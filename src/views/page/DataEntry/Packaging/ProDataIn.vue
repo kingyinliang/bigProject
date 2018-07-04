@@ -108,35 +108,7 @@
               <el-input v-model="form.name"></el-input>
             </el-form-item>
           </div>
-          <div class="audit"><i class="iconfont factory-shouqicaidan"></i><span>审核日志</span></div>
-          <el-table
-            :data="tableData"
-            header-row-class-name="tableHead"
-            border
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              label="序号"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="审核动作"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核意见">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核人">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核时间">
-            </el-table-column>
-          </el-table>
+          <auditLog :tableData="tableData"></auditLog>
         </el-form>
       </div>
     </el-tab-pane>
@@ -234,35 +206,7 @@
               <el-input v-model="form.name"></el-input>
             </el-form-item>
           </el-form>
-          <div class="audit"><i class="iconfont factory-shouqicaidan"></i><span>审核日志</span></div>
-          <el-table
-            :data="tableData"
-            header-row-class-name="tableHead"
-            border
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              label="序号"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="审核动作"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核意见">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核人">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="审核时间">
-            </el-table-column>
-          </el-table>
+          <auditLog :tableData="tableData"></auditLog>
         </div>
       </div>
     </el-tab-pane>
@@ -272,7 +216,73 @@
           <el-button>异常记录</el-button>
         </el-tooltip>
       </span>
-      异常记录
+      <div class="clearfix">
+        <h3>录入数据单位：MIN</h3>
+        <div class="btn">
+          <el-button type="primary" @click="addformrow">新增</el-button>
+        </div>
+      </div>
+      <div class="message">
+        <i class="el-icon-info"></i>
+        <span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>
+      </div>
+      <el-table
+        ref="table1"
+        header-row-class-name="tableHead"
+        :data="tableData3"
+        border
+        tooltip-effect="dark"
+        style="width: 100%;margin-bottom: 20px"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          label="日期"
+          width="120">
+          <template slot-scope="scope">{{ scope.row.date }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.crew" placeholder="车间">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-dropdown @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
+                <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
+        <el-form-item label="总停线时间">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <auditLog :tableData="tableData"></auditLog>
     </el-tab-pane>
     <el-tab-pane name="4">
       <span slot="label">
@@ -280,7 +290,117 @@
           <el-button>生产入库</el-button>
         </el-tooltip>
       </span>
-      生产入库
+      <div class="tab4">
+        <div class="tabtit">
+          <span>白班录入</span>
+          <div class="btn">
+            <el-button type="primary" @click="addformrow">新增</el-button>
+          </div>
+        </div>
+        <el-table
+          ref="table1"
+          header-row-class-name="tableHead"
+          :data="tableData3"
+          border
+          tooltip-effect="dark"
+          style="width: 100%;margin-bottom: 20px"
+          @selection-change="handleSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="日期"
+            width="120">
+            <template slot-scope="scope">{{ scope.row.date }}</template>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="地址"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="地址">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.crew" placeholder="车间">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="地址">
+            <template slot-scope="scope">
+              <el-dropdown @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
+                  <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="tabtit">
+          <span>夜班录入</span>
+          <div class="btn">
+            <el-button type="primary" @click="addformrow">新增</el-button>
+          </div>
+        </div>
+        <el-table
+          ref="table1"
+          header-row-class-name="tableHead"
+          :data="tableData3"
+          border
+          tooltip-effect="dark"
+          style="width: 100%;margin-bottom: 20px"
+          @selection-change="handleSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="日期"
+            width="120">
+            <template slot-scope="scope">{{ scope.row.date }}</template>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="地址"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="地址">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.crew" placeholder="车间">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="删除"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <auditLog :tableData="tableData"></auditLog>
+      </div>
     </el-tab-pane>
     <el-tab-pane name="5">
       <span slot="label">
@@ -288,7 +408,53 @@
           <el-button>物料领用</el-button>
         </el-tooltip>
       </span>
-      物料领用
+      <el-table
+        ref="table1"
+        header-row-class-name="tableHead"
+        :data="tableData3"
+        border
+        tooltip-effect="dark"
+        style="width: 100%;margin-bottom: 20px"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          label="日期"
+          width="120">
+          <template slot-scope="scope">{{ scope.row.date }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.crew" placeholder="车间">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-dropdown @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
+                <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-tab-pane>
     <el-tab-pane name="6">
       <span slot="label">
@@ -358,10 +524,17 @@ export default {
     },
     cleararr () {
       this.$refs.table1.clearSelection()
+    },
+    remove (index, rows) {
+      rows.splice(index, 1)
     }
   },
   computed: {},
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 
@@ -385,41 +558,34 @@ export default {
 .times .el-input{
   width: 180px;
 }
-.audit{
-  line-height: 40px;
-  i{
-    font-size: 22px;
-    float: left;
-  }
+.btn{
+  float: right;
+}
+.tabtit{
   span{
-    margin-left: 12px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
+    line-height: 40px;
   }
 }
-.staff{
-  .btn{
-    float: right;
+.message{
+  background-color: #e5f7ff;
+  border-radius: 4px;
+  border: solid 1px #b9e7ff;
+  i{
+    color:#1890ff;
+    margin-left: 10px;
   }
-  .message{
-    background-color: #e5f7ff;
-    border-radius: 4px;
-    border: solid 1px #b9e7ff;
-    i{
-      color:#1890ff;
-      margin-left: 10px;
-    }
-    span{
-      line-height: 40px;
-      font-size: 14px;
-      color: #606266;
-      margin-left: 5px;
-    }
-    .num{
-      cursor: pointer;
-      color: #1890ff;
-      margin: 0 5px;
-    }
+  span{
+    line-height: 40px;
+    font-size: 14px;
+    color: #606266;
+    margin-left: 5px;
+  }
+  .num{
+    cursor: pointer;
+    color: #1890ff;
+    margin: 0 5px;
   }
 }
 </style>

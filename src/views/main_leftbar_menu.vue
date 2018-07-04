@@ -43,7 +43,7 @@ export default {
     gotoRouteHandle (menu) {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === menu.menuId)
       if (route.length >= 1) {
-        this.$router.push({ path: route[0].name })
+        this.$router.push({ path: route[0].path })
       }
     }
   },
