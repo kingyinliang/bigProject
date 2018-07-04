@@ -6,9 +6,10 @@ import { isURL } from '@/net/validate'
 
 Vue.use(Router)
 
+// const _import = require('./import-' + process.env.NODE_ENV)
+
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
-  { path: '/', redirect: '/login' },
   { path: '/404', component: resolve => require(['@/views/common/404'], resolve), name: '404', meta: { title: '404未找到' } },
   { path: '/login', component: resolve => require(['@/views/common/login'], resolve), name: 'login', meta: { title: '登录' } }
 ]
@@ -34,39 +35,10 @@ const mainRoutes = {
 }
 
 const router = new Router({
-  mode: 'history',
-  // mode: 'hash',
+  // mode: 'history',
+  mode: 'hash',
   isAddDynamicMenuRoutes: false, // 是否已经添加动态(菜单)路由
   routes: globalRoutes.concat(mainRoutes)
-  // routes: [
-  //   {
-  //     path: '*',
-  //     component: resolve => require(['@/views/common/404'], resolve)
-  //   },
-  //   {
-  //     path: '/',
-  //     redirect: '/login'
-  //   },
-  //   {
-  //     path: '/login',
-  //     component: resolve => require(['@/views/common/login'], resolve)
-  //   },
-  //   {
-  //     path: '/factory',
-  //     // component: resolve => require(['@/views/home/index'], resolve),
-  //     component: resolve => require(['@/views/main'], resolve)
-  //     // children: [
-  //     //   {
-  //     //     path: '',
-  //     //     component: resolve => require(['@/views/home/home'], resolve)
-  //     //   },
-  //     //   {
-  //     //     path: '/orgStructure',
-  //     //     component: resolve => require(['page/BasicData/OrgStructure/index'], resolve)
-  //     //   }
-  //     // ]
-  //   }
-  // ]
 })
 
 router.beforeEach((to, from, next) => {
@@ -122,9 +94,9 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       var route = {
-        path: menuList[i].url.replace('/', '-'),
+        path: menuList[i].url.replace(/\//g, '-'),
         component: null,
-        name: menuList[i].url.replace('/', '-'),
+        name: menuList[i].url.replace(/\//g, '-'),
         meta: {
           menuId: menuList[i].menuId,
           title: menuList[i].name,
@@ -140,7 +112,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
         try {
-          route['component'] = resolve => require([`@/views/${menuList[i].url}`], resolve) || null
+          route['component'] = () => import('../views/page' + menuList[i].url)
         } catch (e) {}
       }
       routes.push(route)
