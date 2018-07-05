@@ -73,4 +73,7 @@ a, a:link, a:visited, a:hover, a:active {
 td{
   text-align: center;
 }
+.site-sidebar__menu-icon{
+  font-size: 20px!important;
+}
 

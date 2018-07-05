@@ -6,22 +6,22 @@ import { isURL } from '@/net/validate'
 
 Vue.use(Router)
 
-// const _import = require('./import-' + process.env.NODE_ENV)
+const _import = require('./import-' + process.env.NODE_ENV)
 
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
-  { path: '/404', component: resolve => require(['@/views/common/404'], resolve), name: '404', meta: { title: '404未找到' } },
-  { path: '/login', component: resolve => require(['@/views/common/login'], resolve), name: 'login', meta: { title: '登录' } }
+  { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
+  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
 const mainRoutes = {
   path: '/',
-  component: resolve => require(['@/views/main'], resolve),
+  component: _import('main'),
   children: [
-    // { path: '/home', component: resolve => require(['@/views/common/home'], resolve), name: 'home', meta: { title: '首页' } }
-    // { path: '/home', component: resolve => require(['page/BasicData/OrgStructure/index'], resolve), name: 'home', meta: { title: '组织架构' } }
-    { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '数据录入' } }
+    { path: '/', redirect: '/home' },
+    // { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
+    { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '首页' } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -112,7 +112,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
         try {
-          route['component'] = () => import('../views/page' + menuList[i].url)
+          route['component'] = _import(`page/${menuList[i].url}`) || null
         } catch (e) {}
       }
       routes.push(route)
@@ -125,7 +125,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
     mainRoutes.children = routes
     router.addRoutes([
       mainRoutes,
-      { path: '*', redirect: { name: '404' } }
+      { path: '*', redirect: { path: '404' } }
     ])
     sessionStorage.setItem('dynamicMenuRoutes', JSON.stringify(mainRoutes.children || '[]'))
     console.log('\n')

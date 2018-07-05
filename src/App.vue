@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'App',
-  created () {
+  mounted () {
     if (this.$route.meta.title) document.title = this.$route.meta.title
   }
 }

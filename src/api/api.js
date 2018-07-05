@@ -1,4 +1,4 @@
-let HOST = 'http://10.10.1.99:8080'
+let HOST = 'http://10.1.1.98:8080'
 // let HOST = 'http://localhost:8080/factory'
 /*
 *首页api

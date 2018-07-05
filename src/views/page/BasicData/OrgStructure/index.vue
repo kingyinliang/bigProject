@@ -1,33 +1,30 @@
 <template>
-    <div style="display: flex;flex-direction:column">
-      <div class="head">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-          <el-breadcrumb-item>组织架构</el-breadcrumb-item>
-        </el-breadcrumb>
-        <h3>组织架构</h3>
-      </div>
-      <div class="rightmain">
-        <div class="bg">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-tree :data="data" @node-contextmenu="showtab1"></el-tree>
-            </el-col>
-            <el-col :span="12">
-
-            </el-col>
-          </el-row>
-        </div>
-      </div>
-      <div class="footer">
-        <p>
-          <a href="">帮助</a>
-          <a href="">帮助</a>
-          <a href="">帮助</a>
-        </p>
-        <p>Copyright @ 2018 欣和系统研究及运维组飞机稿</p>
-      </div>
+    <div>
+      <!--<div class="head">-->
+        <!--<el-breadcrumb separator="/">-->
+          <!--<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>-->
+          <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
+          <!--<el-breadcrumb-item>组织架构</el-breadcrumb-item>-->
+        <!--</el-breadcrumb>-->
+        <!--<h3>组织架构</h3>-->
+      <!--</div>-->
+      <el-row>
+        <el-col :span="12">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>组织架构一览</span>
+            </div>
+            <el-tree :data="data" default-expand-all @node-contextmenu="showtab1"></el-tree>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>组织详细信息</span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
       <el-dialog :visible.sync="dialogFormVisible1" title="新增部门" id="adddepform">
         <el-form :model="adddepform" label-position="left" label-width="100px">
           <el-form-item label="部门编号">
@@ -216,26 +213,6 @@ export default {
   }
   .rightmain{
     flex: 1;
-    padding: 16px 24px;
-    .bg{
-      background: white;
-      width: 100%;
-      height: 100%;
-      padding: 15px;
-    }
-  }
-  .footer{
-    text-align: center;
-    width: 100%;
-    height: 50px;
-    color: rgba(0, 0, 0, 0.45);
-    line-height: 20px;
-    font-size: 12px;
-    a{
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.45);
-      margin: 0 10px;
-    }
   }
   #menu{
     cursor: pointer;

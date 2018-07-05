@@ -1,5 +1,8 @@
 <template>
-    <div>包装首页</div>
+    <div>
+      <h1>包装首页</h1>
+      <el-button>数据录入</el-button>
+    </div>
 </template>
 
 <script>

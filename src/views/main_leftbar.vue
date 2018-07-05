@@ -6,8 +6,8 @@
         :collapse="sidebarFold"
         :collapseTransition="false"
         class="site-sidebar__menu">
-        <el-menu-item index="home" @click="$router.push({ path: 'home' })">
-          <i name="shouye" class="site-sidebar__menu-icon"></i>
+        <el-menu-item index="home" @click="menuActiveName='home';$router.push({ path: 'home' })">
+          <i class="site-sidebar__menu-icon iconfont factory-shouye"></i>
           <span slot="title">首页</span>
         </el-menu-item>
         <sub-menu
