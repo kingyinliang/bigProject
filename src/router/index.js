@@ -15,13 +15,14 @@ const globalRoutes = [
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
+const ssroutes = []
 const mainRoutes = {
   path: '/',
   component: _import('main'),
   children: [
     { path: '/', redirect: '/home' },
     // { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
-    { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '首页' } }
+    { path: '/home', component: resolve => require(['page/SystemSetup/Parameter/ParameterManage'], resolve), name: 'home', meta: { title: '首页' } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -92,6 +93,21 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
+      if (menuList[i].hasChild) {
+        var router2 = {
+          path: menuList[i].hasChild.replace(/\//g, '-'),
+          component: null,
+          name: menuList[i].hasChild.replace(/\//g, '-'),
+          meta: {
+            menuId: menuList[i].menuId,
+            title: menuList[i].name,
+            isDynamic: true,
+            isTab: true
+          }
+        }
+        router2['component'] = _import(`page/${menuList[i].hasChild}`) || null
+        routes.push(router2)
+      }
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       var route = {
         path: menuList[i].url.replace(/\//g, '-'),
@@ -116,6 +132,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         } catch (e) {}
       }
       routes.push(route)
+      ssroutes.push(route)
     }
   }
   if (temp.length >= 1) {
@@ -125,9 +142,9 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
     mainRoutes.children = routes
     router.addRoutes([
       mainRoutes,
-      { path: '*', redirect: { path: '404' } }
+      { path: '*', redirect: { path: '/404' } }
     ])
-    sessionStorage.setItem('dynamicMenuRoutes', JSON.stringify(mainRoutes.children || '[]'))
+    sessionStorage.setItem('dynamicMenuRoutes', JSON.stringify(ssroutes || '[]'))
     console.log('\n')
     console.log('%c!<-------------------- 动态(菜单)路由 s -------------------->', 'color:blue')
     console.log(mainRoutes.children)

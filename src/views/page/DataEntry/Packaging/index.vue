@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>包装首页</h1>
-      <el-button>数据录入</el-button>
+      <el-button @click="goPro">数据录入</el-button>
     </div>
 </template>
 
@@ -13,7 +13,11 @@ export default {
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    goPro () {
+      this.$router.push({ path: 'DataEntry-Packaging-ProDataIn' })
+    }
+  },
   computed: {},
   components: {}
 }

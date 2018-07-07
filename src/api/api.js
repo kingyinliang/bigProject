@@ -1,4 +1,4 @@
-let HOST = 'http://10.1.1.98:8080'
+let HOST = 'http://10.10.1.91:8080'
 // let HOST = 'http://localhost:8080/factory'
 /*
 *首页api
@@ -23,14 +23,27 @@ export const MAIN_API = {
    */
   NAV_API: HOST + '/sys/menu/nav'
 }
-export const LIST_API = {
+export const BASICDATA_API = {
   /**
-   * @property {string} BANNER_API banner接口
-   * @param {string} banner_type 1-首页大Banner，2-首页专题Banner，3-短篇大Banner，4-漫画大Banner，5-书籍详情Banner
+   * @property {string} ORGSTRUCTURE_API 组织结构列表
    */
-  BANNER_API: HOST + '/recommend/banner',
+  ORGSTRUCTURE_API: HOST + '/sys/dept/list',
   /**
-   * @property {string} CLASSIFY_API 分类列表
+   * @property {string} SAVEORG_API 组织结构 修改
    */
-  CLASSIFY_API: HOST + '/clazz/getClazzs'
+  SAVEORG_API: HOST + '/sys/dept/update',
+  /**
+   * @property {string} DELETEORG_API 组织结构 删除
+   */
+  DELETEORG_API: HOST + '/sys/dept/delete',
+  /**
+   * @property {string} ADDORG_API 新增
+   */
+  ADDORG_API: HOST + '/sys/dept/save'
+}
+export const SYSTEMSETUP_API = {
+  /**
+   * @property {string} PARAMETERTYPE_API 参数类型
+   */
+  PARAMETERTYPE_API: HOST + '/sys/dict/list'
 }
