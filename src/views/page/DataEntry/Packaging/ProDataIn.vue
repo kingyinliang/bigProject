@@ -455,6 +455,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <auditLog :tableData="tableData"></auditLog>
     </el-tab-pane>
     <el-tab-pane name="6">
       <span slot="label">
@@ -462,7 +463,81 @@
           <el-button>待杀菌数量</el-button>
         </el-tooltip>
       </span>
-      待杀菌数量
+      <el-table
+        ref="table1"
+        header-row-class-name="tableHead"
+        :data="tableData3"
+        border
+        tooltip-effect="dark"
+        style="width: 100%;margin-bottom: 20px"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          prop="name"
+          label="">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="清洗冲顶">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="换产冲顶">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="开机冲顶">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="包材不良">
+        </el-table-column>
+        <el-table-column
+          label="日期"
+          width="120">
+          <template slot-scope="scope">{{ scope.row.date }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.crew" placeholder="车间">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="删除"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="地址">
+          <template slot-scope="scope">
+            <el-dropdown @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
+                <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-form :inline="true" size="small" label-width="120px" style="margin: 20px 0">
+        <el-form-item label="待杀菌数量（L）">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+      </el-form>
     </el-tab-pane>
     <el-tab-pane name="7">
       <span slot="label">
@@ -470,7 +545,9 @@
           <el-button>文本记录</el-button>
         </el-tooltip>
       </span>
-      文本记录
+      <el-form :model="form">
+        <el-input type="textarea" v-model="form.name" class="textarea" style="width: 100%;height: 200px"></el-input>
+      </el-form>
     </el-tab-pane>
   </el-tabs>
 </div>
@@ -588,8 +665,13 @@ export default {
     margin: 0 5px;
   }
 }
+
 </style>
 <style>
+.textarea textarea{
+  width: 100%;
+  height: 100%!important;
+}
 #tabs .el-tabs__item{
   height: 50px;
   line-height: 50px;
