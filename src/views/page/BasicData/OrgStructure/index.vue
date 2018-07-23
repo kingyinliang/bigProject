@@ -56,7 +56,7 @@
                 <el-form-item label="产线图片" >
                   <img :src="OrgDetail.picUrl" alt="" v-if="update">
                   <el-upload
-                    action="http://10.10.1.91:8080/sys/dept/fileUpLoad"
+                    action="http://localhost:8080/sys/dept/fileUpLoad"
                     :limit="1"
                     :headers="heads"
                     list-type="picture"
@@ -87,7 +87,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-dialog :visible.sync="dialogFormVisible1" :before-close="handleClose" :title="sibling?'新增同级':'新增下级'" id="adddepform">
+      <el-dialog :visible.sync="dialogFormVisible1" @close="clearForm('addDep')" :title="sibling?'新增同级':'新增下级'" id="adddepform">
         <el-form :model="addDep" size="small" label-position="left" label-width="100px">
           <el-form-item label="部门编号">
             <el-input v-model="addDep.deptCode" auto-complete="off"></el-input>
@@ -118,7 +118,7 @@
           </el-form-item>
           <el-form-item label="产线图片" v-if="addDep.deptType== 5">
             <el-upload
-              action="http://10.10.1.91:8080/sys/dept/fileUpLoad"
+              action="http://localhost:8080/sys/dept/fileUpLoad"
               :limit="1"
               list-type="picture"
               :headers="heads"
@@ -141,7 +141,7 @@
           </div>
         </el-form>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible3" :before-close="handleClose" title="人员维护">
+      <el-dialog :visible.sync="dialogFormVisible3" @close="clearForm('adddepform')" title="人员维护">
         <el-form :model="adddepform" label-width="100px" size="small" :inline="true">
           <el-form-item label="归属部门">
             <el-input v-model="adddepform.name"></el-input>
@@ -177,7 +177,7 @@
           </el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible4" :before-close="handleClose" title="班组维护">
+      <el-dialog :visible.sync="dialogFormVisible4" @close="clearForm('adddepform')" title="班组维护">
         <el-form :model="adddepform" label-position="left" label-width="100px">
           <el-form-item label="班组编码">
             <el-input v-model="adddepform.name" auto-complete="off"></el-input>
@@ -202,7 +202,7 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible5" :before-close="handleClose" title="设备维护"></el-dialog>
+      <el-dialog :visible.sync="dialogFormVisible5" @close="clearForm('adddepform')" title="设备维护"></el-dialog>
       <ul id = "menu" v-show = "menuVisible">
         <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
         <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
@@ -275,7 +275,7 @@ export default {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
-          this.OrgTree = data
+          this.OrgTree = data.deptList
         } else {
           this.$message.error(data.msg)
         }
@@ -302,14 +302,6 @@ export default {
       let menu = document.querySelector('#menu')
       menu.style.left = event.clientX + 'px'
       menu.style.top = event.clientY + 'px'
-    },
-    // 关闭弹窗提示
-    handleClose (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
     },
     // 上传图片图片回调 新增
     addfile (res, file) {

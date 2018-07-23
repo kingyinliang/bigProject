@@ -1,5 +1,5 @@
-// let HOST = 'http://10.10.1.91:8080'
-let HOST = 'http://demo.renren.io/renren-fast/'
+let HOST = 'http://localhost:8080'
+// let HOST = 'http://demo.renren.io/renren-fast/'
 /*
 *首页api
  */
@@ -45,5 +45,45 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} PARAMETERTYPE_API 参数类型
    */
-  PARAMETERTYPE_API: HOST + '/sys/dict/list'
+  PARAMETERTYPE_API: HOST + '/sys/dict/list',
+  /**
+   * @property {string} USERLIST_API 用户列表
+   */
+  USERLIST_API: HOST + '/sys/user/list',
+  /**
+   * @property {string} ROLELIST_API 角色列表
+   */
+  ROLELIST_API: HOST + '/sys/role/list',
+  /**
+   * @property {string} USERDETAIL_API 用户详情
+   */
+  USERDETAIL_API: HOST + '/sys/user/info',
+  /**
+   * @property {string} USERUPDATE_API 修改用户
+   */
+  USERUPDATE_API: HOST + '/sys/user/update',
+  /**
+   * @property {string} USERADD_API 新增用户
+   */
+  USERADD_API: HOST + '/sys/user/save',
+  /**
+   * @property {string} USERDEL_API 删除用户
+   */
+  USERDEL_API: HOST + '/sys/user/delete',
+  /**
+   * @property {string} ROLEDETAIL_API 角色详情
+   */
+  ROLEDETAIL_API: HOST + '/sys/role/info',
+  /**
+   * @property {string} ROLEUPDATE_API 修改角色
+   */
+  ROLEUPDATE_API: HOST + '/sys/role/update',
+  /**
+   * @property {string} ROLEADD_API 新增角色
+   */
+  ROLEADD_API: HOST + '/sys/role/save',
+  /**
+   * @property {string} USERDEL_API 删除角色
+   */
+  ROLEDEL_API: HOST + '/sys/role/delete'
 }

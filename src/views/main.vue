@@ -40,7 +40,6 @@ export default {
     // 获取当前管理员信息
     getUserInfo () {
       this.$http(`${MAIN_API.USERINFO_API}`, 'GET', {}).then(({data}) => {
-        console.log(data)
         if (data && data.code === 0) {
           this.loading = false
           this.userId = data.user.userId

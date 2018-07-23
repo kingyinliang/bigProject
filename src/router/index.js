@@ -21,10 +21,10 @@ const mainRoutes = {
   component: _import('main'),
   children: [
     { path: '/', redirect: '/home' },
-    // { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
+    { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
     // { path: '/home', component: resolve => require(['page/SystemSetup/Parameter/ParameterManage'], resolve), name: 'home', meta: { title: '首页' } }
     // { path: '/home', component: resolve => require(['page/DataEntry/StereoscopicStorehouse/index'], resolve), name: 'home', meta: { title: '首页' } }
-    { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '首页' } }
+    // { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '首页' } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
