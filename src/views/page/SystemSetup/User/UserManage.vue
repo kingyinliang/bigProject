@@ -1,7 +1,7 @@
 <template>
   <el-row >
     <el-row>
-      <el-button type="primary" @click="showAdddialog()">新增</el-button>
+      <el-button type="primary" @click="dialogFormVisible2 = true">新增</el-button>
     </el-row>
     <el-row class="list">
       <el-table
@@ -45,7 +45,7 @@
       <el-form :model="userForm" label-position="left" label-width="100px">
         <el-form-item label="部门">
           <p v-if="deptName2.length"><span v-for="(item, index) in deptName2" :key="index" style="margin-right: 10px">{{item}}</span></p>
-          <el-button @click="dialogFormVisible3 = true">点击选择部门</el-button>
+          <el-button @click="dialogFormVisible4 = true">点击选择部门</el-button>
         </el-form-item>
         <el-form-item label="用户名">
           <el-input v-model="userForm.username" auto-complete="off"></el-input>
@@ -65,7 +65,7 @@
       <el-form :model="userAdd" label-position="left" label-width="100px" ref="useradd">
         <el-form-item label="部门">
           <p v-if="deptName.length"><span v-for="(item, index) in deptName" :key="index" style="margin-right: 10px">{{item}}</span></p>
-          <el-button @click="dialogFormVisible4 = true">点击选择部门</el-button>
+          <el-button @click="dialogFormVisible3 = true">点击选择部门</el-button>
         </el-form-item>
         <el-form-item label="用户名">
           <el-input v-model="userAdd.username" auto-complete="off"></el-input>
@@ -89,11 +89,11 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible3" title="选择部门">
       <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange"></el-tree>
-      <el-button type="primary" @click="dialogFormVisible3 = false">关闭</el-button>
+      <el-button type="primary" @click="dialogFormVisible3 = false">关闭3</el-button>
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible4" title="选择部门">
-      <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange"></el-tree>
-      <el-button type="primary" @click="dialogFormVisible3 = false">关闭</el-button>
+      <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange2" node-key="deptId" :default-checked-keys="[3]"></el-tree>
+      <el-button type="primary" @click="dialogFormVisible4 = false">关闭4</el-button>
     </el-dialog>
   </el-row>
 </template>
@@ -265,6 +265,15 @@ export default {
         this.deptName.splice(this.deptName.indexOf(data.label), 1)
       } else if (checked) {
         this.userAdd.deptId.push(data.deptId)
+        this.deptName.push(data.label)
+      }
+    },
+    handleCheckChange2 (data, checked, indeterminate) {
+      if (this.userForm.deptId.indexOf(data.deptId) !== -1) {
+        this.userForm.deptId.splice(this.userForm.deptId.indexOf(data.deptId), 1)
+        this.deptName.splice(this.deptName.indexOf(data.label), 1)
+      } else if (checked) {
+        this.userForm.deptId.push(data.deptId)
         this.deptName.push(data.label)
       }
     }
