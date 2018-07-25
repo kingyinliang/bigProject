@@ -1,216 +1,219 @@
 <template>
-    <div>
-      <!--<div class="head">-->
-        <!--<el-breadcrumb separator="/">-->
-          <!--<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>-->
-          <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
-          <!--<el-breadcrumb-item>组织架构</el-breadcrumb-item>-->
-        <!--</el-breadcrumb>-->
-        <!--<h3>组织架构</h3>-->
-      <!--</div>-->
-      <el-row :gutter="20">
-        <div style="margin-bottom: 20px;padding-left: 20px">
-          <el-input placeholder="参数类型" v-model="form.name" style="width: 300px">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </el-input>
-          <el-button>查询</el-button>
-        </div>
-        <el-col :span="12">
-          <el-card class="orgcard">
-            <div slot="header" class="clearfix">
-              <span>组织架构一览</span>
-            </div>
-            <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail"></el-tree>
-          </el-card>
-        </el-col>
-        <el-col :span="12">
-          <el-card class="orgcard">
-            <div slot="header" class="clearfix">
-              <span>组织详细信息</span>
-            </div>
-            <div>
-              <el-form :model="OrgDetail" size="small" label-width="110px">
-                <el-form-item label="部门编码" >
-                  <span v-if="update">{{OrgDetail.deptCode}}</span>
-                  <el-input v-model="OrgDetail.deptCode" v-else></el-input>
-                </el-form-item>
-                <el-form-item label="部门名称" >
-                  <span v-if="update">{{OrgDetail.label}}</span>
-                  <el-input v-model="OrgDetail.label" v-else></el-input>
-                </el-form-item>
-                <el-form-item label="上级部门" >
-                  <span>{{OrgDetail.parentId}}</span>
-                </el-form-item>
-                <el-form-item label="部门类型" >
-                  <span v-if="update">{{OrgDetail.deptType}}</span>
-                  <el-input v-model="OrgDetail.deptType" v-else></el-input>
-                </el-form-item>
-                <el-form-item label="产线属性" >
-                  <span v-if="update">{{OrgDetail.proLine}}</span>
-                  <el-select v-model="OrgDetail.proLine" placeholder="请选择部门类型" style="width: 100%" v-else>
-                    <el-option label="普通产线" value="普通产线"></el-option>
-                    <el-option label="二合一" value="二合一"></el-option>
-                    <el-option label="礼盒" value="礼盒"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="产线图片" >
-                  <img :src="OrgDetail.picUrl" alt="" v-if="update">
-                  <el-upload
-                    action="http://localhost:8080/sys/dept/fileUpLoad"
-                    :limit="1"
-                    :headers="heads"
-                    list-type="picture"
-                    :file-list="fileList"
-                    :on-success="addfile2" v-else>
-                    <el-button size="small" type="primary">选取文件</el-button>
-                  </el-upload>
-                </el-form-item>
-                <el-form-item label="联系人" >
-                  <span v-if="update">{{OrgDetail.connect}}</span>
-                  <el-input v-model="OrgDetail.connect" v-else></el-input>
-                </el-form-item>
-                <el-form-item label="电话" >
-                  <span v-if="update">{{OrgDetail.phone}}</span>
-                  <el-input v-model="OrgDetail.phone" v-else></el-input>
-                </el-form-item>
-                <el-form-item label="备注" >
-                  <span v-if="update">{{OrgDetail.remark}}</span>
-                  <el-input type="textarea" v-model="OrgDetail.remark" v-else></el-input>
-                </el-form-item>
-                <div style="text-align: center">
-                  <el-button @click="update = !update">编辑</el-button>
-                  <el-button @click="savedatail">保存</el-button>
-                  <el-button @click="deleteorg">删除</el-button>
-                </div>
-              </el-form>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-dialog :visible.sync="dialogFormVisible1" @close="clearForm('addDep')" :title="sibling?'新增同级':'新增下级'" id="adddepform">
-        <el-form :model="addDep" size="small" label-position="left" label-width="100px">
-          <el-form-item label="部门编号">
-            <el-input v-model="addDep.deptCode" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="部门名称">
-            <el-input v-model="addDep.label" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="上级部门">
-            <span v-if="sibling">{{clickTreeNode.parentId}}</span>
-            <span v-if="!sibling">{{clickTreeNode.deptId}}</span>
-          </el-form-item>
-          <el-form-item label="部门类型">
-            <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
-            <el-select v-model="addDep.deptType" placeholder="请选择部门类型" style="width: 100%">
-              <el-option label="公司" value="1"></el-option>
-              <el-option label="工厂" value="2"></el-option>
-              <el-option label="部门 " value="3 "></el-option>
-              <el-option label="车间  " value="4  "></el-option>
-              <el-option label="工序/产线  " value="5  "></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="产线属性" v-if="addDep.deptType== 5">
-            <el-select v-model="addDep.proLine" placeholder="请选择部门类型" style="width: 100%">
-              <el-option label="普通产线" value="普通产线"></el-option>
-              <el-option label="二合一" value="二合一"></el-option>
-              <el-option label="礼盒" value="礼盒"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="产线图片" v-if="addDep.deptType== 5">
-            <el-upload
-              action="http://localhost:8080/sys/dept/fileUpLoad"
-              :limit="1"
-              list-type="picture"
-              :headers="heads"
-              :on-success="addfile">
-              <el-button size="small" type="primary">选取文件</el-button>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="联系人">
-            <el-input v-model="addDep.connect" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="addDep.phone" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input type="textarea" v-model="addDep.remark"></el-input>
-          </el-form-item>
-          <div style="text-align: center">
-            <el-button @click="addOrg">{{ addDep.deptType==5 }}保存</el-button>
-            <el-button @click="closethis">关闭</el-button>
-          </div>
-        </el-form>
-      </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible3" @close="clearForm('adddepform')" title="人员维护">
-        <el-form :model="adddepform" label-width="100px" size="small" :inline="true">
-          <el-form-item label="归属部门">
-            <el-input v-model="adddepform.name"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button><i class=""></i>添加</el-button>
-          </el-form-item>
-        </el-form>
-        <el-table
-          ref="table1"
-          header-row-class-name="tableHead"
-          :data="tableData3"
-          border
-          tooltip-effect="dark"
-          style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            type="index"
-            :index="indexMethod">
-          </el-table-column>
-          <el-table-column
-            label="人员工号"
-            width="120">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="人员姓名"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            label="删除">
-            <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
-          </el-table-column>
-        </el-table>
-      </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible4" @close="clearForm('adddepform')" title="班组维护">
-        <el-form :model="adddepform" label-position="left" label-width="100px">
-          <el-form-item label="班组编码">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="班组名称">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="上级部门">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="部门类型">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="联系人">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible5" @close="clearForm('adddepform')" title="设备维护"></el-dialog>
-      <ul id = "menu" v-show = "menuVisible">
-        <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
-        <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
-        <li class="menuli" @click="dialogFormVisible3 = true">人员维护</li>
-        <li class="menuli" @click="dialogFormVisible4 = true">班组维护</li>
-        <li class="menuli" @click="dialogFormVisible5 = true">设备维护</li>
-      </ul>
+  <div>
+    <div class="topTitle">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>基础数据</el-breadcrumb-item>
+        <el-breadcrumb-item>组织架构</el-breadcrumb-item>
+      </el-breadcrumb>
+      <h3>组织架构</h3>
     </div>
+    <div class="main">
+      <el-card>
+        <el-row :gutter="20">
+          <div style="margin-bottom: 20px;padding-left: 20px">
+            <el-input placeholder="参数类型" v-model="form.name" style="width: 300px">
+              <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-button>查询</el-button>
+          </div>
+          <el-col :span="12">
+            <el-card class="orgcard">
+              <div slot="header" class="clearfix">
+                <span>组织架构一览</span>
+              </div>
+              <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail"></el-tree>
+            </el-card>
+          </el-col>
+          <el-col :span="12">
+            <el-card class="orgcard">
+              <div slot="header" class="clearfix">
+                <span>组织详细信息</span>
+              </div>
+              <div>
+                <el-form :model="OrgDetail" size="small" label-width="110px">
+                  <el-form-item label="部门编码" >
+                    <span v-if="update">{{OrgDetail.deptCode}}</span>
+                    <el-input v-model="OrgDetail.deptCode" v-else></el-input>
+                  </el-form-item>
+                  <el-form-item label="部门名称" >
+                    <span v-if="update">{{OrgDetail.label}}</span>
+                    <el-input v-model="OrgDetail.label" v-else></el-input>
+                  </el-form-item>
+                  <el-form-item label="上级部门" >
+                    <span>{{OrgDetail.parentId}}</span>
+                  </el-form-item>
+                  <el-form-item label="部门类型" >
+                    <span v-if="update">{{OrgDetail.deptType}}</span>
+                    <el-input v-model="OrgDetail.deptType" v-else></el-input>
+                  </el-form-item>
+                  <el-form-item label="产线属性" >
+                    <span v-if="update">{{OrgDetail.proLine}}</span>
+                    <el-select v-model="OrgDetail.proLine" placeholder="请选择部门类型" style="width: 100%" v-else>
+                      <el-option label="普通产线" value="普通产线"></el-option>
+                      <el-option label="二合一" value="二合一"></el-option>
+                      <el-option label="礼盒" value="礼盒"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="产线图片" >
+                    <img :src="OrgDetail.picUrl" alt="" v-if="update">
+                    <el-upload
+                      action="http://localhost:8080/sys/dept/fileUpLoad"
+                      :limit="1"
+                      :headers="heads"
+                      list-type="picture"
+                      :file-list="fileList"
+                      :on-success="addfile2" v-else>
+                      <el-button size="small" type="primary">选取文件</el-button>
+                    </el-upload>
+                  </el-form-item>
+                  <el-form-item label="联系人" >
+                    <span v-if="update">{{OrgDetail.connect}}</span>
+                    <el-input v-model="OrgDetail.connect" v-else></el-input>
+                  </el-form-item>
+                  <el-form-item label="电话" >
+                    <span v-if="update">{{OrgDetail.phone}}</span>
+                    <el-input v-model="OrgDetail.phone" v-else></el-input>
+                  </el-form-item>
+                  <el-form-item label="备注" >
+                    <span v-if="update">{{OrgDetail.remark}}</span>
+                    <el-input type="textarea" v-model="OrgDetail.remark" v-else></el-input>
+                  </el-form-item>
+                  <div style="text-align: center">
+                    <el-button @click="update = !update">编辑</el-button>
+                    <el-button @click="savedatail">保存</el-button>
+                    <el-button @click="deleteorg">删除</el-button>
+                  </div>
+                </el-form>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-dialog :visible.sync="dialogFormVisible1" @close="clearForm('addDep')" :title="sibling?'新增同级':'新增下级'" id="adddepform">
+          <el-form :model="addDep" size="small" label-position="left" label-width="100px">
+            <el-form-item label="部门编号">
+              <el-input v-model="addDep.deptCode" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="部门名称">
+              <el-input v-model="addDep.label" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="上级部门">
+              <span v-if="sibling">{{clickTreeNode.parentId}}</span>
+              <span v-if="!sibling">{{clickTreeNode.deptId}}</span>
+            </el-form-item>
+            <el-form-item label="部门类型">
+              <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
+              <el-select v-model="addDep.deptType" placeholder="请选择部门类型" style="width: 100%">
+                <el-option label="公司" value="1"></el-option>
+                <el-option label="工厂" value="2"></el-option>
+                <el-option label="部门 " value="3 "></el-option>
+                <el-option label="车间  " value="4  "></el-option>
+                <el-option label="工序/产线  " value="5  "></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="产线属性" v-if="addDep.deptType== 5">
+              <el-select v-model="addDep.proLine" placeholder="请选择部门类型" style="width: 100%">
+                <el-option label="普通产线" value="普通产线"></el-option>
+                <el-option label="二合一" value="二合一"></el-option>
+                <el-option label="礼盒" value="礼盒"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="产线图片" v-if="addDep.deptType== 5">
+              <el-upload
+                action="http://localhost:8080/sys/dept/fileUpLoad"
+                :limit="1"
+                list-type="picture"
+                :headers="heads"
+                :on-success="addfile">
+                <el-button size="small" type="primary">选取文件</el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="联系人">
+              <el-input v-model="addDep.connect" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话">
+              <el-input v-model="addDep.phone" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input type="textarea" v-model="addDep.remark"></el-input>
+            </el-form-item>
+            <div style="text-align: center">
+              <el-button @click="addOrg">{{ addDep.deptType==5 }}保存</el-button>
+              <el-button @click="closethis">关闭</el-button>
+            </div>
+          </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible3" @close="clearForm('adddepform')" title="人员维护">
+          <el-form :model="adddepform" label-width="100px" size="small" :inline="true">
+            <el-form-item label="归属部门">
+              <el-input v-model="adddepform.name"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button><i class=""></i>添加</el-button>
+            </el-form-item>
+          </el-form>
+          <el-table
+            ref="table1"
+            header-row-class-name="tableHead"
+            :data="tableData3"
+            border
+            tooltip-effect="dark"
+            style="width: 100%;margin-bottom: 20px">
+            <el-table-column
+              type="index"
+              :index="indexMethod">
+            </el-table-column>
+            <el-table-column
+              label="人员工号"
+              width="120">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="人员姓名"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              label="删除">
+              <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
+            </el-table-column>
+          </el-table>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible4" @close="clearForm('adddepform')" title="班组维护">
+          <el-form :model="adddepform" label-position="left" label-width="100px">
+            <el-form-item label="班组编码">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="班组名称">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="上级部门">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="部门类型">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible5" @close="clearForm('adddepform')" title="设备维护"></el-dialog>
+        <ul id = "menu" v-show = "menuVisible">
+          <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
+          <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
+          <li class="menuli" @click="dialogFormVisible3 = true">人员维护</li>
+          <li class="menuli" @click="dialogFormVisible4 = true">班组维护</li>
+          <li class="menuli" @click="dialogFormVisible5 = true">设备维护</li>
+        </ul>
+      </el-card>
+    </div>
+  </div>
 </template>
 
 <script>

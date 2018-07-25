@@ -1,101 +1,112 @@
 <template>
-  <el-row >
-    <el-row>
-      <el-button type="primary" @click="dialogFormVisible2 = true">新增</el-button>
-    </el-row>
-    <el-row class="list">
-      <el-table
-        :data="page"
-        header-row-class-name="tableHead"
-        border style="border-radius: 10px">
-        <el-table-column
-          type="index"
-          :index="1">
-        </el-table-column>
-        <el-table-column
-          label="用户名">
-          <template slot-scope="scope">{{ scope.row.username }}</template>
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="角色名称">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="操作">
-          <template slot-scope="scope">
-            <el-button type="primary" @click="showdialog(scope.row)">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete" circle @click="userDel(scope.row)"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-row>
-    <el-row >
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currPage"
-        :page-sizes="[10, 15, 20]"
-        :page-size="limit"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount">
-      </el-pagination>
-    </el-row>
-    <el-dialog :visible.sync="dialogFormVisible" title="操作" @close="clearForm('userForm')">
-      <el-form :model="userForm" label-position="left" label-width="100px">
-        <el-form-item label="部门">
-          <p v-if="deptName2.length"><span v-for="(item, index) in deptName2" :key="index" style="margin-right: 10px">{{item}}</span></p>
-          <el-button @click="dialogFormVisible4 = true">点击选择部门</el-button>
-        </el-form-item>
-        <el-form-item label="用户名">
-          <el-input v-model="userForm.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model="userForm.mobile" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色">
-          <el-checkbox-group v-model="userForm.roleIdList">
-            <el-checkbox :label="item.roleId" name="type" v-for="(item, index) in roleIdList" :key="index">{{item.roleName}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-button type="primary" @click="userUplode">保存</el-button>
-      </el-form>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogFormVisible2" title="新增" @close="clearForm('userAdd')">
-      <el-form :model="userAdd" label-position="left" label-width="100px" ref="useradd">
-        <el-form-item label="部门">
-          <p v-if="deptName.length"><span v-for="(item, index) in deptName" :key="index" style="margin-right: 10px">{{item}}</span></p>
-          <el-button @click="dialogFormVisible3 = true">点击选择部门</el-button>
-        </el-form-item>
-        <el-form-item label="用户名">
-          <el-input v-model="userAdd.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model="userAdd.mobile" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="userAdd.password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input v-model="password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色">
-          <el-checkbox-group v-model="userAdd.roleIdList">
-            <el-checkbox :label="item.roleId" name="type" v-for="(item, index) in roleIdList" :key="index">{{item.roleName}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-button type="primary" @click="showAdd">保存</el-button>
-      </el-form>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogFormVisible3" title="选择部门">
-      <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange"></el-tree>
-      <el-button type="primary" @click="dialogFormVisible3 = false">关闭3</el-button>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogFormVisible4" title="选择部门">
-      <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange2" node-key="deptId" :default-checked-keys="[3]"></el-tree>
-      <el-button type="primary" @click="dialogFormVisible4 = false">关闭4</el-button>
-    </el-dialog>
-  </el-row>
+  <div>
+    <div class="topTitle">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <el-breadcrumb-item>管理员列表</el-breadcrumb-item>
+      </el-breadcrumb>
+      <h3>管理员列表</h3>
+    </div>
+    <div class="main">
+      <el-card>
+        <el-row>
+          <el-button type="primary" @click="dialogFormVisible2 = true">新增</el-button>
+        </el-row>
+        <el-row class="list">
+          <el-table
+            :data="page"
+            header-row-class-name="tableHead"
+            border style="border-radius: 10px">
+            <el-table-column
+              type="index"
+              :index="1">
+            </el-table-column>
+            <el-table-column
+              label="用户名">
+              <template slot-scope="scope">{{ scope.row.username }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="角色名称">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" @click="showdialog(scope.row)">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" circle @click="userDel(scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-row>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        </el-row>
+        <el-dialog :visible.sync="dialogFormVisible" title="操作" @close="clearForm('userForm')">
+          <el-form :model="userForm" label-position="left" label-width="100px">
+            <el-form-item label="部门">
+              <p v-if="deptName2.length"><span v-for="(item, index) in deptName2" :key="index" style="margin-right: 10px">{{item}}</span></p>
+              <el-button @click="dialogFormVisible4 = true">点击选择部门</el-button>
+            </el-form-item>
+            <el-form-item label="用户名">
+              <el-input v-model="userForm.username" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号">
+              <el-input v-model="userForm.mobile" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="角色">
+              <el-checkbox-group v-model="userForm.roleIdList">
+                <el-checkbox :label="item.roleId" name="type" v-for="(item, index) in roleIdList" :key="index">{{item.roleName}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-button type="primary" @click="userUplode">保存</el-button>
+          </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible2" title="新增" @close="clearForm('userAdd')">
+          <el-form :model="userAdd" label-position="left" label-width="100px" ref="useradd">
+            <el-form-item label="部门">
+              <p v-if="deptName.length"><span v-for="(item, index) in deptName" :key="index" style="margin-right: 10px">{{item}}</span></p>
+              <el-button @click="dialogFormVisible3 = true">点击选择部门</el-button>
+            </el-form-item>
+            <el-form-item label="用户名">
+              <el-input v-model="userAdd.username" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号">
+              <el-input v-model="userAdd.mobile" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="userAdd.password" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+              <el-input v-model="password" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="角色">
+              <el-checkbox-group v-model="userAdd.roleIdList">
+                <el-checkbox :label="item.roleId" name="type" v-for="(item, index) in roleIdList" :key="index">{{item.roleName}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-button type="primary" @click="showAdd">保存</el-button>
+          </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible3" title="选择部门">
+          <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange"></el-tree>
+          <el-button type="primary" @click="dialogFormVisible3 = false">关闭3</el-button>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible4" title="选择部门">
+          <el-tree :data="OrgTree" default-expand-all show-checkbox @check-change="handleCheckChange2" node-key="deptId" :default-checked-keys="[3]"></el-tree>
+          <el-button type="primary" @click="dialogFormVisible4 = false">关闭4</el-button>
+        </el-dialog>
+      </el-card>
+    </div>
+  </div>
 </template>
 
 <script>

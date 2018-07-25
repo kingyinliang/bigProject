@@ -1,73 +1,84 @@
 <template>
-  <el-row >
-    <el-row>
-      <el-button type="primary" @click="showAdddialog()">新增</el-button>
-    </el-row>
-    <el-row class="list">
-      <el-table
-        :data="role"
-        header-row-class-name="tableHead"
-        border
-        style="border-radius: 10px">
-        <el-table-column
-          type="index"
-          :index="1">
-        </el-table-column>
-        <el-table-column
-          prop="roleName"
-          label="角色名称">
-        </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="角色描述">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="操作">
-          <template slot-scope="scope">
-            <el-button type="primary" @click="showdialog(scope.row)">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete" circle @click="roleDel(scope.row)"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-row>
-    <el-row >
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currPage"
-        :page-sizes="[10, 15, 20]"
-        :page-size="limit"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount">
-      </el-pagination>
-    </el-row>
-    <el-dialog :visible.sync="dialogFormVisible" title="操作" @close="clearForm('roleForm')">
-      <el-form :model="roleForm" label-position="left" label-width="100px">
-        <!--<el-form-item label="部门">-->
-        <!--<el-input v-model="userForm.name" auto-complete="off"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item label="用户名">
-          <el-input v-model="roleForm.roleName" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-button type="primary" @click="userUplode">保存</el-button>
-      </el-form>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogFormVisible2" title="新增" @close="clearForm('roleAdd')">
-      <el-form :model="roleAdd" label-position="left" label-width="100px">
-        <!--<el-form-item label="部门">-->
-        <!--<el-input v-model="userForm.name" auto-complete="off"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item label="角色名称">
-          <el-input v-model="roleAdd.roleName" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色描述">
-          <el-input v-model="roleAdd.remark" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-button type="primary" @click="showAdd">保存</el-button>
-      </el-form>
-    </el-dialog>
-  </el-row>
+  <div>
+    <div class="topTitle">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <el-breadcrumb-item>角色管理</el-breadcrumb-item>
+      </el-breadcrumb>
+      <h3>角色管理</h3>
+    </div>
+    <div class="main">
+      <el-card>
+        <el-row>
+          <el-button type="primary" @click="showAdddialog()">新增</el-button>
+        </el-row>
+        <el-row class="list">
+          <el-table
+            :data="role"
+            header-row-class-name="tableHead"
+            border
+            style="border-radius: 10px">
+            <el-table-column
+              type="index"
+              :index="1">
+            </el-table-column>
+            <el-table-column
+              prop="roleName"
+              label="角色名称">
+            </el-table-column>
+            <el-table-column
+              prop="remark"
+              label="角色描述">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" @click="showdialog(scope.row)">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" circle @click="roleDel(scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-row>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        </el-row>
+        <el-dialog :visible.sync="dialogFormVisible" title="操作" @close="clearForm('roleForm')">
+          <el-form :model="roleForm" label-position="left" label-width="100px">
+            <!--<el-form-item label="部门">-->
+            <!--<el-input v-model="userForm.name" auto-complete="off"></el-input>-->
+            <!--</el-form-item>-->
+            <el-form-item label="用户名">
+              <el-input v-model="roleForm.roleName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-button type="primary" @click="userUplode">保存</el-button>
+          </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible2" title="新增" @close="clearForm('roleAdd')">
+          <el-form :model="roleAdd" label-position="left" label-width="100px">
+            <!--<el-form-item label="部门">-->
+            <!--<el-input v-model="userForm.name" auto-complete="off"></el-input>-->
+            <!--</el-form-item>-->
+            <el-form-item label="角色名称">
+              <el-input v-model="roleAdd.roleName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="角色描述">
+              <el-input v-model="roleAdd.remark" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-button type="primary" @click="showAdd">保存</el-button>
+          </el-form>
+        </el-dialog>
+      </el-card>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -10,6 +10,20 @@ body {
   color: #303133;
   background-color: #fff;
 }
+.main{
+  padding: 15px;
+}
+.topTitle{
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  padding: 20px;
+  h3{
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+}
 a {
   color: mix(#fff, $--color-primary, 20%);
   text-decoration: none;
@@ -309,7 +323,7 @@ img {
 ------------------------------ */
 .site-content {
   position: relative;
-  padding: 15px;
+  //padding: 15px;
 
   &__wrapper {
     position: relative;
@@ -319,7 +333,7 @@ img {
     background: $content--background-color;
   }
   &--tabs {
-    padding: 55px 0 0;
+    //padding: 55px 0 0;
   }
   > .el-tabs {
     > .el-tabs__header {
