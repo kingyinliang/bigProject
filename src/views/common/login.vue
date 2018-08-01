@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm">
       <el-form-item label="账号" prop="user">
       <el-input v-model="ruleForm2.user" auto-complete="off"></el-input>
       </el-form-item>
@@ -76,6 +76,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.loginForm{
+  width: 400px;
+  height: 180px;
+  position: fixed;
+  top: 200px;
+  right: 100px;
+}
 </style>

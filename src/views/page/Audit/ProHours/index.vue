@@ -9,7 +9,7 @@
     </div>
     <div class="main">
       <el-card>
-        <el-form :inline="true" :model="form" size="small" label-width="40px" class="topforms">
+        <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">
           <el-row>
             <el-form-item style="float: right">
               <el-button>编辑</el-button>
@@ -39,7 +39,10 @@
           <el-form-item label="订单">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="日期">
+          <el-form-item label="生产日期">
+            <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="过账日期">
             <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
           </el-form-item>
         </el-form>
@@ -76,12 +79,7 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="组件物料"
-            width="95">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="发料组件数量"
+            label="实际生生产数量"
             width="95">
           </el-table-column>
           <el-table-column
@@ -91,17 +89,57 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="物料批次"
+            label="准备工时"
             width="95">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="出库库位"
+            label="单位"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="机器工时"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="单位"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="人工工时"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="单位"
             width="95">
           </el-table-column>
           <el-table-column
             prop="name"
             label="接口回写"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="执行开始的确认日期"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="设置完成的确认日期"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="操作活动编号"
+            width="95">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="部分/最后确认"
             width="95">
           </el-table-column>
           <el-table-column
@@ -162,7 +200,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .topforms{
     .el-date-editor.el-input{
       width: auto;

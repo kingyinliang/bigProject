@@ -9,11 +9,10 @@
     </div>
     <div class="main">
       <el-card>
-        <el-form :inline="true" :model="form" size="small" label-width="40px" class="topforms">
+        <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">
           <el-row>
             <el-form-item style="float: right">
-              <el-button>编辑</el-button>
-              <el-button type="primary">保存</el-button>
+              <el-button type="primary">查询</el-button>
               <el-button>审核通过</el-button>
               <el-button>审核不通过</el-button>
             </el-form-item>
@@ -39,9 +38,17 @@
           <el-form-item label="订单">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="日期">
+          <el-form-item label="生产日期">
             <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
           </el-form-item>
+          <el-form-item label="过账日期">
+            <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+          </el-form-item>
+          <el-row>
+            <el-form-item label="抬头文本" class="formtextarea">
+              <el-input type="textarea"></el-input>
+            </el-form-item>
+          </el-row>
         </el-form>
         <el-table
           ref="table1"
@@ -53,6 +60,10 @@
           <el-table-column
             type="selection"
             width="55">
+          </el-table-column>
+          <el-table-column
+            type="index"
+            width="50">
           </el-table-column>
           <el-table-column
             prop="name"
@@ -120,9 +131,12 @@
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="操作"
-            width="95">
+            width="190">
+            <template slot-scope="scope">
+              <el-button @click="remove(scope.$index,tableData3)" type="primary">编辑</el-button>
+              <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-card>
@@ -162,13 +176,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .topforms{
-  .el-date-editor.el-input{
-    width: auto;
-  }
-  input{
-    width: 200px!important;
-  }
+    .el-date-editor.el-input{
+      width: auto;
+    }
+    input{
+      width: 200px!important;
+    }
+    .formtextarea{
+      .el-form-item__content{
+        width: 500px;
+      }
+    }
   }
 </style>

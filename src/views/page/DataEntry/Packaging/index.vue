@@ -42,19 +42,19 @@
                 <div class="itemForm">
                   <el-form :model="plantList" size="small" label-position="right" label-width="68px">
                     <el-form-item label="产线">
-                      <el-input v-model="plantList.name"></el-input>
+                     <p>{{plantList.name}}</p>
                     </el-form-item>
                     <el-form-item label="订单号">
-                      <el-input v-model="plantList.name"></el-input>
+                      <p>{{plantList.name}}</p>
                     </el-form-item>
                     <el-form-item label="品项">
-                      <el-input v-model="plantList.name"></el-input>
+                      <p>{{plantList.name}}</p>
                     </el-form-item>
                     <el-form-item label="计划产量">
-                      <el-input v-model="plantList.name"></el-input>
+                      <p>{{plantList.name}}</p>
                     </el-form-item>
                     <el-form-item label="实时产量">
-                      <el-input v-model="plantList.name"></el-input>
+                      <p>{{plantList.name}}</p>
                     </el-form-item>
                   </el-form>
                 </div>
@@ -99,11 +99,15 @@ export default {
     display: flex;
     img{
       float: left;
-      width: 150px;
+      width: 200px;
       height: 240px;
+      margin-right: 50px;
     }
     .itemForm{
       flex: 1;
+      p{
+        color: #8a979e;
+      }
     }
   }
 }

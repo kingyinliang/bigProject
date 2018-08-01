@@ -1,5 +1,5 @@
-let HOST = 'http://localhost:8080'
-// let HOST = 'http://demo.renren.io/renren-fast/'
+// let HOST = 'http://localhost:8080'
+let HOST = 'http://10.8.4.153:50080'
 /*
 *首页api
  */
