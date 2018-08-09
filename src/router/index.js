@@ -30,6 +30,7 @@ const mainRoutes = {
     let token = Vue.cookie.get('token')
     // let menuList = Vue.$store.state.common.menuList
     // console.log(menuList)
+    // if (to.meta.title) document.title = to.meta.title
     if (!token || !/\S/.test(token)) {
       next({ path: 'login' })
     }

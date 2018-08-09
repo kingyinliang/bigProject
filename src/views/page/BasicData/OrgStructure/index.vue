@@ -16,7 +16,7 @@
             </el-input>
             <el-button>查询</el-button>
           </div>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-card class="orgcard">
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
@@ -24,7 +24,7 @@
               <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail"></el-tree>
             </el-card>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="16">
             <el-card class="orgcard">
               <div slot="header" class="clearfix">
                 <span>组织详细信息</span>
@@ -142,42 +142,42 @@
             </div>
           </el-form>
         </el-dialog>
-        <el-dialog :visible.sync="dialogFormVisible3" @close="clearForm('adddepform')" title="人员维护">
-          <el-form :model="adddepform" label-width="100px" size="small" :inline="true">
-            <el-form-item label="归属部门">
-              <el-input v-model="adddepform.name"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button><i class=""></i>添加</el-button>
-            </el-form-item>
-          </el-form>
-          <el-table
-            ref="table1"
-            header-row-class-name="tableHead"
-            :data="tableData3"
-            border
-            tooltip-effect="dark"
-            style="width: 100%;margin-bottom: 20px">
-            <el-table-column
-              type="index"
-              :index="indexMethod">
-            </el-table-column>
-            <el-table-column
-              label="人员工号"
-              width="120">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="人员姓名"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              label="删除">
-              <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
-            </el-table-column>
-          </el-table>
-        </el-dialog>
+        <!--<el-dialog :visible.sync="dialogFormVisible3" @close="clearForm('adddepform')" title="人员维护">-->
+          <!--<el-form :model="adddepform" label-width="100px" size="small" :inline="true">-->
+            <!--<el-form-item label="归属部门">-->
+              <!--<el-input v-model="adddepform.name"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item>-->
+              <!--<el-button><i class=""></i>添加</el-button>-->
+            <!--</el-form-item>-->
+          <!--</el-form>-->
+          <!--<el-table-->
+            <!--ref="table1"-->
+            <!--header-row-class-name="tableHead"-->
+            <!--:data="tableData3"-->
+            <!--border-->
+            <!--tooltip-effect="dark"-->
+            <!--style="width: 100%;margin-bottom: 20px">-->
+            <!--<el-table-column-->
+              <!--type="index"-->
+              <!--:index="indexMethod">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+              <!--label="人员工号"-->
+              <!--width="120">-->
+              <!--<template slot-scope="scope">{{ scope.row.date }}</template>-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+              <!--prop="name"-->
+              <!--label="人员姓名"-->
+              <!--width="120">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+              <!--label="删除">-->
+              <!--<template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>-->
+            <!--</el-table-column>-->
+          <!--</el-table>-->
+        <!--</el-dialog>-->
         <el-dialog :visible.sync="dialogFormVisible4" @close="clearForm('adddepform')" title="班组维护">
           <el-form :model="adddepform" label-position="left" label-width="100px">
             <el-form-item label="班组编码">
@@ -203,13 +203,10 @@
             </el-form-item>
           </el-form>
         </el-dialog>
-        <el-dialog :visible.sync="dialogFormVisible5" @close="clearForm('adddepform')" title="设备维护"></el-dialog>
         <ul id = "menu" v-show = "menuVisible">
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
-          <li class="menuli" @click="dialogFormVisible3 = true">人员维护</li>
           <li class="menuli" @click="dialogFormVisible4 = true">班组维护</li>
-          <li class="menuli" @click="dialogFormVisible5 = true">设备维护</li>
         </ul>
       </el-card>
     </div>

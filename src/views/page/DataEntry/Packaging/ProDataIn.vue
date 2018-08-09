@@ -9,52 +9,54 @@
       <h3>包装车间</h3>
     </div>
     <div class="main">
-      <el-card>
-        <el-form :inline="true" :model="form" size="small" label-width="80px" class="topform">
-          <el-row>
-            <el-form-item style="float: right">
-              <el-button type="primary" @click="isRedact=true">编辑</el-button>
-            </el-form-item>
-            <el-form-item style="float: right">
+      <el-card style="margin: 0">
+        <el-row type="flex">
+          <el-col>
+            <el-form :inline="true" :model="form" size="small" label-width="80px" class="topform">
+              <el-form-item label="车间">
+                <el-select v-model="form.region" placeholder="车间">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="产线">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="订单号">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="品项">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="计划产量">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="日期">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="提交人员">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="提交时间">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+          <el-col style="width: 210px">
+            <el-row style="float: right;margin-bottom: 13px">
               <el-button type="primary" >返回</el-button>
-            </el-form-item>
-          </el-row>
-          <el-row style="float: right" v-if="isRedact">
-            <el-form-item style="float: right">
+              <el-button type="primary" @click="isRedact=true">编辑</el-button>
+            </el-row>
+            <el-row style="float: right" v-if="isRedact">
               <el-button type="primary" >保存</el-button>
-            </el-form-item>
-            <el-form-item style="float: right">
               <el-button type="primary" >提交</el-button>
-            </el-form-item>
-          </el-row>
-          <el-form-item label="车间">
-            <el-select v-model="form.region" placeholder="车间">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="产线">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="订单号">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="品项">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="计划产量">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="日期">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="提交人员">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="提交时间">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-        </el-form>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-card>
+    </div>
+    <div class="main" style="padding-top: 0px">
+      <el-card>
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">

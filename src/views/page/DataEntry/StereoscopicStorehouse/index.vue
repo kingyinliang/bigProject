@@ -8,39 +8,49 @@
     <h3>立体库</h3>
   </div>
   <div class="main">
+    <el-card style="margin: 0">
+      <el-row type="flex">
+        <el-col>
+          <el-form :inline="true" :model="form" size="small" label-width="40px" class="topforms">
+            <el-form-item label="工厂">
+              <el-select v-model="form.region" placeholder="车间">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="车间">
+              <el-select v-model="form.region" placeholder="车间">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="产线">
+              <el-select v-model="form.region" placeholder="车间">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="订单">
+              <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="日期">
+              <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col style="width: 200px">
+          <el-button>返回</el-button>
+          <el-button type="primary">查询</el-button>
+        </el-col>
+      </el-row>
+    </el-card>
+  </div>
+  <div class="main" style="padding-top: 0px">
     <el-card>
-      <el-form :inline="true" :model="form" size="small" label-width="40px" class="topforms">
-        <el-row>
-          <el-form-item style="float: right">
-            <el-button>保存</el-button>
-            <el-button>编辑</el-button>
-          </el-form-item>
-        </el-row>
-        <el-form-item label="工厂">
-          <el-select v-model="form.region" placeholder="车间">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="车间">
-          <el-select v-model="form.region" placeholder="车间">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="产线">
-          <el-select v-model="form.region" placeholder="车间">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="订单">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
-        </el-form-item>
-      </el-form>
+      <el-row style="margin-bottom: 13px;float: right">
+        <el-button>编辑</el-button>
+        <el-button type="primary">入库报表</el-button>
+      </el-row>
       <el-table
         ref="table1"
         header-row-class-name="tableHead"

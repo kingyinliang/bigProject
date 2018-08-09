@@ -9,47 +9,57 @@
     </div>
     <div class="main">
       <el-card>
-        <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">
-          <el-row>
-            <el-form-item style="float: right">
+        <el-row type="flex">
+          <el-col>
+            <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">
+              <el-form-item label="工厂">
+                <el-select v-model="form.region" placeholder="车间">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="车间">
+                <el-select v-model="form.region" placeholder="车间">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="产线">
+                <el-select v-model="form.region" placeholder="车间">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="订单">
+                <el-input v-model="form.name"></el-input>
+              </el-form-item>
+              <el-form-item label="生产日期">
+                <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="过账日期">
+                <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+              </el-form-item>
+              <el-row>
+                <el-form-item label="抬头文本" class="formtextarea">
+                  <el-input type="textarea"></el-input>
+                </el-form-item>
+              </el-row>
+            </el-form>
+          </el-col>
+          <el-col style="width: 300px">
+            <el-row style="margin-bottom: 13px">
               <el-button type="primary">查询</el-button>
+            </el-row>
+            <el-row>
               <el-button>审核通过</el-button>
               <el-button>审核不通过</el-button>
-            </el-form-item>
-          </el-row>
-          <el-form-item label="工厂">
-            <el-select v-model="form.region" placeholder="车间">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="车间">
-            <el-select v-model="form.region" placeholder="车间">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="产线">
-            <el-select v-model="form.region" placeholder="车间">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="订单">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="生产日期">
-            <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="过账日期">
-            <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
-          </el-form-item>
-          <el-row>
-            <el-form-item label="抬头文本" class="formtextarea">
-              <el-input type="textarea"></el-input>
-            </el-form-item>
-          </el-row>
-        </el-form>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-card>
+    </div>
+    <div class="main" style="padding-top: 0px">
+      <el-card>
         <el-table
           ref="table1"
           header-row-class-name="tableHead"
@@ -161,6 +171,7 @@
             width="95">
           </el-table-column>
           <el-table-column
+            fixed="right"
             label="操作"
             width="190">
             <template slot-scope="scope">

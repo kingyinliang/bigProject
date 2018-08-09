@@ -1,0 +1,199 @@
+<template>
+    <div>
+      <div class="topTitle">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>基础数据</el-breadcrumb-item>
+          <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+        </el-breadcrumb>
+        <h3>订单管理</h3>
+      </div>
+      <div class="main">
+        <el-card>
+          <div class="clearfix">
+            <el-row style="float: right">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
+                <el-form-item>
+                  <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" size="small" @click="querys">查询</el-button>
+                  <el-button size="small" @click="visible = true">高级查询</el-button>
+                  <el-button size="small">同步</el-button>
+                </el-form-item>
+              </el-form>
+            </el-row>
+          </div>
+          <el-row>
+            <el-table
+              ref="table1"
+              header-row-class-name="tableHead"
+              :data="sapOrderlist"
+              tooltip-effect="dark"
+              style="width: 100%;margin-bottom: 20px">
+              <el-table-column
+                label="生产订单">
+                <template slot-scope="scope">
+                  <el-button type="text">{{scope.row.orderNo}}</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="订单类型"
+                width="80">
+                <template slot-scope="scope">
+                  {{ scope.row.orderType }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="factory"
+                label="工厂"
+                width="80">
+              </el-table-column>
+              <el-table-column
+                prop="commitDate"
+                label="基本完成日期"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="startDate"
+                label="基本开始日期"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="materialCode"
+                label="物料"
+                width="110">
+              </el-table-column>
+              <el-table-column
+                prop="orderNum"
+                label="订单数量"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="orderUnit"
+                label="订单单位"
+                width="80">
+              </el-table-column>
+              <el-table-column
+                prop="dispatchMan"
+                label="生产调度员"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="syncDate"
+                label="同步日期"
+                width="120">
+              </el-table-column>
+            </el-table>
+          </el-row>
+          <el-row >
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currPage"
+              :page-sizes="[10, 15, 20]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+            </el-pagination>
+          </el-row>
+        </el-card>
+      </div>
+      <el-dialog
+        title="高级查询"
+        :close-on-click-modal="false"
+        :visible.sync="visible">
+        <div>
+          <el-form :model="form" size="small" label-width="110px" class="orderdialog">
+            <el-form-item label="生产订单">
+              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+            </el-form-item>
+            <el-form-item label="物料">
+              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+            </el-form-item>
+            <el-form-item label="生产调度员">
+              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+            </el-form-item>
+            <el-form-item label="基本开始日期">
+              <el-date-picker v-model="form.param" placeholder="手工录入"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="基本完成日期">
+              <el-date-picker v-model="form.param" placeholder="手工录入"></el-date-picker>
+            </el-form-item>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">取消</el-button>
+          <el-button type="primary">确定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+</template>
+
+<script>
+import {BASICDATA_API} from '@/api/api'
+export default {
+  name: 'OrderManage',
+  data () {
+    return {
+      visible: false,
+      form: {
+        param: ''
+      },
+      sapOrderlist: [],
+      currPage: 1,
+      pageSize: 10,
+      totalCount: 1
+    }
+  },
+  mounted () {
+    this.GetOrderList()
+  },
+  methods: {
+    // 获取订单管理
+    GetOrderList () {
+      this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'GET', {}).then(({data}) => {
+        console.log(data)
+        if (data.code === 0) {
+          this.sapOrderlist = data.page.list
+          this.pageSize = data.page.pageSize
+          this.totalCount = data.page.totalCount
+          this.currPage = data.page.currPage
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    querys () {},
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.Getsaplist({
+        param: this.form.param,
+        pageSize: val,
+        page: 1
+      })
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.Getsaplist({
+        param: this.form.param,
+        pageSize: this.pageSize,
+        page: val
+      })
+    }
+  },
+  computed: {},
+  components: {}
+}
+</script>
+
+<style scoped>
+
+</style>
+<style lang="scss">
+  .orderdialog{
+    margin: auto;
+    input{
+      width: 300px!important;
+    }
+  }
+</style>
