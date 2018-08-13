@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm">
+    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
       <el-form-item label="账号" prop="user">
       <el-input v-model="ruleForm2.user" auto-complete="off"></el-input>
       </el-form-item>
@@ -54,7 +54,6 @@ export default {
             username: this.ruleForm2.user,
             password: this.ruleForm2.pass
           }).then(res => {
-            console.log(res.data)
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.token)
               // window.sessionStorage.setItem('menuList', JSON.stringify(res.data.data.menuList))

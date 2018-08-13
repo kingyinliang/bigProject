@@ -4,18 +4,6 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <!--<el-row type="flex">-->
-        <!--<el-col>-->
-          <!--<el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">-->
-            <!--<el-form-item label="用户名称">-->
-              <!--<el-input v-model="form.username" placeholder="用户名称"></el-input>-->
-            <!--</el-form-item>-->
-          <!--</el-form>-->
-        <!--</el-col>-->
-        <!--<el-col style="width: 100px">-->
-          <!--<el-button type="primary">查询</el-button>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
       <el-row>
         <el-transfer
           filterable

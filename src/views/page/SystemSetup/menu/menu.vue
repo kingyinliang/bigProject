@@ -10,7 +10,7 @@
       <div class="main">
         <el-card>
           <el-row>
-            <el-button>新增</el-button>
+            <el-button @click="addOrUpdateHandle()">新增</el-button>
           </el-row>
           <el-row>
             <el-table
@@ -102,7 +102,7 @@
 import TableTreeColumn from '@/views/components/table-tree-column'
 import { treeDataTranslate } from '@/net/validate'
 import AddOrUpdate from './menuAdd'
-import {MAIN_API} from '@/api/api'
+import {MAIN_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'menuManage',
   data () {
@@ -127,6 +127,29 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
+    },
+    // 删除
+    deleteHandle (id) {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${SYSTEMSETUP_API.MENUDEL_API}/${id}`, 'POST', {}).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }).catch(() => {})
     }
   },
   computed: {},

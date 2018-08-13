@@ -1,75 +1,89 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>参数类型</span>
-          </div>
-          <div>
-            <el-table
-              header-row-class-name="tableHead"
-              :data="parameterType"
-              border
-              @row-click="setTypeDetail"
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index">
-              </el-table-column>
-              <el-table-column
-                label="参数类型编码"
-                width="120">
-                <template slot-scope="scope">{{ scope.row.code }}</template>
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="参数类型名称"
-                width="120">
-              </el-table-column>
-              <el-table-column
-                label="删除">
-                <template slot-scope="scope"><el-button @click="remove(scope.$index,parameterType)">删除</el-button></template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>参数</span>
-          </div>
-          <div>
-            <el-table
-              ref="table1"
-              header-row-class-name="tableHead"
-              :data="tableData3"
-              border
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index">
-              </el-table-column>
-              <el-table-column
-                label="人员工号"
-                width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="人员姓名"
-                width="120">
-              </el-table-column>
-              <el-table-column
-                label="删除">
-                <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div class="topTitle">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>基础数据</el-breadcrumb-item>
+        <el-breadcrumb-item>容器管理</el-breadcrumb-item>
+      </el-breadcrumb>
+      <h3>容器管理</h3>
+    </div>
+    <div class="main">
+      <el-card>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>参数类型</span>
+              </div>
+              <div>
+                <el-table
+                  header-row-class-name="tableHead"
+                  :data="parameterType"
+                  border
+                  @row-click="setTypeDetail"
+                  tooltip-effect="dark"
+                  style="width: 100%;margin-bottom: 20px">
+                  <el-table-column
+                    type="index"
+                    width="50"
+                    label="序号">
+                  </el-table-column>
+                  <el-table-column
+                    label="参数类型编码">
+                    <template slot-scope="scope">{{ scope.row.code }}</template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="参数类型名称">
+                  </el-table-column>
+                  <el-table-column
+                    label="操作"
+                    width="80">
+                    <template slot-scope="scope"><el-button @click="remove(scope.$index,parameterType)">删除</el-button></template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="16">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>参数</span>
+              </div>
+              <div>
+                <el-table
+                  ref="table1"
+                  header-row-class-name="tableHead"
+                  :data="tableData3"
+                  border
+                  tooltip-effect="dark"
+                  style="width: 100%;margin-bottom: 20px">
+                  <el-table-column
+                    type="index"
+                    width="50"
+                    label="序号">
+                  </el-table-column>
+                  <el-table-column
+                    label="人员工号"
+                    width="120">
+                    <template slot-scope="scope">{{ scope.row.date }}</template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="人员姓名"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    label="删除">
+                    <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-card>
+    </div>
   </div>
 </template>
 

@@ -11,12 +11,12 @@
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
+              <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2">
                 <el-form-item>
-                  <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
+                  <el-input v-model="param.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="querys">查询</el-button>
+                  <el-button type="primary" size="small" @click="querys(param)">查询</el-button>
                   <el-button size="small" @click="visible = true">高级查询</el-button>
                   <el-button size="small">同步</el-button>
                 </el-form-item>
@@ -105,25 +105,25 @@
         <div>
           <el-form :model="form" size="small" label-width="110px" class="orderdialog">
             <el-form-item label="生产订单">
-              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+              <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
             </el-form-item>
             <el-form-item label="物料">
-              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+              <el-input v-model="form.materialName" placeholder="手工录入"></el-input>
             </el-form-item>
             <el-form-item label="生产调度员">
-              <el-input v-model="form.param" placeholder="手工录入"></el-input>
+              <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
             </el-form-item>
             <el-form-item label="基本开始日期">
-              <el-date-picker v-model="form.param" placeholder="手工录入"></el-date-picker>
+              <el-date-picker v-model="form.startDateOne" placeholder="选择日期"></el-date-picker>
             </el-form-item>
             <el-form-item label="基本完成日期">
-              <el-date-picker v-model="form.param" placeholder="手工录入"></el-date-picker>
+              <el-date-picker v-model="form.commitDateOne" placeholder="选择日期"></el-date-picker>
             </el-form-item>
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary">确定</el-button>
+          <el-button type="primary" @click="querys(form)">确定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -136,8 +136,15 @@ export default {
   data () {
     return {
       visible: false,
+      param: {
+        orderNo: ''
+      },
       form: {
-        param: ''
+        orderNo: '',
+        materialName: '',
+        dispatchMan: '',
+        startDateOne: '',
+        commitDateOne: ''
       },
       sapOrderlist: [],
       currPage: 1,
@@ -150,34 +157,38 @@ export default {
   },
   methods: {
     // 获取订单管理
-    GetOrderList () {
-      this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'GET', {}).then(({data}) => {
+    GetOrderList (obj) {
+      this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'POST', obj).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.sapOrderlist = data.page.list
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
           this.currPage = data.page.currPage
+          this.visible = false
         } else {
           this.$message.error(data.msg)
         }
       })
     },
-    querys () {},
+    // 查询
+    querys (obj) {
+      this.GetOrderList(obj)
+    },
     // 改变每页条数
     handleSizeChange (val) {
       this.Getsaplist({
         param: this.form.param,
-        pageSize: val,
-        page: 1
+        pageSize: JSON.stringify(val),
+        page: '1'
       })
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.Getsaplist({
         param: this.form.param,
-        pageSize: this.pageSize,
-        page: val
+        pageSize: JSON.stringify(this.pageSize),
+        page: JSON.stringify(val)
       })
     }
   },

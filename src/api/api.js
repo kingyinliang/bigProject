@@ -1,5 +1,6 @@
 // let HOST = 'http://localhost:8080'
-let HOST = 'http://10.8.4.153:50080'
+// let HOST = 'http://10.8.4.153:50080'
+let HOST = 'http://10.8.4.153:50080/api'
 /*
 *首页api
  */
@@ -56,7 +57,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} CONTAINERLIST_API 容器列表
    */
-  CONTAINERLIST_API: HOST + '/sys/holder/getList',
+  CONTAINERLIST_API: HOST + '/sys/holder/list',
+  /**
+   * @property {string} CONTAINERLIST_API 容器详情
+   */
+  CONTAINERDETAIL_API: HOST + '/sys/holder/findById',
   /**
    * @property {string} CONTAINERADD_API 容器新增
    */
@@ -73,7 +78,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} CONTAINERDEL_API 设备列表
    */
-  DEVICELIST_API: HOST + '/sys/device/getList',
+  DEVICELIST_API: HOST + '/sys/device/list',
+  /**
+   * @property {string} DEVICEDEL_API 设备删除
+   */
+  DEVICEDEL_API: HOST + '/sys/device/delete',
   /**
    * @property {string} DEVICEADD_API 设备新增
    */
@@ -128,5 +137,25 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} USERDEL_API 删除角色
    */
-  ROLEDEL_API: HOST + '/sys/role/delete'
+  ROLEDEL_API: HOST + '/sys/role/delete',
+  /**
+   * @property {string} MENUSELECT 菜单
+   */
+  MENUSELECT_API: HOST + '/sys/menu/select',
+  /**
+   * @property {string} MENUINFO 菜单详情
+   */
+  MENUINFO_API: HOST + '/sys/menu/info',
+  /**
+   * @property {string} MENUINFO 菜单新增
+   */
+  MENUADD_API: HOST + '/sys/menu/save',
+  /**
+   * @property {string} MENUINFO 菜单新增
+   */
+  MENUDEL_API: HOST + '/sys/menu/delete',
+  /**
+   * @property {string} MENUINFO 菜单修改
+   */
+  MENUUPDATE_API: HOST + '/sys/menu/update'
 }

@@ -11,13 +11,12 @@
       <el-card>
         <el-row class="clearfix">
           <div style="float: right">
-            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
+            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2">
               <el-form-item>
-                <el-input v-model="form.name" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="param.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small">查询</el-button>
-                <el-button size="small">同步</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -37,12 +36,13 @@
                 <span>设备管理</span>
               </div>
               <div>
-                <el-button @click="remove(scope.$index,tableData3)" style="float: right;margin-bottom: 20px">批量删除</el-button>
-                <el-button @click="addOrupdate(deptId)" style="float: right;margin-bottom: 20px">新增</el-button>
+                <el-button @click="remove()" style="float: right;margin-bottom: 20px">批量删除</el-button>
+                <el-button @click="addOrupdate(deptId)" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
                 <el-table
                   ref="table1"
                   header-row-class-name="tableHead"
-                  :data="tableData3"
+                  :data="deviceList"
+                  @selection-change="handleSelectionChange"
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
@@ -55,11 +55,11 @@
                     width="50">
                   </el-table-column>
                   <el-table-column
-                    prop="name"
+                    prop="deviceNo"
                     label="设备编号">
                   </el-table-column>
                   <el-table-column
-                    prop="name"
+                    prop="remark"
                     label="设备描述"
                     width="100">
                   </el-table-column>
@@ -68,17 +68,28 @@
                     label="操作"
                     width="100">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="addOrupdate(deptId, scope.$index,tableData3)">编辑</el-button>
+                      <el-button type="text" @click="addOrupdate(deptId, scope.row)">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
               </div>
+              <el-row >
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="totalCount">
+                </el-pagination>
+              </el-row>
             </el-card>
           </el-col>
         </el-row>
       </el-card>
     </div>
-    <add-orupdate v-if="visible" ref="addOrupdate"></add-orupdate>
+    <add-orupdate v-if="visible" ref="addOrupdate" @refreshDataList="getList()"></add-orupdate>
   </div>
 </template>
 
@@ -92,7 +103,14 @@ export default {
       deptId: 0,
       visible: false,
       OrgTree: [],
-      form: {}
+      param: {
+        param: ''
+      },
+      deviceList: [],
+      multipleSelection: [],
+      totalCount: 0,
+      currPage: 1,
+      pageSize: 10
     }
   },
   mounted () {
@@ -113,10 +131,30 @@ export default {
     // 获取设备列表
     setdetail (data) {
       this.deptId = data.deptId
-      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'GET', {
-        DEPTID: data.deptId
+      this.getList()
+    },
+    // 获取列表
+    getList () {
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: this.param.param,
+        deptId: this.deptId,
+        currPage: JSON.stringify(this.currPage),
+        pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
         console.log(data)
+        if (data.code === 0) {
+          this.deviceList = data.list
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.multipleSelection = []
+      })
+    },
+    // 表格选中
+    handleSelectionChange (val) {
+      this.multipleSelection = []
+      val.forEach((item, index) => {
+        this.multipleSelection.push(item.deviceId)
       })
     },
     // 添加和编辑
@@ -129,6 +167,47 @@ export default {
           this.$refs.addOrupdate.init(deptId, id)
         })
       }
+    },
+    // 删除
+    remove () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请选择要删除的设备')
+      } else {
+        this.$confirm('确认删除设备, 是否继续?', '删除设备', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${BASICDATA_API.CONTAINERDEL_API}`, 'GET', this.multipleSelection).then(({data}) => {
+            console.log(data)
+            if (data.code === 0) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.multipleSelection = []
+              this.getList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.pageSize = JSON.stringify(val)
+      this.getList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.currPage = JSON.stringify(val)
+      this.getList()
     }
   },
   computed: {},

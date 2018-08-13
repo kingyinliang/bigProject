@@ -63,9 +63,9 @@ export function transfer (data) {
   var res = []
   data.forEach((item, index) => {
     res.push({
-      label: item.username,
+      label: item.realName,
       key: item.userId,
-      screncon: item.username
+      screncon: item.realName
     })
   })
   return res

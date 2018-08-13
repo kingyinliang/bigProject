@@ -90,7 +90,7 @@ export default {
       },
       currPage: 1,
       pageSize: 10,
-      totalCount: 1,
+      totalCount: 0,
       saplist: []
     }
   },
@@ -100,7 +100,7 @@ export default {
   methods: {
     // 物料列表
     Getsaplist (obj) {
-      this.$http(`${BASICDATA_API.SAPLIST_API}`, 'GET', obj).then(({data}) => {
+      this.$http(`${BASICDATA_API.SAPLIST_API}`, 'POST', obj).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.saplist = data.page.list
@@ -122,25 +122,25 @@ export default {
     // 查询
     querys () {
       this.Getsaplist({
-        param: this.param,
-        pageSize: 10,
-        page: 1
+        param: JSON.stringify(this.form.param),
+        pageSize: '10',
+        page: '1'
       })
     },
     // 改变每页条数
     handleSizeChange (val) {
       this.Getsaplist({
-        param: this.param,
-        pageSize: val,
-        page: 1
+        param: JSON.stringify(this.form.param),
+        pageSize: JSON.stringify(val),
+        page: '1'
       })
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.Getsaplist({
-        param: this.param,
-        pageSize: this.pageSize,
-        page: val
+        param: this.form.param,
+        pageSize: JSON.stringify(this.pageSize),
+        page: JSON.stringify(val)
       })
     }
   },

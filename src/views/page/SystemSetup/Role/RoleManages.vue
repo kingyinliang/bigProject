@@ -44,8 +44,7 @@
               </el-table-column>
               <el-table-column
                 prop="remark"
-                label="描述"
-                width="200">
+                label="描述">
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -63,22 +62,22 @@
               <el-table-column
                 prop="creator"
                 label="创建人"
-                width="95">
+                width="100">
               </el-table-column>
               <el-table-column
                 prop="created"
                 label="创建时间"
-                width="95">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="changer"
                 label="修改人"
-                width="95">
+                width="100">
               </el-table-column>
               <el-table-column
                 prop="changed"
                 label="修改时间"
-                width="95">
+                width="110">
               </el-table-column>
             </el-table>
           </el-row>
@@ -115,26 +114,7 @@ export default {
       currPage: 1,
       pageSize: 10,
       totalCount: 1,
-      role: [],
-      userlist: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: '',
-        roleId: 1
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: '',
-        roleId: 2
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: '',
-        roleId: 3
-      }]
+      role: []
     }
   },
   mounted () {
@@ -148,7 +128,7 @@ export default {
         if (data.code === 0) {
           this.role = data.page.list
           this.currPage = data.page.currPage
-          this.limit = data.page.pageSize
+          this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
           this.$message.error(data.msg)
@@ -172,15 +152,15 @@ export default {
     // 改变每页条数
     handleSizeChange (val) {
       this.GetRoleList({
-        limit: val,
-        page: 1
+        pageSize: JSON.stringify(val),
+        currPage: '1'
       })
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.GetRoleList({
-        limit: this.limit,
-        page: val
+        pageSize: JSON.stringify(this.pageSize),
+        currPage: JSON.stringify(val)
       })
     }
   },
