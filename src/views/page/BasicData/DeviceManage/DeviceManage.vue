@@ -13,10 +13,10 @@
           <div style="float: right">
             <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2">
               <el-form-item>
-                <el-input v-model="param.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small">查询</el-button>
+                <el-button type="primary" size="small" @click="getList()">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -143,7 +143,10 @@ export default {
       }).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
-          this.deviceList = data.list
+          this.deviceList = data.list.list
+          this.pageSize = data.list.pageSize
+          this.totalCount = data.list.totalCount
+          this.currPage = data.list.currPage
         } else {
           this.$message.error(data.msg)
         }
@@ -178,7 +181,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${BASICDATA_API.CONTAINERDEL_API}`, 'GET', this.multipleSelection).then(({data}) => {
+          this.$http(`${BASICDATA_API.DEVICEDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
             console.log(data)
             if (data.code === 0) {
               this.$message({
@@ -201,12 +204,12 @@ export default {
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.pageSize = JSON.stringify(val)
+      this.pageSize = val
       this.getList()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.currPage = JSON.stringify(val)
+      this.currPage = val
       this.getList()
     }
   },

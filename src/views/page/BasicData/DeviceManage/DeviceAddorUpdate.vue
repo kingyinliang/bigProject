@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="form" size="small" label-width="110px" class="devicedialog">
+      <el-form :model="form" size="small" label-width="110px" class="devicedialog" @keyup.enter.native="submitForm()">
         <el-form-item label="设备名称">
           <el-input v-model="form.deviceName" placeholder="手工录入"></el-input>
         </el-form-item>

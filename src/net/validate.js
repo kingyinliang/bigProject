@@ -61,12 +61,19 @@ export function treeDataTranslate (data, id = 'id', pid = 'parentId') {
 
 export function transfer (data) {
   var res = []
+  var selcedid = []
   data.forEach((item, index) => {
+    if (item.del_flag === '0') {
+      selcedid.push(item.user_id)
+    }
     res.push({
-      label: item.realName,
-      key: item.userId,
-      screncon: item.realName
+      label: item.name,
+      key: item.user_id,
+      screncon: item.name
     })
   })
-  return res
+  return {
+    res: res,
+    selcedid: selcedid
+  }
 }

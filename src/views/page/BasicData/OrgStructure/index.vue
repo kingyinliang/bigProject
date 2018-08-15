@@ -170,7 +170,7 @@
         <ul id = "menu" v-show = "menuVisible">
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
-          <li class="menuli" @click="dialogFormVisible4 = true">班组维护</li>
+          <li class="menuli" @click="team()">班组维护</li>
         </ul>
       </el-card>
     </div>
@@ -245,10 +245,6 @@ export default {
         }
       })
     },
-    // 表格删除
-    remove (index, rows) {
-      rows.splice(index, 1)
-    },
     // 表格自定义序号
     indexMethod (index) {
       return index + 1
@@ -267,6 +263,14 @@ export default {
       menu.style.left = event.clientX + 'px'
       menu.style.top = event.clientY + 'px'
     },
+    team () {
+      if (this.clickTreeNode.deptType === '班组') {
+        this.dialogFormVisible4 = true
+      } else {
+        this.menuVisible = false
+        this.$message.error('当前不是班组，不能班组维护')
+      }
+    },
     // 上传图片图片回调 新增
     addfile (res, file) {
       this.addDep.picUrl = res.picUrl
@@ -280,6 +284,7 @@ export default {
     },
     closethis () {
       console.log(this.addDep)
+      this.dialogFormVisible1 = false
     },
     // 保存
     savedatail () {

@@ -3,9 +3,9 @@
     <div class="topTitle">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-        <el-breadcrumb-item>容器管理</el-breadcrumb-item>
+        <el-breadcrumb-item>参数管理</el-breadcrumb-item>
       </el-breadcrumb>
-      <h3>容器管理</h3>
+      <h3>参数管理</h3>
     </div>
     <div class="main">
       <el-card>
@@ -13,7 +13,10 @@
           <el-col :span="8">
             <el-card>
               <div slot="header" class="clearfix">
-                <span>参数类型</span>
+                <div slot="header" class="clearfix">
+                  <span style="float: left;line-height: 35px">参数类型</span>
+                  <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('type')"></el-button>
+                </div>
               </div>
               <div>
                 <el-table
@@ -48,13 +51,14 @@
           <el-col :span="16">
             <el-card>
               <div slot="header" class="clearfix">
-                <span>参数</span>
+                <span style="float: left;line-height: 35px">参数</span>
+                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('param')"></el-button>
               </div>
               <div>
                 <el-table
                   ref="table1"
                   header-row-class-name="tableHead"
-                  :data="tableData3"
+                  :data="parameter"
                   border
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
@@ -64,18 +68,16 @@
                     label="序号">
                   </el-table-column>
                   <el-table-column
-                    label="人员工号"
-                    width="120">
-                    <template slot-scope="scope">{{ scope.row.date }}</template>
+                    prop="name"
+                    label="参数类型编码">
                   </el-table-column>
                   <el-table-column
                     prop="name"
-                    label="人员姓名"
-                    width="120">
+                    label="参数类型名称">
                   </el-table-column>
                   <el-table-column
                     label="删除">
-                    <template slot-scope="scope"><el-button @click="remove(scope.$index,tableData3)">删除</el-button></template>
+                    <template slot-scope="scope"><el-button @click="remove(scope.$index)">删除</el-button></template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -84,15 +86,18 @@
         </el-row>
       </el-card>
     </div>
+    <add-or-update ref="addOrupdate" v-if="visible"></add-or-update>
   </div>
 </template>
 
 <script>
+import addOrUpdate from './ParameterAddorUpdate'
 import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'ParameterManage',
   data () {
     return {
+      visible: false,
       tableData3: [{
         date: '2016-05-03',
         name: '王小虎',
@@ -109,14 +114,16 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
         crew: ''
       }],
-      parameterType: []
+      parameterType: [],
+      parameter: []
     }
   },
   mounted () {
-    this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'GET', {}).then(({data}) => {
+    this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'GET', {
+    }).then(({data}) => {
       console.log(data)
       if (data.code === 0) {
-        this.parameterType = data.page.list
+        this.parameterType = data.dicList
       } else {
         this.$message.error(data.msg)
       }
@@ -129,14 +136,36 @@ export default {
     },
     //  设置类型详情
     setTypeDetail (row, event, column) {
-      console.log(row.id)
+      console.log(row)
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', row.type).then(({data}) => {
+        console.log(data)
+        if (data.code === 0) {
+          this.parameter = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 新增  修改
+    addorupdate (str, id) {
+      this.visible = true
+      this.$nextTick(() => {
+        this.$refs.addOrupdate.init(str, id)
+      })
     }
   },
   computed: {},
-  components: {}
+  components: {
+    addOrUpdate
+  }
 }
 </script>
 
+<style lang="scss">
+  .el-card__header{
+    padding: 13px 15px;
+  }
+</style>
 <style scoped>
 
 </style>

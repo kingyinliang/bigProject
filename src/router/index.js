@@ -22,9 +22,6 @@ const mainRoutes = {
   children: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
-    // { path: '/home', component: resolve => require(['page/SystemSetup/Parameter/ParameterManage'], resolve), name: 'home', meta: { title: '首页' } }
-    // { path: '/home', component: resolve => require(['page/DataEntry/StereoscopicStorehouse/index'], resolve), name: 'home', meta: { title: '首页' } }
-    // { path: '/home', component: resolve => require(['page/DataEntry/Packaging/ProDataIn'], resolve), name: 'home', meta: { title: '首页' } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -96,11 +93,11 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
-      if (menuList[i].hasChild) {
+      if (menuList[i].remark) {
         var router2 = {
-          path: menuList[i].hasChild.replace(/\//g, '-'),
+          path: menuList[i].remark.replace(/\//g, '-'),
           component: null,
-          name: menuList[i].hasChild.replace(/\//g, '-'),
+          name: menuList[i].remark.replace(/\//g, '-'),
           meta: {
             menuId: menuList[i].menuId,
             title: menuList[i].name,
@@ -108,7 +105,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
             isTab: true
           }
         }
-        router2['component'] = _import(`page/${menuList[i].hasChild}`) || null
+        router2['component'] = _import(`page/${menuList[i].remark}`) || null
         routes.push(router2)
       }
       menuList[i].url = menuList[i].url.replace(/^\//, '')

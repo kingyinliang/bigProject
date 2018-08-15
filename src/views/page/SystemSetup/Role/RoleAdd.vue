@@ -15,14 +15,14 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary">确定</el-button>
+      <el-button type="primary" @click="dataFormSubmit">确定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 import { treeDataTranslate } from '@/net/validate'
-import {MAIN_API} from '@/api/api'
+import {MAIN_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'RoleAdd',
   data () {
@@ -40,12 +40,40 @@ export default {
   methods: {
     // 获取功能
     init (id) {
+      this.roleId = id
       this.$http(`${MAIN_API.MENULIST_API}`, 'GET', {}).then(({data}) => {
         console.log(data)
         this.menuList = treeDataTranslate(data, 'menuId')
-        console.log(this.menuList)
       }).then(() => {
         this.visible = true
+      }).then(() => {
+        this.$http(`${SYSTEMSETUP_API.LISTMENU_API}`, 'POST', {
+          roleId: id
+        }).then(({data}) => {
+          this.$refs.menuListTree.setCheckedKeys(data.list)
+        })
+      })
+    },
+    // 表单提交
+    dataFormSubmit () {
+      this.$http(`${SYSTEMSETUP_API.ROLEMENUUPDATE_API}`, 'POST', {
+        roleId: this.roleId,
+        deptId: [].concat(this.$refs.menuListTree.getCheckedKeys())
+      }).then(({data}) => {
+        console.log(data)
+        if (data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     }
   },

@@ -166,6 +166,8 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.visible = false
+
       })
     },
     // 表格选中

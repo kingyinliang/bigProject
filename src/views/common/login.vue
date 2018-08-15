@@ -36,7 +36,7 @@ export default {
       rules2: {
         user: [
           { required: true, message: '请输入账号名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         pass: [
           { validator: validatePass, trigger: 'blur' }

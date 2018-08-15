@@ -99,8 +99,12 @@ export default {
   },
   methods: {
     // 物料列表
-    Getsaplist (obj) {
-      this.$http(`${BASICDATA_API.SAPLIST_API}`, 'POST', obj).then(({data}) => {
+    Getsaplist () {
+      this.$http(`${BASICDATA_API.SAPLIST_API}`, 'POST', {
+        param: this.form.param,
+        pageSize: JSON.stringify(this.pageSize),
+        currPage: JSON.stringify(this.currPage)
+      }).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.saplist = data.page.list
@@ -121,27 +125,17 @@ export default {
     },
     // 查询
     querys () {
-      this.Getsaplist({
-        param: JSON.stringify(this.form.param),
-        pageSize: '10',
-        page: '1'
-      })
+      this.Getsaplist()
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.Getsaplist({
-        param: JSON.stringify(this.form.param),
-        pageSize: JSON.stringify(val),
-        page: '1'
-      })
+      this.pageSize = val
+      this.Getsaplist()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.Getsaplist({
-        param: this.form.param,
-        pageSize: JSON.stringify(this.pageSize),
-        page: JSON.stringify(val)
-      })
+      this.currPage = val
+      this.Getsaplist()
     }
   },
   computed: {},

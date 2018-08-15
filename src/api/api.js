@@ -1,5 +1,4 @@
 // let HOST = 'http://localhost:8080'
-// let HOST = 'http://10.8.4.153:50080'
 let HOST = 'http://10.8.4.153:50080/api'
 /*
 *首页api
@@ -95,9 +94,29 @@ export const BASICDATA_API = {
 }
 export const SYSTEMSETUP_API = {
   /**
+   * @property {string} PARAMETERLIST_API 参数类型列表
+   */
+  PARAMETERLIST_API: HOST + '/sys/dict/findListByType',
+  /**
    * @property {string} PARAMETERTYPE_API 参数类型
    */
   PARAMETERTYPE_API: HOST + '/sys/dict/list',
+  /**
+   * @property {string} PARAMETERADD_API 参数新增
+   */
+  PARAMETERADD_API: HOST + '/sys/dict/save',
+  /**
+   * @property {string} PARAMETERADD_API 参数删除
+   */
+  PARAMETERDEL_API: HOST + '/sys/dict/delete',
+  /**
+   * @property {string} PARAMETERADD_API 参数修改
+   */
+  PARAMETERUPDATE_API: HOST + '/sys/dict/update',
+  /**
+   * @property {string} PARAMETERDETAIL_API 参数详情
+   */
+  PARAMETERDETAIL_API: HOST + '/sys/dict/info',
   /**
    * @property {string} USERLIST_API 用户列表
    */
@@ -138,6 +157,30 @@ export const SYSTEMSETUP_API = {
    * @property {string} USERDEL_API 删除角色
    */
   ROLEDEL_API: HOST + '/sys/role/delete',
+  /**
+   * @property {string} USERDEL_API 人员分配修改
+   */
+  ROLEUSERUPDATE_API: HOST + '/sys/role/updateUser',
+  /**
+   * @property {string} USERDEL_API 功能分配修改
+   */
+  ROLEMENUUPDATE_API: HOST + '/sys/role/updateMenu',
+  /**
+   * @property {string} USERDEL_API 组织架构分配修改
+   */
+  ROLEDEPTUPDATE_API: HOST + '/sys/role/updateDept',
+  /**
+   * @property {string} ROLEUSER_API 人员分配
+   */
+  ROLEUSER_API: HOST + '/sys/role/listUser',
+  /**
+   * @property {string} LISTMENU_API 功能分配
+   */
+  LISTMENU_API: HOST + '/sys/role/listMenu',
+  /**
+   * @property {string} LISTMENU_API 部门分配
+   */
+  LISTDEPT_API: HOST + '/sys/role/listDept',
   /**
    * @property {string} MENUSELECT 菜单
    */

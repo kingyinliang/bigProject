@@ -10,7 +10,7 @@
           :titles="['未分配人员', '已分配人员']"
           :filter-method="filterMethod"
           filter-placeholder="请输入用户名称"
-          v-model="value2"
+          v-model="selctId"
           :data="userlist">
         </el-transfer>
       </el-row>
@@ -28,27 +28,13 @@ import { transfer } from '@/net/validate'
 export default {
   name: 'UserManage',
   data () {
-    const generateData2 = _ => {
-      const data = []
-      const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
-      const pinyin = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
-      cities.forEach((city, index) => {
-        data.push({
-          label: city,
-          key: index,
-          pinyin: pinyin[index]
-        })
-      })
-      return data
-    }
     return {
-      data2: generateData2(),
-      value2: [],
       filterMethod (query, item) {
         return item.screncon.indexOf(query) > -1
       },
+      roleId: '',
       userlist: [],
-      form: {},
+      selctId: [],
       visible: false
     }
   },
@@ -56,19 +42,44 @@ export default {
   },
   methods: {
     init (id) {
-      this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'GET').then(({data}) => {
+      this.roleId = id
+      this.$http(`${SYSTEMSETUP_API.ROLEUSER_API}`, 'POST', {
+        roleId: id
+      }).then(({data}) => {
         if (data.code === 0) {
-          this.userlist = transfer(data.page.list)
-          console.log(this.userlist)
+          this.userlist = transfer(data.list).res
+          this.selctId = transfer(data.list).selcedid
+        } else {
+          this.$message.error(data.msg)
         }
-      }).then(() => {
         this.visible = true
-        if (id) {
-        }
       })
     },
     updatauser () {
-      console.log(this.value2)
+      console.log(this.selctId)
+      if (this.selctId.length) {
+        this.$http(`${SYSTEMSETUP_API.ROLEUSERUPDATE_API}`, 'POST', {
+          roleId: this.roleId,
+          userId: this.selctId
+        }).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$message.error('请分配人员')
+      }
     }
   },
   computed: {},

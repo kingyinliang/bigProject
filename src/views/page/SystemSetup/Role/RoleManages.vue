@@ -11,14 +11,15 @@
         <el-card>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms">
+              <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms" @keyup.enter.native="GetRoleList()">
                 <el-form-item label="角色名称">
                   <el-input v-model="form.username" placeholder="角色名称"></el-input>
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width: 100px">
-              <el-button type="primary">查询</el-button>
+            <el-col style="width: 200px">
+              <el-button type="primary" @click="GetRoleList()">查询</el-button>
+              <el-button type="primary" @click="roleAddOrUpdate()">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -47,16 +48,14 @@
                 label="描述">
               </el-table-column>
               <el-table-column
-                prop="name"
-                label="系统级角色"
-                width="95">
-              </el-table-column>
-              <el-table-column
                 label="操作"
-                width="240">
+                width="340">
                 <template slot-scope="scope">
                   <a @click="userManage(scope.row.roleId)">人员管理</a>
                   <a @click="fnManage(scope.row.roleId)">功能分配</a>
+                  <a @click="roleDept(scope.row.roleId)">部门分配</a>
+                  <a @click="roleAddOrUpdate(scope.row)">修改绝色</a>
+                  <a @click="removes(scope.row.roleId)">删除角色</a>
                 </template>
               </el-table-column>
               <el-table-column
@@ -94,14 +93,18 @@
           </el-row>
         </el-card>
       </div>
-      <role-add v-if="addOrUpdateVisible1" ref="addOrUpdate" ></role-add>
-      <user-manage v-if="addOrUpdateVisible2" ref="usermanage"></user-manage>
+      <role-add v-if="addOrUpdateVisible1" ref="addOrUpdate" @refreshDataList="GetRoleList()"></role-add>
+      <user-manage v-if="addOrUpdateVisible2" ref="usermanage" @refreshDataList="GetRoleList()"></user-manage>
+      <role-dept v-if="addOrUpdateVisible3" ref="roleDept" @refreshDataList="GetRoleList()"></role-dept>
+      <role-add-or-update v-if="addOrUpdateVisible4" ref="roleaddorupdate" @refreshDataList="GetRoleList()"></role-add-or-update>
     </div>
 </template>
 
 <script>
-import roleAdd from './RoleAdd'
-import userManage from './UserManage'
+import RoleAdd from './RoleAdd'
+import UserManage from './UserManage'
+import RoleDept from './RoleDept'
+import RoleAddOrUpdate from './addRole'
 import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'RoleManages',
@@ -109,7 +112,11 @@ export default {
     return {
       addOrUpdateVisible1: false,
       addOrUpdateVisible2: false,
-      form: {},
+      addOrUpdateVisible3: false,
+      addOrUpdateVisible4: false,
+      form: {
+        username: ''
+      },
       menuList: [],
       currPage: 1,
       pageSize: 10,
@@ -122,8 +129,12 @@ export default {
   },
   methods: {
     // 获取角色列表
-    GetRoleList (obj) {
-      this.$http(`${SYSTEMSETUP_API.ROLELIST_API}`, 'GET', obj).then(({data}) => {
+    GetRoleList () {
+      this.$http(`${SYSTEMSETUP_API.ROLELIST_API}`, 'POST', {
+        roleName: this.form.username,
+        currPage: JSON.stringify(this.currPage),
+        pageSize: JSON.stringify(this.pageSize)
+      }).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.role = data.page.list
@@ -133,6 +144,10 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.addOrUpdateVisible1 = false
+        this.addOrUpdateVisible2 = false
+        this.addOrUpdateVisible3 = false
+        this.addOrUpdateVisible4 = false
       })
     },
     // 人员管理
@@ -149,25 +164,63 @@ export default {
         this.$refs.addOrUpdate.init(id)
       })
     },
+    // 部门管理
+    roleDept (id) {
+      this.addOrUpdateVisible3 = true
+      this.$nextTick(() => {
+        this.$refs.roleDept.init(id)
+      })
+    },
+    // 新增 修改
+    roleAddOrUpdate (id) {
+      this.addOrUpdateVisible4 = true
+      this.$nextTick(() => {
+        this.$refs.roleaddorupdate.init(id)
+      })
+    },
+    // 删除角色
+    removes (id) {
+      this.$confirm('确认删除该角色, 是否继续?', '删除角色', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${SYSTEMSETUP_API.ROLEDEL_API}`, 'POST', id).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.GetRoleList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     // 改变每页条数
     handleSizeChange (val) {
-      this.GetRoleList({
-        pageSize: JSON.stringify(val),
-        currPage: '1'
-      })
+      this.pageSize = val
+      this.GetRoleList()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.GetRoleList({
-        pageSize: JSON.stringify(this.pageSize),
-        currPage: JSON.stringify(val)
-      })
+      this.currPage = val
+      this.GetRoleList()
     }
   },
   computed: {},
   components: {
-    roleAdd,
-    userManage
+    RoleAdd,
+    UserManage,
+    RoleDept,
+    RoleAddOrUpdate
   }
 }
 </script>

@@ -11,12 +11,12 @@
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
                 <el-form-item>
-                  <el-input v-model="param.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
+                  <el-input v-model="form.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="querys(param)">查询</el-button>
+                  <el-button type="primary" size="small" @click="querys()">查询</el-button>
                   <el-button size="small" @click="visible = true">高级查询</el-button>
                   <el-button size="small">同步</el-button>
                 </el-form-item>
@@ -108,7 +108,7 @@
               <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
             </el-form-item>
             <el-form-item label="物料">
-              <el-input v-model="form.materialName" placeholder="手工录入"></el-input>
+              <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
             </el-form-item>
             <el-form-item label="生产调度员">
               <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
@@ -136,12 +136,9 @@ export default {
   data () {
     return {
       visible: false,
-      param: {
-        orderNo: ''
-      },
       form: {
         orderNo: '',
-        materialName: '',
+        materialCode: '',
         dispatchMan: '',
         startDateOne: '',
         commitDateOne: ''
@@ -157,8 +154,10 @@ export default {
   },
   methods: {
     // 获取订单管理
-    GetOrderList (obj) {
-      this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'POST', obj).then(({data}) => {
+    GetOrderList () {
+      this.form.currPage = JSON.stringify(this.currPage)
+      this.form.pageSize = JSON.stringify(this.pageSize)
+      this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'POST', this.form).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.sapOrderlist = data.page.list
@@ -172,24 +171,18 @@ export default {
       })
     },
     // 查询
-    querys (obj) {
-      this.GetOrderList(obj)
+    querys () {
+      this.GetOrderList()
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.Getsaplist({
-        param: this.form.param,
-        pageSize: JSON.stringify(val),
-        page: '1'
-      })
+      this.pageSize = val
+      this.GetOrderList()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.Getsaplist({
-        param: this.form.param,
-        pageSize: JSON.stringify(this.pageSize),
-        page: JSON.stringify(val)
-      })
+      this.currPage = val
+      this.GetOrderList()
     }
   },
   computed: {},
