@@ -50,7 +50,11 @@ export default {
         this.$http(`${SYSTEMSETUP_API.LISTMENU_API}`, 'POST', {
           roleId: id
         }).then(({data}) => {
-          this.$refs.menuListTree.setCheckedKeys(data.list)
+          if (data.code === 0) {
+            this.$refs.menuListTree.setCheckedKeys(data.list)
+          } else {
+            this.$message.error(data.msg)
+          }
         })
       })
     },

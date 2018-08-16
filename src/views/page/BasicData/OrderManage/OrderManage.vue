@@ -25,6 +25,7 @@
           </div>
           <el-row>
             <el-table
+              class="orderTable"
               ref="table1"
               header-row-class-name="tableHead"
               :data="sapOrderlist"
@@ -198,6 +199,13 @@ export default {
     margin: auto;
     input{
       width: 300px!important;
+    }
+  }
+  .orderTable{
+    table{
+      td{
+        padding: 0!important;
+      }
     }
   }
 </style>
