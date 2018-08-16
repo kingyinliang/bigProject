@@ -39,11 +39,11 @@
                     prop="name"
                     label="参数类型名称">
                   </el-table-column>
-                  <el-table-column
-                    label="操作"
-                    width="80">
-                    <template slot-scope="scope"><el-button type="text" @click="remove(scope.$index,parameterType)">删除</el-button></template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--label="操作"-->
+                    <!--width="80">-->
+                    <!--<template slot-scope="scope"><el-button type="text" @click="remove(scope.$index,parameterType)">删除</el-button></template>-->
+                  <!--</el-table-column>-->
                 </el-table>
               </div>
             </el-card>
@@ -83,10 +83,10 @@
                     prop="value"
                     label="参数名称">
                   </el-table-column>
-                  <el-table-column
-                    label="删除">
-                    <template slot-scope="scope"><el-button type="text" @click="remove(scope.$index)">删除</el-button></template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--label="删除">-->
+                    <!--<template slot-scope="scope"><el-button type="text" @click="remove(scope.$index)">删除</el-button></template>-->
+                  <!--</el-table-column>-->
                 </el-table>
               </div>
             </el-card>
