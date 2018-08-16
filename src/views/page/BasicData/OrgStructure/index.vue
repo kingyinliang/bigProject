@@ -11,7 +11,7 @@
       <el-card>
         <el-row :gutter="20">
           <div style="margin-bottom: 20px;padding-left: 20px">
-            <el-input placeholder="参数类型" v-model="form.name" style="width: 300px">
+            <el-input placeholder="部门名称" v-model="form.name" style="width: 300px">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
             <el-button>查询</el-button>
@@ -36,17 +36,19 @@
                     <el-input v-model="OrgDetail.deptCode" v-else></el-input>
                   </el-form-item>
                   <el-form-item label="部门名称" >
-                    <span v-if="update">{{OrgDetail.label}}</span>
-                    <el-input v-model="OrgDetail.label" v-else></el-input>
+                    <span v-if="update">{{OrgDetail.deptName}}</span>
+                    <el-input v-model="OrgDetail.deptName" v-else></el-input>
                   </el-form-item>
                   <el-form-item label="上级部门" >
                     <span>{{OrgDetail.parentId}}</span>
                   </el-form-item>
                   <el-form-item label="部门类型" >
                     <span v-if="update">{{OrgDetail.deptType}}</span>
-                    <el-input v-model="OrgDetail.deptType" v-else></el-input>
+                    <el-select v-model="OrgDetail.deptType" v-else>
+                      <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+                    </el-select>
                   </el-form-item>
-                  <el-form-item label="产线属性" >
+                  <el-form-item label="产线属性" v-if="OrgDetail.deptType === '产线'">
                     <span v-if="update">{{OrgDetail.proLine}}</span>
                     <el-select v-model="OrgDetail.proLine" placeholder="请选择部门类型" style="width: 100%" v-else>
                       <el-option label="普通产线" value="普通产线"></el-option>
@@ -54,7 +56,7 @@
                       <el-option label="礼盒" value="礼盒"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="产线图片" >
+                  <el-form-item label="产线图片" v-if="OrgDetail.deptType === '产线'">
                     <img :src="OrgDetail.picUrl" alt="" v-if="update">
                     <el-upload
                       action="http://localhost:8080/sys/dept/fileUpLoad"
@@ -67,8 +69,8 @@
                     </el-upload>
                   </el-form-item>
                   <el-form-item label="联系人" >
-                    <span v-if="update">{{OrgDetail.connect}}</span>
-                    <el-input v-model="OrgDetail.connect" v-else></el-input>
+                    <span v-if="update">{{OrgDetail.lxr}}</span>
+                    <el-input v-model="OrgDetail.lxr" v-else></el-input>
                   </el-form-item>
                   <el-form-item label="电话" >
                     <span v-if="update">{{OrgDetail.phone}}</span>
@@ -103,15 +105,11 @@
             <el-form-item label="部门类型">
               <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
               <el-select v-model="addDep.deptType" placeholder="请选择部门类型" style="width: 100%">
-                <el-option label="公司" value="1"></el-option>
-                <el-option label="工厂" value="2"></el-option>
-                <el-option label="部门 " value="3 "></el-option>
-                <el-option label="车间  " value="4  "></el-option>
-                <el-option label="工序/产线  " value="5  "></el-option>
+                <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线属性" v-if="addDep.deptType== 5">
-              <el-select v-model="addDep.proLine" placeholder="请选择部门类型" style="width: 100%">
+            <el-form-item label="产线属性" v-if="addDep.deptType== '产线'">
+              <el-select v-model="addDep.proLine" placeholder="请选择产线属性" style="width: 100%">
                 <el-option label="普通产线" value="普通产线"></el-option>
                 <el-option label="二合一" value="二合一"></el-option>
                 <el-option label="礼盒" value="礼盒"></el-option>
@@ -128,7 +126,7 @@
               </el-upload>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model="addDep.connect" auto-complete="off"></el-input>
+              <el-input v-model="addDep.lxr" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="电话">
               <el-input v-model="addDep.phone" auto-complete="off"></el-input>
@@ -137,7 +135,7 @@
               <el-input type="textarea" v-model="addDep.remark"></el-input>
             </el-form-item>
             <div style="text-align: center">
-              <el-button @click="addOrg">{{ addDep.deptType==5 }}保存</el-button>
+              <el-button @click="addOrg">保存</el-button>
               <el-button @click="closethis">关闭</el-button>
             </div>
           </el-form>
@@ -154,7 +152,9 @@
               <el-input v-model="adddepform.name" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="部门类型">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
+              <el-select v-model="adddepform.name" auto-complete="off">
+                <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="联系人">
               <el-input v-model="adddepform.name" auto-complete="off"></el-input>
@@ -170,7 +170,7 @@
         <ul id = "menu" v-show = "menuVisible">
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
           <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
-          <li class="menuli" @click="team()">班组维护</li>
+          <!--<li class="menuli" @click="team()">班组维护</li>-->
         </ul>
       </el-card>
     </div>
@@ -178,7 +178,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -187,6 +187,7 @@ export default {
       adddepform: {
         name: ''
       },
+      dictList: [],
       fileList: [{}],
       menuVisible: false,
       orgid: null,
@@ -195,22 +196,6 @@ export default {
       dialogFormVisible3: false,
       dialogFormVisible4: false,
       dialogFormVisible5: false,
-      tableData3: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }],
       heads: [],
       sibling: true,
       update: true,
@@ -226,6 +211,7 @@ export default {
     })
     this.heads = {token: this.$cookie.get('token')}
     this.getTree()
+    this.getDictList()
   },
   ready () {
     document.addEventListener('click', (e) => {
@@ -245,13 +231,29 @@ export default {
         }
       })
     },
+    // 容器参数下拉
+    getDictList () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=DEPT_TYPE`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.dictList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 表格自定义序号
     indexMethod (index) {
       return index + 1
     },
     // 设置组织详情
     setdetail (data) {
-      this.OrgDetail = data
+      this.$http(`${BASICDATA_API.ORGDETAIL_API}/${data.deptId}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          this.OrgDetail = data.dept
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
       this.fileList[0].name = this.OrgDetail.fileName
       this.fileList[0].url = this.OrgDetail.picUrl
     },
@@ -263,6 +265,7 @@ export default {
       menu.style.left = event.clientX + 'px'
       menu.style.top = event.clientY + 'px'
     },
+    // 班组维护
     team () {
       if (this.clickTreeNode.deptType === '班组') {
         this.dialogFormVisible4 = true
@@ -288,30 +291,49 @@ export default {
     },
     // 保存
     savedatail () {
-      this.OrgDetail.deptName = this.OrgDetail.label
-      this.$http(`${BASICDATA_API.SAVEORG_API}`, 'POST', this.OrgDetail).then(({data}) => {
-        if (data.code === 0) {
-          this.getTree()
-          this.OrgDetail = {}
-          this.fileList = [{}]
-          this.update = true
-        } else {
-          this.$message.error(data.msg)
-        }
+      this.$confirm('确认修改部门, 是否继续?', '修改部门', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${BASICDATA_API.SAVEORG_API}`, 'POST', this.OrgDetail).then(({data}) => {
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getTree()
+            this.OrgDetail = {}
+            this.fileList = [{}]
+            this.update = true
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     },
     //  删除
     deleteorg () {
-      this.$http(`${BASICDATA_API.DELETEORG_API}`, 'GET', {
-        deptId: this.OrgDetail.deptId
-      }).then(({data}) => {
-        console.log(data)
-        if (data.code === 0) {
-          this.getTree()
-          this.OrgDetail = {}
-        } else {
-          this.$message.error(data.msg)
-        }
+      this.$confirm('确认删除部门, 是否继续?', '删除部门', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${BASICDATA_API.DELETEORG_API}`, 'GET', {
+          deptId: this.OrgDetail.deptId
+        }).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getTree()
+            this.OrgDetail = {}
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     },
     //  新增
@@ -323,6 +345,10 @@ export default {
       }
       this.$http(`${BASICDATA_API.ADDORG_API}`, 'POST', this.addDep).then(({data}) => {
         if (data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
           this.getTree()
           this.addDep = {}
           this.dialogFormVisible1 = false

@@ -58,7 +58,7 @@ export default {
     dataFormSubmit () {
       this.$http(`${SYSTEMSETUP_API.ROLEMENUUPDATE_API}`, 'POST', {
         roleId: this.roleId,
-        deptId: [].concat(this.$refs.menuListTree.getCheckedKeys())
+        menuId: [].concat(this.$refs.menuListTree.getCheckedKeys())
       }).then(({data}) => {
         console.log(data)
         if (data.code === 0) {

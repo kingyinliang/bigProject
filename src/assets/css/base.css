@@ -76,4 +76,7 @@ td{
 .site-sidebar__menu-icon{
   font-size: 20px!important;
 }
+.is-opened .el-submenu__title{
+  background-color: #000c17!important;
+}
 

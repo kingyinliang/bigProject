@@ -44,8 +44,8 @@
                 width="95">
               </el-table-column>
               <el-table-column
-                prop="remark"
-                label="描述">
+                prop="roleCode"
+                label="角色编码">
               </el-table-column>
               <el-table-column
                 label="操作"

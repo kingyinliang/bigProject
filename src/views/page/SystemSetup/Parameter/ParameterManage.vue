@@ -33,7 +33,7 @@
                   </el-table-column>
                   <el-table-column
                     label="参数类型编码">
-                    <template slot-scope="scope">{{ scope.row.code }}</template>
+                    <template slot-scope="scope">{{ scope.row.type }}</template>
                   </el-table-column>
                   <el-table-column
                     prop="name"
@@ -42,7 +42,7 @@
                   <el-table-column
                     label="操作"
                     width="80">
-                    <template slot-scope="scope"><el-button @click="remove(scope.$index,parameterType)">删除</el-button></template>
+                    <template slot-scope="scope"><el-button type="text" @click="remove(scope.$index,parameterType)">删除</el-button></template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -52,7 +52,7 @@
             <el-card>
               <div slot="header" class="clearfix">
                 <span style="float: left;line-height: 35px">参数</span>
-                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('param')"></el-button>
+                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('param',false,true)"></el-button>
               </div>
               <div>
                 <el-table
@@ -68,7 +68,7 @@
                     label="序号">
                   </el-table-column>
                   <el-table-column
-                    prop="name"
+                    prop="type"
                     label="参数类型编码">
                   </el-table-column>
                   <el-table-column
@@ -76,8 +76,16 @@
                     label="参数类型名称">
                   </el-table-column>
                   <el-table-column
+                    prop="code"
+                    label="参数编码">
+                  </el-table-column>
+                  <el-table-column
+                    prop="value"
+                    label="参数名称">
+                  </el-table-column>
+                  <el-table-column
                     label="删除">
-                    <template slot-scope="scope"><el-button @click="remove(scope.$index)">删除</el-button></template>
+                    <template slot-scope="scope"><el-button type="text" @click="remove(scope.$index)">删除</el-button></template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -86,7 +94,7 @@
         </el-row>
       </el-card>
     </div>
-    <add-or-update ref="addOrupdate" v-if="visible"></add-or-update>
+    <add-or-update ref="addOrupdate" v-if="visible" @refreshDataList="getList()"></add-or-update>
   </div>
 </template>
 
@@ -114,43 +122,61 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
         crew: ''
       }],
+      activeItem: {},
       parameterType: [],
-      parameter: []
+      parameter: [],
+      adds: {}
     }
   },
   mounted () {
-    this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'GET', {
-    }).then(({data}) => {
-      console.log(data)
-      if (data.code === 0) {
-        this.parameterType = data.dicList
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
+    this.getdictList()
   },
   methods: {
+    // 获取类型
+    getdictList () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'GET', {
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.parameterType = data.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 表格删除
     remove (index, rows) {
       rows.splice(index, 1)
     },
     //  设置类型详情
     setTypeDetail (row, event, column) {
-      console.log(row)
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', row.type).then(({data}) => {
-        console.log(data)
+      this.activeItem = row
+      this.adds = {}
+      this.adds.name = row.name
+      this.adds.type = row.type
+      console.log(this.adds)
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.type}`, 'POST').then(({data}) => {
         if (data.code === 0) {
-          this.parameter = data.page.list
+          this.parameter = data.dicList
         } else {
           this.$message.error(data.msg)
         }
       })
     },
+    // 更新列表
+    getList () {
+      this.getdictList()
+      this.setTypeDetail(this.activeItem)
+    },
     // 新增  修改
-    addorupdate (str, id) {
+    addorupdate (str, id, adds) {
+      console.log(this.adds)
       this.visible = true
       this.$nextTick(() => {
-        this.$refs.addOrupdate.init(str, id)
+        if (adds) {
+          this.$refs.addOrupdate.init(str, id, this.adds)
+        } else {
+          this.$refs.addOrupdate.init(str, id)
+        }
       })
     }
   },

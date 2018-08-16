@@ -59,7 +59,7 @@
                     label="设备编号">
                   </el-table-column>
                   <el-table-column
-                    prop="remark"
+                    prop="deviceName"
                     label="设备描述"
                     width="100">
                   </el-table-column>

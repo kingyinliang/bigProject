@@ -19,21 +19,15 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
     },
     withCredentials: false
   }
-  // console.log(storage.getData(AUTHORIZATION_KEY))
-  // if (!login) {
-  //   if (storage.getData(AUTHORIZATION_KEY)) {
-  //     options.headers['Access-token'] = storage.getData(AUTHORIZATION_KEY)
-  //   }
-  // }
   if (ContentType) {
     options.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    options.transformRequest = [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      return ret
-    }]
+    // options.transformRequest = [function (data) {
+    //   let ret = ''
+    //   for (let it in data) {
+    //     ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+    //   }
+    //   return ret
+    // }]
   }
   /**
    * 请求拦截

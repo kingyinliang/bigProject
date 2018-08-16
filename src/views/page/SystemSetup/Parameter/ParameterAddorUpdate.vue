@@ -6,18 +6,18 @@
     <div style="height: 300px;overflow: auto">
       <el-form :model="dataForm" :rules="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px">
         <el-form-item label="参数类型编码">
-          <span v-if="!type">{{dataForm.holderNo}}</span>
-          <el-input v-model="dataForm.holderNo" placeholder="手动输入" v-if="type"></el-input>
+          <span v-if="!type">{{dataForm.type}}</span>
+          <el-input v-model="dataForm.type" placeholder="手动输入" v-if="type"></el-input>
         </el-form-item>
         <el-form-item label="参数类型名称">
-          <span v-if="!type">{{dataForm.holderNo}}</span>
-          <el-input v-model="dataForm.holderNo" placeholder="手动输入" v-if="type"></el-input>
+          <span v-if="!type">{{dataForm.name}}</span>
+          <el-input v-model="dataForm.name" placeholder="手动输入" v-if="type"></el-input>
         </el-form-item>
-        <el-form-item label="参数编码" v-if="!type">
-          <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
+        <el-form-item label="参数编码">
+          <el-input v-model="dataForm.code" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="参数名称" v-if="!type">
-          <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
+        <el-form-item label="参数名称">
+          <el-input v-model="dataForm.value" placeholder="手动输入"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -35,7 +35,12 @@ export default {
   data () {
     return {
       id: false,
-      dataForm: {},
+      dataForm: {
+        type: '',
+        name: '',
+        code: '',
+        value: ''
+      },
       visible: false,
       type: true
     }
@@ -43,7 +48,7 @@ export default {
   mounted () {
   },
   methods: {
-    init (str, id) {
+    init (str, id, adds) {
       if (str === 'type') {
         this.type = true
       } else {
@@ -51,15 +56,21 @@ export default {
       }
       if (id) {
         this.id = id
+        this.dataForm = id
       } else {
         this.id = false
+        this.dataForm = {}
+      }
+      if (adds) {
+        this.dataForm = adds
       }
       this.visible = true
     },
     dataFormSubmit () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST').then(({data}) => {
-        console.log(data)
+      // if () {}
+      this.$http(`${this.id ? SYSTEMSETUP_API.PARAMETERUPDATE_API : SYSTEMSETUP_API.PARAMETERADD_API}`, 'POST', this.dataForm).then(({data}) => {
         if (data.code === 0) {
+          this.dataForm = {}
           this.$message({
             message: '操作成功',
             type: 'success',

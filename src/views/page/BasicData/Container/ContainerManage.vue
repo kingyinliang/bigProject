@@ -15,16 +15,7 @@
               <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms1">
                 <el-form-item label="容器类型">
                   <el-select v-model="form.holderType" placeholder="请选择">
-                    <el-option label="发酵罐" value="发酵罐"></el-option>
-                    <el-option label="成品罐" value="成品罐"></el-option>
-                    <el-option label="半成品罐" value="半成品罐"></el-option>
-                    <el-option label="连续蒸煮号" value="连续蒸煮号"></el-option>
-                    <el-option label="曲房" value="曲房"></el-option>
-                    <el-option label="麦粉计量仓" value="麦粉计量仓"></el-option>
-                    <el-option label="豆粕计量仓" value="豆粕计量仓"></el-option>
-                    <el-option label="盐水罐" value="盐水罐"></el-option>
-                    <el-option label="筛前罐" value="筛前罐"></el-option>
-                    <el-option label="筛后罐" value="筛后罐"></el-option>
+                    <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="容器号">
@@ -124,7 +115,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 import ConAddorUpdate from './ContaninerAddorUpdate'
 export default {
   name: 'ContainerManage',
@@ -136,11 +127,13 @@ export default {
       pageSize: 10,
       totalCount: 0,
       multipleSelection: [],
+      dictList: [],
       list: []
     }
   },
   mounted () {
     this.GetContainerList()
+    this.getDictList()
   },
   methods: {
     // 获取容器列表
@@ -163,6 +156,16 @@ export default {
           this.$message.error(data.msg)
         }
         this.visible = false
+      })
+    },
+    // 容器参数下拉
+    getDictList () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holderType`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.dictList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     // 表格选中

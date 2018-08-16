@@ -5,14 +5,11 @@
     :visible.sync="visible">
     <div>
       <el-form :model="form" size="small" label-width="110px" class="devicedialog" @keyup.enter.native="submitForm()">
-        <el-form-item label="设备名称">
+        <el-form-item label="设备描述">
           <el-input v-model="form.deviceName" placeholder="手工录入"></el-input>
         </el-form-item>
         <el-form-item label="设备编号">
           <el-input v-model="form.deviceNo" placeholder="手工录入"></el-input>
-        </el-form-item>
-        <el-form-item label="设备描述">
-          <el-input v-model="form.remark" placeholder="手工录入"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -33,8 +30,7 @@ export default {
       visible: false,
       form: {
         deviceName: '',
-        deviceNo: '',
-        remark: ''
+        deviceNo: ''
       }
     }
   },
@@ -53,7 +49,7 @@ export default {
     // 提交订单
     submitForm () {
       if (this.id) {
-        this.$http(`${BASICDATA_API.DEVICEADD_API}`, 'POST', this.form).then(({data}) => {
+        this.$http(`${BASICDATA_API.DEVICEUPDATE_API}`, 'POST', this.form).then(({data}) => {
           console.log(data)
           if (data.code === 0) {
             this.$message({

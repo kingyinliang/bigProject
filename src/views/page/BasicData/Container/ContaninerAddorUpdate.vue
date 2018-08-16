@@ -7,16 +7,7 @@
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
         <el-form-item label="容器类型">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
-            <el-option label="HOne" value="HOne"></el-option>
-            <el-option label="成品罐" value="成品罐"></el-option>
-            <el-option label="半成品罐" value="半成品罐"></el-option>
-            <el-option label="连续蒸煮号" value="连续蒸煮号"></el-option>
-            <el-option label="曲房" value="曲房"></el-option>
-            <el-option label="麦粉计量仓" value="麦粉计量仓"></el-option>
-            <el-option label="豆粕计量仓" value="豆粕计量仓"></el-option>
-            <el-option label="盐水罐" value="盐水罐"></el-option>
-            <el-option label="筛前罐" value="筛前罐"></el-option>
-            <el-option label="筛后罐" value="筛后罐"></el-option>
+            <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="容器号">
@@ -47,13 +38,14 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'ContaninerAddorUpdate',
   data () {
     return {
       conid: '',
       visible: false,
+      dictList: [],
       dataForm: {
         holderType: '',
         holderNo: '',
@@ -102,6 +94,16 @@ export default {
         this.conid = 0
         this.visible = true
       }
+    },
+    // 容器参数下拉
+    getDictList () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holderType`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.dictList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     dataFormSubmit () {
       if (this.conid) {

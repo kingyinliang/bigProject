@@ -9,7 +9,7 @@
           <el-input v-model="dataForm.roleName" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="dataForm.remark" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.roleCode" placeholder="手动输入"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -30,7 +30,7 @@ export default {
       visible: false,
       dataForm: {
         roleName: '',
-        remark: ''
+        roleCode: ''
       }
     }
   },
@@ -40,7 +40,8 @@ export default {
     init (id) {
       if (id) {
         this.roleId = id.roleId
-        this.dataForm = id
+        this.dataForm.roleName = id.roleName
+        this.dataForm.roleCode = id.roleCode
       } else {
         this.roleId = ''
         this.dataForm = {}

@@ -33,6 +33,10 @@ export const BASICDATA_API = {
    */
   ORGSTRUCTURE_API: HOST + '/sys/dept/list',
   /**
+   * @property {string} ORGSTRUCTURE_API 组织结构详情
+   */
+  ORGDETAIL_API: HOST + '/sys/dept/info',
+  /**
    * @property {string} SAVEORG_API 组织结构 修改
    */
   SAVEORG_API: HOST + '/sys/dept/update',
@@ -86,6 +90,10 @@ export const BASICDATA_API = {
    * @property {string} DEVICEADD_API 设备新增
    */
   DEVICEADD_API: HOST + '/sys/device/save',
+  /**
+   * @property {string} DEVICEADD_API 设备新增
+   */
+  DEVICEUPDATE_API: HOST + '/sys/device/update',
   // 订单管理
   /**
    * @property {string} ORDERLIST_API 订单列表
