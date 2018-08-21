@@ -10,6 +10,7 @@
         node-key="menuId"
         ref="menuListTree"
         :default-expand-all="true"
+        :expand-on-click-node="false"
         show-checkbox>
       </el-tree>
     </div>

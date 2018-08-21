@@ -5,7 +5,6 @@
         <el-breadcrumb-item>基础数据</el-breadcrumb-item>
         <el-breadcrumb-item>参数管理</el-breadcrumb-item>
       </el-breadcrumb>
-      <h3>参数管理</h3>
     </div>
     <div class="main">
       <el-card>
@@ -83,10 +82,13 @@
                     prop="value"
                     label="参数名称">
                   </el-table-column>
-                  <!--<el-table-column-->
-                    <!--label="删除">-->
-                    <!--<template slot-scope="scope"><el-button type="text" @click="remove(scope.$index)">删除</el-button></template>-->
-                  <!--</el-table-column>-->
+                  <el-table-column
+                    label="操作">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="remove(scope.row)">删除</el-button>
+                      <el-button type="text" @click="addorupdate('param', scope.row)">编辑</el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </div>
             </el-card>
@@ -144,8 +146,24 @@ export default {
       })
     },
     // 表格删除
-    remove (index, rows) {
-      rows.splice(index, 1)
+    remove (row) {
+      this.$confirm('确认删除参数, 是否继续?', '删除参数', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${SYSTEMSETUP_API.PARAMETERDEL_API}`, 'POST', [row.id]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      })
     },
     //  设置类型详情
     setTypeDetail (row, event, column) {

@@ -5,17 +5,17 @@
           <el-breadcrumb-item>基础数据</el-breadcrumb-item>
           <el-breadcrumb-item>容器管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>容器管理</h3>
       </div>
       <div class="main">
         <el-card>
           <h3>容器管理列表</h3>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms1">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms1" @keyup.enter.native="qurery()">
                 <el-form-item label="容器类型">
                   <el-select v-model="form.holderType" placeholder="请选择">
-                    <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+                    <el-option label=""  value=""></el-option>
+                    <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="容器号">
@@ -29,7 +29,7 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width: 280px">
+            <el-col style="width: 320px">
               <el-button size="small" @click="qurery">查询</el-button>
               <el-button size="small" @click="addOrupdate()">新增</el-button>
               <el-button size="small" @click="remove">批量删除</el-button>
@@ -160,7 +160,7 @@ export default {
     },
     // 容器参数下拉
     getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holderType`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holder_type`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {

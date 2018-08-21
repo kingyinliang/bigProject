@@ -5,23 +5,21 @@
         <el-breadcrumb-item>基础数据</el-breadcrumb-item>
         <el-breadcrumb-item>组织架构</el-breadcrumb-item>
       </el-breadcrumb>
-      <h3>组织架构</h3>
     </div>
     <div class="main">
       <el-card>
         <el-row :gutter="20">
           <div style="margin-bottom: 20px;padding-left: 20px">
-            <el-input placeholder="部门名称" v-model="form.name" style="width: 300px">
+            <el-input placeholder="部门名称" v-model="filterText" style="width: 300px">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
-            <el-button>查询</el-button>
           </div>
           <el-col :span="8">
             <el-card class="orgcard">
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
-              <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail"></el-tree>
+              <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
           <el-col :span="16">
@@ -40,15 +38,19 @@
                     <el-input v-model="OrgDetail.deptName" v-else></el-input>
                   </el-form-item>
                   <el-form-item label="上级部门" >
-                    <span>{{OrgDetail.parentId}}</span>
+                    <span>{{OrgDetail.parentName}}</span>
+                  </el-form-item>
+                  <el-form-item label="生产调度员">
+                    <span v-if="update">{{OrgDetail.dispatchMan}}</span>
+                    <el-input v-model="OrgDetail.dispatchMan" v-else></el-input>
                   </el-form-item>
                   <el-form-item label="部门类型" >
-                    <span v-if="update">{{OrgDetail.deptType}}</span>
+                    <span v-if="update">{{OrgDetail.deptTypeName}}</span>
                     <el-select v-model="OrgDetail.deptType" v-else>
-                      <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+                      <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="产线属性" v-if="OrgDetail.deptType === '产线'">
+                  <el-form-item label="产线属性" v-if="OrgDetail.deptType === 'proLine'">
                     <span v-if="update">{{OrgDetail.proLine}}</span>
                     <el-select v-model="OrgDetail.proLine" placeholder="请选择部门类型" style="width: 100%" v-else>
                       <el-option label="普通产线" value="普通产线"></el-option>
@@ -56,7 +58,7 @@
                       <el-option label="礼盒" value="礼盒"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="产线图片" v-if="OrgDetail.deptType === '产线'">
+                  <el-form-item label="产线图片" v-if="OrgDetail.deptType === 'proLine'">
                     <img :src="OrgDetail.picUrl" alt="" v-if="update">
                     <el-upload
                       action="http://localhost:8080/sys/dept/fileUpLoad"
@@ -99,23 +101,27 @@
               <el-input v-model="addDep.deptName" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="上级部门">
-              <span v-if="sibling">{{clickTreeNode.parentId}}</span>
-              <span v-if="!sibling">{{clickTreeNode.deptId}}</span>
+              <span v-if="sibling">{{addDep.parentName}}</span>
+              <span v-if="!sibling">{{addDep.parentName}}</span>
+            </el-form-item>
+            <el-form-item label="生产调度员">
+              <span v-if="update">{{addDep.dispatchMan}}</span>
+              <el-input v-model="addDep.dispatchMan" v-else></el-input>
             </el-form-item>
             <el-form-item label="部门类型">
               <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
               <el-select v-model="addDep.deptType" placeholder="请选择部门类型" style="width: 100%">
-                <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+                <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线属性" v-if="addDep.deptType== '产线'">
+            <el-form-item label="产线属性" v-if="addDep.deptType== 'proLine'">
               <el-select v-model="addDep.proLine" placeholder="请选择产线属性" style="width: 100%">
                 <el-option label="普通产线" value="普通产线"></el-option>
                 <el-option label="二合一" value="二合一"></el-option>
                 <el-option label="礼盒" value="礼盒"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线图片" v-if="addDep.deptType== 5">
+            <el-form-item label="产线图片" v-if="addDep.deptType== 'proLine'">
               <el-upload
                 action="http://localhost:8080/sys/dept/fileUpLoad"
                 :limit="1"
@@ -140,37 +146,9 @@
             </div>
           </el-form>
         </el-dialog>
-        <el-dialog :visible.sync="dialogFormVisible4" @close="clearForm('adddepform')" title="班组维护">
-          <el-form :model="adddepform" label-position="left" label-width="100px">
-            <el-form-item label="班组编码">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="班组名称">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="上级部门">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="部门类型">
-              <el-select v-model="adddepform.name" auto-complete="off">
-                <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="联系人">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="电话">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input v-model="adddepform.name" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
         <ul id = "menu" v-show = "menuVisible">
-          <li class="menuli" @click="dialogFormVisible1 = true;sibling = true">新增同级</li>
-          <li class="menuli" @click="dialogFormVisible1 = true;sibling = false">新增下级</li>
-          <!--<li class="menuli" @click="team()">班组维护</li>-->
+          <li class="menuli" @click="dialogFormVisible1 = true;sibling = true;addDep.parentName = clickTreeNode.parentName">新增同级</li>
+          <li class="menuli" @click="dialogFormVisible1 = true;sibling = false;addDep.parentName = clickTreeNode.deptName">新增下级</li>
         </ul>
       </el-card>
     </div>
@@ -183,6 +161,7 @@ export default {
   name: 'index',
   data () {
     return {
+      filterText: '',
       form: {},
       adddepform: {
         name: ''
@@ -203,6 +182,11 @@ export default {
       OrgDetail: {},
       addDep: {},
       clickTreeNode: {}
+    }
+  },
+  watch: {
+    filterText (val) {
+      this.$refs.tree2.filter(val)
     }
   },
   mounted () {
@@ -231,9 +215,9 @@ export default {
         }
       })
     },
-    // 容器参数下拉
+    // 组织架构参数下拉
     getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=DEPT_TYPE`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=dept_type`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
@@ -260,19 +244,11 @@ export default {
     // 右键菜单
     showtab1 (event, object, value, element) {
       this.clickTreeNode = object
+      console.log(object)
       this.menuVisible = true
       let menu = document.querySelector('#menu')
       menu.style.left = event.clientX + 'px'
       menu.style.top = event.clientY + 'px'
-    },
-    // 班组维护
-    team () {
-      if (this.clickTreeNode.deptType === '班组') {
-        this.dialogFormVisible4 = true
-      } else {
-        this.menuVisible = false
-        this.$message.error('当前不是班组，不能班组维护')
-      }
     },
     // 上传图片图片回调 新增
     addfile (res, file) {
@@ -288,6 +264,15 @@ export default {
     closethis () {
       console.log(this.addDep)
       this.dialogFormVisible1 = false
+    },
+    // 查询
+    query () {
+      this.setdetail({deptId: this.form.name})
+    },
+    // 搜索
+    filterNode (value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     },
     // 保存
     savedatail () {
@@ -342,6 +327,11 @@ export default {
         this.addDep.parentId = this.clickTreeNode.parentId
       } else {
         this.addDep.parentId = this.clickTreeNode.deptId
+      }
+      if (this.addDep.deptType !== 'proLine') {
+        delete this.addDep.fileName
+        delete this.addDep.proLine
+        delete this.addDep.picUrl
       }
       this.$http(`${BASICDATA_API.ADDORG_API}`, 'POST', this.addDep).then(({data}) => {
         if (data.code === 0) {

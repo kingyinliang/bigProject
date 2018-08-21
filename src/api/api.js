@@ -1,4 +1,4 @@
-// let HOST = 'http://localhost:8080'
+// let HOST = 'http://localhost:8080/'
 let HOST = 'http://10.8.4.153:50080/api'
 /*
 *首页api

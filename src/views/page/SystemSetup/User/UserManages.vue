@@ -5,13 +5,12 @@
           <el-breadcrumb-item>系统管理</el-breadcrumb-item>
           <el-breadcrumb-item>管理员列表</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>管理员列表</h3>
       </div>
       <div class="main">
         <el-card>
           <el-row class="clearfix">
             <div style="float: right">
-              <el-form :inline="true" :model="condition" size="small" label-width="68px" class="topforms2">
+              <el-form :inline="true" :model="condition" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()">
                 <el-form-item>
                   <el-input v-model="condition.param" placeholder="用户名/工号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
@@ -27,7 +26,7 @@
                 <div slot="header" class="clearfix">
                   <span>组织架构</span>
                 </div>
-                <el-tree :data="OrgTree" default-expand-all @node-click="setdetail"></el-tree>
+                <el-tree :data="OrgTree" default-expand-all @node-click="setdetail" :expand-on-click-node="false"></el-tree>
               </el-card>
             </el-col>
             <el-col>
@@ -84,7 +83,6 @@
                       width="100">
                       <template slot-scope="scope">
                         <el-button type="text" @click="addOrupdate(scope.row.userId)">编辑</el-button>
-                        <el-button type="text" @click="roleDel(scope.row)">删除</el-button>
                       </template>
                     </el-table-column>
                   </el-table>

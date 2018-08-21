@@ -5,7 +5,6 @@
           <el-breadcrumb-item>系统管理</el-breadcrumb-item>
           <el-breadcrumb-item>角色管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>角色管理</h3>
       </div>
       <div class="main">
         <el-card>
@@ -54,7 +53,7 @@
                   <a @click="userManage(scope.row.roleId)">人员管理</a>
                   <a @click="fnManage(scope.row.roleId)">功能分配</a>
                   <a @click="roleDept(scope.row.roleId)">部门分配</a>
-                  <a @click="roleAddOrUpdate(scope.row)">修改绝色</a>
+                  <a @click="roleAddOrUpdate(scope.row)">修改角色</a>
                   <a @click="removes(scope.row.roleId)">删除角色</a>
                 </template>
               </el-table-column>

@@ -5,13 +5,12 @@
           <el-breadcrumb-item>基础数据</el-breadcrumb-item>
           <el-breadcrumb-item>订单管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>订单管理</h3>
       </div>
       <div class="main">
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
                 <el-form-item>
                   <el-input v-model="form.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
@@ -60,9 +59,11 @@
                 width="100">
               </el-table-column>
               <el-table-column
-                prop="materialCode"
                 label="物料"
                 width="110">
+                <template slot-scope="scope">
+                  {{ scope.row.materialCode }} {{ scope.row.materialName }}
+                </template>
               </el-table-column>
               <el-table-column
                 prop="orderNum"
@@ -103,7 +104,7 @@
         title="高级查询"
         :close-on-click-modal="false"
         :visible.sync="visible">
-        <div>
+        <div class="formdata">
           <el-form :model="form" size="small" label-width="110px" class="orderdialog">
             <el-form-item label="生产订单">
               <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
@@ -114,11 +115,25 @@
             <el-form-item label="生产调度员">
               <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
             </el-form-item>
-            <el-form-item label="基本开始日期">
-              <el-date-picker v-model="form.startDateOne" placeholder="选择日期"></el-date-picker>
+            <el-form-item label="基本开始日期" class="times">
+              <el-row>
+                <el-col :span="12">
+                  <el-date-picker v-model="form.startDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                </el-col>
+                <el-col span="12">
+                  <el-date-picker v-model="form.startDateTwo" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                </el-col>
+              </el-row>
             </el-form-item>
-            <el-form-item label="基本完成日期">
-              <el-date-picker v-model="form.commitDateOne" placeholder="选择日期"></el-date-picker>
+            <el-form-item label="基本完成日期" class="times">
+              <el-row>
+                <el-col :span="12">
+                  <el-date-picker v-model="form.commitDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                </el-col>
+                <el-col span="12">
+                  <el-date-picker v-model="form.commitDateTwo" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
@@ -191,14 +206,25 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.formdata{
+  .times{
+    input{
+      width: 200px!important;
+    }
+  }
+}
 </style>
 <style lang="scss">
   .orderdialog{
     margin: auto;
     input{
       width: 300px!important;
+    }
+    .times{
+      input{
+        width: 150px!important;
+      }
     }
   }
   .orderTable{

@@ -6,7 +6,6 @@
         <el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>
         <el-breadcrumb-item>数据录入</el-breadcrumb-item>
       </el-breadcrumb>
-      <h3>包装车间</h3>
     </div>
     <div class="main">
       <el-card style="margin: 0">

@@ -7,7 +7,8 @@
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
         <el-form-item label="容器类型">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
-            <el-option :label="item.code" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
+            <el-option label=""  value=""></el-option>
+            <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="容器号">
@@ -69,6 +70,7 @@ export default {
     }
   },
   mounted () {
+    this.getDictList()
   },
   methods: {
     init (id) {
@@ -97,7 +99,7 @@ export default {
     },
     // 容器参数下拉
     getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holderType`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holder_type`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {

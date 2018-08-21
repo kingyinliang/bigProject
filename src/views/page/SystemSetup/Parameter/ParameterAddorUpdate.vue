@@ -67,7 +67,6 @@ export default {
       this.visible = true
     },
     dataFormSubmit () {
-      // if () {}
       this.$http(`${this.id ? SYSTEMSETUP_API.PARAMETERUPDATE_API : SYSTEMSETUP_API.PARAMETERADD_API}`, 'POST', this.dataForm).then(({data}) => {
         if (data.code === 0) {
           this.dataForm = {}

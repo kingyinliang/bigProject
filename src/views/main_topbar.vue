@@ -17,18 +17,18 @@
       <el-menu
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
-        <el-menu-item index="1" @click="$router.push({ name: 'theme' })">
-          <template slot="title">
-            <i name="shezhi" class="el-icon-setting"></i>
-          </template>
-        </el-menu-item>
-        <el-menu-item index="2" @click="$router.push({ name: 'theme' })">
-          <template slot="title">
-            <el-badge value="1">
-              <i name="shezhi" class="el-icon-setting"></i>
-            </el-badge>
-          </template>
-        </el-menu-item>
+        <!--<el-menu-item index="1" @click="$router.push({ name: 'theme' })">-->
+          <!--<template slot="title">-->
+            <!--<i name="shezhi" class="el-icon-setting"></i>-->
+          <!--</template>-->
+        <!--</el-menu-item>-->
+        <!--<el-menu-item index="2" @click="$router.push({ name: 'theme' })">-->
+          <!--<template slot="title">-->
+            <!--<el-badge value="1">-->
+              <!--<i name="shezhi" class="el-icon-setting"></i>-->
+            <!--</el-badge>-->
+          <!--</template>-->
+        <!--</el-menu-item>-->
         <el-menu-item class="site-navbar__avatar" index="3">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">

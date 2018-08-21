@@ -5,13 +5,12 @@
         <el-breadcrumb-item>基础数据</el-breadcrumb-item>
         <el-breadcrumb-item>设备管理</el-breadcrumb-item>
       </el-breadcrumb>
-      <h3>设备管理</h3>
     </div>
     <div class="main">
       <el-card>
         <el-row class="clearfix">
           <div style="float: right">
-            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2">
+            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()">
               <el-form-item>
                 <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>

@@ -5,7 +5,6 @@
           <el-breadcrumb-item>系统管理</el-breadcrumb-item>
           <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>菜单管理</h3>
       </div>
       <div class="main">
         <el-card>

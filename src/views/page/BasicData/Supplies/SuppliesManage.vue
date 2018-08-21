@@ -5,13 +5,12 @@
           <el-breadcrumb-item>基础数据</el-breadcrumb-item>
           <el-breadcrumb-item>物料管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3>物料管理</h3>
       </div>
       <div class="main">
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
                 <el-form-item>
                   <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
@@ -32,7 +31,7 @@
               <el-table-column
                 label="物料">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="showdetail(scope.row.materialId)">{{scope.row.materialName}}</el-button>
+                  <el-button type="text" @click="showdetail(scope.row.materialId)">{{scope.row.materialCode}} {{scope.row.materialName}}</el-button>
                 </template>
               </el-table-column>
               <el-table-column
