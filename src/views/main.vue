@@ -43,7 +43,7 @@ export default {
         if (data && data.code === 0) {
           this.loading = false
           this.userId = data.user.userId
-          this.userName = data.user.username
+          this.userName = data.user.userName
         }
       })
     }

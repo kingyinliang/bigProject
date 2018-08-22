@@ -194,7 +194,7 @@ export default {
       if (e.target.className !== 'menuli') this.menuVisible = false
     })
     this.heads = {token: this.$cookie.get('token')}
-    this.getTree()
+    this.getTree(true)
     this.getDictList()
   },
   ready () {
@@ -205,11 +205,14 @@ export default {
   },
   methods: {
     // 获取组织结构树
-    getTree () {
+    getTree (type) {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
+          if (type) {
+            this.setdetail(this.OrgTree[0].children[0])
+          }
         } else {
           this.$message.error(data.msg)
         }

@@ -27,7 +27,10 @@
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="归属车间">
-          <el-input v-model="dataForm.deptId" placeholder="手动输入"></el-input>
+          <el-select v-model="dataForm.deptId" placeholder="请选择" style="width: 100%">
+            <el-option label=""  value=""></el-option>
+            <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </div>
@@ -71,6 +74,7 @@ export default {
   },
   mounted () {
     this.getDictList()
+    this.Getdeptcode()
   },
   methods: {
     init (id) {
@@ -96,6 +100,16 @@ export default {
         this.conid = 0
         this.visible = true
       }
+    },
+    // 获取归属车间
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.workshop = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 容器参数下拉
     getDictList () {

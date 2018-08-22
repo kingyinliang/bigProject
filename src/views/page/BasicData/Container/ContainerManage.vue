@@ -25,7 +25,10 @@
                   <el-input v-model="form.holderHold" placeholder="手动输入"></el-input>
                 </el-form-item>
                 <el-form-item label="归属车间">
-                  <el-input v-model="form.deptId" placeholder="手动输入"></el-input>
+                  <el-select v-model="form.deptId" placeholder="请选择">
+                    <el-option label=""  value=""></el-option>
+                    <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -123,6 +126,7 @@ export default {
     return {
       visible: false,
       form: {},
+      workshop: [],
       currPage: 1,
       pageSize: 10,
       totalCount: 0,
@@ -134,6 +138,7 @@ export default {
   mounted () {
     this.GetContainerList()
     this.getDictList()
+    this.Getdeptcode()
   },
   methods: {
     // 获取容器列表
@@ -163,6 +168,16 @@ export default {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holder_type`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取归属车间
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.workshop = data.typeList
         } else {
           this.$message.error(data.msg)
         }

@@ -13,31 +13,28 @@
           <el-col>
             <el-form :inline="true" :model="form" size="small" label-width="80px" class="topform">
               <el-form-item label="车间">
-                <el-select v-model="form.region" placeholder="车间">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
+                <p class="el-input"></p>
               </el-form-item>
               <el-form-item label="产线">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.name}}</p>
               </el-form-item>
               <el-form-item label="订单号">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.order_no}}</p>
               </el-form-item>
               <el-form-item label="品项">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.name}}</p>
               </el-form-item>
               <el-form-item label="计划产量">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.plan}}</p>
               </el-form-item>
               <el-form-item label="日期">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.product_date}}</p>
               </el-form-item>
               <el-form-item label="提交人员">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.name}}</p>
               </el-form-item>
               <el-form-item label="提交时间">
-                <el-input v-model="form.name"></el-input>
+                <p class="el-input">{{order.name}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -47,7 +44,7 @@
               <el-button type="primary" @click="isRedact=true">编辑</el-button>
             </el-row>
             <el-row style="float: right" v-if="isRedact">
-              <el-button type="primary" >保存</el-button>
+              <el-button type="primary" @click="SaveForm">保存</el-button>
               <el-button type="primary" >提交</el-button>
             </el-row>
           </el-col>
@@ -64,11 +61,11 @@
               </el-tooltip>
             </span>
             <div class="times">
-              <el-form :inline="true" :model="form" size="small" label-width="110px">
+              <el-form :inline="true" :model="readyDate" size="small" label-width="110px">
                 <div class="clearfix">
                   <h3>录入数据单位：MIN</h3>
                   <el-form-item label="是否停线交接班" style="float: right">
-                    <el-select v-model="form.shiftChange" placeholder="是否停线交接班">
+                    <el-select v-model="readyDatetype" placeholder="是否停线交接班">
                       <el-option label="是" value="true"></el-option>
                       <el-option label="否" value="false"></el-option>
                     </el-select>
@@ -80,87 +77,109 @@
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.dayStartDate}}</p>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.dayStartLineDate}}</p>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.dayChange" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.dayChange}}</p>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.dayEndDate}}</p>
                     </el-form-item>
                     <el-form-item label="停线时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.dayCauseDate}}</p>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.dayDinner" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.dayDinner}}</p>
                     </el-form-item>
                   </div>
                 </el-card>
-                <el-card class="box-card" v-if="form.shiftChange == 'true'">
+                <el-card class="box-card" v-if="readyDatetype == 'true'">
                   <div slot="header" class="clearfix">
                     <span>中班录入</span>
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.midStartDate}}</p>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.midStartLineDate}}</p>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.midChange" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.midChange}}</p>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.midEndDate}}</p>
                     </el-form-item>
                     <el-form-item label="停线时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.midCauseDate}}</p>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.midDinner" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.midDinner}}</p>
                     </el-form-item>
                   </div>
                 </el-card>
-                <el-card class="box-card" v-if="form.shiftChange == 'true'">
+                <el-card class="box-card" v-if="readyDatetype == 'true'">
                   <div slot="header" class="clearfix">
                     <span>夜班录入</span>
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.nightStartDate}}</p>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.nightStartLineDate}}</p>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.nightChange" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.nightChange}}</p>
                     </el-form-item>
-                    <el-form-item label="工作结束时间" >
-                      <el-date-picker type="date" placeholder="选择" v-model="form.date1"></el-date-picker>
+                    <el-form-item label="工作结束时间">
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.nightEndDate}}</p>
                     </el-form-item>
-                    <el-form-item label="停线时间" >
-                      <el-input v-model="form.name"></el-input>
+                    <el-form-item label="停线时间">
+                      <el-date-picker type="datetime" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact"></el-date-picker>
+                      <p class="el-input" v-else>{{readyDate.nightCauseDate}}</p>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="readyDate.nightDinner" v-if="isRedact"></el-input>
+                      <p class="el-input" v-else>{{readyDate.nightDinner}}</p>
                     </el-form-item>
                   </div>
                 </el-card>
                 <div style="padding: 20px">
                   <el-form-item label="交接班">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="readyDate.shift" v-if="isRedact"></el-input>
+                    <p class="el-input" v-else>{{readyDate.shift}}</p>
                   </el-form-item>
                   <el-form-item label="班前会">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="readyDate.meeting" v-if="isRedact"></el-input>
+                    <p class="el-input" v-else>{{readyDate.meeting}}</p>
                   </el-form-item>
                   <el-form-item label="生产前准备">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="readyDate.prepared" v-if="isRedact"></el-input>
+                    <p class="el-input" v-else>{{readyDate.prepared}}</p>
                   </el-form-item>
                   <el-form-item label="生产后清场">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="readyDate.clear" v-if="isRedact"></el-input>
+                    <p class="el-input" v-else>{{readyDate.clear}}</p>
                   </el-form-item>
                 </div>
                 <auditLog :tableData="tableData"></auditLog>
@@ -234,7 +253,7 @@
                     width="120">
                     <template slot-scope="scope">
                       <el-input v-if="scope.row.peprop==3" v-model="scope.row.peprop3"></el-input>
-                      <el-button v-else>点击选择人员</el-button>
+                      <el-button type="text" v-else>点击选择人员</el-button>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -407,7 +426,6 @@
             </span>
             <div class="tab4">
               <div class="tabtit">
-                <!--<span>白班录入</span>-->
                 <div class="btn">
                   <el-button type="primary" @click="addformrow">新增</el-button>
                 </div>
@@ -515,7 +533,7 @@
                 <el-table-column
                   label="产出数"
                   width="120">
-                  <template slot-scope="scope">{{ scope.row.date1 + scope.row.date2 + scope.row.date3 + scope.row.date5 }}</template>
+                  <template slot-scope="scope">{{ scope.row.date1*1 + scope.row.date2*1 + scope.row.date3*1 + scope.row.date5*1 }}</template>
                 </el-table-column>
                 <el-table-column
                   label="单位"
@@ -811,6 +829,7 @@
 </template>
 
 <script>
+import {PACKAGING_API} from '@/api/api'
 export default {
   name: 'ProDataIn',
   data () {
@@ -838,12 +857,231 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
         crew: ''
       }],
-      multipleSelection: []
+      multipleSelection: [],
+      orderId: '',
+      orderNo: '',
+      productDate: '',
+      workShop: '',
+      factoryid: '',
+      order: {},
+      readyDatetype: 'true',
+      readyDate: {
+        dayStartDate: '',
+        dayStartLineDate: '',
+        dayChange: '',
+        dayDinner: '',
+        dayCauseDate: '',
+        dayEndDate: '',
+        midCauseDate: '',
+        midChange: '',
+        midDinner: '',
+        midEndDate: '',
+        midStartDate: '',
+        midStartLineDate: '',
+        nightCauseDate: '',
+        nightChange: '',
+        nightDinner: '',
+        nightEndDate: '',
+        nightStartDate: '',
+        nightStartLineDate: '',
+        shift: '',
+        meeting: '',
+        prepared: '',
+        clear: ''
+      },
+      uerDate: []
     }
   },
   mounted () {
+    this.orderNo = this.$route.query.order_no
+    this.productDate = this.$route.query.productDate
+    this.workShop = this.$route.query.workShop
+    this.factoryid = this.$route.query.factoryid
+    this.GetOrderList()
   },
   methods: {
+    // 获取表头
+    GetOrderList () {
+      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        // workShop: this.plantList.workShop,
+        workShop: '4E5FE5ADEC514FB5B680F1096A9D4AAA',
+        productDate: this.productDate,
+        orderNo: this.orderNo
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.order = data.list[0]
+          this.orderId = data.list[0].order_id
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    /**
+    * @property 以下为七个获取列表
+    */
+    // 获取包装车间人员列表
+    Getpkguser () {
+      this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
+        orderId: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间人员列表')
+          console.log(data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取包装车间准备时间列表
+    Getpkgready () {
+      this.$http(`${PACKAGING_API.PKGREADYLIST_API}`, 'POST', {
+        orderId: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间准备时间列表')
+          console.log(data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取包装车间生产入库列表
+    Getpkgin () {
+      this.$http(`${PACKAGING_API.PKGINLIST_API}`, 'POST', {
+        orderId: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间生产入库列表')
+          console.log(data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    /**
+     * @property 以下为七个保存列表
+     */
+    // 保存
+    SaveForm () {
+      this.$http(`${PACKAGING_API.PKGORDERID_API}`, 'POST', {
+        orderNo: this.orderNo
+      }).then(({data}) => {
+        if (data.code === 0) {
+          // this.order.
+          if (data.orderId) {
+            this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
+              if (data.code === 0) {
+                console.log('保存表头')
+                console.log(data)
+                this.SaveReady()
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          } else {
+            this.$http(`${PACKAGING_API.PKGORDERSAVE_API}`, 'POST', this.order).then(({data}) => {
+              if (data.code === 0) {
+                console.log('修改表头')
+                console.log(data)
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 保存准备时间
+    SaveReady () {
+      if (this.readyDatetype === 'true') {
+        this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', this.readyDate).then(({data}) => {
+          if (data.code === 0) {
+            console.log('保存准备时间')
+            console.log(data)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', {
+          dayStartDate: this.dayStartDate,
+          dayStartLineDate: this.dayStartLineDate,
+          dayChange: this.dayChange,
+          dayDinner: this.dayDinner,
+          dayCauseDate: this.dayCauseDate,
+          dayEndDate: this.dayEndDate,
+          shift: this.shift,
+          meeting: this.meeting,
+          prepared: this.prepared,
+          clear: this.clear
+        }).then(({data}) => {
+          if (data.code === 0) {
+            console.log('保存准备时间')
+            console.log(data)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 保存人员
+    SaveUser () {
+      this.$http(`${PACKAGING_API.PKGUSERSAVE_API}`, 'POST', {}).then(({data}) => {
+        if (data.code === 0) {
+          console.log('保存人员')
+          console.log(data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 修改人员
+    UpdateUser () {
+      this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', {}).then(({data}) => {
+        if (data.code === 0) {
+          console.log('修改人员')
+          console.log(data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 修改准备时间
+    UpdateReady () {
+      if (this.readyDatetype === 'true') {
+        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
+          if (data.code === 0) {
+            console.log('保存准备时间')
+            console.log(data)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
+          dayStartDate: this.dayStartDate,
+          dayStartLineDate: this.dayStartLineDate,
+          dayChange: this.dayChange,
+          dayDinner: this.dayDinner,
+          dayCauseDate: this.dayCauseDate,
+          dayEndDate: this.dayEndDate,
+          shift: this.shift,
+          meeting: this.meeting,
+          prepared: this.prepared,
+          clear: this.clear
+        }).then(({data}) => {
+          if (data.code === 0) {
+            console.log('保存准备时间')
+            console.log(data)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 我是分割线
     handleSelectionChange (val) {
       this.multipleSelection = val
     },

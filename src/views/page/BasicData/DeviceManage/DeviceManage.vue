@@ -26,7 +26,7 @@
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
-              <el-tree :data="OrgTree" default-expand-all @node-click="setdetail"></el-tree>
+              <el-tree :data="OrgTree" default-expand-all @node-click="setdetail" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
           <el-col :span="16">

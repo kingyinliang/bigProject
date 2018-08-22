@@ -50,7 +50,7 @@ export default {
           if (route.meta.isDynamic) {
             route = this.dynamicMenuRoutes.filter(item => item.name === route.name)[0]
             if (!route) {
-              return console.error('未能找到可用标签页!')
+              return
             }
           }
           tab = {

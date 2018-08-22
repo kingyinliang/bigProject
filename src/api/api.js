@@ -45,9 +45,17 @@ export const BASICDATA_API = {
    */
   DELETEORG_API: HOST + '/sys/dept/delete',
   /**
-   * @property {string} ADDORG_API 新增
+   * @property {string} ADDORG_API 组织结构 新增
    */
   ADDORG_API: HOST + '/sys/dept/save',
+  /**
+   * @property {string} ADDORG_API 组织结构 按部门类型查询
+   */
+  FINDORG_API: HOST + '/sys/dept/findInfoByType',
+  /**
+ * @property {string} ADDORG_API 组织结构 按部门id查询车间
+ */
+  FINDORGBYID_API: HOST + '/sys/dept/findCCById',
   /**
    * @property {string} SAPLIST_API 物料列表
    */
@@ -209,4 +217,50 @@ export const SYSTEMSETUP_API = {
    * @property {string} MENUINFO 菜单修改
    */
   MENUUPDATE_API: HOST + '/sys/menu/update'
+}
+export const PACKAGING_API = {
+  /**
+   * @property {string} PKGORDELIST_API 包装车间订单列表
+   */
+  PKGORDELIST_API: HOST + '/pkg/order/list',
+  /**
+   * @property {string} PKGORDERID_API 包装车间orderid
+   */
+  PKGORDERID_API: HOST + '/pkg/order/selectId',
+  /**
+   * @property {string} PKGORDERID_API 包装车间order保存
+   */
+  PKGORDERSAVE_API: HOST + '/pkg/order/save',
+  /**
+   * @property {string} PKGORDERID_API 包装车间order修改
+   */
+  PKGORDERUPDATE_API: HOST + '/pkg/order/update',
+  /**
+   * @property {string} PKGUSERLIST_API 包装车间人员列表
+   */
+  PKGUSERLIST_API: HOST + '/pkg/user/list',
+  /**
+   * @property {string} PKGUSERLIST_API 包装车间人员修改
+   */
+  PKGUSERUPDATE_API: HOST + '/pkg/user/update',
+  /**
+   * @property {string} PKGUSERSAVE_API 包装车间人员保存
+   */
+  PKGUSERSAVE_API: HOST + '/pkg/user/save',
+  /**
+   * @property {string} PKGREADYLIST_API 包装车间准备时间列表
+   */
+  PKGREADYLIST_API: HOST + '/pkg/read/list',
+  /**
+   * @property {string} PKGREADYSAVE_API 包装车间准备时间保存
+   */
+  PKGREADYSAVE_API: HOST + '/pkg/ready/save',
+  /**
+   * @property {string} PKGREADYUPDATE_API 包装车间准备时间修改
+   */
+  PKGREADYUPDATE_API: HOST + '/pkg/ready/update',
+  /**
+   * @property {string} PKGINLIST_API 包装车间生产入库列表
+   */
+  PKGINLIST_API: HOST + '/sys/pkgInStorage/list'
 }
