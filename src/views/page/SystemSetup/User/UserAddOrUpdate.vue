@@ -4,24 +4,18 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+      <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="80px">
         <el-form-item label="人员工号">
           <el-input v-model="dataForm.workNum" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="虚拟工号">
           <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="人员姓名">
-          <el-input v-model="dataForm.realName" placeholder="手动输入"></el-input>
-        </el-form-item>
-        <el-form-item label="登录账号">
-          <el-input v-model="dataForm.userName" placeholder="手动输入"></el-input>
+        <el-form-item label="人员姓名" prop="realName">
+          <el-input v-model="dataForm.realName" placeholder="手动输入" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="职务">
           <el-input v-model="dataForm.post" placeholder="手动输入"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="dataForm.newPassword" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="dataForm.email" placeholder="手动输入"></el-input>
@@ -48,14 +42,18 @@ export default {
       userId: '',
       visible: false,
       dataForm: {
+        name: '',
         realName: '',
         workNum: '',
         workNumTemp: '',
-        userName: '',
-        newPassword: '',
         post: '',
         email: '',
         mobile: ''
+      },
+      dataRule: {
+        realName: [
+          { required: true, message: '人员姓名不能为空', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -84,45 +82,46 @@ export default {
     // 表单提交
     dataFormSubmit () {
       this.dataForm.deptId = this.deptId
-      if (this.dataForm.newPassword) {
-        this.dataForm.password = this.dataForm.newPassword
-      }
-      if (this.userId) {
-        // 修改
-        this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
-          console.log(data)
-          if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.$emit('refreshDataList')
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+      if (this.dataForm.workNum || this.dataForm.workNumTemp) {
+        if (this.userId) {
+          // 修改
+          this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+            console.log(data)
+            if (data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        } else {
+          // 新增
+          this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
+            console.log(data)
+            if (data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }
       } else {
-        // 新增
-        this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-          console.log(data)
-          if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.$emit('refreshDataList')
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+        this.$message.error('人员工号和虚拟工号必须添加一个')
       }
     }
   },

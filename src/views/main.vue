@@ -44,6 +44,7 @@ export default {
           this.loading = false
           this.userId = data.user.userId
           this.userName = data.user.userName
+          this.realName = data.user.realName
         }
       })
     }
@@ -63,6 +64,10 @@ export default {
     userName: {
       get () { return this.$store.state.user.name },
       set (val) { this.$store.commit('user/updateName', val) }
+    },
+    realName: {
+      get () { return this.$store.state.user.realName },
+      set (val) { this.$store.commit('user/updaterealName', val) }
     }
   },
   components: {

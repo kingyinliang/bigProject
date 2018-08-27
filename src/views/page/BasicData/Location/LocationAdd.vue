@@ -1,0 +1,154 @@
+<template>
+    <el-dialog
+      title="新增库位"
+      :close-on-click-modal="false"
+      :visible.sync="visible"
+      class="locationdialog1">
+      <div style="width: 400px;margin: auto">
+        <el-form :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()">
+          <el-form-item label="车间" prop="deptId">
+            <el-select v-model="formatDate.deptId" placeholder="请选择">
+              <el-option label=""  value=""></el-option>
+              <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="物料类型" prop="materialType">
+            <el-select v-model="formatDate.materialType" placeholder="请选择">
+              <el-option label=""  value=""></el-option>
+              <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="物料编码">
+            <el-select v-model="formatDate.material" filterable placeholder="请选择">
+              <el-option
+                v-for="item in SerchSapList"
+                :key="item.materialName"
+                :label="item.materialCode+' '+item.materialName"
+                :value="item.materialCode+' '+item.materialName">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="库位" prop="storageLocation">
+            <el-input v-model="formatDate.storageLocation" placeholder="手工录入"></el-input>
+          </el-form-item>
+          <el-form-item label="是否样品库">
+            <el-select v-model="formatDate.isSample" placeholder="请选择">
+              <el-option label="是"  value="1"></el-option>
+              <el-option label="否"  value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="发料/入库" prop="orderNo6">
+            <el-select v-model="formatDate.orderNo" placeholder="请选择">
+              <el-option label="发料"  value=""></el-option>
+              <el-option label="入库"  value=""></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible1 = false">取消</el-button>
+        <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      </span>
+    </el-dialog>
+</template>
+
+<script>
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
+export default {
+  name: 'LocationAdd',
+  data () {
+    return {
+      visible: false,
+      sapList: [],
+      workshop: [],
+      SerchSapList: [],
+      formatDate: {
+        deptId: '',
+        storageLocation: '',
+        materialType: '',
+        material: '',
+        isSample: ''
+      },
+      dataRule: {
+        deptId: [
+          { required: true, message: '车间不能为空', trigger: 'blur' }
+        ],
+        materialType: [
+          { required: true, message: '物料类型不能为空', trigger: 'blur' }
+        ],
+        storageLocation: [
+          { required: true, message: '库位不能为空', trigger: 'blur' }
+        ],
+        orderNo6: [
+          { required: true, message: '发料/入库不能为空', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  mounted () {
+    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.allList
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
+  },
+  methods: {
+    init () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.workshop = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_type`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.sapList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      this.visible = true
+    },
+    // 新增
+    dataFormSubmit () {
+      this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
+      this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
+      delete this.formatDate.material
+      this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
+        if (data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    }
+  },
+  computed: {},
+  components: {}
+}
+</script>
+
+<style lang="scss">
+  .locationdialog1{
+    .el-select,input{
+      width: 100%!important;
+    }
+    .el-dialog{
+      min-width: 450px;
+    }
+  }
+</style>
+<style scoped>
+
+</style>

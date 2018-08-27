@@ -2,8 +2,8 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">欣和工厂管理系统</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">欣和</a>
+        <a class="site-navbar__brand-lg" href="javascript:;"><img src="@/assets/img/logohead.png" alt="" style="width: 140px"></a>
+        <a class="site-navbar__brand-mini" href="javascript:;"><img src="@/assets/img/logo.png" alt="" style="width: 47px"></a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
@@ -32,7 +32,7 @@
         <el-menu-item class="site-navbar__avatar" index="3">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
-              <img src="@/assets/img/avatar.png" :alt="userName">{{ userName }}
+              <img src="@/assets/img/avatar.png" :alt="userName">{{ realName + '（' +userName+ '）' }}
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="logoutHandle()">退出</el-dropdown-item>
@@ -86,6 +86,10 @@ export default {
     },
     userName: {
       get () { return this.$store.state.user.name }
+    },
+    realName: {
+      get () { return this.$store.state.user.realName },
+      set (val) { this.$store.commit('user/updaterealName', val) }
     }
   },
   components: {}

@@ -1,5 +1,7 @@
 // let HOST = 'http://localhost:8080/'
-let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.8.4.153:50080/api'
+let HOST = 'http://10.1.2.42:8080'
+// let HOST = 'http://10.1.1.148:8080'
 /*
 *首页api
  */
@@ -27,6 +29,9 @@ export const MAIN_API = {
    */
   MENULIST_API: HOST + '/sys/menu/list'
 }
+/*
+*基础数据api
+ */
 export const BASICDATA_API = {
   /**
    * @property {string} ORGSTRUCTURE_API 组织结构列表
@@ -106,8 +111,27 @@ export const BASICDATA_API = {
   /**
    * @property {string} ORDERLIST_API 订单列表
    */
-  ORDERLIST_API: HOST + '/sys/saporder/list'
+  ORDERLIST_API: HOST + '/sys/saporder/list',
+  /**
+   * @property {string} LOCATIONLIST_API 库位列表
+   */
+  LOCATIONLIST_API: HOST + '/sys/sto/list',
+  /**
+   * @property {string} LOCATIONADD_API 库位新增
+   */
+  LOCATIONADD_API: HOST + '/sys/sto/save',
+  /**
+   * @property {string} LOCATIONDEL_API 库位删除
+   */
+  LOCATIONDEL_API: HOST + '/sys/sto/delete',
+  /**
+   * @property {string} LOCATIONDEL_API 库位删除
+   */
+  SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList'
 }
+/*
+*系统设置api
+ */
 export const SYSTEMSETUP_API = {
   /**
    * @property {string} PARAMETERLIST_API 参数类型列表
@@ -218,6 +242,9 @@ export const SYSTEMSETUP_API = {
    */
   MENUUPDATE_API: HOST + '/sys/menu/update'
 }
+/*
+*包装车间api
+ */
 export const PACKAGING_API = {
   /**
    * @property {string} PKGORDELIST_API 包装车间订单列表
@@ -250,7 +277,7 @@ export const PACKAGING_API = {
   /**
    * @property {string} PKGREADYLIST_API 包装车间准备时间列表
    */
-  PKGREADYLIST_API: HOST + '/pkg/read/list',
+  PKGREADYLIST_API: HOST + '/pkg/ready/list',
   /**
    * @property {string} PKGREADYSAVE_API 包装车间准备时间保存
    */
@@ -262,5 +289,25 @@ export const PACKAGING_API = {
   /**
    * @property {string} PKGINLIST_API 包装车间生产入库列表
    */
-  PKGINLIST_API: HOST + '/sys/pkgInStorage/list'
+  PKGINLIST_API: HOST + '/sys/pkgInStorage/list',
+  /**
+   * @property {string} PKGINSAVE_API 包装车间生产入库保存
+   */
+  PKGINSAVE_API: HOST + '/sys/pkgInStorage/save',
+  /**
+   * @property {string} PKGINUPDATE_API 包装车间生产入库修改
+   */
+  PKGINUPDATE_API: HOST + '/sys/pkgInStorage/update',
+  /**
+   * @property {string} PKGEXCLIST_API 包装车间异常列表
+   */
+  PKGEXCLIST_API: HOST + '/pkg/exc/list',
+  /**
+   * @property {string} PKGEXCSAVE_API 包装车间异常保存
+   */
+  PKGEXCSAVE_API: HOST + '/pkg/exc/save',
+  /**
+   * @property {string} PKGEXCUPDATE_API 包装车间异常修改
+   */
+  PKGEXCUPDATE_API: HOST + '/pkg/exc/update'
 }

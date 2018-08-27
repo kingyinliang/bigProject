@@ -38,10 +38,10 @@
                 <div class="itemForm">
                   <el-form :model="item" size="small" label-position="right" label-width="68px">
                     <el-form-item label="产线">
-                     <p>{{item.product_line}}</p>
+                     <p>{{item.productLineName}}</p>
                     </el-form-item>
                     <el-form-item label="订单号">
-                      <el-select v-model="item.order_no" placeholder="请选择" :change="orderchange(item)">
+                      <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
                         <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
@@ -81,7 +81,7 @@ export default {
         orderNo: '',
         productDate: ''
       },
-      orderNo: '',
+      workShop: '',
       productDate: '',
       factoryid: '',
       workShopname: ''
@@ -109,9 +109,10 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', JSON.stringify(id)).then(({data}) => {
+      this.plantList.workShop = ''
+      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
         if (data.code === 0) {
-          this.workshop = data.childList
+          this.workshop = data.typeList
         } else {
           this.$message.error(data.msg)
         }
@@ -120,14 +121,13 @@ export default {
     // 获取列表
     GetOrderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-        // workShop: this.plantList.workShop,
-        workShop: '4E5FE5ADEC514FB5B680F1096A9D4AAA',
+        workShop: this.plantList.workShop,
         productDate: this.plantList.productDate,
-        orderNo: this.plantList.orderNo
+        orderNo: ''
       }).then(({data}) => {
         if (data.code === 0) {
           this.list = this.orderList(data.list)
-          this.orderNo = this.plantList.orderNo
+          this.workShop = this.plantList.workShop
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
         } else {
@@ -137,17 +137,18 @@ export default {
     },
     // 订单号下拉
     orderchange (row) {
-      if (row.order_no && row.order_no !== row.order_no2) {
+      if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-          // workShop: this.plantList.workShop,
-          workShop: '4E5FE5ADEC514FB5B680F1096A9D4AAA',
-          productDate: this.plantList.productDate,
-          orderNo: row.order_no
+          workShop: this.workShop,
+          productDate: this.productDate,
+          orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {
-            row.order_no2 = row.order_no
+            row.orderNo2 = row.orderNo
             row.name = data.list[0].name
             row.properties = data.list[0].properties
+            row.plan = data.list[0].plan
+            row.actual = data.list[0].actual
           } else {
             this.$message.error(data.msg)
           }
@@ -159,17 +160,18 @@ export default {
       console.log(data)
       let result = []
       for (let i = 0; i < data.length; i++) {
-        let orderNo = [data[i].order_no]
+        let orderNo = [data[i].orderNo]
         for (let j = i + 1; j < data.length; j++) {
-          if (data[i].product_line === data[j].product_line) {
+          if (data[i].productLine === data[j].productLine) {
             j = ++i
-            orderNo.push(data[j].order_no)
+            orderNo.push(data[j].orderNo)
           }
         }
         result.push({
-          product_line: data[i].product_line,
-          order_no: '',
-          order_no2: '',
+          productLine: data[i].productLine,
+          productLineName: data[i].productLineName,
+          orderNo: '',
+          orderNo2: '',
           order_arr: orderNo,
           name: '',
           properties: ''
@@ -182,8 +184,8 @@ export default {
     },
     // 数据录入
     goPro (item) {
-      if (item.order_no && item.properties) {
-        this.$router.push({ path: `DataEntry-Packaging-ProDataIn?order_no=${item.order_no}&factoryid=${this.factoryid}&workShopname=${this.workShopname}&productDate=${this.productDate}` })
+      if (item.orderNo && item.properties) {
+        this.$router.push({ path: `DataEntry-Packaging-ProDataIn?order_no=${item.orderNo}&workShop=${this.workShop}&factoryid=${this.factoryid}&productDate=${this.productDate}` })
       } else {
         this.$message.error('请选择订单号')
       }

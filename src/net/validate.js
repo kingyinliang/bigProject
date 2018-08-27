@@ -58,7 +58,7 @@ export function treeDataTranslate (data, id = 'id', pid = 'parentId') {
   }
   return res
 }
-
+// 人员管理数据处理
 export function transfer (data) {
   var res = []
   var selcedid = []
