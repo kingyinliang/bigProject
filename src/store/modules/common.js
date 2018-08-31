@@ -14,7 +14,11 @@ export default {
     menuActiveName: '',
     // 主入口标签页
     mainTabs: [],
-    mainTabsActiveName: ''
+    mainTabsActiveName: '',
+    // 包装车间
+    Pkgfactoryid: '',
+    PkgworkShop: '',
+    PkgproductDate: ''
   },
   mutations: {
     updateDocumentClientHeight (state, height) {
@@ -40,6 +44,15 @@ export default {
     },
     updateMainTabsActiveName (state, name) {
       state.mainTabsActiveName = name
+    },
+    updateFactoryid (state, name) {
+      state.Pkgfactoryid = name
+    },
+    updateWorkShop (state, name) {
+      state.PkgworkShop = name
+    },
+    updateProductDate (state, name) {
+      state.PkgproductDate = name
     }
   }
 }

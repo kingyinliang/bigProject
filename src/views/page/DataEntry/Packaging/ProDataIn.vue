@@ -45,7 +45,7 @@
             </el-row>
             <el-row style="float: right" v-if="isRedact">
               <el-button type="primary" size="small" @click="SaveForm">保存</el-button>
-              <el-button type="primary" size="small" >提交</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -56,7 +56,7 @@
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyDate.status" placement="top-start">
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
@@ -65,7 +65,11 @@
                 <div class="clearfix">
                   <h3>录入数据单位：MIN</h3>
                   <el-form-item label="是否停线交接班" style="float: right">
-                    <el-select v-model="readyDate.isCause" placeholder="是否停线交接班">
+                    <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact">
+                      <el-option label="是" value="1"></el-option>
+                      <el-option label="否" value="0"></el-option>
+                    </el-select>
+                    <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
                       <el-option label="是" value="1"></el-option>
                       <el-option label="否" value="0"></el-option>
                     </el-select>
@@ -78,27 +82,27 @@
                   <div>
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.dayStartDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.dayStartLineDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="readyDate.dayChange" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.dayChange}}</p>
+                      <el-input v-model="readyDate.dayChange" v-if="isRedact" placeholder="手工录入"></el-input>
+                      <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.dayEndDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.dayCauseDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="readyDate.dayDinner" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.dayDinner}}</p>
+                      <el-input v-model="readyDate.dayDinner" v-if="isRedact" placeholder="手工录入"></el-input>
+                      <el-input v-model="readyDate.dayDinner" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                   </div>
                 </el-card>
@@ -109,27 +113,27 @@
                   <div>
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.midStartDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.midStartLineDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="readyDate.midChange" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.midChange}}</p>
+                      <el-input v-model="readyDate.midChange" placeholder="手工录入" v-if="isRedact"></el-input>
+                      <el-input v-model="readyDate.midChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.midEndDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.midCauseDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="readyDate.midDinner" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.midDinner}}</p>
+                      <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-if="isRedact"></el-input>
+                      <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                   </div>
                 </el-card>
@@ -140,55 +144,55 @@
                   <div>
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.nightStartDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.nightStartLineDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
-                      <el-input v-model="readyDate.nightChange" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.nightChange}}</p>
+                      <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-if="isRedact"></el-input>
+                      <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.nightEndDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact"></el-date-picker>
-                      <p class="el-input" v-else>{{readyDate.nightCauseDate}}</p>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
-                      <el-input v-model="readyDate.nightDinner" v-if="isRedact"></el-input>
-                      <p class="el-input" v-else>{{readyDate.nightDinner}}</p>
+                      <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-if="isRedact"></el-input>
+                      <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                   </div>
                 </el-card>
                 <div style="padding: 20px">
                   <el-form-item label="交接班">
-                    <el-input v-model="readyDate.shift" v-if="isRedact"></el-input>
-                    <p class="el-input" v-else>{{readyDate.shift}}</p>
+                    <el-input v-model="readyDate.shift" placeholder="手工录入" v-if="isRedact"></el-input>
+                    <el-input v-model="readyDate.shift" placeholder="手工录入" v-else disabled></el-input>
                   </el-form-item>
                   <el-form-item label="班前会">
-                    <el-input v-model="readyDate.meeting" v-if="isRedact"></el-input>
-                    <p class="el-input" v-else>{{readyDate.meeting}}</p>
+                    <el-input v-model="readyDate.meeting" placeholder="手工录入" v-if="isRedact"></el-input>
+                    <el-input v-model="readyDate.meeting" placeholder="手工录入" v-else disabled></el-input>
                   </el-form-item>
                   <el-form-item label="生产前准备">
-                    <el-input v-model="readyDate.prepared" v-if="isRedact"></el-input>
-                    <p class="el-input" v-else>{{readyDate.prepared}}</p>
+                    <el-input v-model="readyDate.prepared" placeholder="手工录入" v-if="isRedact"></el-input>
+                    <el-input v-model="readyDate.prepared" placeholder="手工录入" v-else disabled></el-input>
                   </el-form-item>
                   <el-form-item label="生产后清场">
-                    <el-input v-model="readyDate.clear" v-if="isRedact"></el-input>
-                    <p class="el-input" v-else>{{readyDate.clear}}</p>
+                    <el-input v-model="readyDate.clear" placeholder="手工录入" v-if="isRedact"></el-input>
+                    <el-input v-model="readyDate.clear" placeholder="手工录入" v-else disabled></el-input>
                   </el-form-item>
                 </div>
-                <auditLog :tableData="tableData"></auditLog>
+                <auditLog :tableData="ReadAudit"></auditLog>
               </el-form>
             </div>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="人员需讨论" placement="top-start">
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
@@ -196,14 +200,14 @@
               <div class="clearfix">
                 <h3>录入数据单位：MIN</h3>
                 <div class="btn">
-                  <el-button type="primary" @click="addformrow(uerDate)">新增</el-button>
+                  <el-button type="primary" @click="addUserDate(uerDate)" size="small">新增</el-button>
                 </div>
               </div>
               <div>
-                <div class="message">
-                  <i class="el-icon-info"></i>
-                  <span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>
-                </div>
+                <!--<div class="message">-->
+                  <!--<i class="el-icon-info"></i>-->
+                  <!--<span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>-->
+                <!--</div>-->
                 <el-table
                   ref="table1"
                   header-row-class-name="tableHead"
@@ -219,67 +223,72 @@
                   <el-table-column
                   label="白/中/夜班">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.classType" placeholder="请选择">
-                        <el-option label="白班" value="白班"></el-option>
-                        <el-option label="中班" value="中班"></el-option>
-                        <el-option label="夜班" value="夜班"></el-option>
+                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-if="isRedact">
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                       </el-select>
+                      <span v-else>{{ scope.row.classType }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="班组/工序">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.deptId" placeholder="请选择">
-                        <el-option label="班组" value="班组"></el-option>
-                        <el-option label="工序" value="工序"></el-option>
+                      <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact">
+                        <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
                       </el-select>
+                      <span v-else>{{ scope.row.deptId }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="人员属性"
                     width="120">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.userType" placeholder="请选择">
+                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact">
                         <el-option label="正式" value="正式"></el-option>
                         <el-option label="借调" value="借调"></el-option>
                         <el-option label="临时工" value="临时工"></el-option>
                       </el-select>
+                      <span v-else>{{ scope.row.userType }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="人员选择"
                     width="120">
                     <template slot-scope="scope">
-                      <el-input v-if="scope.row.userType=='临时工'" v-model="scope.row.userId"></el-input>
-                      <el-button type="text" v-else>点击选择人员</el-button>
+                      <span v-if="!isRedact || scope.row.userType !=='临时工'">{{scope.row.userId[0]}}</span>
+                      <el-input v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId" size="small"></el-input>
+                      <el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工'">点击选择人员</el-button>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="开始时间"
                     width="120">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.startDate"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
+                      <span v-else>{{ scope.row.startDate }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="用餐时间（MIN）"
                     width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.dinner"></el-input>
+                      <el-input v-model="scope.row.dinner" size="small" v-if="isRedact"></el-input>
+                      <span v-else>{{ scope.row.dinner }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="结束时间"
                     width="120">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.endDate"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
+                      <span v-else>{{ scope.row.endDate }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="备注"
                     width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.remark"></el-input>
+                      <el-input v-model="scope.row.remark" size="small" v-if="isRedact"></el-input>
+                      <span v-else>{{ scope.row.remark }}</span>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -288,26 +297,25 @@
                     <el-input v-model="form.name"></el-input>
                   </el-form-item>
                 </el-form>
-                <auditLog :tableData="tableData"></auditLog>
+                <auditLog :tableData="UserAudit"></auditLog>
               </div>
             </div>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-                <el-button>异常记录</el-button>
-              </el-tooltip>
+              <el-button>异常记录</el-button>
             </span>
             <div class="clearfix">
               <h3>录入数据单位：MIN</h3>
               <div class="btn">
-                <el-button type="primary" @click="addformrow">新增</el-button>
+                <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-if="isRedact">新增</el-button>
+                <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
-            <div class="message">
-              <i class="el-icon-info"></i>
-              <span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>
-            </div>
+            <!--<div class="message">-->
+              <!--<i class="el-icon-info"></i>-->
+              <!--<span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>-->
+            <!--</div>-->
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -324,13 +332,11 @@
                 label="异常情况（下拉选择）"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.expCode" placeholder="请选择S">
-                    <el-option label="设备故障" value="1"></el-option>
-                    <el-option label="小停机" value="2"></el-option>
-                    <el-option label="制程不良" value="3"></el-option>
-                    <el-option label="等待损失" value="4"></el-option>
-                    <el-option label="能源" value="5"></el-option>
-                    <el-option label="其他" value="6"></el-option>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small">
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -338,28 +344,31 @@
                 label="异常描述"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.expInfo"></el-input>
+                  <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常开始时间"
                 width="120">
                 <template slot-scope="scope">
-                  <el-date-picker type="date" placeholder="选择" v-model="scope.row.expStartDate"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常结束时间"
                 width="120">
                 <template slot-scope="scope">
-                  <el-date-picker type="date" placeholder="选择" v-model="scope.row.expEndDate"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常时间"
                 width="120">
                 <template slot-scope="scope">
-                  <span>{{scope.row.expContinue = scope.row.expEndDate-scope.row.expStartDate}}</span>
+                  <span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -373,9 +382,11 @@
                 label="设备"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.deviceId" placeholder="设备">
-                    <el-option label="1" value="1"></el-option>
-                    <el-option label="2" value="2"></el-option>
+                  <el-select v-model="scope.row.deviceId" placeholder="设备" size="small" v-if="!isRedact" disabled>
+                    <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.deviceId" placeholder="设备" v-else size="small">
+                    <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -383,7 +394,10 @@
                 label="物料分类简称"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.materialShort" placeholder="选择简称">
+                  <el-select v-model="scope.row.materialShort" placeholder="选择简称" v-if="!isRedact" size="small" disabled>
+                    <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.materialShort" placeholder="选择简称" v-else size="small">
                     <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
@@ -392,11 +406,11 @@
                 label="能源"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.energy" placeholder="选择能源">
-                    <el-option label="水" value="1"></el-option>
-                    <el-option label="电" value="2"></el-option>
-                    <el-option label="气" value="3"></el-option>
-                    <el-option label="汽" value="4"></el-option>
+                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-if="!isRedact" disabled size="small">
+                    <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-else size="small">
+                    <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -404,27 +418,28 @@
                 label="备注"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark"></el-input>
+                  <el-input v-model="scope.row.remark" v-if="!isRedact" disabled size="small" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.remark" v-else size="small" placeholder="手工录入"></el-input>
                 </template>
               </el-table-column>
             </el-table>
             <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
               <el-form-item label="总停线时间">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="ExcNum" size="small"></el-input>
               </el-form-item>
             </el-form>
-            <auditLog :tableData="tableData"></auditLog>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="接口没有" placement="top-start">
                 <el-button>生产入库</el-button>
               </el-tooltip>
             </span>
             <div class="tab4">
               <div class="tabtit">
                 <div class="btn">
-                  <el-button type="primary" @click="addformrow(InDate)">新增</el-button>
+                  <el-button type="primary" @click="AddInDate(InDate)" size="small" v-if="isRedact">新增</el-button>
+                  <el-button type="primary" @click="AddInDate(InDate)" size="small" v-else disabled>新增</el-button>
                 </div>
               </div>
               <el-table
@@ -434,7 +449,8 @@
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleSelectionChange"
+                v-if="order.properties !== '二合一&礼盒产线'">
                 <el-table-column
                   type="selection"
                   width="55">
@@ -443,10 +459,11 @@
                   label="白/中/夜班"
                   width="120">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.classType" placeholder="请选择">
-                      <el-option label="白班" value="1"></el-option>
-                      <el-option label="中班" value="2"></el-option>
-                      <el-option label="夜班" value="3"></el-option>
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                     </el-select>
                   </template>
                 </el-table-column>
@@ -454,14 +471,16 @@
                   label="生产批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="人工码垛-包材库 A"
+                  label="人工码垛-包材库"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.manPacking"></el-input>
+                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -472,10 +491,26 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="人工码垛-立体库 B"
+                  label="自动码垛-包材库"
+                  width="120" v-if="order.workShopName === '包装三车间'">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120" v-if="order.workShopName === '包装三车间'">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.aiPackingUnit}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="人工码垛-立体库"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.manSolid"></el-input>
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -486,24 +521,41 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="自动上架-立体库 C"
-                  width="120">
+                  label="自动码垛-立体库"
+                  width="120" v-if="order.workShopName === '包装三车间'">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiShelves"></el-input>
+                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="单位"
-                  width="120">
+                  width="120" v-if="order.workShopName === '包装三车间'">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.aiSolidUnit}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="自动上架-立体库"
+                  width="120" v-if="order.workShopName !== '包装三车间'">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120" v-if="order.workShopName !== '包装三车间'">
                   <template slot-scope="scope">
                     <span>{{scope.row.aiShelvesUnit}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="不良品 D"
+                  label="不良品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.bad"></el-input>
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -514,10 +566,11 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="样品 E"
+                  label="样品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.sample"></el-input>
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -530,7 +583,10 @@
                 <el-table-column
                   label="产出数"
                   width="120">
-                  <template slot-scope="scope">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1 + scope.row.aiShelves*1 + scope.row.sample*1) }}</template>
+                  <template slot-scope="scope">
+                    <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiSolid*1*(ratio*1) + scope.row.sample*1) }}</span>
+                    <span v-else>{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiShelves*1*(ratio*1) + scope.row.sample*1) }}</span>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   label="单位"
@@ -543,87 +599,204 @@
                   label="备注"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark"></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="操作"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
               </el-table>
-              <div class="tabtit">
+              <el-table
+                ref="table1"
+                header-row-class-name="tableHead"
+                :data="InDate"
+                border
+                tooltip-effect="dark"
+                style="width: 100%;margin-bottom: 20px"
+                @selection-change="handleSelectionChange"
+                v-if="order.properties === '二合一&礼盒产线'">
+                <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column>
+                <el-table-column
+                  label="白/中/夜班"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="生产批次"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="人工码垛-立体库"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.manPackingUnit = basicUnit }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="不良品"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.badUnit = productUnit}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="样品"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.sampleUnit = productUnit}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="产出数"
+                  width="120">
+                  <template slot-scope="scope">{{ scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1) }}</template>
+                </el-table-column>
+                <el-table-column
+                  label="单位"
+                  width="120">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.outputUnit = productUnit}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="主产品批次"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="赠品批次"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="备注"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div>
+                <el-form :inline="true" :model="countOutput" size="small" label-width="110px">
+                  <el-form-item label="产出数合计">
+                    <span>{{countOutputNum}}</span>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div class="tabtit" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
                 <span>机维组数量确认</span>
                 <div class="btn">
                   <el-button type="primary">刷新</el-button>
                 </div>
               </div>
               <el-table
+                v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'"
                 ref="table1"
                 header-row-class-name="tableHead"
-                :data="tableData3"
+                :data="InVlist"
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px">
                 <el-table-column
-                  prop="name"
+                  prop="orderId"
                   label="生产订单号"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="batch"
                   label="生产批次"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="aiShelves"
                   label="自动上架数-立体库"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="aiShelvesUnit"
                   label="单位"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="jwzAcount"
                   label="机维组确认数"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="differentUnit"
                   label="单位"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="different"
                   label="差异数量"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="differentUnit"
                   label="单位"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="differentInfo"
                   label="差异说明"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="name"
+                  prop="jwzMan"
                   label="机维组确认人"
                   width="120">
                 </el-table-column>
               </el-table>
-              <auditLog :tableData="tableData"></auditLog>
+              <auditLog :tableData="InAudit"></auditLog>
             </div>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="" placement="top-start">
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
@@ -636,52 +809,46 @@
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
               <el-table-column
-                label="日期"
+                label="物料（包材）"
                 width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+                <template slot-scope="scope">{{ order.materialCode + ' ' + order.materialName }}</template>
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
+                label="单位"
                 width="120">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址"
+                label="需求用量"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="地址">
+                label="生产使用">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.crew" placeholder="车间">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column
-                label="地址">
+                label="本班损耗">
                 <template slot-scope="scope">
-                  <el-dropdown @command="handleCommand">
-                        <span class="el-dropdown-link">
-                          {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
-                        </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
-                      <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="不合格数">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="不良批次">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="厂家（选择）">
+                <template slot-scope="scope">
                 </template>
               </el-table-column>
             </el-table>
-            <auditLog :tableData="tableData"></auditLog>
-          </el-tab-pane>
-          <el-tab-pane name="6">
-            <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-                <el-button>待杀菌数量</el-button>
-              </el-tooltip>
-            </span>
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -691,81 +858,151 @@
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
               <el-table-column
-                prop="name"
-                label="">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="清洗冲顶">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="换产冲顶">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="开机冲顶">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="包材不良">
-              </el-table-column>
-              <el-table-column
-                label="日期"
+                label="物料（半成品）"
                 width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+                <template slot-scope="scope">{{ order.materialCode + ' ' + order.materialName }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="单位"
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址"
+                label="领用罐号"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="地址">
+                label="过滤日期">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.crew" placeholder="车间">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="生产使用量">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="换罐时间">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="用完时间">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="厂家（选择）">
+                <template slot-scope="scope">
+                </template>
+              </el-table-column>
+            </el-table>
+            <auditLog :tableData="SapAudit"></auditLog>
+          </el-tab-pane>
+          <el-tab-pane name="6">
+            <span slot="label">
+              <el-button>待杀菌数量</el-button>
+            </span>
+            <div class="clearfix">
+              <div class="btn">
+                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-if="isRedact">新增</el-button>
+                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-else>新增</el-button>
+              </div>
+            </div>
+            <el-table
+              ref="table1"
+              header-row-class-name="tableHead"
+              :data="GermsDate"
+              border
+              tooltip-effect="dark"
+              style="width: 100%;margin-bottom: 20px"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                label="白/中/夜班">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
+                    <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.classType" placeholder="请选择" v-else disabled size="small">
+                    <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="删除"
-                show-overflow-tooltip>
+                label="清洗冲顶">
                 <template slot-scope="scope">
-                  <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+                  <el-input v-model="scope.row.washing" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.washing" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="地址">
+                label="换产冲顶">
                 <template slot-scope="scope">
-                  <el-dropdown @command="handleCommand">
-                        <span class="el-dropdown-link">
-                          {{ scope.row.crew }}<i class="el-icon-arrow-down el-icon--right"></i>
-                        </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item command="黄金糕">黄金糕</el-dropdown-item>
-                      <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                  <el-input v-model="scope.row.changeProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.changeProduct" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="开机冲顶">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.bootHeader" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.bootHeader" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="包材不良">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.badMaterial" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.badMaterial" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="制程不良"
+                width="120">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.badProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.badProduct" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="半成品物料不合格"
+                width="120">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.badSemi" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.badSemi" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="设备残留"
+                width="120">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.deviceLoss" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.deviceLoss" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="备注"
+                width="120">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remark" v-if="isRedact" placeholder="手工录入" size="small"></el-input>
+                  <el-input v-model="scope.row.remark" v-else disabled placeholder="手工录入" size="small"></el-input>
                 </template>
               </el-table-column>
             </el-table>
             <el-form :inline="true" size="small" label-width="120px" style="margin: 20px 0">
               <el-form-item label="待杀菌数量（L）">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="GermsNum"></el-input>
               </el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane name="7">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-                <el-button>文本记录</el-button>
-              </el-tooltip>
+              <el-button>文本记录</el-button>
             </span>
             <el-form :model="form">
-              <el-input type="textarea" v-model="form.name" class="textarea" style="width: 100%;height: 200px"></el-input>
+              <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-if="isRedact"></el-input>
+              <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-else disabled></el-input>
             </el-form>
           </el-tab-pane>
         </el-tabs>
@@ -775,24 +1012,32 @@
       title="人员分配"
       :close-on-click-modal="false"
       :visible.sync="visible">
-      <!--<el-transfer-->
-        <!--filterable-->
-        <!--:titles="['未分配人员', '已分配人员']"-->
-        <!--:filter-method="filterMethod"-->
-        <!--filter-placeholder="请输入用户名称"-->
-        <!--v-model="selctId"-->
-        <!--:data="userlist">-->
-      <!--</el-transfer>-->
+      <el-transfer
+        filterable
+        :titles="['未分配人员', '已分配人员']"
+        :filter-method="filterMethod"
+        filter-placeholder="请输入用户名称"
+        v-model="selctId"
+        :data="userlist">
+      </el-transfer>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">取消</el-button>
+        <el-button type="primary" @click="updatauser(row)">确定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {SYSTEMSETUP_API, PACKAGING_API} from '@/api/api'
+import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
+import { setUserList } from '@/net/validate'
 export default {
   name: 'ProDataIn',
   data () {
     return {
+      filterMethod (query, item) {
+        return item.screncon.indexOf(query) > -1
+      },
       isRedact: false,
       visible: false,
       form: {
@@ -803,16 +1048,6 @@ export default {
       tableData: [],
       tableData3: [{
         date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-04',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄',
         crew: ''
@@ -827,25 +1062,27 @@ export default {
       order: {
         productDate: ''
       },
+      countOutput: {},
       readyDate: {
+        id: '',
         status: 'saved',
         orderId: '',
         isCause: '1',
         dayStartDate: '',
         dayStartLineDate: '',
         dayChange: '',
-        dayDinner: '',
+        dayDinner: '60',
         dayCauseDate: '',
         dayEndDate: '',
         midCauseDate: '',
         midChange: '',
-        midDinner: '',
+        midDinner: '60',
         midEndDate: '',
         midStartDate: '',
         midStartLineDate: '',
         nightCauseDate: '',
         nightChange: '',
-        nightDinner: '',
+        nightDinner: '60',
         nightEndDate: '',
         nightStartDate: '',
         nightStartLineDate: '',
@@ -854,48 +1091,40 @@ export default {
         prepared: '',
         clear: ''
       },
+      ReadAudit: [],
       uerDate: [{
         classType: '',
         deptId: '',
         userType: '',
-        userId: '',
+        userId: [],
         startDate: '',
         dinner: '',
         endDate: '',
         remark: ''
       }],
-      ExcDate: [{
-        expCode: '',
-        expInfo: '',
-        expStartDate: '',
-        expEndDate: '',
-        expContinue: '',
-        expContinueUnit: '',
-        deviceId: '',
-        materialShort: '',
-        energy: '',
-        remark: ''
-      }],
+      UserAudit: [],
+      Team: [],
+      selctId: [],
+      userlist: [],
+      row: {},
+      equipmentType: [],
+      enery: [],
+      stoppageType: [],
+      ExcDate: [],
       materialShort: [],
-      InDate: [{
-        status: 'saved',
-        isPkgThree: '1',
-        orderId: '',
-        classType: '',
-        batch: '',
-        manPacking: '',
-        manPackingUnit: '',
-        aiShelves: '',
-        aiShelvesUnit: '',
-        manSolid: '',
-        manSolidUnit: '',
-        bad: '',
-        badUnit: '',
-        sample: '',
-        sampleUnit: '',
-        output: '',
-        outputUnit: ''
-      }]
+      InDate: [],
+      InVlist: [],
+      basicUnit: '',
+      productUnit: '',
+      ratio: 0,
+      InAudit: [],
+      productShift: [],
+      SapDate: [],
+      SapAudit: [],
+      GermsDate: [
+      ],
+      Text: '',
+      textId: ''
     }
   },
   mounted () {
@@ -905,6 +1134,10 @@ export default {
     this.factoryid = this.$route.query.factoryid
     this.GetOrderList()
     this.GetmaterialShort()
+    this.GetProductShift()
+    this.Getenery()
+    this.GetstoppageType()
+    this.GetTeam()
   },
   methods: {
     // 获取表头
@@ -918,16 +1151,18 @@ export default {
           this.order = data.list[0]
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
-          console.log(this.orderId)
-          console.log(this.readyDate)
+          this.GetRatio()
+          this.GetequipmentType()
           if (this.orderStatus !== '已同步') {
             console.log(1)
-            // this.Getpkgready()
-            // this.Getpkguser()
-            // this.GetpkgExc()
+            this.Getpkgready()
+            this.Getpkguser()
+            this.GetpkgExc()
             this.Getpkgin()
+            this.GetpkgSap()
+            this.GetpkgGerms()
+            this.GetText()
           } else {
-            this.InDate[0].orderId = this.orderId
             this.readyDate.orderId = this.orderId
           }
         } else {
@@ -935,11 +1170,78 @@ export default {
         }
       })
     },
+    // 获取产线下班组
+    GetTeam () {
+      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.Team = data.teamList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取物料分类简称
     GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_kind`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取设备类型
+    GetequipmentType () {
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: '',
+        deptId: this.order.productLine,
+        currPage: '1',
+        pageSize: '50'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.equipmentType = data.list.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取能源下拉
+    Getenery () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.enery = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取异常情况
+    GetstoppageType () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=stoppage_type`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.stoppageType = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取生产班次
+    GetProductShift () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.productShift = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取比例
+    GetRatio () {
+      this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.order.materialCode}).then(({data}) => {
+        if (data.code === 0) {
+          this.ratio = data.sme.ratio
+          this.basicUnit = data.sme.basicUnit
+          this.productUnit = data.sme.productUnit
         } else {
           this.$message.error(data.msg)
         }
@@ -951,11 +1253,12 @@ export default {
     // 获取包装车间人员列表
     Getpkguser () {
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
-        orderId: this.orderId
+        order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
           console.log('获取包装车间人员列表')
           console.log(data)
+          this.UserAudit = data.listApproval
         } else {
           this.$message.error(data.msg)
         }
@@ -964,12 +1267,15 @@ export default {
     // 获取包装车间准备时间列表
     Getpkgready () {
       this.$http(`${PACKAGING_API.PKGREADYLIST_API}`, 'POST', {
-        orderId: this.orderId
+        order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
           console.log('获取包装车间准备时间列表')
           console.log(data)
-          this.readyDate = data.list
+          if (data.listForm.length > 0) {
+            this.readyDate = data.listForm[0]
+            this.ReadAudit = data.listApproval
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -977,11 +1283,11 @@ export default {
     },
     // 获取包装车间异常记录列表
     GetpkgExc () {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}/${this.orderId}`, 'GET').then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: this.orderId}).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间准备时间列表')
+          console.log('获取包装车间异常记录列表')
           console.log(data)
-          this.readyDate = data.list
+          this.ExcDate = data.listForm
         } else {
           this.$message.error(data.msg)
         }
@@ -990,11 +1296,58 @@ export default {
     // 获取包装车间生产入库列表
     Getpkgin () {
       this.$http(`${PACKAGING_API.PKGINLIST_API}`, 'POST', {
-        orderId: this.orderId
+        orderId: this.orderId,
+        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'isTwoOne' : this.order.properties === '包装三车间' ? 'isPkgThree' : ''
       }).then(({data}) => {
         if (data.code === 0) {
           console.log('获取包装车间生产入库列表')
           console.log(data)
+          this.InDate = data.plist
+          this.InVlist = data.vlist
+          this.InAudit = data.vrlist
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取包装车间物料领用列表
+    GetpkgSap () {
+      this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
+        order_id: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间物料领用列表')
+          console.log(data)
+          this.SapAudit = data.listApproval
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取包装车间待杀菌数量列表
+    GetpkgGerms () {
+      this.$http(`${PACKAGING_API.PKGGERMSLIST_API}`, 'POST', {
+        order_id: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间待杀菌数量列表')
+          console.log(data)
+          this.GermsDate = data.listForm
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取包装车间文本记录列表
+    GetText () {
+      this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', {
+        order_id: this.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          console.log('获取包装车间文本记录列表')
+          console.log(data)
+          this.Text = data.listForm[0].pkgText
+          this.textId = data.listForm[0].id
         } else {
           this.$message.error(data.msg)
         }
@@ -1009,16 +1362,25 @@ export default {
       this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
         if (data.code === 0) {
           console.log('修改表头')
+          this.UpdateReady() // 修改准备时间
+          this.UpdateExc() // 修改异常记录
+          this.UpdateIn() // 修改生产入库
+          this.UpdateGerms() // 修改待杀菌数量
+          this.UpdateText() // 修改文本
           if (this.orderStatus !== '已同步') {
-            this.UpdateReady() // 修改准备时间
+            // this.UpdateReady() // 修改准备时间
             // this.UpdateUser() // 修改人员
             // this.UpdateExc() // 修改异常记录
             // this.UpdateIn() // 修改生产入库
+            // this.UpdateGerms() // 修改待杀菌数量
+            // this.UpdateText() // 修改文本
           } else {
-            this.SaveReady() // 保存准备时间
+            // this.SaveReady() // 保存准备时间
             // this.SaveUser() // 保存人员
             // this.SaveExc() // 保存异常记录
             // this.SaveIn() // 保存生产入库
+            // this.SaveGerms() // 保存待杀菌数量
+            // this.SaveText() // 保存文本
           }
         } else {
           this.$message.error(data.msg)
@@ -1027,14 +1389,14 @@ export default {
     },
     // 表头处理
     tableheader () {
+      console.log(this.countOutputNum)
       this.order.orderStatus = '已保存'
-      // this.order.realOutput = //生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
-      // this.order.outputUnit = //生产入库单位
-      // this.order.countOutput = //生产入库总产量
+      this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
+      this.order.countOutputUnit = '瓶'// 生产入库单位
+      this.order.countOutput = this.countOutputNum // 生产入库总产量
       // this.order.countMan =  // 实际作业人数
       // this.order.expAllDate =  // 总停线时间
-      // this.order.germs =  // 待杀菌数量合计
-      delete this.order.productDate
+      this.order.germs = this.GermsNum // 待杀菌数量合计
       this.order.operator = `${this.realName}(${this.userName})`
     },
     // 保存准备时间
@@ -1042,8 +1404,8 @@ export default {
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', this.readyDate).then(({data}) => {
           if (data.code === 0) {
-            console.log('保存准备时间')
-            console.log(data)
+            this.$message('保存准备时间成功')
+            this.Getpkgready()
           } else {
             this.$message.error(data.msg)
           }
@@ -1052,7 +1414,7 @@ export default {
         this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', {
           status: 'saved',
           isCause: this.readyDate.isCause,
-          orderId: this.readyDate.orderId,
+          orderId: this.orderId,
           dayStartDate: this.readyDate.dayStartDate,
           dayStartLineDate: this.readyDate.dayStartLineDate,
           dayChange: this.readyDate.dayChange,
@@ -1086,10 +1448,13 @@ export default {
     },
     // 保存异常记录
     SaveExc () {
-      this.$http(`${PACKAGING_API.PKGEXCSAVE_API}`, 'POST', {}).then(({data}) => {
+      this.ExcDate.forEach((item) => {
+        item.orderId = this.orderId
+      })
+      this.$http(`${PACKAGING_API.PKGEXCSAVE_API}`, 'POST', this.ExcDate).then(({data}) => {
         if (data.code === 0) {
-          console.log('保存人员')
-          console.log(data)
+          this.$message.success('保存异常记录成功')
+          this.GetpkgExc()
         } else {
           this.$message.error(data.msg)
         }
@@ -1097,43 +1462,81 @@ export default {
     },
     // 保存生产入库
     SaveIn () {
+      this.InDate.forEach((item) => {
+        item.orderId = this.orderId
+      })
       this.$http(`${PACKAGING_API.PKGINSAVE_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
-          console.log('保存生产入库')
-          console.log(data)
+          this.$message.success('保存生产入库成功')
+          this.Getpkgin()
         } else {
           this.$message.error(data.msg)
         }
       })
     },
+    // 保存待杀菌数量
+    SaveGerms () {
+      this.GermsDate.forEach((item) => {
+        item.orderId = this.orderId
+        item.status = 'saved'
+      })
+      this.$http(`${PACKAGING_API.PKGGERMSSAVE_API}`, 'POST', this.GermsDate).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('保存待杀菌数量成功')
+          this.GetpkgGerms()
+        } else {
+          this.$message.error('保存待杀菌数量' + data.msg)
+        }
+      })
+    },
+    // 保存文本
+    SaveText () {
+      this.$http(`${PACKAGING_API.PKGTEXTSAVE_API}`, 'POST', {
+        orderId: this.orderId,
+        pkgText: this.Text,
+        workShop: this.order.workShop,
+        blongProc: this.order.productLine
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('保存文本成功')
+          this.GetText()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    /**
+     * @property 以下为七个修改列表
+     */
     // 修改人员
     UpdateUser () {
       this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', {}).then(({data}) => {
         if (data.code === 0) {
-          console.log('修改人员')
+          this.$message.success('修改人员成功')
           console.log(data)
         } else {
           this.$message.error(data.msg)
         }
       })
     },
-    // 修改
     // 修改准备时间
     UpdateReady () {
+      this.readyDate.orderId = this.orderId
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
           if (data.code === 0) {
-            console.log('修改准备时间')
-            console.log(data)
+            this.$message.success('修改准备时间成功')
+            this.Getpkgready()
           } else {
             this.$message.error(data.msg)
           }
         })
       } else {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
+          id: this.readyDate.id ? this.readyDate.id : '',
           status: 'saved',
           isCause: this.readyDate.isCause,
-          orderId: this.readyDate.orderId,
+          orderId: this.orderId,
           dayStartDate: this.readyDate.dayStartDate,
           dayStartLineDate: this.readyDate.dayStartLineDate,
           dayChange: this.readyDate.dayChange,
@@ -1146,7 +1549,7 @@ export default {
           clear: this.readyDate.clear
         }).then(({data}) => {
           if (data.code === 0) {
-            console.log('修改准备时间')
+            this.$message.success('修改准备时间成功')
             console.log(data)
           } else {
             this.$message.error(data.msg)
@@ -1155,37 +1558,252 @@ export default {
       }
     },
     // 修改异常记录
-    UpdateExc () {},
+    UpdateExc () {
+      if (this.ExcDate.length > 0) {
+        this.ExcDate.forEach((item) => {
+          item.orderId = this.orderId
+        })
+        this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('修改异常记录成功')
+            this.GetpkgExc()
+          } else {
+            this.$message.error('异常记录' + data.msg)
+          }
+        })
+      }
+    },
     // 修改生产入库
     UpdateIn () {
-      this.InDate.orderId = this.orderId
+      this.InDate.forEach((item) => {
+        item.orderId = this.orderId
+      })
       this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
-          console.log('保存生产入库')
-          console.log(data)
+          this.$message.success('修改生产入库成功')
+          this.Getpkgin()
+        } else {
+          this.$message.error('生产入库' + data.msg)
+        }
+      })
+    },
+    // 修改物料领用
+    UpdateSap () {},
+    // 修改待杀菌数量
+    UpdateGerms () {
+      if (this.GermsDate.length > 0) {
+        this.GermsDate.forEach((item) => {
+          item.orderId = this.orderId
+          item.status = 'saved'
+        })
+        this.$http(`${PACKAGING_API.PKGGERMSUPDATE_API}`, 'POST', this.GermsDate).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('修改待杀菌数量成功')
+            this.GetpkgGerms()
+          } else {
+            this.$message.error('修改待杀菌数量' + data.msg)
+          }
+        })
+      }
+    },
+    // 修改文本
+    UpdateText () {
+      this.$http(`${PACKAGING_API.PKGTEXTUPDATE_API}`, 'POST', {
+        id: this.textId,
+        orderId: this.orderId,
+        pkgText: this.Text,
+        workShop: this.order.workShop,
+        blongProc: this.order.productLine
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('修改文本成功')
+          this.GetText()
+        } else {
+          this.$message.error('修改文本' + data.msg)
+        }
+      })
+    },
+    /**
+     * @property 以下为提交
+     */
+    SubmitForm () {
+      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: '222'}, [{
+        orderId: this.orderId,
+        classType: '夜班',
+        deptId: '',
+        userType: '',
+        userId: ['1', '2'],
+        startDate: '2018-08-30 00:00:00.0',
+        dinner: '222',
+        endDate: '2018-08-30 00:00:00.0',
+        remark: '2'
+      }, {
+        orderId: this.orderId,
+        classType: '白班',
+        deptId: '',
+        userType: '',
+        userId: ['2', '3'],
+        startDate: '2018-08-30 00:00:00.0',
+        dinner: '332',
+        endDate: '2018-08-30 00:00:00.0',
+        remark: '2'
+      }], this.ExcDate, {
+        orderId: this.orderId,
+        countOutput: this.countOutputNum,
+        countOutputUnit: '瓶',
+        productDate: this.order.productDate
+      }]).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+        if (data.code === 0) {
         } else {
           this.$message.error(data.msg)
         }
       })
     },
     // 我是分割线
+    // 选择人员
+    selectUser (row) {
+      this.row = row
+      if (row.userType === '借调') {
+        this.GetUserforteam()
+      } else if (row.userType === '正式') {
+        if (row.deptId) {
+          this.GetUserforteam(row.deptId)
+        } else {
+          this.$message.error('请选择班组/工序')
+        }
+      } else {
+        this.$message.error('请选择人员属性')
+      }
+    },
+    // 根据部门id查人
+    GetUserforteam (id) {
+      this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
+        if (data.code === 0) {
+          this.userlist = setUserList(data.listUser)
+          this.visible = true
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 确定人员
+    updatauser (row) {
+      row.userId = this.selctId
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    handleCommand (command) {
-      this.$message('click on item ' + command)
     },
     addformrow (form) {
       form.push([])
     },
-    cleararr () {
-      this.$refs.table1.clearSelection()
+    // 新增人员
+    addUserDate (form) {
+      form.push({
+        orderId: this.orderId,
+        classType: '',
+        deptId: '',
+        userType: '',
+        userId: '',
+        startDate: '',
+        dinner: '',
+        endDate: '',
+        remark: ''
+      })
     },
-    remove (index, rows) {
-      rows.splice(index, 1)
+    // 新增入库
+    AddInDate (form) {
+      let types = ''
+      if (this.order.properties === '二合一&礼盒产线') {
+        types = 'isTwoOne'
+      } else if (this.order.workShopName === '包装三车间') {
+        types = 'isPkgThree'
+      }
+      form.push({
+        status: 'saved',
+        isPkgThree: types,
+        orderId: '',
+        classType: '',
+        batch: '',
+        manPacking: '',
+        manPackingUnit: '瓶',
+        aiPacking: '',
+        aiPackingUnit: '瓶',
+        aiShelves: '',
+        aiShelvesUnit: '箱',
+        aiSolid: '',
+        aiSolidUnit: '箱',
+        manSolid: '',
+        manSolidUnit: '箱',
+        bad: '',
+        badUnit: '瓶',
+        sample: '',
+        sampleUnit: '瓶',
+        output: '',
+        outputUnit: '瓶',
+        mainBatch: '',
+        attachBatch: ''
+      })
+    },
+    // 新增异常记录
+    AddExcDate (form) {
+      form.push({
+        id: '',
+        orderId: '',
+        expCode: '',
+        expInfo: '',
+        expStartDate: '',
+        expEndDate: '',
+        expContinue: '',
+        expContinueUnit: '',
+        deviceId: '',
+        materialShort: '',
+        energy: '',
+        remark: ''
+      })
+    },
+    // 新增待杀菌
+    AddGermsDate (form) {
+      form.push({
+        id: '',
+        washing: 0,
+        changeProduct: 0,
+        bootHeader: 0,
+        badMaterial: 0,
+        badProduct: 0,
+        badSemi: 0,
+        deviceLoss: 0
+      })
     }
   },
   computed: {
+    ExcNum: function () {
+      let num = 0
+      this.ExcDate.forEach((item) => {
+        num += item.expContinue
+      })
+      // return typeof(this.ExcDate[0].expEndDate)
+      return num
+    },
+    GermsNum: function () {
+      let num = 0
+      this.GermsDate.forEach((item) => {
+        num += (item.washing * 1 + item.changeProduct * 1 + item.bootHeader * 1 + item.badMaterial * 1 + item.badProduct * 1 + item.badSemi * 1 + item.deviceLoss * 1)
+      })
+      return num
+    },
+    countOutputNum: function () {
+      let num = 0
+      this.InDate.forEach((item) => {
+        num += item.output
+      })
+      return num
+    },
     userName: {
       get () { return this.$store.state.user.name },
       set (val) { this.$store.commit('user/updateName', val) }
@@ -1221,7 +1839,7 @@ export default {
   }
 }
 .times .el-input{
-  width: 180px;
+  width: 200px;
 }
 .btn{
   float: right;

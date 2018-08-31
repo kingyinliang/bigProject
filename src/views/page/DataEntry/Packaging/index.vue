@@ -47,13 +47,13 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="品项">
-                      <p>{{item.name}}</p>
+                      <p>{{item.materialCode + ' ' + item.materialName}}</p>
                     </el-form-item>
                     <el-form-item label="计划产量">
-                      <p>{{item.plan}}</p>
+                      <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
                     </el-form-item>
                     <el-form-item label="实时产量">
-                      <p>{{item.actual}}</p>
+                      <p>{{item.realOutput? item.realOutput : '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
                   </el-form>
                 </div>
@@ -74,13 +74,13 @@ export default {
     return {
       factory: [],
       workshop: [],
-      list: [],
       plantList: {
         factoryid: '',
         workShop: '',
         orderNo: '',
         productDate: ''
       },
+      list: [],
       workShop: '',
       productDate: '',
       factoryid: '',
@@ -93,7 +93,14 @@ export default {
     }
   },
   mounted () {
-    this.GetOrderList()
+    this.plantList.factoryid = this.Pkgfactoryid
+    this.plantList.productDate = this.PkgproductDate
+    this.plantList.workShop = this.PkgworkShop
+    let that = this
+    setTimeout(function () {
+      that.plantList.workShop = that.PkgworkShop
+      that.GetOrderList()
+    }, 1000)
     this.Getdeptcode()
   },
   methods: {
@@ -108,7 +115,7 @@ export default {
       })
     },
     // 获取车间
-    Getdeptbyid (id) {
+    Getdeptbyid (id, typ) {
       this.plantList.workShop = ''
       this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
         if (data.code === 0) {
@@ -126,6 +133,9 @@ export default {
         orderNo: ''
       }).then(({data}) => {
         if (data.code === 0) {
+          this.Pkgfactoryid = this.plantList.factoryid
+          this.PkgworkShop = this.plantList.workShop
+          this.PkgproductDate = this.plantList.productDate
           this.list = this.orderList(data.list)
           this.workShop = this.plantList.workShop
           this.productDate = this.plantList.productDate
@@ -145,10 +155,12 @@ export default {
         }).then(({data}) => {
           if (data.code === 0) {
             row.orderNo2 = row.orderNo
-            row.name = data.list[0].name
+            row.materialCode = data.list[0].materialCode
+            row.materialName = data.list[0].materialName
+            row.planOutput = data.list[0].planOutput
+            row.outputUnit = data.list[0].outputUnit
             row.properties = data.list[0].properties
             row.plan = data.list[0].plan
-            row.actual = data.list[0].actual
           } else {
             this.$message.error(data.msg)
           }
@@ -167,13 +179,18 @@ export default {
             orderNo.push(data[j].orderNo)
           }
         }
+        if (orderNo.length === 0) {
+        }
         result.push({
           productLine: data[i].productLine,
           productLineName: data[i].productLineName,
           orderNo: '',
           orderNo2: '',
           order_arr: orderNo,
-          name: '',
+          materialCode: '',
+          materialName: '',
+          planOutput: '',
+          outputUnit: '',
           properties: ''
         })
       }
@@ -191,7 +208,20 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    Pkgfactoryid: {
+      get () { return this.$store.state.common.Pkgfactoryid },
+      set (val) { this.$store.commit('common/updateFactoryid', val) }
+    },
+    PkgworkShop: {
+      get () { return this.$store.state.common.PkgworkShop },
+      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    },
+    PkgproductDate: {
+      get () { return this.$store.state.common.PkgproductDate },
+      set (val) { this.$store.commit('common/updateProductDate', val) }
+    }
+  },
   components: {}
 }
 </script>

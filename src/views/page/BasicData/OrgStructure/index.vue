@@ -19,7 +19,7 @@
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
-              <el-tree :data="OrgTree" default-expand-all @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
+              <el-tree :data="OrgTree" @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
           <el-col :span="16">
@@ -51,11 +51,10 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="产线属性" v-if="OrgDetail.deptType === 'proLine'">
-                    <span v-if="update">{{OrgDetail.proLine}}</span>
-                    <el-select v-model="OrgDetail.proLine" placeholder="请选择部门类型" style="width: 100%" v-else>
+                    <span v-if="update">{{OrgDetail.properties}}</span>
+                    <el-select v-model="OrgDetail.properties" placeholder="请选择部门类型" style="width: 100%" v-else>
                       <el-option label="普通产线" value="普通产线"></el-option>
-                      <el-option label="二合一" value="二合一"></el-option>
-                      <el-option label="礼盒" value="礼盒"></el-option>
+                      <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="产线图片" v-if="OrgDetail.deptType === 'proLine'">
@@ -83,7 +82,7 @@
                     <el-input type="textarea" v-model="OrgDetail.remark" v-else></el-input>
                   </el-form-item>
                   <div style="text-align: center">
-                    <el-button @click="update = !update">编辑</el-button>
+                    <el-button @click="update = !update" v-if="update">编辑</el-button>
                     <el-button @click="savedatail">保存</el-button>
                     <el-button @click="deleteorg">删除</el-button>
                   </div>
@@ -105,8 +104,7 @@
               <span v-if="!sibling">{{addDep.parentName}}</span>
             </el-form-item>
             <el-form-item label="生产调度员">
-              <span v-if="update">{{addDep.dispatchMan}}</span>
-              <el-input v-model="addDep.dispatchMan" v-else></el-input>
+              <el-input v-model="addDep.dispatchMan"></el-input>
             </el-form-item>
             <el-form-item label="部门类型">
               <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
@@ -115,10 +113,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="产线属性" v-if="addDep.deptType== 'proLine'">
-              <el-select v-model="addDep.proLine" placeholder="请选择产线属性" style="width: 100%">
+              <el-select v-model="addDep.properties" placeholder="请选择产线属性" style="width: 100%">
                 <el-option label="普通产线" value="普通产线"></el-option>
-                <el-option label="二合一" value="二合一"></el-option>
-                <el-option label="礼盒" value="礼盒"></el-option>
+                <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="产线图片" v-if="addDep.deptType== 'proLine'">

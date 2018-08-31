@@ -77,3 +77,14 @@ export function transfer (data) {
     selcedid: selcedid
   }
 }
+export function setUserList (data) {
+  var res = []
+  data.forEach((item, index) => {
+    res.push({
+      label: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）',
+      key: item.userId,
+      screncon: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）'
+    })
+  })
+  return res
+}

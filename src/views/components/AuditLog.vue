@@ -7,25 +7,24 @@
     border
     style="width: 100%">
     <el-table-column
-      prop="date"
       label="序号"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="status"
       label="审核动作"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="memo"
       label="审核意见">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="verifyMan"
       label="审核人">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="verifyDate"
       label="审核时间">
     </el-table-column>
   </el-table>

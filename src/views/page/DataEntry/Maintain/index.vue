@@ -5,7 +5,6 @@
       <el-breadcrumb-item>数据录入</el-breadcrumb-item>
       <el-breadcrumb-item>机维组</el-breadcrumb-item>
     </el-breadcrumb>
-    <h3>机维组</h3>
   </div>
   <div class="main">
     <el-card>
@@ -13,36 +12,34 @@
         <el-col>
         <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" class="maintain">
           <el-form-item label="工厂">
-            <el-select v-model="plantList.name" placeholder="请选择">
-              <el-option label="是" value="yes"></el-option>
-              <el-option label="否" value="no"></el-option>
+            <el-select v-model="plantList.factory" placeholder="请选择">
+              <el-option label=""  value=""></el-option>
+              <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="车间">
-            <el-select v-model="plantList.name" placeholder="请选择">
-              <el-option label="是" value="yes"></el-option>
-              <el-option label="否" value="no"></el-option>
+            <el-select v-model="plantList.workshop" placeholder="请选择">
+              <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="产线">
-            <el-select v-model="plantList.name" placeholder="白班/夜班">
-              <el-option label="白班" value="yes"></el-option>
-              <el-option label="夜班" value="no"></el-option>
+            <el-select v-model="plantList.productline" placeholder="产线">
+              <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="订单号">
-            <el-input></el-input>
+            <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
           </el-form-item>
           <el-form-item label="日期">
-            <el-date-picker type="date" placeholder="选择" v-model="plantList.connect"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
         </el-form>
         </el-col>
         <el-col style="width: 320px">
           <el-row>
-            <el-button>查询</el-button>
-            <el-button type="primary">保存</el-button>
-            <el-button type="primary">提交</el-button>
+            <el-button size="small" @click="GetMaintainList">查询</el-button>
+            <el-button type="primary" size="small" @click="save()">保存</el-button>
+            <el-button type="primary" size="small" @click="submit()">提交</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -53,78 +50,104 @@
       <el-table
         ref="maintain"
         header-row-class-name="tableHead"
-        :data="tableData3"
+        :data="MaintainList"
         border
         tooltip-effect="dark"
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
           type="selection"
-          width="55">
+          width="40">
         </el-table-column>
         <el-table-column
           type="index"
-          width="50">
+          width="30">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="生产订单号">
+          prop="orderNo"
+          label="生产订单号"
+          width="120">
         </el-table-column>
         <el-table-column
-          prop="name"
           label="品项">
+          <template slot-scope="scope">
+            {{scope.row.materialCode + ' ' + scope.row.materialName}}
+          </template>
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="batch"
           label="生产批次">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="自动上架数-立体库（B）">
+          prop="aiShelves"
+          label="自动上架数-立体库">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="单位">
+          prop="aiShelvesUnit"
+          label="单位"
+          width="50">
         </el-table-column>
         <el-table-column
           label="车间确认人"
-          width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          width="80">
+          <template slot-scope="scope">{{ scope.row.workShopMan }}</template>
         </el-table-column>
         <el-table-column
           label="机维组确认整板数">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.name" v-if="scope.row.redact"></el-input>
-            <span v-if="!scope.row.redact">{{ scope.row.name }}</span>
+            <el-input v-model="scope.row.jwzZb" v-if="scope.row.redact"></el-input>
+            <span v-if="!scope.row.redact">{{ scope.row.jwzZb }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="name"
           label="机维组确认半板数">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.jwzBb" v-if="scope.row.redact"></el-input>
+            <span v-if="!scope.row.redact">{{ scope.row.jwzBb }}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="name"
           label="机维组确认数">
+          <template slot-scope="scope">
+            <span>{{ scope.row.jwzAcount = scope.row.jwzBb*1 + scope.row.jwzZb*1 }}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="name"
           label="差异数量">
+          <template slot-scope="scope">
+            <span>{{ scope.row.different = scope.row.jwzAcount*1 - scope.row.aiShelves*1}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="单位">
+          label="单位"
+          width="50">
+          <template slot-scope="scope">
+            <span>{{ scope.row.differentUnit  = '箱'}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="address"
+          label="原差异数量">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.orgnDifferent" v-if="scope.row.redact"></el-input>
+            <span v-else>{{ scope.row.orgnDifferent }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           label="差异说明"
           show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.differentInfo" v-if="scope.row.redact"></el-input>
+            <span v-else>{{ scope.row.differentInfo }}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="address"
           label="机维组确认人">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="备注">
+          label="备注"
+          width="50">
+          <template slot-scope="scope">
+            <span>{{ scope.row.remark }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -137,42 +160,167 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-row >
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="plantList.currPage"
+          :page-sizes="[10, 15, 20]"
+          :page-size="plantList.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="plantList.totalCount">
+        </el-pagination>
+      </el-row>
     </el-card>
   </div>
 </div>
 </template>
 
 <script>
+import {BASICDATA_API, MAINTAIN_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
-      plantList: {},
+      factory: [],
+      workshop: [],
+      productline: [],
+      plantList: {
+        status: 'checked',
+        orderNo: '',
+        factory: '',
+        workshop: '',
+        productline: '',
+        productdate: '',
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0
+      },
+      MaintainList: [],
       tableData3: [{
         date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }, {
-        date: '2016-05-04',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄',
         crew: ''
       }]
     }
   },
+  watch: {
+    'plantList.factory' (n, o) {
+      this.Getdeptbyid(n)
+    },
+    'plantList.workshop' (n, o) {
+      if (n) {
+        this.GetParentline(n)
+      }
+    }
+  },
   mounted () {
+    this.GetMaintainList()
+    this.Getdeptcode()
   },
   methods: {
+    // 获取列表
+    GetMaintainList () {
+      this.$http(`${MAINTAIN_API.MAINTAINLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.MaintainList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取车间
+    Getdeptbyid (id) {
+      this.plantList.workshop = ''
+      this.plantList.productline = ''
+      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          this.workshop = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取产线
+    GetParentline (id) {
+      this.plantList.productline = ''
+      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        if (data.code === 0) {
+          this.productline = data.childList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 编辑
     redact (row) {
       if (!row.redact) {
         row.redact = true
+        this.MaintainList.splice(this.MaintainList.length, 0, {})
+        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+      } else {
+        row.redact = false
+        this.MaintainList.splice(this.MaintainList.length, 0, {})
+        this.MaintainList.splice(this.MaintainList.length - 1, 1)
       }
+    },
+    // 保存
+    save () {
+      this.$confirm('确认保存, 是否继续?', '保存', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', this.MaintainList).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('保存成功')
+            this.GetMaintainList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      })
+    },
+    // 提交
+    submit () {
+      this.$confirm('确认提交, 是否继续?', '提交', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${MAINTAIN_API.MAINTAINSUB_API}`, 'POST', this.MaintainList).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('提交成功')
+            this.GetMaintainList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetMaintainList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetMaintainList()
     }
   },
   computed: {},

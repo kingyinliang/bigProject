@@ -1,6 +1,6 @@
 // let HOST = 'http://localhost:8080/'
-// let HOST = 'http://10.8.4.153:50080/api'
-let HOST = 'http://10.1.2.42:8080'
+let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.1.2.42:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
 *首页api
@@ -61,6 +61,14 @@ export const BASICDATA_API = {
  * @property {string} ADDORG_API 组织结构 按部门id查询车间
  */
   FINDORGBYID_API: HOST + '/sys/dept/findCCById',
+  /**
+   * @property {string} ADDORG_API 组织结构 按部门id查询子类
+   */
+  FINDORGBYPARENTID_API: HOST + '/sys/dept/findListByParent',
+  /**
+   * @property {string} FINDTEAM_API 组织结构 获取班组
+   */
+  FINDTEAM_API: HOST + '/sys/dept/findProductTeam',
   /**
    * @property {string} SAPLIST_API 物料列表
    */
@@ -162,10 +170,6 @@ export const SYSTEMSETUP_API = {
    */
   USERLIST_API: HOST + '/sys/user/list',
   /**
-   * @property {string} ROLELIST_API 角色列表
-   */
-  ROLELIST_API: HOST + '/sys/role/list',
-  /**
    * @property {string} USERDETAIL_API 用户详情
    */
   USERDETAIL_API: HOST + '/sys/user/info',
@@ -181,6 +185,14 @@ export const SYSTEMSETUP_API = {
    * @property {string} USERDEL_API 删除用户
    */
   USERDEL_API: HOST + '/sys/user/delete',
+  /**
+   * @property {string} USERFORTEAM_API 获取所有人员
+   */
+  USERALL_API: HOST + '/sys/user/listAllOrTeamUser',
+  /**
+   * @property {string} ROLELIST_API 角色列表
+   */
+  ROLELIST_API: HOST + '/sys/role/list',
   /**
    * @property {string} ROLEDETAIL_API 角色详情
    */
@@ -247,6 +259,10 @@ export const SYSTEMSETUP_API = {
  */
 export const PACKAGING_API = {
   /**
+   * @property {string} PKGORDELIST_API 包装车间物料换算比例
+   */
+  PKGBILI_API: HOST + '/sys/sapmaterial/findInfoByCode',
+  /**
    * @property {string} PKGORDELIST_API 包装车间订单列表
    */
   PKGORDELIST_API: HOST + '/pkg/order/list',
@@ -309,5 +325,96 @@ export const PACKAGING_API = {
   /**
    * @property {string} PKGEXCUPDATE_API 包装车间异常修改
    */
-  PKGEXCUPDATE_API: HOST + '/pkg/exc/update'
+  PKGEXCUPDATE_API: HOST + '/pkg/exc/update',
+  /**
+   * @property {string} PKGEXCUPDATE_API 包装车间物料领用列表
+   */
+  PKGSPALIST_API: HOST + '/pkg/material/list',
+  /**
+   * @property {string} PKGEXCUPDATE_API 包装车间物料领用保存
+   */
+  PKGSPASAVE_API: HOST + '/pkg/material/save',
+  /**
+   * @property {string} PKGEXCUPDATE_API 包装车间物料领用修改
+   */
+  PKGSPAUPDATE_API: HOST + '/pkg/material/update',
+  /**
+   * @property {string} PKGGERMSLIST_API 包装车间待杀菌数量列表
+   */
+  PKGGERMSLIST_API: HOST + '/pkg/germs/list',
+  /**
+   * @property {string} PKGGERMSSAVE_API 包装车间待杀菌数量保存
+   */
+  PKGGERMSSAVE_API: HOST + '/pkg/germs/save',
+  /**
+   * @property {string} PKGGERMSUPDATE_API 包装车间待杀菌数量修改
+   */
+  PKGGERMSUPDATE_API: HOST + '/pkg/germs/update',
+  /**
+   * @property {string} PKGTEXTLIST_API 包装车间文本记录列表
+   */
+  PKGTEXTLIST_API: HOST + '/pkg/text/list',
+  /**
+   * @property {string} PKGTEXTSAVE_API 包装车间文本记录保存
+   */
+  PKGTEXTSAVE_API: HOST + '/pkg/text/save',
+  /**
+   * @property {string} PKGTEXTUPDATE_API 包装车间文本记录修改
+   */
+  PKGTEXTUPDATE_API: HOST + '/pkg/text/update',
+  /**
+   * @property {string} PKGSAVEFORM_API 包装车间提交
+   */
+  PKGSAVEFORM_API: HOST + '/verify/time/save',
+  /**
+   * @property {string} PKGSAVEFORMIN_API 包装车间提交
+   */
+  PKGSAVEFORMIN_API: HOST + '/sys/pkgInStorage/updatePkgInSto'
+}
+/*
+*机维组api
+ */
+export const MAINTAIN_API = {
+  /**
+   * @property {string} MAINTAINLIST_API 机维组列表
+   */
+  MAINTAINLIST_API: HOST + '/sys/verifyJWZ/findListByParams',
+  /**
+   * @property {string} MAINTAINSAVE_API 机维组保存
+   */
+  MAINTAINSAVE_API: HOST + '/sys/verifyJWZ/update',
+  /**
+   * @property {string} MAINTAINSAVE_API 机维组提交
+   */
+  MAINTAINSUB_API: HOST + '/sys/verifyJWZ/finished'
+}
+/*
+*立体库api
+ */
+export const LTK_API = {
+  /**
+   * @property {string} MAINTAINLIST_API 立体库列表
+   */
+  LTKLIST_API: HOST + '/sys/verifyLTK/list',
+  /**
+   * @property {string} MAINTAINSAVE_API 立体库审核
+   */
+  LTKAUDIT_API: HOST + '/sys/verifyLTK/auditing'
+}
+/*
+*生管审核api
+ */
+export const AUDIT_API = {
+  /**
+   * @property {string} AUDITLIST_API 生产入库审核列表
+   */
+  AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
+  /**
+   * @property {string} AUDITLIST_API 生产入库审核
+   */
+  GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
+  /**
+   * @property {string} AUDITLIST_API 生产报工列表
+   */
+  AUDITHOURSLIST_API: HOST + '/verify/time/list'
 }
