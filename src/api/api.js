@@ -252,7 +252,43 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} MENUINFO 菜单修改
    */
-  MENUUPDATE_API: HOST + '/sys/menu/update'
+  MENUUPDATE_API: HOST + '/sys/menu/update',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务
+   */
+  SCHEDULELIST_API: HOST + '/sys/schedule/list',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务删除
+   */
+  SCHEDULEDEL_API: HOST + '/sys/schedule/delete',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务暂停
+   */
+  SCHEDULEPAUSE_API: HOST + '/sys/schedule/pause',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务恢复
+   */
+  SCHEDULERESUME_API: HOST + '/sys/schedule/resume',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务立即执行
+   */
+  SCHEDULERUN_API: HOST + '/sys/schedule/run',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务详情
+   */
+  SCHEDULEINFO_API: HOST + '/sys/schedule/info',
+  /**
+   * @property {string} SCHEDULELIST_API 定时任务
+   */
+  SCHEDULE_API: HOST + '/sys/schedule',
+  /**
+   * @property {string} SCHEDULELIST_API 日志列表
+   */
+  LOGLIST_API: HOST + '/sys/scheduleLog/list',
+  /**
+   * @property {string} SCHEDULELIST_API 失败信息
+   */
+  LOGINFO_API: HOST + '/sys/scheduleLog/info'
 }
 /*
 *包装车间api

@@ -13,17 +13,19 @@
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="80px" class="topforms">
               <el-form-item label="工厂">
                 <el-select v-model="plantList.factory" placeholder="请选择">
-                  <el-option label=""  value=""></el-option>
+                  <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="车间">
                 <el-select v-model="plantList.workshop" placeholder="请选择">
+                  <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="产线">
                 <el-select v-model="plantList.productline" placeholder="产线">
+                  <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
@@ -243,7 +245,7 @@ export default {
     }
   },
   mounted () {
-    this.GetAuditList()
+    // this.GetAuditList()
     this.Getdeptcode()
   },
   methods: {

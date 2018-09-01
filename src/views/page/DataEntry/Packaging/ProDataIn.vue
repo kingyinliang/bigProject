@@ -200,7 +200,8 @@
               <div class="clearfix">
                 <h3>录入数据单位：MIN</h3>
                 <div class="btn">
-                  <el-button type="primary" @click="addUserDate(uerDate)" size="small">新增</el-button>
+                  <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-if="isRedact">新增</el-button>
+                  <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-else disabled>新增</el-button>
                 </div>
               </div>
               <div>
@@ -221,7 +222,8 @@
                     width="55">
                   </el-table-column>
                   <el-table-column
-                  label="白/中/夜班">
+                  label="白/中/夜班"
+                  width="100">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-if="isRedact">
                         <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
@@ -230,7 +232,8 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="班组/工序">
+                    label="班组/工序"
+                    width="100">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact">
                         <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
@@ -252,32 +255,32 @@
                   </el-table-column>
                   <el-table-column
                     label="人员选择"
-                    width="120">
+                    width="220">
                     <template slot-scope="scope">
-                      <span v-if="!isRedact || scope.row.userType !=='临时工'">{{scope.row.userId[0]}}</span>
-                      <el-input v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId" size="small"></el-input>
+                      <span v-if="!isRedact || scope.row.userType !=='临时工'">
+                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                      </span>
+                      <el-input v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId[0]" size="small"></el-input>
                       <el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工'">点击选择人员</el-button>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="开始时间"
-                    width="120">
+                    label="开始时间">
                     <template slot-scope="scope">
                       <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
                       <span v-else>{{ scope.row.startDate }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="用餐时间（MIN）"
-                    width="120">
+                    label="用餐时间"
+                    width="80">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.dinner" size="small" v-if="isRedact"></el-input>
                       <span v-else>{{ scope.row.dinner }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="结束时间"
-                    width="120">
+                    label="结束时间">
                     <template slot-scope="scope">
                       <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
                       <span v-else>{{ scope.row.endDate }}</span>
@@ -285,7 +288,7 @@
                   </el-table-column>
                   <el-table-column
                     label="备注"
-                    width="120">
+                    width="100">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.remark" size="small" v-if="isRedact"></el-input>
                       <span v-else>{{ scope.row.remark }}</span>
@@ -294,7 +297,7 @@
                 </el-table>
                 <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
                   <el-form-item label="实际作业人数">
-                    <el-input v-model="form.name"></el-input>
+                    <span>{{countMan}}</span>
                   </el-form-item>
                 </el-form>
                 <auditLog :tableData="UserAudit"></auditLog>
@@ -335,7 +338,7 @@
                   <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
                     <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
                   </el-select>
-                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small">
+                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
                     <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
@@ -352,23 +355,24 @@
                 label="异常开始时间"
                 width="120">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常结束时间"
                 width="120">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常时间"
                 width="120">
                 <template slot-scope="scope">
-                  <span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>
+                  <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
+                  <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate) }}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -382,10 +386,10 @@
                 label="设备"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.deviceId" placeholder="设备" size="small" v-if="!isRedact" disabled>
+                  <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" size="small" v-if="isRedact && (scope.row.expCode === '001' || scope.row.expCode === '002')" >
                     <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
                   </el-select>
-                  <el-select v-model="scope.row.deviceId" placeholder="设备" v-else size="small">
+                  <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" v-else size="small" disabled>
                     <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
                   </el-select>
                 </template>
@@ -394,10 +398,10 @@
                 label="物料分类简称"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.materialShort" placeholder="选择简称" v-if="!isRedact" size="small" disabled>
+                  <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-if="isRedact && (scope.row.expCode === '003' || scope.row.expCode === '004')" size="small" >
                     <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
                   </el-select>
-                  <el-select v-model="scope.row.materialShort" placeholder="选择简称" v-else size="small">
+                  <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-else size="small" disabled>
                     <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
@@ -406,10 +410,10 @@
                 label="能源"
                 width="120">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-if="!isRedact" disabled size="small">
+                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-if="isRedact && scope.row.expCode === '005'"  size="small">
                     <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
                   </el-select>
-                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-else size="small">
+                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-else size="small" disabled>
                     <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </template>
@@ -907,7 +911,7 @@
             <div class="clearfix">
               <div class="btn">
                 <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-if="isRedact">新增</el-button>
-                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-else>新增</el-button>
+                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
             <el-table
@@ -932,22 +936,22 @@
               <el-table-column
                 label="清洗冲顶">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.washing" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.washing" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.washing" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.washing" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="换产冲顶">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.changeProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.changeProduct" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.changeProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.changeProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="开机冲顶">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.bootHeader" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.bootHeader" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.bootHeader" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.bootHeader" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -961,24 +965,24 @@
                 label="制程不良"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.badProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.badProduct" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.badProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.badProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="半成品物料不合格"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.badSemi" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.badSemi" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.badSemi" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.badSemi" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="设备残留"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.deviceLoss" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.deviceLoss" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  <el-input v-model="scope.row.deviceLoss" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.deviceLoss" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1030,7 +1034,7 @@
 
 <script>
 import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
-import { setUserList } from '@/net/validate'
+import { setUserList, toDate } from '@/net/validate'
 export default {
   name: 'ProDataIn',
   data () {
@@ -1059,6 +1063,7 @@ export default {
       productDate: '',
       workShop: '',
       factoryid: '',
+      listbom: [],
       order: {
         productDate: ''
       },
@@ -1092,16 +1097,7 @@ export default {
         clear: ''
       },
       ReadAudit: [],
-      uerDate: [{
-        classType: '',
-        deptId: '',
-        userType: '',
-        userId: [],
-        startDate: '',
-        dinner: '',
-        endDate: '',
-        remark: ''
-      }],
+      uerDate: [],
       UserAudit: [],
       Team: [],
       selctId: [],
@@ -1119,7 +1115,8 @@ export default {
       ratio: 0,
       InAudit: [],
       productShift: [],
-      SapDate: [],
+      SapDateP: [],
+      SapDateS: [],
       SapAudit: [],
       GermsDate: [
       ],
@@ -1149,12 +1146,12 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.order = data.list[0]
+          this.listbom = data.listbom
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
           this.GetRatio()
           this.GetequipmentType()
           if (this.orderStatus !== '已同步') {
-            console.log(1)
             this.Getpkgready()
             this.Getpkguser()
             this.GetpkgExc()
@@ -1239,9 +1236,13 @@ export default {
     GetRatio () {
       this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.order.materialCode}).then(({data}) => {
         if (data.code === 0) {
-          this.ratio = data.sme.ratio
-          this.basicUnit = data.sme.basicUnit
-          this.productUnit = data.sme.productUnit
+          if (data.sme) {
+            this.ratio = data.sme.ratio
+            this.basicUnit = data.sme.basicUnit
+            this.productUnit = data.sme.productUnit
+          } else {
+            this.$message.error('比例获取失败')
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -1258,6 +1259,7 @@ export default {
         if (data.code === 0) {
           console.log('获取包装车间人员列表')
           console.log(data)
+          this.uerDate = data.listForm
           this.UserAudit = data.listApproval
         } else {
           this.$message.error(data.msg)
@@ -1318,6 +1320,8 @@ export default {
         if (data.code === 0) {
           console.log('获取包装车间物料领用列表')
           console.log(data)
+          this.SapDateP = data.listFormP
+          this.SapDateS = data.listFormS
           this.SapAudit = data.listApproval
         } else {
           this.$message.error(data.msg)
@@ -1363,6 +1367,7 @@ export default {
         if (data.code === 0) {
           console.log('修改表头')
           this.UpdateReady() // 修改准备时间
+          this.UpdateUser() // 修改人员
           this.UpdateExc() // 修改异常记录
           this.UpdateIn() // 修改生产入库
           this.UpdateGerms() // 修改待杀菌数量
@@ -1394,8 +1399,8 @@ export default {
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
       this.order.countOutputUnit = '瓶'// 生产入库单位
       this.order.countOutput = this.countOutputNum // 生产入库总产量
-      // this.order.countMan =  // 实际作业人数
-      // this.order.expAllDate =  // 总停线时间
+      this.order.countMan = this.countMan // 实际作业人数
+      this.order.expAllDate = this.ExcNum// 总停线时间
       this.order.germs = this.GermsNum // 待杀菌数量合计
       this.order.operator = `${this.realName}(${this.userName})`
     },
@@ -1510,12 +1515,12 @@ export default {
      */
     // 修改人员
     UpdateUser () {
-      this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', {}).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('修改人员成功')
           console.log(data)
         } else {
-          this.$message.error(data.msg)
+          this.$message.error('修改人员成功' + data.msg)
         }
       })
     },
@@ -1575,17 +1580,19 @@ export default {
     },
     // 修改生产入库
     UpdateIn () {
-      this.InDate.forEach((item) => {
-        item.orderId = this.orderId
-      })
-      this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('修改生产入库成功')
-          this.Getpkgin()
-        } else {
-          this.$message.error('生产入库' + data.msg)
-        }
-      })
+      if (this.InDate.length > 0) {
+        this.InDate.forEach((item) => {
+          item.orderId = this.orderId
+        })
+        this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('修改生产入库成功')
+            this.Getpkgin()
+          } else {
+            this.$message.error('生产入库' + data.msg)
+          }
+        })
+      }
     },
     // 修改物料领用
     UpdateSap () {},
@@ -1686,6 +1693,7 @@ export default {
       this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
         if (data.code === 0) {
           this.userlist = setUserList(data.listUser)
+          this.selctId = this.row.userId
           this.visible = true
         } else {
           this.$message.error(data.msg)
@@ -1695,6 +1703,7 @@ export default {
     // 确定人员
     updatauser (row) {
       row.userId = this.selctId
+      this.visible = false
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -1709,7 +1718,7 @@ export default {
         classType: '',
         deptId: '',
         userType: '',
-        userId: '',
+        userId: [],
         startDate: '',
         dinner: '',
         endDate: '',
@@ -1779,9 +1788,29 @@ export default {
         badSemi: 0,
         deviceLoss: 0
       })
+    },
+    // 异常下拉
+    setnull (row) {
+      row.deviceId = ''
+      row.materialShort = ''
+      row.energy = ''
     }
   },
   computed: {
+    countMan: function () {
+      let num = 0
+      this.uerDate.forEach((item) => {
+        num += item.userId.length
+      })
+      return num
+    },
+    mistiming: function () {
+      return function (end, start) {
+        console.log(end)
+        console.log(start)
+        return (toDate(end) - toDate(start)) / 60000
+      }
+    },
     ExcNum: function () {
       let num = 0
       this.ExcDate.forEach((item) => {

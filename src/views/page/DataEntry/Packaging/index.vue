@@ -179,12 +179,16 @@ export default {
             orderNo.push(data[j].orderNo)
           }
         }
-        if (orderNo.length === 0) {
+        let orderNos = ''
+        if (orderNo.length === 1) {
+          orderNos = orderNo[0]
+        } else {
+          orderNos = ''
         }
         result.push({
           productLine: data[i].productLine,
           productLineName: data[i].productLineName,
-          orderNo: '',
+          orderNo: orderNos,
           orderNo2: '',
           order_arr: orderNo,
           materialCode: '',

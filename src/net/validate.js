@@ -82,9 +82,22 @@ export function setUserList (data) {
   data.forEach((item, index) => {
     res.push({
       label: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）',
-      key: item.userId,
+      key: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）',
       screncon: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）'
     })
   })
   return res
+}
+export function toDate (dateString) {
+  var DATE_REGEXP = new RegExp('(\\d{4})-(\\d{2})-(\\d{2})([T\\s](\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3}))?)?.*')
+  if (DATE_REGEXP.test(dateString)) {
+    var timestamp = dateString.replace(DATE_REGEXP, function ($all, $year, $month, $day, $part1, $hour, $minute, $second, $part2, $milliscond) {
+      var date = new Date($year, $month, $day, $hour || '00', $minute || '00', $second || '00', $milliscond || '00')
+      return date.getTime()
+    })
+    var date = new Date()
+    date.setTime(timestamp)
+    return date
+  }
+  return null
 }

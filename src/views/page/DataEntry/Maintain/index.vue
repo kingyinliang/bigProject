@@ -13,17 +13,19 @@
         <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" class="maintain">
           <el-form-item label="工厂">
             <el-select v-model="plantList.factory" placeholder="请选择">
-              <el-option label=""  value=""></el-option>
+              <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="车间">
             <el-select v-model="plantList.workshop" placeholder="请选择">
+              <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="产线">
             <el-select v-model="plantList.productline" placeholder="产线">
+              <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
@@ -155,7 +157,7 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="redact(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="redact(scope.row)">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             <el-button type="text" size="small" @click="remove(scope.$index,tableData3)">删除</el-button>
           </template>
         </el-table-column>
@@ -216,7 +218,7 @@ export default {
     }
   },
   mounted () {
-    this.GetMaintainList()
+    // this.GetMaintainList()
     this.Getdeptcode()
   },
   methods: {
@@ -280,37 +282,45 @@ export default {
     },
     // 保存
     save () {
-      this.$confirm('确认保存, 是否继续?', '保存', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', this.MaintainList).then(({data}) => {
-          if (data.code === 0) {
-            this.$message.success('保存成功')
-            this.GetMaintainList()
-          } else {
-            this.$message.error(data.msg)
-          }
+      if (this.MaintainList.length > 0) {
+        this.$confirm('确认保存, 是否继续?', '保存', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', this.MaintainList).then(({data}) => {
+            if (data.code === 0) {
+              this.$message.success('保存成功')
+              this.GetMaintainList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         })
-      })
+      } else {
+        this.$message.error('请勾选后保存')
+      }
     },
     // 提交
     submit () {
-      this.$confirm('确认提交, 是否继续?', '提交', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$http(`${MAINTAIN_API.MAINTAINSUB_API}`, 'POST', this.MaintainList).then(({data}) => {
-          if (data.code === 0) {
-            this.$message.success('提交成功')
-            this.GetMaintainList()
-          } else {
-            this.$message.error(data.msg)
-          }
+      if (this.MaintainList.length > 0) {
+        this.$confirm('确认提交, 是否继续?', '提交', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${MAINTAIN_API.MAINTAINSUB_API}`, 'POST', this.MaintainList).then(({data}) => {
+            if (data.code === 0) {
+              this.$message.success('提交成功')
+              this.GetMaintainList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         })
-      })
+      } else {
+        this.$message.error('请勾选后保存')
+      }
     },
     // 改变每页条数
     handleSizeChange (val) {

@@ -19,7 +19,7 @@
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
-              <el-tree :data="OrgTree" @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
+              <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
           <el-col :span="16">
@@ -163,6 +163,8 @@ export default {
       adddepform: {
         name: ''
       },
+      row: {},
+      arrList: [],
       dictList: [],
       fileList: [{}],
       menuVisible: false,
@@ -207,6 +209,7 @@ export default {
         console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
+          this.arrList = [this.OrgTree[0].children[0].deptId]
           if (type) {
             this.setdetail(this.OrgTree[0].children[0])
           }
@@ -231,6 +234,7 @@ export default {
     },
     // 设置组织详情
     setdetail (data) {
+      this.row = data
       this.$http(`${BASICDATA_API.ORGDETAIL_API}/${data.deptId}`, 'GET').then(({data}) => {
         if (data.code === 0) {
           this.OrgDetail = data.dept
@@ -287,10 +291,10 @@ export default {
               message: '操作成功',
               type: 'success'
             })
-            this.getTree()
             this.OrgDetail = {}
             this.fileList = [{}]
             this.update = true
+            this.setdetail(this.row)
           } else {
             this.$message.error(data.msg)
           }
