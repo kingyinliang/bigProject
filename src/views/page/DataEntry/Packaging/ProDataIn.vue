@@ -267,7 +267,7 @@
                   <el-table-column
                     label="开始时间">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
                       <span v-else>{{ scope.row.startDate }}</span>
                     </template>
                   </el-table-column>
@@ -282,7 +282,7 @@
                   <el-table-column
                     label="结束时间">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
                       <span v-else>{{ scope.row.endDate }}</span>
                     </template>
                   </el-table-column>
@@ -1515,6 +1515,9 @@ export default {
      */
     // 修改人员
     UpdateUser () {
+      this.uerDate.forEach((item) => {
+        item.status = 'saved'
+      })
       this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('修改人员成功')
@@ -1799,15 +1802,15 @@ export default {
   computed: {
     countMan: function () {
       let num = 0
-      this.uerDate.forEach((item) => {
-        num += item.userId.length
-      })
-      return num
+      if (this.uerDate) {
+        this.uerDate.forEach((item) => {
+          num += item.userId.length
+        })
+        return num
+      }
     },
     mistiming: function () {
       return function (end, start) {
-        console.log(end)
-        console.log(start)
         return (toDate(end) - toDate(start)) / 60000
       }
     },

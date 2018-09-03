@@ -89,11 +89,11 @@
               width="150"
               label="操作">
               <template slot-scope="scope">
-                <el-button v-if="isAuth('sys:schedule:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>
-                <el-button v-if="isAuth('sys:schedule:delete')" type="text" size="small" @click="deleteHandle(scope.row.jobId)">删除</el-button>
-                <el-button v-if="isAuth('sys:schedule:pause')" type="text" size="small" @click="pauseHandle(scope.row.jobId)">暂停</el-button>
-                <el-button v-if="isAuth('sys:schedule:resume')" type="text" size="small" @click="resumeHandle(scope.row.jobId)">恢复</el-button>
-                <el-button v-if="isAuth('sys:schedule:run')" type="text" size="small" @click="runHandle(scope.row.jobId)">立即执行</el-button>
+                <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>
+                <el-button type="text" size="small" @click="deleteHandle(scope.row.jobId)">删除</el-button>
+                <el-button type="text" size="small" @click="pauseHandle(scope.row.jobId)">暂停</el-button>
+                <el-button type="text" size="small" @click="resumeHandle(scope.row.jobId)">恢复</el-button>
+                <el-button type="text" size="small" @click="runHandle(scope.row.jobId)">立即执行</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -138,6 +138,7 @@ export default {
     }
   },
   mounted () {
+    this.getDataList()
   },
   methods: {
     // 获取数据列表
@@ -216,7 +217,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http(`${SYSTEMSETUP_API.SCHEDULELIST_API}`, 'POST', ids).then(({data}) => {
+        this.$http(`${SYSTEMSETUP_API.SCHEDULEPAUSE_API}`, 'POST', ids).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

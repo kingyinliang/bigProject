@@ -60,7 +60,7 @@
                   <el-form-item label="产线图片" v-if="OrgDetail.deptType === 'proLine'">
                     <img :src="OrgDetail.picUrl" alt="" v-if="update">
                     <el-upload
-                      action="http://localhost:8080/sys/dept/fileUpLoad"
+                      action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
                       :limit="1"
                       :headers="heads"
                       list-type="picture"
@@ -120,7 +120,7 @@
             </el-form-item>
             <el-form-item label="产线图片" v-if="addDep.deptType== 'proLine'">
               <el-upload
-                action="http://localhost:8080/sys/dept/fileUpLoad"
+                action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
                 :limit="1"
                 list-type="picture"
                 :headers="heads"

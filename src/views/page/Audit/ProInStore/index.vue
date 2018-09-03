@@ -76,14 +76,16 @@
             width="50">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="orderNo"
             label="生产订单号"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="生产物料"
-            width="95">
+            width="200">
+            <template slot-scope="scope">
+              {{ scope.row.materialName + ' ' + scope.row.materialCode}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="name"
@@ -93,30 +95,30 @@
           <el-table-column
             prop="name"
             label="单位"
-            width="95">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="entryQnt"
             label="入库数量"
-            width="95">
+            width="75">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="entryUom"
             label="单位"
-            width="95">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="isSample"
             label="是否样品"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="batch"
             label="物料批次"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="prodDate"
             label="生产日期"
             width="95">
           </el-table-column>
@@ -173,10 +175,10 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="190">
+            width="100">
             <template slot-scope="scope">
-              <el-button @click="remove(scope.$index,tableData3)" type="primary">编辑</el-button>
-              <el-button @click="remove(scope.$index,tableData3)">删除</el-button>
+              <el-button @click="remove(scope.$index,tableData3)" type="text">编辑</el-button>
+              <el-button @click="remove(scope.$index,tableData3)" type="text">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
