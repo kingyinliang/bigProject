@@ -228,7 +228,9 @@
                       <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-if="isRedact">
                         <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                       </el-select>
-                      <span v-else>{{ scope.row.classType }}</span>
+                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                      </el-select>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -238,19 +240,25 @@
                       <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact">
                         <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
                       </el-select>
-                      <span v-else>{{ scope.row.deptId }}</span>
+                      <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-else disabled>
+                        <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+                      </el-select>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="人员属性"
-                    width="120">
+                    width="110">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact">
+                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact" @change="userTypesele(scope.row)">
                         <el-option label="正式" value="正式"></el-option>
                         <el-option label="借调" value="借调"></el-option>
                         <el-option label="临时工" value="临时工"></el-option>
                       </el-select>
-                      <span v-else>{{ scope.row.userType }}</span>
+                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-else disabled>
+                        <el-option label="正式" value="正式"></el-option>
+                        <el-option label="借调" value="借调"></el-option>
+                        <el-option label="临时工" value="临时工"></el-option>
+                      </el-select>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -268,22 +276,22 @@
                     label="开始时间">
                     <template slot-scope="scope">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
-                      <span v-else>{{ scope.row.startDate }}</span>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.startDate" size="small" v-else disabled></el-date-picker>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="用餐时间"
-                    width="80">
+                    width="100">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.dinner" size="small" v-if="isRedact"></el-input>
-                      <span v-else>{{ scope.row.dinner }}</span>
+                      <el-input v-model="scope.row.dinner" size="small" v-if="isRedact" type="number" min="0"></el-input>
+                      <el-input v-model="scope.row.dinner" size="small" v-else disabled type="number" min="0"></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="结束时间">
                     <template slot-scope="scope">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
-                      <span v-else>{{ scope.row.endDate }}</span>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.endDate" size="small" v-else disabled></el-date-picker>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -291,7 +299,7 @@
                     width="100">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.remark" size="small" v-if="isRedact"></el-input>
-                      <span v-else>{{ scope.row.remark }}</span>
+                      <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -807,56 +815,61 @@
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
-              :data="tableData3"
+              :data="listbomP"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
               <el-table-column
                 label="物料（包材）"
-                width="120">
-                <template slot-scope="scope">{{ order.materialCode + ' ' + order.materialName }}</template>
+                width="180">
+                <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
-                prop="name"
+                prop="meins"
                 label="单位"
-                width="120">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="需求用量"
-                show-overflow-tooltip>
+                width="60">
               </el-table-column>
               <el-table-column
                 label="生产使用">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="本班损耗">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="不合格数">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="不良批次">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="厂家（选择）">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
             </el-table>
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
-              :data="tableData3"
+              :data="listbomS"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
@@ -1063,7 +1076,8 @@ export default {
       productDate: '',
       workShop: '',
       factoryid: '',
-      listbom: [],
+      listbomP: [],
+      listbomS: [],
       order: {
         productDate: ''
       },
@@ -1118,8 +1132,7 @@ export default {
       SapDateP: [],
       SapDateS: [],
       SapAudit: [],
-      GermsDate: [
-      ],
+      GermsDate: [],
       Text: '',
       textId: ''
     }
@@ -1146,7 +1159,8 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.order = data.list[0]
-          this.listbom = data.listbom
+          this.listbomP = data.listbomP
+          this.listbomS = data.listbomS
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
           this.GetRatio()
@@ -1249,8 +1263,8 @@ export default {
       })
     },
     /**
-    * @property 以下为七个获取列表
-    */
+     * @property 以下为七个获取列表
+     */
     // 获取包装车间人员列表
     Getpkguser () {
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
@@ -1522,6 +1536,7 @@ export default {
         if (data.code === 0) {
           this.$message.success('修改人员成功')
           console.log(data)
+          this.Getpkguser()
         } else {
           this.$message.error('修改人员成功' + data.msg)
         }
@@ -1598,7 +1613,8 @@ export default {
       }
     },
     // 修改物料领用
-    UpdateSap () {},
+    UpdateSap () {
+    },
     // 修改待杀菌数量
     UpdateGerms () {
       if (this.GermsDate.length > 0) {
@@ -1637,27 +1653,7 @@ export default {
      * @property 以下为提交
      */
     SubmitForm () {
-      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: '222'}, [{
-        orderId: this.orderId,
-        classType: '夜班',
-        deptId: '',
-        userType: '',
-        userId: ['1', '2'],
-        startDate: '2018-08-30 00:00:00.0',
-        dinner: '222',
-        endDate: '2018-08-30 00:00:00.0',
-        remark: '2'
-      }, {
-        orderId: this.orderId,
-        classType: '白班',
-        deptId: '',
-        userType: '',
-        userId: ['2', '3'],
-        startDate: '2018-08-30 00:00:00.0',
-        dinner: '332',
-        endDate: '2018-08-30 00:00:00.0',
-        remark: '2'
-      }], this.ExcDate, {
+      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan}, this.uerDate, this.ExcDate, {
         orderId: this.orderId,
         countOutput: this.countOutputNum,
         countOutputUnit: '瓶',
@@ -1668,12 +1664,12 @@ export default {
           this.$message.error(data.msg)
         }
       })
-      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      // this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+      //   if (data.code === 0) {
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
     },
     // 我是分割线
     // 选择人员
@@ -1723,7 +1719,7 @@ export default {
         userType: '',
         userId: [],
         startDate: '',
-        dinner: '',
+        dinner: '60',
         endDate: '',
         remark: ''
       })
@@ -1797,6 +1793,10 @@ export default {
       row.deviceId = ''
       row.materialShort = ''
       row.energy = ''
+    },
+    // 人员属性下拉
+    userTypesele (row) {
+      row.userId = ['']
     }
   },
   computed: {

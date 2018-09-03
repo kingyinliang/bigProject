@@ -126,11 +126,18 @@
             prop="name"
             label="入库库位"
             width="95">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.name" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.name }}</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="moveType"
             label="移动类型"
             width="95">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.moveType" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.moveType }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="stckType"
@@ -138,14 +145,20 @@
             width="95">
           </el-table-column>
           <el-table-column
-            prop="noMoreGr"
             label="交货已完成标识"
             width="95">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.noMoreGr" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.noMoreGr }}</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="expirydate"
             label="货架寿命到期日"
             width="95">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.expirydate" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.expirydate }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="interfaceReturn"
@@ -153,32 +166,34 @@
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="memo"
             label="审核意见"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="verifyMan"
             label="审核人"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="verifyDate"
             label="审核时间"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="备注"
             width="95">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.remark }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            width="60">
             <template slot-scope="scope">
-              <el-button @click="remove(scope.$index,tableData3)" type="text">编辑</el-button>
-              <el-button @click="remove(scope.$index,tableData3)" type="text">删除</el-button>
+              <el-button @click="redact(scope.row)" type="text">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -303,6 +318,18 @@ export default {
       val.forEach((item, index) => {
         this.multipleSelection.push(item)
       })
+    },
+    // 编辑
+    redact (row) {
+      if (!row.redact) {
+        row.redact = true
+        this.MaintainList.splice(this.MaintainList.length, 0, {})
+        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+      } else {
+        row.redact = false
+        this.MaintainList.splice(this.MaintainList.length, 0, {})
+        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+      }
     },
     // 审核拒绝
     repulseAutios () {
