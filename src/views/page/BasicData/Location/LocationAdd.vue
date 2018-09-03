@@ -38,9 +38,9 @@
             </el-select>
           </el-form-item>
           <el-form-item label="发料/入库" prop="orderNo6">
-            <el-select v-model="formatDate.orderNo" placeholder="请选择">
-              <el-option label="发料"  value=""></el-option>
-              <el-option label="入库"  value=""></el-option>
+            <el-select v-model="formatDate.materialOperation" placeholder="请选择">
+              <el-option label="发料"  value="发料"></el-option>
+              <el-option label="入库"  value="入库"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -67,7 +67,8 @@ export default {
         storageLocation: '',
         materialType: '',
         material: '',
-        isSample: ''
+        isSample: '',
+        materialOperation: ''
       },
       dataRule: {
         deptId: [

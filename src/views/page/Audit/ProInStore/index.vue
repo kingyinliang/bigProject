@@ -88,7 +88,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="planOutput"
             label="计划生产数量"
             width="95">
           </el-table-column>
@@ -128,27 +128,27 @@
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="moveType"
             label="移动类型"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="stckType"
             label="库存类型"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="noMoreGr"
             label="交货已完成标识"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="expirydate"
             label="货架寿命到期日"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="interfaceReturn"
             label="接口回写"
             width="95">
           </el-table-column>
