@@ -27,15 +27,17 @@
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="index"
-                    width="50"
+                    width="55"
                     label="序号">
                   </el-table-column>
                   <el-table-column
+                    show-overflow-tooltip='true'
                     label="参数类型编码">
                     <template slot-scope="scope">{{ scope.row.type }}</template>
                   </el-table-column>
                   <el-table-column
                     prop="name"
+                    show-overflow-tooltip='true'
                     label="参数类型名称">
                   </el-table-column>
                   <!--<el-table-column-->
@@ -63,7 +65,7 @@
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="index"
-                    width="50"
+                    width="55"
                     label="序号">
                   </el-table-column>
                   <el-table-column

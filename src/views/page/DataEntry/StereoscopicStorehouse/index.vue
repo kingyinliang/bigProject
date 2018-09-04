@@ -10,7 +10,7 @@
     <el-card style="margin: 0">
       <el-row type="flex">
         <el-col>
-          <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" class="topforms">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="55px" class="topforms">
             <el-form-item label="工厂">
               <el-select v-model="plantList.factory" placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>

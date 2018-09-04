@@ -31,51 +31,44 @@
             style="width: 100%;">
             <el-table-column
               type="selection"
-              header-align="center"
-              align="center"
-              width="50">
+              width="34">
             </el-table-column>
             <el-table-column
               prop="jobId"
-              header-align="center"
-              align="center"
-              width="80"
+              width="55"
               label="ID">
             </el-table-column>
             <el-table-column
               prop="beanName"
-              header-align="center"
-              align="center"
+              show-overflow-tooltip='true'
               label="bean名称">
             </el-table-column>
             <el-table-column
               prop="methodName"
-              header-align="center"
-              align="center"
+              show-overflow-tooltip='true'
               label="方法名称">
             </el-table-column>
             <el-table-column
               prop="params"
-              header-align="center"
-              align="center"
+              width="80"
+              show-overflow-tooltip='true'
               label="参数">
             </el-table-column>
             <el-table-column
               prop="cronExpression"
-              header-align="center"
-              align="center"
+              width="100"
+              show-overflow-tooltip='true'
               label="cron表达式">
             </el-table-column>
             <el-table-column
               prop="remark"
-              header-align="center"
-              align="center"
+              width="100"
+              show-overflow-tooltip='true'
               label="备注">
             </el-table-column>
             <el-table-column
               prop="status"
-              header-align="center"
-              align="center"
+              width="64"
               label="状态">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.status === 0" size="small">正常</el-tag>
@@ -84,9 +77,8 @@
             </el-table-column>
             <el-table-column
               fixed="right"
-              header-align="center"
-              align="center"
-              width="150"
+              show-overflow-tooltip='true'
+              width="240"
               label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>

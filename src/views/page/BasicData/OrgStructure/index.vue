@@ -403,4 +403,10 @@ export default {
     height: 450px;
     overflow: auto;
   }
+  .el-form-item__label {
+    background: url(/static/img/mh.png) no-repeat right center;
+    background-size: 3px;
+    padding-right: 6px;
+    margin-right: 10px;
+  }
 </style>
