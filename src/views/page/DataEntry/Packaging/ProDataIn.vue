@@ -821,8 +821,7 @@
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
               <el-table-column
-                label="物料（包材）"
-                width="180">
+                label="物料（包材）">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
@@ -831,35 +830,40 @@
                 width="60">
               </el-table-column>
               <el-table-column
-                label="生产使用">
+                label="生产使用"
+                width="125">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-if="isRedact"></el-input>
-                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-else disabled></el-input>
+                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-if="isRedact" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="本班损耗">
+                label="本班损耗"
+                width="125">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact"></el-input>
-                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled></el-input>
+                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="不合格数">
+                label="不合格数"
+                width="125">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact"></el-input>
-                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled></el-input>
+                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="不良批次">
+                label="不良批次"
+                width="125">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact"></el-input>
                   <el-input v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="厂家（选择）">
+                label="厂家（选择）"
+                width="125">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact"></el-input>
                   <el-input v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
@@ -875,12 +879,11 @@
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
               <el-table-column
-                label="物料（半成品）"
-                width="120">
-                <template slot-scope="scope">{{ order.materialCode + ' ' + order.materialName }}</template>
+                label="物料（半成品）">
+                <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
-                prop="name"
+                prop="meins"
                 label="单位"
                 width="120">
               </el-table-column>
@@ -1418,112 +1421,6 @@ export default {
       this.order.germs = this.GermsNum // 待杀菌数量合计
       this.order.operator = `${this.realName}(${this.userName})`
     },
-    // 保存准备时间
-    SaveReady () {
-      if (this.readyDate.isCause === '1') {
-        this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', this.readyDate).then(({data}) => {
-          if (data.code === 0) {
-            this.$message('保存准备时间成功')
-            this.Getpkgready()
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      } else {
-        this.$http(`${PACKAGING_API.PKGREADYSAVE_API}`, 'POST', {
-          status: 'saved',
-          isCause: this.readyDate.isCause,
-          orderId: this.orderId,
-          dayStartDate: this.readyDate.dayStartDate,
-          dayStartLineDate: this.readyDate.dayStartLineDate,
-          dayChange: this.readyDate.dayChange,
-          dayDinner: this.readyDate.dayDinner,
-          dayCauseDate: this.readyDate.dayCauseDate,
-          dayEndDate: this.readyDate.dayEndDate,
-          shift: this.readyDate.shift,
-          meeting: this.readyDate.meeting,
-          prepared: this.readyDate.prepared,
-          clear: this.readyDate.clear
-        }).then(({data}) => {
-          if (data.code === 0) {
-            console.log('保存准备时间')
-            console.log(data)
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      }
-    },
-    // 保存人员
-    SaveUser () {
-      this.$http(`${PACKAGING_API.PKGUSERSAVE_API}`, 'POST', {}).then(({data}) => {
-        if (data.code === 0) {
-          console.log('保存人员')
-          console.log(data)
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 保存异常记录
-    SaveExc () {
-      this.ExcDate.forEach((item) => {
-        item.orderId = this.orderId
-      })
-      this.$http(`${PACKAGING_API.PKGEXCSAVE_API}`, 'POST', this.ExcDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('保存异常记录成功')
-          this.GetpkgExc()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 保存生产入库
-    SaveIn () {
-      this.InDate.forEach((item) => {
-        item.orderId = this.orderId
-      })
-      this.$http(`${PACKAGING_API.PKGINSAVE_API}`, 'POST', this.InDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('保存生产入库成功')
-          this.Getpkgin()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 保存待杀菌数量
-    SaveGerms () {
-      this.GermsDate.forEach((item) => {
-        item.orderId = this.orderId
-        item.status = 'saved'
-      })
-      this.$http(`${PACKAGING_API.PKGGERMSSAVE_API}`, 'POST', this.GermsDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('保存待杀菌数量成功')
-          this.GetpkgGerms()
-        } else {
-          this.$message.error('保存待杀菌数量' + data.msg)
-        }
-      })
-    },
-    // 保存文本
-    SaveText () {
-      this.$http(`${PACKAGING_API.PKGTEXTSAVE_API}`, 'POST', {
-        orderId: this.orderId,
-        pkgText: this.Text,
-        workShop: this.order.workShop,
-        blongProc: this.order.productLine
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('保存文本成功')
-          this.GetText()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
     /**
      * @property 以下为七个修改列表
      */
@@ -1614,6 +1511,14 @@ export default {
     },
     // 修改物料领用
     UpdateSap () {
+      this.$http(`${PACKAGING_API.PKGSPAUPDATE_API}`, 'POST', {}).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('修改物料领用')
+          this.GetpkgSap()
+        } else {
+          this.$message.error('物料领用' + data.msg)
+        }
+      })
     },
     // 修改待杀菌数量
     UpdateGerms () {
@@ -1653,23 +1558,23 @@ export default {
      * @property 以下为提交
      */
     SubmitForm () {
-      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan}, this.uerDate, this.ExcDate, {
-        orderId: this.orderId,
-        countOutput: this.countOutputNum,
-        countOutputUnit: '瓶',
-        productDate: this.order.productDate
-      }]).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-      // this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+      // this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan}, this.uerDate, this.ExcDate, {
+      //   orderId: this.orderId,
+      //   countOutput: this.countOutputNum,
+      //   countOutputUnit: '瓶',
+      //   productDate: this.order.productDate
+      // }]).then(({data}) => {
       //   if (data.code === 0) {
       //   } else {
       //     this.$message.error(data.msg)
       //   }
       // })
+      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 我是分割线
     // 选择人员

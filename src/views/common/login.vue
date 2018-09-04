@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video width="100%" height="100%" autoplay ref="videos" id="videos" muted src="http://shinhoglobal.com/img/index1.mp4">
+    <video width="100%" height="100%" autoplay ref="videos" id="videos" muted src="http://shinhoglobal.com/img/index3.mp4">
       您的浏览器不支持 video 标签。
     </video>
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
@@ -37,7 +37,7 @@ export default {
         pass: ''
       },
       curr: 0,
-      videoList: ['http://shinhoglobal.com/img/index1.mp4', 'http://shinhoglobal.com/img/index2.mp4', 'http://shinhoglobal.com/img/index3.mp4', 'http://shinhoglobal.com/img/index4.mp4'],
+      videoList: ['http://shinhoglobal.com/img/index3.mp4', 'http://shinhoglobal.com/img/index1.mp4', 'http://shinhoglobal.com/img/index2.mp4'],
       rules2: {
         user: [
           { required: true, message: '请输入账号名称', trigger: 'blur' },
@@ -92,6 +92,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+video{
+  object-fit: fill;
+}
 .loginForm{
   width: 400px;
   height: 180px;
