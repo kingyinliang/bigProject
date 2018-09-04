@@ -885,36 +885,55 @@
               <el-table-column
                 prop="meins"
                 label="单位"
-                width="120">
+                width="60">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="领用罐号"
-                show-overflow-tooltip>
+                label="领用罐号">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact" size="small">
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in finHolder" :key="index"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in semiHolder" :key="index"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-else disabled size="small">
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in finHolder" :key="index"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in semiHolder" :key="index"></el-option>
+                  </el-select>
+                </template>
               </el-table-column>
               <el-table-column
                 label="过滤日期">
                 <template slot-scope="scope">
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="生产使用量">
                 <template slot-scope="scope">
+                  <el-input v-model="scope.row.productUseNum" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.productUseNum" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="换罐时间">
                 <template slot-scope="scope">
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="用完时间">
                 <template slot-scope="scope">
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
-                label="厂家（选择）">
+                label="操作"
+                width="50">
                 <template slot-scope="scope">
+                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)"></el-button>
+                  <!--<el-button type="danger" icon="el-icon-delete" circle size="small"></el-button>-->
                 </template>
               </el-table-column>
             </el-table>
@@ -1135,6 +1154,8 @@ export default {
       SapDateP: [],
       SapDateS: [],
       SapAudit: [],
+      finHolder: [],
+      semiHolder: [],
       GermsDate: [],
       Text: '',
       textId: ''
@@ -1151,6 +1172,7 @@ export default {
     this.Getenery()
     this.GetstoppageType()
     this.GetTeam()
+    this.GetPot()
   },
   methods: {
     // 获取表头
@@ -1260,6 +1282,33 @@ export default {
           } else {
             this.$message.error('比例获取失败')
           }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取罐
+    GetPot () {
+      // 成品罐
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        holder_type: '007',
+        pageSize: '100',
+        currPage: '1'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.finHolder = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      // 半成品罐
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        holder_type: '006',
+        pageSize: '100',
+        currPage: '1'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.semiHolder = data.page.list
         } else {
           this.$message.error(data.msg)
         }
@@ -1558,17 +1607,25 @@ export default {
      * @property 以下为提交
      */
     SubmitForm () {
-      // this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan}, this.uerDate, this.ExcDate, {
-      //   orderId: this.orderId,
-      //   countOutput: this.countOutputNum,
-      //   countOutputUnit: '瓶',
-      //   productDate: this.order.productDate
-      // }]).then(({data}) => {
-      //   if (data.code === 0) {
-      //   } else {
-      //     this.$message.error(data.msg)
-      //   }
-      // })
+      if (this.readyDate.isCause === '1') {
+        this.readyDate.dayDinner = this.readyDate.dayDinner + ''
+        this.readyDate.midDinner = this.readyDate.midDinner + ''
+        this.readyDate.nightDinner = this.readyDate.nightDinner + ''
+      } else {
+        this.readyDate.dayDinner = this.readyDate.dayDinner + ''
+      }
+      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan.toString()}, this.uerDate, this.ExcDate, {
+        orderId: this.orderId,
+        countOutput: this.countOutputNum.toString(),
+        countOutputUnit: '瓶',
+        productDate: this.order.productDate
+      }]).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('提交成功')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
         } else {
@@ -1661,6 +1718,19 @@ export default {
         outputUnit: '瓶',
         mainBatch: '',
         attachBatch: ''
+      })
+    },
+    // 新增物料半成品
+    addSapS (form, row) {
+      form.push({
+        materialCode: row.materialCode,
+        materialName: row.materialName,
+        meins: row.meins,
+        potNo: '',
+        filterDate: '',
+        productUseNum: '',
+        changePotDate: '',
+        usePotDate: ''
       })
     },
     // 新增异常记录
