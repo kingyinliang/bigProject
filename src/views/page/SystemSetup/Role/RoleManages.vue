@@ -31,7 +31,7 @@
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 type="selection"
-                width="55">
+                width="34">
               </el-table-column>
               <el-table-column
                 type="index"
@@ -40,15 +40,16 @@
               <el-table-column
                 prop="roleName"
                 label="角色名称"
-                width="95">
+                show-overflow-tooltip='true'
+                width="">
               </el-table-column>
-              <el-table-column
+<!--               <el-table-column
                 prop="roleCode"
                 label="角色编码">
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="操作"
-                width="340">
+                width="320">
                 <template slot-scope="scope">
                   <a @click="userManage(scope.row.roleId)">人员管理</a>
                   <a @click="fnManage(scope.row.roleId)">功能分配</a>
@@ -60,22 +61,24 @@
               <el-table-column
                 prop="creator"
                 label="创建人"
-                width="100">
+                show-overflow-tooltip='true'
+                width="">
               </el-table-column>
               <el-table-column
                 prop="created"
                 label="创建时间"
-                width="120">
+                width="160">
               </el-table-column>
               <el-table-column
                 prop="changer"
                 label="修改人"
-                width="100">
+                show-overflow-tooltip='true'
+                width="">
               </el-table-column>
               <el-table-column
                 prop="changed"
                 label="修改时间"
-                width="110">
+                width="160">
               </el-table-column>
             </el-table>
           </el-row>
