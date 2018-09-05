@@ -1,6 +1,6 @@
 // let HOST = 'http://localhost:8080/'
-// let HOST = 'http://10.8.4.153:50080/api'
-let HOST = 'http://10.1.1.74:8080'
+let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
 *首页api
@@ -452,5 +452,9 @@ export const AUDIT_API = {
   /**
    * @property {string} AUDITLIST_API 生产报工列表
    */
-  AUDITHOURSLIST_API: HOST + '/verify/time/list'
+  AUDITHOURSLIST_API: HOST + '/verify/time/list',
+  /**
+   * @property {string} AUDITLIST_API 生产报工列表
+   */
+  AUDITHOURSUPDATE_API: HOST + '/verify/time/update'
 }

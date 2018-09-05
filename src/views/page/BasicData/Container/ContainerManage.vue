@@ -57,7 +57,7 @@
                 width="50">
               </el-table-column>
               <el-table-column
-                prop="holderType"
+                prop="typeName"
                 label="容器类型"
                 width="95">
               </el-table-column>
@@ -86,7 +86,7 @@
                 width="95">
               </el-table-column>
               <el-table-column
-                prop="deptId"
+                prop="deptName"
                 label="归属车间"
                 width="95">
               </el-table-column>
@@ -145,8 +145,9 @@ export default {
     GetContainerList (obj) {
       if (!obj) {
         obj = {
-          pageSize: JSON.stringify(this.pageSize),
-          currPage: JSON.stringify(this.currPage)
+          type: 'holder_type',
+          pageSize: this.pageSize,
+          currPage: this.currPage
         }
       }
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', obj).then(({data}) => {
@@ -193,8 +194,9 @@ export default {
     // 查询
     qurery () {
       this.GetContainerList({
-        pageSize: JSON.stringify(this.pageSize),
-        currPage: JSON.stringify(this.currPage),
+        type: 'holder_type',
+        pageSize: this.pageSize,
+        currPage: this.currPage,
         holder_type: this.form.holderType,
         holder_no: this.form.holderNo,
         holder_hold: this.form.holderHold,
@@ -243,7 +245,8 @@ export default {
     // 改变每页条数
     handleSizeChange (val) {
       this.GetContainerList({
-        pageSize: JSON.stringify(val),
+        type: 'holder_type',
+        pageSize: val,
         currPage: '1',
         holderType: this.form.holderType,
         holderNo: this.form.holderNo,
@@ -254,12 +257,13 @@ export default {
     // 跳转页数
     handleCurrentChange (val) {
       this.GetContainerList({
+        type: 'holder_type',
         holderType: this.form.holderType,
         holderNo: this.form.holderNo,
         holderHold: this.form.holderHold,
         deptId: this.form.deptId,
-        pageSize: JSON.stringify(this.pageSize),
-        currPage: JSON.stringify(val)
+        pageSize: this.pageSize,
+        currPage: val
       })
     }
   },

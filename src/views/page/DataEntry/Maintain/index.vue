@@ -70,7 +70,8 @@
           width="120">
         </el-table-column>
         <el-table-column
-          label="品项">
+          label="品项"
+          width="280">
           <template slot-scope="scope">
             {{scope.row.materialCode + ' ' + scope.row.materialName}}
           </template>

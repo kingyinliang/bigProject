@@ -14,6 +14,7 @@
       prop="status"
       label="审核动作"
       width="180">
+      <template slot-scope="scope">{{scope.row.status === 'noPass'? '不通过':scope.row.status === 'checked'? '通过' : '' }}</template>
     </el-table-column>
     <el-table-column
       prop="memo"

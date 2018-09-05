@@ -12,7 +12,7 @@
           <el-row style="float: right">
             <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
               <el-form-item>
-                <el-input v-model="form.name" placeholder="物料" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetLocationList()">查询</el-button>
@@ -42,27 +42,29 @@
               width="55">
             </el-table-column>
             <el-table-column
-              prop="dept_name"
+              prop="deptName"
               label="车间">
             </el-table-column>
             <el-table-column
-              prop="material_type"
+              prop="materialType"
               label="物料类型">
             </el-table-column>
             <el-table-column
-              prop="name"
               label="物料编码">
+              <template slot-scope="scope">
+                {{ scope.row.materialCode + ' ' + scope.row.materialName}}
+              </template>
             </el-table-column>
             <el-table-column
-              prop="storage_location"
+              prop="storageLocation"
               label="库位">
             </el-table-column>
             <el-table-column
-              prop="is_sample"
+              prop="isSample"
               label="是否样品库">
             </el-table-column>
             <el-table-column
-              prop="holderPatch"
+              prop="materialOperation"
               label="发料/入库">
             </el-table-column>
           </el-table>
@@ -120,7 +122,7 @@ export default {
       visible1: false,
       visible: false,
       form: {
-        name: '',
+        materialCode: '',
         deptName: '',
         materialType: '',
         storageLocation: ''
@@ -156,7 +158,7 @@ export default {
     // 获取库位列表
     GetLocationList () {
       this.$http(`${BASICDATA_API.LOCATIONLIST_API}`, 'POST', {
-        name: this.form.name,
+        materialCode: this.form.materialCode,
         deptName: this.form.storageLocation,
         materialType: this.form.storageLocation,
         storageLocation: this.form.storageLocation,

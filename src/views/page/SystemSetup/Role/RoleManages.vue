@@ -10,15 +10,15 @@
         <el-card>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="80px" class="topforms" @keyup.enter.native="GetRoleList()">
-                <el-form-item label="角色名称">
+              <el-form :inline="true" :model="form" size="small" label-width="85px" class="topforms" @keyup.enter.native="GetRoleList()">
+                <el-form-item label="角色名称：">
                   <el-input v-model="form.username" placeholder="角色名称"></el-input>
                 </el-form-item>
               </el-form>
             </el-col>
             <el-col style="width: 200px">
-              <el-button type="primary" @click="GetRoleList()">查询</el-button>
-              <el-button type="primary" @click="roleAddOrUpdate()">新增</el-button>
+              <el-button type="primary" @click="GetRoleList()" size="small">查询</el-button>
+              <el-button type="primary" @click="roleAddOrUpdate()" size="small">新增</el-button>
             </el-col>
           </el-row>
           <el-row>

@@ -34,7 +34,7 @@
                 <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button>
               </div>
               <div class="clearfix item">
-                <img :src="item.img" alt="">
+                <img :src="'http://10.8.4.153:50080' + item.img" alt="">
                 <div class="itemForm">
                   <el-form :model="item" size="small" label-position="right" label-width="68px">
                     <el-form-item label="产线">
@@ -186,6 +186,7 @@ export default {
           orderNos = ''
         }
         result.push({
+          img: data[i].img,
           productLine: data[i].productLine,
           productLineName: data[i].productLineName,
           orderNo: orderNos,
@@ -242,8 +243,8 @@ export default {
     display: flex;
     img{
       float: left;
-      width: 200px;
-      height: 240px;
+      width: 180px;
+      height: 300px;
       margin-right: 50px;
     }
     .itemForm{

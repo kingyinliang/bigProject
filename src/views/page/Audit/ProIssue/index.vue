@@ -208,9 +208,7 @@ export default {
       this.Getdeptbyid(n)
     },
     'plantList.workshop' (n, o) {
-      if (n) {
-        this.GetParentline(n)
-      }
+      this.GetParentline(n)
     }
   },
   mounted () {
@@ -245,24 +243,32 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.workshop = []
+      }
     },
     // 获取产线
     GetParentline (id) {
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.productline = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.productline = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.productline = []
+      }
     },
     // 表格选中
     handleSelectionChange (val) {

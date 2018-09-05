@@ -2,7 +2,7 @@
   <div>
     <div class="topTitle">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>基础数据</el-breadcrumb-item>
+        <el-breadcrumb-item>系统设置</el-breadcrumb-item>
         <el-breadcrumb-item>参数管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>

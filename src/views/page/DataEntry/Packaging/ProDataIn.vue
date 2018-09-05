@@ -11,30 +11,30 @@
       <el-card style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <el-form :inline="true" :model="form" size="small" label-width="80px" class="topform">
-              <el-form-item label="车间">
+            <el-form :inline="true" :model="form" size="small" label-width="82px" class="topform">
+              <el-form-item label="车间：">
                 <p class="el-input">{{order.workShopName}}</p>
               </el-form-item>
-              <el-form-item label="产线">
+              <el-form-item label="产线：">
                 <p class="el-input">{{order.productLineName}}</p>
               </el-form-item>
-              <el-form-item label="订单号">
+              <el-form-item label="订单号：">
                 <p class="el-input">{{order.orderNo}}</p>
               </el-form-item>
-              <el-form-item label="品项">
+              <el-form-item label="品项：">
                 <p class="el-input">{{order.materialCode + ' ' + order.materialName}}</p>
               </el-form-item>
-              <el-form-item label="计划产量">
+              <el-form-item label="计划产量：">
                 <p class="el-input">{{order.planOutput + ' ' + order.outputUnit}}</p>
               </el-form-item>
-              <el-form-item label="日期">
+              <el-form-item label="日期：">
                 <p class="el-input">{{order.productDate.indexOf(' ')!==-1?order.productDate.substring(0, order.productDate.indexOf(' ')):order.productDate}}</p>
               </el-form-item>
-              <el-form-item label="提交人员">
-                <p class="el-input"></p>
+              <el-form-item label="提交人员：">
+                <p class="el-input">{{order.operator}}</p>
               </el-form-item>
-              <el-form-item label="提交时间">
-                <p class="el-input"></p>
+              <el-form-item label="提交时间：">
+                <p class="el-input">{{order.operDate}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -205,10 +205,10 @@
                 </div>
               </div>
               <div>
-                <!--<div class="message">-->
-                  <!--<i class="el-icon-info"></i>-->
-                  <!--<span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>-->
-                <!--</div>-->
+                <div class="message" v-if="multipleSelectionUser.length > 0">
+                  <i class="el-icon-info"></i>
+                  <span>已选择 <span class="num">{{multipleSelectionUser.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="delUser()">删除</span>
+                </div>
                 <el-table
                   ref="table1"
                   header-row-class-name="tableHead"
@@ -216,9 +216,10 @@
                   border
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px"
-                  @selection-change="handleSelectionChange">
+                  @selection-change="handleSelectionChangeUser">
                   <el-table-column
                     type="selection"
+                    v-if="isRedact"
                     width="55">
                   </el-table-column>
                   <el-table-column
@@ -265,11 +266,11 @@
                     label="人员选择"
                     width="220">
                     <template slot-scope="scope">
-                      <span v-if="!isRedact || scope.row.userType !=='临时工'">
+                      <span>
                         <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
                       </span>
-                      <el-input v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId[0]" size="small"></el-input>
                       <el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工'">点击选择人员</el-button>
+                      <el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId[0]">点击输入临时工</el-button>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -825,7 +826,7 @@
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
-                prop="meins"
+                prop="unit"
                 label="单位"
                 width="60">
               </el-table-column>
@@ -833,8 +834,8 @@
                 label="生产使用"
                 width="125">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-if="isRedact" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.productUsrNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact" type="number" min="0"></el-input>
+                  <el-input v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -883,7 +884,7 @@
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
-                prop="meins"
+                prop="unit"
                 label="单位"
                 width="60">
               </el-table-column>
@@ -891,12 +892,12 @@
                 label="领用罐号">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact" size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in finHolder" :key="index"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in semiHolder" :key="index"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
                   <el-select v-model="scope.row.potNo" placeholder="请选择" v-else disabled size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in finHolder" :key="index"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="(iteam, index) in semiHolder" :key="index"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -932,8 +933,8 @@
                 label="操作"
                 width="50">
                 <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)"></el-button>
-                  <!--<el-button type="danger" icon="el-icon-delete" circle size="small"></el-button>-->
+                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0'"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1'"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1051,17 +1052,48 @@
       title="人员分配"
       :close-on-click-modal="false"
       :visible.sync="visible">
-      <el-transfer
-        filterable
-        :titles="['未分配人员', '已分配人员']"
-        :filter-method="filterMethod"
-        filter-placeholder="请输入用户名称"
-        v-model="selctId"
-        :data="userlist">
-      </el-transfer>
+      <el-row>
+        <!--<el-col style="width: 250px">-->
+          <!--<el-card></el-card>-->
+        <!--</el-col>-->
+        <el-col style="width: 500px">
+          <el-transfer
+            filterable
+            :titles="['未分配人员', '已分配人员']"
+            :filter-method="filterMethod"
+            filter-placeholder="请输入用户名称"
+            v-model="selctId"
+            :data="userlist">
+          </el-transfer>
+        </el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false">取消</el-button>
         <el-button type="primary" @click="updatauser(row)">确定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      width="450px"
+      ref="dayLaborer"
+      title="新增临时工"
+      :close-on-click-modal="false"
+      :visible.sync="visible1">
+      <el-form :model="form" size="small" label-width="120px" class="dialogform">
+        <el-row>
+          <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px">新增</el-button>
+        </el-row>
+        <el-form-item label="临时工姓名：" v-for="(item, index) in selctId2" :key="index">
+          <el-col :span="20">
+            <el-input v-model="selctId2[index]"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)"></el-button>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible1 = false">取消</el-button>
+        <el-button type="primary" @click="close(row)">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -1079,18 +1111,13 @@ export default {
       },
       isRedact: false,
       visible: false,
+      visible1: false,
       form: {
         shiftChange: 'true',
         connect: 'yes'
       },
       activeName: '1',
       tableData: [],
-      tableData3: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }],
       multipleSelection: [],
       orderId: '',
       orderStatus: '',
@@ -1137,6 +1164,7 @@ export default {
       UserAudit: [],
       Team: [],
       selctId: [],
+      selctId2: [],
       userlist: [],
       row: {},
       equipmentType: [],
@@ -1158,7 +1186,8 @@ export default {
       semiHolder: [],
       GermsDate: [],
       Text: '',
-      textId: ''
+      textId: '',
+      multipleSelectionUser: []
     }
   },
   mounted () {
@@ -1184,8 +1213,6 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.order = data.list[0]
-          this.listbomP = data.listbomP
-          this.listbomS = data.listbomS
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
           this.GetRatio()
@@ -1199,6 +1226,17 @@ export default {
             this.GetpkgGerms()
             this.GetText()
           } else {
+            this.listbomP = data.listbomP
+            this.listbomS = data.listbomS
+            this.listbomS.forEach((item) => {
+              item.isSplit = '0'
+              item.id = ''
+              item.orderId = this.order.orderId
+            })
+            this.listbomP.forEach((item) => {
+              item.id = ''
+              item.orderId = this.order.orderId
+            })
             this.readyDate.orderId = this.orderId
           }
         } else {
@@ -1386,8 +1424,8 @@ export default {
         if (data.code === 0) {
           console.log('获取包装车间物料领用列表')
           console.log(data)
-          this.SapDateP = data.listFormP
-          this.SapDateS = data.listFormS
+          this.listbomP = data.listFormP
+          this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
         } else {
           this.$message.error(data.msg)
@@ -1428,40 +1466,18 @@ export default {
      */
     // 保存
     SaveForm () {
-      this.tableheader()
-      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
-        if (data.code === 0) {
-          console.log('修改表头')
-          this.UpdateReady() // 修改准备时间
-          this.UpdateUser() // 修改人员
-          this.UpdateExc() // 修改异常记录
-          this.UpdateIn() // 修改生产入库
-          this.UpdateGerms() // 修改待杀菌数量
-          this.UpdateText() // 修改文本
-          if (this.orderStatus !== '已同步') {
-            // this.UpdateReady() // 修改准备时间
-            // this.UpdateUser() // 修改人员
-            // this.UpdateExc() // 修改异常记录
-            // this.UpdateIn() // 修改生产入库
-            // this.UpdateGerms() // 修改待杀菌数量
-            // this.UpdateText() // 修改文本
-          } else {
-            // this.SaveReady() // 保存准备时间
-            // this.SaveUser() // 保存人员
-            // this.SaveExc() // 保存异常记录
-            // this.SaveIn() // 保存生产入库
-            // this.SaveGerms() // 保存待杀菌数量
-            // this.SaveText() // 保存文本
-          }
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      this.tableheader('已保存') // 修改表头
+      this.UpdateReady() // 修改准备时间
+      this.UpdateUser() // 修改人员
+      this.UpdateExc() // 修改异常记录
+      this.UpdateIn() // 修改生产入库
+      this.UpdateSap() // 修改物料领用
+      this.UpdateGerms() // 修改待杀菌数量
+      this.UpdateText() // 修改文本
     },
     // 表头处理
-    tableheader () {
-      console.log(this.countOutputNum)
-      this.order.orderStatus = '已保存'
+    tableheader (str) {
+      this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
       this.order.countOutputUnit = '瓶'// 生产入库单位
       this.order.countOutput = this.countOutputNum // 生产入库总产量
@@ -1469,24 +1485,33 @@ export default {
       this.order.expAllDate = this.ExcNum// 总停线时间
       this.order.germs = this.GermsNum // 待杀菌数量合计
       this.order.operator = `${this.realName}(${this.userName})`
+      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('保存表头成功')
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+      })
     },
     /**
      * @property 以下为七个修改列表
      */
     // 修改人员
     UpdateUser () {
-      this.uerDate.forEach((item) => {
-        item.status = 'saved'
-      })
-      this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('修改人员成功')
-          console.log(data)
-          this.Getpkguser()
-        } else {
-          this.$message.error('修改人员成功' + data.msg)
-        }
-      })
+      if (this.uerDate.length > 0) {
+        this.uerDate.forEach((item) => {
+          item.status = 'saved'
+        })
+        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('修改人员成功')
+            console.log(data)
+            this.Getpkguser()
+          } else {
+            this.$message.error('修改人员成功' + data.msg)
+          }
+        })
+      }
     },
     // 修改准备时间
     UpdateReady () {
@@ -1560,9 +1585,15 @@ export default {
     },
     // 修改物料领用
     UpdateSap () {
-      this.$http(`${PACKAGING_API.PKGSPAUPDATE_API}`, 'POST', {}).then(({data}) => {
+      this.listbomP.forEach((item) => {
+        item.status = 'saved'
+      })
+      this.listbomS.forEach((item) => {
+        item.status = 'saved'
+      })
+      this.$http(`${PACKAGING_API.PKGSPAUPDATE_API}`, 'POST', [this.listbomP, this.listbomS]).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('修改物料领用')
+          this.$message.success('修改物料领用成功')
           this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
@@ -1606,7 +1637,18 @@ export default {
     /**
      * @property 以下为提交
      */
+    // 提交
     SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.tableheader('submit')
+        this.ProHours()
+      })
+    },
+    ProHours () {
       if (this.readyDate.isCause === '1') {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
         this.readyDate.midDinner = this.readyDate.midDinner + ''
@@ -1626,12 +1668,12 @@ export default {
           this.$message.error(data.msg)
         }
       })
-      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      // this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+      //   if (data.code === 0) {
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
     },
     // 我是分割线
     // 选择人员
@@ -1649,6 +1691,25 @@ export default {
         this.$message.error('请选择人员属性')
       }
     },
+    // 选择输入临时工
+    dayLaborer (row) {
+      this.row = row
+      this.visible1 = true
+      this.selctId2 = []
+      this.row.userId.forEach((item) => {
+        this.selctId2.push(item)
+      })
+    },
+    addDayLaborer (row) {
+      row.push('')
+    },
+    close (row) {
+      row.userId = this.selctId2
+      this.visible1 = false
+    },
+    delselctId2 (item) {
+      this.selctId2.splice(this.selctId2.indexOf(item), 1)
+    },
     // 根据部门id查人
     GetUserforteam (id) {
       this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
@@ -1665,12 +1726,6 @@ export default {
     updatauser (row) {
       row.userId = this.selctId
       this.visible = false
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
-    addformrow (form) {
-      form.push([])
     },
     // 新增人员
     addUserDate (form) {
@@ -1712,7 +1767,7 @@ export default {
         manSolidUnit: '箱',
         bad: '',
         badUnit: '瓶',
-        sample: '',
+        sample: 0,
         sampleUnit: '瓶',
         output: '',
         outputUnit: '瓶',
@@ -1723,6 +1778,7 @@ export default {
     // 新增物料半成品
     addSapS (form, row) {
       form.push({
+        id: '',
         materialCode: row.materialCode,
         materialName: row.materialName,
         meins: row.meins,
@@ -1730,7 +1786,8 @@ export default {
         filterDate: '',
         productUseNum: '',
         changePotDate: '',
-        usePotDate: ''
+        usePotDate: '',
+        isSplit: '1'
       })
     },
     // 新增异常记录
@@ -1771,7 +1828,19 @@ export default {
     },
     // 人员属性下拉
     userTypesele (row) {
-      row.userId = ['']
+      row.userId = []
+    },
+    // 人员选中 和  删除
+    handleSelectionChangeUser (val) {
+      this.multipleSelectionUser = val
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    delUser () {
+      this.multipleSelectionUser.forEach((item) => {
+        this.uerDate.splice(this.uerDate.indexOf(item), 1)
+      })
     }
   },
   computed: {
@@ -1843,6 +1912,11 @@ export default {
       padding: 0;
       border: none;
     }
+  }
+}
+.dialogform{
+  input{
+    width: 100%;
   }
 }
 .times .el-input{

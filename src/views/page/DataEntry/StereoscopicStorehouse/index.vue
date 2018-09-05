@@ -61,6 +61,7 @@
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
           type="selection"
+          :selectable='checkboxT'
           width="55">
         </el-table-column>
         <el-table-column
@@ -251,6 +252,14 @@ export default {
       val.forEach((item, index) => {
         this.multipleSelection.push(item)
       })
+    },
+    // 审核通过禁用
+    checkboxT (row) {
+      if (row.status === 'chekced') {
+        return 0
+      } else {
+        return 1
+      }
     },
     // 审核拒绝
     repulseAutios () {

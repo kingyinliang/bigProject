@@ -29,55 +29,56 @@
               </div>
               <div>
                 <el-form :model="OrgDetail" size="small" label-width="110px">
-                  <el-form-item label="部门编码" >
+                  <el-form-item label="部门编码：" >
                     <span v-if="update">{{OrgDetail.deptCode}}</span>
                     <el-input v-model="OrgDetail.deptCode" v-else></el-input>
                   </el-form-item>
-                  <el-form-item label="部门名称" >
+                  <el-form-item label="部门名称：" >
                     <span v-if="update">{{OrgDetail.deptName}}</span>
                     <el-input v-model="OrgDetail.deptName" v-else></el-input>
                   </el-form-item>
-                  <el-form-item label="上级部门" >
+                  <el-form-item label="上级部门：" >
                     <span>{{OrgDetail.parentName}}</span>
                   </el-form-item>
-                  <el-form-item label="生产调度员">
+                  <el-form-item label="生产调度员：">
                     <span v-if="update">{{OrgDetail.dispatchMan}}</span>
                     <el-input v-model="OrgDetail.dispatchMan" v-else></el-input>
                   </el-form-item>
-                  <el-form-item label="部门类型" >
+                  <el-form-item label="部门类型：" >
                     <span v-if="update">{{OrgDetail.deptTypeName}}</span>
                     <el-select v-model="OrgDetail.deptType" v-else>
                       <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="产线属性" v-if="OrgDetail.deptType === 'proLine'">
+                  <el-form-item label="产线属性：" v-if="OrgDetail.deptType === 'proLine'">
                     <span v-if="update">{{OrgDetail.properties}}</span>
                     <el-select v-model="OrgDetail.properties" placeholder="请选择部门类型" style="width: 100%" v-else>
                       <el-option label="普通产线" value="普通产线"></el-option>
                       <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="产线图片" v-if="OrgDetail.deptType === 'proLine'">
-                    <img :src="OrgDetail.picUrl" alt="" v-if="update">
+                  <el-form-item label="产线图片：" v-if="OrgDetail.deptType === 'proLine'">
+                    <img :src="'http://10.8.4.153:50080'+OrgDetail.img" alt="" v-if="update" class="pkgImg">
                     <el-upload
                       action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
                       :limit="1"
                       :headers="heads"
                       list-type="picture"
                       :file-list="fileList"
+                      :beforeUpload="beforeAvatarUpload"
                       :on-success="addfile2" v-else>
                       <el-button size="small" type="primary">选取文件</el-button>
                     </el-upload>
                   </el-form-item>
-                  <el-form-item label="联系人" >
+                  <el-form-item label="联系人：" >
                     <span v-if="update">{{OrgDetail.lxr}}</span>
                     <el-input v-model="OrgDetail.lxr" v-else></el-input>
                   </el-form-item>
-                  <el-form-item label="电话" >
+                  <el-form-item label="电话：" >
                     <span v-if="update">{{OrgDetail.phone}}</span>
                     <el-input v-model="OrgDetail.phone" v-else></el-input>
                   </el-form-item>
-                  <el-form-item label="备注" >
+                  <el-form-item label="备注：" >
                     <span v-if="update">{{OrgDetail.remark}}</span>
                     <el-input type="textarea" v-model="OrgDetail.remark" v-else></el-input>
                   </el-form-item>
@@ -93,32 +94,32 @@
         </el-row>
         <el-dialog :visible.sync="dialogFormVisible1" @close="clearForm('addDep')" :title="sibling?'新增同级':'新增下级'" id="adddepform">
           <el-form :model="addDep" size="small" label-position="left" label-width="100px">
-            <el-form-item label="部门编号">
+            <el-form-item label="部门编号：">
               <el-input v-model="addDep.deptCode" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="部门名称">
+            <el-form-item label="部门名称：">
               <el-input v-model="addDep.deptName" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="上级部门">
+            <el-form-item label="上级部门：">
               <span v-if="sibling">{{addDep.parentName}}</span>
               <span v-if="!sibling">{{addDep.parentName}}</span>
             </el-form-item>
-            <el-form-item label="生产调度员">
+            <el-form-item label="生产调度员：">
               <el-input v-model="addDep.dispatchMan"></el-input>
             </el-form-item>
-            <el-form-item label="部门类型">
+            <el-form-item label="部门类型：">
               <!--<el-input v-model="addDep.deptType" auto-complete="off"></el-input>-->
               <el-select v-model="addDep.deptType" placeholder="请选择部门类型" style="width: 100%">
                 <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线属性" v-if="addDep.deptType== 'proLine'">
+            <el-form-item label="产线属性：" v-if="addDep.deptType== 'proLine'">
               <el-select v-model="addDep.properties" placeholder="请选择产线属性" style="width: 100%">
                 <el-option label="普通产线" value="普通产线"></el-option>
                 <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线图片" v-if="addDep.deptType== 'proLine'">
+            <el-form-item label="产线图片：" v-if="addDep.deptType== 'proLine'">
               <el-upload
                 action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
                 :limit="1"
@@ -128,13 +129,13 @@
                 <el-button size="small" type="primary">选取文件</el-button>
               </el-upload>
             </el-form-item>
-            <el-form-item label="联系人">
+            <el-form-item label="联系人：">
               <el-input v-model="addDep.lxr" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="电话">
+            <el-form-item label="电话：">
               <el-input v-model="addDep.phone" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="备注">
+            <el-form-item label="备注：">
               <el-input type="textarea" v-model="addDep.remark"></el-input>
             </el-form-item>
             <div style="text-align: center">
@@ -235,15 +236,22 @@ export default {
     // 设置组织详情
     setdetail (data) {
       this.row = data
+      this.update = true
       this.$http(`${BASICDATA_API.ORGDETAIL_API}/${data.deptId}`, 'GET').then(({data}) => {
         if (data.code === 0) {
           this.OrgDetail = data.dept
+          if (this.OrgDetail.img) {
+            this.fileList[0] = {}
+            this.fileList[0].name = ''
+            this.fileList[0].url = 'http://10.8.4.153:50080' + this.OrgDetail.img
+          } else {
+            console.log('.....')
+            this.fileList = []
+          }
         } else {
           this.$message.error(data.msg)
         }
       })
-      this.fileList[0].name = this.OrgDetail.fileName
-      this.fileList[0].url = this.OrgDetail.picUrl
     },
     // 右键菜单
     showtab1 (event, object, value, element) {
@@ -254,16 +262,26 @@ export default {
       menu.style.left = event.clientX + 'px'
       menu.style.top = event.clientY + 'px'
     },
+    // 上传图片
+    beforeAvatarUpload (file) {
+      const isLt2M = file.size / 1024 / 1024 < 50
+      if (!isLt2M) {
+        this.$message({
+          message: '上传文件大小不能超过 10MB!',
+          type: 'warning'
+        })
+      }
+      return isLt2M
+    },
     // 上传图片图片回调 新增
     addfile (res, file) {
-      this.addDep.picUrl = res.picUrl
-      this.addDep.fileName = res.fileName
+      console.log(res)
+      this.addDep.img = res.picUrl
     },
     // 上传图片回调 修改
     addfile2 (res, file) {
       console.log(this.fileList)
-      this.OrgDetail.picUrl = res.picUrl
-      this.OrgDetail.fileName = res.fileName
+      this.OrgDetail.img = res.picUrl
     },
     closethis () {
       console.log(this.addDep)
@@ -358,6 +376,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .pkgImg{
+    width: 60px;
+    height: 100px;
+  }
   .el-card__header {
     font-size: 14px;
     padding: 13px 20px;
@@ -402,11 +424,5 @@ export default {
   .orgcard .el-card__body{
     height: 450px;
     overflow: auto;
-  }
-  .el-form-item__label {
-    background: url(/static/img/mh.png) no-repeat right center;
-    background-size: 3px;
-    padding-right: 6px;
-    margin-right: 10px;
   }
 </style>

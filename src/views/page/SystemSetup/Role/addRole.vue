@@ -4,11 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-        <el-form-item label="角色名称">
+      <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="85px">
+        <el-form-item label="角色名称：">
           <el-input v-model="dataForm.roleName" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="描述">
+        <el-form-item label="描述：">
           <el-input v-model="dataForm.roleCode" placeholder="手动输入"></el-input>
         </el-form-item>
       </el-form>
