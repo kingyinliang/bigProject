@@ -78,7 +78,7 @@
             <el-table-column
               fixed="right"
               show-overflow-tooltip='true'
-              width="240"
+              width="232"
               label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>

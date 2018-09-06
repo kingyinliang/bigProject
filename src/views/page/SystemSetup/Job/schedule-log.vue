@@ -20,40 +20,45 @@
       style="width: 100%;">
       <el-table-column
         prop="logId"
-        header-align="center"
-        align="center"
+        header-align="left"
+        align="left"
         width="80"
         label="日志ID">
       </el-table-column>
       <el-table-column
         prop="jobId"
-        header-align="center"
-        align="center"
+        header-align="left"
+        align="left"
         width="80"
+        show-overflow-tooltip='true'
         label="任务ID">
       </el-table-column>
       <el-table-column
         prop="beanName"
-        header-align="center"
-        align="center"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="bean名称">
       </el-table-column>
       <el-table-column
         prop="methodName"
-        header-align="center"
-        align="center"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="方法名称">
       </el-table-column>
       <el-table-column
         prop="params"
-        header-align="center"
-        align="center"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="参数">
       </el-table-column>
       <el-table-column
         prop="status"
-        header-align="center"
-        align="center"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 0" size="small">成功</el-tag>
@@ -62,15 +67,18 @@
       </el-table-column>
       <el-table-column
         prop="times"
-        header-align="center"
-        align="center"
+        width="150"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="耗时(单位: 毫秒)">
       </el-table-column>
       <el-table-column
         prop="createTime"
-        header-align="center"
-        align="center"
         width="180"
+        show-overflow-tooltip='true'
+        header-align="left"
+        align="left"
         label="执行时间">
       </el-table-column>
     </el-table>
