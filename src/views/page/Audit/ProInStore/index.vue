@@ -110,7 +110,7 @@
           <el-table-column
             label="是否样品"
             width="95">
-            <template slot-scop="scope">
+            <template slot-scope="scope">
               {{scope.row.isSample === '0'? '否':'是'}}
             </template>
           </el-table-column>

@@ -1,5 +1,6 @@
 // let HOST = 'http://localhost:8080/'
 let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.1.1.96:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
@@ -74,6 +75,10 @@ export const BASICDATA_API = {
    */
   SAPLIST_API: HOST + '/sys/sapmaterial/list',
   /**
+   * @property {string} SAPLIST_API 物料同步
+   */
+  SAPUPDATE_API: HOST + '/sys/sapmaterial/syncMaterialManual',
+  /**
    * @property {string} SAPDETAIL_API 物料详情
    */
   SAPDETAIL_API: HOST + '/sys/sapmaterialitem/info',
@@ -135,7 +140,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} LOCATIONDEL_API 库位删除
    */
-  SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList'
+  SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList',
+  /**
+   * @property {string} SAPORDERUPDATE_API 库位删除
+   */
+  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual'
 }
 /*
 *系统设置api
@@ -371,9 +380,13 @@ export const PACKAGING_API = {
    */
   PKGSPASAVE_API: HOST + '/pkg/material/save',
   /**
-   * @property {string} PKGEXCUPDATE_API 包装车间物料领用修改
+   * @property {string} PKGEXCUPDATE_API 包装车间物料领用修改 半成品
    */
-  PKGSPAUPDATE_API: HOST + '/pkg/material/update',
+  PKGSPAUPDATES_API: HOST + '/pkg/material/update/semi',
+  /**
+   * @property {string} PKGEXCUPDATE_API 包装车间物料领用修改 包材
+   */
+  PKGSPAUPDATEP_API: HOST + '/pkg/material/update/packing',
   /**
    * @property {string} PKGGERMSLIST_API 包装车间待杀菌数量列表
    */

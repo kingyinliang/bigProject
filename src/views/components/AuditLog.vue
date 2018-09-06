@@ -8,6 +8,7 @@
     style="width: 100%">
     <el-table-column
       label="序号"
+      type="index"
       width="180">
     </el-table-column>
     <el-table-column
@@ -21,11 +22,11 @@
       label="审核意见">
     </el-table-column>
     <el-table-column
-      prop="verifyMan"
+      prop="verify_man"
       label="审核人">
     </el-table-column>
     <el-table-column
-      prop="verifyDate"
+      prop="verify_date"
       label="审核时间">
     </el-table-column>
   </el-table>

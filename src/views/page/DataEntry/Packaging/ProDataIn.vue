@@ -44,7 +44,7 @@
               <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row style="float: right" v-if="isRedact">
-              <el-button type="primary" size="small" @click="SaveForm">保存</el-button>
+              <el-button type="primary" size="small" @click="SaveForm('已保存')">保存</el-button>
               <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
             </el-row>
           </el-col>
@@ -205,14 +205,11 @@
                 </div>
               </div>
               <div>
-                <div class="message" v-if="multipleSelectionUser.length > 0">
-                  <i class="el-icon-info"></i>
-                  <span>已选择 <span class="num">{{multipleSelectionUser.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="delUser()">删除</span>
-                </div>
                 <el-table
                   ref="table1"
                   header-row-class-name="tableHead"
                   :data="uerDate"
+                  :row-class-name="RowDelFlag"
                   border
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px"
@@ -297,10 +294,19 @@
                   </el-table-column>
                   <el-table-column
                     label="备注"
-                    width="100">
+                    width="100">@click="delUser()"
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.remark" size="small" v-if="isRedact"></el-input>
                       <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="50">
+                    <template slot-scope="scope">
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="delUser(scope.row)"></el-button>
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -324,22 +330,15 @@
                 <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
-            <!--<div class="message">-->
-              <!--<i class="el-icon-info"></i>-->
-              <!--<span>已选择 <span class="num">{{multipleSelection.length}}</span> 项 <span>是否删除</span></span><span class="num" @click="cleararr">清空</span>-->
-            <!--</div>-->
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
               :data="ExcDate"
+              :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
               @selection-change="handleSelectionChange">
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
               <el-table-column
                 label="异常情况（下拉选择）"
                 width="120">
@@ -361,16 +360,14 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="异常开始时间"
-                width="120">
+                label="异常开始时间">
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
                   <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
-                label="异常结束时间"
-                width="120">
+                label="异常结束时间">
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
                   <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
@@ -435,6 +432,15 @@
                   <el-input v-model="scope.row.remark" v-else size="small" placeholder="手工录入"></el-input>
                 </template>
               </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                width="50">
+                <template slot-scope="scope">
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                </template>
+              </el-table-column>
             </el-table>
             <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
               <el-form-item label="总停线时间">
@@ -459,15 +465,12 @@
                 ref="table1"
                 header-row-class-name="tableHead"
                 :data="InDate"
+                :row-class-name="RowDelFlag"
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
                 @selection-change="handleSelectionChange"
                 v-if="order.properties !== '二合一&礼盒产线'">
-                <el-table-column
-                  type="selection"
-                  width="55">
-                </el-table-column>
                 <el-table-column
                   label="白/中/夜班"
                   width="120">
@@ -616,11 +619,21 @@
                     <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="50">
+                  <template slot-scope="scope">
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                  </template>
+                </el-table-column>
               </el-table>
               <el-table
                 ref="table1"
                 header-row-class-name="tableHead"
                 :data="InDate"
+                :row-class-name="RowDelFlag"
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
@@ -729,6 +742,15 @@
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact"></el-input>
                     <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="50">
+                  <template slot-scope="scope">
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -875,6 +897,7 @@
               ref="table1"
               header-row-class-name="tableHead"
               :data="listbomS"
+              :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
@@ -933,8 +956,8 @@
                 label="操作"
                 width="50">
                 <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0'"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1'"></el-button>
+                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact" @click="dellistbomS(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -954,6 +977,7 @@
               ref="table1"
               header-row-class-name="tableHead"
               :data="GermsDate"
+              :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
@@ -1027,6 +1051,15 @@
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.remark" v-if="isRedact" placeholder="手工录入" size="small"></el-input>
                   <el-input v-model="scope.row.remark" v-else disabled placeholder="手工录入" size="small"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                width="50">
+                <template slot-scope="scope">
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1329,9 +1362,10 @@ export default {
     GetPot () {
       // 成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        type: 'holder_type',
         holder_type: '007',
-        pageSize: '100',
-        currPage: '1'
+        pageSize: 100,
+        currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
           this.finHolder = data.page.list
@@ -1341,9 +1375,10 @@ export default {
       })
       // 半成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        type: 'holder_type',
         holder_type: '006',
-        pageSize: '100',
-        currPage: '1'
+        pageSize: 100,
+        currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
           this.semiHolder = data.page.list
@@ -1465,8 +1500,8 @@ export default {
      * @property 以下为七个保存列表
      */
     // 保存
-    SaveForm () {
-      this.tableheader('已保存') // 修改表头
+    SaveForm (str) {
+      this.tableheader(str) // 修改表头
       this.UpdateReady() // 修改准备时间
       this.UpdateUser() // 修改人员
       this.UpdateExc() // 修改异常记录
@@ -1591,9 +1626,17 @@ export default {
       this.listbomS.forEach((item) => {
         item.status = 'saved'
       })
-      this.$http(`${PACKAGING_API.PKGSPAUPDATE_API}`, 'POST', [this.listbomP, this.listbomS]).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('修改物料领用成功')
+          this.$message.success('修改物料领用包材成功')
+          this.GetpkgSap()
+        } else {
+          this.$message.error('物料领用' + data.msg)
+        }
+      })
+      this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('修改物料领用半成品成功')
           this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
@@ -1644,10 +1687,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.tableheader('submit')
+        this.SaveForm('submit')
         this.ProHours()
+        this.submitIn()
+        this.subSap()
       })
     },
+    // 报工提交
     ProHours () {
       if (this.readyDate.isCause === '1') {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
@@ -1668,12 +1714,26 @@ export default {
           this.$message.error(data.msg)
         }
       })
-      // this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
-      //   if (data.code === 0) {
-      //   } else {
-      //     this.$message.error(data.msg)
-      //   }
-      // })
+    },
+    // 入库提交
+    submitIn () {
+      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('入库提交成功')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 物料提交
+    subSap () {
+      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('物料提交成功')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 我是分割线
     // 选择人员
@@ -1700,13 +1760,16 @@ export default {
         this.selctId2.push(item)
       })
     },
+    // 临时工添加
     addDayLaborer (row) {
       row.push('')
     },
+    // 临时工确定
     close (row) {
       row.userId = this.selctId2
       this.visible1 = false
     },
+    // 临时工删除
     delselctId2 (item) {
       this.selctId2.splice(this.selctId2.indexOf(item), 1)
     },
@@ -1772,8 +1835,13 @@ export default {
         output: '',
         outputUnit: '瓶',
         mainBatch: '',
-        attachBatch: ''
+        attachBatch: '',
+        delFlag: '0'
       })
+    },
+    // 删除半成品
+    dellistbomS (row) {
+      row.delFlag = '1'
     },
     // 新增物料半成品
     addSapS (form, row) {
@@ -1787,7 +1855,8 @@ export default {
         productUseNum: '',
         changePotDate: '',
         usePotDate: '',
-        isSplit: '1'
+        isSplit: '1',
+        delFlag: '0'
       })
     },
     // 新增异常记录
@@ -1804,7 +1873,8 @@ export default {
         deviceId: '',
         materialShort: '',
         energy: '',
-        remark: ''
+        remark: '',
+        delFlag: '0'
       })
     },
     // 新增待杀菌
@@ -1817,7 +1887,8 @@ export default {
         badMaterial: 0,
         badProduct: 0,
         badSemi: 0,
-        deviceLoss: 0
+        deviceLoss: 0,
+        delFlag: 0
       })
     },
     // 异常下拉
@@ -1830,17 +1901,17 @@ export default {
     userTypesele (row) {
       row.userId = []
     },
-    // 人员选中 和  删除
-    handleSelectionChangeUser (val) {
-      this.multipleSelectionUser = val
+    // 人员删除
+    delUser (row) {
+      this.uerDate.splice(this.uerDate.indexOf(row), 1)
     },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
-    delUser () {
-      this.multipleSelectionUser.forEach((item) => {
-        this.uerDate.splice(this.uerDate.indexOf(item), 1)
-      })
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     }
   },
   computed: {
@@ -1861,7 +1932,7 @@ export default {
     ExcNum: function () {
       let num = 0
       this.ExcDate.forEach((item) => {
-        num += item.expContinue
+        num = num + (item.delFlag === '0' ? item.expContinue : 0)
       })
       // return typeof(this.ExcDate[0].expEndDate)
       return num
@@ -1876,7 +1947,7 @@ export default {
     countOutputNum: function () {
       let num = 0
       this.InDate.forEach((item) => {
-        num += item.output
+        num = num + (item.delFlag === '0' ? item.output : 0)
       })
       return num
     },
@@ -1898,6 +1969,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.rowDel{
+  display: none;
+}
 #tabs{
   h3{
     font-size: 16px;
@@ -1955,6 +2029,9 @@ export default {
 
 </style>
 <style>
+.rowDel{
+  display: none;
+}
 .textarea textarea{
   width: 100%;
   height: 100%!important;

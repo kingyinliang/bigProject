@@ -17,12 +17,14 @@
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys()">查询</el-button>
                   <el-button size="small" @click="visible = true">高级查询</el-button>
-                  <el-button size="small">同步</el-button>
+                  <el-button size="small" @click="sapOrderUpdate">同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>
           </div>
-          <el-row>
+          <el-row
+            v-loading.fullscreen.lock="loading"
+            element-loading-text="正在同步中">
             <el-table
               class="orderTable"
               ref="table1"
@@ -159,6 +161,7 @@ export default {
   name: 'OrderManage',
   data () {
     return {
+      loading: true,
       visible: false,
       form: {
         orderNo: '',
@@ -183,12 +186,26 @@ export default {
       this.form.pageSize = JSON.stringify(this.pageSize)
       this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'POST', this.form).then(({data}) => {
         console.log(data)
+        this.loading = false
         if (data.code === 0) {
           this.sapOrderlist = data.page.list
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
           this.currPage = data.page.currPage
           this.visible = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 同步
+    sapOrderUpdate () {
+      this.loading = true
+      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
+        if (data.code === 0) {
+          this.loading = false
+          this.$message.success('同步成功')
+          this.GetOrderList()
         } else {
           this.$message.error(data.msg)
         }
