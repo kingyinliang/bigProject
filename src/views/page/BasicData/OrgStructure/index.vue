@@ -9,7 +9,7 @@
     <div class="main">
       <el-card>
         <el-row :gutter="20">
-          <div style="margin-bottom: 20px;padding-left: 20px">
+          <div style="margin-bottom: 20px;padding-left: 10px">
             <el-input placeholder="部门名称" v-model="filterText" style="width: 300px">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
