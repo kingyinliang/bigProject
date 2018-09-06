@@ -26,11 +26,13 @@
             <el-table
               class="orderTable"
               ref="table1"
+              border
               header-row-class-name="tableHead"
               :data="sapOrderlist"
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
+                width="122"
                 label="生产订单">
                 <template slot-scope="scope">
                   <el-button type="text">{{scope.row.orderNo}}</el-button>
@@ -38,7 +40,7 @@
               </el-table-column>
               <el-table-column
                 label="订单类型"
-                width="80">
+                width="77">
                 <template slot-scope="scope">
                   {{ scope.row.orderType }}
                 </template>
@@ -46,21 +48,23 @@
               <el-table-column
                 prop="factory"
                 label="工厂"
-                width="80">
+                width="77">
               </el-table-column>
               <el-table-column
                 prop="commitDate"
                 label="基本完成日期"
-                width="100">
+                header-align="center"
+                width="105">
               </el-table-column>
               <el-table-column
                 prop="startDate"
                 label="基本开始日期"
-                width="100">
+                header-align="center"
+                width="105">
               </el-table-column>
               <el-table-column
                 label="物料"
-                width="110">
+                :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{ scope.row.materialCode }} {{ scope.row.materialName }}
                 </template>
@@ -68,22 +72,26 @@
               <el-table-column
                 prop="orderNum"
                 label="订单数量"
-                width="100">
+                header-align="center"
+                align="left"
+                width="80">
               </el-table-column>
               <el-table-column
                 prop="orderUnit"
                 label="订单单位"
+                header-align="center"
                 width="80">
               </el-table-column>
               <el-table-column
                 prop="dispatchMan"
                 label="生产调度员"
-                width="100">
+                header-align="center"
+                width="91">
               </el-table-column>
               <el-table-column
                 prop="syncDate"
                 label="同步日期"
-                width="120">
+                width="100">
               </el-table-column>
             </el-table>
           </el-row>
@@ -106,16 +114,16 @@
         :visible.sync="visible">
         <div class="formdata">
           <el-form :model="form" size="small" label-width="110px" class="orderdialog">
-            <el-form-item label="生产订单">
+            <el-form-item label="生产订单：">
               <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
             </el-form-item>
-            <el-form-item label="物料">
+            <el-form-item label="物料：">
               <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
             </el-form-item>
-            <el-form-item label="生产调度员">
+            <el-form-item label="生产调度员：">
               <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
             </el-form-item>
-            <el-form-item label="基本开始日期" class="times">
+            <el-form-item label="基本开始日期：" class="times">
               <el-row>
                 <el-col :span="12">
                   <el-date-picker v-model="form.startDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
@@ -125,7 +133,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item label="基本完成日期" class="times">
+            <el-form-item label="基本完成日期：" class="times">
               <el-row>
                 <el-col :span="12">
                   <el-date-picker v-model="form.commitDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
