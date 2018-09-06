@@ -40,30 +40,30 @@
             </el-table-column>
             <el-table-column
               prop="beanName"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               label="bean名称">
             </el-table-column>
             <el-table-column
               prop="methodName"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               label="方法名称">
             </el-table-column>
             <el-table-column
               prop="params"
               width="80"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               label="参数">
             </el-table-column>
             <el-table-column
               prop="cronExpression"
               width="100"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               label="cron表达式">
             </el-table-column>
             <el-table-column
               prop="remark"
               width="100"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               label="备注">
             </el-table-column>
             <el-table-column
@@ -77,7 +77,7 @@
             </el-table-column>
             <el-table-column
               fixed="right"
-              show-overflow-tooltip='true'
+              :show-overflow-tooltip=true
               width="232"
               label="操作">
               <template slot-scope="scope">

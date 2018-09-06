@@ -30,33 +30,33 @@
         header-align="left"
         align="left"
         width="80"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         label="任务ID">
       </el-table-column>
       <el-table-column
         prop="beanName"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="bean名称">
       </el-table-column>
       <el-table-column
         prop="methodName"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="方法名称">
       </el-table-column>
       <el-table-column
         prop="params"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="参数">
       </el-table-column>
       <el-table-column
         prop="status"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="状态">
@@ -68,7 +68,7 @@
       <el-table-column
         prop="times"
         width="150"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="耗时(单位: 毫秒)">
@@ -76,7 +76,7 @@
       <el-table-column
         prop="createTime"
         width="180"
-        show-overflow-tooltip='true'
+        :show-overflow-tooltip=true
         header-align="left"
         align="left"
         label="执行时间">

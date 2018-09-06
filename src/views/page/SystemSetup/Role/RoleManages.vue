@@ -40,7 +40,7 @@
               <el-table-column
                 prop="roleName"
                 label="角色名称"
-                show-overflow-tooltip='true'
+                :show-overflow-tooltip=true
                 width="">
               </el-table-column>
 <!--               <el-table-column
@@ -61,7 +61,7 @@
               <el-table-column
                 prop="creator"
                 label="创建人"
-                show-overflow-tooltip='true'
+                :show-overflow-tooltip=true
                 width="">
               </el-table-column>
               <el-table-column
@@ -72,7 +72,7 @@
               <el-table-column
                 prop="changer"
                 label="修改人"
-                show-overflow-tooltip='true'
+                :show-overflow-tooltip=true
                 width="">
               </el-table-column>
               <el-table-column

@@ -9,7 +9,7 @@
       <div class="main">
         <el-card>
           <el-row>
-            <el-button @click="addOrUpdateHandle()">新增</el-button>
+            <el-button @click="addOrUpdateHandle()" style="margin-bottom: 22px;">新增</el-button>
           </el-row>
           <el-row>
             <el-table

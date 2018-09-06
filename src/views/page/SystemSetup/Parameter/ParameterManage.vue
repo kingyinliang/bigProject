@@ -31,13 +31,13 @@
                     label="序号">
                   </el-table-column>
                   <el-table-column
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数类型编码">
                     <template slot-scope="scope">{{ scope.row.type }}</template>
                   </el-table-column>
                   <el-table-column
                     prop="name"
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数类型名称">
                   </el-table-column>
                   <!--<el-table-column-->
@@ -70,22 +70,22 @@
                   </el-table-column>
                   <el-table-column
                     prop="type"
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数类型编码">
                   </el-table-column>
                   <el-table-column
                     prop="name"
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数类型名称">
                   </el-table-column>
                   <el-table-column
                     prop="code"
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数编码">
                   </el-table-column>
                   <el-table-column
                     prop="value"
-                    show-overflow-tooltip='true'
+                    :show-overflow-tooltip=true
                     label="参数名称">
                   </el-table-column>
                   <el-table-column
