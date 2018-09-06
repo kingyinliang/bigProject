@@ -47,7 +47,7 @@
         <a href="">帮助</a>
         <a href="">帮助</a>
       </p>
-      <p>Copyright @ 2018 欣和系统研究及运维组飞机稿</p>
+      <p>Copyright @ 2018 欣和系统研究及运维组</p>
     </div>
   </main>
 </template>
