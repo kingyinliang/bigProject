@@ -16,12 +16,14 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys">查询</el-button>
-                  <el-button size="small">同步</el-button>
+                  <el-button size="small" @click="SapuUpdate">同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>
           </div>
-          <el-row>
+          <el-row
+            v-loading.fullscreen.lock="loading"
+            element-loading-text="正在同步中">
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -83,6 +85,7 @@ export default {
   name: 'SuppliesManage',
   data () {
     return {
+      loading: false,
       visible: false,
       form: {
         param: ''
@@ -120,6 +123,18 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs.sapDetail.init(id)
+      })
+    },
+    SapuUpdate () {
+      this.loading = true
+      this.$http(`${BASICDATA_API.SAPUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
+        if (data.code === 0) {
+          this.loading = false
+          this.$message.success('同步成功')
+          this.Getsaplist()
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     // 查询

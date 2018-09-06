@@ -934,8 +934,8 @@
                 label="操作"
                 width="50">
                 <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0'"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1'"></el-button>
+                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact" @click="dellistbomS(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1330,9 +1330,10 @@ export default {
     GetPot () {
       // 成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        type: 'holder_type',
         holder_type: '007',
-        pageSize: '100',
-        currPage: '1'
+        pageSize: 100,
+        currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
           this.finHolder = data.page.list
@@ -1342,9 +1343,10 @@ export default {
       })
       // 半成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        type: 'holder_type',
         holder_type: '006',
-        pageSize: '100',
-        currPage: '1'
+        pageSize: 100,
+        currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
           this.semiHolder = data.page.list
@@ -1787,6 +1789,10 @@ export default {
         attachBatch: ''
       })
     },
+    // 删除半成品
+    dellistbomS (row) {
+      row.delFlag = '1'
+    },
     // 新增物料半成品
     addSapS (form, row) {
       form.push({
@@ -1799,7 +1805,8 @@ export default {
         productUseNum: '',
         changePotDate: '',
         usePotDate: '',
-        isSplit: '1'
+        isSplit: '1',
+        delFlag: 0
       })
     },
     // 新增异常记录
@@ -1856,7 +1863,7 @@ export default {
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
-      if (row.delFlag) {
+      if (row.delFlag === '1') {
         return 'rowDel'
       } else {
         return ''
@@ -1978,6 +1985,9 @@ export default {
 
 </style>
 <style>
+.rowDel{
+  display: none;
+}
 .textarea textarea{
   width: 100%;
   height: 100%!important;
