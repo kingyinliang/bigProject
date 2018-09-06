@@ -42,12 +42,7 @@
       <!--</keep-alive>-->
     <!--</el-card>-->
     <div class="footer">
-      <p>
-        <a href="">帮助</a>
-        <a href="">帮助</a>
-        <a href="">帮助</a>
-      </p>
-      <p>Copyright @ 2018 欣和系统研究及运维组</p>
+      <p>Copyright @ 2018 烟台欣和企业食品有限公司版权所有</p>
     </div>
   </main>
 </template>

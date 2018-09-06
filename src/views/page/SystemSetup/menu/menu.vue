@@ -18,36 +18,40 @@
               style="width: 100%;">
               <el-table-column
                 prop="menuId"
-                header-align="center"
-                align="center"
+                header-align="left"
+                align="left"
                 width="80"
                 label="ID">
               </el-table-column>
               <table-tree-column
                 prop="name"
-                header-align="center"
+                header-align="left"
                 treeKey="menuId"
                 width="150"
+                :show-overflow-tooltip=true
                 label="名称">
               </table-tree-column>
               <el-table-column
                 prop="parentName"
-                header-align="center"
-                align="center"
-                width="120"
+                header-align="left"
+                align="left"
+                width="100"
+                :show-overflow-tooltip=true
                 label="上级菜单">
               </el-table-column>
               <el-table-column
-                header-align="center"
-                align="center"
+                header-align="left"
+                align="left"
+                :show-overflow-tooltip=true
                 label="图标">
                 <template slot-scope="scope">
                 </template>
               </el-table-column>
               <el-table-column
                 prop="type"
-                header-align="center"
-                align="center"
+                header-align="left"
+                align="left"
+                :show-overflow-tooltip=true
                 label="类型">
                 <template slot-scope="scope">
                   <el-tag v-if="scope.row.type === 0" size="small">目录</el-tag>
@@ -57,31 +61,33 @@
               </el-table-column>
               <el-table-column
                 prop="orderNum"
-                header-align="center"
-                align="center"
+                header-align="left"
+                align="left"
+                width="80"
+                :show-overflow-tooltip=true
                 label="排序号">
               </el-table-column>
               <el-table-column
                 prop="url"
-                header-align="center"
-                align="center"
-                width="150"
-                :show-overflow-tooltip="true"
+                header-align="left"
+                align="left"
+                width="180"
+                :show-overflow-tooltip=true
                 label="菜单URL">
               </el-table-column>
               <el-table-column
                 prop="perms"
-                header-align="center"
-                align="center"
-                width="150"
-                :show-overflow-tooltip="true"
+                header-align="left"
+                align="left"
+                width="180"
+                :show-overflow-tooltip=true
                 label="授权标识">
               </el-table-column>
               <el-table-column
                 fixed="right"
-                header-align="center"
-                align="center"
-                width="150"
+                header-align="left"
+                align="left"
+                width="88"
                 label="操作">
                 <template slot-scope="scope">
                   <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>

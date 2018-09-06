@@ -235,4 +235,5 @@ export default {
       cursor: pointer;
     }
   }
+  .el-dialog__body { padding: 10px 20px; }
 </style>
