@@ -26,17 +26,20 @@
               ref="table1"
               header-row-class-name="tableHead"
               :data="saplist"
+              border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
+                :show-overflow-tooltip="true"
                 label="物料">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="showdetail(scope.row.materialId)">{{scope.row.materialCode}} {{scope.row.materialName}}</el-button>
+                  <el-button style="padding: 0px;" type="text" @click="showdetail(scope.row.materialId)">{{scope.row.materialCode}} {{scope.row.materialName}}</el-button>
                 </template>
               </el-table-column>
               <el-table-column
+                :show-overflow-tooltip="true"
                 label="物料类型"
-                width="130">
+                width="180">
                 <template slot-scope="scope">
                   {{ scope.row.materialTypeCode }}
                   {{ scope.row.materialTypeName }}
@@ -45,17 +48,19 @@
               <el-table-column
                 prop="basicUnit"
                 label="基本单位"
-                width="100">
+                  :show-overflow-tooltip="true"
+                width="79">
               </el-table-column>
               <el-table-column
                 prop="productUnit"
                 label="生产单位"
-                width="100">
+                  :show-overflow-tooltip="true"
+                width="79">
               </el-table-column>
               <el-table-column
                 prop="syncDate"
                 label="同步日期"
-                width="120">
+                width="100">
               </el-table-column>
             </el-table>
           </el-row>
