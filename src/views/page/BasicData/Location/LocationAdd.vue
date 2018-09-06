@@ -6,19 +6,19 @@
       class="locationdialog1">
       <div style="width: 400px;margin: auto">
         <el-form :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()">
-          <el-form-item label="车间" prop="deptId">
+          <el-form-item label="车间：" prop="deptId">
             <el-select v-model="formatDate.deptId" placeholder="请选择">
               <el-option label=""  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="物料类型" prop="materialType">
+          <el-form-item label="物料类型：" prop="materialType">
             <el-select v-model="formatDate.materialType" placeholder="请选择">
               <el-option label=""  value=""></el-option>
               <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="物料编码">
+          <el-form-item label="物料编码：">
             <el-select v-model="formatDate.material" filterable placeholder="请选择">
               <el-option
                 v-for="item in SerchSapList"
@@ -28,16 +28,16 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="库位" prop="storageLocation">
+          <el-form-item label="库位：" prop="storageLocation">
             <el-input v-model="formatDate.storageLocation" placeholder="手工录入"></el-input>
           </el-form-item>
-          <el-form-item label="是否样品库">
+          <el-form-item label="是否样品库：">
             <el-select v-model="formatDate.isSample" placeholder="请选择">
               <el-option label="是"  value="1"></el-option>
               <el-option label="否"  value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="发料/入库" prop="orderNo6">
+          <el-form-item label="发料/入库：" prop="orderNo6">
             <el-select v-model="formatDate.materialOperation" placeholder="请选择">
               <el-option label="发料"  value="发料"></el-option>
               <el-option label="入库"  value="入库"></el-option>

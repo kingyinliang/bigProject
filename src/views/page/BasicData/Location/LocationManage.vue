@@ -34,7 +34,7 @@
             style="width: 100%;margin-bottom: 20px">
             <el-table-column
               type="selection"
-              width="55">
+              width="34">
             </el-table-column>
             <el-table-column
               type="index"
@@ -43,28 +43,35 @@
             </el-table-column>
             <el-table-column
               prop="deptName"
+              width="120"
+              :show-overflow-tooltip="true"
               label="车间">
             </el-table-column>
             <el-table-column
               prop="materialType"
+              :show-overflow-tooltip="true"
               label="物料类型">
             </el-table-column>
             <el-table-column
+              :show-overflow-tooltip="true"
               label="物料编码">
               <template slot-scope="scope">
                 {{ scope.row.materialCode + ' ' + scope.row.materialName}}
               </template>
             </el-table-column>
             <el-table-column
+              width="80"
               prop="storageLocation"
               label="库位">
             </el-table-column>
             <el-table-column
               prop="isSample"
+              width="91"
               label="是否样品库">
             </el-table-column>
             <el-table-column
               prop="materialOperation"
+              width="84"
               label="发料/入库">
             </el-table-column>
           </el-table>
@@ -87,19 +94,19 @@
       :close-on-click-modal="false"
       :visible.sync="visible1">
       <el-form :model="form" size="small" label-width="110px" class="locationdialog">
-        <el-form-item label="车间" prop="orderNo1">
+        <el-form-item label="车间：" prop="orderNo1">
           <el-select v-model="form.deptName" placeholder="请选择">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料类型" prop="orderNo2">
+        <el-form-item label="物料类型：" prop="orderNo2">
           <el-select v-model="form.materialType" placeholder="请选择">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="库位">
+        <el-form-item label="库位：">
           <el-input v-model="form.storageLocation" placeholder="手工录入"></el-input>
         </el-form-item>
       </el-form>
