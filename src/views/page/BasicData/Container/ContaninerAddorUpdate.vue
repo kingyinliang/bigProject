@@ -4,29 +4,29 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-        <el-form-item label="容器类型">
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px">
+        <el-form-item label="容器类型：">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="容器号">
+        <el-form-item label="容器号：">
           <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="容器描述">
+        <el-form-item label="容器描述：">
           <el-input v-model="dataForm.holderName" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="容器量">
+        <el-form-item label="容器量：">
           <el-input type="number" v-model="dataForm.holderHold" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="批数">
+        <el-form-item label="批数：">
           <el-input type="number" v-model="dataForm.holderPatch" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="物理区域">
+        <el-form-item label="物理区域：">
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="归属车间">
+        <el-form-item label="归属车间：">
           <el-select v-model="dataForm.deptId" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
