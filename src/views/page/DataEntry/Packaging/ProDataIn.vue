@@ -875,6 +875,7 @@
               ref="table1"
               header-row-class-name="tableHead"
               :data="listbomS"
+              :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px"
@@ -1591,9 +1592,17 @@ export default {
       this.listbomS.forEach((item) => {
         item.status = 'saved'
       })
-      this.$http(`${PACKAGING_API.PKGSPAUPDATE_API}`, 'POST', [this.listbomP, this.listbomS]).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('修改物料领用成功')
+          this.$message.success('修改物料领用包材成功')
+          this.GetpkgSap()
+        } else {
+          this.$message.error('物料领用' + data.msg)
+        }
+      })
+      this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('修改物料领用半成品成功')
           this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
@@ -1700,13 +1709,16 @@ export default {
         this.selctId2.push(item)
       })
     },
+    // 临时工添加
     addDayLaborer (row) {
       row.push('')
     },
+    // 临时工确定
     close (row) {
       row.userId = this.selctId2
       this.visible1 = false
     },
+    // 临时工删除
     delselctId2 (item) {
       this.selctId2.splice(this.selctId2.indexOf(item), 1)
     },
@@ -1841,6 +1853,14 @@ export default {
       this.multipleSelectionUser.forEach((item) => {
         this.uerDate.splice(this.uerDate.indexOf(item), 1)
       })
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag) {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     }
   },
   computed: {
@@ -1898,6 +1918,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.rowDel{
+  display: none;
+}
 #tabs{
   h3{
     font-size: 16px;
