@@ -5,10 +5,10 @@
     :visible.sync="visible">
     <div>
       <el-form :model="form" size="small" label-width="110px" class="devicedialog" @keyup.enter.native="submitForm()">
-        <el-form-item label="设备描述">
+        <el-form-item label="设备描述：">
           <el-input v-model="form.deviceName" placeholder="手工录入"></el-input>
         </el-form-item>
-        <el-form-item label="设备编号">
+        <el-form-item label="设备编号：">
           <el-input v-model="form.deviceNo" placeholder="手工录入"></el-input>
         </el-form-item>
       </el-form>

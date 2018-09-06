@@ -39,6 +39,7 @@
                 <el-button @click="addOrupdate(deptId)" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
                 <el-table
                   ref="table1"
+                  border
                   header-row-class-name="tableHead"
                   :data="deviceList"
                   @selection-change="handleSelectionChange"
@@ -46,26 +47,28 @@
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                   </el-table-column>
                   <el-table-column
                     type="index"
                     label="序号"
-                    width="50">
+                    width="55">
                   </el-table-column>
                   <el-table-column
-                    prop="deviceNo"
+                    prop="deviceNo"                    
+                    width="120"
+                    :show-overflow-tooltip="true"
                     label="设备编号">
                   </el-table-column>
                   <el-table-column
                     prop="deviceName"
                     label="设备描述"
-                    width="100">
+                    :show-overflow-tooltip="true">
                   </el-table-column>
                   <el-table-column
                     fixed="right"
                     label="操作"
-                    width="100">
+                    width="65">
                     <template slot-scope="scope">
                       <el-button type="text" @click="addOrupdate(deptId, scope.row)">编辑</el-button>
                     </template>
