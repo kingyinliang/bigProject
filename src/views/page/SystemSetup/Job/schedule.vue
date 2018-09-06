@@ -68,7 +68,9 @@
             </el-table-column>
             <el-table-column
               prop="status"
-              width="64"
+              width="63"
+              header-align="left"
+              align="center"
               label="状态">
               <template slot-scope="scope">
                 <el-tag v-if="scope.row.status === 0" size="small">正常</el-tag>

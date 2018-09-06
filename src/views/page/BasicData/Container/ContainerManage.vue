@@ -11,20 +11,20 @@
           <h3>容器管理列表</h3>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms1" @keyup.enter.native="qurery()">
-                <el-form-item label="容器类型">
+              <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()">
+                <el-form-item label="容器类型：">
                   <el-select v-model="form.holderType" placeholder="请选择">
                     <el-option label=""  value=""></el-option>
                     <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="容器号">
+                <el-form-item label="容器号：">
                   <el-input v-model="form.holderNo" placeholder="手动输入"></el-input>
                 </el-form-item>
-                <el-form-item label="容器量">
+                <el-form-item label="容器量：">
                   <el-input v-model="form.holderHold" placeholder="手动输入"></el-input>
                 </el-form-item>
-                <el-form-item label="归属车间">
+                <el-form-item label="归属车间：">
                   <el-select v-model="form.deptId" placeholder="请选择">
                     <el-option label=""  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
@@ -49,53 +49,62 @@
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 type="selection"
-                width="55">
+                width="34">
               </el-table-column>
               <el-table-column
                 type="index"
                 label="序号"
-                width="50">
+                width="55">
               </el-table-column>
               <el-table-column
                 prop="typeName"
                 label="容器类型"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="100">
               </el-table-column>
               <el-table-column
                 prop="holderNo"
                 label="容器号"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="80">
               </el-table-column>
               <el-table-column
                 prop="holderName"
+                :show-overflow-tooltip="true"
                 label="容器描述">
               </el-table-column>
               <el-table-column
                 prop="holderHold"
                 label="容器量"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="80">
               </el-table-column>
               <el-table-column
                 prop="holderPatch"
                 label="批数"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="80">
               </el-table-column>
               <el-table-column
                 prop="holderArea"
                 label="物理区域"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="deptName"
                 label="归属车间"
-                width="95">
+                :show-overflow-tooltip="true"
+                width="92">
               </el-table-column>
               <el-table-column
                 fixed="right"
                 label="操作"
-                width="100">
+                header-align="left"
+                align="left"
+                width="65">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="addOrupdate(scope.row.holderId)">编辑</el-button>
+                  <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.holderId)">编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
