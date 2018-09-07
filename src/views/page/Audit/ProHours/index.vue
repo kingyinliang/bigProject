@@ -40,11 +40,9 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width: 300px">
+          <el-col style="width: 360px">
             <el-row style="margin-bottom: 13px">
               <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-            </el-row>
-            <el-row>
               <el-button type="primary" size="small" @click="subAutio">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios">审核不通过</el-button>
             </el-row>
@@ -65,16 +63,18 @@
           <el-table-column
             type="selection"
             :selectable='checkboxT'
-            width="55">
+            width="34">
           </el-table-column>
           <el-table-column
             prop="orderNo"
             label="生产订单号"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="120">
           </el-table-column>
           <el-table-column
             label="生产物料"
-            width="180">
+            :show-overflow-tooltip="true"
+            width="360">
             <template slot-scope="scope">
               {{ scope.row.materialCode + ' ' + scope.row.materialName}}
             </template>
@@ -82,7 +82,7 @@
           <el-table-column
             prop="planOutput"
             label="计划生产数量"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="outputUnit"
@@ -92,7 +92,7 @@
           <el-table-column
             prop="yield"
             label="实际生产数量"
-            width="80">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="outputUnit"
@@ -102,7 +102,7 @@
           <el-table-column
             prop="confActivity1"
             label="准备工时"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="confActiUnit1"
@@ -112,7 +112,7 @@
           <el-table-column
             prop="confActivity2"
             label="机器工时"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="confActiUnit2"
@@ -122,7 +122,7 @@
           <el-table-column
             prop="confActivity3"
             label="人工工时"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="confActiUnit3"
@@ -132,11 +132,12 @@
           <el-table-column
             prop="interfaceReturn"
             label="接口回写"
-            width="80">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             label="执行开始的确认日期"
-            width="120">
+            width="148">
             <template slot-scope="scope">
               <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.execStartDate" v-if="scope.row.redact" size="small"></el-date-picker>
               <span v-else>{{ scope.row.execStartDate }}</span>
@@ -144,7 +145,7 @@
           </el-table-column>
           <el-table-column
             label="设置完成的确认日期"
-            width="120">
+            width="148">
             <template slot-scope="scope">
               <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.setupFinDate" v-if="scope.row.redact" size="small"></el-date-picker>
               <span v-else>{{ scope.row.setupFinDate }}</span>
@@ -152,7 +153,8 @@
           </el-table-column>
           <el-table-column
             label="操作活动编号"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="105">
             <template slot-scope="scope">
               <el-input v-model="scope.row.operation" v-if="scope.row.redact" placeholder="手工录入" size="small"></el-input>
               <span v-else>{{ scope.row.operation }}</span>
@@ -160,7 +162,8 @@
           </el-table-column>
           <el-table-column
             label="部分/最后确认"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="112">
             <template slot-scope="scope">
               <el-input v-model="scope.row.finConf" v-if="scope.row.redact" placeholder="手工录入" size="small"></el-input>
               <span v-else>{{ scope.row.finConf }}</span>
@@ -169,22 +172,22 @@
           <el-table-column
             prop="memo"
             label="审核意见"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="verifyMan"
-            label="审核人"
-            width="95">
+            label="审核人">
           </el-table-column>
           <el-table-column
             prop="verifyDate"
             label="审核时间"
-            width="95">
+            width="160">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="95">
+            width="65">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'chekced'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
