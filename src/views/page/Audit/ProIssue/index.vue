@@ -75,6 +75,7 @@
           </el-table-column>
           <el-table-column
             prop="orderNo"
+            label="生产订单号"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
