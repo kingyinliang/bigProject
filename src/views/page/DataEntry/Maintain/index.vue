@@ -10,34 +10,34 @@
     <el-card>
       <el-row type="flex">
         <el-col>
-        <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="55px" class="maintain">
-          <el-form-item label="工厂">
+        <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+          <el-form-item label="工厂：">
             <el-select v-model="plantList.factory" placeholder="请选择">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="车间">
+          <el-form-item label="车间：">
             <el-select v-model="plantList.workshop" placeholder="请选择">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="产线">
+          <el-form-item label="产线：">
             <el-select v-model="plantList.productline" placeholder="产线">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单号">
+          <el-form-item label="订单号：">
             <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
           </el-form-item>
-          <el-form-item label="日期">
+          <el-form-item label="日期：">
             <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
         </el-form>
         </el-col>
-        <el-col style="width: 320px">
+        <el-col style="width: 260px">
           <el-row>
             <el-button size="small" @click="GetMaintainList">查询</el-button>
             <el-button type="primary" size="small" @click="save()">保存</el-button>
@@ -58,31 +58,35 @@
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
           type="selection"
-          width="40">
+          width="34">
         </el-table-column>
         <el-table-column
           type="index"
-          width="30">
+          width="55">
         </el-table-column>
         <el-table-column
           prop="orderNo"
           label="生产订单号"
+          :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
           label="品项"
-          width="280">
+          :show-overflow-tooltip="true"
+          width="360">
           <template slot-scope="scope">
             {{scope.row.materialCode + ' ' + scope.row.materialName}}
           </template>
         </el-table-column>
         <el-table-column
           prop="batch"
-          label="生产批次">
+          label="生产批次"
+          width="78">
         </el-table-column>
         <el-table-column
           prop="aiShelves"
-          label="自动上架数-立体库">
+          label="自动上架数-立体库"
+           width="140">
         </el-table-column>
         <el-table-column
           prop="aiShelvesUnit"
@@ -91,31 +95,36 @@
         </el-table-column>
         <el-table-column
           label="车间确认人"
-          width="80">
+          :show-overflow-tooltip="true"
+          width="92">
           <template slot-scope="scope">{{ scope.row.workShopMan }}</template>
         </el-table-column>
         <el-table-column
-          label="机维组确认整板数">
+          label="机维组确认整板数"
+          width="135">
           <template slot-scope="scope">
             <el-input v-model="scope.row.jwzZb" v-if="scope.row.redact"></el-input>
             <span v-if="!scope.row.redact">{{ scope.row.jwzZb }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="机维组确认半板数">
+          label="机维组确认半板数"
+          width="135">
           <template slot-scope="scope">
             <el-input v-model="scope.row.jwzBb" v-if="scope.row.redact"></el-input>
             <span v-if="!scope.row.redact">{{ scope.row.jwzBb }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="机维组确认数">
+          label="机维组确认数"
+          width="107">
           <template slot-scope="scope">
             <span>{{ scope.row.jwzAcount = scope.row.jwzBb*1 + scope.row.jwzZb*1 }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="差异数量">
+          label="差异数量"
+          width="78">
           <template slot-scope="scope">
             <span>{{ scope.row.different = scope.row.jwzAcount*1 - scope.row.aiShelves*1}}</span>
           </template>
@@ -128,7 +137,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="原差异数量">
+          label="原差异数量"
+          width="92">
           <template slot-scope="scope">
             <el-input v-model="scope.row.orgnDifferent" v-if="scope.row.redact"></el-input>
             <span v-else>{{ scope.row.orgnDifferent }}</span>
@@ -136,6 +146,8 @@
         </el-table-column>
         <el-table-column
           label="差异说明"
+          :show-overflow-tooltip="true"
+          width="78"
           show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input v-model="scope.row.differentInfo" v-if="scope.row.redact"></el-input>
@@ -143,11 +155,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="机维组确认人">
+          label="机维组确认人"
+          width="107">
         </el-table-column>
         <el-table-column
           label="备注"
-          width="50">
+          :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{ scope.row.remark }}</span>
           </template>
@@ -156,7 +169,7 @@
           fixed="right"
           prop="address"
           label="操作"
-          width="100">
+          width="96">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="redact(scope.row)">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             <el-button type="text" size="small" @click="remove(scope.$index,tableData3)">删除</el-button>

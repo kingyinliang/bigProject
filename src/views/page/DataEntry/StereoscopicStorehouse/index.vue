@@ -72,6 +72,7 @@
         <el-table-column
           prop="name"
           label="品相"
+          :show-overflow-tooltip="true"
           width="360">
           <template slot-scope="scope">
             <span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>
@@ -105,21 +106,25 @@
         <el-table-column
           prop="unit"
           label="单位"
+          :show-overflow-tooltip="true"
           width="50">
         </el-table-column>
         <el-table-column
           prop="workShopMan"
           label="车间确认人"
+          :show-overflow-tooltip="true"
           width="92">
         </el-table-column>
         <el-table-column
           prop="changer"
           label="立体库确认人"
+          :show-overflow-tooltip="true"
           width="105">
         </el-table-column>
         <el-table-column
           prop="memo"
           label="审核意见"
+          :show-overflow-tooltip="true"
           width="78">
         </el-table-column>
         <el-table-column
@@ -129,8 +134,8 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="备注"
-          width="95">
+          :show-overflow-tooltip="true"
+          label="备注">
         </el-table-column>
       </el-table>
       <el-row >
