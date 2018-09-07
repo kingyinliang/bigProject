@@ -10,29 +10,29 @@
     <el-card style="margin: 0">
       <el-row type="flex">
         <el-col>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="55px" class="topforms">
-            <el-form-item label="工厂">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+            <el-form-item label="工厂：">
               <el-select v-model="plantList.factory" placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="车间">
+            <el-form-item label="车间：">
               <el-select v-model="plantList.workshop" placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线">
+            <el-form-item label="产线：">
               <el-select v-model="plantList.productline" placeholder="产线">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="订单号">
+            <el-form-item label="订单号：">
               <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
             </el-form-item>
-            <el-form-item label="日期">
+            <el-form-item label="日期：">
               <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-form>
@@ -62,17 +62,17 @@
         <el-table-column
           type="selection"
           :selectable='checkboxT'
-          width="55">
+          width="34">
         </el-table-column>
         <el-table-column
           label="生产订单号"
-          width="95">
+          width="120">
           <template slot-scope="scope">{{ scope.row.orderNo }}</template>
         </el-table-column>
         <el-table-column
           prop="name"
           label="品相"
-          width="95">
+          width="360">
           <template slot-scope="scope">
             <span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>
           </template>
@@ -80,52 +80,52 @@
         <el-table-column
           prop="batch"
           label="生产批次"
-          width="95">
+          width="78">
         </el-table-column>
         <el-table-column
           prop="input"
           label="订单入库量"
-          width="95">
+          width="91">
         </el-table-column>
         <el-table-column
           prop="manSolid"
           label="人工码垛数-立体库"
-          width="95">
+          width="140">
         </el-table-column>
         <el-table-column
           prop="aiShelves"
           label="自动上架-立体库"
-          width="95">
+          width="140">
         </el-table-column>
         <el-table-column
           prop="aiSolid"
           label="自动码垛-立体库"
-          width="95">
+          width="140">
         </el-table-column>
         <el-table-column
           prop="unit"
           label="单位"
-          width="95">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="workShopMan"
           label="车间确认人"
-          width="95">
+          width="92">
         </el-table-column>
         <el-table-column
           prop="changer"
           label="立体库确认人"
-          width="95">
+          width="105">
         </el-table-column>
         <el-table-column
           prop="memo"
           label="审核意见"
-          width="95">
+          width="78">
         </el-table-column>
         <el-table-column
           prop="verifyDate"
           label="审核时间"
-          width="95">
+          width="220">
         </el-table-column>
         <el-table-column
           prop="name"

@@ -14,7 +14,7 @@
               <div slot="header" class="clearfix">
                 <div slot="header" class="clearfix">
                   <span style="float: left;line-height: 35px">参数类型</span>
-                  <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('type')"></el-button>
+                  <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('type')"></el-button>
                 </div>
               </div>
               <div>
@@ -53,7 +53,7 @@
             <el-card>
               <div slot="header" class="clearfix">
                 <span style="float: left;line-height: 35px">参数</span>
-                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right" @click="addorupdate('param',false,true)"></el-button>
+                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('param',false,true)"></el-button>
               </div>
               <div>
                 <el-table
