@@ -45,11 +45,9 @@
               </el-row>
             </el-form>
           </el-col>
-          <el-col style="width: 300px">
+          <el-col style="width: 360px">
             <el-row style="margin-bottom: 13px">
               <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-            </el-row>
-            <el-row>
               <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
             </el-row>
@@ -69,20 +67,22 @@
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
             type="selection"
-            width="55">
+            width="34">
           </el-table-column>
           <el-table-column
             type="index"
-            width="50">
+            width="55">
           </el-table-column>
           <el-table-column
             prop="orderNo"
             label="生产订单号"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="120">
           </el-table-column>
           <el-table-column
             label="生产物料"
-            width="200">
+            :show-overflow-tooltip="true"
+            width="360">
             <template slot-scope="scope">
               {{ scope.row.materialName + ' ' + scope.row.materialCode}}
             </template>
@@ -90,7 +90,7 @@
           <el-table-column
             prop="planOutput"
             label="计划生产数量"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="name"
@@ -100,7 +100,7 @@
           <el-table-column
             prop="entryQnt"
             label="入库数量"
-            width="75">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="entryUom"
@@ -109,7 +109,7 @@
           </el-table-column>
           <el-table-column
             label="是否样品"
-            width="95">
+            width="78">
             <template slot-scope="scope">
               {{scope.row.isSample === '0'? '否':'是'}}
             </template>
@@ -117,17 +117,17 @@
           <el-table-column
             prop="batch"
             label="物料批次"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="prodDate"
             label="生产日期"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="name"
             label="入库库位"
-            width="95">
+            width="78">
             <template slot-scope="scope">
               <el-input  v-model="scope.row.name" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
               <span v-if="!scope.row.redact">{{ scope.row.name }}</span>
@@ -135,7 +135,7 @@
           </el-table-column>
           <el-table-column
             label="移动类型"
-            width="95">
+            width="78">
             <template slot-scope="scope">
               <el-input  v-model="scope.row.moveType" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
               <span v-if="!scope.row.redact">{{ scope.row.moveType }}</span>
@@ -144,11 +144,11 @@
           <el-table-column
             prop="stckType"
             label="库存类型"
-            width="95">
+            width="78">
           </el-table-column>
           <el-table-column
             label="交货已完成标识"
-            width="95">
+            width="120">
             <template slot-scope="scope">
               <el-input  v-model="scope.row.noMoreGr" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
               <span v-if="!scope.row.redact">{{ scope.row.noMoreGr }}</span>
@@ -156,7 +156,7 @@
           </el-table-column>
           <el-table-column
             label="货架寿命到期日"
-            width="95">
+            width="120">
             <template slot-scope="scope">
               <el-input  v-model="scope.row.expirydate" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
               <span v-if="!scope.row.redact">{{ scope.row.expirydate }}</span>
@@ -165,26 +165,27 @@
           <el-table-column
             prop="interfaceReturn"
             label="接口回写"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="memo"
             label="审核意见"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="verifyMan"
-            label="审核人"
-            width="95">
+            label="审核人">
           </el-table-column>
           <el-table-column
             prop="verifyDate"
             label="审核时间"
-            width="95">
+            width="160">
           </el-table-column>
           <el-table-column
-            label="备注"
-            width="95">
+            :show-overflow-tooltip="true"
+            label="备注">
             <template slot-scope="scope">
               <el-input  v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
               <span v-if="!scope.row.redact">{{ scope.row.remark }}</span>
@@ -193,7 +194,7 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="60">
+            width="65">
             <template slot-scope="scope">
               <el-button @click="redact(scope.row)" type="text">编辑</el-button>
             </template>

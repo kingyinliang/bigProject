@@ -81,7 +81,7 @@
         <el-table-column
           prop="batch"
           label="生产批次"
-          width="78">
+          width="105">
         </el-table-column>
         <el-table-column
           prop="input"
