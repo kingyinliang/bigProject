@@ -13,8 +13,10 @@
           </el-row>
           <el-row>
             <el-table
+              header-row-class-name="tableHead"  
               :data="dataList"
               border
+              tooltip-effect="dark"
               style="width: 100%;">
               <el-table-column
                 prop="menuId"
@@ -90,8 +92,8 @@
                 width="88"
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
-                  <el-button type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+                  <el-button style="padding: 0;" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
+                  <el-button style="padding: 0;" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
