@@ -24,7 +24,9 @@
             </el-form-item>
           </el-form>
           <el-table
+            header-row-class-name="tableHead"
             :data="dataList"
+            tooltip-effect="dark"
             border
             v-loading="dataListLoading"
             @selection-change="selectionChangeHandle"
@@ -83,11 +85,11 @@
               width="232"
               label="操作">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>
-                <el-button type="text" size="small" @click="deleteHandle(scope.row.jobId)">删除</el-button>
-                <el-button type="text" size="small" @click="pauseHandle(scope.row.jobId)">暂停</el-button>
-                <el-button type="text" size="small" @click="resumeHandle(scope.row.jobId)">恢复</el-button>
-                <el-button type="text" size="small" @click="runHandle(scope.row.jobId)">立即执行</el-button>
+                <el-button style="padding: 1px 0;" type="text" size="small" @click="addOrUpdateHandle(scope.row.jobId)">修改</el-button>
+                <el-button style="padding: 1px 0;" type="text" size="small" @click="deleteHandle(scope.row.jobId)">删除</el-button>
+                <el-button style="padding: 1px 0;" type="text" size="small" @click="pauseHandle(scope.row.jobId)">暂停</el-button>
+                <el-button style="padding: 1px 0;" type="text" size="small" @click="resumeHandle(scope.row.jobId)">恢复</el-button>
+                <el-button style="padding: 1px 0;" type="text" size="small" @click="runHandle(scope.row.jobId)">立即执行</el-button>
               </template>
             </el-table-column>
           </el-table>
