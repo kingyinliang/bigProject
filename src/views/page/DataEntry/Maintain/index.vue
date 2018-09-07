@@ -171,8 +171,8 @@
           label="操作"
           width="96">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="redact(scope.row)">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-            <el-button type="text" size="small" @click="remove(scope.$index,tableData3)">删除</el-button>
+            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+            <el-button style="padding: 0;" type="text" size="small" @click="remove(scope.$index,tableData3)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
