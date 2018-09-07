@@ -21,7 +21,7 @@
             </div>
           </el-row>
           <el-row type="flex" :gutter="20">
-            <el-col style="width: 400px">
+            <el-col :span="8">
               <el-card>
                 <div slot="header" class="clearfix">
                   <span>组织架构</span>
@@ -29,7 +29,7 @@
                 <el-tree :data="OrgTree" default-expand-all @node-click="setdetail" :expand-on-click-node="false"></el-tree>
               </el-card>
             </el-col>
-            <el-col>
+            <el-col :span="16">
               <el-card>
                 <div slot="header" class="clearfix">
                   <span>人员</span>
@@ -38,51 +38,66 @@
                   <el-button @click="remove()" style="float: right;margin:0 20px 20px 0">批量删除</el-button>
                   <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0">增加</el-button>
                   <el-table
+                    ref="table1"
                     :data="userArr"
                     @selection-change="handleSelectionChange"
                     header-row-class-name="tableHead"
                     border
-                    style="border-radius: 10px">
+                    tooltip-effect="dark"
+                    style="width: 100%;margin-bottom: 20px">
                     <el-table-column
-                      type="selection">
+                      type="selection"
+                      width="34">
                     </el-table-column>
                     <el-table-column
                       type="index"
-                      :index="1">
+                      :index="1"
+                      width="55">
                     </el-table-column>
                     <el-table-column
                       prop="workNum"
-                      label="人员工号">
+                      label="人员工号"
+                      width="87">
                     </el-table-column>
                     <el-table-column
                       prop="workNumTemp"
-                      label="虚拟工号">
+                      label="虚拟工号"
+                      width="87">
                     </el-table-column>
                     <el-table-column
                       prop="realName"
-                      label="人员姓名">
+                      label="人员姓名"
+                      width="87">
                     </el-table-column>
                     <el-table-column
                       prop="post"
-                      label="职务">
+                      label="职务"
+                      :show-overflow-tooltip="true"
+                      width="150">
                     </el-table-column>
                     <el-table-column
                       prop="email"
-                      label="邮箱">
+                      label="邮箱"
+                      :show-overflow-tooltip="true"
+                      width="250">
                     </el-table-column>
                     <el-table-column
                       prop="mobile"
-                      label="手机号">
+                      label="手机号"
+                      :show-overflow-tooltip="true"
+                      width="112">
                     </el-table-column>
                     <el-table-column
                       prop="created"
-                      label="创建日期">
+                      label="创建日期"
+                      width="160">
                     </el-table-column>
                     <el-table-column
                       label="操作"
-                      width="100">
+                      fixed="right"
+                      width="65">
                       <template slot-scope="scope">
-                        <el-button type="text" @click="addOrupdate(scope.row.userId)">编辑</el-button>
+                        <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.userId)">编辑</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -235,5 +250,5 @@ export default {
 </script>
 
 <style scoped>
-
+.el-button {  }
 </style>

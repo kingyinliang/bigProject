@@ -4,23 +4,23 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="80px">
-        <el-form-item label="人员工号">
+      <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
+        <el-form-item label="人员工号：">
           <el-input v-model="dataForm.workNum" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="虚拟工号">
+        <el-form-item label="虚拟工号：">
           <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="人员姓名" prop="realName">
+        <el-form-item label="人员姓名：" prop="realName">
           <el-input v-model="dataForm.realName" placeholder="手动输入" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="职务">
+        <el-form-item label="职务：">
           <el-input v-model="dataForm.post" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱：">
           <el-input v-model="dataForm.email" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item label="手机号：">
           <el-input v-model="dataForm.mobile" placeholder="手动输入"></el-input>
         </el-form-item>
       </el-form>
