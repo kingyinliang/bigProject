@@ -904,12 +904,12 @@
                 label="领用罐号">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact" size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
                   <el-select v-model="scope.row.potNo" placeholder="请选择" v-else disabled size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -1118,7 +1118,7 @@
       </span>
     </el-dialog>
     <el-dialog
-      width="800px"
+      width="850px"
       title="借调人员"
       :close-on-click-modal="false"
       :visible.sync="visible2">
@@ -1131,8 +1131,13 @@
         </el-col>
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
-            <el-tree :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
+            <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
+            <el-tree ref="userlistTree" :filter-node-method="filterNode" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
           </el-card>
+        </el-col>
+        <el-col style="width: 50px;padding: 70px 5px">
+          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0"></el-button>
         </el-col>
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
@@ -1155,8 +1160,11 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      filterText: '',
       userListTreeProps: {
-        label: 'realName',
+        label: function (data, node) {
+          return data.realName + '（' + data.workNum + '）'
+        },
         children: ''
       },
       selctListTreeProps: {
@@ -1248,6 +1256,11 @@ export default {
       Text: '',
       textId: '',
       multipleSelectionUser: []
+    }
+  },
+  watch: {
+    filterText (val) {
+      this.$refs.userlistTree.filter(val)
     }
   },
   mounted () {
@@ -1785,6 +1798,11 @@ export default {
       })
     },
     // 我是分割线
+    // 搜索人员
+    filterNode (value, data) {
+      if (!value) return true
+      return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
+    },
     // 选择人员
     selectUser (row) {
       this.row = row
