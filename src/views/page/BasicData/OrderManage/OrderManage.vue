@@ -37,7 +37,7 @@
                 width="122"
                 label="生产订单">
                 <template slot-scope="scope">
-                  <el-button type="text" style="color: #606266; padding: 9px 0;">{{scope.row.orderNo}}</el-button>
+                  <el-button type="text" style="color: #606266; padding: 0;">{{scope.row.orderNo}}</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -249,13 +249,6 @@ export default {
     .times{
       input{
         width: 150px!important;
-      }
-    }
-  }
-  .orderTable{
-    table{
-      td{
-        padding: 0!important;
       }
     }
   }
