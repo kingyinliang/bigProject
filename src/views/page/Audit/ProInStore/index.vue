@@ -69,6 +69,7 @@
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
             type="selection"
+            :selectable='checkboxT'
             width="55">
           </el-table-column>
           <el-table-column
@@ -125,12 +126,11 @@
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="入库库位"
             width="95">
             <template slot-scope="scope">
-              <el-input  v-model="scope.row.name" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-              <span v-if="!scope.row.redact">{{ scope.row.name }}</span>
+              <el-input  v-model="scope.row.stgeLoc" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.stgeLoc }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -195,7 +195,7 @@
             label="操作"
             width="60">
             <template slot-scope="scope">
-              <el-button @click="redact(scope.row)" type="text">编辑</el-button>
+              <el-button type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'chekced'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -327,16 +327,38 @@ export default {
         this.multipleSelection.push(item)
       })
     },
+    // 过账日期
+    SetPostgDate (date) {
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    },
+    // 审核通过禁用
+    checkboxT (row) {
+      if (row.status === 'chekced') {
+        return 0
+      } else {
+        return 1
+      }
+    },
     // 编辑
     redact (row) {
       if (!row.redact) {
         row.redact = true
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        this.AuditList.splice(this.AuditList.length, 0, {})
+        this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        row.redact = false
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        let date = new Date()
+        row.postgDate = this.SetPostgDate(date)
+        row.status = ''
+        this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', [row]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            row.redact = false
+            this.AuditList.splice(this.AuditList.length, 0, {})
+            this.AuditList.splice(this.AuditList.length - 1, 1)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     },
     // 审核拒绝
@@ -356,9 +378,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          let date = new Date()
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
+            item.postgDate = this.SetPostgDate(date)
           })
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
@@ -382,9 +406,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          let date = new Date()
           this.multipleSelection.forEach((item) => {
             item.status = 'chekced'
             item.memo = '审核通过'
+            item.postgDate = this.SetPostgDate(date)
           })
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {

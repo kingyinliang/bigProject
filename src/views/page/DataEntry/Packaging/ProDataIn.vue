@@ -214,11 +214,6 @@
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
-                    type="selection"
-                    v-if="isRedact"
-                    width="55">
-                  </el-table-column>
-                  <el-table-column
                   label="白/中/夜班"
                   width="100">
                     <template slot-scope="scope">
@@ -1136,7 +1131,7 @@
         </el-col>
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
-            <el-tree :data="userlist" :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
+            <el-tree :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
           </el-card>
         </el-col>
         <el-col style="width: 250px">

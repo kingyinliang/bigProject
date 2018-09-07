@@ -76,91 +76,95 @@
             width="50">
           </el-table-column>
           <el-table-column
-            prop=""
+            prop="orderNo"
             label="生产订单号"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="生产物料"
             width="95">
+            <template slot-scope="scope">
+              {{`${scope.row.meterialCodeH} ${scope.row.meterialNameH}`}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="planOutput"
             label="计划生产数量"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="outputUnit"
             label="单位"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="组件物料"
             width="95">
+            <template slot-scope="scope">
+              {{`${scope.row.materialCode} ${scope.row.materialName}`}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="productUseNum"
             label="发料组件数量"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="unit"
             label="单位"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="batch"
             label="物料批次"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="potNo"
             label="领用罐号"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="stgeLoc"
             label="出库库位"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="moveType"
             label="移动类型"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="stckType"
             label="库存类型"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="interfaceReturn"
             label="接口回写"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="memo"
             label="审核意见"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="verifyMan"
             label="审核人"
             width="95">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="verifyDate"
             label="审核时间"
             width="95">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="190">
+            width="50">
             <template slot-scope="scope">
-              <el-button @click="remove(scope.$index,tableData3)" type="primary">编辑</el-button>
+              <el-button type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'chekced'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -292,6 +296,40 @@ export default {
         this.multipleSelection.push(item)
       })
     },
+    // 过账日期
+    SetPostgDate (date) {
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    },
+    // 审核通过禁用
+    checkboxT (row) {
+      if (row.status === 'chekced') {
+        return 0
+      } else {
+        return 1
+      }
+    },
+    // 编辑
+    redact (row) {
+      if (!row.redact) {
+        row.redact = true
+        this.AuditList.splice(this.AuditList.length, 0, {})
+        this.AuditList.splice(this.AuditList.length - 1, 1)
+      } else {
+        let date = new Date()
+        row.postgDate = this.SetPostgDate(date)
+        row.status = ''
+        this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            row.redact = false
+            this.AuditList.splice(this.AuditList.length, 0, {})
+            this.AuditList.splice(this.AuditList.length - 1, 1)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
@@ -309,9 +347,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          let date = new Date()
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
+            item.postgDate = this.SetPostgDate(date)
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
@@ -335,9 +375,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          let date = new Date()
           this.multipleSelection.forEach((item) => {
             item.status = 'chekced'
             item.memo = '审核通过'
+            item.postgDate = this.SetPostgDate(date)
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
