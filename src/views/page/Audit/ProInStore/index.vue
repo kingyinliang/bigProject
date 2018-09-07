@@ -10,36 +10,36 @@
       <el-card>
         <el-row type="flex">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="80px" class="topforms">
-              <el-form-item label="工厂">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+              <el-form-item label="工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间">
-                <el-select v-model="plantList.workshop" placeholder="请选择">
+              <el-form-item label="车间：">
+                <el-select v-model="plantList.workShop" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="产线">
-                <el-select v-model="plantList.productline" placeholder="产线">
+              <el-form-item label="产线：">
+                <el-select v-model="plantList.productLine" placeholder="产线">
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="订单号">
+              <el-form-item label="订单号：">
                 <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
               </el-form-item>
-              <el-form-item label="生产日期">
+              <el-form-item label="生产日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
-              <el-form-item label="过账日期">
+              <el-form-item label="过账日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
               </el-form-item>
               <el-row>
-                <el-form-item label="抬头文本" class="formtextarea">
+                <el-form-item label="抬头文本：" class="formtextarea">
                   <el-input type="textarea" v-model="plantList.headerTxt"></el-input>
                 </el-form-item>
               </el-row>
@@ -240,8 +240,8 @@ export default {
       plantList: {
         orderNo: '',
         factory: '',
-        workshop: '',
-        productline: '',
+        workShop: '',
+        productLine: '',
         prodDate: '',
         pstngDate: '',
         headerTxt: '',
@@ -257,7 +257,7 @@ export default {
     'plantList.factory' (n, o) {
       this.Getdeptbyid(n)
     },
-    'plantList.workshop' (n, o) {
+    'plantList.workShop' (n, o) {
       this.GetParentline(n)
     }
   },
@@ -291,8 +291,8 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.plantList.workshop = ''
-      this.plantList.productline = ''
+      this.plantList.workShop = ''
+      this.plantList.productLine = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
           if (data.code === 0) {

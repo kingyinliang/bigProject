@@ -26,7 +26,7 @@
                 <div slot="header" class="clearfix">
                   <span>组织架构</span>
                 </div>
-                <el-tree :data="OrgTree" default-expand-all @node-click="setdetail" :expand-on-click-node="false"></el-tree>
+                <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" :expand-on-click-node="false"></el-tree>
               </el-card>
             </el-col>
             <el-col>
@@ -35,8 +35,8 @@
                   <span>人员</span>
                 </div>
                 <div>
-                  <el-button @click="remove()" style="float: right;margin:0 20px 20px 0">批量删除</el-button>
-                  <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0">增加</el-button>
+                  <el-button @click="remove()" style="float: right;margin:0 20px 20px 0" size="small">批量删除</el-button>
+                  <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small">增加</el-button>
                   <el-table
                     :data="userArr"
                     @selection-change="handleSelectionChange"
@@ -124,6 +124,7 @@ export default {
       multipleSelection: [],
       totalCount: 1,
       currPage: 1,
+      arrList: [],
       pageSize: 10
     }
   },
@@ -136,6 +137,7 @@ export default {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
           this.OrgTree = data.deptList
+          this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
           this.$message.error(data.msg)
         }

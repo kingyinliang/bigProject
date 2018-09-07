@@ -8,19 +8,19 @@
     </div>
     <div class="main">
       <el-card>
-        <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="40px" ref="" @keyup.enter.native="GetOrderList()">
-          <el-form-item label="工厂">
+        <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()">
+          <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
               <el-option label=""  value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="车间">
+          <el-form-item label="车间：">
             <el-select v-model="plantList.workShop" placeholder="请选择" @change="setworkShopname">
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="时间">
+          <el-form-item label="时间：">
             <el-date-picker type="date" placeholder="选择" v-model="plantList.productDate" value-format="yyyyMMdd"></el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -36,23 +36,23 @@
               <div class="clearfix item">
                 <img :src="'http://10.8.4.153:50080' + item.img" alt="">
                 <div class="itemForm">
-                  <el-form :model="item" size="small" label-position="right" label-width="68px">
-                    <el-form-item label="产线">
+                  <el-form :model="item" size="small" label-position="right" label-width="85px">
+                    <el-form-item label="产线：">
                      <p>{{item.productLineName}}</p>
                     </el-form-item>
-                    <el-form-item label="订单号">
+                    <el-form-item label="订单号：">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
                         <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="品项">
+                    <el-form-item label="品项：">
                       <p>{{item.materialCode + ' ' + item.materialName}}</p>
                     </el-form-item>
-                    <el-form-item label="计划产量">
+                    <el-form-item label="计划产量：">
                       <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                    <el-form-item label="实时产量">
+                    <el-form-item label="实时产量：">
                       <p>{{item.realOutput? item.realOutput : '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
                   </el-form>

@@ -212,8 +212,7 @@
                   :row-class-name="RowDelFlag"
                   border
                   tooltip-effect="dark"
-                  style="width: 100%;margin-bottom: 20px"
-                  @selection-change="handleSelectionChangeUser">
+                  style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="selection"
                     v-if="isRedact"
@@ -337,8 +336,7 @@
               :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px"
-              @selection-change="handleSelectionChange">
+              style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 label="异常情况（下拉选择）"
                 width="120">
@@ -469,7 +467,6 @@
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
-                @selection-change="handleSelectionChange"
                 v-if="order.properties !== '二合一&礼盒产线'">
                 <el-table-column
                   label="白/中/夜班"
@@ -637,7 +634,6 @@
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
-                @selection-change="handleSelectionChange"
                 v-if="order.properties === '二合一&礼盒产线'">
                 <el-table-column
                   type="selection"
@@ -841,8 +837,7 @@
               :data="listbomP"
               border
               tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px"
-              @selection-change="handleSelectionChange">
+              style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 label="物料（包材）">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
@@ -900,8 +895,7 @@
               :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px"
-              @selection-change="handleSelectionChange">
+              style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 label="物料（半成品）">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
@@ -980,8 +974,7 @@
               :row-class-name="RowDelFlag"
               border
               tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px"
-              @selection-change="handleSelectionChange">
+              style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 label="白/中/夜班">
                 <template slot-scope="scope">
@@ -1101,7 +1094,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取消</el-button>
+        <el-button @click="visible1 = false">取消</el-button>
         <el-button type="primary" @click="updatauser(row)">确定</el-button>
       </span>
     </el-dialog>
@@ -1129,6 +1122,34 @@
         <el-button type="primary" @click="close(row)">确定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      width="800px"
+      title="借调人员"
+      :close-on-click-modal="false"
+      :visible.sync="visible2">
+      <el-row>
+        <el-col style="width: 250px">
+          <el-card style="height: 303px;overflow-y: scroll">
+            <h3 style="font-size: 16px;color: black;margin-bottom: 10px">组织架构</h3>
+            <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" ref="tree2" :expand-on-click-node="false"></el-tree>
+          </el-card>
+        </el-col>
+        <el-col style="width: 250px">
+          <el-card style="height: 303px;overflow-y: scroll">
+            <el-tree :data="userlist" :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
+          </el-card>
+        </el-col>
+        <el-col style="width: 250px">
+          <el-card style="height: 303px;overflow-y: scroll">
+            <el-tree :data="selctId" :props="selctListTreeProps"  :expand-on-click-node="false"></el-tree>
+          </el-card>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible2 = false">取消</el-button>
+        <el-button type="primary" @click="updatauser(row)">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -1139,12 +1160,23 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      userListTreeProps: {
+        label: 'realName',
+        children: ''
+      },
+      selctListTreeProps: {
+        label: 'realName',
+        children: ''
+      },
+      OrgTree: [],
+      arrList: [],
       filterMethod (query, item) {
         return item.screncon.indexOf(query) > -1
       },
       isRedact: false,
       visible: false,
       visible1: false,
+      visible2: false,
       form: {
         shiftChange: 'true',
         connect: 'yes'
@@ -1235,8 +1267,23 @@ export default {
     this.GetstoppageType()
     this.GetTeam()
     this.GetPot()
+    this.getTree()
   },
   methods: {
+    // 获取组织结构树
+    getTree () {
+      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
+        if (data.code === 0) {
+          this.OrgTree = data.deptList
+          this.arrList = [this.OrgTree[0].children[0].deptId]
+          // if (type) {
+          //   this.setdetail(this.OrgTree[0].children[0])
+          // }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取表头
     GetOrderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -1727,7 +1774,14 @@ export default {
     },
     // 物料提交
     subSap () {
-      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('物料提交成功')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('物料提交成功')
         } else {
@@ -1740,7 +1794,8 @@ export default {
     selectUser (row) {
       this.row = row
       if (row.userType === '借调') {
-        this.GetUserforteam()
+        // this.GetUserforteam()
+        this.visible2 = true
       } else if (row.userType === '正式') {
         if (row.deptId) {
           this.GetUserforteam(row.deptId)
@@ -1750,6 +1805,21 @@ export default {
       } else {
         this.$message.error('请选择人员属性')
       }
+    },
+    // 根据组织架构查人
+    setdetail (data) {
+      this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
+        deptId: data.deptId,
+        param: '',
+        currPage: '1',
+        pageSize: '1000'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.userlist = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 选择输入临时工
     dayLaborer (row) {

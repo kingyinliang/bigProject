@@ -55,7 +55,7 @@
                     width="55">
                   </el-table-column>
                   <el-table-column
-                    prop="deviceNo"                    
+                    prop="deviceNo"
                     width="120"
                     :show-overflow-tooltip="true"
                     label="设备编号">

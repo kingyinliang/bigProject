@@ -1,7 +1,7 @@
 // let HOST = 'http://localhost:8080/'
-let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.1.1.96:8080'
-// let HOST = 'http://10.1.1.74:8080'
+let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
 *首页api
@@ -412,13 +412,21 @@ export const PACKAGING_API = {
    */
   PKGTEXTUPDATE_API: HOST + '/pkg/text/update',
   /**
-   * @property {string} PKGSAVEFORM_API 包装车间提交
+   * @property {string} PKGSAVEFORM_API 包装车间提交 报工
    */
   PKGSAVEFORM_API: HOST + '/verify/time/save',
   /**
-   * @property {string} PKGSAVEFORMIN_API 包装车间提交
+   * @property {string} PKGSAVEFORMIN_API 包装车间提交 入库
    */
-  PKGSAVEFORMIN_API: HOST + '/sys/pkgInStorage/updatePkgInSto'
+  PKGSAVEFORMIN_API: HOST + '/sys/pkgInStorage/updatePkgInSto',
+  /**
+   * @property {string} PKGSAVEFORMIN_API 包装车间提交物料 包材
+   */
+  PKGSAVEFORMP_API: HOST + '/verify/material/save/packing',
+  /**
+   * @property {string} PKGSAVEFORMIN_API 包装车间提交物料 半成品
+   */
+  PKGSAVEFORMS_API: HOST + '/verify/material/save/semi'
 }
 /*
 *机维组api
@@ -459,15 +467,23 @@ export const AUDIT_API = {
    */
   AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
   /**
-   * @property {string} AUDITLIST_API 生产入库审核
+   * @property {string} GOAUDIT_API 生产入库审核
    */
   GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
   /**
-   * @property {string} AUDITLIST_API 生产报工列表
+   * @property {string} AUDITHOURSLIST_API 生产报工列表
    */
   AUDITHOURSLIST_API: HOST + '/verify/time/list',
   /**
-   * @property {string} AUDITLIST_API 生产报工列表
+   * @property {string} AUDITHOURSUPDATE_API 生产报工审核
    */
-  AUDITHOURSUPDATE_API: HOST + '/verify/time/update'
+  AUDITHOURSUPDATE_API: HOST + '/verify/time/update',
+  /**
+   * @property {string} AUDITISSUELIST_API 生产发料列表
+   */
+  AUDITISSUELIST_API: HOST + '/verify/material/list',
+  /**
+   * @property {string} AUDITLIST_API 生产发料审核
+   */
+  AUDITISSUEUPDATE_API: HOST + '/verify/time/update'
 }
