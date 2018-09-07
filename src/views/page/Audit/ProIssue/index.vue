@@ -45,11 +45,9 @@
               </el-row>
             </el-form>
           </el-col>
-          <el-col style="width: 300px">
+          <el-col style="width: 360px">
             <el-row style="margin-bottom: 13px">
               <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-            </el-row>
-            <el-row>
               <el-button type="primary" size="small">审核通过</el-button>
               <el-button type="danger" size="small">审核不通过</el-button>
             </el-row>
@@ -69,20 +67,21 @@
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
             type="selection"
-            width="55">
+            width="34">
           </el-table-column>
           <el-table-column
             type="index"
-            width="50">
+            width="55">
           </el-table-column>
           <el-table-column
             prop="orderNo"
-            label="生产订单号"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="120">
           </el-table-column>
           <el-table-column
             label="生产物料"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="360">
             <template slot-scope="scope">
               {{`${scope.row.meterialCodeH} ${scope.row.meterialNameH}`}}
             </template>
@@ -90,16 +89,17 @@
           <el-table-column
             prop="planOutput"
             label="计划生产数量"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="outputUnit"
             label="单位"
-            width="95">
+            width="50">
           </el-table-column>
           <el-table-column
             label="组件物料"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="450">
             <template slot-scope="scope">
               {{`${scope.row.materialCode} ${scope.row.materialName}`}}
             </template>
@@ -107,62 +107,65 @@
           <el-table-column
             prop="productUseNum"
             label="发料组件数量"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="unit"
             label="单位"
-            width="95">
+            width="50">
           </el-table-column>
           <el-table-column
             prop="batch"
             label="物料批次"
-            width="95">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="potNo"
             label="领用罐号"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="295">
           </el-table-column>
           <el-table-column
             prop="stgeLoc"
             label="出库库位"
-            width="95">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="moveType"
             label="移动类型"
-            width="95">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="stckType"
             label="库存类型"
-            width="95">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="interfaceReturn"
             label="接口回写"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="memo"
             label="审核意见"
-            width="95">
+            :show-overflow-tooltip="true"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="verifyMan"
-            label="审核人"
-            width="95">
+            :show-overflow-tooltip="true"
+            label="审核人">
           </el-table-column>
           <el-table-column
             prop="verifyDate"
             label="审核时间"
-            width="95">
+            width="160">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="50">
+            width="65">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'chekced'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
