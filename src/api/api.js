@@ -485,5 +485,5 @@ export const AUDIT_API = {
   /**
    * @property {string} AUDITLIST_API 生产发料审核
    */
-  AUDITISSUEUPDATE_API: HOST + '/verify/time/update'
+  AUDITISSUEUPDATE_API: HOST + '/verify/material/update'
 }

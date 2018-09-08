@@ -260,7 +260,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'chekced') {
+      if (row.status === 'checked') {
         return 0
       } else {
         return 1
@@ -310,7 +310,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.multipleSelection.forEach((item) => {
-            item.status = 'chekced'
+            item.status = 'checked'
             item.memo = '审核通过'
           })
           this.$http(`${LTK_API.LTKAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {

@@ -5,6 +5,7 @@
         <el-breadcrumb-item>数据录入</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>
         <el-breadcrumb-item>数据录入</el-breadcrumb-item>
+        <div style="float: right">{{orderStatus}}</div>
       </el-breadcrumb>
     </div>
     <div class="main">
@@ -41,11 +42,13 @@
           <el-col style="width: 210px">
             <el-row style="float: right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row style="float: right" v-if="isRedact">
-              <el-button type="primary" size="small" @click="SaveForm('已保存')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
+              <el-button type="primary" size="small" @click="SaveForm('saved')" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">保存</el-button>
+              <el-button type="primary" size="small" @click="SaveForm('saved')" v-else disabled>保存</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm()" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">提交</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm()" v-else disabled>提交</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -192,7 +195,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="人员需讨论" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="uerDate.length? uerDate[0].status : ''" placement="top-start">
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
@@ -443,7 +446,7 @@
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="接口没有" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Instatus" placement="top-start">
                 <el-button>生产入库</el-button>
               </el-tooltip>
             </span>
@@ -593,7 +596,7 @@
                   width="120">
                   <template slot-scope="scope">
                     <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiSolid*1*(ratio*1) + scope.row.sample*1) }}</span>
-                    <span v-else>{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiShelves*1*(ratio*1) + scope.row.sample*1) }}</span>
+                    <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiShelves*1*(ratio*1) + scope.row.sample*1) }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -822,7 +825,7 @@
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Sapstatus" placement="top-start">
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
@@ -1136,12 +1139,13 @@
           </el-card>
         </el-col>
         <el-col style="width: 50px;padding: 70px 5px">
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()"></el-button>
         </el-col>
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
-            <el-tree :data="selctId" :props="selctListTreeProps"  :expand-on-click-node="false"></el-tree>
+            <el-input v-model="filterText1" size="small" placeholder="搜索人员"></el-input>
+            <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false"></el-tree>
           </el-card>
         </el-col>
       </el-row>
@@ -1161,6 +1165,7 @@ export default {
   data () {
     return {
       filterText: '',
+      filterText1: '',
       userListTreeProps: {
         label: function (data, node) {
           return data.realName + '（' + data.workNum + '）'
@@ -1168,7 +1173,9 @@ export default {
         children: ''
       },
       selctListTreeProps: {
-        label: 'realName',
+        label: function (data, node) {
+          return data.label
+        },
         children: ''
       },
       OrgTree: [],
@@ -1241,26 +1248,42 @@ export default {
       ExcDate: [],
       materialShort: [],
       InDate: [],
+      Instatus: '',
       InVlist: [],
       basicUnit: '',
       productUnit: '',
-      ratio: 0,
+      ratio: undefined,
       InAudit: [],
       productShift: [],
       SapDateP: [],
       SapDateS: [],
       SapAudit: [],
+      Sapstatus: '',
       finHolder: [],
       semiHolder: [],
       GermsDate: [],
       Text: '',
       textId: '',
-      multipleSelectionUser: []
+      multipleSelectionUser: [],
+      netStatus: {
+        orderStatus: true,
+        readyState: true,
+        userState: true,
+        excState: true,
+        inState: true,
+        sapState1: true,
+        sapState2: true,
+        meState: true,
+        textState: true
+      }
     }
   },
   watch: {
     filterText (val) {
       this.$refs.userlistTree.filter(val)
+    },
+    filterText1 (val) {
+      this.$refs.userlistTree1.filter(val)
     }
   },
   mounted () {
@@ -1306,6 +1329,16 @@ export default {
           this.GetRatio()
           this.GetequipmentType()
           if (this.orderStatus !== '已同步') {
+            if (this.orderStatus === 'checked') {
+              this.Instatus = 'checked'
+              this.Sapstatus = 'checked'
+            } else if (this.orderStatus === 'submit') {
+              this.Instatus = 'submit'
+              this.Sapstatus = 'submit'
+            } else if (this.orderStatus === 'saved') {
+              this.Instatus = 'saved'
+              this.Sapstatus = 'saved'
+            }
             this.Getpkgready()
             this.Getpkguser()
             this.GetpkgExc()
@@ -1501,6 +1534,13 @@ export default {
           this.InDate = data.plist
           this.InVlist = data.vlist
           this.InAudit = data.vrlist
+          if (this.orderStatus === 'noPass') {
+            this.InDate.forEach((item) => {
+              if (item.status === 'noPass') {
+                this.Instatus = 'noPass'
+              }
+            })
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -1517,6 +1557,18 @@ export default {
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
+          if (this.orderStatus === 'noPass') {
+            this.listbomP.forEach((item) => {
+              if (item.status === 'noPass') {
+                this.Sapstatus = 'noPass'
+              }
+            })
+            this.listbomS.forEach((item) => {
+              if (item.status === 'noPass') {
+                this.Sapstatus = 'noPass'
+              }
+            })
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -1557,16 +1609,17 @@ export default {
     // 保存
     SaveForm (str) {
       this.tableheader(str) // 修改表头
-      this.UpdateReady() // 修改准备时间
-      this.UpdateUser() // 修改人员
-      this.UpdateExc() // 修改异常记录
-      this.UpdateIn() // 修改生产入库
-      this.UpdateSap() // 修改物料领用
-      this.UpdateGerms() // 修改待杀菌数量
-      this.UpdateText() // 修改文本
+      this.UpdateReady(str) // 修改准备时间
+      this.UpdateUser(str) // 修改人员
+      this.UpdateExc(str) // 修改异常记录
+      this.UpdateIn(str) // 修改生产入库
+      this.UpdateSap(str) // 修改物料领用
+      this.UpdateGerms(str) // 修改待杀菌数量
+      this.UpdateText(str) // 修改文本
     },
     // 表头处理
     tableheader (str) {
+      this.netStatus.orderStatus = false
       this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
       this.order.countOutputUnit = '瓶'// 生产入库单位
@@ -1576,7 +1629,10 @@ export default {
       this.order.germs = this.GermsNum // 待杀菌数量合计
       this.order.operator = `${this.realName}(${this.userName})`
       this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
+        this.netStatus.orderStatus = true
+        this.getStatus(str)
         if (data.code === 0) {
+          this.GetOrderList()
           this.$message.success('保存表头成功')
         } else {
           this.$message.error('保存表头' + data.msg)
@@ -1587,12 +1643,15 @@ export default {
      * @property 以下为七个修改列表
      */
     // 修改人员
-    UpdateUser () {
+    UpdateUser (str) {
       if (this.uerDate.length > 0) {
+        this.netStatus.userState = false
         this.uerDate.forEach((item) => {
-          item.status = 'saved'
+          item.status = str
         })
         this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
+          this.netStatus.userState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改人员成功')
             console.log(data)
@@ -1604,10 +1663,14 @@ export default {
       }
     },
     // 修改准备时间
-    UpdateReady () {
+    UpdateReady (str) {
+      this.netStatus.readyState = false
       this.readyDate.orderId = this.orderId
+      this.readyDate.status = str
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
+          this.netStatus.readyState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改准备时间成功')
             this.Getpkgready()
@@ -1632,6 +1695,8 @@ export default {
           prepared: this.readyDate.prepared,
           clear: this.readyDate.clear
         }).then(({data}) => {
+          this.netStatus.readyState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改准备时间成功')
             console.log(data)
@@ -1642,12 +1707,15 @@ export default {
       }
     },
     // 修改异常记录
-    UpdateExc () {
+    UpdateExc (str) {
       if (this.ExcDate.length > 0) {
+        this.netStatus.excState = false
         this.ExcDate.forEach((item) => {
           item.orderId = this.orderId
         })
         this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
+          this.netStatus.excState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改异常记录成功')
             this.GetpkgExc()
@@ -1658,12 +1726,16 @@ export default {
       }
     },
     // 修改生产入库
-    UpdateIn () {
+    UpdateIn (str) {
       if (this.InDate.length > 0) {
+        this.netStatus.inState = false
         this.InDate.forEach((item) => {
           item.orderId = this.orderId
+          item.status = str
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
+          this.netStatus.inState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改生产入库成功')
             this.Getpkgin()
@@ -1674,14 +1746,18 @@ export default {
       }
     },
     // 修改物料领用
-    UpdateSap () {
+    UpdateSap (str) {
+      this.netStatus.sapState1 = false
+      this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
-        item.status = 'saved'
+        item.status = str
       })
       this.listbomS.forEach((item) => {
-        item.status = 'saved'
+        item.status = str
       })
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
+        this.netStatus.sapState1 = true
+        this.getStatus(str)
         if (data.code === 0) {
           this.$message.success('修改物料领用包材成功')
           this.GetpkgSap()
@@ -1690,6 +1766,8 @@ export default {
         }
       })
       this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
+        this.netStatus.sapState2 = true
+        this.getStatus(str)
         if (data.code === 0) {
           this.$message.success('修改物料领用半成品成功')
           this.GetpkgSap()
@@ -1699,13 +1777,15 @@ export default {
       })
     },
     // 修改待杀菌数量
-    UpdateGerms () {
+    UpdateGerms (str) {
       if (this.GermsDate.length > 0) {
+        this.netStatus.meState = false
         this.GermsDate.forEach((item) => {
           item.orderId = this.orderId
-          item.status = 'saved'
         })
         this.$http(`${PACKAGING_API.PKGGERMSUPDATE_API}`, 'POST', this.GermsDate).then(({data}) => {
+          this.netStatus.meState = true
+          this.getStatus(str)
           if (data.code === 0) {
             this.$message.success('修改待杀菌数量成功')
             this.GetpkgGerms()
@@ -1716,7 +1796,8 @@ export default {
       }
     },
     // 修改文本
-    UpdateText () {
+    UpdateText (str) {
+      this.netStatus.textState = false
       this.$http(`${PACKAGING_API.PKGTEXTUPDATE_API}`, 'POST', {
         id: this.textId,
         orderId: this.orderId,
@@ -1724,6 +1805,8 @@ export default {
         workShop: this.order.workShop,
         blongProc: this.order.productLine
       }).then(({data}) => {
+        this.netStatus.textState = true
+        this.getStatus(str)
         if (data.code === 0) {
           this.$message.success('修改文本成功')
           this.GetText()
@@ -1731,6 +1814,14 @@ export default {
           this.$message.error('修改文本' + data.msg)
         }
       })
+    },
+    // 判断状态
+    getStatus (str) {
+      if (str === 'submit' && this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
+        this.ProHours()
+        this.submitIn()
+        this.subSap()
+      }
     },
     /**
      * @property 以下为提交
@@ -1743,9 +1834,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.SaveForm('submit')
-        this.ProHours()
-        this.submitIn()
-        this.subSap()
       })
     },
     // 报工提交
@@ -1803,12 +1891,16 @@ export default {
       if (!value) return true
       return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
     },
+    filterNode1 (value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
     // 选择人员
     selectUser (row) {
       this.row = row
       if (row.userType === '借调') {
-        // this.GetUserforteam()
-        this.visible2 = true
+        this.GetUserforteam()
+        // this.SetSelecd()
       } else if (row.userType === '正式') {
         if (row.deptId) {
           this.GetUserforteam(row.deptId)
@@ -1818,6 +1910,17 @@ export default {
       } else {
         this.$message.error('请选择人员属性')
       }
+    },
+    // 往左
+    delSelcted () {},
+    // 往右
+    addSelcted () {
+      console.log(this.$refs.userlistTree.getCheckedNodes())
+      this.$refs.userlistTree.getCheckedNodes().forEach((item, index) => {
+        if (this.selctId.indexOf({label: item.realName + '（' + item.workNum + '）'}) === -1) {
+          this.selctId.push({label: item.realName + '（' + item.workNum + '）'})
+        }
+      })
     },
     // 根据组织架构查人
     setdetail (data) {
@@ -1855,6 +1958,15 @@ export default {
     // 临时工删除
     delselctId2 (item) {
       this.selctId2.splice(this.selctId2.indexOf(item), 1)
+    },
+    // 反写选中人
+    SetSelecd () {
+      this.selctId = []
+      this.row.userId.forEach((item, index) => {
+        this.selctId.push({label: item})
+      })
+      console.log(this.selctId)
+      this.visible2 = true
     },
     // 根据部门id查人
     GetUserforteam (id) {
