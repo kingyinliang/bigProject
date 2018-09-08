@@ -1612,6 +1612,7 @@ export default {
      */
     // 保存
     SaveForm (str) {
+      this.isRedact = false
       this.tableheader(str) // 修改表头
       this.UpdateReady(str) // 修改准备时间
       this.UpdateUser(str) // 修改人员
@@ -1631,7 +1632,10 @@ export default {
       this.order.countMan = this.countMan // 实际作业人数
       this.order.expAllDate = this.ExcNum// 总停线时间
       this.order.germs = this.GermsNum // 待杀菌数量合计
-      this.order.operator = `${this.realName}(${this.userName})`
+      if (str !== 'saved') {
+        this.order.operator = `${this.realName}(${this.userName})`
+        this.order.operDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString()
+      }
       this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
         this.netStatus.orderStatus = true
         this.getStatus(str)
@@ -1685,7 +1689,7 @@ export default {
       } else {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
           id: this.readyDate.id ? this.readyDate.id : '',
-          status: 'saved',
+          status: str,
           isCause: this.readyDate.isCause,
           orderId: this.orderId,
           dayStartDate: this.readyDate.dayStartDate,

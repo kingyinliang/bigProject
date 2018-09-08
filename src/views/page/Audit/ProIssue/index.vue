@@ -218,7 +218,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: new Date(),
+        pstngDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
         headerTxt: '',
         currPage: 1,
         pageSize: 10,

@@ -237,7 +237,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        postgDate: new Date(),
+        postgDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
         currPage: 1,
         pageSize: 10,
         totalCount: 0

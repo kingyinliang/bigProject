@@ -207,6 +207,7 @@ export default {
           this.$message.success('同步成功')
           this.GetOrderList()
         } else {
+          this.loading = false
           this.$message.error(data.msg)
         }
       })

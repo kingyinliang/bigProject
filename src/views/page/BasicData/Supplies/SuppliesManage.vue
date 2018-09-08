@@ -112,7 +112,6 @@ export default {
         pageSize: JSON.stringify(this.pageSize),
         currPage: JSON.stringify(this.currPage)
       }).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.saplist = data.page.list
           this.pageSize = data.page.pageSize
@@ -138,6 +137,7 @@ export default {
           this.$message.success('同步成功')
           this.Getsaplist()
         } else {
+          this.loading = false
           this.$message.error(data.msg)
         }
       })
