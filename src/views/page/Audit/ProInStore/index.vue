@@ -67,6 +67,7 @@
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
             type="selection"
+            :selectable='checkboxT'
             width="34">
           </el-table-column>
           <el-table-column
@@ -93,7 +94,7 @@
             width="105">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="outputUnit"
             label="单位"
             width="50">
           </el-table-column>
@@ -125,12 +126,11 @@
             width="105">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="入库库位"
             width="78">
             <template slot-scope="scope">
-              <el-input  v-model="scope.row.name" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-              <span v-if="!scope.row.redact">{{ scope.row.name }}</span>
+              <el-input  v-model="scope.row.stgeLoc" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.stgeLoc }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -142,9 +142,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="stckType"
             label="库存类型"
             width="78">
+            <template slot-scope="scope">
+              <el-input  v-model="scope.row.stckType" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
+              <span v-if="!scope.row.redact">{{ scope.row.stckType }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             label="交货已完成标识"
@@ -244,7 +247,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: '',
+        pstngDate: new Date(),
         headerTxt: '',
         currPage: 1,
         pageSize: 10,
@@ -328,16 +331,33 @@ export default {
         this.multipleSelection.push(item)
       })
     },
+    // 审核通过禁用
+    checkboxT (row) {
+      if (row.status === 'checked') {
+        return 0
+      } else {
+        return 1
+      }
+    },
     // 编辑
     redact (row) {
       if (!row.redact) {
         row.redact = true
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        this.AuditList.splice(this.AuditList.length, 0, {})
+        this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        row.redact = false
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        row.pstngDate = this.productline.pstngDate
+        row.status = ''
+        this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            row.redact = false
+            this.AuditList.splice(this.AuditList.length, 0, {})
+            this.AuditList.splice(this.AuditList.length - 1, 1)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     },
     // 审核拒绝
@@ -384,7 +404,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.multipleSelection.forEach((item) => {
-            item.status = 'chekced'
+            item.status = 'checked'
             item.memo = '审核通过'
           })
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {

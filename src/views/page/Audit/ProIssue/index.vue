@@ -48,8 +48,8 @@
           <el-col style="width: 360px">
             <el-row style="margin-bottom: 13px">
               <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-              <el-button type="primary" size="small">审核通过</el-button>
-              <el-button type="danger" size="small">审核不通过</el-button>
+              <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
+              <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -68,6 +68,8 @@
           <el-table-column
             type="selection"
             width="34">
+            :selectable='checkboxT'
+            width="55">
           </el-table-column>
           <el-table-column
             type="index"
@@ -216,7 +218,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: '',
+        pstngDate: new Date(),
         headerTxt: '',
         currPage: 1,
         pageSize: 10,
@@ -306,7 +308,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'chekced') {
+      if (row.status === 'checked') {
         return 0
       } else {
         return 1
@@ -319,8 +321,7 @@ export default {
         this.AuditList.splice(this.AuditList.length, 0, {})
         this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        let date = new Date()
-        row.postgDate = this.SetPostgDate(date)
+        row.pstngDate = this.productline.pstngDate
         row.status = ''
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
@@ -351,11 +352,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let date = new Date()
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
-            item.postgDate = this.SetPostgDate(date)
+            item.pstngDate = this.productline.pstngDate
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
@@ -379,11 +379,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let date = new Date()
           this.multipleSelection.forEach((item) => {
-            item.status = 'chekced'
+            item.status = 'checked'
             item.memo = '审核通过'
-            item.postgDate = this.SetPostgDate(date)
+            item.pstngDate = this.productline.pstngDate
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
