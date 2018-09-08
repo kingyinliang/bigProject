@@ -1135,23 +1135,25 @@
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
             <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree" :filter-node-method="filterNode" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false"></el-tree>
+            <el-tree ref="userlistTree" :filter-node-method="filterNode" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
           </el-card>
         </el-col>
         <el-col style="width: 50px;padding: 70px 5px">
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-if="tree2Status"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-else disabled></el-button>
+          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-if="tree1Status"></el-button>
+          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-else disabled></el-button>
         </el-col>
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
             <el-input v-model="filterText1" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false"></el-tree>
+            <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false" @check-change="userTree1"></el-tree>
           </el-card>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible2 = false">取消</el-button>
-        <el-button type="primary" @click="updatauser(row)">确定</el-button>
+        <el-button type="primary" @click="saveduser(row)">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -1265,6 +1267,8 @@ export default {
       Text: '',
       textId: '',
       multipleSelectionUser: [],
+      tree1Status: false,
+      tree2Status: false,
       netStatus: {
         orderStatus: true,
         readyState: true,
@@ -1912,15 +1916,43 @@ export default {
       }
     },
     // 往左
-    delSelcted () {},
+    delSelcted () {
+      this.$refs.userlistTree1.getCheckedNodes().forEach((item, index) => {
+        this.selctId.splice(this.selctId.indexOf(item), 1)
+      })
+      this.tree2Status = false
+    },
     // 往右
     addSelcted () {
-      console.log(this.$refs.userlistTree.getCheckedNodes())
       this.$refs.userlistTree.getCheckedNodes().forEach((item, index) => {
-        if (this.selctId.indexOf({label: item.realName + '（' + item.workNum + '）'}) === -1) {
-          this.selctId.push({label: item.realName + '（' + item.workNum + '）'})
+        let obj = {}
+        obj.label = item.realName + '（' + item.workNum + '）'
+        if (JSON.stringify(this.selctId).indexOf(JSON.stringify(obj)) === -1) {
+          this.selctId.push(obj)
         }
       })
+    },
+    userTree () {
+      if (this.$refs.userlistTree.getCheckedNodes().length > 0) {
+        this.tree1Status = true
+      } else {
+        this.tree1Status = false
+      }
+    },
+    userTree1 () {
+      if (this.$refs.userlistTree1.getCheckedNodes().length > 0) {
+        this.tree2Status = true
+      } else {
+        this.tree2Status = false
+      }
+    },
+    // 借调人员确定
+    saveduser (row) {
+      row.userId = []
+      this.selctId.forEach((item) => {
+        row.userId.push(item.label)
+      })
+      this.visible2 = false
     },
     // 根据组织架构查人
     setdetail (data) {
@@ -1932,6 +1964,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.userlist = data.page.list
+          this.tree1Status = false
         } else {
           this.$message.error(data.msg)
         }
@@ -1962,10 +1995,12 @@ export default {
     // 反写选中人
     SetSelecd () {
       this.selctId = []
+      this.userlist = []
+      this.tree1Status = false
+      this.tree2Status = false
       this.row.userId.forEach((item, index) => {
         this.selctId.push({label: item})
       })
-      console.log(this.selctId)
       this.visible2 = true
     },
     // 根据部门id查人
