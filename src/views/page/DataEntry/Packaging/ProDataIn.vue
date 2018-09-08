@@ -1899,8 +1899,8 @@ export default {
     selectUser (row) {
       this.row = row
       if (row.userType === '借调') {
-        this.GetUserforteam()
-        // this.SetSelecd()
+        // this.GetUserforteam()
+        this.SetSelecd()
       } else if (row.userType === '正式') {
         if (row.deptId) {
           this.GetUserforteam(row.deptId)

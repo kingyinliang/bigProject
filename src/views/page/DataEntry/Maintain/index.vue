@@ -147,8 +147,7 @@
         <el-table-column
           label="差异说明"
           :show-overflow-tooltip="true"
-          width="78"
-          show-overflow-tooltip>
+          width="78">
           <template slot-scope="scope">
             <el-input v-model="scope.row.differentInfo" v-if="scope.row.redact"></el-input>
             <span v-else>{{ scope.row.differentInfo }}</span>

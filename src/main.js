@@ -8,18 +8,16 @@ import VueCookie from 'vue-cookie'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
+import { isAuth } from '@/net/validate'
 import '@/assets/scss/index.scss'
-import VideoPlayer from 'vue-video-player'
-require('video.js/dist/video-js.css')
-require('vue-video-player/src/custom-theme.css')
 
-Vue.use(VideoPlayer)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
 
 // 挂载全局
 Vue.prototype.$http = httpProxy // ajax请求方法
+Vue.prototype.isAuth = isAuth// 权限方法
 // 关闭弹窗清除表单
 Vue.prototype.clearForm = function (form) {
   this[form] = {}

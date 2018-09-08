@@ -9,11 +9,11 @@
       <div class="main">
         <el-card>
           <el-row>
-            <el-button @click="addOrUpdateHandle()" style="margin-bottom: 22px;">新增</el-button>
+            <el-button @click="addOrUpdateHandle()" style="margin-bottom: 22px;" size="small">新增</el-button>
           </el-row>
           <el-row>
             <el-table
-              header-row-class-name="tableHead"  
+              header-row-class-name="tableHead"
               :data="dataList"
               border
               tooltip-effect="dark"
@@ -47,6 +47,7 @@
                 :show-overflow-tooltip=true
                 label="图标">
                 <template slot-scope="scope">
+                  <i class="iconfont" :class="scope.row.icon"></i>
                 </template>
               </el-table-column>
               <el-table-column
@@ -56,9 +57,9 @@
                 :show-overflow-tooltip=true
                 label="类型">
                 <template slot-scope="scope">
-                  <el-tag v-if="scope.row.type === 0" size="small">目录</el-tag>
-                  <el-tag v-else-if="scope.row.type === 1" size="small" type="success">菜单</el-tag>
-                  <el-tag v-else-if="scope.row.type === 2" size="small" type="info">按钮</el-tag>
+                  <el-tag v-if="scope.row.type === '0'" size="small">目录</el-tag>
+                  <el-tag v-else-if="scope.row.type === '1'" size="small" type="success">菜单</el-tag>
+                  <el-tag v-else-if="scope.row.type === '2'" size="small" type="info">按钮</el-tag>
                 </template>
               </el-table-column>
               <el-table-column

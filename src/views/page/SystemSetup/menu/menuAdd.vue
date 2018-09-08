@@ -168,7 +168,7 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http(`${!this.dataForm.id ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'GET', {
+          this.$http(`${!this.dataForm.id ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'POST', {
             'menuId': this.dataForm.id || undefined,
             'type': this.dataForm.type,
             'name': this.dataForm.name,
