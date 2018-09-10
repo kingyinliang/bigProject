@@ -1,7 +1,7 @@
 // let HOST = 'http://localhost:8080/'
-// let HOST = 'http://10.8.4.153:50080/api'
+let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.1.1.96:8080'
-let HOST = 'http://10.1.1.74:8080'
+// let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
 *首页api

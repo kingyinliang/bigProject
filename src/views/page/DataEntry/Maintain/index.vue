@@ -52,8 +52,9 @@
       <el-table
         ref="maintain"
         header-row-class-name="tableHead"
-        :data="MaintainList"
+        :data="noMaintainList"
         border
+        @selection-change="handleSelectionChange"
         tooltip-effect="dark"
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
@@ -212,12 +213,7 @@ export default {
         totalCount: 0
       },
       MaintainList: [],
-      tableData3: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        crew: ''
-      }]
+      noMaintainList: []
     }
   },
   watch: {
@@ -239,7 +235,7 @@ export default {
     GetMaintainList () {
       this.$http(`${MAINTAIN_API.MAINTAINLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
-          this.MaintainList = data.page.list
+          this.noMaintainList = data.page.list
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
@@ -262,13 +258,15 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 获取产线
     GetParentline (id) {
@@ -279,6 +277,13 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      })
+    },
+    // 表格选中
+    handleSelectionChange (val) {
+      this.multipleSelection = []
+      val.forEach((item, index) => {
+        this.multipleSelection.push(item)
       })
     },
     // 编辑
@@ -316,6 +321,7 @@ export default {
     },
     // 提交
     submit () {
+      console.log(this.MaintainList)
       if (this.MaintainList.length > 0) {
         this.$confirm('确认提交, 是否继续?', '提交', {
           confirmButtonText: '确定',

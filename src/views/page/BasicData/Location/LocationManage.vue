@@ -65,9 +65,11 @@
               label="库位">
             </el-table-column>
             <el-table-column
-              prop="isSample"
               width="91"
               label="是否样品库">
+              <template slot-scope="scope">
+                {{scope.row.isSample === '0'? '否':'是'}}
+              </template>
             </el-table-column>
             <el-table-column
               prop="materialOperation"

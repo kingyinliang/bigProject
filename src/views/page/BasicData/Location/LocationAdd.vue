@@ -46,7 +46,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible1 = false">取消</el-button>
+        <el-button @click="visible = false">取消</el-button>
         <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
       </span>
     </el-dialog>
@@ -67,7 +67,7 @@ export default {
         storageLocation: '',
         materialType: '',
         material: '',
-        isSample: '',
+        isSample: '1',
         materialOperation: ''
       },
       dataRule: {

@@ -48,11 +48,10 @@
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left: 30px;">
-                  
                 </el-form-item>
               </el-row>
             </el-form>
-          </el-col>          
+          </el-col>
         </el-row>
       </el-card>
     </div>
@@ -68,9 +67,8 @@
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
             type="selection"
-            width="34">
             :selectable='checkboxT'
-            width="55">
+            width="34">
           </el-table-column>
           <el-table-column
             type="index"

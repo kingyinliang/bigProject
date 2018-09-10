@@ -30,8 +30,7 @@
               <div>
                 <el-form :model="OrgDetail" size="small" label-width="110px">
                   <el-form-item label="部门编码：" >
-                    <span v-if="update">{{OrgDetail.deptCode}}</span>
-                    <el-input v-model="OrgDetail.deptCode" v-else></el-input>
+                    <span>{{OrgDetail.deptCode}}</span>
                   </el-form-item>
                   <el-form-item label="部门名称：" >
                     <span v-if="update">{{OrgDetail.deptName}}</span>

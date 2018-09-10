@@ -5,7 +5,7 @@
         <el-breadcrumb-item>数据录入</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>
         <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-        <div style="float: right">{{orderStatus}}</div>
+        <div style="float: right">{{orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus}}</div>
       </el-breadcrumb>
     </div>
     <div class="main">
@@ -59,7 +59,7 @@
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="readyDate.status" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'已同步'" placement="top-start">
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
@@ -195,7 +195,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="uerDate.length? uerDate[0].status : ''" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="uerDate.length? (uerDate[0].status === 'noPass'? '不通过':uerDate[0].status === 'saved'? '已保存':uerDate[0].status === 'submit' ? '已提交' : uerDate[0].status === 'checked'? '通过':uerDate[0].status) : '已同步'" placement="top-start">
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
@@ -327,7 +327,7 @@
                 <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
-            <el-form :rules="excRoles" label-width="5px">
+            <el-form :rules="excRoles" label-width="5px" ref="excRoles">
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -341,7 +341,6 @@
                 width="220">
                 <template slot-scope="scope">
                   <el-form-item prop="expCode">
-                    <!--<i class="notNull">*</i>-->
                     <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
                       <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
                     </el-select>
@@ -453,7 +452,7 @@
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Instatus" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'已同步'" placement="top-start">
                 <el-button>生产入库</el-button>
               </el-tooltip>
             </span>
@@ -777,7 +776,7 @@
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px">
                 <el-table-column
-                  prop="orderId"
+                  prop="orderNo"
                   label="生产订单号"
                   width="120">
                 </el-table-column>
@@ -832,7 +831,7 @@
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Sapstatus" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'已同步'" placement="top-start">
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
@@ -899,6 +898,7 @@
               :data="listbomS"
               :row-class-name="RowDelFlag"
               border
+              v-if="order.properties !== '二合一&礼盒产线'"
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
@@ -1228,7 +1228,7 @@ export default {
       countOutput: {},
       readyDate: {
         id: '',
-        status: 'saved',
+        status: '',
         orderId: '',
         isCause: '1',
         dayStartDate: '',
@@ -1630,15 +1630,22 @@ export default {
      */
     // 保存
     SaveForm (str) {
-      this.isRedact = false
-      this.tableheader(str) // 修改表头
-      this.UpdateReady(str) // 修改准备时间
-      this.UpdateUser(str) // 修改人员
-      this.UpdateExc(str) // 修改异常记录
-      this.UpdateIn(str) // 修改生产入库
-      this.UpdateSap(str) // 修改物料领用
-      this.UpdateGerms(str) // 修改待杀菌数量
-      this.UpdateText(str) // 修改文本
+      this.$refs.excRoles.validate((valid) => {
+        if (valid) {
+          this.isRedact = false
+          this.tableheader(str) // 修改表头
+          this.UpdateReady(str) // 修改准备时间
+          this.UpdateUser(str) // 修改人员
+          this.UpdateExc(str) // 修改异常记录
+          this.UpdateIn(str) // 修改生产入库
+          this.UpdateSap(str) // 修改物料领用
+          this.UpdateGerms(str) // 修改待杀菌数量
+          this.UpdateText(str) // 修改文本
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     // 表头处理
     tableheader (str) {

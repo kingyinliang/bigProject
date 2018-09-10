@@ -197,7 +197,7 @@
             label="操作"
             width="65">
             <template slot-scope="scope">
-              <el-button style="padding: 0;" @click="redact(scope.row)" type="text" v-if="scope.row.status != 'checked'">编辑</el-button>
+              <el-button style="padding: 0;" @click="redact(scope.row)" type="text" v-if="scope.row.status != 'checked'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
