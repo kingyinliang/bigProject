@@ -3,7 +3,7 @@
   :title="!dataForm.id ? '新增' : '修改'"
   :close-on-click-modal="false"
   :visible.sync="visible">
-  <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+  <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px">
     <el-form-item label="类型" prop="type">
       <el-radio-group v-model="dataForm.type">
         <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index">{{ type }}</el-radio>
@@ -30,7 +30,7 @@
       </el-popover>
       <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择上级菜单" class="menu-list__input"></el-input>
     </el-form-item>
-    <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
+    <el-form-item v-if="dataForm.type === 1 || dataForm.type === 3 || dataForm.type === 0" label="菜单路由" prop="url">
       <el-input v-model="dataForm.url" placeholder="菜单路由"></el-input>
     </el-form-item>
     <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
@@ -90,7 +90,7 @@ export default {
       dataForm: {
         id: 0,
         type: 1,
-        typeList: ['目录', '菜单', '按钮'],
+        typeList: ['目录', '菜单', '按钮', '三级页面'],
         name: '',
         parentId: 0,
         parentName: '',

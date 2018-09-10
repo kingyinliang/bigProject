@@ -60,6 +60,7 @@
                   <el-tag v-if="scope.row.type === '0'" size="small">目录</el-tag>
                   <el-tag v-else-if="scope.row.type === '1'" size="small" type="success">菜单</el-tag>
                   <el-tag v-else-if="scope.row.type === '2'" size="small" type="info">按钮</el-tag>
+                  <el-tag v-else-if="scope.row.type === '3'" size="small" type="success">三级页面</el-tag>
                 </template>
               </el-table-column>
               <el-table-column
@@ -102,7 +103,7 @@
         </el-card>
       </div>
       <!-- 弹窗, 新增 / 修改 -->
-      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate"></add-or-update>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     </div>
 </template>
 
