@@ -128,20 +128,20 @@
             <el-form-item label="基本开始日期：" class="times">
               <el-row>
                 <el-col :span="12">
-                  <el-date-picker v-model="form.startDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                  <el-date-picker v-model="form.startDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
-                <el-col span="12">
-                  <el-date-picker v-model="form.startDateTwo" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                <el-col :span="12">
+                  <el-date-picker v-model="form.startDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
               </el-row>
             </el-form-item>
             <el-form-item label="基本完成日期：" class="times">
               <el-row>
                 <el-col :span="12">
-                  <el-date-picker v-model="form.commitDateOne" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                  <el-date-picker v-model="form.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
                 <el-col span="12">
-                  <el-date-picker v-model="form.commitDateTwo" placeholder="选择日期" value-format="yyyy.MM.dd" style="width: 150px"></el-date-picker>
+                  <el-date-picker v-model="form.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
               </el-row>
             </el-form-item>
@@ -210,6 +210,8 @@ export default {
           this.loading = false
           this.$message.error(data.msg)
         }
+      }).catch(() => {
+        this.loading = false
       })
     },
     // 查询
