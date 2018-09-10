@@ -84,24 +84,24 @@
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
                       <el-input v-model="readyDate.dayChange" v-if="isRedact" placeholder="手工录入"></el-input>
                       <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
                       <el-input v-model="readyDate.dayDinner" v-if="isRedact" placeholder="手工录入"></el-input>
@@ -115,24 +115,24 @@
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
                       <el-input v-model="readyDate.midChange" placeholder="手工录入" v-if="isRedact"></el-input>
                       <el-input v-model="readyDate.midChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
                       <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-if="isRedact"></el-input>
@@ -146,24 +146,24 @@
                   </div>
                   <div>
                     <el-form-item label="工作开始时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="开线时间" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="切换时间" >
                       <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-if="isRedact"></el-input>
                       <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
                     <el-form-item label="工作结束时间">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="停线时间">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
                     <el-form-item label="用餐时间" >
                       <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-if="isRedact"></el-input>
@@ -270,8 +270,8 @@
                   <el-table-column
                     label="开始时间">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.startDate" size="small" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-else disabled></el-date-picker>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -285,8 +285,8 @@
                   <el-table-column
                     label="结束时间">
                     <template slot-scope="scope">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.endDate" size="small" v-else disabled></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-else disabled></el-date-picker>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -919,8 +919,8 @@
               <el-table-column
                 label="过滤日期">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
@@ -933,15 +933,15 @@
               <el-table-column
                 label="换罐时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="用完时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
