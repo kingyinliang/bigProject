@@ -29,6 +29,7 @@ export default {
       roleId: '',
       visible: false,
       dataForm: {
+        roleId: '',
         roleName: '',
         roleCode: ''
       }
@@ -40,6 +41,7 @@ export default {
     init (id) {
       if (id) {
         this.roleId = id.roleId
+        this.dataForm.roleId = id.roleId
         this.dataForm.roleName = id.roleName
         this.dataForm.roleCode = id.roleCode
       } else {

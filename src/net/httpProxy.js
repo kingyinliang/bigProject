@@ -17,6 +17,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
     headers: {
       // 'Access-token': storage.getData(AUTHORIZATION_KEY) || 'token will be here'
     },
+    timeout: 1000 * 60 * 20,
     withCredentials: false
   }
   if (ContentType) {
