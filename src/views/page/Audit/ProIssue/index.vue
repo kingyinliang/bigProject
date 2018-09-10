@@ -126,7 +126,13 @@
             prop="potNo"
             label="领用罐号"
             :show-overflow-tooltip="true"
-            width="295">
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="filterDate"
+            label="过滤日期"
+            :show-overflow-tooltip="true"
+            width="100">
           </el-table-column>
           <el-table-column
             prop="stgeLoc"
