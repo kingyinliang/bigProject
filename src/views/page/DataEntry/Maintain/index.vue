@@ -39,7 +39,7 @@
         </el-col>
         <el-col style="width: 260px">
           <el-row>
-            <el-button size="small" @click="GetMaintainList">查询</el-button>
+            <el-button type="primary" size="small" @click="GetMaintainList">查询</el-button>
             <el-button type="primary" size="small" @click="save()">保存</el-button>
             <el-button type="primary" size="small" @click="submit()">提交</el-button>
           </el-row>
