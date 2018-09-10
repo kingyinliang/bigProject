@@ -45,7 +45,7 @@
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="抬头文本：">
-                  <el-input  v-model="plantList.headerTxt"></el-input>
+                  <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left: 30px;">
                   

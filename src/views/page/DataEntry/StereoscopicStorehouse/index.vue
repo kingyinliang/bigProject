@@ -35,12 +35,12 @@
             <el-form-item label="日期：">
               <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
+            <el-form-item style="margin-left: 67px;">
+              <el-button type="primary" size="small" @click="GetLtkList()">查询</el-button>
+              <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
+              <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col style="width: 345px">
-          <el-button type="primary" size="small" @click="GetLtkList()">查询</el-button>
-          <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
-          <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -349,7 +349,7 @@ export default {
       width: auto;
     }
     input{
-      width: 200px!important;
+      width: 240px!important;
     }
   }
 </style>

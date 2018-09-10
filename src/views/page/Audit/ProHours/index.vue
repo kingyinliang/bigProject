@@ -10,7 +10,7 @@
       <el-card>
         <el-row type="flex">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="82px" class="topforms">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
               <el-form-item label="工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
@@ -35,17 +35,17 @@
               <el-form-item label="生产日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
-              <el-form-item label="记账日期：">
-                <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.postgDate"></el-date-picker>
+              <el-form-item style="margin-left: 67px;">
+                <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
+                <el-button type="primary" size="small" @click="subAutio">审核通过</el-button>
+                <el-button type="danger" size="small" @click="repulseAutios">审核不通过</el-button>
               </el-form-item>
+              <el-row>
+                <el-form-item label="记账日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.postgDate"></el-date-picker>
+                </el-form-item>
+              </el-row>
             </el-form>
-          </el-col>
-          <el-col style="width: 360px">
-            <el-row style="margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-              <el-button type="primary" size="small" @click="subAutio">审核通过</el-button>
-              <el-button type="danger" size="small" @click="repulseAutios">审核不通过</el-button>
-            </el-row>
           </el-col>
         </el-row>
       </el-card>
@@ -431,7 +431,7 @@ export default {
       width: auto;
     }
     input{
-      width: 200px!important;
+      width: 240px!important;
     }
   }
 </style>
