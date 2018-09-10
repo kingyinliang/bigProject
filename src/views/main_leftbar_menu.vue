@@ -4,13 +4,16 @@
     :index="menu.menuId + ''"
     :popper-class="'site-sidebar--' + sidebarLayoutSkin + '-popper'">
     <template slot="title">
-      <i :class="menu.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
-      <span>{{ menu.name }}</span>
+      <div @click="gotoRouteHandle(menu)">
+        <i :class="menu.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
+        <span>{{ menu.name }}</span>
+      </div>
     </template>
     <sub-menu
       v-for="item in menu.list"
       :key="item.menuId"
       :menu="item"
+      v-if="item.type != '3'"
       :dynamicMenuRoutes="dynamicMenuRoutes">
     </sub-menu>
   </el-submenu>
@@ -42,6 +45,8 @@ export default {
     // 通过menuId与动态(菜单)路由进行匹配跳转至指定路由
     gotoRouteHandle (menu) {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === menu.menuId)
+      console.log(menu.menuId)
+      console.log(route)
       if (route.length >= 1) {
         this.$router.push({ path: route[0].path })
       }

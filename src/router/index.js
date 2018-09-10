@@ -90,6 +90,23 @@ function fnCurrentRouteType (route) {
 function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
   var temp = []
   for (var i = 0; i < menuList.length; i++) {
+    if (menuList[i].type === '0' && menuList[i].url && /\S/.test(menuList[i].url)) {
+      var route0 = {
+        path: menuList[i].url.replace(/\//g, '-'),
+        component: null,
+        name: menuList[i].url.replace(/\//g, '-'),
+        meta: {
+          menuId: menuList[i].menuId,
+          title: menuList[i].name,
+          isDynamic: true,
+          isTab: true,
+          iframeUrl: ''
+        }
+      }
+      route0['component'] = _import(`page/${menuList[i].url}`) || null
+      routes.push(route0)
+      ssroutes.push(route0)
+    }
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
@@ -107,6 +124,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         }
         router2['component'] = _import(`page/${menuList[i].remark}`) || null
         routes.push(router2)
+        ssroutes.push(router2)
       }
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       var route = {
