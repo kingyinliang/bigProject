@@ -35,23 +35,24 @@
               <el-form-item label="生产日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
-              <el-form-item label="过账日期：">
-                <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
+              <el-form-item style="margin-left: 67px;">
+                <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
+                <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
+                <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
               </el-form-item>
               <el-row>
-                <el-form-item label="抬头文本：" class="formtextarea">
-                  <el-input type="textarea" v-model="plantList.headerTxt"></el-input>
+                <el-form-item label="过账日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="抬头文本：">
+                  <el-input  v-model="plantList.headerTxt"></el-input>
+                </el-form-item>
+                <el-form-item style="margin-left: 30px;">
+                  
                 </el-form-item>
               </el-row>
             </el-form>
-          </el-col>
-          <el-col style="width: 360px">
-            <el-row style="margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-              <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
-              <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
-            </el-row>
-          </el-col>
+          </el-col>          
         </el-row>
       </el-card>
     </div>
@@ -423,7 +424,7 @@ export default {
       width: auto;
     }
     input{
-      width: 200px!important;
+      width: 240px!important;
     }
     .formtextarea{
       .el-form-item__content{
