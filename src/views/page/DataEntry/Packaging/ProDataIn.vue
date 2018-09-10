@@ -327,6 +327,7 @@
                 <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
+            <el-form :rules="excRoles" label-width="5px">
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -337,22 +338,27 @@
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
                 label="异常情况（下拉选择）"
-                width="120">
+                width="220">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                  </el-select>
+                  <el-form-item prop="expCode">
+                    <!--<i class="notNull">*</i>-->
+                    <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
+                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常描述"
                 width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
+                  <el-form-item prop="expCode">
+                    <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                    <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
@@ -438,6 +444,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            </el-form>
             <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
               <el-form-item label="总停线时间">
                 <el-input v-model="ExcNum" size="small"></el-input>
@@ -1166,6 +1173,17 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      excRoles: {
+        expCode: [
+          { required: true, message: '请输入账号名称', trigger: 'blur' }
+        ],
+        expStartDate: [
+          { required: true, message: '请输入账号名称', trigger: 'blur' }
+        ],
+        expEndDate: [
+          { required: true, message: '请输入账号名称', trigger: 'blur' }
+        ]
+      },
       filterText: '',
       filterText1: '',
       userListTreeProps: {
@@ -2262,7 +2280,17 @@ export default {
 }
 
 </style>
-<style>
+<style lang="scss">
+#tabs{
+  table{
+    .el-form-item{
+      margin-bottom: 0;
+    }
+  }
+  .notNull{
+    color: red;
+  }
+}
 .rowDel{
   display: none;
 }

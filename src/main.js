@@ -10,6 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
 import '@/assets/scss/index.scss'
+import $ from 'jquery'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

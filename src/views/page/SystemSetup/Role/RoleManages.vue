@@ -187,7 +187,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http(`${SYSTEMSETUP_API.ROLEDEL_API}`, 'POST', id).then(({data}) => {
+        this.$http(`${SYSTEMSETUP_API.ROLEDEL_API}`, 'POST', {roleId: id}).then(({data}) => {
           console.log(data)
           if (data.code === 0) {
             this.$message({
