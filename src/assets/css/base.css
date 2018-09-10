@@ -82,5 +82,5 @@ td{
   background-color: #000c17!important;
 }
 
-.el-table td, .el-table th { padding: 6px 0; }
-.el-tag--small { height: 22px; line-height: 20px; }
+.el-table td, .el-table th { padding: 6px 0 !important; }
+.el-tag--small { height: 22px !important; line-height: 20px !important; }
