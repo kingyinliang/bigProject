@@ -35,8 +35,8 @@
                   <span>人员</span>
                 </div>
                 <div>
-                  <el-button @click="remove()" style="float: right;margin:0 20px 20px 0" size="small">批量删除</el-button>
-                  <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small">增加</el-button>
+                  <el-button @click="remove()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:users:del')">批量删除</el-button>
+                  <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:users:save')">增加</el-button>
                   <el-table
                     ref="table1"
                     :data="userArr"
@@ -97,7 +97,7 @@
                       fixed="right"
                       width="65">
                       <template slot-scope="scope">
-                        <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.userId)">编辑</el-button>
+                        <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.userId)" v-if="isAuth('sys:users:info')">编辑</el-button>
                       </template>
                     </el-table-column>
                   </el-table>

@@ -4,6 +4,9 @@
   :close-on-click-modal="false"
   :visible.sync="visible">
   <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px">
+    <el-form-item label="ID" prop="id">
+      <el-input v-model="dataForm.id" placeholder="请输入id"></el-input>
+    </el-form-item>
     <el-form-item label="类型" prop="type">
       <el-radio-group v-model="dataForm.type">
         <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index">{{ type }}</el-radio>
@@ -87,6 +90,7 @@ export default {
     return {
       iconList: ['factory-shouye', 'factory-shezhi', 'factory-luru', 'factory-shenhe', 'factory-baobiao', 'factory-yibiao'],
       visible: false,
+      type: true,
       dataForm: {
         id: 0,
         type: 1,
@@ -101,6 +105,9 @@ export default {
         iconList: []
       },
       dataRule: {
+        id: [
+          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
+        ],
         name: [
           { required: true, message: '菜单名称不能为空', trigger: 'blur' }
         ],
@@ -134,8 +141,10 @@ export default {
         if (!this.dataForm.id) {
           // 新增
           this.menuListTreeSetCurrentNode()
+          this.type = true
         } else {
           // 修改
+          this.type = false
           this.$http(`${SYSTEMSETUP_API.MENUINFO_API}/${this.dataForm.id}`, 'GET', {}).then(({data}) => {
             this.dataForm.id = data.menu.menuId
             this.dataForm.type = data.menu.type * 1
@@ -168,7 +177,7 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http(`${!this.dataForm.id ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'POST', {
+          this.$http(`${this.type ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'POST', {
             'menuId': this.dataForm.id || undefined,
             'type': this.dataForm.type,
             'name': this.dataForm.name,

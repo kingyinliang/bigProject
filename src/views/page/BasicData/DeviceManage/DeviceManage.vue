@@ -26,7 +26,7 @@
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
-              <el-tree :data="OrgTree" default-expand-all @node-click="setdetail" :expand-on-click-node="false"></el-tree>
+              <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
           <el-col :span="16">
@@ -102,6 +102,7 @@ export default {
   name: 'DeviceManage',
   data () {
     return {
+      arrList: [],
       deptId: 0,
       visible: false,
       OrgTree: [],
@@ -125,6 +126,7 @@ export default {
         console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
+          this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
           this.$message.error(data.msg)
         }

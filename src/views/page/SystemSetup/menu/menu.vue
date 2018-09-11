@@ -9,7 +9,7 @@
       <div class="main">
         <el-card>
           <el-row>
-            <el-button @click="addOrUpdateHandle()" style="margin-bottom: 22px;" size="small">新增</el-button>
+            <el-button v-if="isAuth('sys:menu:save')" @click="addOrUpdateHandle()" style="margin-bottom: 22px;" size="small">新增</el-button>
           </el-row>
           <el-row>
             <el-table
@@ -94,8 +94,8 @@
                 width="88"
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button style="padding: 0;" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
-                  <el-button style="padding: 0;" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+                  <el-button style="padding: 0;" v-if="isAuth('sys:menu:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
+                  <el-button style="padding: 0;" v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
