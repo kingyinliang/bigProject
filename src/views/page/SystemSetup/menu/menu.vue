@@ -128,6 +128,7 @@ export default {
     getDataList () {
       this.$http(`${MAIN_API.MENULIST_API}`, 'GET', {}).then(({data}) => {
         this.dataList = treeDataTranslate(data, 'menuId')
+        this.addOrUpdateVisible = false
       })
     },
     // 新增 / 修改

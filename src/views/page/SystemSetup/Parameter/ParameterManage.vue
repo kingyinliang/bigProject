@@ -14,8 +14,8 @@
               <div slot="header" class="clearfix">
                 <div slot="header" class="clearfix">
                   <span style="float: left;line-height: 35px">参数类型</span>
-                  <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('type')"></el-button>
-                </div>
+                  <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('type')" v-if="isAuth('sys:dict:save')"></el-button>
+                </div>v-if="isAuth('sys:dict:save')"
               </div>
               <div>
                 <el-table
@@ -53,7 +53,7 @@
             <el-card>
               <div slot="header" class="clearfix">
                 <span style="float: left;line-height: 35px">参数</span>
-                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('param',false,true)"></el-button>
+                <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('param',false,true)" v-if="isAuth('sys:dict:save')"></el-button>
               </div>
               <div>
                 <el-table
@@ -92,8 +92,8 @@
                     width="96"
                     label="操作">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="remove(scope.row)">删除</el-button>
-                      <el-button type="text" @click="addorupdate('param', scope.row)">编辑</el-button>
+                      <el-button type="text" @click="remove(scope.row)" v-if="isAuth('sys:dict:delete')">删除</el-button>
+                      <el-button type="text" @click="addorupdate('param', scope.row)" v-if="isAuth('sys:dict:update')">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -138,7 +138,9 @@ export default {
     }
   },
   mounted () {
-    this.getdictList()
+    if (this.isAuth('sys:dict:list')) {
+      this.getdictList()
+    }
   },
   methods: {
     // 获取类型

@@ -17,8 +17,8 @@
               </el-form>
             </el-col>
             <el-col style="width: 200px">
-              <el-button type="primary" @click="GetRoleList()" size="small">查询</el-button>
-              <el-button type="primary" @click="roleAddOrUpdate()" size="small">新增</el-button>
+              <el-button type="primary" @click="GetRoleList()" size="small" v-if="isAuth('sys:role:list')">查询</el-button>
+              <el-button type="primary" @click="roleAddOrUpdate()" size="small" v-if="isAuth('sys:role:save')">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -43,19 +43,15 @@
                 :show-overflow-tooltip=true
                 width="">
               </el-table-column>
-<!--               <el-table-column
-                prop="roleCode"
-                label="角色编码">
-              </el-table-column> -->
               <el-table-column
                 label="操作"
                 width="320">
                 <template slot-scope="scope">
-                  <a @click="userManage(scope.row.roleId)">人员管理</a>
-                  <a @click="fnManage(scope.row.roleId)">功能分配</a>
-                  <a @click="roleDept(scope.row.roleId)">部门分配</a>
-                  <a @click="roleAddOrUpdate(scope.row)">修改角色</a>
-                  <a @click="removes(scope.row.roleId)">删除角色</a>
+                  <a @click="userManage(scope.row.roleId)" v-if="isAuth('sys:role:updateuser')">人员管理</a>
+                  <a @click="fnManage(scope.row.roleId)" v-if="isAuth('sys:role:updatemenu')">功能分配</a>
+                  <a @click="roleDept(scope.row.roleId)" v-if="isAuth('sys:role:updatedept')">部门分配</a>
+                  <a @click="roleAddOrUpdate(scope.row)" v-if="isAuth('sys:role:update')">修改角色</a>
+                  <a @click="removes(scope.row.roleId)" v-if="isAuth('sys:role:delete')">删除角色</a>
                 </template>
               </el-table-column>
               <el-table-column

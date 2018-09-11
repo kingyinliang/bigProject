@@ -129,13 +129,14 @@ export default {
   },
   methods: {
     init (id) {
-      this.dataForm.id = id || 0
+      console.log(id)
       this.$http(`${SYSTEMSETUP_API.MENUSELECT_API}`, 'GET', {}).then(({data}) => {
         this.menuList = treeDataTranslate(data.menuList, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          this.$refs.dataForm.resetFields()
+          this.dataForm.id = id || 0
         })
       }).then(() => {
         if (!this.dataForm.id) {
