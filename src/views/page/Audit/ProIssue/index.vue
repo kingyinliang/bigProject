@@ -47,11 +47,15 @@
                 <el-form-item label="抬头文本：">
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
                 </el-form-item>
-                <el-form-item style="margin-left: 30px;">
-                </el-form-item>
               </el-row>
             </el-form>
           </el-col>
+        </el-row>
+        <el-row>
+          <div class="toggleSearch" style="text-align: center; border-top: 1px solid #dcdfe6;">
+            <i class="el-icon-caret-bottom"></i>
+            <span style="">显示搜索</span>
+          </div>
         </el-row>
       </el-card>
     </div>
