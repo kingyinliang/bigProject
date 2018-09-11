@@ -33,7 +33,7 @@
                 <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.prodDate"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
               <el-form-item style="margin-left: 67px;">
                 <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>

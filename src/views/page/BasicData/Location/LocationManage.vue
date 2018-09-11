@@ -48,9 +48,11 @@
               label="车间">
             </el-table-column>
             <el-table-column
-              prop="materialType"
               :show-overflow-tooltip="true"
               label="物料类型">
+              <template slot-scope="scope">
+                {{ scope.row.materialTypeCode + ' ' + scope.row.materialTypeName}}
+              </template>
             </el-table-column>
             <el-table-column
               :show-overflow-tooltip="true"

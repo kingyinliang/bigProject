@@ -42,7 +42,7 @@
               </el-form-item>
               <el-row>
                 <el-form-item label="过账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="抬头文本：">
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
@@ -245,7 +245,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
+        pstngDate: '',
         headerTxt: '',
         currPage: 1,
         pageSize: 10,
@@ -265,6 +265,7 @@ export default {
   },
   mounted () {
     // this.GetAuditList()
+    this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString()
     this.Getdeptcode()
   },
   methods: {
@@ -344,7 +345,7 @@ export default {
         this.AuditList.splice(this.AuditList.length, 0, {})
         this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        row.pstngDate = this.productline.pstngDate
+        row.pstngDate = this.plantList.pstngDate
         row.status = ''
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
@@ -378,6 +379,7 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
+            item.pstngDate = this.plantList.pstngDate
           })
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
@@ -404,7 +406,10 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'checked'
             item.memo = '审核通过'
+            item.pstngDate = this.plantList.pstngDate
           })
+          console.log(this.productline.pstngDate)
+          console.log(this.multipleSelection)
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
               this.$message.success('操作成功')

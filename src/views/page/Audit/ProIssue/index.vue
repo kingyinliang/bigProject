@@ -121,9 +121,12 @@
             width="50">
           </el-table-column>
           <el-table-column
-            prop="batch"
             label="物料批次"
             width="105">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
+              <span v-else>{{scope.row.batch}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="potNo"
@@ -138,14 +141,20 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="stgeLoc"
             label="出库库位"
             width="78">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.stgeLoc" size="small" v-if="scope.row.redact"></el-input>
+              <span v-else>{{scope.row.stgeLoc}}</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="moveType"
             label="移动类型"
             width="78">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.moveType" size="small" v-if="scope.row.redact"></el-input>
+              <span v-else>{{scope.row.moveType}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="stckType"
@@ -330,7 +339,7 @@ export default {
         this.AuditList.splice(this.AuditList.length, 0, {})
         this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        row.pstngDate = this.productline.pstngDate
+        row.pstngDate = this.plantList.pstngDate
         row.status = ''
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
@@ -364,7 +373,7 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
-            item.pstngDate = this.productline.pstngDate
+            item.pstngDate = this.plantList.pstngDate
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
@@ -391,7 +400,7 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'checked'
             item.memo = '审核通过'
-            item.pstngDate = this.productline.pstngDate
+            item.pstngDate = this.plantList.pstngDate
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {

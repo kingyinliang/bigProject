@@ -64,10 +64,10 @@
               </el-tooltip>
             </span>
             <div class="times">
-              <el-form :inline="true" :model="readyDate" size="small" label-width="110px">
+              <el-form :inline="true" :model="readyDate" :rules="timesForm" ref="timesForm" size="small" label-width="125px">
                 <div class="clearfix">
                   <h3>录入数据单位：MIN</h3>
-                  <el-form-item label="是否停线交接班" style="float: right">
+                  <el-form-item label="是否停线交接班" style="float: right" prop="isCause">
                     <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact">
                       <el-option label="是" value="1"></el-option>
                       <el-option label="否" value="0"></el-option>
@@ -83,27 +83,27 @@
                     <span>白班录入</span>
                   </div>
                   <div>
-                    <el-form-item label="工作开始时间" >
+                    <el-form-item label="工作开始时间" prop="dayStartDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="开线时间" >
+                    <el-form-item label="开线时间" prop="dayStartLineDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="切换时间" >
+                    <el-form-item label="切换时间">
                       <el-input v-model="readyDate.dayChange" v-if="isRedact" placeholder="手工录入"></el-input>
                       <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="工作结束时间" >
+                    <el-form-item label="工作结束时间" prop="dayEndDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="停线时间" >
+                    <el-form-item label="停线时间" prop="dayCauseDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="用餐时间" >
+                    <el-form-item label="用餐时间" prop="dayDinner">
                       <el-input v-model="readyDate.dayDinner" v-if="isRedact" placeholder="手工录入"></el-input>
                       <el-input v-model="readyDate.dayDinner" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
@@ -264,7 +264,7 @@
                         <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
                       </span>
                       <el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工'">点击选择人员</el-button>
-                      <el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact" v-model="scope.row.userId[0]">点击输入临时工</el-button>
+                      <el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact">点击输入临时工</el-button>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -327,7 +327,6 @@
                 <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
               </div>
             </div>
-            <el-form :rules="excRoles" label-width="5px" ref="excRoles">
             <el-table
               ref="table1"
               header-row-class-name="tableHead"
@@ -337,27 +336,23 @@
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
-                label="异常情况（下拉选择）"
-                width="220">
+                label="异常情况"
+                width="120">
                 <template slot-scope="scope">
-                  <el-form-item prop="expCode">
-                    <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                    </el-select>
-                    <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                    </el-select>
-                  </el-form-item>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column
                 label="异常描述"
                 width="120">
                 <template slot-scope="scope">
-                  <el-form-item prop="expCode">
-                    <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                    <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
-                  </el-form-item>
+                  <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -443,7 +438,6 @@
                 </template>
               </el-table-column>
             </el-table>
-            </el-form>
             <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
               <el-form-item label="总停线时间">
                 <el-input v-model="ExcNum" size="small"></el-input>
@@ -764,7 +758,7 @@
               <div class="tabtit" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
                 <span>机维组数量确认</span>
                 <div class="btn">
-                  <el-button type="primary">刷新</el-button>
+                  <el-button type="primary" size="small">刷新</el-button>
                 </div>
               </div>
               <el-table
@@ -852,6 +846,11 @@
                 width="60">
               </el-table-column>
               <el-table-column
+                prop="needNum"
+                label="需求用量"
+                width="120">
+              </el-table-column>
+              <el-table-column
                 label="生产使用"
                 width="125">
                 <template slot-scope="scope">
@@ -928,6 +927,13 @@
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact"></el-date-picker>
                   <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="批次">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.batch" v-if="isRedact"></el-input>
+                  <el-input v-model="scope.row.batch" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1173,15 +1179,24 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
-      excRoles: {
-        expCode: [
+      timesForm: {
+        isCause: [
+          { required: true, message: '请输入工作开始时间', trigger: 'blur' }
+        ],
+        dayStartDate: [
+          { required: true, message: '请输入开线时间', trigger: 'blur' }
+        ],
+        dayStartLineDate: [
           { required: true, message: '请输入账号名称', trigger: 'blur' }
         ],
-        expStartDate: [
-          { required: true, message: '请输入账号名称', trigger: 'blur' }
+        dayEndDate: [
+          { required: true, message: '请输入工作结束时间', trigger: 'blur' }
         ],
-        expEndDate: [
-          { required: true, message: '请输入账号名称', trigger: 'blur' }
+        dayCauseDate: [
+          { required: true, message: '请输入停线时间', trigger: 'blur' }
+        ],
+        dayDinner: [
+          { required: true, message: '请输入用餐时间', trigger: 'blur' }
         ]
       },
       filterText: '',
@@ -1628,24 +1643,109 @@ export default {
     /**
      * @property 以下为七个保存列表
      */
-    // 保存
-    SaveForm (str) {
-      this.$refs.excRoles.validate((valid) => {
-        if (valid) {
-          this.isRedact = false
-          this.tableheader(str) // 修改表头
-          this.UpdateReady(str) // 修改准备时间
-          this.UpdateUser(str) // 修改人员
-          this.UpdateExc(str) // 修改异常记录
-          this.UpdateIn(str) // 修改生产入库
-          this.UpdateSap(str) // 修改物料领用
-          this.UpdateGerms(str) // 修改待杀菌数量
-          this.UpdateText(str) // 修改文本
-        } else {
-          console.log('error submit!!')
-          return false
+    // 校验
+    userrul () {
+      let ty = true
+      this.uerDate.forEach((item) => {
+        if (item.userType && item.userId.length !== 0) {} else {
+          ty = false
         }
       })
+      return ty
+    },
+    excrul () {
+      let ty = true
+      this.ExcDate.forEach((item) => {
+        if (item.expCode && item.expStartDate && item.expEndDate) {} else {
+          ty = false
+        }
+      })
+      return ty
+    },
+    inrul () {
+      let ty = true
+      this.ExcDate.forEach((item) => {
+        if (item.batch) {} else {
+          ty = false
+        }
+      })
+      return ty
+    },
+    saprul () {
+      let ty = true
+      this.listbomP.forEach((item) => {
+        if (item.productUseNum) {} else {
+          ty = false
+        }
+      })
+      // this.listbomS.forEach((item) => {
+      //   if (item.productUseNum) {} else {
+      //     ty = false
+      //   }
+      // })
+      return ty
+    },
+    // 保存
+    SaveForm (str) {
+      if (str === 'submit') {
+        this.$refs.timesForm.validate((valid) => {
+          if (valid) {
+            if (this.uerDate.length === 0) {
+              this.$message.error('人员不能为空')
+              return false
+            }
+            if (!this.userrul()) {
+              this.$message.error('人员必填项未填')
+              return false
+            }
+            if (this.ExcDate.length > 0) {
+              if (!this.excrul()) {
+                this.$message.error('异常记录必填项未填')
+                return false
+              }
+            }
+            if (this.InDate.length === 0) {
+              this.$message.error('生产入库不能为空')
+              return false
+            } else {
+              if (!this.inrul()) {
+                this.$message.error('生产入库必填项未填')
+                return false
+              }
+            }
+            if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间') {
+              this.$message.error('机维组未确认，不能提交')
+              return false
+            }
+            if (!this.saprul()) {
+              this.$message.error('物料领用必填项未填')
+              return false
+            }
+            this.isRedact = false
+            this.tableheader(str) // 修改表头
+            this.UpdateReady(str) // 修改准备时间
+            this.UpdateUser(str) // 修改人员
+            this.UpdateExc(str) // 修改异常记录
+            this.UpdateIn(str) // 修改生产入库
+            this.UpdateSap(str) // 修改物料领用
+            this.UpdateGerms(str) // 修改待杀菌数量
+            this.UpdateText(str) // 修改文本
+          } else {
+            this.$message.error('准备时间必填项未填')
+            return false
+          }
+        })
+      } else {
+        this.isRedact = false
+        this.tableheader(str) // 修改表头
+        this.UpdateReady(str) // 修改准备时间
+        this.UpdateUser(str) // 修改人员
+        this.UpdateExc(str) // 修改异常记录
+        this.UpdateIn(str) // 修改生产入库
+        this.UpdateSap(str) // 修改物料领用
+        this.UpdateGerms(str) // 修改待杀菌数量
+        this.UpdateText(str) // 修改文本
+      }
     },
     // 表头处理
     tableheader (str) {
@@ -1680,7 +1780,11 @@ export default {
       if (this.uerDate.length > 0) {
         this.netStatus.userState = false
         this.uerDate.forEach((item) => {
-          item.status = str
+          if (item.status) {
+            if (item.status === 'saved') { item.status = str }
+          } else {
+            item.status = str
+          }
         })
         this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
           this.netStatus.userState = true
@@ -1699,7 +1803,9 @@ export default {
     UpdateReady (str) {
       this.netStatus.readyState = false
       this.readyDate.orderId = this.orderId
-      this.readyDate.status = str
+      if (!this.readyDate.status) {
+        this.readyDate.status = str
+      }
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
           this.netStatus.readyState = true
@@ -1762,9 +1868,20 @@ export default {
     UpdateIn (str) {
       if (this.InDate.length > 0) {
         this.netStatus.inState = false
+        let types = ''
+        if (this.order.properties === '二合一&礼盒产线') {
+          types = 'isTwoOne'
+        } else if (this.order.workShopName === '包装三车间') {
+          types = 'isPkgThree'
+        }
         this.InDate.forEach((item) => {
           item.orderId = this.orderId
-          item.status = str
+          if (item.status) {
+            if (item.status === 'saved') { item.status = str }
+          } else {
+            item.status = str
+          }
+          item.isPkgThree = types
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
           this.netStatus.inState = true
@@ -1783,10 +1900,18 @@ export default {
       this.netStatus.sapState1 = false
       this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
-        item.status = str
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str }
+        } else {
+          item.status = str
+        }
       })
       this.listbomS.forEach((item) => {
-        item.status = str
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str }
+        } else {
+          item.status = str
+        }
       })
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         this.netStatus.sapState1 = true
@@ -2065,15 +2190,9 @@ export default {
     },
     // 新增入库
     AddInDate (form) {
-      let types = ''
-      if (this.order.properties === '二合一&礼盒产线') {
-        types = 'isTwoOne'
-      } else if (this.order.workShopName === '包装三车间') {
-        types = 'isPkgThree'
-      }
       form.push({
         status: 'saved',
-        isPkgThree: types,
+        isPkgThree: '',
         orderId: '',
         classType: '',
         batch: '',

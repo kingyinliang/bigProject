@@ -5,7 +5,7 @@
       :visible.sync="visible"
       class="locationdialog1">
       <div style="width: 400px;margin: auto">
-        <el-form :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()">
+        <el-form ref="addLo" :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()">
           <el-form-item label="车间：" prop="deptId">
             <el-select v-model="formatDate.deptId" placeholder="请选择">
               <el-option label=""  value=""></el-option>
@@ -15,7 +15,7 @@
           <el-form-item label="物料类型：" prop="materialType">
             <el-select v-model="formatDate.materialType" placeholder="请选择">
               <el-option label=""  value=""></el-option>
-              <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
+              <el-option :label="item.code + ' ' + item.value" v-for="(item, index) in sapList" :key="index" :value="item.code + ' ' + item.value"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="物料编码：">
@@ -115,22 +115,30 @@ export default {
     },
     // 新增
     dataFormSubmit () {
-      this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
-      this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
-      delete this.formatDate.material
-      this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
+      this.$refs.addLo.validate((valid) => {
+        if (valid) {
+          this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
+          this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
+          this.formatDate.materialTypeCode = this.formatDate.materialType.substring(0, this.formatDate.materialType.indexOf(' '))
+          this.formatDate.materialTypeName = this.formatDate.materialType.substring(this.formatDate.materialType.indexOf(' ') + 1)
+          this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
+            if (data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
             }
           })
         } else {
-          this.$message.error(data.msg)
+          console.log('error submit!!')
+          return false
         }
       })
     }

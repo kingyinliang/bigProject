@@ -11,12 +11,17 @@ import { HTTP_METHOD } from './http'
 * */
 export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) => {
 // export default (url, method = HTTP_METHOD.GET, data = {}, login = false, ContentType = false) => {
+//   let cancel, promiseArr = {}
+//   const CancelToken = axios.CancelToken
   const options = {
     url,
     method,
     headers: {
       // 'Access-token': storage.getData(AUTHORIZATION_KEY) || 'token will be here'
     },
+    // cancelToken: new CancelToken(c => {
+    //   cancel = c
+    // }),
     timeout: 1000 * 60 * 20,
     withCredentials: false
   }
@@ -35,6 +40,12 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
    */
   axios.interceptors.request.use(config => {
     config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
+    // if (promiseArr[config.url]) {
+    //   promiseArr[config.url]('操作取消')
+    //   promiseArr[config.url] = cancel
+    // } else {
+    //   promiseArr[config.url] = cancel
+    // }
     return config
   }, error => {
     return Promise.reject(error)
