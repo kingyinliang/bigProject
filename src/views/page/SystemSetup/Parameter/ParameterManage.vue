@@ -13,9 +13,9 @@
             <el-card>
               <div slot="header" class="clearfix">
                 <div slot="header" class="clearfix">
-                  <span style="float: left;line-height: 35px">参数类型</span>
+                  <span style="float: left;line-height: 40px">参数类型</span>
                   <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('type')" v-if="isAuth('sys:dict:save')"></el-button>
-                </div>v-if="isAuth('sys:dict:save')"
+                </div>
               </div>
               <div>
                 <el-table
@@ -52,7 +52,7 @@
           <el-col :span="16">
             <el-card>
               <div slot="header" class="clearfix">
-                <span style="float: left;line-height: 35px">参数</span>
+                <span style="float: left;line-height: 40px">参数</span>
                 <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('param',false,true)" v-if="isAuth('sys:dict:save')"></el-button>
               </div>
               <div>
@@ -218,6 +218,7 @@ export default {
   .el-card__header{
     padding: 13px 15px;
   }
+  .main .el-card__header { padding: 0 15px !important; }
 </style>
 <style scoped>
 .el-button { padding: 0; }

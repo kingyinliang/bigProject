@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="topTitle">
+<!--     <div class="topTitle">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>生管审核</el-breadcrumb-item>
         <el-breadcrumb-item>生产入库</el-breadcrumb-item>
       </el-breadcrumb>
-    </div>
+    </div> -->
     <div class="main">
-      <el-card>
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
@@ -51,10 +51,16 @@
             </el-form>
           </el-col>
         </el-row>
+        <div class="toggleSearchBottom">
+            <i class="el-icon-caret-top"></i>
+        </div>
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card>
+      <el-card class="tableCard">
+        <div class="toggleSearchTop">
+            <i class="el-icon-caret-bottom"></i>
+        </div>
         <el-table
           ref="table1"
           header-row-class-name="tableHead"
@@ -266,7 +272,23 @@ export default {
   mounted () {
     // this.GetAuditList()
     this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString()
-    this.Getdeptcode()
+    this.Getdeptcode();
+
+    // 搜索切换显隐
+    $('.toggleSearchBottom').click(function(){
+      $('.searchCard').animate({height: 0}, 300, function(){
+        $('.searchCard').parent('.main').css('padding-bottom', 0);
+      });     
+      $(this).hide();
+      $('.toggleSearchTop').show();
+    })
+    $('.toggleSearchTop').click(function(){
+      $('.searchCard').animate({height: '190px'}, 300, function(){
+        $('.searchCard').parent('.main').css('padding-bottom', '15px');
+      });
+      $(this).hide();
+      $('.toggleSearchBottom').show();
+    })
   },
   methods: {
     // 获取列表
@@ -438,6 +460,20 @@ export default {
 </script>
 
 <style lang="scss">
+  .searchCard, .tableCard { 
+    position: relative;
+    .toggleSearchTop { 
+      width: 100%; position: absolute; top: 0; left: 0; text-align: center; cursor: pointer; display: none;
+    }
+    .toggleSearchBottom { 
+      width: 100%; position: absolute; bottom: 0; left: 0; text-align: center; cursor: pointer;
+    }
+    .el-icon-caret-top:before,
+    .el-icon-caret-bottom:before {
+      color: #dcdfe6;
+    }
+  }
+  
   .topforms{
     .el-date-editor.el-input{
       width: auto;
