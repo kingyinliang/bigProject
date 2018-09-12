@@ -82,10 +82,10 @@
                     <span v-if="update">{{OrgDetail.remark}}</span>
                     <el-input type="textarea" v-model="OrgDetail.remark" v-else></el-input>
                   </el-form-item>
-                  <div style="text-align: center">
-                    <el-button @click="update = !update" v-if="update && isAuth('sys:dept:update')">编辑</el-button>
-                    <el-button @click="savedatail" v-if="isAuth('sys:dept:update')">保存</el-button>
-                    <el-button @click="deleteorg" v-if="isAuth('sys:dept:delete')">删除</el-button>
+                  <div style="text-align: center; margin-top: 30px;">
+                    <el-button type="primary" size="small" @click="update = !update" v-if="update && isAuth('sys:dept:update')">编辑</el-button>
+                    <el-button type="primary" size="small" @click="savedatail" v-if="isAuth('sys:dept:update')">保存</el-button>
+                    <el-button type="danger" size="small" @click="deleteorg" v-if="isAuth('sys:dept:delete')">删除</el-button>
                   </div>
                 </el-form>
               </div>
@@ -424,5 +424,9 @@ export default {
   .orgcard .el-card__body{
     height: 450px;
     overflow: auto;
+  }
+  .orgcard .el-form-item--mini.el-form-item,
+  .orgcard .el-form-item--small.el-form-item {
+    margin-bottom: 5px;
   }
 </style>
