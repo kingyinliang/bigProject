@@ -261,7 +261,8 @@ export default {
     }
   },
   mounted () {
-    this.Getdeptcode();
+    this.Getdeptcode()
+    let $ = this.$
 
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {

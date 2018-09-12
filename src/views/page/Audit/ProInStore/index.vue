@@ -272,7 +272,8 @@ export default {
   mounted () {
     // this.GetAuditList()
     this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString()
-    this.Getdeptcode();
+    this.Getdeptcode()
+    let $ = this.$
 
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {

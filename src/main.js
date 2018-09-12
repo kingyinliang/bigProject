@@ -19,6 +19,8 @@ Vue.use(VueCookie)
 // 挂载全局
 Vue.prototype.$http = httpProxy // ajax请求方法
 Vue.prototype.isAuth = isAuth// 权限方法
+Vue.prototype.$ = $// 权限方法
+
 // 关闭弹窗清除表单
 Vue.prototype.clearForm = function (form) {
   this[form] = {}
