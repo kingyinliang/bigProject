@@ -2406,7 +2406,6 @@ export default {
     margin: 0 5px;
   }
 }
-
 </style>
 <style lang="scss">
 #tabs{
@@ -2449,5 +2448,10 @@ export default {
 }
 .el-card{
   margin-bottom: 20px;
+}
+.el-input.is-disabled .el-input__inner {
+  color: #606266;
+  border-color: #dcdfe6;
+  background: none;
 }
 </style>
