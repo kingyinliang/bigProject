@@ -15,8 +15,8 @@
                   <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="querys">查询</el-button>
-                  <el-button size="small" @click="SapuUpdate">同步</el-button>
+                  <el-button type="primary" size="small" @click="querys" v-if="isAuth('sys:sapMaterial:list')">查询</el-button>
+                  <el-button size="small" @click="SapuUpdate" v-if="isAuth('sys:sapMaterial:syncMaterialManual')">同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>

@@ -15,7 +15,7 @@
                 <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="getList()">查询</el-button>
+                <el-button type="primary" size="small" @click="getList()" v-if="isAuth('sys:device:list')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -35,8 +35,8 @@
                 <span>设备管理</span>
               </div>
               <div>
-                <el-button @click="remove()" style="float: right;margin-bottom: 20px">批量删除</el-button>
-                <el-button @click="addOrupdate(deptId)" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
+                <el-button @click="remove()" style="float: right;margin-bottom: 20px"  v-if="isAuth('sys:device:delete')">批量删除</el-button>
+                <el-button @click="addOrupdate(deptId)" v-if="isAuth('sys:device:save')" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
                 <el-table
                   ref="table1"
                   border
@@ -70,7 +70,7 @@
                     label="操作"
                     width="65">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="addOrupdate(deptId, scope.row)">编辑</el-button>
+                      <el-button type="text" @click="addOrupdate(deptId, scope.row)" v-if="isAuth('sys:device:update')">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>

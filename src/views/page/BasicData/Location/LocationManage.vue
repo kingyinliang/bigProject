@@ -15,10 +15,10 @@
                 <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetLocationList()">查询</el-button>
-                <el-button size="small" @click="visible1 = true">高级查询</el-button>
-                <el-button type="small" size="small" @click="addLocation()">新增</el-button>
-                <el-button size="small" @click="remove()">批量删除</el-button>
+                <el-button type="primary" size="small" @click="GetLocationList()" v-if="isAuth('sys:sto:list')">查询</el-button>
+                <el-button size="small" @click="visible1 = true" v-if="isAuth('sys:sto:list')">高级查询</el-button>
+                <el-button type="small" size="small" @click="addLocation()" v-if="isAuth('sys:sto:save')">新增</el-button>
+                <el-button size="small" @click="remove()" v-if="isAuth('sys:sto:delete')">批量删除</el-button>
               </el-form-item>
             </el-form>
           </el-row>

@@ -36,9 +36,9 @@
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
               <el-form-item style="margin-left: 67px;">
-                <el-button type="primary" size="small" @click="GetAuditList()">查询</el-button>
-                <el-button type="primary" size="small" @click="subAutio">审核通过</el-button>
-                <el-button type="danger" size="small" @click="repulseAutios">审核不通过</el-button>
+                <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('verify:material:list')">查询</el-button>
+                <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:material:update')">审核通过</el-button>
+                <el-button type="danger" size="small" @click="repulseAutios" v-if="isAuth('verify:material:update')">审核不通过</el-button>
               </el-form-item>
               <el-row>
                 <el-form-item label="记账日期：">
@@ -195,7 +195,7 @@
             label="操作"
             width="65">
             <template slot-scope="scope">
-              <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'checked'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+              <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'checked' && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -267,7 +267,7 @@ export default {
     $('.toggleSearchBottom').click(function(){
       $('.searchCard').animate({height: 0}, 300, function(){
         $('.searchCard').parent('.main').css('padding-bottom', 0);
-      });     
+      });
       $(this).hide();
       $('.toggleSearchTop').show();
     })
@@ -448,12 +448,12 @@ export default {
 </script>
 
 <style lang="scss">
-  .searchCard, .tableCard { 
+  .searchCard, .tableCard {
     position: relative;
-    .toggleSearchTop { 
+    .toggleSearchTop {
       width: 100%; position: absolute; top: 0; left: 0; text-align: center; cursor: pointer; display: none;
     }
-    .toggleSearchBottom { 
+    .toggleSearchBottom {
       width: 100%; position: absolute; bottom: 0; left: 0; text-align: center; cursor: pointer;
     }
     .el-icon-caret-top:before,
