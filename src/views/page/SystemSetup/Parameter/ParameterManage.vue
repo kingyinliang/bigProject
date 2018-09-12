@@ -6,7 +6,7 @@
         <el-breadcrumb-item>参数管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="main">
+    <div class="main mainHeader">
       <el-card>
         <el-row :gutter="20">
           <el-col :span="8">
@@ -218,7 +218,7 @@ export default {
   .el-card__header{
     padding: 13px 15px;
   }
-  .main .el-card__header { padding: 0 15px !important; }
+  .mainHeader .el-card__header { padding: 0 15px !important; }
 </style>
 <style scoped>
 .el-button { padding: 0; }
