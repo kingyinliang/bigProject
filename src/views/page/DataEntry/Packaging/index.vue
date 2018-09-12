@@ -33,13 +33,12 @@
             <el-form :model="item" size="small" label-position="right" label-width="85px">
               <div class="clearfix pro-line">
                   <el-form-item label="产线：">
-                    <p>{{item.productLineName}} <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p> 
-                  </el-form-item>                  
+                    <p>{{item.productLineName}} <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p>
+                  </el-form-item>
               </div>
               <div class="clearfix item">
                 <img :src="'http://10.8.4.153:50080' + item.img" alt="">
                 <div class="itemForm">
-                  
                     <el-form-item label="订单号：" style="margin-bottom: 10px;">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
                         <el-option label=""  value=""></el-option>
@@ -55,7 +54,6 @@
                     <el-form-item label="实时产量：" style="margin-bottom: 10px;">
                       <p>{{item.realOutput? item.realOutput : '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                 
                 </div>
               </div>
                </el-form>
