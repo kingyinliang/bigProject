@@ -33,9 +33,9 @@
               </el-form>
             </el-col>
             <el-col style="width: 320px">
-              <el-button size="small" @click="qurery" v-if="isAuth('sys:holder:list')">查询</el-button>
-              <el-button size="small" @click="addOrupdate()" v-if="isAuth('sys:holder:save')">新增</el-button>
-              <el-button size="small" @click="remove" v-if="isAuth('sys:holder:delete')">批量删除</el-button>
+              <el-button type="primary" size="small" @click="qurery" v-if="isAuth('sys:holder:list')">查询</el-button>
+              <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:holder:save')">新增</el-button>
+              <el-button type="danger" size="small" @click="remove" v-if="isAuth('sys:holder:delete')">批量删除</el-button>
             </el-col>
           </el-row>
           <el-row>

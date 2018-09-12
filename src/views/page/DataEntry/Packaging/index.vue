@@ -11,7 +11,7 @@
         <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()">
           <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
-              <el-option label=""  value=""></el-option>
+              <el-option label="" value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
@@ -30,34 +30,33 @@
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in list" :key="index" style="margin-bottom: 10px">
             <el-card class="box-card">
-              <div class="clearfix">
-                <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button>
+            <el-form :model="item" size="small" label-position="right" label-width="85px">
+              <div class="clearfix pro-line">
+                  <el-form-item label="产线：">
+                    <p>{{item.productLineName}} <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p>
+                  </el-form-item>
               </div>
               <div class="clearfix item">
                 <img :src="'http://10.8.4.153:50080' + item.img" alt="">
                 <div class="itemForm">
-                  <el-form :model="item" size="small" label-position="right" label-width="85px">
-                    <el-form-item label="产线：">
-                     <p>{{item.productLineName}}</p>
-                    </el-form-item>
-                    <el-form-item label="订单号：">
+                    <el-form-item label="订单号：" style="margin-bottom: 10px;">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
                         <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="品项：">
+                    <el-form-item label="品项：" style="margin-bottom: 10px;">
                       <p>{{item.materialCode + ' ' + item.materialName}}</p>
                     </el-form-item>
-                    <el-form-item label="计划产量：">
+                    <el-form-item label="计划产量：" style="margin-bottom: 10px;">
                       <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                    <el-form-item label="实时产量：">
+                    <el-form-item label="实时产量：" style="margin-bottom: 10px;">
                       <p>{{item.realOutput? item.realOutput : '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                  </el-form>
                 </div>
               </div>
+               </el-form>
             </el-card>
           </el-col>
         </el-row>
@@ -233,6 +232,9 @@ export default {
 
 <style lang="scss" scoped>
 .box-card{
+  .pro-line { border-bottom: 1px solid #dcdfe6; }
+  .pro-line p { color: red; font-size: 16px; letter-spacing: .1em; }
+  .pro-line .el-form-item__label { }
   b{
     font-size: 16px;
     line-height: 32px;
@@ -243,9 +245,11 @@ export default {
     display: flex;
     img{
       float: left;
-      width: 180px;
-      height: 300px;
-      margin-right: 50px;
+      width: 220px;
+      height: 220px;
+      border-radius: 6px;
+      border: 1px solid #dcdfe6;
+      margin-right: 20px;
     }
     .itemForm{
       flex: 1;

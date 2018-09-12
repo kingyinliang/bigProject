@@ -16,7 +16,7 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys" v-if="isAuth('sys:sapMaterial:list')">查询</el-button>
-                  <el-button size="small" @click="SapuUpdate" v-if="isAuth('sys:sapMaterial:syncMaterialManual')">同步</el-button>
+                  <el-button type="primary" size="small" @click="SapuUpdate" v-if="isAuth('sys:sapMaterial:syncMaterialManual')">同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>

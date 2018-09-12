@@ -447,6 +447,7 @@ export default {
 </script>
 
 <style lang="scss">
+  .searchCard { margin-bottom: 0; }
   .searchCard, .tableCard {
     position: relative;
     .toggleSearchTop {

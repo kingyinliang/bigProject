@@ -16,9 +16,9 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetLocationList()" v-if="isAuth('sys:sto:list')">查询</el-button>
-                <el-button size="small" @click="visible1 = true" v-if="isAuth('sys:sto:list')">高级查询</el-button>
-                <el-button type="small" size="small" @click="addLocation()" v-if="isAuth('sys:sto:save')">新增</el-button>
-                <el-button size="small" @click="remove()" v-if="isAuth('sys:sto:delete')">批量删除</el-button>
+                <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sto:list')">高级查询</el-button>
+                <el-button type="primary" size="small" @click="addLocation()" v-if="isAuth('sys:sto:save')">新增</el-button>
+                <el-button type="danger" size="small" @click="remove()" v-if="isAuth('sys:sto:delete')">批量删除</el-button>
               </el-form-item>
             </el-form>
           </el-row>

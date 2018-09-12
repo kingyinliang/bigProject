@@ -16,8 +16,8 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys()" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
-                  <el-button size="small" @click="visible = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                  <el-button size="small" @click="sapOrderUpdate" v-if="isAuth('sys:sapOrder:syncOrderManual')">同步</el-button>
+                  <el-button type="primary" size="small" @click="visible = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
+                  <el-button type="primary" size="small" @click="sapOrderUpdate" v-if="isAuth('sys:sapOrder:syncOrderManual')">同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>

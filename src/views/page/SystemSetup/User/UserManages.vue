@@ -35,8 +35,8 @@
                   <span>人员</span>
                 </div>
                 <div>
-                  <el-button @click="remove()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:user:delete')">批量删除</el-button>
-                  <el-button @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:user:save')">增加</el-button>
+                  <el-button type="danger" @click="remove()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:user:delete')">批量删除</el-button>
+                  <el-button type="primary" @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:user:save')">增加</el-button>
                   <el-table
                     ref="table1"
                     :data="userArr"

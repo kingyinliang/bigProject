@@ -9,7 +9,7 @@
       <div class="main">
         <el-card>
           <el-row>
-            <el-button v-if="isAuth('sys:menu:save')" @click="addOrUpdateHandle()" style="margin-bottom: 22px;" size="small">新增</el-button>
+            <el-button type="primary" v-if="isAuth('sys:menu:save')" @click="addOrUpdateHandle()" style="margin-bottom: 22px;" size="small">新增</el-button>
           </el-row>
           <el-row>
             <el-table
