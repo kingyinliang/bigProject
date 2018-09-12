@@ -758,7 +758,7 @@
               <div class="tabtit" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
                 <span>机维组数量确认</span>
                 <div class="btn">
-                  <el-button type="primary" size="small">刷新</el-button>
+                  <el-button type="primary" size="small" @click="GetMaintain()">刷新</el-button>
                 </div>
               </div>
               <el-table
@@ -1583,6 +1583,20 @@ export default {
         }
       })
     },
+    // 机维组刷新
+    GetMaintain () {
+      this.$http(`${PACKAGING_API.PKGINLIST_API}`, 'POST', {
+        orderId: this.orderId,
+        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'isTwoOne' : this.order.properties === '包装三车间' ? 'isPkgThree' : ''
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.InVlist = data.vlist
+          this.$message.success('刷新成功')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取包装车间物料领用列表
     GetpkgSap () {
       this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
@@ -1664,7 +1678,7 @@ export default {
     },
     inrul () {
       let ty = true
-      this.ExcDate.forEach((item) => {
+      this.InDate.forEach((item) => {
         if (item.batch) {} else {
           ty = false
         }
@@ -1678,11 +1692,13 @@ export default {
           ty = false
         }
       })
-      // this.listbomS.forEach((item) => {
-      //   if (item.productUseNum) {} else {
-      //     ty = false
-      //   }
-      // })
+      if (this.order.properties !== '二合一&礼盒产线') {
+        this.listbomS.forEach((item) => {
+          if (item.potNo && item.filterDate && item.productUseNum) {} else {
+            ty = false
+          }
+        })
+      }
       return ty
     },
     // 保存
@@ -2176,18 +2192,33 @@ export default {
     },
     // 新增人员
     addUserDate (form) {
-      form.push({
-        status: '',
-        orderId: this.orderId,
-        classType: '',
-        deptId: '',
-        userType: '',
-        userId: [],
-        startDate: '',
-        dinner: '60',
-        endDate: '',
-        remark: ''
-      })
+      if (form.length) {
+        form.push({
+          status: '',
+          orderId: this.orderId,
+          classType: '',
+          deptId: '',
+          userType: '',
+          userId: [],
+          startDate: form[form.length - 1].startDate,
+          dinner: '60',
+          endDate: form[form.length - 1].endDate,
+          remark: ''
+        })
+      } else {
+        form.push({
+          status: '',
+          orderId: this.orderId,
+          classType: '',
+          deptId: '',
+          userType: '',
+          userId: [],
+          startDate: '',
+          dinner: '60',
+          endDate: '',
+          remark: ''
+        })
+      }
     },
     // 新增入库
     AddInDate (form) {
