@@ -47,7 +47,7 @@
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="selection"
-                    width="35">
+                    width="34">
                   </el-table-column>
                   <el-table-column
                     type="index"
@@ -224,6 +224,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.el-table-column--selection .cell { padding-right: 0 !important; }
 </style>
