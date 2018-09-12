@@ -256,7 +256,7 @@ export default {
   },
   mounted () {
     // this.GetAuditList()
-    this.Getdeptcode();
+    this.Getdeptcode()
 
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {
