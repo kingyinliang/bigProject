@@ -75,7 +75,7 @@ export default {
               // window.sessionStorage.setItem('menuList', JSON.stringify(res.data.data.menuList))
               this.$router.push({path: '/home'})
             } else {
-              this.$message.error(data.msg)
+              this.$message.error(res.data.msg)
             }
           })
         } else {
