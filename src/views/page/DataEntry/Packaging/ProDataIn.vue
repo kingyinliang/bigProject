@@ -258,7 +258,8 @@
                   </el-table-column>
                   <el-table-column
                     label="人员选择"
-                    width="220">
+                    :show-overflow-tooltip="true"
+                    width="360">
                     <template slot-scope="scope">
                       <span>
                         <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>

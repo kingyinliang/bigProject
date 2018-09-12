@@ -1,5 +1,9 @@
 <template>
-<div><h1>home</h1></div>
+<div>
+<!-- <h1>home</h1> -->
+<img src="@/assets/img/index.jpg" style="width: 100%;">
+
+</div>
 </template>
 
 <script>
