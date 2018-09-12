@@ -47,7 +47,7 @@
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column
                     type="selection"
-                    width="34">
+                    width="35">
                   </el-table-column>
                   <el-table-column
                     type="index"
