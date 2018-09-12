@@ -425,7 +425,8 @@ export default {
     height: 450px;
     overflow: auto;
   }
-  .orgcard .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  .orgcard .el-form-item--mini.el-form-item,
+  .orgcard .el-form-item--small.el-form-item {
     margin-bottom: 5px;
   }
 </style>
