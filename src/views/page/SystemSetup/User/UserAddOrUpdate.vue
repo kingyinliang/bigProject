@@ -50,6 +50,7 @@ export default {
         email: '',
         mobile: ''
       },
+      type: true,
       dataRule: {
         realName: [
           { required: true, message: '人员姓名不能为空', trigger: 'blur' }
@@ -82,47 +83,56 @@ export default {
     // 表单提交
     dataFormSubmit () {
       this.dataForm.deptId = this.deptId
-      if (this.dataForm.workNum || this.dataForm.workNumTemp) {
-        if (this.userId) {
-          // 修改
-          this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
-            console.log(data)
-            if (data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          if (this.type) {
+            this.type = false
+            if (this.dataForm.workNum || this.dataForm.workNumTemp) {
+              if (this.userId) {
+                // 修改
+                this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+                  console.log(data)
+                  if (data.code === 0) {
+                    this.$message({
+                      message: '操作成功',
+                      type: 'success',
+                      duration: 1500,
+                      onClose: () => {
+                        this.type = true
+                        this.visible = false
+                        this.$emit('refreshDataList')
+                      }
+                    })
+                  } else {
+                    this.$message.error(data.msg)
+                  }
+                })
+              } else {
+                // 新增
+                this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
+                  console.log(data)
+                  if (data.code === 0) {
+                    this.$message({
+                      message: '操作成功',
+                      type: 'success',
+                      duration: 1500,
+                      onClose: () => {
+                        this.type = true
+                        this.visible = false
+                        this.$emit('refreshDataList')
+                      }
+                    })
+                  } else {
+                    this.$message.error(data.msg)
+                  }
+                })
+              }
             } else {
-              this.$message.error(data.msg)
+              this.$message.error('人员工号和虚拟工号必须添加一个')
             }
-          })
-        } else {
-          // 新增
-          this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-            console.log(data)
-            if (data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
+          }
         }
-      } else {
-        this.$message.error('人员工号和虚拟工号必须添加一个')
-      }
+      })
     }
   },
   computed: {},

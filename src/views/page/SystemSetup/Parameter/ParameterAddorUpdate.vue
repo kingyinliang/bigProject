@@ -42,7 +42,8 @@ export default {
         value: ''
       },
       visible: false,
-      type: true
+      type: true,
+      submitType: true
     }
   },
   mounted () {
@@ -67,22 +68,26 @@ export default {
       this.visible = true
     },
     dataFormSubmit () {
-      this.$http(`${this.id ? SYSTEMSETUP_API.PARAMETERUPDATE_API : SYSTEMSETUP_API.PARAMETERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-        if (data.code === 0) {
-          this.dataForm = {}
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.submitType) {
+        this.submitType = false
+        this.$http(`${this.id ? SYSTEMSETUP_API.PARAMETERUPDATE_API : SYSTEMSETUP_API.PARAMETERADD_API}`, 'POST', this.dataForm).then(({data}) => {
+          if (data.code === 0) {
+            this.dataForm = {}
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.submitType = true
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   },
   computed: {

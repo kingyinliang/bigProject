@@ -74,6 +74,8 @@ export default {
               this.$cookie.set('token', res.data.token)
               // window.sessionStorage.setItem('menuList', JSON.stringify(res.data.data.menuList))
               this.$router.push({path: '/home'})
+            } else {
+              this.$message.error(data.msg)
             }
           })
         } else {

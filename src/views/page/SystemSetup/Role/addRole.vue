@@ -32,7 +32,8 @@ export default {
         roleId: '',
         roleName: '',
         roleCode: ''
-      }
+      },
+      type: true
     }
   },
   mounted () {
@@ -52,22 +53,26 @@ export default {
     },
     // 提交
     dataFormSubmit () {
-      this.$http(`${this.roleId ? SYSTEMSETUP_API.ROLEUPDATE_API : SYSTEMSETUP_API.ROLEADD_API}`, 'POST', this.dataForm).then(({data}) => {
-        console.log(data)
-        if (data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.type) {
+        this.type = false
+        this.$http(`${this.roleId ? SYSTEMSETUP_API.ROLEUPDATE_API : SYSTEMSETUP_API.ROLEADD_API}`, 'POST', this.dataForm).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.type = true
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   },
   computed: {},

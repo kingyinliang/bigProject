@@ -122,7 +122,8 @@ export default {
       menuListTreeProps: {
         label: 'name',
         children: 'children'
-      }
+      },
+      submitType: true
     }
   },
   mounted () {
@@ -176,34 +177,38 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.$http(`${this.type ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'POST', {
-            'menuId': this.dataForm.id || undefined,
-            'type': this.dataForm.type,
-            'name': this.dataForm.name,
-            'parentId': this.dataForm.parentId,
-            'url': this.dataForm.url,
-            'perms': this.dataForm.perms,
-            'orderNum': this.dataForm.orderNum,
-            'icon': this.dataForm.icon
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        }
-      })
+      if (this.submitType) {
+        this.submitType = false
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$http(`${this.type ? SYSTEMSETUP_API.MENUADD_API : SYSTEMSETUP_API.MENUUPDATE_API}`, 'POST', {
+              'menuId': this.dataForm.id || undefined,
+              'type': this.dataForm.type,
+              'name': this.dataForm.name,
+              'parentId': this.dataForm.parentId,
+              'url': this.dataForm.url,
+              'perms': this.dataForm.perms,
+              'orderNum': this.dataForm.orderNum,
+              'icon': this.dataForm.icon
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.submitType = true
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }
+        })
+      }
     }
   },
   computed: {},

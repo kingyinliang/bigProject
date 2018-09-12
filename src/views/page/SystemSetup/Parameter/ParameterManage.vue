@@ -138,9 +138,7 @@ export default {
     }
   },
   mounted () {
-    if (this.isAuth('sys:dict:list')) {
-      this.getdictList()
-    }
+    this.getdictList()
   },
   methods: {
     // 获取类型

@@ -35,6 +35,7 @@ export default {
       roleId: '',
       userlist: [],
       selctId: [],
+      type: true,
       visible: false
     }
   },
@@ -56,8 +57,8 @@ export default {
       })
     },
     updatauser () {
-      console.log(this.selctId)
-      if (this.selctId.length) {
+      if (this.type) {
+        this.type = false
         this.$http(`${SYSTEMSETUP_API.ROLEUSERUPDATE_API}`, 'POST', {
           roleId: this.roleId,
           userId: this.selctId
@@ -69,6 +70,7 @@ export default {
               type: 'success',
               duration: 1500,
               onClose: () => {
+                this.type = true
                 this.visible = false
                 this.$emit('refreshDataList')
               }

@@ -5,13 +5,13 @@
     :visible.sync="visible">
     <div>
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px">
-        <el-form-item label="容器类型：">
+        <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="容器号：">
+        <el-form-item label="容器号：" prop="holderNo">
           <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="容器描述：">
@@ -26,7 +26,7 @@
         <el-form-item label="物理区域：">
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="归属车间：">
+        <el-form-item label="归属车间：" prop="deptId">
           <el-select v-model="dataForm.deptId" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
@@ -64,10 +64,10 @@ export default {
           { required: true, message: '容器类型不能为空', trigger: 'blur' }
         ],
         holderNo: [
-          { required: true, message: '容器号不能为空', trigger: 'change' }
+          { required: true, message: '容器号不能为空', trigger: 'blur' }
         ],
         deptId: [
-          { required: true, message: '归属车间不能为空', trigger: 'change' }
+          { required: true, message: '归属车间不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -122,39 +122,46 @@ export default {
       })
     },
     dataFormSubmit () {
-      if (this.conid) {
-        this.$http(`${BASICDATA_API.CONTAINERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
-          if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.$emit('refreshDataList')
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          if (this.conid) {
+            this.$http(`${BASICDATA_API.CONTAINERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+              if (data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
               }
             })
           } else {
-            this.$message.error(data.msg)
-          }
-        })
-      } else {
-        this.$http(`${BASICDATA_API.CONTAINERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-          if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.$emit('refreshDataList')
+            this.$http(`${BASICDATA_API.CONTAINERADD_API}`, 'POST', this.dataForm).then(({data}) => {
+              if (data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
               }
             })
-          } else {
-            this.$message.error(data.msg)
           }
-        })
-      }
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   },
   computed: {},

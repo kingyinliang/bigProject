@@ -14,16 +14,16 @@
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
-          <el-col :span="8" v-if="isAuth('sys:dept:list')">
+          <el-col :span="8">
             <el-card class="orgcard">
               <div slot="header" class="clearfix">
                 <span>组织架构一览</span>
               </div>
               <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" v-if="isAuth('sys:dept:save')" @node-contextmenu="showtab1" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
-              <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
+              <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" v-else @node-click="setdetail" :filter-node-method="filterNode" ref="tree2" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
-          <el-col :span="16" v-if="isAuth('sys:dept:list')">
+          <el-col :span="16">
             <el-card class="orgcard">
               <div slot="header" class="clearfix">
                 <span>组织详细信息</span>

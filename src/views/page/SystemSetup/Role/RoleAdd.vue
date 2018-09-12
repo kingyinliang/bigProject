@@ -33,7 +33,8 @@ export default {
       menuListTreeProps: {
         label: 'name',
         children: 'children'
-      }
+      },
+      type: true
     }
   },
   mounted () {
@@ -61,25 +62,29 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.$http(`${SYSTEMSETUP_API.ROLEMENUUPDATE_API}`, 'POST', {
-        roleId: this.roleId,
-        menuId: [].concat(this.$refs.menuListTree.getCheckedKeys())
-      }).then(({data}) => {
-        console.log(data)
-        if (data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.type) {
+        this.type = false
+        this.$http(`${SYSTEMSETUP_API.ROLEMENUUPDATE_API}`, 'POST', {
+          roleId: this.roleId,
+          menuId: [].concat(this.$refs.menuListTree.getCheckedKeys())
+        }).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.type = true
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   },
   computed: {},

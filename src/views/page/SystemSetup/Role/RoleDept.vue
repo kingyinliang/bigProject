@@ -27,6 +27,7 @@ export default {
     return {
       roleId: '',
       visible: false,
+      type: true,
       OrgTree: []
     }
   },
@@ -59,26 +60,30 @@ export default {
     },
     // 提交
     dataFormSubmit () {
-      this.$http(`${SYSTEMSETUP_API.ROLEDEPTUPDATE_API}`, 'POST', {
-        roleId: this.roleId,
-        deptId: [].concat(this.$refs.deptListTree.getCheckedKeys())
-      }).then(({data}) => {
-        console.log(data)
-        if (data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-        this.visible = true
-      })
+      if (this.type) {
+        this.type = false
+        this.$http(`${SYSTEMSETUP_API.ROLEDEPTUPDATE_API}`, 'POST', {
+          roleId: this.roleId,
+          deptId: [].concat(this.$refs.deptListTree.getCheckedKeys())
+        }).then(({data}) => {
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.type = true
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+          this.visible = true
+        })
+      }
     }
   },
   computed: {},
