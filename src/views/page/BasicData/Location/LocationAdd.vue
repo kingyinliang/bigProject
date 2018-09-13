@@ -70,6 +70,7 @@ export default {
         isSample: '1',
         materialOperation: ''
       },
+      submitType: true,
       dataRule: {
         deptId: [
           { required: true, message: '车间不能为空', trigger: 'blur' }
@@ -115,32 +116,38 @@ export default {
     },
     // 新增
     dataFormSubmit () {
-      this.$refs.addLo.validate((valid) => {
-        if (valid) {
-          this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
-          this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
-          this.formatDate.materialTypeCode = this.formatDate.materialType.substring(0, this.formatDate.materialType.indexOf(' '))
-          this.formatDate.materialTypeName = this.formatDate.materialType.substring(this.formatDate.materialType.indexOf(' ') + 1)
-          this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
-            if (data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      if (this.submitType) {
+        this.submitType = false
+        this.$refs.addLo.validate((valid) => {
+          if (valid) {
+            this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
+            this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
+            this.formatDate.materialTypeCode = this.formatDate.materialType.substring(0, this.formatDate.materialType.indexOf(' '))
+            this.formatDate.materialTypeName = this.formatDate.materialType.substring(this.formatDate.materialType.indexOf(' ') + 1)
+            this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
+              if (data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.submitType = true
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.submitType = true
+                this.$message.error(data.msg)
+              }
+            })
+          } else {
+            this.submitType = true
+            console.log('error submit!!')
+            return false
+          }
+        })
+      }
     }
   },
   computed: {},

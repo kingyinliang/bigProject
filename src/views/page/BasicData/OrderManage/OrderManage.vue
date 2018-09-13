@@ -140,7 +140,7 @@
                 <el-col :span="12">
                   <el-date-picker v-model="form.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
-                <el-col span="12">
+                <el-col :span="12">
                   <el-date-picker v-model="form.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 150px"></el-date-picker>
                 </el-col>
               </el-row>

@@ -104,6 +104,7 @@ export default {
                       }
                     })
                   } else {
+                    this.type = true
                     this.$message.error(data.msg)
                   }
                 })
@@ -123,11 +124,13 @@ export default {
                       }
                     })
                   } else {
+                    this.type = true
                     this.$message.error(data.msg)
                   }
                 })
               }
             } else {
+              this.type = true
               this.$message.error('人员工号和虚拟工号必须添加一个')
             }
           }

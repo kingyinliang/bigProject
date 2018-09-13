@@ -281,26 +281,57 @@ export default {
     },
     // 表格选中
     handleSelectionChange (val) {
-      this.multipleSelection = []
+      this.MaintainList = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item)
+        this.MaintainList.push(item)
       })
+    },
+    // 校验校验
+    getverify () {
+      let ty = true
+      this.MaintainList.forEach((item) => {
+        if (item.different !== 0) {
+          if (!item.differentInfo) {
+            ty = false
+          }
+        }
+      })
+      return ty
     },
     // 编辑
     redact (row) {
       if (!row.redact) {
         row.redact = true
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        this.noMaintainList.splice(this.noMaintainList.length, 0, {})
+        this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
       } else {
-        row.redact = false
-        this.MaintainList.splice(this.MaintainList.length, 0, {})
-        this.MaintainList.splice(this.MaintainList.length - 1, 1)
+        if (row.different !== 0) {
+          if (!row.differentInfo) {
+            this.$message.error('差异说明必填')
+            return false
+          }
+        }
+        row.postgDate = this.plantList.postgDate
+        row.status = ''
+        this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', [row]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            row.redact = false
+            this.noMaintainList.splice(this.noMaintainList.length, 0, {})
+            this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     },
     // 保存
     save () {
       if (this.MaintainList.length > 0) {
+        if (!this.getverify()) {
+          this.$message.error('差异说明必填')
+          return false
+        }
         this.$confirm('确认保存, 是否继续?', '保存', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -321,8 +352,11 @@ export default {
     },
     // 提交
     submit () {
-      console.log(this.MaintainList)
       if (this.MaintainList.length > 0) {
+        if (!this.getverify()) {
+          this.$message.error('差异说明必填')
+          return false
+        }
         this.$confirm('确认提交, 是否继续?', '提交', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

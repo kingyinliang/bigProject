@@ -42,7 +42,7 @@
               </el-form-item>
               <el-row>
                 <el-form-item label="过账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.pstngDate"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd" v-model="plantList.pstngDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="抬头文本：">
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
@@ -236,7 +236,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
+        pstngDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString(),
         headerTxt: '',
         currPage: 1,
         pageSize: 10,
