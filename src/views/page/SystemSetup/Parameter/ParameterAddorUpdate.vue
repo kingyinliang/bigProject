@@ -84,6 +84,7 @@ export default {
               }
             })
           } else {
+            this.submitType = true
             this.$message.error(data.msg)
           }
         })

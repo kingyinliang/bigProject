@@ -287,13 +287,15 @@ export default {
       })
     },
     // 校验校验
-    getverify (row) {
+    getverify () {
       let ty = true
-      if (row.different !== 0) {
-        if (!row.differentInfo) {
-          ty = false
+      this.MaintainList.forEach((item) => {
+        if (item.different !== 0) {
+          if (!item.differentInfo) {
+            ty = false
+          }
         }
-      }
+      })
       return ty
     },
     // 编辑
@@ -303,9 +305,11 @@ export default {
         this.noMaintainList.splice(this.noMaintainList.length, 0, {})
         this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
       } else {
-        if (this.getverify(row)) {
-          this.$message.error('差异说明必填')
-          return false
+        if (row.different !== 0) {
+          if (!row.differentInfo) {
+            this.$message.error('差异说明必填')
+            return false
+          }
         }
         row.postgDate = this.plantList.postgDate
         row.status = ''
@@ -324,13 +328,10 @@ export default {
     // 保存
     save () {
       if (this.MaintainList.length > 0) {
-        this.MaintainList.forEach((item) => {
-          if (item.different !== 0) {
-            if (!item.differentInfo) {
-              this.$message.error('差异说明必填')
-            }
-          }
-        })
+        if (!this.getverify()) {
+          this.$message.error('差异说明必填')
+          return false
+        }
         this.$confirm('确认保存, 是否继续?', '保存', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -351,8 +352,11 @@ export default {
     },
     // 提交
     submit () {
-      console.log(this.MaintainList)
       if (this.MaintainList.length > 0) {
+        if (!this.getverify()) {
+          this.$message.error('差异说明必填')
+          return false
+        }
         this.$confirm('确认提交, 是否继续?', '提交', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

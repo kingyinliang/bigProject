@@ -59,6 +59,7 @@ export default {
         holderArea: '',
         deptId: ''
       },
+      submitType: true,
       dataRule: {
         holderType: [
           { required: true, message: '容器类型不能为空', trigger: 'blur' }
@@ -122,46 +123,54 @@ export default {
       })
     },
     dataFormSubmit () {
-      this.$refs.dataForm.validate((valid) => {
-        if (valid) {
-          if (this.conid) {
-            this.$http(`${BASICDATA_API.CONTAINERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
-              if (data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
+      if (this.submitType) {
+        this.submitType = false
+        this.$refs.dataForm.validate((valid) => {
+          if (valid) {
+            if (this.conid) {
+              this.$http(`${BASICDATA_API.CONTAINERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+                if (data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.submitType = true
+                      this.visible = false
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.submitType = true
+                  this.$message.error(data.msg)
+                }
+              })
+            } else {
+              this.$http(`${BASICDATA_API.CONTAINERADD_API}`, 'POST', this.dataForm).then(({data}) => {
+                if (data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.submitType = true
+                      this.visible = false
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.submitType = true
+                  this.$message.error(data.msg)
+                }
+              })
+            }
           } else {
-            this.$http(`${BASICDATA_API.CONTAINERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-              if (data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
+            this.submitType = true
+            console.log('error submit!!')
+            return false
           }
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+        })
+      }
     }
   },
   computed: {},

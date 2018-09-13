@@ -69,6 +69,7 @@ export default {
               }
             })
           } else {
+            this.type = true
             this.$message.error(data.msg)
           }
         })

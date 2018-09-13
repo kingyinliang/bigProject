@@ -9,8 +9,8 @@
     <div class="main">
       <el-card>
         <el-row :gutter="20">
-          <div style="margin-bottom: 20px;padding-left: 10px">
-            <el-input placeholder="部门名称" v-model="filterText" style="width: 300px">
+          <div style="margin-bottom: 10px;padding-left: 10px">
+            <el-input placeholder="部门名称" v-model="filterText" size="small" style="width: 300px">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
@@ -181,7 +181,8 @@ export default {
       OrgTree: [],
       OrgDetail: {},
       addDep: {},
-      clickTreeNode: {}
+      clickTreeNode: {},
+      submitType: true
     }
   },
   watch: {
@@ -345,29 +346,34 @@ export default {
     },
     //  新增
     addOrg () {
-      if (this.sibling) {
-        this.addDep.parentId = this.clickTreeNode.parentId
-      } else {
-        this.addDep.parentId = this.clickTreeNode.deptId
-      }
-      if (this.addDep.deptType !== 'proLine') {
-        delete this.addDep.fileName
-        delete this.addDep.proLine
-        delete this.addDep.picUrl
-      }
-      this.$http(`${BASICDATA_API.ADDORG_API}`, 'POST', this.addDep).then(({data}) => {
-        if (data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-          this.getTree()
-          this.addDep = {}
-          this.dialogFormVisible1 = false
+      if (this.submitType) {
+        this.submitType = false
+        if (this.sibling) {
+          this.addDep.parentId = this.clickTreeNode.parentId
         } else {
-          this.$message.error(data.msg)
+          this.addDep.parentId = this.clickTreeNode.deptId
         }
-      })
+        if (this.addDep.deptType !== 'proLine') {
+          delete this.addDep.fileName
+          delete this.addDep.proLine
+          delete this.addDep.picUrl
+        }
+        this.$http(`${BASICDATA_API.ADDORG_API}`, 'POST', this.addDep).then(({data}) => {
+          if (data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getTree()
+            this.addDep = {}
+            this.dialogFormVisible1 = false
+            this.submitType = true
+          } else {
+            this.submitType = true
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   },
   computed: {},

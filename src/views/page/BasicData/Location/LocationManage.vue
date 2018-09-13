@@ -12,7 +12,7 @@
           <el-row style="float: right">
             <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
               <el-form-item>
-                <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="form.materialCode" placeholder="车间" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetLocationList()" v-if="isAuth('sys:sto:list')">查询</el-button>
@@ -177,6 +177,8 @@ export default {
         pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
         console.log(data)
+        this.visible = false
+        this.visible1 = false
         if (data.code === 0) {
           this.multipleSelection = []
           this.list = data.page.list
