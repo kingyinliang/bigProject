@@ -345,6 +345,7 @@ export default {
               this.$message.error(data.msg)
             }
           })
+          this.GetMaintainList()
         })
       } else {
         this.$message.error('请勾选后保存')

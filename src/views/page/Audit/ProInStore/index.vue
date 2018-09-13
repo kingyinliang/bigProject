@@ -271,7 +271,7 @@ export default {
   },
   mounted () {
     // this.GetAuditList()
-    this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString()
+    this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate()))
     this.Getdeptcode()
     let $ = this.$
 
@@ -379,6 +379,7 @@ export default {
           } else {
             this.$message.error(data.msg)
           }
+          this.GetAuditList()
         })
       }
     },

@@ -1,10 +1,10 @@
 // let HOST = 'http://localhost:8080/'
-let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.1.1.96:8080'
-// let HOST = 'http://10.1.1.74:8080'
+let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 /*
-*首页api
+*MAINapi
  */
 
 export const MAIN_API = {
@@ -28,7 +28,11 @@ export const MAIN_API = {
   /**
    * @property {string} MENULIST_API 功能列表
    */
-  MENULIST_API: HOST + '/sys/menu/list'
+  MENULIST_API: HOST + '/sys/menu/list',
+  /**
+   * @property {string} MENULIST_API 功能列表
+   */
+  UPPASS_API: HOST + '/sys/user/password'
 }
 /*
 *基础数据api

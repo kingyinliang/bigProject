@@ -5,21 +5,24 @@
     v-loading.fullscreen.lock="loading"
     element-loading-text="拼命加载中">
     <template v-if="!loading">
-      <main-navbar />
+      <main-navbar :updatePassword="updatePassword"/>
       <main-sidebar />
       <div class="site-content__wrapper" :style="{ 'min-height': documentClientHeight + 'px' }">
         <main-content />
       </div>
     </template>
+    <update-pass v-if="pasVisible" ref="upPass" id="upPass" :refreshDataList="refreshDataList"></update-pass>
   </div>
 </template>
 
 <script>
+import updatePass from '@/views/common/updatePass'
 import {MAIN_API} from '@/api/api'
 export default {
   name: 'mains',
   data () {
     return {
+      pasVisible: false,
       loading: true
     }
   },
@@ -30,6 +33,16 @@ export default {
     this.resetDocumentClientHeight()
   },
   methods: {
+    refreshDataList () {
+      this.pasVisible = false
+    },
+    // 修改密码
+    updatePassword () {
+      this.pasVisible = true
+      this.$nextTick(() => {
+        this.$refs['upPass'].init()
+      })
+    },
     // 重置窗口可视高度
     resetDocumentClientHeight () {
       this.documentClientHeight = document.documentElement['clientHeight']
@@ -79,7 +92,8 @@ export default {
     },
     MainNavbar: resolve => {
       require(['@/views/main_topbar'], resolve)
-    }
+    },
+    updatePass
   }
 }
 </script>
