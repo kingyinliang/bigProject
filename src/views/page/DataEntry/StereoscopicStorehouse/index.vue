@@ -209,7 +209,7 @@ export default {
   mounted () {
     // this.GetLtkList()
     this.Getdeptcode()
-   
+    let $ = this.$
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {
       $('.searchCard').animate({height: 0}, 300, function () {

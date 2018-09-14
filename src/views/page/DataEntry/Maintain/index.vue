@@ -235,7 +235,7 @@ export default {
   mounted () {
     // this.GetMaintainList()
     this.Getdeptcode()
-
+    let $ = this.$
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {
       $('.searchCard').animate({height: 0}, 300, function () {
@@ -250,7 +250,7 @@ export default {
       })
       $(this).hide()
       $('.toggleSearchBottom').show()
-    })  
+    })
   },
   methods: {
     // 获取列表

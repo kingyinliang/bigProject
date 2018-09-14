@@ -86,9 +86,9 @@
                 </div>
                 <el-card class="box-card">
                   <div slot="header" class="clearfix">
-                    <span>白班录入</span>
+                    <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="dayshiftBox">
                     <el-form-item label="工作开始时间" prop="dayStartDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
@@ -117,9 +117,9 @@
                 </el-card>
                 <el-card class="box-card" v-if="readyDate.isCause == '1'">
                   <div slot="header" class="clearfix">
-                    <span>中班录入</span>
+                    <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="middleshiftBox">
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
@@ -148,9 +148,9 @@
                 </el-card>
                 <el-card class="box-card" v-if="readyDate.isCause == '1'">
                   <div slot="header" class="clearfix">
-                    <span>夜班录入</span>
+                    <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="nightshiftBox">
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
@@ -1348,7 +1348,7 @@ export default {
     this.GetTeam()
     this.GetPot()
     this.getTree()
-
+    let $ = this.$
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {
       $('.searchCard').animate({height: 0}, 300, function () {
@@ -1363,7 +1363,23 @@ export default {
       })
       $(this).hide()
       $('.toggleSearchBottom').show()
-    })   
+    })
+    // 白班、中班、晚班切换显隐
+    $('.shiftBtn').click(function () {
+      var $shiftBtn = $('.' + $(this).attr('name'))
+      var $shiftBox = $('.' + $(this).attr('name') + 'Box')
+      if ($shiftBtn.children('i').hasClass('el-icon-caret-top')) {
+        $shiftBox.animate({height: 0}, 300, function () {
+          $shiftBtn.children('i').removeClass('el-icon-caret-top').addClass('el-icon-caret-bottom')
+          $(this).parent('.el-card__body').css({'padding-top': 0, 'padding-bottom': 0})
+        })
+      } else {
+        $shiftBox.parent('.el-card__body').css({'padding-top': 20, 'padding-bottom': 20})
+        $shiftBox.animate({height: 150}, 300, function () {
+          $shiftBtn.children('i').removeClass('el-icon-caret-bottom').addClass('el-icon-caret-top')
+        })
+      }
+    })
   },
   methods: {
     // 获取组织结构树
@@ -2481,7 +2497,9 @@ export default {
       color: #dcdfe6;
     }
   }
-
+  .shiftBtn {
+    cursor: pointer;
+  }
 #tabs{
   table{
     .el-form-item{
