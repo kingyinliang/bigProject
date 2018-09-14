@@ -32,9 +32,9 @@
             <el-card class="box-card">
             <el-form :model="item" size="small" label-position="right" label-width="85px">
               <div class="clearfix pro-line">
-                  <el-form-item label="产线：">
-                    <p>{{item.productLineName}} <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p>
-                  </el-form-item>
+                <el-form-item label="产线：">
+                  <p>{{item.productLineName}} <span style="margin-left: 120px;color: #8a979e;font-size: 14px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span><el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p>
+                </el-form-item>
               </div>
               <div class="clearfix item">
                 <img :src="'http://10.8.4.153:50080' + item.img" alt="">
@@ -157,6 +157,7 @@ export default {
             row.materialCode = data.list[0].materialCode
             row.materialName = data.list[0].materialName
             row.planOutput = data.list[0].planOutput
+            row.orderStatus = data.list[0].orderStatus
             row.outputUnit = data.list[0].outputUnit
             row.properties = data.list[0].properties
             row.plan = data.list[0].plan
@@ -193,6 +194,7 @@ export default {
           order_arr: orderNo,
           materialCode: '',
           materialName: '',
+          orderStatus: '',
           planOutput: '',
           outputUnit: '',
           properties: ''

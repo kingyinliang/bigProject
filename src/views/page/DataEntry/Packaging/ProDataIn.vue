@@ -66,7 +66,7 @@
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'已同步'" placement="top-start">
-                <el-button>准备时间</el-button>
+                <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">准备时间</el-button>
               </el-tooltip>
             </span>
             <div class="times">
@@ -202,7 +202,7 @@
           <el-tab-pane name="2">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="uerDate.length? (uerDate[0].status === 'noPass'? '不通过':uerDate[0].status === 'saved'? '已保存':uerDate[0].status === 'submit' ? '已提交' : uerDate[0].status === 'checked'? '通过':uerDate[0].status) : '已同步'" placement="top-start">
-                <el-button>人员</el-button>
+                <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">人员</el-button>
               </el-tooltip>
             </span>
             <div class="staff">
@@ -267,11 +267,19 @@
                     :show-overflow-tooltip="true"
                     width="300">
                     <template slot-scope="scope">
-                      <span>
+                      <span v-if="!isRedact" style="cursor: pointer">
                         <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
                       </span>
-                      <el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击选择人员</el-button>
-                      <el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击输入临时工</el-button>
+                      <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                        <i>点击选择人员</i>
+                      </span>
+                      <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                        <i>点击输入临时工</i>
+                      </span>
+                      <!--<el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击选择人员</el-button>-->
+                      <!--<el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击输入临时工</el-button>-->
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -458,7 +466,7 @@
           <el-tab-pane name="4">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'已同步'" placement="top-start">
-                <el-button>生产入库</el-button>
+                <el-button :style="{'color': Instatus === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
             <div class="tab4">
@@ -837,7 +845,7 @@
           <el-tab-pane name="5">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'已同步'" placement="top-start">
-                <el-button>物料领用</el-button>
+                <el-button :style="{'color': Sapstatus === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
             <el-table
@@ -1102,9 +1110,6 @@
       :close-on-click-modal="false"
       :visible.sync="visible">
       <el-row>
-        <!--<el-col style="width: 250px">-->
-          <!--<el-card></el-card>-->
-        <!--</el-col>-->
         <el-col style="width: 500px">
           <el-transfer
             filterable
@@ -1117,7 +1122,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible1 = false">取消</el-button>
+        <el-button @click="visible = false">取消</el-button>
         <el-button type="primary" @click="updatauser(row)">确定</el-button>
       </span>
     </el-dialog>
@@ -1841,7 +1846,7 @@ export default {
         this.netStatus.userState = false
         this.uerDate.forEach((item) => {
           if (item.status) {
-            if (item.status === 'saved') { item.status = str }
+            if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
           } else {
             item.status = str
           }
@@ -1865,6 +1870,8 @@ export default {
       this.readyDate.orderId = this.orderId
       if (!this.readyDate.status) {
         this.readyDate.status = str
+      } else if (this.readyDate.status === 'noPass' && str === 'submit') {
+        this.readyDate.status = str
       }
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
@@ -1880,7 +1887,7 @@ export default {
       } else {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
           id: this.readyDate.id ? this.readyDate.id : '',
-          status: str,
+          status: this.readyDate.status,
           isCause: this.readyDate.isCause,
           orderId: this.orderId,
           dayStartDate: this.readyDate.dayStartDate,
@@ -1937,7 +1944,7 @@ export default {
         this.InDate.forEach((item) => {
           item.orderId = this.orderId
           if (item.status) {
-            if (item.status === 'saved') { item.status = str }
+            if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
           } else {
             item.status = str
           }
@@ -1961,14 +1968,14 @@ export default {
       this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
         if (item.status) {
-          if (item.status === 'saved') { item.status = str }
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
           item.status = str
         }
       })
       this.listbomS.forEach((item) => {
         if (item.status) {
-          if (item.status === 'saved') { item.status = str }
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
           item.status = str
         }
