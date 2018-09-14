@@ -4,10 +4,10 @@
       您的浏览器不支持 video 标签。
     </video>
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
-      <el-form-item label="账号" prop="user">
+      <el-form-item label="账号：" prop="user">
       <el-input v-model="ruleForm2.user" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="pass">
+      <el-form-item label="密码：" prop="pass">
         <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
@@ -15,6 +15,7 @@
         <el-button @click="resetForm('ruleForm2')">重置</el-button>
       </el-form-item>
     </el-form>
+    <div class="loginFormBg"></div>
     <el-dialog
       title="修改密码"
       :visible.sync="visible">
@@ -100,7 +101,7 @@ export default {
             duration: 1500,
             onClose: () => {
               this.visible = false
-              this.$emit('refreshDataList')
+              this.$router.push({path: '/home'})
             }
           })
         } else {
@@ -117,8 +118,12 @@ export default {
           }).then(res => {
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.token)
-              // window.sessionStorage.setItem('menuList', JSON.stringify(res.data.data.menuList))
-              this.$router.push({path: '/home'})
+              if (res.data.list[0].isFirst === '1') {
+                this.visible = true
+              } else {
+                // window.sessionStorage.setItem('menuList', JSON.stringify(res.data.data.menuList))
+                this.$router.push({path: '/home'})
+              }
             } else {
               this.$message.error(res.data.msg)
             }
@@ -138,7 +143,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 video{
   object-fit: fill;
 }
@@ -148,5 +153,23 @@ video{
   position: fixed;
   top: 200px;
   right: 100px;
+  z-index: 999;
+  label{
+    color: white!important;
+  }
+  input{
+    background: #ffffff!important;
+  }
+}
+.loginFormBg{
+  border-radius: 10px;
+  background-color: rgba(60, 60, 60, 0.6);
+  box-shadow: 0px 5px 19px 1px
+  rgba(214, 221, 237, 0.45);
+  width: 425px;
+  height: 220px;
+  position: fixed;
+  top: 165px;
+  right: 65px;
 }
 </style>

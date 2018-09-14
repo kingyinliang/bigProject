@@ -75,8 +75,11 @@
             width="34">
           </el-table-column>
           <el-table-column
-            type="index"
-            width="55">
+            label="审核状态"
+            width="100">
+            <template slot-scope="scope">
+              {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? scope.row.interfaceReturnStatus === '0'? '接口失败': '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -188,7 +191,7 @@
             label="操作"
             width="65">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="redact(scope.row)" v-if="scope.row.status != 'checked' && isAuth('verify:time:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+              <el-button type="text" size="small" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:time:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -343,7 +346,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'checked') {
+      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
         return 0
       } else {
         return 1
