@@ -236,7 +236,7 @@ export default {
         workShop: '',
         productLine: '',
         prodDate: '',
-        pstngDate: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDate().toString(),
+        pstngDate: new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate())),
         headerTxt: '',
         currPage: 1,
         pageSize: 10,
@@ -367,6 +367,7 @@ export default {
           } else {
             this.$message.error(data.msg)
           }
+          this.GetAuditList()
         })
       }
     },

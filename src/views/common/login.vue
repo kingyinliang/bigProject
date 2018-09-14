@@ -15,6 +15,23 @@
         <el-button @click="resetForm('ruleForm2')">重置</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      title="修改密码"
+      :visible.sync="visible">
+      <div>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px">
+          <el-form-item label="原密码：" prop="password">
+            <el-input v-model="dataForm.password" placeholder="手动输入" minlength="8" maxlength="12" type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码：">
+            <el-input v-model="dataForm.newPassword" placeholder="手动输入" minlength="8" maxlength="12" type="password"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dataFormSubmit">确定</el-button>
+    </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -32,6 +49,17 @@ export default {
       }
     }
     return {
+      dataRule: {
+        password: [
+          { required: true, message: '原密码必填', trigger: 'blur' },
+          { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' }
+        ]
+      },
+      visible: false,
+      dataForm: {
+        password: '',
+        newPassword: ''
+      },
       ruleForm2: {
         user: '',
         pass: ''
@@ -41,7 +69,7 @@ export default {
       rules2: {
         user: [
           { required: true, message: '请输入账号名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' }
         ],
         pass: [
           { validator: validatePass, trigger: 'blur' }
@@ -62,6 +90,23 @@ export default {
       this.$refs.videos.src = this.videoList[this.curr]
       this.$refs.videos.load()
       this.$refs.videos.play()
+    },
+    dataFormSubmit () {
+      this.$http(`${MAIN_API.UPPASS_API}`, 'POST', this.dataForm).then(({data}) => {
+        if (data.code === 0) {
+          this.$message({
+            message: '修改成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
