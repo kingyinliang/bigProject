@@ -62,7 +62,7 @@
                     <el-table-column
                       prop="workNumTemp"
                       label="虚拟工号"
-                      width="87">
+                      width="110">
                     </el-table-column>
                     <el-table-column
                       prop="realName"
