@@ -1,7 +1,7 @@
 <template>
 <div>
 <!-- <h1>home</h1> -->
-<img src="@/assets/img/index.jpg" style="width: 100%;">
+<img src="@/assets/img/index.svg" style="width: 80%; display: block; margin: 120px auto;">
 
 </div>
 </template>

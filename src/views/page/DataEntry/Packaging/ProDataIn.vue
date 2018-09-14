@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </div>
     <div class="main">
-      <el-card style="margin: 0">
+      <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
             <el-form :inline="true" :model="form" size="small" label-width="82px" class="topform">
@@ -23,7 +23,7 @@
                 <p class="el-input">{{order.orderNo}}</p>
               </el-form-item>
               <el-form-item label="品项：">
-                <p class="el-input">{{order.materialCode + ' ' + order.materialName}}</p>
+                <p class="el-input" style="width: 457px;">{{order.materialCode + ' ' + order.materialName}}</p>
               </el-form-item>
               <el-form-item label="计划产量：">
                 <p class="el-input">{{order.planOutput + ' ' + order.outputUnit}}</p>
@@ -52,10 +52,16 @@
             </el-row>
           </el-col>
         </el-row>
+        <div class="toggleSearchBottom">
+            <i class="el-icon-caret-top"></i>
+        </div>
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card>
+      <el-card class="tableCard">
+        <div class="toggleSearchTop">
+            <i class="el-icon-caret-bottom"></i>
+        </div>
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">
@@ -80,9 +86,9 @@
                 </div>
                 <el-card class="box-card">
                   <div slot="header" class="clearfix">
-                    <span>白班录入</span>
+                    <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="dayshiftBox">
                     <el-form-item label="工作开始时间" prop="dayStartDate">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
@@ -111,9 +117,9 @@
                 </el-card>
                 <el-card class="box-card" v-if="readyDate.isCause == '1'">
                   <div slot="header" class="clearfix">
-                    <span>中班录入</span>
+                    <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="middleshiftBox">
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
@@ -142,9 +148,9 @@
                 </el-card>
                 <el-card class="box-card" v-if="readyDate.isCause == '1'">
                   <div slot="header" class="clearfix">
-                    <span>夜班录入</span>
+                    <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
-                  <div>
+                  <div class="nightshiftBox">
                     <el-form-item label="工作开始时间" >
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
@@ -1342,6 +1348,38 @@ export default {
     this.GetTeam()
     this.GetPot()
     this.getTree()
+    let $ = this.$
+    // 搜索切换显隐
+    $('.toggleSearchBottom').click(function () {
+      $('.searchCard').animate({height: 0}, 300, function () {
+        $('.searchCard').parent('.main').css('padding-bottom', 0)
+      })
+      $(this).hide()
+      $('.toggleSearchTop').show()
+    })
+    $('.toggleSearchTop').click(function () {
+      $('.searchCard').animate({height: '190px'}, 300, function () {
+        $('.searchCard').parent('.main').css('padding-bottom', '15px')
+      })
+      $(this).hide()
+      $('.toggleSearchBottom').show()
+    })
+    // 白班、中班、晚班切换显隐
+    $('.shiftBtn').click(function () {
+      var $shiftBtn = $('.' + $(this).attr('name'))
+      var $shiftBox = $('.' + $(this).attr('name') + 'Box')
+      if ($shiftBtn.children('i').hasClass('el-icon-caret-top')) {
+        $shiftBox.animate({height: 0}, 300, function () {
+          $shiftBtn.children('i').removeClass('el-icon-caret-top').addClass('el-icon-caret-bottom')
+          $(this).parent('.el-card__body').css({'padding-top': 0, 'padding-bottom': 0})
+        })
+      } else {
+        $shiftBox.parent('.el-card__body').css({'padding-top': 20, 'padding-bottom': 20})
+        $shiftBox.animate({height: 150}, 300, function () {
+          $shiftBtn.children('i').removeClass('el-icon-caret-bottom').addClass('el-icon-caret-top')
+        })
+      }
+    })
   },
   methods: {
     // 获取组织结构树
@@ -2445,6 +2483,23 @@ export default {
 }
 </style>
 <style lang="scss">
+  .searchCard { margin-bottom: 0; }
+  .searchCard, .tableCard {
+    position: relative;
+    .toggleSearchTop {
+      width: 100%; position: absolute; top: 0; left: 0; text-align: center; cursor: pointer; display: none;
+    }
+    .toggleSearchBottom {
+      width: 100%; position: absolute; bottom: 0; left: 0; text-align: center; cursor: pointer;
+    }
+    .el-icon-caret-top:before,
+    .el-icon-caret-bottom:before {
+      color: #dcdfe6;
+    }
+  }
+  .shiftBtn {
+    cursor: pointer;
+  }
 #tabs{
   table{
     .el-form-item{
