@@ -219,7 +219,7 @@ export default {
       $('.toggleSearchTop').show()
     })
     $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '190px'}, 300, function () {
+      $('.searchCard').animate({height: '140px'}, 300, function () {
         $('.searchCard').parent('.main').css('padding-bottom', '15px')
       })
       $(this).hide()
