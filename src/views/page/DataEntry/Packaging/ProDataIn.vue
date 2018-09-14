@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </div>
     <div class="main">
-      <el-card style="margin: 0">
+      <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
             <el-form :inline="true" :model="form" size="small" label-width="82px" class="topform">
@@ -23,7 +23,7 @@
                 <p class="el-input">{{order.orderNo}}</p>
               </el-form-item>
               <el-form-item label="品项：">
-                <p class="el-input">{{order.materialCode + ' ' + order.materialName}}</p>
+                <p class="el-input" style="width: 457px;">{{order.materialCode + ' ' + order.materialName}}</p>
               </el-form-item>
               <el-form-item label="计划产量：">
                 <p class="el-input">{{order.planOutput + ' ' + order.outputUnit}}</p>
@@ -52,10 +52,16 @@
             </el-row>
           </el-col>
         </el-row>
+        <div class="toggleSearchBottom">
+            <i class="el-icon-caret-top"></i>
+        </div>
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card>
+      <el-card class="tableCard">
+        <div class="toggleSearchTop">
+            <i class="el-icon-caret-bottom"></i>
+        </div>
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">
@@ -1342,6 +1348,22 @@ export default {
     this.GetTeam()
     this.GetPot()
     this.getTree()
+
+    // 搜索切换显隐
+    $('.toggleSearchBottom').click(function () {
+      $('.searchCard').animate({height: 0}, 300, function () {
+        $('.searchCard').parent('.main').css('padding-bottom', 0)
+      })
+      $(this).hide()
+      $('.toggleSearchTop').show()
+    })
+    $('.toggleSearchTop').click(function () {
+      $('.searchCard').animate({height: '190px'}, 300, function () {
+        $('.searchCard').parent('.main').css('padding-bottom', '15px')
+      })
+      $(this).hide()
+      $('.toggleSearchBottom').show()
+    })   
   },
   methods: {
     // 获取组织结构树
@@ -2445,6 +2467,21 @@ export default {
 }
 </style>
 <style lang="scss">
+  .searchCard { margin-bottom: 0; }
+  .searchCard, .tableCard {
+    position: relative;
+    .toggleSearchTop {
+      width: 100%; position: absolute; top: 0; left: 0; text-align: center; cursor: pointer; display: none;
+    }
+    .toggleSearchBottom {
+      width: 100%; position: absolute; bottom: 0; left: 0; text-align: center; cursor: pointer;
+    }
+    .el-icon-caret-top:before,
+    .el-icon-caret-bottom:before {
+      color: #dcdfe6;
+    }
+  }
+
 #tabs{
   table{
     .el-form-item{
