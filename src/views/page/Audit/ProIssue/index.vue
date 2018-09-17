@@ -1,11 +1,5 @@
 <template>
   <div>
-<!--     <div class="topTitle">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>生管审核</el-breadcrumb-item>
-        <el-breadcrumb-item>生产发料</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div> -->
     <div class="main">
       <el-card class="searchCard">
         <el-row type="flex">
@@ -42,7 +36,7 @@
               </el-form-item>
               <el-row>
                 <el-form-item label="过账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd" v-model="plantList.pstngDate"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="抬头文本：">
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
@@ -114,12 +108,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="productUseNum"
+            prop="entryQnt"
             label="发料组件数量"
             width="105">
           </el-table-column>
           <el-table-column
-            prop="unit"
+            prop="entryUom"
             label="单位"
             width="50">
           </el-table-column>

@@ -320,6 +320,15 @@ export default {
       })
       return ty
     },
+    getverify1 () {
+      let ty = true
+      this.MaintainList.forEach((item) => {
+        if (item.aiShelves * 1 !== item.jwzAcount * 1) {
+          ty = false
+        }
+      })
+      return ty
+    },
     // 编辑
     redact (row) {
       if (!row.redact) {
@@ -332,6 +341,10 @@ export default {
             this.$message.error('差异说明必填')
             return false
           }
+        }
+        if (row.aiShelves * 1 !== row.jwzAcount * 1) {
+          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
+          return false
         }
         row.postgDate = this.plantList.postgDate
         row.status = ''
@@ -352,6 +365,10 @@ export default {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
           this.$message.error('差异说明必填')
+          return false
+        }
+        if (!this.getverify1()) {
+          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
           return false
         }
         this.$confirm('确认保存, 是否继续?', '保存', {
@@ -378,6 +395,10 @@ export default {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
           this.$message.error('差异说明必填')
+          return false
+        }
+        if (!this.getverify1()) {
+          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
           return false
         }
         this.$confirm('确认提交, 是否继续?', '提交', {

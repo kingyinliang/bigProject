@@ -366,7 +366,8 @@
               </el-table-column>
               <el-table-column
                 label="异常描述"
-                width="120">
+                :show-overflow-tooltip="true"
+                width="220">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
                   <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
@@ -376,16 +377,16 @@
                 width="241"
                 label="异常开始时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 width="241"
                 label="异常结束时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
@@ -835,8 +836,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="jwzMan"
-                  label="机维组确认人"
-                  width="120">
+                  label="机维组确认人">
                 </el-table-column>
               </el-table>
               <auditLog :tableData="InAudit"></auditLog>
@@ -1433,10 +1433,15 @@ export default {
             this.GetpkgGerms()
             this.GetText()
           } else {
+            this.addUserDate(this.uerDate)
+            this.AddExcDate(this.ExcDate)
+            this.AddInDate(this.InDate)
+            this.AddGermsDate(this.GermsDate)
             this.listbomP = data.listbomP
             this.listbomS = data.listbomS
             this.listbomS.forEach((item) => {
               item.isSplit = '0'
+              item.delFlag = '0'
               item.id = ''
               item.orderId = this.order.orderId
             })
@@ -1719,7 +1724,13 @@ export default {
     excrul () {
       let ty = true
       this.ExcDate.forEach((item) => {
-        if (item.expCode && item.expStartDate && item.expEndDate) {} else {
+        if (item.expCode && item.expStartDate && item.expEndDate) {
+          if ((item.expContinue * 1) < 0) {
+            ty = false
+            this.$message.error('异常开始时间大于结束时间')
+            return false
+          }
+        } else {
           ty = false
         }
       })
@@ -1765,7 +1776,7 @@ export default {
             }
             if (this.ExcDate.length > 0) {
               if (!this.excrul()) {
-                this.$message.error('异常记录必填项未填')
+                this.$message.error('异常记录必填项未填或异常开始时间大于结束时间')
                 return false
               }
             }
@@ -2550,8 +2561,9 @@ export default {
   margin-bottom: 20px;
 }
 .el-input.is-disabled .el-input__inner {
-  color: #606266;
-  border-color: #dcdfe6;
+  background-color: white!important;
+  color: #606266!important;
+  border-color: #dcdfe6!important;
   background: none;
 }
 .topBox .btn { margin-bottom: 18px; }

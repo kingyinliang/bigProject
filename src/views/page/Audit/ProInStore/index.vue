@@ -128,9 +128,11 @@
             width="105">
           </el-table-column>
           <el-table-column
-            prop="prodDate"
             label="生产日期"
             width="105">
+            <template slot-scope="scope">
+              {{scope.row.prodDate | SetDate}}
+            </template>
           </el-table-column>
           <el-table-column
             label="入库库位"
@@ -270,6 +272,11 @@ export default {
     },
     'plantList.workShop' (n, o) {
       this.GetParentline(n)
+    }
+  },
+  filters: {
+    SetDate: function (value) {
+      return value.slice(0, value.indexOf(' '))
     }
   },
   mounted () {

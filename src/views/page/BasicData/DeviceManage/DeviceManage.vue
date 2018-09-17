@@ -51,6 +51,7 @@
                   </el-table-column>
                   <el-table-column
                     type="index"
+                    :index="indexMethod"
                     label="序号"
                     width="55">
                   </el-table-column>
@@ -163,6 +164,10 @@ export default {
       val.forEach((item, index) => {
         this.multipleSelection.push(item.deviceId)
       })
+    },
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
     },
     // 添加和编辑
     addOrupdate (deptId, id) {

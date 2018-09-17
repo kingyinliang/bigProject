@@ -37,7 +37,7 @@
                 width="122"
                 label="生产订单">
                 <template slot-scope="scope">
-                  <el-button type="text" style="color: #606266; padding: 0;">{{scope.row.orderNo}}</el-button>
+                  {{scope.row.orderNo}}
                 </template>
               </el-table-column>
               <el-table-column

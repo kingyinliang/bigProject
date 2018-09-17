@@ -52,7 +52,7 @@
                       <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
                     </el-form-item>
                     <el-form-item label="实时产量：" style="margin-bottom: 10px;">
-                      <p>{{item.realOutput? item.realOutput : '0' + ' ' + item.outputUnit}}</p>
+                      <p>{{item.realOutput? item.realOutput + item.outputUnit: '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
                 </div>
               </div>
@@ -108,6 +108,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          if (!this.plantList.factoryid) {
+            this.plantList.factoryid = data.typeList[0].deptId
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -152,6 +155,7 @@ export default {
           productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
+          console.log(data.list[0].realOutput)
           if (data.code === 0) {
             row.orderNo2 = row.orderNo
             row.materialCode = data.list[0].materialCode
@@ -160,6 +164,7 @@ export default {
             row.orderStatus = data.list[0].orderStatus
             row.outputUnit = data.list[0].outputUnit
             row.properties = data.list[0].properties
+            row.realOutput = data.list[0].realOutput
             row.plan = data.list[0].plan
           } else {
             this.$message.error(data.msg)
@@ -192,6 +197,7 @@ export default {
           orderNo: orderNos,
           orderNo2: '',
           order_arr: orderNo,
+          realOutput: '',
           materialCode: '',
           materialName: '',
           orderStatus: '',

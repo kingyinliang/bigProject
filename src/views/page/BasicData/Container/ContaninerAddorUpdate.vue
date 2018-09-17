@@ -18,10 +18,10 @@
           <el-input v-model="dataForm.holderName" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="容器量：">
-          <el-input type="number" v-model="dataForm.holderHold" placeholder="手动输入"></el-input>
+          <el-input type="number" v-model="dataForm.holderHold" placeholder="手动输入" min="0"></el-input>
         </el-form-item>
         <el-form-item label="批数：">
-          <el-input type="number" v-model="dataForm.holderPatch" placeholder="手动输入"></el-input>
+          <el-input type="number" v-model="dataForm.holderPatch" placeholder="手动输入" min="0"></el-input>
         </el-form-item>
         <el-form-item label="物理区域：">
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
@@ -59,6 +59,7 @@ export default {
         holderArea: '',
         deptId: ''
       },
+      workshop: [],
       submitType: true,
       dataRule: {
         holderType: [

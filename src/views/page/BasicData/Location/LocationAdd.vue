@@ -37,7 +37,7 @@
               <el-option label="否"  value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="发料/入库：" prop="orderNo6">
+          <el-form-item label="发料/入库：" prop="materialOperation">
             <el-select v-model="formatDate.materialOperation" placeholder="请选择">
               <el-option label="发料"  value="发料"></el-option>
               <el-option label="入库"  value="入库"></el-option>
@@ -67,7 +67,7 @@ export default {
         storageLocation: '',
         materialType: '',
         material: '',
-        isSample: '1',
+        isSample: '0',
         materialOperation: ''
       },
       submitType: true,
@@ -81,7 +81,7 @@ export default {
         storageLocation: [
           { required: true, message: '库位不能为空', trigger: 'blur' }
         ],
-        orderNo6: [
+        materialOperation: [
           { required: true, message: '发料/入库不能为空', trigger: 'blur' }
         ]
       }

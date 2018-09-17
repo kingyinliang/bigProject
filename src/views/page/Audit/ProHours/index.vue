@@ -42,7 +42,7 @@
               </el-form-item>
               <el-row>
                 <el-form-item label="记账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd" v-model="plantList.postgDate"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate"></el-date-picker>
                 </el-form-item>
               </el-row>
             </el-form>
@@ -190,7 +190,8 @@
           </el-table-column>
           <el-table-column
             prop="verifyMan"
-            label="审核人">
+            label="审核人"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="verifyDate"

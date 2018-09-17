@@ -53,6 +53,15 @@ export default {
         callback()
       }
     }
+    var validatePass1 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入账号'))
+      } else if (value.length !== 8) {
+        callback(new Error('长度为 8 个字符工号'))
+      } else {
+        callback()
+      }
+    }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
@@ -90,10 +99,10 @@ export default {
       videoList: ['http://10.8.4.153:50080/profile/video.mp4'],
       rules2: {
         user: [
-          { required: true, message: '请输入账号名称', trigger: 'blur' },
-          { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' }
+          { validator: validatePass1, trigger: 'blur' }
         ],
         pass: [
+          { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ]
       }
