@@ -355,7 +355,8 @@ img {
       }
     }
     > .el-tabs__content {
-      padding: 0 15px 15px;
+      //padding: 0 15px 15px;
+      padding-top: 44px;
       > .site-tabs__tools {
         position: fixed;
         top: 50px;

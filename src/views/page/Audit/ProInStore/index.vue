@@ -365,7 +365,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'checked') {
+      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
         return 0
       } else {
         return 1

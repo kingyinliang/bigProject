@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="topTitle">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-        <el-breadcrumb-item>组织架构</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
+    <!--<div class="topTitle">-->
+      <!--<el-breadcrumb separator="/">-->
+        <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
+        <!--<el-breadcrumb-item>组织架构</el-breadcrumb-item>-->
+      <!--</el-breadcrumb>-->
+    <!--</div>-->
     <div class="main">
       <el-card>
         <el-row :gutter="20">

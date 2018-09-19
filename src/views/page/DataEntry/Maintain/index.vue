@@ -1,11 +1,11 @@
 <template>
 <div>
-  <div class="topTitle">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-      <el-breadcrumb-item>机维组</el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
+  <!--<div class="topTitle">-->
+    <!--<el-breadcrumb separator="/">-->
+      <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
+      <!--<el-breadcrumb-item>机维组</el-breadcrumb-item>-->
+    <!--</el-breadcrumb>-->
+  <!--</div>-->
   <div class="main">
     <el-card class="searchCard">
       <el-row type="flex">
@@ -40,8 +40,8 @@
         <el-col style="width: 260px">
           <el-row>
             <el-button type="primary" size="small" @click="GetMaintainList">查询</el-button>
-            <el-button type="primary" size="small" @click="save()">保存</el-button>
-            <el-button type="primary" size="small" @click="submit()">提交</el-button>
+            <el-button type="primary" size="small" @click="save()" v-if="isAuth('sys:verifyJWZ:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="submit()" v-if="isAuth('sys:verifyJWZ:finished')">提交</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -161,8 +161,10 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="jwzMan"
           label="机维组确认人"
           width="107">
+          <template slot-scope="scope"></template>
         </el-table-column>
         <el-table-column
           label="备注"
@@ -175,10 +177,9 @@
           fixed="right"
           prop="address"
           label="操作"
-          width="96">
+          width="50">
           <template slot-scope="scope">
-            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-            <el-button style="padding: 0;" type="text" size="small" @click="remove(scope.$index,tableData3)">删除</el-button>
+            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="isAuth('sys:verifyJWZ:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -18,7 +18,9 @@ export default {
     // 包装车间
     Pkgfactoryid: '',
     PkgworkShop: '',
-    PkgproductDate: ''
+    PkgproductDate: '',
+    // 包装车间数据录入传值
+    PkgorderNo: ''
   },
   mutations: {
     updateDocumentClientHeight (state, height) {
@@ -53,6 +55,9 @@ export default {
     },
     updateProductDate (state, name) {
       state.PkgproductDate = name
+    },
+    updateOrderNo (state, name) {
+      state.PkgorderNo = name
     }
   }
 }

@@ -66,7 +66,7 @@ export default {
         this.type = false
         this.$http(`${SYSTEMSETUP_API.ROLEMENUUPDATE_API}`, 'POST', {
           roleId: this.roleId,
-          menuId: [].concat(this.$refs.menuListTree.getCheckedKeys())
+          menuId: [[].concat(this.$refs.menuListTree.getCheckedKeys()), [].concat(this.$refs.menuListTree.getHalfCheckedKeys())]
         }).then(({data}) => {
           console.log(data)
           if (data.code === 0) {

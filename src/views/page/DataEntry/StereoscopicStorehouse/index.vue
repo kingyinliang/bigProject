@@ -1,11 +1,11 @@
 <template>
 <div>
-  <div class="topTitle">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-      <el-breadcrumb-item>立体库</el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
+  <!--<div class="topTitle">-->
+    <!--<el-breadcrumb separator="/">-->
+      <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
+      <!--<el-breadcrumb-item>立体库</el-breadcrumb-item>-->
+    <!--</el-breadcrumb>-->
+  <!--</div>-->
   <div class="main">
     <el-card class="searchCard" style="margin: 0">
       <el-row type="flex">
@@ -37,8 +37,8 @@
             </el-form-item>
             <el-form-item style="margin-left: 67px;">
               <el-button type="primary" size="small" @click="GetLtkList()">查询</el-button>
-              <el-button type="primary" size="small" @click="subAutio()">审核通过</el-button>
-              <el-button type="danger" size="small" @click="repulseAutios()">审核不通过</el-button>
+              <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
+              <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyLTK:auditing')">审核不通过</el-button>
             </el-form-item>
           </el-form>
         </el-col>

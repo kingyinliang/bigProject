@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <div class="topTitle">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>
-        <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-        <div style="float: right">{{orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus}}</div>
-      </el-breadcrumb>
-    </div>
+  <el-col v-loading.fullscreen.lock="loading" element-loading-text="加载中">
+    <!--<div class="topTitle">-->
+      <!--<el-breadcrumb separator="/">-->
+        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
+        <!--<el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>-->
+        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
+      <!--</el-breadcrumb>-->
+    <!--</div>-->
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -42,13 +41,16 @@
           <el-col style="width: 210px">
             <el-row style="float: right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row style="float: right" v-if="isRedact">
               <el-button type="primary" size="small" @click="SaveForm('saved')" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">保存</el-button>
               <el-button type="primary" size="small" @click="SaveForm('saved')" v-else disabled>保存</el-button>
               <el-button type="primary" size="small" @click="SubmitForm()" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">提交</el-button>
               <el-button type="primary" size="small" @click="SubmitForm()" v-else disabled>提交</el-button>
+            </el-row>
+            <el-row style="position: absolute;right: 0;top: 100px;">
+              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus}}</span></div>
             </el-row>
           </el-col>
         </el-row>
@@ -268,6 +270,9 @@
                     width="300">
                     <template slot-scope="scope">
                       <span v-if="!isRedact" style="cursor: pointer">
+                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                      </span>
+                      <span v-if="isRedact && (readyDate.status ==='submit' || readyDate.status ==='checked')">
                         <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
                       </span>
                       <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
@@ -490,7 +495,7 @@
                   label="白/中/夜班"
                   width="120">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')" size="small">
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
                       <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                     </el-select>
                     <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
@@ -502,7 +507,7 @@
                   label="生产批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -510,7 +515,7 @@
                   label="人工码垛-包材库"
                   width="140">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -525,7 +530,7 @@
                   label="自动码垛-包材库"
                   width="140" v-if="order.workShopName === '包装三车间'">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -540,7 +545,7 @@
                   label="人工码垛-立体库"
                   width="140">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -555,7 +560,7 @@
                   label="自动码垛-立体库"
                   width="120" v-if="order.workShopName === '包装三车间'">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -570,7 +575,7 @@
                   label="自动上架-立体库"
                   width="140" v-if="order.workShopName !== '包装三车间'">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -585,7 +590,7 @@
                   label="不良品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -600,7 +605,7 @@
                   label="样品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -630,7 +635,7 @@
                   label="备注"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -639,7 +644,7 @@
                   label="操作"
                   width="60">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                   </template>
                 </el-table-column>
@@ -661,7 +666,7 @@
                   label="白/中/夜班"
                   width="120">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')" size="small">
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
                       <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
                     </el-select>
                     <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
@@ -673,7 +678,7 @@
                   label="生产批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -681,7 +686,7 @@
                   label="人工码垛-立体库"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -696,7 +701,7 @@
                   label="不良品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -711,7 +716,7 @@
                   label="样品"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -738,7 +743,7 @@
                   label="主产品批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -746,7 +751,7 @@
                   label="赠品批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -754,7 +759,7 @@
                   label="备注"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')"></el-input>
+                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -763,7 +768,7 @@
                   label="操作"
                   width="60">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                   </template>
                 </el-table-column>
@@ -875,7 +880,7 @@
                 label="生产使用"
                 width="125">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" type="number" min="0"></el-input>
+                  <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
                   <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
@@ -883,7 +888,7 @@
                 label="本班损耗"
                 width="125">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" type="number" min="0"></el-input>
+                  <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
                   <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
@@ -891,7 +896,7 @@
                 label="不合格数"
                 width="125">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" type="number" min="0"></el-input>
+                  <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
                   <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
@@ -899,14 +904,14 @@
                 label="不良批次"
                 width="140">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-input>
+                  <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="厂家（选择）">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-input>
+                  <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
@@ -932,7 +937,7 @@
               <el-table-column
                 label="领用罐号">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" size="small">
+                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
@@ -945,43 +950,43 @@
               <el-table-column
                 label="过滤日期">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                  <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                  <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="批次">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-input>
-                  <el-input v-model="scope.row.batch" v-else disabled></el-input>
+                  <el-input size="small" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                  <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="生产使用量">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-input>
-                  <el-input v-model="scope.row.productUseNum" v-else disabled></el-input>
+                  <el-input size="small" v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                  <el-input size="small" v-model="scope.row.productUseNum" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="换罐时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
+                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="用完时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
+                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column
                 label="操作"
                 width="60">
                 <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')"></el-button>
+                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
                   <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row)"></el-button>
                 </template>
               </el-table-column>
@@ -1186,7 +1191,7 @@
         <el-button type="primary" @click="saveduser(row)">确定</el-button>
       </span>
     </el-dialog>
-  </div>
+  </el-col>
 </template>
 
 <script>
@@ -1196,6 +1201,7 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      loading: true,
       timesForm: {
         isCause: [
           { required: true, message: '请输入工作开始时间', trigger: 'blur' }
@@ -1341,18 +1347,6 @@ export default {
     }
   },
   mounted () {
-    this.orderNo = this.$route.query.order_no
-    this.productDate = this.$route.query.productDate
-    this.workShop = this.$route.query.workShop
-    this.factoryid = this.$route.query.factoryid
-    this.GetOrderList()
-    this.GetmaterialShort()
-    this.GetProductShift()
-    this.Getenery()
-    this.GetstoppageType()
-    this.GetTeam()
-    this.GetPot()
-    this.getTree()
     let $ = this.$
     // 搜索切换显隐
     $('.toggleSearchBottom').click(function () {
@@ -1386,6 +1380,20 @@ export default {
       }
     })
   },
+  activated () {
+    this.loading = true
+    this.orderNo = this.PkgorderNo
+    this.productDate = this.PkgproductDate
+    this.workShop = this.PkgworkShop
+    this.GetOrderList()
+    this.GetmaterialShort()
+    this.GetProductShift()
+    this.Getenery()
+    this.GetstoppageType()
+    this.GetTeam()
+    this.GetPot()
+    this.getTree()
+  },
   methods: {
     // 获取组织结构树
     getTree () {
@@ -1408,6 +1416,7 @@ export default {
         productDate: this.productDate,
         orderNo: this.orderNo
       }).then(({data}) => {
+        this.loading = false
         if (data.code === 0) {
           this.order = data.list[0]
           this.orderId = data.list[0].orderId
@@ -1450,6 +1459,7 @@ export default {
               item.orderId = this.order.orderId
             })
             this.readyDate.orderId = this.orderId
+            this.loading = false
           }
         } else {
           this.$message.error(data.msg)
@@ -1625,12 +1635,29 @@ export default {
           this.InDate = data.plist
           this.InVlist = data.vlist
           this.InAudit = data.vrlist
-          if (this.orderStatus === 'noPass') {
-            this.InDate.forEach((item) => {
-              if (item.status === 'noPass') {
-                this.Instatus = 'noPass'
-              }
-            })
+          let sub = 0
+          let che = 0
+          let no = 0
+          let sav = 0
+          this.InDate.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          if (no > 0) {
+            this.Instatus = 'noPass'
+          } else if (sub > 0) {
+            this.Instatus = 'submit'
+          } else if (sav > 0) {
+            this.Instatus = 'saved'
+          } else if (che > 0) {
+            this.Instatus = 'checked'
           }
         } else {
           this.$message.error(data.msg)
@@ -1662,17 +1689,40 @@ export default {
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
-          if (this.orderStatus === 'noPass') {
-            this.listbomP.forEach((item) => {
-              if (item.status === 'noPass') {
-                this.Sapstatus = 'noPass'
-              }
-            })
-            this.listbomS.forEach((item) => {
-              if (item.status === 'noPass') {
-                this.Sapstatus = 'noPass'
-              }
-            })
+          let sub = 0
+          let che = 0
+          let no = 0
+          let sav = 0
+          this.listbomP.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          this.listbomS.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          if (no > 0) {
+            this.Sapstatus = 'noPass'
+          } else if (sub > 0) {
+            this.Sapstatus = 'submit'
+          } else if (sav > 0) {
+            this.Sapstatus = 'saved'
+          } else if (che > 0) {
+            this.Sapstatus = 'checked'
           }
         } else {
           this.$message.error(data.msg)
@@ -1698,6 +1748,7 @@ export default {
       this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', {
         order_id: this.orderId
       }).then(({data}) => {
+        this.loading = false
         if (data.code === 0) {
           console.log('获取包装车间文本记录列表')
           console.log(data)
@@ -2081,8 +2132,11 @@ export default {
       } else {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
       }
+      this.readyDate.status = 'submit'
       this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan.toString()}, this.uerDate, this.ExcDate, {
         orderId: this.orderId,
+        outputUnit: this.order.outputUnit,
+        realOutput: this.order.realOutput + '',
         countOutput: this.countOutputNum.toString(),
         countOutputUnit: '瓶',
         productDate: this.order.productDate
@@ -2318,6 +2372,7 @@ export default {
     // 新增物料半成品
     addSapS (form, row) {
       form.push({
+        orderId: this.order.orderId,
         status: '',
         id: '',
         materialCode: row.materialCode,
@@ -2431,6 +2486,18 @@ export default {
     realName: {
       get () { return this.$store.state.user.realName },
       set (val) { this.$store.commit('user/updateName', val) }
+    },
+    PkgworkShop: {
+      get () { return this.$store.state.common.PkgworkShop },
+      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    },
+    PkgproductDate: {
+      get () { return this.$store.state.common.PkgproductDate },
+      set (val) { this.$store.commit('common/updateProductDate', val) }
+    },
+    PkgorderNo: {
+      get () { return this.$store.state.common.PkgorderNo },
+      set (val) { this.$store.commit('common/updateOrderNo', val) }
     }
   },
   components: {

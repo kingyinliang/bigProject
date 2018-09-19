@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="topTitle">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-        <el-breadcrumb-item>库位管理</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
+    <!--<div class="topTitle">-->
+      <!--<el-breadcrumb separator="/">-->
+        <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
+        <!--<el-breadcrumb-item>库位管理</el-breadcrumb-item>-->
+      <!--</el-breadcrumb>-->
+    <!--</div>-->
     <div class="main">
       <el-card>
         <div class="clearfix">
@@ -173,8 +173,8 @@ export default {
         deptName: this.form.storageLocation,
         materialType: this.form.storageLocation,
         storageLocation: this.form.storageLocation,
-        currPage: JSON.stringify(this.currPage),
-        pageSize: JSON.stringify(this.pageSize)
+        currPage: this.currPage,
+        pageSize: this.pageSize
       }).then(({data}) => {
         console.log(data)
         this.visible = false

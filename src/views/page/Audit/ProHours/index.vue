@@ -152,7 +152,7 @@
             label="执行开始的确认日期"
             width="148">
             <template slot-scope="scope">
-              <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.execStartDate" v-if="scope.row.redact" size="small"></el-date-picker>
+              <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择" v-model="scope.row.execStartDate" v-if="scope.row.redact" size="small"></el-date-picker>
               <span v-else>{{ scope.row.execStartDate }}</span>
             </template>
           </el-table-column>
@@ -160,7 +160,7 @@
             label="设置完成的确认日期"
             width="148">
             <template slot-scope="scope">
-              <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm:ss" placeholder="选择" v-model="scope.row.setupFinDate" v-if="scope.row.redact" size="small"></el-date-picker>
+              <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd"  placeholder="选择" v-model="scope.row.setupFinDate" v-if="scope.row.redact" size="small"></el-date-picker>
               <span v-else>{{ scope.row.setupFinDate }}</span>
             </template>
           </el-table-column>

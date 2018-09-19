@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="topTitle">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>数据录入</el-breadcrumb-item>
-        <el-breadcrumb-item>包装车间</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
+    <!--<div class="topTitle">-->
+      <!--<el-breadcrumb separator="/">-->
+        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
+        <!--<el-breadcrumb-item>包装车间</el-breadcrumb-item>-->
+      <!--</el-breadcrumb>-->
+    <!--</div>-->
     <div class="main">
       <el-card>
         <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()">
@@ -214,7 +214,11 @@ export default {
     // 数据录入
     goPro (item) {
       if (item.orderNo && item.properties) {
-        this.$router.push({ path: `DataEntry-Packaging-ProDataIn?order_no=${item.orderNo}&workShop=${this.workShop}&factoryid=${this.factoryid}&productDate=${this.productDate}` })
+        this.PkgorderNo = item.orderNo
+        this.PkgproductDate = this.productDate
+        this.PkgworkShop = this.workShop
+        // this.$router.push({ path: `DataEntry-Packaging-ProDataIn?order_no=${item.orderNo}&workShop=${this.workShop}&factoryid=${this.factoryid}&productDate=${this.productDate}` })
+        this.$router.push({ path: `DataEntry-Packaging-ProDataIn` })
       } else {
         this.$message.error('请选择订单号')
       }
@@ -232,6 +236,10 @@ export default {
     PkgproductDate: {
       get () { return this.$store.state.common.PkgproductDate },
       set (val) { this.$store.commit('common/updateProductDate', val) }
+    },
+    PkgorderNo: {
+      get () { return this.$store.state.common.PkgorderNo },
+      set (val) { this.$store.commit('common/updateOrderNo', val) }
     }
   },
   components: {}
