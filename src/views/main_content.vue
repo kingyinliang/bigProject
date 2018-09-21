@@ -28,7 +28,7 @@
             width="100%" height="100%" frameborder="0" scrolling="yes">
           </iframe>
           <keep-alive v-else>
-            <router-view v-if="item.name === mainTabsActiveName"/>
+            <router-view v-if="item.name === mainTabsActiveName" :clearPkg="clearPkg"/>
           </keep-alive>
         <!--</el-card>-->
       </el-tab-pane>

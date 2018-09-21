@@ -343,10 +343,10 @@ export default {
             return false
           }
         }
-        if (row.aiShelves * 1 !== row.jwzAcount * 1) {
-          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
-          return false
-        }
+        // if (row.aiShelves * 1 !== row.jwzAcount * 1) {
+        //   this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
+        //   return false
+        // }
         row.postgDate = this.plantList.postgDate
         row.status = ''
         this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', [row]).then(({data}) => {
@@ -368,10 +368,10 @@ export default {
           this.$message.error('差异说明必填')
           return false
         }
-        if (!this.getverify1()) {
-          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
-          return false
-        }
+        // if (!this.getverify1()) {
+        //   this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
+        //   return false
+        // }
         this.$confirm('确认保存, 是否继续?', '保存', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

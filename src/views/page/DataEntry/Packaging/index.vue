@@ -217,14 +217,33 @@ export default {
         this.PkgorderNo = item.orderNo
         this.PkgproductDate = this.productDate
         this.PkgworkShop = this.workShop
-        // this.$router.push({ path: `DataEntry-Packaging-ProDataIn?order_no=${item.orderNo}&workShop=${this.workShop}&factoryid=${this.factoryid}&productDate=${this.productDate}` })
-        this.$router.push({ path: `DataEntry-Packaging-ProDataIn` })
+        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Packaging-ProDataIn')
+        let that = this
+        setTimeout(function () {
+          that.$router.push({ name: `DataEntry-Packaging-ProDataIn` })
+        }, 100)
       } else {
         this.$message.error('请选择订单号')
       }
     }
   },
   computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    },
+    mainTabsActiveName: {
+      get () {
+        return this.$store.state.common.mainTabsActiveName
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabsActiveName', val)
+      }
+    },
     Pkgfactoryid: {
       get () { return this.$store.state.common.Pkgfactoryid },
       set (val) { this.$store.commit('common/updateFactoryid', val) }

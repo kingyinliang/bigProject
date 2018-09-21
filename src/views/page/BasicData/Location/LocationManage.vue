@@ -223,7 +223,7 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item.holderId)
+        this.multipleSelection.push(item.id)
       })
     },
     // 改变每页条数

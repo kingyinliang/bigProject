@@ -203,7 +203,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="uerDate.length? (uerDate[0].status === 'noPass'? '不通过':uerDate[0].status === 'saved'? '已保存':uerDate[0].status === 'submit' ? '已提交' : uerDate[0].status === 'checked'? '通过':uerDate[0].status) : '已同步'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过': '已同步'" placement="top-start">
                 <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">人员</el-button>
               </el-tooltip>
             </span>
@@ -1379,8 +1379,6 @@ export default {
         })
       }
     })
-  },
-  activated () {
     this.loading = true
     this.orderNo = this.PkgorderNo
     this.productDate = this.PkgproductDate
@@ -1394,7 +1392,78 @@ export default {
     this.GetPot()
     this.getTree()
   },
+  activated () {
+    // Object.assign(this.$data, this.$options.data())
+    // this.clearData()
+    // this.loading = true
+    // this.orderNo = this.PkgorderNo
+    // this.productDate = this.PkgproductDate
+    // this.workShop = this.PkgworkShop
+    // this.GetOrderList()
+    // this.GetmaterialShort()
+    // this.GetProductShift()
+    // this.Getenery()
+    // this.GetstoppageType()
+    // this.GetTeam()
+    // this.GetPot()
+    // this.getTree()
+  },
   methods: {
+    // 初始化data
+    clearData () {
+      this.readyDate = {
+        id: '',
+        status: '',
+        orderId: '',
+        isCause: '1',
+        dayStartDate: '',
+        dayStartLineDate: '',
+        dayChange: '',
+        dayDinner: '60',
+        dayCauseDate: '',
+        dayEndDate: '',
+        midCauseDate: '',
+        midChange: '',
+        midDinner: '',
+        midEndDate: '',
+        midStartDate: '',
+        midStartLineDate: '',
+        nightCauseDate: '',
+        nightChange: '',
+        nightDinner: '',
+        nightEndDate: '',
+        nightStartDate: '',
+        nightStartLineDate: '',
+        shift: '',
+        meeting: '',
+        prepared: '',
+        clear: ''
+      }
+      this.ReadAudit = []
+      this.uerDate = []
+      this.UserAudit = []
+      this.ExcDate = []
+      this.InDate = []
+      this.InAudit = []
+      this.SapAudit = []
+      this.GermsDate = []
+      this.Text = ''
+      this.isRedact = false
+      this.visible = false
+      this.visible1 = false
+      this.visible2 = false
+      this.netStatus = {
+        orderStatus: true,
+        readyState: true,
+        userState: true,
+        excState: true,
+        inState: true,
+        sapState1: true,
+        sapState2: true,
+        meState: true,
+        textState: true
+      }
+    },
     // 获取组织结构树
     getTree () {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
@@ -1443,9 +1512,9 @@ export default {
             this.GetText()
           } else {
             this.addUserDate(this.uerDate)
-            this.AddExcDate(this.ExcDate)
+            // this.AddExcDate(this.ExcDate)
             this.AddInDate(this.InDate)
-            this.AddGermsDate(this.GermsDate)
+            // this.AddGermsDate(this.GermsDate)
             this.listbomP = data.listbomP
             this.listbomS = data.listbomS
             this.listbomS.forEach((item) => {
@@ -1932,8 +2001,8 @@ export default {
       this.readyDate.orderId = this.orderId
       if (!this.readyDate.status) {
         this.readyDate.status = str
-      } else if (this.readyDate.status === 'noPass' && str === 'submit') {
-        this.readyDate.status = str
+      } else {
+        if (this.readyDate.status === 'saved') { this.readyDate.status = str } else if (this.readyDate.status === 'noPass' && str === 'submit') { this.readyDate.status = str }
       }
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {

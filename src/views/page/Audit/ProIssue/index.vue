@@ -355,7 +355,7 @@ export default {
       } else {
         row.pstngDate = this.plantList.pstngDate
         row.status = ''
-        this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
+        this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('操作成功')
             row.redact = false
