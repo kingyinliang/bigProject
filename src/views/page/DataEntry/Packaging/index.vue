@@ -8,7 +8,7 @@
     <!--</div>-->
     <div class="main">
       <el-card>
-        <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()">
+        <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
           <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
               <el-option label="" value=""></el-option>
@@ -33,7 +33,11 @@
             <el-form :model="item" size="small" label-position="right" label-width="85px">
               <div class="clearfix pro-line">
                 <el-form-item label="产线：">
-                  <p>{{item.productLineName}} <span style="margin-left: 120px;color: #8a979e;font-size: 14px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span><el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button></p>
+                  <p>
+                    {{item.productLineName}}
+                    <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button>
+                    <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
+                  </p>
                 </el-form-item>
               </div>
               <div class="clearfix item">
@@ -119,13 +123,15 @@ export default {
     // 获取车间
     Getdeptbyid (id, typ) {
       this.plantList.workShop = ''
-      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 获取列表
     GetOrderList () {

@@ -10,7 +10,7 @@
       <el-card>
         <el-row class="clearfix">
           <div style="float: right">
-            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()">
+            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()" @submit.native.prevent>
               <el-form-item>
                 <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>

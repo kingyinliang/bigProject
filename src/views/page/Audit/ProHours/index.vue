@@ -10,7 +10,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetAuditList()" @submit.native.prevent>
               <el-form-item label="工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
@@ -250,7 +250,7 @@ export default {
         factory: '',
         workShop: '',
         productLine: '',
-        prodDate: '',
+        prodDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
         postgDate: new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate())),
         currPage: 1,
         pageSize: 10,
@@ -380,6 +380,10 @@ export default {
         })
       }
     },
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.plantList.currPage * 1 - 1) * (this.plantList.pageSize * 1)
+    },
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
@@ -405,9 +409,9 @@ export default {
           this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
               this.visible = false
-              this.$message.success('操作成功')
               this.Text = ''
               this.GetAuditList()
+              this.$message.success('操作成功')
             } else {
               this.$message.error(data.msg)
             }
@@ -434,6 +438,7 @@ export default {
             if (data.code === 0) {
               this.$message.success('操作成功')
               this.GetAuditList()
+              if (data) {}
             } else {
               this.$message.error(data.msg)
             }

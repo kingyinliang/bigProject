@@ -188,7 +188,8 @@
           </el-table-column>
           <el-table-column
             prop="verifyMan"
-            label="审核人">
+            label="审核人"
+            width="160">
           </el-table-column>
           <el-table-column
             prop="verifyDate"
@@ -255,7 +256,7 @@ export default {
         factory: '',
         workShop: '',
         productLine: '',
-        prodDate: '',
+        prodDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
         pstngDate: '',
         headerTxt: '',
         currPage: 1,

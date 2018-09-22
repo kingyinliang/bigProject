@@ -10,7 +10,7 @@
     <el-card class="searchCard" style="margin: 0">
       <el-row type="flex">
         <el-col>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetLtkList()" @submit.native.prevent>
             <el-form-item label="工厂：">
               <el-select v-model="plantList.factory" placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>
@@ -77,7 +77,7 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="品相"
+          label="品项"
           :show-overflow-tooltip="true"
           width="360">
           <template slot-scope="scope">

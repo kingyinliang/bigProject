@@ -65,6 +65,7 @@
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
           type="selection"
+          :selectable='checkboxT'
           width="34">
         </el-table-column>
         <el-table-column
@@ -309,6 +310,14 @@ export default {
         this.MaintainList.push(item)
       })
     },
+    // 审核通过禁用
+    checkboxT (row) {
+      if (row.status === 'finished') {
+        return 0
+      } else {
+        return 1
+      }
+    },
     // 校验校验
     getverify () {
       let ty = true
@@ -343,10 +352,6 @@ export default {
             return false
           }
         }
-        // if (row.aiShelves * 1 !== row.jwzAcount * 1) {
-        //   this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
-        //   return false
-        // }
         row.postgDate = this.plantList.postgDate
         row.status = ''
         this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', [row]).then(({data}) => {
@@ -368,10 +373,6 @@ export default {
           this.$message.error('差异说明必填')
           return false
         }
-        // if (!this.getverify1()) {
-        //   this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
-        //   return false
-        // }
         this.$confirm('确认保存, 是否继续?', '保存', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

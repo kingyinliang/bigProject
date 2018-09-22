@@ -152,6 +152,7 @@ export default {
           }).then(res => {
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.token)
+              this.mainTabs = []
               if (res.data.list[0].isFirst === '1') {
                 this.visible = true
               } else {
@@ -172,7 +173,16 @@ export default {
       this.$refs[formName].resetFields()
     }
   },
-  computed: {},
+  computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    }
+  },
   components: {}
 }
 </script>

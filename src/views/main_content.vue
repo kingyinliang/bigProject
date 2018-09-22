@@ -28,7 +28,7 @@
             width="100%" height="100%" frameborder="0" scrolling="yes">
           </iframe>
           <keep-alive v-else>
-            <router-view v-if="item.name === mainTabsActiveName" :clearPkg="clearPkg"/>
+            <router-view v-if="item.name === mainTabsActiveName"/>
           </keep-alive>
         <!--</el-card>-->
       </el-tab-pane>
@@ -103,17 +103,38 @@ export default {
     },
     // tabs, 删除tab
     removeTabHandle (tabName) {
-      this.mainTabs = this.mainTabs.filter(item => item.name !== tabName)
-      if (this.mainTabs.length >= 1) {
-        // 当前选中tab被删除
-        if (tabName === this.mainTabsActiveName) {
-          this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
-            this.mainTabsActiveName = this.$route.name
-          })
-        }
+      if (tabName === 'DataEntry-Packaging-ProDataIn') {
+        this.$confirm('为防止数据丢失请保存后关闭, 是否继续?', '关闭', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.mainTabs = this.mainTabs.filter(item => item.name !== tabName)
+          if (this.mainTabs.length >= 1) {
+            // 当前选中tab被删除
+            if (tabName === this.mainTabsActiveName) {
+              this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
+                this.mainTabsActiveName = this.$route.name
+              })
+            }
+          } else {
+            this.menuActiveName = ''
+            this.$router.push({name: 'home'})
+          }
+        })
       } else {
-        this.menuActiveName = ''
-        this.$router.push({name: 'home'})
+        this.mainTabs = this.mainTabs.filter(item => item.name !== tabName)
+        if (this.mainTabs.length >= 1) {
+          // 当前选中tab被删除
+          if (tabName === this.mainTabsActiveName) {
+            this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
+              this.mainTabsActiveName = this.$route.name
+            })
+          }
+        } else {
+          this.menuActiveName = ''
+          this.$router.push({name: 'home'})
+        }
       }
     },
     // tabs, 关闭当前

@@ -10,7 +10,7 @@
       <el-card>
         <div class="clearfix">
           <el-row style="float: right">
-            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
+            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
               <el-form-item>
                 <el-input v-model="form.materialCode" placeholder="车间" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
@@ -39,6 +39,7 @@
             <el-table-column
               type="index"
               label="序号"
+              :index="indexMethod"
               width="55">
             </el-table-column>
             <el-table-column
@@ -166,6 +167,10 @@ export default {
     })
   },
   methods: {
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
+    },
     // 获取库位列表
     GetLocationList () {
       this.$http(`${BASICDATA_API.LOCATIONLIST_API}`, 'POST', {

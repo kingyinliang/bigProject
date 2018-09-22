@@ -11,7 +11,7 @@
           <h3>容器管理列表</h3>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()">
+              <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()" @submit.native.prevent>
                 <el-form-item label="容器类型：">
                   <el-select v-model="form.holderType" placeholder="请选择">
                     <el-option label=""  value=""></el-option>
@@ -53,6 +53,7 @@
               </el-table-column>
               <el-table-column
                 type="index"
+                :index="indexMethod"
                 label="序号"
                 width="55">
               </el-table-column>
@@ -150,6 +151,10 @@ export default {
     this.Getdeptcode()
   },
   methods: {
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
+    },
     // 获取容器列表
     GetContainerList (obj) {
       if (!obj) {

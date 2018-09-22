@@ -10,7 +10,7 @@
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()">
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
                 <el-form-item>
                   <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>

@@ -50,7 +50,7 @@
               <el-button type="primary" size="small" @click="SubmitForm()" v-else disabled>提交</el-button>
             </el-row>
             <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus}}</span></div>
+              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
             </el-row>
           </el-col>
         </el-row>
@@ -67,7 +67,7 @@
         <el-tabs v-model="activeName" id="tabs">
           <el-tab-pane name="1">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'已同步'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">准备时间</el-button>
               </el-tooltip>
             </span>
@@ -203,7 +203,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过': '已同步'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过': '未录入'" placement="top-start">
                 <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">人员</el-button>
               </el-tooltip>
             </span>
@@ -471,7 +471,7 @@
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'已同步'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': Instatus === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
@@ -507,7 +507,7 @@
                   label="生产批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" maxlength="10"></el-input>
                     <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -678,7 +678,7 @@
                   label="生产批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -724,7 +724,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.sampleUnit = productUnit}}</span>
+                    <span>{{scope.row.sampleUnit = basicUnit}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -743,7 +743,7 @@
                   label="主产品批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -751,7 +751,7 @@
                   label="赠品批次"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
                   </template>
                 </el-table-column>
@@ -825,8 +825,8 @@
                   width="60">
                 </el-table-column>
                 <el-table-column
-                  prop="different"
-                  label="差异数量"
+                  prop="orgnDifferent"
+                  label="原差异数量"
                   width="120">
                 </el-table-column>
                 <el-table-column
@@ -849,7 +849,7 @@
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'已同步'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': Sapstatus === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
@@ -904,12 +904,12 @@
                 label="不良批次"
                 width="140">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                  <el-input size="small" maxlength="10" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="厂家（选择）">
+                label="厂家">
                 <template slot-scope="scope">
                   <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
@@ -937,11 +937,11 @@
               <el-table-column
                 label="领用罐号">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                  <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
-                  <el-select v-model="scope.row.potNo" placeholder="请选择" v-else disabled size="small">
+                  <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
@@ -957,7 +957,7 @@
               <el-table-column
                 label="批次">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                  <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
                 </template>
               </el-table-column>
@@ -980,6 +980,13 @@
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
                   <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="备注">
+                <template slot-scope="scope">
+                  <el-input size="small" v-model="scope.row.remark" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                  <el-input size="small" v-model="scope.row.remark" v-else disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1335,6 +1342,21 @@ export default {
         sapState2: true,
         meState: true,
         textState: true
+      },
+      tabStatus: {
+        order: false,
+        user: false,
+        ready: false,
+        exc: false,
+        inpkg: false,
+        sap1: false,
+        sap2: false,
+        me: false,
+        text: false,
+        subhour: false,
+        subin: false,
+        subsap1: false,
+        subsap2: false
       }
     }
   },
@@ -1852,6 +1874,8 @@ export default {
           }
         } else {
           ty = false
+          this.$message.error('异常记录必填项未填')
+          return false
         }
       })
       return ty
@@ -1859,8 +1883,16 @@ export default {
     inrul () {
       let ty = true
       this.InDate.forEach((item) => {
-        if (item.batch) {} else {
+        if (item.batch) {
+          if (item.batch.length !== 10) {
+            ty = false
+            this.$message.error('生产入库请录入10位批次号')
+            return false
+          }
+        } else {
           ty = false
+          this.$message.error('生产入库批次项未填')
+          return false
         }
       })
       return ty
@@ -1896,7 +1928,6 @@ export default {
             }
             if (this.ExcDate.length > 0) {
               if (!this.excrul()) {
-                this.$message.error('异常记录必填项未填或异常开始时间大于结束时间')
                 return false
               }
             }
@@ -1905,7 +1936,6 @@ export default {
               return false
             } else {
               if (!this.inrul()) {
-                this.$message.error('生产入库必填项未填')
                 return false
               }
             }
@@ -1959,13 +1989,13 @@ export default {
       }
       this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.order).then(({data}) => {
         this.netStatus.orderStatus = true
-        this.getStatus(str)
         if (data.code === 0) {
           this.GetOrderList()
-          this.$message.success('保存表头成功')
+          this.tabStatus.order = true
         } else {
           this.$message.error('保存表头' + data.msg)
         }
+        this.getStatus(str)
       })
     },
     /**
@@ -1984,15 +2014,17 @@ export default {
         })
         this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.uerDate).then(({data}) => {
           this.netStatus.userState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改人员成功')
-            console.log(data)
+            this.tabStatus.user = true
             this.Getpkguser()
           } else {
             this.$message.error('修改人员成功' + data.msg)
           }
+          this.getStatus(str)
         })
+      } else {
+        this.tabStatus.user = true
+        this.getStatus(str)
       }
     },
     // 修改准备时间
@@ -2007,13 +2039,13 @@ export default {
       if (this.readyDate.isCause === '1') {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
           this.netStatus.readyState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改准备时间成功')
+            this.tabStatus.ready = true
             this.Getpkgready()
           } else {
             this.$message.error(data.msg)
           }
+          this.getStatus(str)
         })
       } else {
         this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
@@ -2033,13 +2065,13 @@ export default {
           clear: this.readyDate.clear
         }).then(({data}) => {
           this.netStatus.readyState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改准备时间成功')
-            console.log(data)
+            this.tabStatus.ready = true
+            this.Getpkgready()
           } else {
             this.$message.error(data.msg)
           }
+          this.getStatus(str)
         })
       }
     },
@@ -2052,14 +2084,17 @@ export default {
         })
         this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
           this.netStatus.excState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改异常记录成功')
+            this.tabStatus.exc = true
             this.GetpkgExc()
           } else {
             this.$message.error('异常记录' + data.msg)
           }
+          this.getStatus(str)
         })
+      } else {
+        this.tabStatus.exc = true
+        this.getStatus(str)
       }
     },
     // 修改生产入库
@@ -2083,14 +2118,17 @@ export default {
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
           this.netStatus.inState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改生产入库成功')
+            this.tabStatus.inpkg = true
             this.Getpkgin()
           } else {
             this.$message.error('生产入库' + data.msg)
           }
+          this.getStatus(str)
         })
+      } else {
+        this.tabStatus.inpkg = true
+        this.getStatus(str)
       }
     },
     // 修改物料领用
@@ -2113,23 +2151,23 @@ export default {
       })
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         this.netStatus.sapState1 = true
-        this.getStatus(str)
         if (data.code === 0) {
-          this.$message.success('修改物料领用包材成功')
+          this.tabStatus.sap1 = true
           this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
         }
+        this.getStatus(str)
       })
       this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
         this.netStatus.sapState2 = true
-        this.getStatus(str)
         if (data.code === 0) {
-          this.$message.success('修改物料领用半成品成功')
+          this.tabStatus.sap2 = true
           this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
         }
+        this.getStatus(str)
       })
     },
     // 修改待杀菌数量
@@ -2141,14 +2179,17 @@ export default {
         })
         this.$http(`${PACKAGING_API.PKGGERMSUPDATE_API}`, 'POST', this.GermsDate).then(({data}) => {
           this.netStatus.meState = true
-          this.getStatus(str)
           if (data.code === 0) {
-            this.$message.success('修改待杀菌数量成功')
+            this.tabStatus.me = true
             this.GetpkgGerms()
           } else {
             this.$message.error('修改待杀菌数量' + data.msg)
           }
+          this.getStatus(str)
         })
+      } else {
+        this.tabStatus.me = true
+        this.getStatus(str)
       }
     },
     // 修改文本
@@ -2162,21 +2203,34 @@ export default {
         blongProc: this.order.productLine
       }).then(({data}) => {
         this.netStatus.textState = true
-        this.getStatus(str)
         if (data.code === 0) {
-          this.$message.success('修改文本成功')
+          this.tabStatus.text = true
           this.GetText()
         } else {
           this.$message.error('修改文本' + data.msg)
         }
+        this.getStatus(str)
       })
     },
     // 判断状态
     getStatus (str) {
-      if (str === 'submit' && this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
-        this.ProHours()
-        this.submitIn()
-        this.subSap()
+      if (this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
+        if (this.tabStatus.ready && this.tabStatus.user && this.tabStatus.exc && this.tabStatus.inpkg && this.tabStatus.sap1 && this.tabStatus.sap2 && this.tabStatus.me && this.tabStatus.text) {
+          this.$message.success('操作成功')
+        }
+        this.tabStatus.user = false
+        this.tabStatus.ready = false
+        this.tabStatus.exc = false
+        this.tabStatus.inpkg = false
+        this.tabStatus.sap1 = false
+        this.tabStatus.sap2 = false
+        this.tabStatus.me = false
+        this.tabStatus.text = false
+        if (str === 'submit') {
+          this.ProHours()
+          this.submitIn()
+          this.subSap()
+        }
       }
     },
     /**
@@ -2195,9 +2249,9 @@ export default {
     // 报工提交
     ProHours () {
       if (this.readyDate.isCause === '1') {
-        this.readyDate.dayDinner = this.readyDate.dayDinner + ''
-        this.readyDate.midDinner = this.readyDate.midDinner + ''
-        this.readyDate.nightDinner = this.readyDate.nightDinner + ''
+        this.readyDate.dayDinner ? this.readyDate.dayDinner = this.readyDate.dayDinner + '' : this.readyDate.dayDinner = this.readyDate.dayDinner
+        this.readyDate.midDinner ? this.readyDate.midDinner = this.readyDate.midDinner + '' : this.readyDate.midDinner = this.readyDate.midDinner
+        this.readyDate.nightDinner ? this.readyDate.nightDinner = this.readyDate.nightDinner + '' : this.readyDate.nightDinner = this.readyDate.nightDinner
       } else {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
       }
@@ -2211,38 +2265,47 @@ export default {
         productDate: this.order.productDate
       }]).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('提交成功')
+          this.tabStatus.subhour = true
         } else {
           this.$message.error(data.msg)
         }
+        this.subStatus()
       })
     },
     // 入库提交
     submitIn () {
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('入库提交成功')
+          this.tabStatus.subin = true
         } else {
           this.$message.error(data.msg)
         }
+        this.subStatus()
       })
     },
     // 物料提交
     subSap () {
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('物料提交成功')
+          this.tabStatus.subsap1 = true
         } else {
           this.$message.error(data.msg)
         }
+        this.subStatus()
       })
       this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('物料提交成功')
+          this.tabStatus.subsap2 = true
         } else {
           this.$message.error(data.msg)
         }
+        this.subStatus()
       })
+    },
+    subStatus () {
+      if (this.tabStatus.subhour && this.tabStatus.subsap1 && this.tabStatus.subsap2 && this.tabStatus.subin) {
+        this.$message.success('提交成功')
+      }
     },
     // 我是分割线
     // 搜索人员

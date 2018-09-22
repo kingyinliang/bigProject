@@ -64,7 +64,7 @@ export default {
         this.type = false
         this.$http(`${SYSTEMSETUP_API.ROLEDEPTUPDATE_API}`, 'POST', {
           roleId: this.roleId,
-          deptId: [].concat(this.$refs.deptListTree.getCheckedKeys())
+          deptId: [[].concat(this.$refs.deptListTree.getCheckedKeys()), [].concat(this.$refs.deptListTree.getHalfCheckedKeys())]
         }).then(({data}) => {
           console.log(data)
           if (data.code === 0) {
