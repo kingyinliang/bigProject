@@ -12,7 +12,7 @@
           <el-row style="float: right">
             <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
               <el-form-item>
-                <el-input v-model="form.materialCode" placeholder="车间" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="form.deptName" placeholder="车间" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetLocationList()" v-if="isAuth('sys:sto:list')">查询</el-button>
@@ -100,13 +100,13 @@
       :visible.sync="visible1">
       <el-form :model="form" size="small" label-width="110px" class="locationdialog">
         <el-form-item label="车间：" prop="orderNo1">
-          <el-select v-model="form.deptName" placeholder="请选择">
+          <el-select v-model="form.deptId" placeholder="请选择">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="物料类型：" prop="orderNo2">
-          <el-select v-model="form.materialType" placeholder="请选择">
+          <el-select v-model="form.materialTypeCode" placeholder="请选择">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
           </el-select>
@@ -134,9 +134,9 @@ export default {
       visible1: false,
       visible: false,
       form: {
-        materialCode: '',
         deptName: '',
-        materialType: '',
+        deptId: '',
+        materialTypeCode: '',
         storageLocation: ''
       },
       serch: {},
@@ -174,9 +174,9 @@ export default {
     // 获取库位列表
     GetLocationList () {
       this.$http(`${BASICDATA_API.LOCATIONLIST_API}`, 'POST', {
-        materialCode: this.form.materialCode,
-        deptName: this.form.storageLocation,
-        materialType: this.form.storageLocation,
+        deptId: this.form.deptId,
+        deptName: this.form.deptName,
+        materialTypeCode: this.form.materialTypeCode,
         storageLocation: this.form.storageLocation,
         currPage: this.currPage,
         pageSize: this.pageSize

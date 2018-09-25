@@ -295,13 +295,15 @@ export default {
     // 获取产线
     GetParentline (id) {
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.productline = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.productline = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 表格选中
     handleSelectionChange (val) {
@@ -322,7 +324,7 @@ export default {
     getverify () {
       let ty = true
       this.MaintainList.forEach((item) => {
-        if (item.different !== 0) {
+        if (item.different !== 0 || item.orgnDifferent) {
           if (!item.differentInfo) {
             ty = false
           }
@@ -346,7 +348,7 @@ export default {
         this.noMaintainList.splice(this.noMaintainList.length, 0, {})
         this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
       } else {
-        if (row.different !== 0) {
+        if (row.different !== 0 || row.orgnDifferent) {
           if (!row.differentInfo) {
             this.$message.error('差异说明必填')
             return false

@@ -35,6 +35,7 @@
               </el-table-column>
               <el-table-column
                 type="index"
+                :index="indexMethod"
                 width="55">
               </el-table-column>
               <el-table-column
@@ -126,6 +127,10 @@ export default {
     this.GetRoleList()
   },
   methods: {
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
+    },
     // 获取角色列表
     GetRoleList () {
       this.$http(`${SYSTEMSETUP_API.ROLELIST_API}`, 'POST', {

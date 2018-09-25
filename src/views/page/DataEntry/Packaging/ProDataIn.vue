@@ -659,10 +659,6 @@
                 style="width: 100%;margin-bottom: 20px"
                 v-if="order.properties === '二合一&礼盒产线'">
                 <el-table-column
-                  type="selection"
-                  width="55">
-                </el-table-column>
-                <el-table-column
                   label="白/中/夜班"
                   width="120">
                   <template slot-scope="scope">

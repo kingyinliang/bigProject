@@ -51,7 +51,7 @@
                     </el-table-column>
                     <el-table-column
                       type="index"
-                      :index="1"
+                      :index="indexMethod"
                       width="55">
                     </el-table-column>
                     <el-table-column
@@ -147,6 +147,10 @@ export default {
     this.getTree()
   },
   methods: {
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
+    },
     // 获取组织结构树
     getTree () {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {

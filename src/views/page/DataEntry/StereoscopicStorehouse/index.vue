@@ -122,7 +122,7 @@
           width="92">
         </el-table-column>
         <el-table-column
-          prop="changer"
+          prop="ltkMan"
           label="立体库确认人"
           :show-overflow-tooltip="true"
           width="105">
@@ -254,24 +254,28 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 获取产线
     GetParentline (id) {
       this.plantList.productline = ''
-      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.productline = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.productline = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 表格选中
     handleSelectionChange (val) {
