@@ -103,7 +103,7 @@
             width="105">
           </el-table-column>
           <el-table-column
-            prop="outputUnit"
+            prop="outputUnitName"
             label="单位"
             width="50">
           </el-table-column>
@@ -121,7 +121,7 @@
             width="105">
           </el-table-column>
           <el-table-column
-            prop="entryUom"
+            prop="entryUomName"
             label="单位"
             width="50">
           </el-table-column>

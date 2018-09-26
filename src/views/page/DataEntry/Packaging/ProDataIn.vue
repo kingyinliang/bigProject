@@ -409,7 +409,7 @@
                 width="80">
                 <template slot-scope="scope">
                   <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                  <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate) }}</span>
+                  <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate, scope.row) }}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1031,7 +1031,7 @@
             </el-table>
             <auditLog :tableData="SapAudit"></auditLog>
           </el-tab-pane>
-          <el-tab-pane name="6">
+          <el-tab-pane name="6" v-if="order.properties !== '二合一&礼盒产线'">
             <span slot="label">
               <el-button>待杀菌数量</el-button>
             </span>
@@ -2604,14 +2604,21 @@ export default {
       }
     },
     mistiming: function () {
-      return function (end, start) {
-        return (toDate(end) - toDate(start)) / 60000
+      return function (end, start, row) {
+        if (end && start && row.delFlag !== '1') {
+          if (((toDate(end) - toDate(start)) / 60000) < 0) {
+            this.$message.error('异常结束时间早于异常开始时间，请重新录入')
+            return 'NaN'
+          } else {
+            return (toDate(end) - toDate(start)) / 60000
+          }
+        }
       }
     },
     ExcNum: function () {
       let num = 0
       this.ExcDate.forEach((item) => {
-        num = num + (item.delFlag === '0' ? item.expContinue : 0)
+        num = num + (item.delFlag === '0' ? item.expContinue * 1 : 0)
       })
       // return typeof(this.ExcDate[0].expEndDate)
       return num

@@ -96,8 +96,12 @@ export default {
     }
   },
   mounted () {
+    if (this.PkgproductDate === '') {
+      this.plantList.productDate = new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate()))
+    } else {
+      this.plantList.productDate = this.PkgproductDate
+    }
     this.plantList.factoryid = this.Pkgfactoryid
-    this.plantList.productDate = this.PkgproductDate
     this.plantList.workShop = this.PkgworkShop
     let that = this
     setTimeout(function () {
@@ -127,6 +131,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            if (this.workshop.length === 1) {
+              this.plantList.workShop = this.workshop[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }

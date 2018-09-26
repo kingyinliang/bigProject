@@ -179,7 +179,7 @@
           label="操作"
           width="50">
           <template slot-scope="scope">
-            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="isAuth('sys:verifyJWZ:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="isAuth('sys:verifyJWZ:update') && scope.row.status !== 'finished'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
           </template>
         </el-table-column>
       </el-table>
