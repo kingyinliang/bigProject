@@ -9,21 +9,11 @@
 
 <script>
 export default {
-  name: '404'
+  name: 'error404'
 }
 </script>
 
 <style scoped>
 .error{
-  width: 1000px;
-  height: 600px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -500px;
-  margin-top: -300px;
-  font-size: 62px;
-  font-weight: bold;
-  text-align: center;
 }
 </style>

@@ -75,7 +75,7 @@
               <el-form :inline="true" :model="readyDate" :rules="timesForm" ref="timesForm" size="small" label-width="125px">
                 <div class="clearfix topBox">
                   <h3>录入数据单位：MIN</h3>
-                  <el-form-item label="是否停线交接班" style="float: right" prop="isCause">
+                  <el-form-item label="是否停线交接班" style="float: right">
                     <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
                       <el-option label="是" value="1"></el-option>
                       <el-option label="否" value="0"></el-option>
@@ -91,11 +91,11 @@
                     <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
                   </div>
                   <div class="dayshiftBox">
-                    <el-form-item label="工作开始时间：" prop="dayStartDate">
+                    <el-form-item label="工作开始时间：">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="开线时间：" prop="dayStartLineDate">
+                    <el-form-item label="开线时间：">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
                     </el-form-item>
@@ -103,15 +103,15 @@
                       <el-input v-model="readyDate.dayChange" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
                       <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="工作结束时间：" prop="dayEndDate">
+                    <el-form-item label="工作结束时间：">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="停线时间：" prop="dayCauseDate">
+                    <el-form-item label="停线时间：">
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
                       <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="用餐时间：" prop="dayDinner">
+                    <el-form-item label="用餐时间：">
                       <el-input v-model="readyDate.dayDinner" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
                       <el-input v-model="readyDate.dayDinner" placeholder="手工录入" v-else disabled></el-input>
                     </el-form-item>
@@ -224,6 +224,11 @@
                   border
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
+                  <el-table-column
+                    type="index"
+                    width="55"
+                    label="序号">
+                  </el-table-column>
                   <el-table-column
                   label="白/中/夜班"
                   width="100">
@@ -358,6 +363,11 @@
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
+                type="index"
+                width="55"
+                label="序号">
+              </el-table-column>
+              <el-table-column
                 label="异常情况"
                 width="120">
                 <template slot-scope="scope">
@@ -465,7 +475,7 @@
             </el-table>
             <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
               <el-form-item label="总停线时间：">
-                <el-input v-model="ExcNum" size="small"></el-input>
+                <span>{{ExcNum}}</span>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -491,6 +501,11 @@
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px"
                 v-if="order.properties !== '二合一&礼盒产线'">
+                <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
                 <el-table-column
                   label="白/中/夜班"
                   width="120">
@@ -659,6 +674,11 @@
                 style="width: 100%;margin-bottom: 20px"
                 v-if="order.properties === '二合一&礼盒产线'">
                 <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
+                <el-table-column
                   label="白/中/夜班"
                   width="120">
                   <template slot-scope="scope">
@@ -690,7 +710,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.manPackingUnit = productUnit }}</span>
+                    <span>{{ productUnit? scope.row.manPackingUnit = productUnit : scope.row.manPackingUnit = basicUnit}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -732,7 +752,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.outputUnit = productUnit}}</span>
+                    <span>{{productUnit? scope.row.outputUnit = productUnit : scope.row.outputUnit = basicUnit}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -790,6 +810,11 @@
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px">
+                <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
                 <el-table-column
                   prop="orderNo"
                   label="生产订单号"
@@ -857,6 +882,11 @@
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
+                type="index"
+                width="55"
+                label="序号">
+              </el-table-column>
+              <el-table-column
                 width="240"
                 :show-overflow-tooltip="true"
                 label="物料（包材）">
@@ -921,6 +951,11 @@
               v-if="order.properties !== '二合一&礼盒产线'"
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
+              <el-table-column
+                type="index"
+                width="55"
+                label="序号">
+              </el-table-column>
               <el-table-column
                 label="物料（半成品）">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
@@ -1015,6 +1050,11 @@
               tooltip-effect="dark"
               style="width: 100%;margin-bottom: 20px">
               <el-table-column
+                type="index"
+                width="55"
+                label="序号">
+              </el-table-column>
+              <el-table-column
                 label="白/中/夜班">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
@@ -1097,7 +1137,7 @@
             </el-table>
             <el-form :inline="true" size="small" label-width="140px" style="margin: 20px 0">
               <el-form-item label="待杀菌数量（L）：">
-                <el-input v-model="GermsNum"></el-input>
+                <span>{{GermsNum}}</span>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -1912,62 +1952,45 @@ export default {
     // 保存
     SaveForm (str) {
       if (str === 'submit') {
-        this.$refs.timesForm.validate((valid) => {
-          if (valid) {
-            if (this.uerDate.length === 0) {
-              this.$message.error('人员不能为空')
-              return false
-            }
-            if (!this.userrul()) {
-              this.$message.error('人员必填项未填')
-              return false
-            }
-            if (this.ExcDate.length > 0) {
-              if (!this.excrul()) {
-                return false
-              }
-            }
-            if (this.InDate.length === 0) {
-              this.$message.error('生产入库不能为空')
-              return false
-            } else {
-              if (!this.inrul()) {
-                return false
-              }
-            }
-            if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间') {
-              this.$message.error('机维组未确认，不能提交')
-              return false
-            }
-            if (!this.saprul()) {
-              this.$message.error('物料领用必填项未填')
-              return false
-            }
-            this.isRedact = false
-            this.tableheader(str) // 修改表头
-            this.UpdateReady(str) // 修改准备时间
-            this.UpdateUser(str) // 修改人员
-            this.UpdateExc(str) // 修改异常记录
-            this.UpdateIn(str) // 修改生产入库
-            this.UpdateSap(str) // 修改物料领用
-            this.UpdateGerms(str) // 修改待杀菌数量
-            this.UpdateText(str) // 修改文本
-          } else {
-            this.$message.error('准备时间必填项未填')
+        if (this.uerDate.length === 0) {
+          this.$message.error('人员不能为空')
+          return false
+        }
+        if (!this.userrul()) {
+          this.$message.error('人员必填项未填')
+          return false
+        }
+        if (this.ExcDate.length > 0) {
+          if (!this.excrul()) {
             return false
           }
-        })
-      } else {
-        this.isRedact = false
-        this.tableheader(str) // 修改表头
-        this.UpdateReady(str) // 修改准备时间
-        this.UpdateUser(str) // 修改人员
-        this.UpdateExc(str) // 修改异常记录
-        this.UpdateIn(str) // 修改生产入库
-        this.UpdateSap(str) // 修改物料领用
-        this.UpdateGerms(str) // 修改待杀菌数量
-        this.UpdateText(str) // 修改文本
+        }
+        if (this.InDate.length === 0) {
+          this.$message.error('生产入库不能为空')
+          return false
+        } else {
+          if (!this.inrul()) {
+            return false
+          }
+        }
+        if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间') {
+          this.$message.error('机维组未确认，不能提交')
+          return false
+        }
+        if (!this.saprul()) {
+          this.$message.error('物料领用必填项未填')
+          return false
+        }
       }
+      this.isRedact = false
+      this.tableheader(str) // 修改表头
+      this.UpdateReady(str) // 修改准备时间
+      this.UpdateUser(str) // 修改人员
+      this.UpdateExc(str) // 修改异常记录
+      this.UpdateIn(str) // 修改生产入库
+      this.UpdateSap(str) // 修改物料领用
+      this.UpdateGerms(str) // 修改待杀菌数量
+      this.UpdateText(str) // 修改文本
     },
     // 表头处理
     tableheader (str) {
@@ -2596,7 +2619,7 @@ export default {
     GermsNum: function () {
       let num = 0
       this.GermsDate.forEach((item) => {
-        num += (item.washing * 1 + item.changeProduct * 1 + item.bootHeader * 1 + item.badMaterial * 1 + item.badProduct * 1 + item.badSemi * 1 + item.deviceLoss * 1)
+        num = num + (item.delFlag === '0' ? (item.washing * 1 + item.changeProduct * 1 + item.bootHeader * 1 + item.badMaterial * 1 + item.badProduct * 1 + item.badSemi * 1 + item.deviceLoss * 1) : 0)
       })
       return num
     },

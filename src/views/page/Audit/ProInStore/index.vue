@@ -33,7 +33,7 @@
                 <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" placeholder="选择" value-format="yyyy.MM.dd HH:mm:ss" v-model="plantList.prodDate"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.prodDate"></el-date-picker>
               </el-form-item>
               <el-form-item style="margin-left: 67px;">
                 <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
@@ -46,6 +46,14 @@
                 </el-form-item>
                 <el-form-item label="抬头文本：">
                   <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
+                </el-form-item>
+                <el-form-item label="订单状态：">
+                  <el-select v-model="plantList.status" placeholder="请选择">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option label="未审核"  value="submit"></el-option>
+                    <el-option label="审核通过"  value="checked"></el-option>
+                    <el-option label="审核不通过"  value="noPass"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-row>
             </el-form>
@@ -259,6 +267,7 @@ export default {
         prodDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
         pstngDate: '',
         headerTxt: '',
+        status: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0

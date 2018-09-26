@@ -140,7 +140,7 @@ export default {
     },
     // 获取列表
     getList () {
-      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+      this.$http(`${BASICDATA_API.DEVICELIST1_API}`, 'POST', {
         param: this.param.param,
         deptId: this.deptId,
         currPage: JSON.stringify(this.currPage),

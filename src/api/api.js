@@ -1,9 +1,9 @@
 // let HOST = 'http://localhost:8080/'
-let HOST = 'http://10.8.4.153:50080/api'
+// let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.1.1.96:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.41:8080'
+let HOST = 'http://10.10.5.41:8080'
 // let HOST = 'http://10.10.5.63:8080'
 /*
 *MAINapi
@@ -94,6 +94,10 @@ export const BASICDATA_API = {
    */
   CONTAINERLIST_API: HOST + '/sys/holder/list',
   /**
+   * @property {string} CONTAINERLIST_API 容器列表
+   */
+  CONTAINERLIST1_API: HOST + '/sys/holder/checkList',
+  /**
    * @property {string} CONTAINERLIST_API 容器详情
    */
   CONTAINERDETAIL_API: HOST + '/sys/holder/findById',
@@ -114,6 +118,10 @@ export const BASICDATA_API = {
    * @property {string} CONTAINERDEL_API 设备列表
    */
   DEVICELIST_API: HOST + '/sys/device/list',
+  /**
+   * @property {string} CONTAINERDEL_API 设备列表
+   */
+  DEVICELIST1_API: HOST + '/sys/device/checkList',
   /**
    * @property {string} DEVICEDEL_API 设备删除
    */

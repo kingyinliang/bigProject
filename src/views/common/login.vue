@@ -153,6 +153,10 @@ export default {
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.token)
               this.mainTabs = []
+              this.Pkgfactoryid = ''
+              this.PkgworkShop = ''
+              this.PkgproductDate = ''
+              this.PkgorderNo = ''
               if (res.data.list[0].isFirst === '1') {
                 this.visible = true
               } else {
@@ -181,6 +185,22 @@ export default {
       set (val) {
         this.$store.commit('common/updateMainTabs', val)
       }
+    },
+    Pkgfactoryid: {
+      get () { return this.$store.state.common.Pkgfactoryid },
+      set (val) { this.$store.commit('common/updateFactoryid', val) }
+    },
+    PkgworkShop: {
+      get () { return this.$store.state.common.PkgworkShop },
+      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    },
+    PkgproductDate: {
+      get () { return this.$store.state.common.PkgproductDate },
+      set (val) { this.$store.commit('common/updateProductDate', val) }
+    },
+    PkgorderNo: {
+      get () { return this.$store.state.common.PkgorderNo },
+      set (val) { this.$store.commit('common/updateOrderNo', val) }
     }
   },
   components: {}

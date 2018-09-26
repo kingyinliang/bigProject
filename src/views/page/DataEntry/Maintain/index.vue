@@ -165,7 +165,6 @@
           prop="jwzMan"
           label="机维组确认人"
           width="107">
-          <template slot-scope="scope"></template>
         </el-table-column>
         <el-table-column
           label="备注"

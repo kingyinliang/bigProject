@@ -164,7 +164,7 @@ export default {
           currPage: this.currPage
         }
       }
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', obj).then(({data}) => {
+      this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', obj).then(({data}) => {
         console.log(data)
         if (data.code === 0) {
           this.multipleSelection = []
