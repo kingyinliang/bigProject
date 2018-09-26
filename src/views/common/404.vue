@@ -13,7 +13,15 @@
 
 <script>
 export default {
-  name: 'error404'
+  name: 'error404',
+  data () {
+    return {}
+  },
+  mounted () {
+  },
+  methods: {},
+  computed: {},
+  components: {}
 }
 </script>
 
