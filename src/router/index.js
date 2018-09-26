@@ -21,7 +21,8 @@ const mainRoutes = {
   children: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } },
-    { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404' } }
+    { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404' } },
+    { path: '/500', component: _import('common/500'), name: '500', meta: { title: '500' } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')

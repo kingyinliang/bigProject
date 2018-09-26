@@ -432,6 +432,7 @@ export default {
               this.GetAuditList()
             } else {
               this.$message.error(data.msg)
+              this.GetAuditList()
             }
           })
         })
