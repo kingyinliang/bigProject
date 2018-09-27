@@ -3,9 +3,9 @@
 // let HOST = 'http://10.1.1.96:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.41:8080'
+let HOST = 'http://10.10.5.41:8080'
 // let HOST = 'http://10.10.5.63:8080'
-let HOST = 'http://srvcontainer:8080'
+// let HOST = 'https://srvcontainer:8080'
 /*
 *MAINapi
  */
