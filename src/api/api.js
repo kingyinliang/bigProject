@@ -3,8 +3,9 @@
 // let HOST = 'http://10.1.1.96:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-let HOST = 'http://10.10.5.41:8080'
+// let HOST = 'http://10.10.5.41:8080'
 // let HOST = 'http://10.10.5.63:8080'
+let HOST = 'http://srvcontainer:8080'
 /*
 *MAINapi
  */
@@ -119,7 +120,7 @@ export const BASICDATA_API = {
    */
   DEVICELIST_API: HOST + '/sys/device/list',
   /**
-   * @property {string} CONTAINERDEL_API 设备列表
+   * @property {string} DEVICELIST1_API 设备列表
    */
   DEVICELIST1_API: HOST + '/sys/device/checkList',
   /**
@@ -193,7 +194,7 @@ export const SYSTEMSETUP_API = {
    */
   USERLIST_API: HOST + '/sys/user/list',
   /**
-   * @property {string} USERLIST_API 用户列表
+   * @property {string} USERLIST1_API 用户列表
    */
   USERLIST1_API: HOST + '/sys/user/checkList',
   /**

@@ -1817,7 +1817,7 @@ export default {
       })
     },
     // 获取包装车间物料领用列表
-    GetpkgSap () {
+    GetpkgSap (str) {
       this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
         order_id: this.orderId
       }).then(({data}) => {
@@ -1827,6 +1827,9 @@ export default {
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
+          if (str) {
+            this.getStatus(str)
+          }
           let sub = 0
           let che = 0
           let no = 0
@@ -2195,25 +2198,24 @@ export default {
           item.status = str
         }
       })
+      console.log('----baocun-----')
+      console.log(this.listbomP)
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         this.netStatus.sapState1 = true
+        this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
+          this.netStatus.sapState2 = true
+          this.GetpkgSap(str)
+          if (data.code === 0) {
+            this.tabStatus.sap2 = true
+          } else {
+            this.$message.error('物料领用' + data.msg)
+          }
+        })
         if (data.code === 0) {
           this.tabStatus.sap1 = true
-          this.GetpkgSap()
         } else {
           this.$message.error('物料领用' + data.msg)
         }
-        this.getStatus(str)
-      })
-      this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
-        this.netStatus.sapState2 = true
-        if (data.code === 0) {
-          this.tabStatus.sap2 = true
-          this.GetpkgSap()
-        } else {
-          this.$message.error('物料领用' + data.msg)
-        }
-        this.getStatus(str)
       })
     },
     // 修改待杀菌数量
@@ -2273,9 +2275,10 @@ export default {
         this.tabStatus.me = false
         this.tabStatus.text = false
         if (str === 'submit') {
-          this.ProHours()
-          this.submitIn()
-          this.subSap()
+          let that = this
+          that.ProHours()
+          that.submitIn()
+          that.subSap()
         }
       }
     },
@@ -2331,6 +2334,8 @@ export default {
     },
     // 物料提交
     subSap () {
+      console.log('----tijiao-----')
+      console.log(this.listbomP)
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subsap1 = true

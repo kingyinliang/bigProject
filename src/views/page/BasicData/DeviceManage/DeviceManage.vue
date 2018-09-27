@@ -15,7 +15,7 @@
                 <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="getList()" v-if="isAuth('sys:device:list')">查询</el-button>
+                <el-button type="primary" size="small" @click="getList()" v-if="isAuth('sys:device:checkList')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -35,7 +35,7 @@
                 <span>设备管理</span>
               </div>
               <div>
-                <el-button type="danger" size="small" @click="remove()" style="float: right;margin-bottom: 20px"  v-if="isAuth('sys:device:delete')">批量删除</el-button>
+                <el-button type="danger" size="small" @click="remove()" style="float: right;margin-bottom: 20px"  v-if="isAuthisAuth('sys:device:delete')">批量删除</el-button>
                 <el-button type="primary" size="small" @click="addOrupdate(deptId)" v-if="isAuth('sys:device:save')" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
                 <el-table
                   ref="table1"
