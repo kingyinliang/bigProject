@@ -29,7 +29,7 @@
                 <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" :expand-on-click-node="false"></el-tree>
               </el-card>
             </el-col>
-            <el-col :span="16" v-if="isAuth('sys:user:list')">
+            <el-col :span="16" v-if="isAuth('sys:user:checkList')">
               <el-card>
                 <div slot="header" class="clearfix">
                   <span>人员</span>
@@ -169,7 +169,7 @@ export default {
     },
     // 获取列表
     getList () {
-      this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
+      this.$http(`${SYSTEMSETUP_API.USERLIST1_API}`, 'POST', {
         deptId: this.deptId,
         param: this.condition.param,
         currPage: JSON.stringify(this.currPage),

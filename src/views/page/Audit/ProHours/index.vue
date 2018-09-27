@@ -449,6 +449,7 @@ export default {
               this.GetAuditList()
               if (data) {}
             } else {
+              this.GetAuditList()
               this.$message.error(data.msg)
             }
           })

@@ -468,7 +468,7 @@
                 label="操作"
                 width="60">
                 <template slot-scope="scope">
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
                   <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                 </template>
               </el-table-column>
@@ -538,7 +538,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.manPackingUnit}}</span>
+                    <span>{{ scope.row.manPackingUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -553,7 +553,7 @@
                   label="单位"
                   width="60" v-if="order.workShopName === '包装三车间'">
                   <template slot-scope="scope">
-                    <span>{{scope.row.aiPackingUnit}}</span>
+                    <span>{{scope.row.aiPackingUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -568,7 +568,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.manSolidUnit}}</span>
+                    <span>{{scope.row.manSolidUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -583,7 +583,7 @@
                   label="单位"
                   width="60" v-if="order.workShopName === '包装三车间'">
                   <template slot-scope="scope">
-                    <span>{{scope.row.aiSolidUnit}}</span>
+                    <span>{{scope.row.aiSolidUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -598,7 +598,7 @@
                   label="单位"
                   width="60" v-if="order.workShopName !== '包装三车间'">
                   <template slot-scope="scope">
-                    <span>{{scope.row.aiShelvesUnit}}</span>
+                    <span>{{scope.row.aiShelvesUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -613,7 +613,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.badUnit}}</span>
+                    <span>{{scope.row.badUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -628,7 +628,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.sampleUnit}}</span>
+                    <span>{{scope.row.sampleUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -643,7 +643,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.outputUnit}}</span>
+                    <span>{{scope.row.outputUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -659,7 +659,7 @@
                   label="操作"
                   width="60">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                   </template>
                 </el-table-column>
@@ -692,7 +692,7 @@
                 </el-table-column>
                 <el-table-column
                   label="生产批次"
-                  width="120">
+                  width="150">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                     <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
@@ -710,7 +710,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{ productUnit? scope.row.manPackingUnit = productUnit : scope.row.manPackingUnit = basicUnit}}</span>
+                    <span>{{ productUnitName? scope.row.manPackingUnitName = productUnitName : scope.row.manPackingUnitName = basicUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -725,7 +725,7 @@
                   label="单位"
                   width="120">
                   <template slot-scope="scope">
-                    <span>{{scope.row.badUnit = basicUnit}}</span>
+                    <span>{{scope.row.badUnitName = basicUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -740,7 +740,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.sampleUnit = basicUnit}}</span>
+                    <span>{{scope.row.sampleUnitName = basicUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -752,7 +752,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{productUnit? scope.row.outputUnit = productUnit : scope.row.outputUnit = basicUnit}}</span>
+                    <span>{{productUnitName? scope.row.outputUnitName = productUnitName : scope.row.outputUnitName = basicUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -784,7 +784,7 @@
                   label="操作"
                   width="60">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                   </template>
                 </el-table-column>
@@ -969,8 +969,8 @@
                 label="领用罐号">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                    <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
                   </el-select>
                   <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
                     <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
@@ -1025,7 +1025,7 @@
                 width="60">
                 <template slot-scope="scope">
                   <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row, delFlagnum.sapnum)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1130,7 +1130,7 @@
                 label="操作"
                 width="60">
                 <template slot-scope="scope">
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.menum)"></el-button>
                   <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
                 </template>
               </el-table-column>
@@ -1353,6 +1353,8 @@ export default {
       InVlist: [],
       basicUnit: '',
       productUnit: '',
+      productUnitName: '',
+      basicUnitName: '',
       ratio: undefined,
       InAudit: [],
       productShift: [],
@@ -1393,6 +1395,13 @@ export default {
         subin: false,
         subsap1: false,
         subsap2: false
+      },
+      delFlagnum: {
+        usernum: 0,
+        excnum: 0,
+        innum: 0,
+        sapnum: 0,
+        menum: 0
       }
     }
   },
@@ -1666,6 +1675,8 @@ export default {
             this.ratio = data.sme.ratio
             this.basicUnit = data.sme.basicUnit
             this.productUnit = data.sme.productUnit
+            this.productUnitName = data.sme.productUnitName
+            this.basicUnitName = data.sme.basicUnitName
           } else {
             this.$message.error('比例获取失败')
           }
@@ -1893,8 +1904,10 @@ export default {
     userrul () {
       let ty = true
       this.uerDate.forEach((item) => {
-        if (item.userType && item.userId.length !== 0) {} else {
-          ty = false
+        if (item.delFlag !== '1') {
+          if (item.userType && item.userId.length !== 0) {} else {
+            ty = false
+          }
         }
       })
       return ty
@@ -1902,16 +1915,18 @@ export default {
     excrul () {
       let ty = true
       this.ExcDate.forEach((item) => {
-        if (item.expCode && item.expStartDate && item.expEndDate) {
-          if ((item.expContinue * 1) < 0) {
+        if (item.delFlag !== '1') {
+          if (item.expCode && item.expStartDate && item.expEndDate) {
+            if ((item.expContinue * 1) < 0) {
+              ty = false
+              this.$message.error('异常开始时间大于结束时间')
+              return false
+            }
+          } else {
             ty = false
-            this.$message.error('异常开始时间大于结束时间')
+            this.$message.error('异常记录必填项未填')
             return false
           }
-        } else {
-          ty = false
-          this.$message.error('异常记录必填项未填')
-          return false
         }
       })
       return ty
@@ -1919,16 +1934,18 @@ export default {
     inrul () {
       let ty = true
       this.InDate.forEach((item) => {
-        if (item.batch) {
-          if (item.batch.length !== 10) {
+        if (item.delFlag !== '1') {
+          if (item.batch) {
+            if (item.batch.length !== 10) {
+              ty = false
+              this.$message.error('生产入库请录入10位批次号')
+              return false
+            }
+          } else {
             ty = false
-            this.$message.error('生产入库请录入10位批次号')
+            this.$message.error('生产入库批次项未填')
             return false
           }
-        } else {
-          ty = false
-          this.$message.error('生产入库批次项未填')
-          return false
         }
       })
       return ty
@@ -1936,14 +1953,18 @@ export default {
     saprul () {
       let ty = true
       this.listbomP.forEach((item) => {
-        if (item.productUseNum) {} else {
-          ty = false
+        if (item.delFlag !== '1') {
+          if (item.productUseNum) {} else {
+            ty = false
+          }
         }
       })
       if (this.order.properties !== '二合一&礼盒产线') {
         this.listbomS.forEach((item) => {
-          if (item.potNo && item.filterDate && item.productUseNum) {} else {
-            ty = false
+          if (item.delFlag !== '1') {
+            if (item.potNo && item.filterDate && item.productUseNum) {} else {
+              ty = false
+            }
           }
         })
       }
@@ -1965,7 +1986,7 @@ export default {
             return false
           }
         }
-        if (this.InDate.length === 0) {
+        if (this.InDate.length === 0 || this.delFlagnum.innum === this.InDate.length) {
           this.$message.error('生产入库不能为空')
           return false
         } else {
@@ -2134,6 +2155,12 @@ export default {
             item.status = str
           }
           item.isPkgThree = types
+          if (this.order.properties === '二合一&礼盒产线') {
+            this.productUnit ? item.manPackingUnit = this.productUnit : item.manPackingUnit = this.basicUnit
+            this.badUnit = this.basicUnit
+            this.sampleUnit = this.basicUnit
+            this.productUnit ? item.outputUnit = this.productUnit : item.outputUnit = this.basicUnit
+          }
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
           this.netStatus.inState = true
@@ -2496,29 +2523,38 @@ export default {
         classType: '',
         batch: '',
         manPacking: '',
-        manPackingUnit: '瓶',
+        manPackingUnit: 'BOT',
+        manPackingUnitName: '瓶',
         aiPacking: '',
-        aiPackingUnit: '瓶',
+        aiPackingUnit: 'BOT',
+        aiPackingUnitName: '瓶',
         aiShelves: '',
-        aiShelvesUnit: '箱',
+        aiShelvesUnit: 'CAR',
+        aiShelvesUnitName: '箱',
         aiSolid: '',
-        aiSolidUnit: '箱',
+        aiSolidUnit: 'CAR',
+        aiSolidUnitName: '箱',
         manSolid: '',
-        manSolidUnit: '箱',
+        manSolidUnit: 'CAR',
+        manSolidUnitName: '箱',
         bad: '',
-        badUnit: '瓶',
+        badUnit: 'BOT',
+        badUnitName: '瓶',
         sample: 0,
-        sampleUnit: '瓶',
+        sampleUnit: 'BOT',
+        sampleUnitName: '瓶',
         output: '',
-        outputUnit: '瓶',
+        outputUnit: 'BOT',
+        outputUnitName: '瓶',
         mainBatch: '',
         attachBatch: '',
         delFlag: '0'
       })
     },
     // 删除半成品
-    dellistbomS (row) {
+    dellistbomS (row, num) {
       row.delFlag = '1'
+      num++
     },
     // 新增物料半成品
     addSapS (form, row) {
