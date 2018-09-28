@@ -85,7 +85,7 @@ export default {
       },
       list: [],
       workShop: '',
-      productDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
+      productDate: '',
       factoryid: '',
       workShopname: ''
     }

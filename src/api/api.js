@@ -5,7 +5,7 @@
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.41:8080'
 // let HOST = 'http://10.10.5.63:8080'
-let HOST = 'https://srvcontainer:8080'
+let HOST = 'https://mdsuatsys.shinho.net.cn'// 正式环境
 /*
 *MAINapi
  */

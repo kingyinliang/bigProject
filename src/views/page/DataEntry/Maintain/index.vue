@@ -179,7 +179,7 @@
           label="操作"
           width="50">
           <template slot-scope="scope">
-            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="isAuth('sys:verifyJWZ:update') && scope.row.status !== 'finished'">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+            <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="isAuth('sys:verifyJWZ:update') && scope.row.status !== 'finished' && scope.row.aiShelves !== 0">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -313,7 +313,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'finished') {
+      if (row.status === 'finished' || row.aiShelves === 0) {
         return 0
       } else {
         return 1

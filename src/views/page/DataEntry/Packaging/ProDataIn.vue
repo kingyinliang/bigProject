@@ -710,7 +710,7 @@
                   label="单位"
                   width="60">
                   <template slot-scope="scope">
-                    <span>{{ productUnitName? scope.row.manPackingUnitName = productUnitName : scope.row.manPackingUnitName = basicUnitName}}</span>
+                    <span>{{ productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -1402,7 +1402,8 @@ export default {
         innum: 0,
         sapnum: 0,
         menum: 0
-      }
+      },
+      instatus: 0
     }
   },
   watch: {
@@ -1936,8 +1937,12 @@ export default {
     },
     inrul () {
       let ty = true
+      this.instatus = 0
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
+          if (item.aiShelves !== '') {
+            this.instatus = 1
+          }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false
@@ -1997,7 +2002,7 @@ export default {
             return false
           }
         }
-        if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间') {
+        if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间' && this.instatus === 1) {
           this.$message.error('机维组未确认，不能提交')
           return false
         }
@@ -2159,9 +2164,9 @@ export default {
           }
           item.isPkgThree = types
           if (this.order.properties === '二合一&礼盒产线') {
-            this.productUnit ? item.manPackingUnit = this.productUnit : item.manPackingUnit = this.basicUnit
-            this.badUnit = this.basicUnit
-            this.sampleUnit = this.basicUnit
+            this.productUnit ? item.manSolidUnit = this.productUnit : item.manSolidUnit = this.basicUnit
+            item.badUnit = this.basicUnit
+            item.sampleUnit = this.basicUnit
             this.productUnit ? item.outputUnit = this.productUnit : item.outputUnit = this.basicUnit
           }
         })
@@ -2334,8 +2339,6 @@ export default {
     },
     // 物料提交
     subSap () {
-      console.log('----tijiao-----')
-      console.log(this.listbomP)
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subsap1 = true
@@ -2608,7 +2611,7 @@ export default {
         badProduct: 0,
         badSemi: 0,
         deviceLoss: 0,
-        delFlag: 0
+        delFlag: '0'
       })
     },
     // 异常下拉
@@ -2659,7 +2662,7 @@ export default {
     ExcNum: function () {
       let num = 0
       this.ExcDate.forEach((item) => {
-        num = num + (item.delFlag === '0' ? item.expContinue * 1 : 0)
+        num = num + (item.delFlag === '0' ? (item.expContinue ? item.expContinue * 1 : 0) : 0)
       })
       // return typeof(this.ExcDate[0].expEndDate)
       return num
