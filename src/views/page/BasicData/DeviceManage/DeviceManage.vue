@@ -35,7 +35,7 @@
                 <span>设备管理</span>
               </div>
               <div>
-                <el-button type="danger" size="small" @click="remove()" style="float: right;margin-bottom: 20px"  v-if="isAuthisAuth('sys:device:delete')">批量删除</el-button>
+                <el-button type="danger" size="small" @click="remove()" style="float: right;margin-bottom: 20px"  v-if="isAuth('sys:device:delete')">批量删除</el-button>
                 <el-button type="primary" size="small" @click="addOrupdate(deptId)" v-if="isAuth('sys:device:save')" style="float: right;margin-bottom: 20px;margin-right: 10px">新增</el-button>
                 <el-table
                   ref="table1"

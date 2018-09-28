@@ -353,7 +353,7 @@ export default {
     },
     // 获取产线
     GetParentline (id) {
-      this.plantList.productline = ''
+      this.plantList.productLine = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
           if (data.code === 0) {
