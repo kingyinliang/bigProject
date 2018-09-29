@@ -1365,6 +1365,7 @@ export default {
       finHolder: [],
       semiHolder: [],
       GermsDate: [],
+      textlist: {},
       Text: '',
       textId: '',
       multipleSelectionUser: [],
@@ -1894,6 +1895,7 @@ export default {
         if (data.code === 0) {
           console.log('获取包装车间文本记录列表')
           console.log(data)
+          this.textlist = data.listForm[0]
           this.Text = data.listForm[0].pkgText
           this.textId = data.listForm[0].id
         } else {
@@ -2272,10 +2274,10 @@ export default {
         id: this.textId,
         orderId: this.orderId,
         pkgText: this.Text,
-        changed: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
-        changer: `${this.realName}(${this.userName})`,
-        created: new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString(),
-        creator: `${this.realName}(${this.userName})`,
+        changed: this.textlist.changed ? this.textlist.changed : null,
+        changer: this.textlist.changer ? this.textlist.changer : null,
+        created: this.textlist.created ? this.textlist.created : null,
+        creator: this.textlist.creator ? this.textlist.creator : null,
         workShop: this.order.workShop,
         blongProc: this.order.productLine
       }).then(({data}) => {
