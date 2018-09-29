@@ -2389,7 +2389,6 @@ export default {
     // 搜索人员
     filterNode (value, data) {
       if (!value) return true
-      console.log(data.realName)
       return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
     },
     filterNode1 (value, data) {
