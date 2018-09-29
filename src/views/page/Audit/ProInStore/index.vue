@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
 <!--     <div class="topTitle">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>生管审核</el-breadcrumb-item>
@@ -247,7 +247,7 @@
         <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
     </el-dialog>
-  </div>
+  </el-col>
 </template>
 
 <script>
@@ -456,6 +456,7 @@ export default {
             item.status = 'checked'
             item.memo = '审核通过'
             item.pstngDate = this.plantList.pstngDate
+            item.headerTxt = this.plantList.headerTxt
           })
           console.log(this.productline.pstngDate)
           console.log(this.multipleSelection)

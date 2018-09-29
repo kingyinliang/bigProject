@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <!--<div class="topTitle">-->
       <!--<el-breadcrumb separator="/">-->
         <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
@@ -121,7 +121,7 @@
       </span>
     </el-dialog>
     <location-add v-if="visible" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
-  </div>
+  </el-col>
 </template>
 
 <script>

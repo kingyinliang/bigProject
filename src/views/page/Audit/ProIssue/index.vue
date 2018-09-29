@@ -261,6 +261,9 @@ export default {
     },
     'plantList.workShop' (n, o) {
       this.GetParentline(n)
+    },
+    'lodingStatus' (n, o) {
+      console.log(n)
     }
   },
   mounted () {
@@ -431,6 +434,7 @@ export default {
             item.status = 'checked'
             item.memo = '审核通过'
             item.pstngDate = this.plantList.pstngDate
+            item.headerTxt = this.plantList.headerTxt
           })
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
