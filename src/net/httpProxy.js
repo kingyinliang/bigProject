@@ -66,8 +66,6 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
     return Promise.reject(error)
   })
   if (method !== HTTP_METHOD.GET) {
-    // options.headers['Accept'] = 'application/json';
-    // options.headers['Content-Type'] = 'application/json;charset=UTF-8';
     options.data = data
   }
   if (method === HTTP_METHOD.GET) {
