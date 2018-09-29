@@ -1,5 +1,5 @@
 <template>
-<div>
+<el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
   <!--<div class="topTitle">-->
     <!--<el-breadcrumb separator="/">-->
       <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
@@ -168,7 +168,7 @@
         <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
   </el-dialog>
-</div>
+</el-col>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
       <!--<div class="topTitle">-->
         <!--<el-breadcrumb separator="/">-->
           <!--<el-breadcrumb-item>系统管理</el-breadcrumb-item>-->
@@ -96,7 +96,7 @@
       <user-manage v-if="addOrUpdateVisible2" ref="usermanage" @refreshDataList="GetRoleList()"></user-manage>
       <role-dept v-if="addOrUpdateVisible3" ref="roleDept" @refreshDataList="GetRoleList()"></role-dept>
       <role-add-or-update v-if="addOrUpdateVisible4" ref="roleaddorupdate" @refreshDataList="GetRoleList()"></role-add-or-update>
-    </div>
+    </el-col>
 </template>
 
 <script>

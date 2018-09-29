@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
       <!--<div class="topTitle">-->
         <!--<el-breadcrumb separator="/">-->
           <!--<el-breadcrumb-item>系统管理</el-breadcrumb-item>-->
@@ -104,7 +104,7 @@
       </div>
       <!-- 弹窗, 新增 / 修改 -->
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-    </div>
+    </el-col>
 </template>
 
 <script>
