@@ -1,12 +1,5 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <!--<div class="topTitle">-->
-      <!--<el-breadcrumb separator="/">-->
-        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
-        <!--<el-breadcrumb-item :to="{ path: '/DataEntry-Packaging-index' }">包装车间</el-breadcrumb-item>-->
-        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
-      <!--</el-breadcrumb>-->
-    <!--</div>-->
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -255,18 +248,21 @@
                   </el-table-column>
                   <el-table-column
                     label="人员属性"
-                    width="110">
+                    width="130">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @change="userTypesele(scope.row)">
-                        <el-option label="正式" value="正式"></el-option>
-                        <el-option label="借调" value="借调"></el-option>
-                        <el-option label="临时工" value="临时工"></el-option>
-                      </el-select>
-                      <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-else disabled>
-                        <el-option label="正式" value="正式"></el-option>
-                        <el-option label="借调" value="借调"></el-option>
-                        <el-option label="临时工" value="临时工"></el-option>
-                      </el-select>
+                      <div class="required">
+                        <i class="reqI">*</i>
+                        <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @change="userTypesele(scope.row)">
+                          <el-option label="正式" value="正式"></el-option>
+                          <el-option label="借调" value="借调"></el-option>
+                          <el-option label="临时工" value="临时工"></el-option>
+                        </el-select>
+                        <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-else disabled>
+                          <el-option label="正式" value="正式"></el-option>
+                          <el-option label="借调" value="借调"></el-option>
+                          <el-option label="临时工" value="临时工"></el-option>
+                        </el-select>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -274,20 +270,23 @@
                     :show-overflow-tooltip="true"
                     width="300">
                     <template slot-scope="scope">
-                      <span v-if="!isRedact" style="cursor: pointer">
-                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                      </span>
-                      <span v-if="isRedact && (readyDate.status ==='submit' || readyDate.status ==='checked')">
-                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                      </span>
-                      <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                        <i>点击选择人员</i>
-                      </span>
-                      <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                        <i>点击输入临时工</i>
-                      </span>
+                      <div class="required" style="min-height: 32px">
+                        <i class="reqI">*</i>
+                        <span v-if="!isRedact" style="cursor: pointer">
+                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                        </span>
+                        <span v-if="isRedact && (readyDate.status ==='submit' || readyDate.status ==='checked')">
+                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                        </span>
+                        <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                          <i>点击选择人员</i>
+                        </span>
+                        <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                          <i>点击输入临时工</i>
+                        </span>
+                      </div>
                       <!--<el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击选择人员</el-button>-->
                       <!--<el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击输入临时工</el-button>-->
                     </template>
@@ -369,14 +368,17 @@
               </el-table-column>
               <el-table-column
                 label="异常情况"
-                width="120">
+                width="150">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                  </el-select>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
+                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -392,16 +394,22 @@
                 width="241"
                 label="异常开始时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
                 width="241"
                 label="异常结束时间">
                 <template slot-scope="scope">
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -520,10 +528,13 @@
                 </el-table-column>
                 <el-table-column
                   label="生产批次"
-                  width="120">
+                  width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" maxlength="10"></el-input>
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" maxlength="10"></el-input>
+                      <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -904,31 +915,31 @@
               </el-table-column>
               <el-table-column
                 label="生产使用"
-                width="125">
+                width="150">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
-                  <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
+                    <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
-                label="本班损耗"
-                width="125">
+                label="本班损耗">
                 <template slot-scope="scope">
                   <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
                   <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="不合格数"
-                width="125">
+                label="不合格数">
                 <template slot-scope="scope">
                   <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
                   <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
-                label="不良批次"
-                width="140">
+                label="不良批次">
                 <template slot-scope="scope">
                   <el-input size="small" maxlength="10" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                   <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
@@ -957,6 +968,7 @@
                 label="序号">
               </el-table-column>
               <el-table-column
+                width="120"
                 label="物料（半成品）">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
@@ -966,26 +978,35 @@
                 width="60">
               </el-table-column>
               <el-table-column
+                width="150"
                 label="领用罐号">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                    <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                    <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
-                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                    <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
-                  </el-select>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                      <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                      <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
+                      <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                      <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                    </el-select>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
+                width="160"
                 label="过滤日期">
                 <template slot-scope="scope">
-                  <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
-                  <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                    <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
+                width="150"
                 label="批次">
                 <template slot-scope="scope">
                   <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
@@ -993,13 +1014,18 @@
                 </template>
               </el-table-column>
               <el-table-column
+                width="120"
                 label="生产使用量">
                 <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                  <el-input size="small" v-model="scope.row.productUseNum" v-else disabled></el-input>
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-input size="small" v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.productUseNum" v-else disabled></el-input>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
+                width="160"
                 label="换罐时间">
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
@@ -1007,6 +1033,7 @@
                 </template>
               </el-table-column>
               <el-table-column
+                width="160"
                 label="用完时间">
                 <template slot-scope="scope">
                   <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
@@ -1021,6 +1048,7 @@
                 </template>
               </el-table-column>
               <el-table-column
+                fixed="right"
                 label="操作"
                 width="60">
                 <template slot-scope="scope">
@@ -2796,6 +2824,16 @@ export default {
 }
 </style>
 <style lang="scss">
+  .required{
+    position: relative;
+    padding-left: 15px;
+    .reqI{
+      color: red;
+      position: absolute;
+      left: 0;
+      line-height: 32px;
+    }
+  }
   .searchCard { margin-bottom: 0; }
   .searchCard, .tableCard {
     position: relative;
