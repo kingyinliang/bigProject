@@ -61,7 +61,7 @@ a, a:link, a:visited, a:hover, a:active {
   visibility: hidden
 }
 .el-submenu .el-menu-item{
-  min-width: 170px;
+  min-width: 170px!important;
 }
 .clearfix {
   zoom: 1; /*IE/7/6*/
