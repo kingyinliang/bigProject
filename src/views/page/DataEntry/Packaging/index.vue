@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <!--<div class="topTitle">-->
       <!--<el-breadcrumb separator="/">-->
         <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
@@ -41,7 +41,7 @@
                 </el-form-item>
               </div>
               <div class="clearfix item">
-                <img :src="'http://10.8.4.153:50080' + item.img" alt="">
+                <img :src="'data:image/gif;base64,' + item.img" alt="">
                 <div class="itemForm">
                     <el-form-item label="订单号：" style="margin-bottom: 10px;">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
@@ -50,7 +50,9 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="品项：" style="margin-bottom: 10px;">
-                      <p>{{item.materialCode + ' ' + item.materialName}}</p>
+                      <el-tooltip class="item" effect="dark" :content="item.materialCode + ' ' + item.materialName" placement="top-start">
+                        <p class="hiddenP">{{item.materialCode + ' ' + item.materialName}}</p>
+                      </el-tooltip>
                     </el-form-item>
                     <el-form-item label="计划产量：" style="margin-bottom: 10px;">
                       <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
@@ -66,7 +68,7 @@
         </el-row>
       </el-card>
     </div>
-  </div>
+  </el-col>
 </template>
 
 <script>
@@ -102,13 +104,11 @@ export default {
       this.plantList.productDate = this.PkgproductDate
     }
     this.plantList.factoryid = this.Pkgfactoryid
-    this.plantList.workShop = this.PkgworkShop
+    this.Getdeptcode()
     let that = this
     setTimeout(function () {
-      that.plantList.workShop = that.PkgworkShop
       that.GetOrderList()
     }, 1000)
-    this.Getdeptcode()
   },
   methods: {
     // 获取工厂
@@ -131,8 +131,10 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            if (this.workshop.length === 1) {
+            if (this.PkgworkShop === '' && this.workshop.length === 1) {
               this.plantList.workShop = this.workshop[0].deptId
+            } else {
+              this.plantList.workShop = this.PkgworkShop
             }
           } else {
             this.$message.error(data.msg)
@@ -279,6 +281,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.hiddenP{
+  max-height: 64px;
+  overflow: hidden;
+  margin-top: 0!important;
+}
 .box-card{
   .pro-line { border-bottom: 1px solid #dcdfe6; }
   .pro-line p { color: red; font-size: 16px; letter-spacing: .1em; }

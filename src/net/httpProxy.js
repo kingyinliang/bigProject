@@ -40,6 +40,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
    */
   axios.interceptors.request.use(config => {
     config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
+    Vue.lodingStatus = true
     // if (promiseArr[config.url]) {
     //   promiseArr[config.url]('操作取消')
     //   promiseArr[config.url] = cancel
@@ -54,6 +55,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
    * 响应拦截
    */
   axios.interceptors.response.use(response => {
+    Vue.lodingStatus = false
     if (response.data && response.data.code === 401) { // 401, token失效
       Vue.cookie.delete('token')
       router.options.isAddDynamicMenuRoutes = false

@@ -58,14 +58,14 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="产线图片：" v-if="OrgDetail.deptType === 'proLine'">
-                    <img :src="'http://10.8.4.153:50080'+OrgDetail.img" alt="" v-if="update" class="pkgImg">
+                    <img :src="'data:image/gif;base64,'+ OrgDetail.img" alt="" v-if="update" class="pkgImg">
                     <el-upload
-                      action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
+                      :action="FILE_API"
                       :limit="1"
+                      :http-request="httpRequest"
                       :headers="heads"
                       list-type="picture"
                       :file-list="fileList"
-                      :beforeUpload="beforeAvatarUpload"
                       :on-success="addfile2" v-else>
                       <el-button size="small" type="primary">选取文件</el-button>
                     </el-upload>
@@ -121,8 +121,9 @@
             </el-form-item>
             <el-form-item label="产线图片：" v-if="addDep.deptType== 'proLine'">
               <el-upload
-                action="http://10.8.4.153:50080/api/sys/dept/fileUpLoad"
+                :action="FILE_API"
                 :limit="1"
+                :http-request="httpRequest"
                 list-type="picture"
                 :headers="heads"
                 :on-success="addfile">
@@ -154,11 +155,13 @@
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API, MAIN_API, HOST_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
+      FILE_API: '',
+      HOST_API: '',
       filterText: '',
       form: {},
       adddepform: {
@@ -182,7 +185,8 @@ export default {
       OrgDetail: {},
       addDep: {},
       clickTreeNode: {},
-      submitType: true
+      submitType: true,
+      fileReader: {}
     }
   },
   watch: {
@@ -191,6 +195,9 @@ export default {
     }
   },
   mounted () {
+    this.fileReader = new FileReader()
+    this.FILE_API = MAIN_API.FILE_API
+    this.HOST_API = HOST_API
     document.addEventListener('click', (e) => {
       if (e.target.className !== 'menuli') this.menuVisible = false
     })
@@ -205,6 +212,21 @@ export default {
     })
   },
   methods: {
+    httpRequest (options) {
+      let file = options.file
+      if (file) {
+        this.fileReader.readAsDataURL(file)
+      }
+      this.fileReader.onload = () => {
+        let base64Str = this.fileReader.result
+        // this.$http(this.FILE_API, 'POST', {pkgImg: base64Str.split(',')[1]}).then(res => {
+        //   options.onSuccess(res, file)
+        // }).catch(err => {
+        //   options.onError(err)
+        // })
+        options.onSuccess(base64Str.split(',')[1], file)
+      }
+    },
     // 获取组织结构树
     getTree (type) {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
@@ -276,13 +298,15 @@ export default {
     },
     // 上传图片图片回调 新增
     addfile (res, file) {
-      console.log(res)
-      this.addDep.img = res.picUrl
+      // console.log(res)
+      // this.addDep.img = res.picUrl
+      this.addDep.img = res
     },
     // 上传图片回调 修改
     addfile2 (res, file) {
-      console.log(this.fileList)
-      this.OrgDetail.img = res.picUrl
+      // console.log(this.fileList)
+      // this.OrgDetail.img = res.picUrl
+      this.OrgDetail.img = res
     },
     closethis () {
       console.log(this.addDep)
@@ -383,7 +407,7 @@ export default {
 
 <style lang="scss" scoped>
   .pkgImg{
-    width: 60px;
+    width: 100px;
     height: 100px;
   }
   .el-card__header {

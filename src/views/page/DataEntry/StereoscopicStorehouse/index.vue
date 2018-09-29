@@ -110,7 +110,7 @@
           width="140">
         </el-table-column>
         <el-table-column
-          prop="unit"
+          prop="unitName"
           label="单位"
           :show-overflow-tooltip="true"
           width="50">
