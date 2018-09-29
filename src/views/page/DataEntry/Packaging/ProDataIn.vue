@@ -889,7 +889,7 @@
               <el-table-column
                 width="240"
                 :show-overflow-tooltip="true"
-                label="物料（包材）">
+                label="物料">
                 <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
               </el-table-column>
               <el-table-column
@@ -1315,7 +1315,7 @@ export default {
         dayStartDate: '',
         dayStartLineDate: '',
         dayChange: '',
-        dayDinner: '60',
+        dayDinner: '',
         dayCauseDate: '',
         dayEndDate: '',
         midCauseDate: '',
@@ -1766,7 +1766,7 @@ export default {
     Getpkgin () {
       this.$http(`${PACKAGING_API.PKGINLIST_API}`, 'POST', {
         orderId: this.orderId,
-        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'isTwoOne' : this.order.properties === '包装三车间' ? 'isPkgThree' : ''
+        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'twoAndOne' : this.order.workShopName === '包装三车间' ? 'isPkgThree' : ''
       }).then(({data}) => {
         if (data.code === 0) {
           console.log('获取包装车间生产入库列表')
@@ -1807,7 +1807,7 @@ export default {
     GetMaintain () {
       this.$http(`${PACKAGING_API.PKGINLIST_API}`, 'POST', {
         orderId: this.orderId,
-        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'isTwoOne' : this.order.properties === '包装三车间' ? 'isPkgThree' : ''
+        isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'twoAndOne' : this.order.workShopName === '包装三车间' ? 'isPkgThree' : ''
       }).then(({data}) => {
         if (data.code === 0) {
           this.InVlist = data.vlist
@@ -1926,6 +1926,25 @@ export default {
               this.$message.error('异常开始时间大于结束时间')
               return false
             }
+            if (item.expCode === '001' || item.expCode === '002') {
+              if (!item.deviceId) {
+                ty = false
+                this.$message.error('异常记录设备必填')
+                return false
+              }
+            } else if (item.expCode === '003' || item.expCode === '004') {
+              if (!item.materialShort) {
+                ty = false
+                this.$message.error('异常记录物料分类必填')
+                return false
+              }
+            } else if (item.expCode === '005') {
+              if (!item.energy) {
+                ty = false
+                this.$message.error('异常记录能源必填')
+                return false
+              }
+            }
           } else {
             ty = false
             this.$message.error('异常记录必填项未填')
@@ -1940,7 +1959,7 @@ export default {
       this.instatus = 0
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
-          if (item.aiShelves !== '') {
+          if (item.aiShelves !== '' && item.aiShelves !== '0') {
             this.instatus = 1
           }
           if (item.batch) {
@@ -2002,6 +2021,7 @@ export default {
             return false
           }
         }
+        this.inrul()
         if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间' && this.instatus === 1) {
           this.$message.error('机维组未确认，不能提交')
           return false

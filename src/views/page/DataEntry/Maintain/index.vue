@@ -97,7 +97,7 @@
            width="140">
         </el-table-column>
         <el-table-column
-          prop="aiShelvesUnit"
+          prop="aiShelvesUnitName"
           label="单位"
           width="50">
         </el-table-column>
@@ -141,7 +141,7 @@
           label="单位"
           width="50">
           <template slot-scope="scope">
-            <span>{{ scope.row.differentUnit  = '箱'}}</span>
+            <span>{{ scope.row.differentUnitName}}</span>
           </template>
         </el-table-column>
         <el-table-column

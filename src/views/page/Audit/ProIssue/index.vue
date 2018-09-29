@@ -35,6 +35,7 @@
                   <el-option label="未审核"  value="submit"></el-option>
                   <el-option label="审核通过"  value="checked"></el-option>
                   <el-option label="审核不通过"  value="noPass"></el-option>
+                  <el-option label="接口失败"  value="0"></el-option>
                 </el-select>
               </el-form-item>
               <el-row>
@@ -65,6 +66,7 @@
         </div>
         <el-table
           ref="table1"
+          v-loading="dataListLoading"
           header-row-class-name="tableHead"
           :data="AuditList"
           @selection-change="handleSelectionChange"
@@ -230,6 +232,7 @@ export default {
   name: 'index',
   data () {
     return {
+      dataListLoading: false,
       visible: false,
       factory: [],
       workshop: [],
@@ -284,6 +287,7 @@ export default {
   methods: {
     // 获取列表
     GetAuditList () {
+      this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITISSUELIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.AuditList = data.page.list
@@ -293,6 +297,7 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.dataListLoading = false
       })
     },
     // 获取工厂
