@@ -1241,7 +1241,7 @@
         <el-col style="width: 250px">
           <el-card style="height: 303px;overflow-y: scroll">
             <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree" :filter-node-method="filterNode" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
+            <el-tree ref="userlistTree" :filter-node-method="filterNode" node-key="userId" @node-click="treeNodeClick" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
           </el-card>
         </el-col>
         <el-col style="width: 50px;padding: 70px 5px">
@@ -2439,6 +2439,14 @@ export default {
         }
       } else {
         this.$message.error('请选择人员属性')
+      }
+    },
+    // 树节点点击
+    treeNodeClick (data) {
+      if (JSON.stringify(this.$refs.userlistTree.getCheckedNodes()).indexOf(JSON.stringify(data)) === -1) {
+        let arr = this.$refs.userlistTree.getCheckedNodes()
+        arr.push(data)
+        this.$refs.userlistTree.setCheckedNodes(arr)
       }
     },
     // 往左
