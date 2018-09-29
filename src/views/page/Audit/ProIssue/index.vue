@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
       <el-card class="searchCard">
         <el-row type="flex">
@@ -223,7 +223,7 @@
         <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
     </el-dialog>
-  </div>
+  </el-col>
 </template>
 
 <script>
@@ -264,6 +264,7 @@ export default {
     }
   },
   mounted () {
+    console.log('-----------' + this.lodingStatus)
     // this.GetAuditList()
     this.Getdeptcode()
     let $ = this.$
