@@ -2274,10 +2274,10 @@ export default {
         id: this.textId,
         orderId: this.orderId,
         pkgText: this.Text,
-        changed: this.textlist.changed ? this.textlist.changed : '',
-        changer: this.textlist.changer ? this.textlist.changer : '',
-        created: this.textlist.created ? this.textlist.created : '',
-        creator: this.textlist.creator ? this.textlist.creator : '',
+        changed: this.textlist.changed ? this.textlist.changed : null,
+        changer: this.textlist.changer ? this.textlist.changer : null,
+        created: this.textlist.created ? this.textlist.created : null,
+        creator: this.textlist.creator ? this.textlist.creator : null,
         workShop: this.order.workShop,
         blongProc: this.order.productLine
       }).then(({data}) => {
