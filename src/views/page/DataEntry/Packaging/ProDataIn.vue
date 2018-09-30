@@ -27,7 +27,7 @@
                 <p class="el-input">{{order.operator}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="el-input">{{order.operDate}}</p>
+                <p class="el-input">{{order.operDate? (order.operDate.indexOf('.')!==-1?order.operDate.substring(0, order.operDate.indexOf('.')):order.operDate):''}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -842,7 +842,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="aiShelvesUnit"
+                  prop="aiShelvesUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
@@ -852,7 +852,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="differentUnit"
+                  prop="differentUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
@@ -862,7 +862,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="differentUnit"
+                  prop="differentUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
@@ -1989,6 +1989,7 @@ export default {
       this.instatus = 0
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
+          item.aiShelves = item.aiShelves + ''
           if (item.aiShelves !== '' && item.aiShelves !== '0') {
             this.instatus = 1
           }
@@ -2053,6 +2054,7 @@ export default {
         }
         this.inrul()
         if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间' && this.instatus === 1) {
+          console.log(this.instatus)
           this.$message.error('机维组未确认，不能提交')
           return false
         }
@@ -2636,10 +2638,10 @@ export default {
         materialName: row.materialName,
         unit: row.unit,
         potNo: '',
-        filterDate: '',
+        filterDate: null,
         productUseNum: '',
-        changePotDate: '',
-        usePotDate: '',
+        changePotDate: null,
+        usePotDate: null,
         isSplit: '1',
         delFlag: '0'
       })
