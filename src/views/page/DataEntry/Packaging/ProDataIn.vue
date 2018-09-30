@@ -27,7 +27,7 @@
                 <p class="el-input">{{order.operator}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="el-input">{{order.operDate}}</p>
+                <p class="el-input">{{order.operDate? (order.operDate.indexOf('.')!==-1?order.operDate.substring(0, order.operDate.indexOf('.')):order.operDate):''}}</p>
               </el-form-item>
             </el-form>
           </el-col>

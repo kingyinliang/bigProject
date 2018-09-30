@@ -373,7 +373,9 @@ export default {
       } else {
         row.pstngDate = this.plantList.pstngDate
         row.status = ''
+        this.lodingStatus = true
         this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', [row]).then(({data}) => {
+          this.lodingStatus = false
           if (data.code === 0) {
             this.$message.success('操作成功')
             row.redact = false
@@ -408,7 +410,9 @@ export default {
             item.memo = this.Text
             item.pstngDate = this.plantList.pstngDate
           })
+          this.lodingStatus = true
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            this.lodingStatus = false
             if (data.code === 0) {
               this.visible = false
               this.$message.success('操作成功')
@@ -436,7 +440,9 @@ export default {
             item.pstngDate = this.plantList.pstngDate
             item.headerTxt = this.plantList.headerTxt
           })
+          this.lodingStatus = true
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            this.lodingStatus = false
             if (data.code === 0) {
               this.$message.success('操作成功')
               this.GetAuditList()
