@@ -1,228 +1,230 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <div class="main">
-      <el-card class="searchCard">
-        <el-row type="flex">
-          <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
-              <el-form-item label="工厂：">
-                <el-select v-model="plantList.factory" placeholder="请选择">
-                  <el-option label="请选择"  value=""></el-option>
-                  <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="车间：">
-                <el-select v-model="plantList.workShop" placeholder="请选择">
-                  <el-option label="请选择"  value=""></el-option>
-                  <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="产线：">
-                <el-select v-model="plantList.productLine" placeholder="产线">
-                  <el-option label="请选择"  value=""></el-option>
-                  <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="订单号：">
-                <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
-              </el-form-item>
-              <el-form-item label="生产日期：">
-                <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="订单状态：">
-                <el-select v-model="plantList.status" placeholder="请选择">
-                  <el-option label="请选择"  value=""></el-option>
-                  <el-option label="未审核"  value="submit"></el-option>
-                  <el-option label="审核通过"  value="checked"></el-option>
-                  <el-option label="审核不通过"  value="noPass"></el-option>
-                  <el-option label="接口失败"  value="0"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-row>
-                <el-form-item label="过账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
+    <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
+      <div class="main">
+        <el-card class="searchCard">
+          <el-row type="flex">
+            <el-col>
+              <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+                <el-form-item label="工厂：">
+                  <el-select v-model="plantList.factory" placeholder="请选择">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="抬头文本：">
-                  <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
+                <el-form-item label="车间：">
+                  <el-select v-model="plantList.workShop" placeholder="请选择">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item style="margin-left: 67px;">
-                  <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('verify:material:list')">查询</el-button>
-                  <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('verify:material:update')">审核通过</el-button>
-                  <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
+                <el-form-item label="产线：">
+                  <el-select v-model="plantList.productLine" placeholder="产线">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
                 </el-form-item>
-              </el-row>
-            </el-form>
-          </el-col>
-        </el-row>
-        <div class="toggleSearchBottom">
-            <i class="el-icon-caret-top"></i>
-        </div>
-      </el-card>
-    </div>
-    <div class="main" style="padding-top: 0">
-      <el-card class="tableCard">
-        <div class="toggleSearchTop">
-            <i class="el-icon-caret-bottom"></i>
-        </div>
-        <el-table
-          ref="table1"
-          v-loading="dataListLoading"
-          header-row-class-name="tableHead"
-          :data="AuditList"
-          @selection-change="handleSelectionChange"
-          border
-          tooltip-effect="dark"
-          style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            type="selection"
-            :selectable='checkboxT'
-            width="34">
-          </el-table-column>
-          <el-table-column
-            label="审核状态"
-            width="100">
-            <template slot-scope="scope">
-              {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? scope.row.interfaceReturnStatus === '0'? '接口失败': '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="生产订单号"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            label="生产物料"
-            :show-overflow-tooltip="true"
-            width="360">
-            <template slot-scope="scope">
-              {{`${scope.row.materialCodeH} ${scope.row.materialNameH}`}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="planOutput"
-            label="计划生产数量"
-            width="105">
-          </el-table-column>
-          <el-table-column
-            prop="outputUnitName"
-            label="单位"
-            width="50">
-          </el-table-column>
-          <el-table-column
-            label="组件物料"
-            :show-overflow-tooltip="true"
-            width="450">
-            <template slot-scope="scope">
-              {{`${scope.row.materialCode} ${scope.row.materialName}`}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="entryQnt"
-            label="发料组件数量"
-            width="105">
-          </el-table-column>
-          <el-table-column
-            prop="entryUomName"
-            label="单位"
-            width="50">
-          </el-table-column>
-          <el-table-column
-            label="物料批次"
-            width="105">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
-              <span v-else>{{scope.row.batch}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="potNo"
-            label="领用罐号"
-            :show-overflow-tooltip="true"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="filterDate"
-            label="过滤日期"
-            :show-overflow-tooltip="true"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            label="出库库位"
-            width="78">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.stgeLoc" size="small" v-if="scope.row.redact"></el-input>
-              <span v-else>{{scope.row.stgeLoc}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="移动类型"
-            width="78">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.moveType" size="small" v-if="scope.row.redact"></el-input>
-              <span v-else>{{scope.row.moveType}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="stckType"
-            label="库存类型"
-            width="78">
-          </el-table-column>
-          <el-table-column
-            prop="interfaceReturn"
-            label="接口回写"
-            :show-overflow-tooltip="true"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            prop="memo"
-            label="审核意见"
-            :show-overflow-tooltip="true"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            prop="verifyMan"
-            :show-overflow-tooltip="true"
-            label="审核人">
-          </el-table-column>
-          <el-table-column
-            prop="verifyDate"
-            label="审核时间"
-            width="160">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="65">
-            <template slot-scope="scope">
-              <el-button type="text" size="small" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-row >
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="plantList.currPage"
-            :page-sizes="[10, 15, 20]"
-            :page-size="plantList.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="plantList.totalCount">
-          </el-pagination>
-        </el-row>
-      </el-card>
-    </div>
-    <el-dialog
-      title="审核拒绝"
-      :close-on-click-modal="false"
-      :visible.sync="visible">
-      <p style="line-height: 42px">请填写不通过原因</p>
-      <el-input type="textarea" v-model="Text" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" @click="repulseAutio()">确定</el-button>
-      </span>
-    </el-dialog>
+                <el-form-item label="订单号：">
+                  <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
+                </el-form-item>
+                <el-form-item label="生产日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="订单状态：">
+                  <el-select v-model="plantList.status" placeholder="请选择">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option label="未审核"  value="submit"></el-option>
+                    <el-option label="审核通过"  value="checked"></el-option>
+                    <el-option label="审核不通过"  value="noPass"></el-option>
+                    <el-option label="接口失败"  value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-row>
+                  <el-form-item label="过账日期：">
+                    <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="抬头文本：">
+                    <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
+                  </el-form-item>
+                  <el-form-item style="margin-left: 67px;">
+                    <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('verify:material:list')">查询</el-button>
+                    <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('verify:material:update')">审核通过</el-button>
+                    <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
+                  </el-form-item>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+          <div class="toggleSearchBottom">
+              <i class="el-icon-caret-top"></i>
+          </div>
+        </el-card>
+      </div>
+      <div class="main" style="padding-top: 0">
+        <el-card class="tableCard">
+          <div class="toggleSearchTop">
+              <i class="el-icon-caret-bottom"></i>
+          </div>
+          <el-table
+            ref="table1"
+            v-loading="dataListLoading"
+            header-row-class-name="tableHead"
+            :data="AuditList"
+            @selection-change="handleSelectionChange"
+            border
+            tooltip-effect="dark"
+            style="width: 100%;margin-bottom: 20px">
+            <el-table-column
+              type="selection"
+              :selectable='checkboxT'
+              width="34">
+            </el-table-column>
+            <el-table-column
+              label="审核状态"
+              width="100">
+              <template slot-scope="scope">
+                {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? scope.row.interfaceReturnStatus === '0'? '接口失败': '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="orderNo"
+              label="生产订单号"
+              :show-overflow-tooltip="true"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              label="生产物料"
+              :show-overflow-tooltip="true"
+              width="360">
+              <template slot-scope="scope">
+                {{`${scope.row.materialCodeH} ${scope.row.materialNameH}`}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="planOutput"
+              label="计划生产数量"
+              width="105">
+            </el-table-column>
+            <el-table-column
+              prop="outputUnitName"
+              label="单位"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              label="组件物料"
+              :show-overflow-tooltip="true"
+              width="450">
+              <template slot-scope="scope">
+                {{`${scope.row.materialCode} ${scope.row.materialName}`}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="entryQnt"
+              label="发料组件数量"
+              width="105">
+            </el-table-column>
+            <el-table-column
+              prop="entryUomName"
+              label="单位"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              label="物料批次"
+              width="105">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
+                <span v-else>{{scope.row.batch}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="potNo"
+              label="领用罐号"
+              :show-overflow-tooltip="true"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="filterDate"
+              label="过滤日期"
+              :show-overflow-tooltip="true"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              label="出库库位"
+              width="78">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.stgeLoc" size="small" v-if="scope.row.redact"></el-input>
+                <span v-else>{{scope.row.stgeLoc}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="移动类型"
+              width="78">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.moveType" size="small" v-if="scope.row.redact"></el-input>
+                <span v-else>{{scope.row.moveType}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="stckType"
+              label="库存类型"
+              width="78">
+            </el-table-column>
+            <el-table-column
+              prop="interfaceReturn"
+              label="接口回写"
+              :show-overflow-tooltip="true"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="memo"
+              label="审核意见"
+              :show-overflow-tooltip="true"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="verifyMan"
+              :show-overflow-tooltip="true"
+              label="审核人">
+            </el-table-column>
+            <el-table-column
+              prop="verifyDate"
+              label="审核时间"
+              width="160">
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="65">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row >
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="plantList.currPage"
+              :page-sizes="[10, 15, 20]"
+              :page-size="plantList.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="plantList.totalCount">
+            </el-pagination>
+          </el-row>
+        </el-card>
+      </div>
+      <el-dialog
+        title="审核拒绝"
+        :close-on-click-modal="false"
+        :visible.sync="visible">
+        <p style="line-height: 42px">请填写不通过原因</p>
+        <el-input type="textarea" v-model="Text" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">取消</el-button>
+          <el-button type="primary" @click="repulseAutio()">确定</el-button>
+        </span>
+      </el-dialog>
+    </el-col>
   </el-col>
 </template>
 
@@ -232,6 +234,7 @@ export default {
   name: 'index',
   data () {
     return {
+      lodingStatus1: false,
       dataListLoading: false,
       visible: false,
       factory: [],
@@ -373,9 +376,9 @@ export default {
       } else {
         row.pstngDate = this.plantList.pstngDate
         row.status = ''
-        this.lodingStatus = true
+        this.lodingStatus1 = true
         this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', [row]).then(({data}) => {
-          this.lodingStatus = false
+          this.lodingStatus1 = false
           if (data.code === 0) {
             this.$message.success('操作成功')
             row.redact = false
@@ -410,9 +413,9 @@ export default {
             item.memo = this.Text
             item.pstngDate = this.plantList.pstngDate
           })
-          this.lodingStatus = true
+          this.lodingStatus1 = true
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.lodingStatus = false
+            this.lodingStatus1 = false
             if (data.code === 0) {
               this.visible = false
               this.$message.success('操作成功')
@@ -440,9 +443,9 @@ export default {
             item.pstngDate = this.plantList.pstngDate
             item.headerTxt = this.plantList.headerTxt
           })
-          this.lodingStatus = true
+          this.lodingStatus1 = true
           this.$http(`${AUDIT_API.AUDITISSUEUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.lodingStatus = false
+            this.lodingStatus1 = false
             if (data.code === 0) {
               this.$message.success('操作成功')
               this.GetAuditList()
