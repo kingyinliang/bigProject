@@ -2636,10 +2636,10 @@ export default {
         materialName: row.materialName,
         unit: row.unit,
         potNo: '',
-        filterDate: '',
+        filterDate: null,
         productUseNum: '',
-        changePotDate: '',
-        usePotDate: '',
+        changePotDate: null,
+        usePotDate: null,
         isSplit: '1',
         delFlag: '0'
       })
