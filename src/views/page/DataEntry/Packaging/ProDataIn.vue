@@ -842,7 +842,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="aiShelvesUnit"
+                  prop="aiShelvesUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
@@ -852,7 +852,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="differentUnit"
+                  prop="differentUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
@@ -862,7 +862,7 @@
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="differentUnit"
+                  prop="differentUnitName"
                   label="单位"
                   width="60">
                 </el-table-column>
