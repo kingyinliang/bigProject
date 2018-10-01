@@ -2031,7 +2031,6 @@ export default {
     },
     // 保存
     SaveForm (str) {
-      this.lodingStatus1 = true
       if (str === 'submit') {
         if (this.uerDate.length === 0) {
           this.$message.error('人员不能为空')
@@ -2065,6 +2064,7 @@ export default {
           return false
         }
       }
+      this.lodingStatus1 = true
       this.isRedact = false
       this.tableheader(str) // 修改表头
       this.UpdateReady(str) // 修改准备时间
