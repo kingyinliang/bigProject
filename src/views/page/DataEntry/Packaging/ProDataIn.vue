@@ -1486,7 +1486,6 @@ export default {
     this.Getenery()
     this.GetstoppageType()
     this.GetTeam()
-    this.GetPot()
     this.getTree()
   },
   activated () {
@@ -1587,6 +1586,7 @@ export default {
           this.order = data.list[0]
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
+          this.GetPot()
           this.GetRatio()
           this.GetequipmentType()
           if (this.orderStatus !== '已同步') {
@@ -1722,6 +1722,7 @@ export default {
         type: 'holder_type',
         holder_type: '007',
         pageSize: 100,
+        workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
@@ -1735,6 +1736,7 @@ export default {
         type: 'holder_type',
         holder_type: '006',
         pageSize: 100,
+        workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {

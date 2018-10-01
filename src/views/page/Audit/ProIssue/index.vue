@@ -294,6 +294,7 @@ export default {
   methods: {
     // 获取列表
     GetAuditList () {
+      this.plantList.headerTxt = ''
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITISSUELIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
