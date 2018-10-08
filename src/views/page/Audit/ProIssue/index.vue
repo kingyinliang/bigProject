@@ -165,6 +165,20 @@
               </template>
             </el-table-column>
             <el-table-column
+              label="移动原因"
+              width="120">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.moveReas" placeholder="请选择" v-if="scope.row.redact" size="small">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="item.value" v-for="(item, index) in MoveReas" :key="index" :value="item.code"></el-option>
+                </el-select>
+                <el-select v-model="scope.row.moveReas" placeholder="请选择" v-else size="small">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="item.value" v-for="(item, index) in MoveReas" :key="index" :value="item.code"></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="stckType"
               label="库存类型"
               width="78">
@@ -229,7 +243,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, AUDIT_API} from '@/api/api'
+import {BASICDATA_API, AUDIT_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -241,6 +255,7 @@ export default {
       workshop: [],
       productline: [],
       Text: '',
+      MoveReas: [],
       plantList: {
         orderNo: '',
         factory: '',
@@ -273,6 +288,7 @@ export default {
     console.log('-----------' + this.lodingStatus)
     // this.GetAuditList()
     this.Getdeptcode()
+    this.GetMoveReas()
     let $ = this.$
 
     // 搜索切换显隐
@@ -306,6 +322,16 @@ export default {
           this.$message.error(data.msg)
         }
         this.dataListLoading = false
+      })
+    },
+    // 获取移动原因
+    GetMoveReas () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=move_reas`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.MoveReas = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     // 获取工厂
