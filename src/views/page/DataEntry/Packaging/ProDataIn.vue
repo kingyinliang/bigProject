@@ -1,823 +1,364 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <div class="main">
-      <el-card class="searchCard" style="margin: 0">
-        <el-row type="flex">
-          <el-col>
-            <el-form :inline="true" :model="form" size="small" label-width="82px" class="topform">
-              <el-form-item label="车间：">
-                <p class="el-input">{{order.workShopName}}</p>
-              </el-form-item>
-              <el-form-item label="产线：">
-                <p class="el-input">{{order.productLineName}}</p>
-              </el-form-item>
-              <el-form-item label="订单号：">
-                <p class="el-input">{{order.orderNo}}</p>
-              </el-form-item>
-              <el-form-item label="品项：">
-                <p class="el-input" style="width: 457px;">{{order.materialCode + ' ' + order.materialName}}</p>
-              </el-form-item>
-              <el-form-item label="计划产量：">
-                <p class="el-input">{{order.planOutput + ' ' + order.outputUnit}}</p>
-              </el-form-item>
-              <el-form-item label="日期：">
-                <p class="el-input">{{order.productDate.indexOf(' ')!==-1?order.productDate.substring(0, order.productDate.indexOf(' ')):order.productDate}}</p>
-              </el-form-item>
-              <el-form-item label="提交人员：">
-                <p class="el-input">{{order.operator}}</p>
-              </el-form-item>
-              <el-form-item label="提交时间：">
-                <p class="el-input">{{order.operDate? (order.operDate.indexOf('.')!==-1?order.operDate.substring(0, order.operDate.indexOf('.')):order.operDate):''}}</p>
-              </el-form-item>
-            </el-form>
-          </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float: right;margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-            </el-row>
-            <el-row style="float: right" v-if="isRedact">
-              <el-button type="primary" size="small" @click="SaveForm('saved')" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">保存</el-button>
-              <el-button type="primary" size="small" @click="SaveForm('saved')" v-else disabled>保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm()" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">提交</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm()" v-else disabled>提交</el-button>
-            </el-row>
-            <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
-          </el-col>
-        </el-row>
-        <div class="toggleSearchBottom">
-            <i class="el-icon-caret-top"></i>
-        </div>
-      </el-card>
-    </div>
-    <div class="main" style="padding-top: 0px">
-      <el-card class="tableCard">
-        <div class="toggleSearchTop">
-            <i class="el-icon-caret-bottom"></i>
-        </div>
-        <el-tabs v-model="activeName" id="tabs">
-          <el-tab-pane name="1">
-            <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">准备时间</el-button>
-              </el-tooltip>
-            </span>
-            <div class="times">
-              <el-form :inline="true" :model="readyDate" :rules="timesForm" ref="timesForm" size="small" label-width="125px">
+    <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
+      <div class="main">
+        <el-card class="searchCard" style="margin: 0">
+          <el-row type="flex">
+            <el-col>
+              <el-form :inline="true" :model="form" size="small" label-width="82px" class="topform">
+                <el-form-item label="车间：">
+                  <p class="el-input">{{order.workShopName}}</p>
+                </el-form-item>
+                <el-form-item label="产线：">
+                  <p class="el-input">{{order.productLineName}}</p>
+                </el-form-item>
+                <el-form-item label="订单号：">
+                  <p class="el-input">{{order.orderNo}}</p>
+                </el-form-item>
+                <el-form-item label="品项：">
+                  <p class="el-input" style="width: 457px;">{{order.materialCode + ' ' + order.materialName}}</p>
+                </el-form-item>
+                <el-form-item label="计划产量：">
+                  <p class="el-input">{{order.planOutput + ' ' + order.outputUnit}}</p>
+                </el-form-item>
+                <el-form-item label="日期：">
+                  <p class="el-input">{{order.productDate.indexOf(' ')!==-1?order.productDate.substring(0, order.productDate.indexOf(' ')):order.productDate}}</p>
+                </el-form-item>
+                <el-form-item label="提交人员：">
+                  <p class="el-input">{{order.operator}}</p>
+                </el-form-item>
+                <el-form-item label="提交时间：">
+                  <p class="el-input">{{order.operDate? (order.operDate.indexOf('.')!==-1?order.operDate.substring(0, order.operDate.indexOf('.')):order.operDate):''}}</p>
+                </el-form-item>
+              </el-form>
+            </el-col>
+            <el-col style="width: 210px">
+              <el-row style="float: right;margin-bottom: 13px">
+                <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
+                <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+              </el-row>
+              <el-row style="float: right" v-if="isRedact">
+                <el-button type="primary" size="small" @click="SaveForm('saved')" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">保存</el-button>
+                <el-button type="primary" size="small" @click="SaveForm('saved')" v-else disabled>保存</el-button>
+                <el-button type="primary" size="small" @click="SubmitForm()" v-if="netStatus.orderStatus && netStatus.readyState && netStatus.userState && netStatus.excState && netStatus.inState && netStatus.sapState1 && netStatus.sapState2 && netStatus.meState && netStatus.textState">提交</el-button>
+                <el-button type="primary" size="small" @click="SubmitForm()" v-else disabled>提交</el-button>
+              </el-row>
+              <el-row style="position: absolute;right: 0;top: 100px;">
+                <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="toggleSearchBottom">
+              <i class="el-icon-caret-top"></i>
+          </div>
+        </el-card>
+      </div>
+      <div class="main" style="padding-top: 0px">
+        <el-card class="tableCard">
+          <div class="toggleSearchTop">
+              <i class="el-icon-caret-bottom"></i>
+          </div>
+          <el-tabs v-model="activeName" id="tabs">
+            <el-tab-pane name="1">
+              <span slot="label">
+                <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过':'未录入'" placement="top-start">
+                  <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">准备时间</el-button>
+                </el-tooltip>
+              </span>
+              <div class="times">
+                <el-form :inline="true" :model="readyDate" :rules="timesForm" ref="timesForm" size="small" label-width="125px">
+                  <div class="clearfix topBox">
+                    <h3>录入数据单位：MIN</h3>
+                    <el-form-item label="是否停线交接班" style="float: right">
+                      <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                        <el-option label="是" value="1"></el-option>
+                        <el-option label="否" value="0"></el-option>
+                      </el-select>
+                      <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
+                        <el-option label="是" value="1"></el-option>
+                        <el-option label="否" value="0"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </div>
+                  <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                      <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
+                    </div>
+                    <div class="dayshiftBox">
+                      <el-form-item label="工作开始时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="开线时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="切换时间：">
+                        <el-input v-model="readyDate.dayChange" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
+                        <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                      <el-form-item label="工作结束时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="停线时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="用餐时间：">
+                        <el-input v-model="readyDate.dayDinner" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
+                        <el-input v-model="readyDate.dayDinner" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                    </div>
+                  </el-card>
+                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                    <div slot="header" class="clearfix">
+                      <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
+                    </div>
+                    <div class="middleshiftBox">
+                      <el-form-item label="工作开始时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="开线时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="切换时间：" >
+                        <el-input v-model="readyDate.midChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                        <el-input v-model="readyDate.midChange" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                      <el-form-item label="工作结束时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="停线时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="用餐时间：" >
+                        <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                        <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                    </div>
+                  </el-card>
+                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                    <div slot="header" class="clearfix">
+                      <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
+                    </div>
+                    <div class="nightshiftBox">
+                      <el-form-item label="工作开始时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="开线时间：" >
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="切换时间：" >
+                        <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                        <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                      <el-form-item label="工作结束时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="停线时间：">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="用餐时间：" >
+                        <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                        <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-else disabled></el-input>
+                      </el-form-item>
+                    </div>
+                  </el-card>
+                  <div style="padding: 20px">
+                    <el-form-item label="交接班：">
+                      <el-input v-model="readyDate.shift" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                      <el-input v-model="readyDate.shift" placeholder="手工录入" v-else disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="班前会：">
+                      <el-input v-model="readyDate.meeting" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                      <el-input v-model="readyDate.meeting" placeholder="手工录入" v-else disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="生产前准备：">
+                      <el-input v-model="readyDate.prepared" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                      <el-input v-model="readyDate.prepared" placeholder="手工录入" v-else disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="生产后清场：">
+                      <el-input v-model="readyDate.clear" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                      <el-input v-model="readyDate.clear" placeholder="手工录入" v-else disabled></el-input>
+                    </el-form-item>
+                  </div>
+                  <auditLog :tableData="ReadAudit"></auditLog>
+                </el-form>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane name="2">
+              <span slot="label">
+                <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过': '未录入'" placement="top-start">
+                  <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">人员</el-button>
+                </el-tooltip>
+              </span>
+              <div class="staff">
                 <div class="clearfix topBox">
                   <h3>录入数据单位：MIN</h3>
-                  <el-form-item label="是否停线交接班" style="float: right">
-                    <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                      <el-option label="是" value="1"></el-option>
-                      <el-option label="否" value="0"></el-option>
-                    </el-select>
-                    <el-select v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
-                      <el-option label="是" value="1"></el-option>
-                      <el-option label="否" value="0"></el-option>
-                    </el-select>
-                  </el-form-item>
+                  <div class="btn">
+                    <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">新增</el-button>
+                    <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-else disabled>新增</el-button>
+                  </div>
                 </div>
-                <el-card class="box-card">
-                  <div slot="header" class="clearfix">
-                    <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
-                  </div>
-                  <div class="dayshiftBox">
-                    <el-form-item label="工作开始时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
+                <div>
+                  <el-table
+                    ref="table1"
+                    header-row-class-name="tableHead"
+                    :data="uerDate"
+                    :row-class-name="RowDelFlag"
+                    border
+                    tooltip-effect="dark"
+                    style="width: 100%;margin-bottom: 20px">
+                    <el-table-column
+                      type="index"
+                      width="55"
+                      label="序号">
+                    </el-table-column>
+                    <el-table-column
+                    label="白/中/夜班"
+                    width="100">
+                      <template slot-scope="scope">
+                        <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                        <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="班组/工序"
+                      width="100">
+                      <template slot-scope="scope">
+                        <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                          <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+                        </el-select>
+                        <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-else disabled>
+                          <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+                        </el-select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="人员属性"
+                      width="130">
+                      <template slot-scope="scope">
+                        <div class="required">
+                          <i class="reqI">*</i>
+                          <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @change="userTypesele(scope.row)">
+                            <el-option label="正式" value="正式"></el-option>
+                            <el-option label="借调" value="借调"></el-option>
+                            <el-option label="临时工" value="临时工"></el-option>
+                          </el-select>
+                          <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-else disabled>
+                            <el-option label="正式" value="正式"></el-option>
+                            <el-option label="借调" value="借调"></el-option>
+                            <el-option label="临时工" value="临时工"></el-option>
+                          </el-select>
+                        </div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="人员选择"
+                      :show-overflow-tooltip="true"
+                      width="300">
+                      <template slot-scope="scope">
+                        <div class="required" style="min-height: 32px">
+                          <i class="reqI">*</i>
+                          <span v-if="!isRedact" style="cursor: pointer">
+                            <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                          </span>
+                          <span v-if="isRedact && (readyDate.status ==='submit' || readyDate.status ==='checked')">
+                            <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                          </span>
+                          <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                            <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                            <i>点击选择人员</i>
+                          </span>
+                          <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                            <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
+                            <i>点击输入临时工</i>
+                          </span>
+                        </div>
+                        <!--<el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击选择人员</el-button>-->
+                        <!--<el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击输入临时工</el-button>-->
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      width="241"
+                      label="开始时间">
+                      <template slot-scope="scope">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-else disabled></el-date-picker>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="用餐时间"
+                      width="100">
+                      <template slot-scope="scope">
+                        <el-input v-model="scope.row.dinner" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" type="number" min="0"></el-input>
+                        <el-input v-model="scope.row.dinner" size="small" v-else disabled type="number" min="0"></el-input>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      width="241"
+                      label="结束时间">
+                      <template slot-scope="scope">
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-else disabled></el-date-picker>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="备注"
+                      width="100">@click="delUser()"
+                      <template slot-scope="scope">
+                        <el-input v-model="scope.row.remark" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
+                        <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      fixed="right"
+                      label="操作"
+                      width="60">
+                      <template slot-scope="scope">
+                        <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @click="delUser(scope.row)"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
+                    <el-form-item label="实际作业人数：">
+                      <span>{{countMan}}</span>
                     </el-form-item>
-                    <el-form-item label="开线时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="切换时间：">
-                      <el-input v-model="readyDate.dayChange" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
-                      <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="工作结束时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="停线时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="用餐时间：">
-                      <el-input v-model="readyDate.dayDinner" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
-                      <el-input v-model="readyDate.dayDinner" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                  </div>
-                </el-card>
-                <el-card class="box-card" v-if="readyDate.isCause == '1'">
-                  <div slot="header" class="clearfix">
-                    <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
-                  </div>
-                  <div class="middleshiftBox">
-                    <el-form-item label="工作开始时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="开线时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="切换时间：" >
-                      <el-input v-model="readyDate.midChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                      <el-input v-model="readyDate.midChange" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="工作结束时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="停线时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="用餐时间：" >
-                      <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                      <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                  </div>
-                </el-card>
-                <el-card class="box-card" v-if="readyDate.isCause == '1'">
-                  <div slot="header" class="clearfix">
-                    <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
-                  </div>
-                  <div class="nightshiftBox">
-                    <el-form-item label="工作开始时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="开线时间：" >
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="切换时间：" >
-                      <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                      <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="工作结束时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="停线时间：">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="用餐时间：" >
-                      <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                      <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-else disabled></el-input>
-                    </el-form-item>
-                  </div>
-                </el-card>
-                <div style="padding: 20px">
-                  <el-form-item label="交接班：">
-                    <el-input v-model="readyDate.shift" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                    <el-input v-model="readyDate.shift" placeholder="手工录入" v-else disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="班前会：">
-                    <el-input v-model="readyDate.meeting" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                    <el-input v-model="readyDate.meeting" placeholder="手工录入" v-else disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="生产前准备：">
-                    <el-input v-model="readyDate.prepared" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                    <el-input v-model="readyDate.prepared" placeholder="手工录入" v-else disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="生产后清场：">
-                    <el-input v-model="readyDate.clear" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                    <el-input v-model="readyDate.clear" placeholder="手工录入" v-else disabled></el-input>
-                  </el-form-item>
+                  </el-form>
+                  <auditLog :tableData="UserAudit"></auditLog>
                 </div>
-                <auditLog :tableData="ReadAudit"></auditLog>
-              </el-form>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane name="2">
-            <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="readyDate.status === 'noPass'? '不通过':readyDate.status === 'saved'? '已保存':readyDate.status === 'submit' ? '已提交' : readyDate.status === 'checked'? '通过': '未录入'" placement="top-start">
-                <el-button :style="{'color': readyDate.status === 'noPass'? 'red' : ''}">人员</el-button>
-              </el-tooltip>
-            </span>
-            <div class="staff">
+              </div>
+            </el-tab-pane>
+            <el-tab-pane name="3">
+              <span slot="label">
+                <el-button>异常记录</el-button>
+              </span>
               <div class="clearfix topBox">
                 <h3>录入数据单位：MIN</h3>
                 <div class="btn">
-                  <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">新增</el-button>
-                  <el-button type="primary" @click="addUserDate(uerDate)" size="small" v-else disabled>新增</el-button>
-                </div>
-              </div>
-              <div>
-                <el-table
-                  ref="table1"
-                  header-row-class-name="tableHead"
-                  :data="uerDate"
-                  :row-class-name="RowDelFlag"
-                  border
-                  tooltip-effect="dark"
-                  style="width: 100%;margin-bottom: 20px">
-                  <el-table-column
-                    type="index"
-                    width="55"
-                    label="序号">
-                  </el-table-column>
-                  <el-table-column
-                  label="白/中/夜班"
-                  width="100">
-                    <template slot-scope="scope">
-                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
-                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="班组/工序"
-                    width="100">
-                    <template slot-scope="scope">
-                      <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
-                      </el-select>
-                      <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-else disabled>
-                        <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="人员属性"
-                    width="130">
-                    <template slot-scope="scope">
-                      <div class="required">
-                        <i class="reqI">*</i>
-                        <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @change="userTypesele(scope.row)">
-                          <el-option label="正式" value="正式"></el-option>
-                          <el-option label="借调" value="借调"></el-option>
-                          <el-option label="临时工" value="临时工"></el-option>
-                        </el-select>
-                        <el-select v-model="scope.row.userType" placeholder="请选择" size="small" v-else disabled>
-                          <el-option label="正式" value="正式"></el-option>
-                          <el-option label="借调" value="借调"></el-option>
-                          <el-option label="临时工" value="临时工"></el-option>
-                        </el-select>
-                      </div>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="人员选择"
-                    :show-overflow-tooltip="true"
-                    width="300">
-                    <template slot-scope="scope">
-                      <div class="required" style="min-height: 32px">
-                        <i class="reqI">*</i>
-                        <span v-if="!isRedact" style="cursor: pointer">
-                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                        </span>
-                        <span v-if="isRedact && (readyDate.status ==='submit' || readyDate.status ==='checked')">
-                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                        </span>
-                        <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                          <i>点击选择人员</i>
-                        </span>
-                        <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                          <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
-                          <i>点击输入临时工</i>
-                        </span>
-                      </div>
-                      <!--<el-button type="text" size="small" @click="selectUser(scope.row)" v-if="isRedact && scope.row.userType !=='临时工' && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击选择人员</el-button>-->
-                      <!--<el-button type="text" size="small" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工' && isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">点击输入临时工</el-button>-->
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    width="241"
-                    label="开始时间">
-                    <template slot-scope="scope">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" v-else disabled></el-date-picker>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="用餐时间"
-                    width="100">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.dinner" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" type="number" min="0"></el-input>
-                      <el-input v-model="scope.row.dinner" size="small" v-else disabled type="number" min="0"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    width="241"
-                    label="结束时间">
-                    <template slot-scope="scope">
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" v-else disabled></el-date-picker>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="备注"
-                    width="100">@click="delUser()"
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.remark" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
-                      <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    fixed="right"
-                    label="操作"
-                    width="60">
-                    <template slot-scope="scope">
-                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" @click="delUser(scope.row)"></el-button>
-                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
-                  <el-form-item label="实际作业人数：">
-                    <span>{{countMan}}</span>
-                  </el-form-item>
-                </el-form>
-                <auditLog :tableData="UserAudit"></auditLog>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane name="3">
-            <span slot="label">
-              <el-button>异常记录</el-button>
-            </span>
-            <div class="clearfix topBox">
-              <h3>录入数据单位：MIN</h3>
-              <div class="btn">
-                <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-if="isRedact">新增</el-button>
-                <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
-              </div>
-            </div>
-            <el-table
-              ref="table1"
-              header-row-class-name="tableHead"
-              :data="ExcDate"
-              :row-class-name="RowDelFlag"
-              border
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index"
-                width="55"
-                label="序号">
-              </el-table-column>
-              <el-table-column
-                label="异常情况"
-                width="150">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                    </el-select>
-                    <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                      <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                    </el-select>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="异常描述"
-                :show-overflow-tooltip="true"
-                width="220">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="241"
-                label="异常开始时间">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="241"
-                label="异常结束时间">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="异常时间"
-                width="80">
-                <template slot-scope="scope">
-                  <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                  <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate, scope.row) }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="单位"
-                width="60">
-                <template slot-scope="scope">
-                  <span>{{scope.row.expContinueUnit = 'MIN'}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="设备"
-                width="120">
-                <template slot-scope="scope">
-                  <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" size="small" v-if="isRedact && (scope.row.expCode === '001' || scope.row.expCode === '002')" >
-                    <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" v-else size="small" disabled>
-                    <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="物料分类简称"
-                width="120">
-                <template slot-scope="scope">
-                  <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-if="isRedact && (scope.row.expCode === '003' || scope.row.expCode === '004')" size="small" >
-                    <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-else size="small" disabled>
-                    <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="能源"
-                width="120">
-                <template slot-scope="scope">
-                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-if="isRedact && scope.row.expCode === '005'"  size="small">
-                    <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.energy" placeholder="选择能源" v-else size="small" disabled>
-                    <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="备注"
-                width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" v-if="!isRedact" disabled size="small" placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.remark" v-else size="small" placeholder="手工录入"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                fixed="right"
-                label="操作"
-                width="60">
-                <template slot-scope="scope">
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
-              <el-form-item label="总停线时间：">
-                <span>{{ExcNum}}</span>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane name="4">
-            <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button :style="{'color': Instatus === 'noPass'? 'red' : ''}">生产入库</el-button>
-              </el-tooltip>
-            </span>
-            <div class="tab4">
-              <div class="tabtit topBox">
-                <div class="btn">
-                  <el-button type="primary" @click="AddInDate(InDate)" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')">新增</el-button>
-                  <el-button type="primary" @click="AddInDate(InDate)" size="small" v-else disabled>新增</el-button>
+                  <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-if="isRedact">新增</el-button>
+                  <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" v-else disabled>新增</el-button>
                 </div>
               </div>
               <el-table
                 ref="table1"
                 header-row-class-name="tableHead"
-                :data="InDate"
+                :data="ExcDate"
                 :row-class-name="RowDelFlag"
-                border
-                tooltip-effect="dark"
-                style="width: 100%;margin-bottom: 20px"
-                v-if="order.properties !== '二合一&礼盒产线'">
-                <el-table-column
-                  type="index"
-                  width="55"
-                  label="序号">
-                </el-table-column>
-                <el-table-column
-                  label="白/中/夜班"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                    </el-select>
-                    <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
-                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                    </el-select>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="生产批次"
-                  width="150">
-                  <template slot-scope="scope">
-                    <div class="required">
-                      <i class="reqI">*</i>
-                      <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" maxlength="10"></el-input>
-                      <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="人工码垛-包材库"
-                  width="140">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.manPackingUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="自动码垛-包材库"
-                  width="140" v-if="order.workShopName === '包装三车间'">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60" v-if="order.workShopName === '包装三车间'">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.aiPackingUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="人工码垛-立体库"
-                  width="140">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.manSolidUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="自动码垛-立体库"
-                  width="120" v-if="order.workShopName === '包装三车间'">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60" v-if="order.workShopName === '包装三车间'">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.aiSolidUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="自动上架-立体库"
-                  width="140" v-if="order.workShopName !== '包装三车间'">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60" v-if="order.workShopName !== '包装三车间'">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.aiShelvesUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="不良品"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.badUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="样品"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.sampleUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="产出数"
-                  width="120">
-                  <template slot-scope="scope">
-                    <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiSolid*1*(ratio*1) + scope.row.sample*1) }}</span>
-                    <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiShelves*1*(ratio*1) + scope.row.sample*1) }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.outputUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="备注"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  fixed="right"
-                  label="操作"
-                  width="60">
-                  <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-table
-                ref="table1"
-                header-row-class-name="tableHead"
-                :data="InDate"
-                :row-class-name="RowDelFlag"
-                border
-                tooltip-effect="dark"
-                style="width: 100%;margin-bottom: 20px"
-                v-if="order.properties === '二合一&礼盒产线'">
-                <el-table-column
-                  type="index"
-                  width="55"
-                  label="序号">
-                </el-table-column>
-                <el-table-column
-                  label="白/中/夜班"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                    </el-select>
-                    <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
-                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                    </el-select>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="生产批次"
-                  width="150">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="人工码垛-立体库"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{ productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="不良品"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="120">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.badUnitName = basicUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="样品"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.sampleUnitName = basicUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="产出数"
-                  width="120">
-                  <template slot-scope="scope">{{ scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1) }}</template>
-                </el-table-column>
-                <el-table-column
-                  label="单位"
-                  width="60">
-                  <template slot-scope="scope">
-                    <span>{{productUnitName? scope.row.outputUnitName = productUnitName : scope.row.outputUnitName = basicUnitName}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="主产品批次"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="赠品批次"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="备注"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  fixed="right"
-                  label="操作"
-                  width="60">
-                  <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <div>
-                <el-form :inline="true" :model="countOutput" size="small" label-width="110px">
-                  <el-form-item label="产出数合计：">
-                    <span>{{countOutputNum}}</span>
-                  </el-form-item>
-                </el-form>
-              </div>
-              <div class="tabtit" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
-                <span>机维组数量确认</span>
-                <div class="btn">
-                  <el-button type="primary" size="small" @click="GetMaintain()">刷新</el-button>
-                </div>
-              </div>
-              <el-table
-                v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'"
-                ref="table1"
-                header-row-class-name="tableHead"
-                :data="InVlist"
                 border
                 tooltip-effect="dark"
                 style="width: 100%;margin-bottom: 20px">
@@ -827,441 +368,902 @@
                   label="序号">
                 </el-table-column>
                 <el-table-column
-                  prop="orderNo"
-                  label="生产订单号"
-                  width="120">
+                  label="异常情况"
+                  width="150">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                        <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                      </el-select>
+                      <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
+                        <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                      </el-select>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="batch"
-                  label="生产批次"
-                  width="120">
+                  label="异常描述"
+                  :show-overflow-tooltip="true"
+                  width="220">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.expInfo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                    <el-input v-model="scope.row.expInfo" v-else size="small" placeholder="手工录入"></el-input>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="aiShelves"
-                  label="自动上架数-立体库"
-                  width="120">
+                  width="241"
+                  label="异常开始时间">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="aiShelvesUnitName"
+                  width="241"
+                  label="异常结束时间">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="异常时间"
+                  width="80">
+                  <template slot-scope="scope">
+                    <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
+                    <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate, scope.row) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   label="单位"
                   width="60">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.expContinueUnit = 'MIN'}}</span>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="jwzAcount"
-                  label="机维组确认数"
+                  label="设备"
                   width="120">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" size="small" v-if="isRedact && (scope.row.expCode === '001' || scope.row.expCode === '002')" >
+                      <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" v-else size="small" disabled>
+                      <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
+                    </el-select>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="differentUnitName"
-                  label="单位"
+                  label="物料分类简称"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-if="isRedact && (scope.row.expCode === '003' || scope.row.expCode === '004')" size="small" >
+                      <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" v-else size="small" disabled>
+                      <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="能源"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.energy" placeholder="选择能源" v-if="isRedact && scope.row.expCode === '005'"  size="small">
+                      <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.energy" placeholder="选择能源" v-else size="small" disabled>
+                      <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="备注"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.remark" v-if="!isRedact" disabled size="small" placeholder="手工录入"></el-input>
+                    <el-input v-model="scope.row.remark" v-else size="small" placeholder="手工录入"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
                   width="60">
-                </el-table-column>
-                <el-table-column
-                  prop="orgnDifferent"
-                  label="原差异数量"
-                  width="120">
-                </el-table-column>
-                <el-table-column
-                  prop="differentUnitName"
-                  label="单位"
-                  width="60">
-                </el-table-column>
-                <el-table-column
-                  prop="differentInfo"
-                  label="差异说明"
-                  width="120">
-                </el-table-column>
-                <el-table-column
-                  prop="jwzMan"
-                  label="机维组确认人">
+                  <template slot-scope="scope">
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                  </template>
                 </el-table-column>
               </el-table>
-              <auditLog :tableData="InAudit"></auditLog>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane name="5">
-            <span slot="label">
-              <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button :style="{'color': Sapstatus === 'noPass'? 'red' : ''}">物料领用</el-button>
-              </el-tooltip>
-            </span>
-            <el-table
-              ref="table1"
-              header-row-class-name="tableHead"
-              :data="listbomP"
-              border
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index"
-                width="55"
-                label="序号">
-              </el-table-column>
-              <el-table-column
-                width="240"
-                :show-overflow-tooltip="true"
-                label="物料">
-                <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
-              </el-table-column>
-              <el-table-column
-                prop="unit"
-                label="单位"
-                width="60">
-              </el-table-column>
-              <el-table-column
-                prop="needNum"
-                label="需求用量"
-                width="90">
-              </el-table-column>
-              <el-table-column
-                label="生产使用"
-                width="150">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
-                    <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+              <el-form :inline="true" size="small" label-width="110px" style="margin: 20px 0">
+                <el-form-item label="总停线时间：">
+                  <span>{{ExcNum}}</span>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane name="4">
+              <span slot="label">
+                <el-tooltip class="item" effect="dark" :content="Instatus === 'noPass'? '不通过':Instatus === 'saved'? '已保存':Instatus === 'submit' ? '已提交' : Instatus === 'checked'? '通过':'未录入'" placement="top-start">
+                  <el-button :style="{'color': Instatus === 'noPass'? 'red' : ''}">生产入库</el-button>
+                </el-tooltip>
+              </span>
+              <div class="tab4">
+                <div class="tabtit topBox">
+                  <div class="btn">
+                    <el-button type="primary" @click="AddInDate(InDate)" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='')">新增</el-button>
+                    <el-button type="primary" @click="AddInDate(InDate)" size="small" v-else disabled>新增</el-button>
                   </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="本班损耗">
-                <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
-                  <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="不合格数">
-                <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
-                  <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="不良批次">
-                <template slot-scope="scope">
-                  <el-input size="small" maxlength="10" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                  <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="厂家">
-                <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                  <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-table
-              ref="table1"
-              header-row-class-name="tableHead"
-              :data="listbomS"
-              :row-class-name="RowDelFlag"
-              border
-              v-if="order.properties !== '二合一&礼盒产线'"
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index"
-                width="55"
-                label="序号">
-              </el-table-column>
-              <el-table-column
-                width="120"
-                label="物料（半成品）">
-                <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
-              </el-table-column>
-              <el-table-column
-                prop="unit"
-                label="单位"
-                width="60">
-              </el-table-column>
-              <el-table-column
-                width="150"
-                label="领用罐号">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                      <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                      <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
-                    </el-select>
-                    <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
-                      <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
-                      <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
-                    </el-select>
+                </div>
+                <el-table
+                  ref="table1"
+                  header-row-class-name="tableHead"
+                  :data="InDate"
+                  :row-class-name="RowDelFlag"
+                  border
+                  tooltip-effect="dark"
+                  style="width: 100%;margin-bottom: 20px"
+                  v-if="order.properties !== '二合一&礼盒产线'">
+                  <el-table-column
+                    type="index"
+                    width="55"
+                    label="序号">
+                  </el-table-column>
+                  <el-table-column
+                    label="白/中/夜班"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                      </el-select>
+                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="生产批次"
+                    width="150">
+                    <template slot-scope="scope">
+                      <div class="required">
+                        <i class="reqI">*</i>
+                        <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" maxlength="10"></el-input>
+                        <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="人工码垛-包材库"
+                    width="140">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.manPackingUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="自动码垛-包材库"
+                    width="140" v-if="order.workShopName === '包装三车间'">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60" v-if="order.workShopName === '包装三车间'">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.aiPackingUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="人工码垛-立体库"
+                    width="140">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.manSolidUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="自动码垛-立体库"
+                    width="120" v-if="order.workShopName === '包装三车间'">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60" v-if="order.workShopName === '包装三车间'">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.aiSolidUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="自动上架-立体库"
+                    width="140" v-if="order.workShopName !== '包装三车间'">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60" v-if="order.workShopName !== '包装三车间'">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.aiShelvesUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="不良品"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.badUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="样品"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.sampleUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="产出数"
+                    width="120">
+                    <template slot-scope="scope">
+                      <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiSolid*1*(ratio*1) + scope.row.sample*1) }}</span>
+                      <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio*1) + scope.row.aiShelves*1*(ratio*1) + scope.row.sample*1) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.outputUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="备注"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="60">
+                    <template slot-scope="scope">
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-table
+                  ref="table1"
+                  header-row-class-name="tableHead"
+                  :data="InDate"
+                  :row-class-name="RowDelFlag"
+                  border
+                  tooltip-effect="dark"
+                  style="width: 100%;margin-bottom: 20px"
+                  v-if="order.properties === '二合一&礼盒产线'">
+                  <el-table-column
+                    type="index"
+                    width="55"
+                    label="序号">
+                  </el-table-column>
+                  <el-table-column
+                    label="白/中/夜班"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                      </el-select>
+                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="生产批次"
+                    width="150">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="人工码垛-立体库"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{ productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="不良品"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="120">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.badUnitName = basicUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="样品"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{scope.row.sampleUnitName = basicUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="产出数"
+                    width="120">
+                    <template slot-scope="scope">{{ scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1) }}</template>
+                  </el-table-column>
+                  <el-table-column
+                    label="单位"
+                    width="60">
+                    <template slot-scope="scope">
+                      <span>{{productUnitName? scope.row.outputUnitName = productUnitName : scope.row.outputUnitName = basicUnitName}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="主产品批次"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.mainBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="赠品批次"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.attachBatch" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="备注"
+                    width="120">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" v-else disabled></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="60">
+                    <template slot-scope="scope">
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
+                      <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <div>
+                  <el-form :inline="true" :model="countOutput" size="small" label-width="110px">
+                    <el-form-item label="产出数合计：">
+                      <span>{{countOutputNum}}</span>
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="tabtit" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
+                  <span>机维组数量确认</span>
+                  <div class="btn">
+                    <el-button type="primary" size="small" @click="GetMaintain()">刷新</el-button>
                   </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="160"
-                label="过滤日期">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
-                    <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="150"
-                label="批次">
-                <template slot-scope="scope">
-                  <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                  <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="120"
-                label="生产使用量">
-                <template slot-scope="scope">
-                  <div class="required">
-                    <i class="reqI">*</i>
-                    <el-input size="small" v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input size="small" v-model="scope.row.productUseNum" v-else disabled></el-input>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="160"
-                label="换罐时间">
-                <template slot-scope="scope">
-                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
-                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
-                </template>
-              </el-table-column>
-              <el-table-column
-                width="160"
-                label="用完时间">
-                <template slot-scope="scope">
-                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
-                  <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="备注">
-                <template slot-scope="scope">
-                  <el-input size="small" v-model="scope.row.remark" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                  <el-input size="small" v-model="scope.row.remark" v-else disabled></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                fixed="right"
-                label="操作"
-                width="60">
-                <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row, delFlagnum.sapnum)"></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <auditLog :tableData="SapAudit"></auditLog>
-          </el-tab-pane>
-          <el-tab-pane name="6" v-if="order.properties !== '二合一&礼盒产线'">
-            <span slot="label">
-              <el-button>待杀菌数量</el-button>
-            </span>
-            <div class="clearfix topBox">
-              <div class="btn">
-                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-if="isRedact">新增</el-button>
-                <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-else disabled>新增</el-button>
+                </div>
+                <el-table
+                  v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'"
+                  ref="table1"
+                  header-row-class-name="tableHead"
+                  :data="InVlist"
+                  border
+                  tooltip-effect="dark"
+                  style="width: 100%;margin-bottom: 20px">
+                  <el-table-column
+                    type="index"
+                    width="55"
+                    label="序号">
+                  </el-table-column>
+                  <el-table-column
+                    prop="orderNo"
+                    label="生产订单号"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="batch"
+                    label="生产批次"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="aiShelves"
+                    label="自动上架数-立体库"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="aiShelvesUnitName"
+                    label="单位"
+                    width="60">
+                  </el-table-column>
+                  <el-table-column
+                    prop="jwzAcount"
+                    label="机维组确认数"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="differentUnitName"
+                    label="单位"
+                    width="60">
+                  </el-table-column>
+                  <el-table-column
+                    prop="orgnDifferent"
+                    label="原差异数量"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="differentUnitName"
+                    label="单位"
+                    width="60">
+                  </el-table-column>
+                  <el-table-column
+                    prop="differentInfo"
+                    label="差异说明"
+                    width="120">
+                  </el-table-column>
+                  <el-table-column
+                    prop="jwzMan"
+                    label="机维组确认人">
+                  </el-table-column>
+                </el-table>
+                <auditLog :tableData="InAudit"></auditLog>
               </div>
-            </div>
-            <el-table
-              ref="table1"
-              header-row-class-name="tableHead"
-              :data="GermsDate"
-              :row-class-name="RowDelFlag"
-              border
-              tooltip-effect="dark"
-              style="width: 100%;margin-bottom: 20px">
-              <el-table-column
-                type="index"
-                width="55"
-                label="序号">
-              </el-table-column>
-              <el-table-column
-                label="白/中/夜班">
-                <template slot-scope="scope">
-                  <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
-                    <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.classType" placeholder="请选择" v-else disabled size="small">
-                    <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="清洗冲顶">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.washing" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.washing" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="换产冲顶">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.changeProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.changeProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="开机冲顶">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.bootHeader" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.bootHeader" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="包材不良">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.badMaterial" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
-                  <el-input v-model="scope.row.badMaterial" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="制程不良"
-                width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.badProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.badProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="半成品物料不合格"
-                width="140">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.badSemi" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.badSemi" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="设备残留"
-                width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.deviceLoss" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                  <el-input v-model="scope.row.deviceLoss" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="备注"
-                width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" v-if="isRedact" placeholder="手工录入" size="small"></el-input>
-                  <el-input v-model="scope.row.remark" v-else disabled placeholder="手工录入" size="small"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                fixed="right"
-                label="操作"
-                width="60">
-                <template slot-scope="scope">
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.menum)"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-form :inline="true" size="small" label-width="140px" style="margin: 20px 0">
-              <el-form-item label="待杀菌数量（L）：">
-                <span>{{GermsNum}}</span>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane name="7">
-            <span slot="label">
-              <el-button>文本记录</el-button>
-            </span>
-            <el-form :model="form">
-              <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-if="isRedact"></el-input>
-              <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-else disabled></el-input>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </el-card>
-    </div>
-    <el-dialog
-      title="人员分配"
-      :close-on-click-modal="false"
-      :visible.sync="visible">
-      <el-row>
-        <el-col style="width: 500px">
-          <el-transfer
-            filterable
-            :titles="['未分配人员', '已分配人员']"
-            :filter-method="filterMethod"
-            filter-placeholder="请输入用户名称"
-            v-model="selctId"
-            :data="userlist">
-          </el-transfer>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" @click="updatauser(row)">确定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      width="450px"
-      ref="dayLaborer"
-      title="新增临时工"
-      :close-on-click-modal="false"
-      :visible.sync="visible1">
-      <el-form :model="form" size="small" label-width="120px" class="dialogform">
+            </el-tab-pane>
+            <el-tab-pane name="5">
+              <span slot="label">
+                <el-tooltip class="item" effect="dark" :content="Sapstatus === 'noPass'? '不通过':Sapstatus === 'saved'? '已保存':Sapstatus === 'submit' ? '已提交' : Sapstatus === 'checked'? '通过':'未录入'" placement="top-start">
+                  <el-button :style="{'color': Sapstatus === 'noPass'? 'red' : ''}">物料领用</el-button>
+                </el-tooltip>
+              </span>
+              <el-table
+                ref="table1"
+                header-row-class-name="tableHead"
+                :data="listbomP"
+                border
+                tooltip-effect="dark"
+                style="width: 100%;margin-bottom: 20px">
+                <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
+                <el-table-column
+                  width="240"
+                  :show-overflow-tooltip="true"
+                  label="物料">
+                  <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="60">
+                </el-table-column>
+                <el-table-column
+                  prop="needNum"
+                  label="需求用量"
+                  width="90">
+                </el-table-column>
+                <el-table-column
+                  label="生产使用"
+                  width="150">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
+                      <el-input size="small" v-model="scope.row.productUseNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="本班损耗">
+                  <template slot-scope="scope">
+                    <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
+                    <el-input size="small" v-model="scope.row.classLoss" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="不合格数">
+                  <template slot-scope="scope">
+                    <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" type="number" min="0"></el-input>
+                    <el-input size="small" v-model="scope.row.belowGradeNum" placeholder="手工录入" v-else disabled type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="不良批次">
+                  <template slot-scope="scope">
+                    <el-input size="small" maxlength="10" v-model="scope.row.badBatch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.badBatch" placeholder="手工录入" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="厂家">
+                  <template slot-scope="scope">
+                    <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-table
+                ref="table1"
+                header-row-class-name="tableHead"
+                :data="listbomS"
+                :row-class-name="RowDelFlag"
+                border
+                v-if="order.properties !== '二合一&礼盒产线'"
+                tooltip-effect="dark"
+                style="width: 100%;margin-bottom: 20px">
+                <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
+                <el-table-column
+                  width="120"
+                  label="物料（半成品）">
+                  <template slot-scope="scope">{{ scope.row.materialCode + ' ' + scope.row.materialName }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="60">
+                </el-table-column>
+                <el-table-column
+                  width="150"
+                  label="领用罐号">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                        <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                        <el-option :label="iteam.holderNo + iteam.typeName" :value="iteam.holderNo + iteam.typeName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                      </el-select>
+                      <el-select v-model="scope.row.potNo" placeholder="请选择" filterable v-else disabled size="small">
+                        <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in finHolder" :key="iteam.holderId"></el-option>
+                        <el-option :label="iteam.holderName" :value="iteam.holderName" v-for="iteam in semiHolder" :key="iteam.holderId"></el-option>
+                      </el-select>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  width="160"
+                  label="过滤日期">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                      <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  width="150"
+                  label="批次">
+                  <template slot-scope="scope">
+                    <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  width="120"
+                  label="生产使用量">
+                  <template slot-scope="scope">
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-input size="small" v-model="scope.row.productUseNum" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input size="small" v-model="scope.row.productUseNum" v-else disabled></el-input>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  width="160"
+                  label="换罐时间">
+                  <template slot-scope="scope">
+                    <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                    <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-else disabled></el-date-picker>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  width="160"
+                  label="用完时间">
+                  <template slot-scope="scope">
+                    <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
+                    <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-else disabled></el-date-picker>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="备注">
+                  <template slot-scope="scope">
+                    <el-input size="small" v-model="scope.row.remark" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.remark" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="60">
+                  <template slot-scope="scope">
+                    <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row, delFlagnum.sapnum)"></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <auditLog :tableData="SapAudit"></auditLog>
+            </el-tab-pane>
+            <el-tab-pane name="6" v-if="order.properties !== '二合一&礼盒产线'">
+              <span slot="label">
+                <el-button>待杀菌数量</el-button>
+              </span>
+              <div class="clearfix topBox">
+                <div class="btn">
+                  <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-if="isRedact">新增</el-button>
+                  <el-button type="primary" @click="AddGermsDate(GermsDate)" size="small" v-else disabled>新增</el-button>
+                </div>
+              </div>
+              <el-table
+                ref="table1"
+                header-row-class-name="tableHead"
+                :data="GermsDate"
+                :row-class-name="RowDelFlag"
+                border
+                tooltip-effect="dark"
+                style="width: 100%;margin-bottom: 20px">
+                <el-table-column
+                  type="index"
+                  width="55"
+                  label="序号">
+                </el-table-column>
+                <el-table-column
+                  label="白/中/夜班">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact" size="small">
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                    </el-select>
+                    <el-select v-model="scope.row.classType" placeholder="请选择" v-else disabled size="small">
+                      <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="清洗冲顶">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.washing" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.washing" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="换产冲顶">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.changeProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.changeProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="开机冲顶">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.bootHeader" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.bootHeader" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="包材不良">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.badMaterial" v-if="isRedact" placeholder="手工录入" size="small" type="number"></el-input>
+                    <el-input v-model="scope.row.badMaterial" v-else disabled placeholder="手工录入" size="small" type="number"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="制程不良"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.badProduct" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.badProduct" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="半成品物料不合格"
+                  width="140">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.badSemi" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.badSemi" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="设备残留"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.deviceLoss" v-if="isRedact" placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                    <el-input v-model="scope.row.deviceLoss" v-else disabled placeholder="手工录入" size="small" type="number" min="0"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="备注"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.remark" v-if="isRedact" placeholder="手工录入" size="small"></el-input>
+                    <el-input v-model="scope.row.remark" v-else disabled placeholder="手工录入" size="small"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="60">
+                  <template slot-scope="scope">
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.menum)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-form :inline="true" size="small" label-width="140px" style="margin: 20px 0">
+                <el-form-item label="待杀菌数量（L）：">
+                  <span>{{GermsNum}}</span>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane name="7">
+              <span slot="label">
+                <el-button>文本记录</el-button>
+              </span>
+              <el-form :model="form">
+                <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-if="isRedact"></el-input>
+                <el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px" v-else disabled></el-input>
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </div>
+      <el-dialog
+        title="人员分配"
+        :close-on-click-modal="false"
+        :visible.sync="visible">
         <el-row>
-          <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px">新增</el-button>
+          <el-col style="width: 500px">
+            <el-transfer
+              filterable
+              :titles="['未分配人员', '已分配人员']"
+              :filter-method="filterMethod"
+              filter-placeholder="请输入用户名称"
+              v-model="selctId"
+              :data="userlist">
+            </el-transfer>
+          </el-col>
         </el-row>
-        <el-form-item label="临时工姓名：" v-for="(item, index) in selctId2" :key="index">
-          <el-col :span="20">
-            <el-input v-model="selctId2[index]"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">取消</el-button>
+          <el-button type="primary" @click="updatauser(row)">确定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        width="450px"
+        ref="dayLaborer"
+        title="新增临时工"
+        :close-on-click-modal="false"
+        :visible.sync="visible1">
+        <el-form :model="form" size="small" label-width="120px" class="dialogform">
+          <el-row>
+            <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px">新增</el-button>
+          </el-row>
+          <el-form-item label="临时工姓名：" v-for="(item, index) in selctId2" :key="index">
+            <el-col :span="20">
+              <el-input v-model="selctId2[index]"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)"></el-button>
+            </el-col>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible1 = false">取消</el-button>
+          <el-button type="primary" @click="close(row)">确定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        width="850px"
+        title="借调人员"
+        :close-on-click-modal="false"
+        :visible.sync="visible2">
+        <el-row>
+          <el-col style="width: 250px">
+            <el-card style="height: 303px;overflow-y: scroll">
+              <h3 style="font-size: 16px;color: black;margin-bottom: 10px">组织架构</h3>
+              <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" ref="tree2" :expand-on-click-node="false"></el-tree>
+            </el-card>
           </el-col>
-          <el-col :span="4">
-            <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)"></el-button>
+          <el-col style="width: 250px">
+            <el-card style="height: 303px;overflow-y: scroll">
+              <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
+              <el-tree ref="userlistTree" :filter-node-method="filterNode" node-key="userId" @node-click="treeNodeClick" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
+            </el-card>
           </el-col>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible1 = false">取消</el-button>
-        <el-button type="primary" @click="close(row)">确定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      width="850px"
-      title="借调人员"
-      :close-on-click-modal="false"
-      :visible.sync="visible2">
-      <el-row>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <h3 style="font-size: 16px;color: black;margin-bottom: 10px">组织架构</h3>
-            <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" ref="tree2" :expand-on-click-node="false"></el-tree>
-          </el-card>
-        </el-col>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree" :filter-node-method="filterNode" node-key="userId" @node-click="treeNodeClick" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
-          </el-card>
-        </el-col>
-        <el-col style="width: 50px;padding: 70px 5px">
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-if="tree2Status"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-else disabled></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-if="tree1Status"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-else disabled></el-button>
-        </el-col>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <el-input v-model="filterText1" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false" @check-change="userTree1"></el-tree>
-          </el-card>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible2 = false">取消</el-button>
-        <el-button type="primary" @click="saveduser(row)">确定</el-button>
-      </span>
-    </el-dialog>
+          <el-col style="width: 50px;padding: 70px 5px">
+            <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-if="tree2Status"></el-button>
+            <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-else disabled></el-button>
+            <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-if="tree1Status"></el-button>
+            <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-else disabled></el-button>
+          </el-col>
+          <el-col style="width: 250px">
+            <el-card style="height: 303px;overflow-y: scroll">
+              <el-input v-model="filterText1" size="small" placeholder="搜索人员"></el-input>
+              <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false" @check-change="userTree1"></el-tree>
+            </el-card>
+          </el-col>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible2 = false">取消</el-button>
+          <el-button type="primary" @click="saveduser(row)">确定</el-button>
+        </span>
+      </el-dialog>
+    </el-col>
   </el-col>
 </template>
 
@@ -1272,6 +1274,7 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      lodingStatus1: false,
       loading: true,
       timesForm: {
         isCause: [
@@ -1476,7 +1479,6 @@ export default {
         })
       }
     })
-    this.loading = true
     this.orderNo = this.PkgorderNo
     this.productDate = this.PkgproductDate
     this.workShop = this.PkgworkShop
@@ -1486,7 +1488,6 @@ export default {
     this.Getenery()
     this.GetstoppageType()
     this.GetTeam()
-    this.GetPot()
     this.getTree()
   },
   activated () {
@@ -1582,11 +1583,11 @@ export default {
         productDate: this.productDate,
         orderNo: this.orderNo
       }).then(({data}) => {
-        this.loading = false
         if (data.code === 0) {
           this.order = data.list[0]
           this.orderId = data.list[0].orderId
           this.orderStatus = data.list[0].orderStatus
+          this.GetPot()
           this.GetRatio()
           this.GetequipmentType()
           if (this.orderStatus !== '已同步') {
@@ -1625,7 +1626,6 @@ export default {
               item.orderId = this.order.orderId
             })
             this.readyDate.orderId = this.orderId
-            this.loading = false
           }
         } else {
           this.$message.error(data.msg)
@@ -1722,6 +1722,7 @@ export default {
         type: 'holder_type',
         holder_type: '007',
         pageSize: 100,
+        workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
@@ -1735,6 +1736,7 @@ export default {
         type: 'holder_type',
         holder_type: '006',
         pageSize: 100,
+        workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {
         if (data.code === 0) {
@@ -1919,7 +1921,6 @@ export default {
       this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', {
         order_id: this.orderId
       }).then(({data}) => {
-        this.loading = false
         if (data.code === 0) {
           console.log('获取包装车间文本记录列表')
           console.log(data)
@@ -2063,6 +2064,7 @@ export default {
           return false
         }
       }
+      this.lodingStatus1 = true
       this.isRedact = false
       this.tableheader(str) // 修改表头
       this.UpdateReady(str) // 修改准备时间
@@ -2324,7 +2326,8 @@ export default {
     // 判断状态
     getStatus (str) {
       if (this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
-        if (this.tabStatus.ready && this.tabStatus.user && this.tabStatus.exc && this.tabStatus.inpkg && this.tabStatus.sap1 && this.tabStatus.sap2 && this.tabStatus.me && this.tabStatus.text) {
+        if (str !== 'submit' && this.tabStatus.ready && this.tabStatus.user && this.tabStatus.exc && this.tabStatus.inpkg && this.tabStatus.sap1 && this.tabStatus.sap2 && this.tabStatus.me && this.tabStatus.text) {
+          this.lodingStatus1 = false
           this.$message.success('操作成功')
         }
         this.tabStatus.user = false
@@ -2336,10 +2339,9 @@ export default {
         this.tabStatus.me = false
         this.tabStatus.text = false
         if (str === 'submit') {
-          let that = this
-          that.ProHours()
-          that.submitIn()
-          that.subSap()
+          this.ProHours()
+          this.submitIn()
+          this.subSap()
         }
       }
     },
@@ -2404,12 +2406,14 @@ export default {
         this.subStatus()
       })
       this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
+        this.$message.success('提交完成')
         if (data.code === 0) {
           this.tabStatus.subsap2 = true
         } else {
           this.$message.error(data.msg)
         }
         this.subStatus()
+        this.lodingStatus1 = false
       })
     },
     subStatus () {

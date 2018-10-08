@@ -314,6 +314,7 @@ export default {
   methods: {
     // 获取列表
     GetAuditList () {
+      this.plantList.headerTxt = ''
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
@@ -461,6 +462,7 @@ export default {
           })
           this.lodingStatus1 = true
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            this.plantList.headerTxt = ''
             this.lodingStatus1 = false
             if (data.code === 0) {
               this.$message.success('操作成功')

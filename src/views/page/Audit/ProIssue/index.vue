@@ -83,7 +83,7 @@
               label="审核状态"
               width="100">
               <template slot-scope="scope">
-                {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? scope.row.interfaceReturnStatus === '0'? '接口失败': '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
+                {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
               </template>
             </el-table-column>
             <el-table-column
@@ -196,7 +196,7 @@
               label="操作"
               width="65">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+                <el-button type="text" size="small" @click="redact(scope.row)" v-if="!(scope.row.status === 'checked' || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -294,6 +294,7 @@ export default {
   methods: {
     // 获取列表
     GetAuditList () {
+      this.plantList.headerTxt = ''
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITISSUELIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
@@ -361,7 +362,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
+      if (row.status === 'checked' || row.status === 'noPass') {
         return 0
       } else {
         return 1
