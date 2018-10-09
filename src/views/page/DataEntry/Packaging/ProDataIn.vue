@@ -2406,7 +2406,7 @@ export default {
       })
     },
     // 入库提交
-    submitIn () {
+    submitIn (str) {
       this.InDate.forEach((item) => {
         item.status = 'submit'
         if (item.status) {
