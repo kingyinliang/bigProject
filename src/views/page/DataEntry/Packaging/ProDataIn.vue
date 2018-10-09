@@ -2025,7 +2025,7 @@ export default {
       let ty = true
       this.listbomP.forEach((item) => {
         if (item.delFlag !== '1') {
-          if (item.productUseNum) {} else {
+          if (item.productUseNum === 0 || item.productUseNum) {} else {
             ty = false
           }
         }
@@ -2075,17 +2075,28 @@ export default {
           this.$message.error('物料领用必填项未填')
           return false
         }
+        this.lodingStatus1 = true
+        this.isRedact = false
+        this.tableheader(str) // 修改表头
+        this.UpdateReady(str) // 修改准备时间
+        this.UpdateUser(str) // 修改人员
+        this.UpdateExc(str) // 修改异常记录
+        // this.UpdateIn(str) // 修改生产入库
+        this.UpdateSap(str) // 修改物料领用
+        this.UpdateGerms(str) // 修改待杀菌数量
+        this.UpdateText(str) // 修改文本
+      } else {
+        this.lodingStatus1 = true
+        this.isRedact = false
+        this.tableheader(str) // 修改表头
+        this.UpdateReady(str) // 修改准备时间
+        this.UpdateUser(str) // 修改人员
+        this.UpdateExc(str) // 修改异常记录
+        this.UpdateIn(str) // 修改生产入库
+        this.UpdateSap(str) // 修改物料领用
+        this.UpdateGerms(str) // 修改待杀菌数量
+        this.UpdateText(str) // 修改文本
       }
-      this.lodingStatus1 = true
-      this.isRedact = false
-      this.tableheader(str) // 修改表头
-      this.UpdateReady(str) // 修改准备时间
-      this.UpdateUser(str) // 修改人员
-      this.UpdateExc(str) // 修改异常记录
-      this.UpdateIn(str) // 修改生产入库
-      this.UpdateSap(str) // 修改物料领用
-      this.UpdateGerms(str) // 修改待杀菌数量
-      this.UpdateText(str) // 修改文本
     },
     // 表头处理
     tableheader (str) {
@@ -2383,7 +2394,7 @@ export default {
         outputUnit: this.order.outputUnit,
         realOutput: this.order.realOutput + '',
         countOutput: this.countOutputNum.toString(),
-        countOutputUnit: '瓶',
+        countOutputUnit: this.order.properties === '二合一&礼盒产线' ? (this.productUnit ? this.productUnit : this.basicUnit) : 'BOT',
         productDate: this.order.productDate
       }]).then(({data}) => {
         if (data.code === 0) {
@@ -2748,9 +2759,9 @@ export default {
     GermsNum: function () {
       let num = 0
       this.GermsDate.forEach((item) => {
-        num = num + (item.delFlag === '0' ? (item.washing * 1 + item.changeProduct * 1 + item.bootHeader * 1 + item.badMaterial * 1 + item.badProduct * 1 + item.badSemi * 1 + item.deviceLoss * 1) : 0)
+        num = num + (item.delFlag === '0' ? (item.washing * 1000 + item.changeProduct * 1000 + item.bootHeader * 1000 + item.badMaterial * 1000 + item.badProduct * 1000 + item.badSemi * 1000 + item.deviceLoss * 1000) : 0)
       })
-      return num
+      return num / 1000
     },
     countOutputNum: function () {
       let num = 0
