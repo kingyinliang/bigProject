@@ -2382,9 +2382,9 @@ export default {
     // 报工提交
     ProHours () {
       if (this.readyDate.isCause === '1') {
-        this.readyDate.dayDinner ? this.readyDate.dayDinner = this.readyDate.dayDinner + '' : this.readyDate.dayDinner = ''
-        this.readyDate.midDinner ? this.readyDate.midDinner = this.readyDate.midDinner + '' : this.readyDate.midDinner = ''
-        this.readyDate.nightDinner ? this.readyDate.nightDinner = this.readyDate.nightDinner + '' : this.readyDate.nightDinner = ''
+        this.readyDate.dayDinner === null ? this.readyDate.dayDinner = this.readyDate.dayDinner : this.readyDate.dayDinner = this.readyDate.dayDinner + ''
+        this.readyDate.midDinner === null ? this.readyDate.midDinner = this.readyDate.midDinner : this.readyDate.midDinner = this.readyDate.midDinner + ''
+        this.readyDate.nightDinner == null ? this.readyDate.nightDinner = this.readyDate.nightDinner : this.readyDate.nightDinner = this.readyDate.nightDinner + ''
       } else {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
       }
