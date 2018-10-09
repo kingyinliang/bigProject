@@ -2103,7 +2103,7 @@ export default {
       this.netStatus.orderStatus = false
       this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
-      this.order.countOutputUnit = '瓶'// 生产入库单位
+      this.order.countOutputUnit = this.order.properties === '二合一&礼盒产线' ? (this.productUnit ? this.productUnit : this.basicUnit) : 'BOT'// 生产入库单位
       this.order.countOutput = this.countOutputNum // 生产入库总产量
       this.order.countMan = this.countMan // 实际作业人数
       this.order.expAllDate = this.ExcNum// 总停线时间
@@ -2407,9 +2407,13 @@ export default {
     },
     // 入库提交
     submitIn () {
+      this.InDate.forEach((item) => {
+        item.status = 'submit'
+      })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subin = true
+          this.Getpkgin()
         } else {
           this.$message.error(data.msg)
         }
