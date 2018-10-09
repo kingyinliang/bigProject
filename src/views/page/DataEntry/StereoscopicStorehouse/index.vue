@@ -171,7 +171,7 @@
       </span>
   </el-dialog>
   <el-dialog
-    width="100%"
+    width="760px"
     :close-on-click-modal="false"
     :visible.sync="visible1">
     <div id="printOrder-data" style="width: 100%">
