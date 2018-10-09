@@ -52,7 +52,7 @@
     <el-card class="tableCard">
       <!--<el-row style="margin-bottom: 13px;float: right">-->
         <!--<el-button>编辑</el-button>-->
-        <el-button type="primary" size="small" @click="visible1 = true">打印</el-button>
+        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
