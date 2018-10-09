@@ -2394,7 +2394,7 @@ export default {
         outputUnit: this.order.outputUnit,
         realOutput: this.order.realOutput + '',
         countOutput: this.countOutputNum.toString(),
-        countOutputUnit: '瓶',
+        countOutputUnit: this.order.properties === '二合一&礼盒产线' ? (this.productUnit ? this.productUnit : this.basicUnit) : 'BOT',
         productDate: this.order.productDate
       }]).then(({data}) => {
         if (data.code === 0) {

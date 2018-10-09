@@ -57,7 +57,7 @@
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <div class="printOrder-data">
+      <div id="printOrder-data">
       <el-table
         ref="table1"
         header-row-class-name="tableHead"
@@ -146,6 +146,71 @@
         </el-table-column>
       </el-table>
       </div>
+      <!--<div>-->
+        <!--<el-table-->
+          <!--ref="table1"-->
+          <!--:fit="true"-->
+          <!--header-row-class-name="tableHead"-->
+          <!--:data="LtkList"-->
+          <!--border-->
+          <!--style="width: 100%;margin-bottom: 20px">-->
+          <!--<el-table-column-->
+            <!--label="生产订单号">-->
+            <!--<template slot-scope="scope">{{ scope.row.orderNo }}</template>-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="name"-->
+            <!--label="品项"-->
+            <!--:show-overflow-tooltip="true">-->
+            <!--<template slot-scope="scope">-->
+              <!--<span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="batch"-->
+            <!--label="生产批次">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="input"-->
+            <!--label="订单入库量">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="manSolid"-->
+            <!--label="人工码垛数-立体库">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="aiShelves"-->
+            <!--label="自动上架-立体库">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="aiSolid"-->
+            <!--label="自动码垛-立体库">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="unitName"-->
+            <!--label="单位">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="workShopMan"-->
+            <!--label="车间确认人">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="ltkMan"-->
+            <!--label="立体库确认人">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="memo"-->
+            <!--label="审核意见">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="verifyDate">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+            <!--prop="name"-->
+            <!--label="备注">-->
+          <!--</el-table-column>-->
+        <!--</el-table>-->
+      <!--</div>-->
       <el-row >
         <el-pagination
           @size-change="handleSizeChange"
@@ -231,14 +296,14 @@ export default {
   methods: {
     // 打印
     doPrint () {
-      // 1.设置要打印的区域 div的className
-      var newstr = document.getElementsByClassName('printOrder-data')[0].innerHTML
-      // 2. 复制给body，并执行window.print打印功能
-      document.body.innerHTML = newstr
-      // 3. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-      var oldstr = document.body.innerHTML
+      let subOutputRankPrint = document.getElementById('printOrder-data')
+      console.log(subOutputRankPrint.innerHTML)
+      let newContent = subOutputRankPrint.innerHTML
+      let oldContent = document.body.innerHTML
+      document.body.innerHTML = newContent
       window.print()
-      document.body.innerHTML = oldstr
+      window.location.reload()
+      document.body.innerHTML = oldContent
       return false
     },
     // 获取列表

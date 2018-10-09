@@ -132,8 +132,8 @@
               label="物料批次"
               width="105">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact" maxlength="10"></el-input>
-                <el-input v-model="scope.row.batch" size="small" v-else disabled maxlength="10"></el-input>
+                <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
+                <el-input v-model="scope.row.batch" size="small" v-else disabled></el-input>
               </template>
             </el-table-column>
             <el-table-column

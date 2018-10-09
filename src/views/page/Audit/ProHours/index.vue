@@ -113,7 +113,7 @@
               width="105">
             </el-table-column>
             <el-table-column
-              prop="outputUnitName"
+              prop="confQuanUnitName"
               label="单位"
               width="50">
             </el-table-column>
