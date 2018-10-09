@@ -2361,7 +2361,7 @@ export default {
         this.tabStatus.text = false
         if (str === 'submit') {
           this.ProHours()
-          this.submitIn()
+          this.submitIn(str)
           this.subSap()
         }
       }
@@ -2382,9 +2382,9 @@ export default {
     // 报工提交
     ProHours () {
       if (this.readyDate.isCause === '1') {
-        this.readyDate.dayDinner ? this.readyDate.dayDinner = this.readyDate.dayDinner + '' : this.readyDate.dayDinner = this.readyDate.dayDinner
-        this.readyDate.midDinner ? this.readyDate.midDinner = this.readyDate.midDinner + '' : this.readyDate.midDinner = this.readyDate.midDinner
-        this.readyDate.nightDinner ? this.readyDate.nightDinner = this.readyDate.nightDinner + '' : this.readyDate.nightDinner = this.readyDate.nightDinner
+        this.readyDate.dayDinner ? this.readyDate.dayDinner = this.readyDate.dayDinner + '' : this.readyDate.dayDinner = this.readyDate.dayDinner + ''
+        this.readyDate.midDinner ? this.readyDate.midDinner = this.readyDate.midDinner + '' : this.readyDate.midDinner = this.readyDate.midDinner + ''
+        this.readyDate.nightDinner ? this.readyDate.nightDinner = this.readyDate.nightDinner + '' : this.readyDate.nightDinner = this.readyDate.nightDinner + ''
       } else {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
       }
@@ -2409,6 +2409,11 @@ export default {
     submitIn () {
       this.InDate.forEach((item) => {
         item.status = 'submit'
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
       })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
