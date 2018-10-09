@@ -52,12 +52,12 @@
     <el-card class="tableCard">
       <!--<el-row style="margin-bottom: 13px;float: right">-->
         <!--<el-button>编辑</el-button>-->
-        <!--<el-button type="primary" size="small" @click="doPrint">打印</el-button>-->
+        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <div id="printOrder-data">
+      <div>
       <el-table
         ref="table1"
         header-row-class-name="tableHead"
@@ -146,71 +146,6 @@
         </el-table-column>
       </el-table>
       </div>
-      <!--<div>-->
-        <!--<el-table-->
-          <!--ref="table1"-->
-          <!--:fit="true"-->
-          <!--header-row-class-name="tableHead"-->
-          <!--:data="LtkList"-->
-          <!--border-->
-          <!--style="width: 100%;margin-bottom: 20px">-->
-          <!--<el-table-column-->
-            <!--label="生产订单号">-->
-            <!--<template slot-scope="scope">{{ scope.row.orderNo }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="name"-->
-            <!--label="品项"-->
-            <!--:show-overflow-tooltip="true">-->
-            <!--<template slot-scope="scope">-->
-              <!--<span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>-->
-            <!--</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="batch"-->
-            <!--label="生产批次">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="input"-->
-            <!--label="订单入库量">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="manSolid"-->
-            <!--label="人工码垛数-立体库">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="aiShelves"-->
-            <!--label="自动上架-立体库">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="aiSolid"-->
-            <!--label="自动码垛-立体库">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="unitName"-->
-            <!--label="单位">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="workShopMan"-->
-            <!--label="车间确认人">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="ltkMan"-->
-            <!--label="立体库确认人">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="memo"-->
-            <!--label="审核意见">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="verifyDate">-->
-          <!--</el-table-column>-->
-          <!--<el-table-column-->
-            <!--prop="name"-->
-            <!--label="备注">-->
-          <!--</el-table-column>-->
-        <!--</el-table>-->
-      <!--</div>-->
       <el-row >
         <el-pagination
           @size-change="handleSizeChange"
@@ -235,6 +170,93 @@
         <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
   </el-dialog>
+  <el-dialog
+    width="100%"
+    :close-on-click-modal="false"
+    :visible.sync="visible1">
+    <div id="printOrder-data" style="width: 100%">
+      <el-table
+        ref="table1"
+        :fit="true"
+        header-row-class-name="tableHead"
+        :data="LtkList"
+        border
+        style="width: 100%;margin-bottom: 20px">
+        <el-table-column
+          label="生产订单号"
+          width="120">
+          <template slot-scope="scope">{{ scope.row.orderNo }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="品项"
+          width="360">
+          <template slot-scope="scope">
+            <span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="batch"
+          label="生产批次"
+          width="105">
+        </el-table-column>
+        <el-table-column
+          prop="input"
+          label="订单入库量"
+          width="91">
+        </el-table-column>
+        <el-table-column
+          prop="manSolid"
+          label="人工码垛数-立体库"
+          width="140">
+        </el-table-column>
+        <el-table-column
+          prop="aiShelves"
+          label="自动上架-立体库"
+          width="140">
+        </el-table-column>
+        <el-table-column
+          prop="aiSolid"
+          label="自动码垛-立体库"
+          width="140">
+        </el-table-column>
+        <el-table-column
+          prop="unitName"
+          label="单位"
+          width="50">
+        </el-table-column>
+        <el-table-column
+          prop="workShopMan"
+          label="车间确认人"
+          width="92">
+        </el-table-column>
+        <el-table-column
+          prop="ltkMan"
+          label="立体库确认人"
+          width="105">
+        </el-table-column>
+        <el-table-column
+          prop="memo"
+          label="审核意见"
+          width="78">
+        </el-table-column>
+        <el-table-column
+          prop="verifyDate"
+          label="审核时间"
+          width="220">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="备注"
+          width="50">
+        </el-table-column>
+      </el-table>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visible1 = false">取消</el-button>
+      <el-button type="primary" @click="doPrint()">确定</el-button>
+    </span>
+  </el-dialog>
 </el-col>
 </template>
 
@@ -245,6 +267,7 @@ export default {
   data () {
     return {
       visible: false,
+      visible1: false,
       factory: [],
       workshop: [],
       productline: [],
