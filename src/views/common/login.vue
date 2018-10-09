@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video width="100%" height="100%" autoplay ref="videos" id="videos" muted src="http://10.8.4.153:50080/profile/video.mp4">
+    <video width="100%" height="100%" autoplay ref="videos" id="videos" muted src="@/assets/img/video.mp4">
       您的浏览器不支持 video 标签。
     </video>
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
@@ -118,7 +118,6 @@ export default {
     play (e) {
       this.curr++
       if (this.curr >= this.videoList.length) this.curr = 0
-      this.$refs.videos.src = this.videoList[this.curr]
       this.$refs.videos.load()
       this.$refs.videos.play()
     },
