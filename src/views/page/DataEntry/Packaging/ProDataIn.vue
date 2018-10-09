@@ -2408,7 +2408,6 @@ export default {
     // 入库提交
     submitIn (str) {
       this.InDate.forEach((item) => {
-        item.status = 'submit'
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {

@@ -174,8 +174,8 @@
     width="760px"
     :close-on-click-modal="false"
     :visible.sync="visible1">
-    <div id="printOrder-data" style="width: 100%">
-      <div style="transform: scale(0.4);width: 1000px">
+    <div id="printOrder-data" style="width: 100%;">
+      <div style="transform: scale(0.4);width: 1700px;position: absolute;left: -60%;top: -60%;">
         <el-table
           ref="table1"
           :fit="true"
