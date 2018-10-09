@@ -52,7 +52,7 @@
     <el-card class="tableCard">
       <!--<el-row style="margin-bottom: 13px;float: right">-->
         <!--<el-button>编辑</el-button>-->
-        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
+        <el-button type="primary" size="small" @click="visible1 = true">打印</el-button>
       <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
@@ -174,8 +174,8 @@
     width="760px"
     :close-on-click-modal="false"
     :visible.sync="visible1">
-    <div id="printOrder-data" style="width: 100%">
-      <div style="transform: scale(0.4);width: 1000px">
+    <div id="printOrder-data" style="width: 100%;">
+      <div style="transform: scale(0.4);width: 1700px;position: absolute;left: -60%;top: -60%;">
         <el-table
           ref="table1"
           :fit="true"
