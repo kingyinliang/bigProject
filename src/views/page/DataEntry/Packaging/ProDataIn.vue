@@ -602,7 +602,7 @@
                     label="自动上架-立体库"
                     width="140" v-if="order.workShopName !== '包装三车间'">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
                       <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" v-else disabled></el-input>
                     </template>
                   </el-table-column>
@@ -1490,22 +1490,6 @@ export default {
     this.GetTeam()
     this.getTree()
   },
-  activated () {
-    // Object.assign(this.$data, this.$options.data())
-    // this.clearData()
-    // this.loading = true
-    // this.orderNo = this.PkgorderNo
-    // this.productDate = this.PkgproductDate
-    // this.workShop = this.PkgworkShop
-    // this.GetOrderList()
-    // this.GetmaterialShort()
-    // this.GetProductShift()
-    // this.Getenery()
-    // this.GetstoppageType()
-    // this.GetTeam()
-    // this.GetPot()
-    // this.getTree()
-  },
   methods: {
     // 初始化data
     clearData () {
@@ -1988,12 +1972,10 @@ export default {
     inrul () {
       let ty = true
       this.instatus = 0
+      let obj = {}
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
           item.aiShelves = item.aiShelves + ''
-          if (item.aiShelves !== '' && item.aiShelves !== '0') {
-            this.instatus = 1
-          }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false
@@ -2005,8 +1987,38 @@ export default {
             this.$message.error('生产入库批次项未填')
             return false
           }
+          if (item.aiShelves !== '' && item.aiShelves !== '0') {
+            this.instatus = 1
+            if (obj[item.batch]) {
+              obj[item.batch] = obj[item.batch] * 1 + item.aiShelves * 1
+            } else {
+              obj[item.batch] = item.aiShelves * 1
+            }
+          }
         }
       })
+      let that = this
+      Object.keys(obj).forEach(function (key) {
+        let tmp = true
+        that.InVlist.forEach((item) => {
+          if (item.batch === key && item.aiShelves === obj[key]) {
+            tmp = false
+          }
+        })
+        if (tmp) {
+          ty = false
+          that.$message.error('机维组未确认，请保存后等待机维组确认后提交')
+          return false
+        }
+      })
+      // this.InVlist.forEach((item) => {
+      //   if (obj[item.batch] !== item.aiShelves) {
+      //     console.log(obj)
+      //     ty = false
+      //     this.$message.error('机维组未确认，不能提交')
+      //     return false
+      //   }
+      // })
       return ty
     },
     saprul () {
@@ -2257,8 +2269,6 @@ export default {
           item.status = str
         }
       })
-      console.log('----baocun-----')
-      console.log(this.listbomP)
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         this.netStatus.sapState1 = true
         this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
