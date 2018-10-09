@@ -52,11 +52,12 @@
     <el-card class="tableCard">
       <!--<el-row style="margin-bottom: 13px;float: right">-->
         <!--<el-button>编辑</el-button>-->
-        <!--<el-button type="primary">入库报表</el-button>-->
+        <!--<el-button type="primary" size="small" @click="doPrint">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
       </div>
+      <div class="printOrder-data">
       <el-table
         ref="table1"
         header-row-class-name="tableHead"
@@ -144,6 +145,7 @@
           label="备注">
         </el-table-column>
       </el-table>
+      </div>
       <el-row >
         <el-pagination
           @size-change="handleSizeChange"
@@ -227,6 +229,18 @@ export default {
     })
   },
   methods: {
+    // 打印
+    doPrint () {
+      // 1.设置要打印的区域 div的className
+      var newstr = document.getElementsByClassName('printOrder-data')[0].innerHTML
+      // 2. 复制给body，并执行window.print打印功能
+      document.body.innerHTML = newstr
+      // 3. 还原：将旧的页面储存起来，当打印完成后返给给页面。
+      var oldstr = document.body.innerHTML
+      window.print()
+      document.body.innerHTML = oldstr
+      return false
+    },
     // 获取列表
     GetLtkList () {
       this.$http(`${LTK_API.LTKLIST_API}`, 'POST', this.plantList).then(({data}) => {

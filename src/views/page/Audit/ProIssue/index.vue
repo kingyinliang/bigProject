@@ -132,8 +132,8 @@
               label="物料批次"
               width="105">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
-                <span v-else>{{scope.row.batch}}</span>
+                <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact" maxlength="10"></el-input>
+                <el-input v-model="scope.row.batch" size="small" v-else disabled maxlength="10"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -153,7 +153,7 @@
               width="78">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.stgeLoc" size="small" v-if="scope.row.redact"></el-input>
-                <span v-else>{{scope.row.stgeLoc}}</span>
+                <el-input v-model="scope.row.stgeLoc" size="small" v-else disabled></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -161,7 +161,7 @@
               width="78">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.moveType" size="small" v-if="scope.row.redact"></el-input>
-                <span v-else>{{scope.row.moveType}}</span>
+                <el-input v-model="scope.row.moveType" size="small" v-else disabled></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -172,7 +172,7 @@
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.value" v-for="(item, index) in MoveReas" :key="index" :value="item.code"></el-option>
                 </el-select>
-                <el-select v-model="scope.row.moveReas" placeholder="请选择" v-else size="small">
+                <el-select v-model="scope.row.moveReas" placeholder="请选择" v-else size="small" disabled>
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.value" v-for="(item, index) in MoveReas" :key="index" :value="item.code"></el-option>
                 </el-select>
