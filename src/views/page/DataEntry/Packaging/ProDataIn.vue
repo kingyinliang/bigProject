@@ -2075,28 +2075,17 @@ export default {
           this.$message.error('物料领用必填项未填')
           return false
         }
-        this.lodingStatus1 = true
-        this.isRedact = false
-        this.tableheader(str) // 修改表头
-        this.UpdateReady(str) // 修改准备时间
-        this.UpdateUser(str) // 修改人员
-        this.UpdateExc(str) // 修改异常记录
-        // this.UpdateIn(str) // 修改生产入库
-        this.UpdateSap(str) // 修改物料领用
-        this.UpdateGerms(str) // 修改待杀菌数量
-        this.UpdateText(str) // 修改文本
-      } else {
-        this.lodingStatus1 = true
-        this.isRedact = false
-        this.tableheader(str) // 修改表头
-        this.UpdateReady(str) // 修改准备时间
-        this.UpdateUser(str) // 修改人员
-        this.UpdateExc(str) // 修改异常记录
-        this.UpdateIn(str) // 修改生产入库
-        this.UpdateSap(str) // 修改物料领用
-        this.UpdateGerms(str) // 修改待杀菌数量
-        this.UpdateText(str) // 修改文本
       }
+      this.lodingStatus1 = true
+      this.isRedact = false
+      this.tableheader(str) // 修改表头
+      this.UpdateReady(str) // 修改准备时间
+      this.UpdateUser(str) // 修改人员
+      this.UpdateExc(str) // 修改异常记录
+      this.UpdateIn(str) // 修改生产入库
+      this.UpdateSap(str) // 修改物料领用
+      this.UpdateGerms(str) // 修改待杀菌数量
+      this.UpdateText(str) // 修改文本
     },
     // 表头处理
     tableheader (str) {
@@ -2407,17 +2396,9 @@ export default {
     },
     // 入库提交
     submitIn (str) {
-      this.InDate.forEach((item) => {
-        if (item.status) {
-          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
-        } else {
-          item.status = str
-        }
-      })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subin = true
-          this.Getpkgin()
         } else {
           this.$message.error(data.msg)
         }
