@@ -1274,6 +1274,7 @@ export default {
   name: 'ProDataIn',
   data () {
     return {
+      St: true,
       lodingStatus1: false,
       loading: true,
       timesForm: {
@@ -2348,7 +2349,8 @@ export default {
         this.tabStatus.sap2 = false
         this.tabStatus.me = false
         this.tabStatus.text = false
-        if (str === 'submit') {
+        if (str === 'submit' && this.St) {
+          this.st = false
           this.ProHours()
           this.submitIn(str)
           this.subSap()
@@ -2365,6 +2367,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.St = true
         this.SaveForm('submit')
       })
     },
@@ -2377,7 +2380,6 @@ export default {
       } else {
         this.readyDate.dayDinner = this.readyDate.dayDinner + ''
       }
-      this.readyDate.status = 'submit'
       this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', [this.readyDate, {countMan: this.countMan.toString()}, this.uerDate, this.ExcDate, {
         orderId: this.orderId,
         outputUnit: this.order.outputUnit,
