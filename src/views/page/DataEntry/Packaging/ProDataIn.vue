@@ -1301,7 +1301,7 @@ export default {
       filterText1: '',
       userListTreeProps: {
         label: function (data, node) {
-          return data.realName + '（' + ((data.workNum !== null && data.workNum !== '') ? data.workNum : data.workNumTemp) + '）'
+          return data.realName + '（' + data.workNum + '）'
         },
         children: ''
       },
@@ -2151,16 +2151,44 @@ export default {
       } else {
         if (this.readyDate.status === 'saved') { this.readyDate.status = str } else if (this.readyDate.status === 'noPass' && str === 'submit') { this.readyDate.status = str }
       }
-      this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
-        this.netStatus.readyState = true
-        if (data.code === 0) {
-          this.tabStatus.ready = true
-          this.Getpkgready()
-        } else {
-          this.$message.error(data.msg)
-        }
-        this.getStatus(str)
-      })
+      if (this.readyDate.isCause === '1') {
+        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
+          this.netStatus.readyState = true
+          if (data.code === 0) {
+            this.tabStatus.ready = true
+            this.Getpkgready()
+          } else {
+            this.$message.error(data.msg)
+          }
+          this.getStatus(str)
+        })
+      } else {
+        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
+          id: this.readyDate.id ? this.readyDate.id : '',
+          status: this.readyDate.status,
+          isCause: this.readyDate.isCause,
+          orderId: this.orderId,
+          dayStartDate: this.readyDate.dayStartDate,
+          dayStartLineDate: this.readyDate.dayStartLineDate,
+          dayChange: this.readyDate.dayChange,
+          dayDinner: this.readyDate.dayDinner,
+          dayCauseDate: this.readyDate.dayCauseDate,
+          dayEndDate: this.readyDate.dayEndDate,
+          shift: this.readyDate.shift,
+          meeting: this.readyDate.meeting,
+          prepared: this.readyDate.prepared,
+          clear: this.readyDate.clear
+        }).then(({data}) => {
+          this.netStatus.readyState = true
+          if (data.code === 0) {
+            this.tabStatus.ready = true
+            this.Getpkgready()
+          } else {
+            this.$message.error(data.msg)
+          }
+          this.getStatus(str)
+        })
+      }
     },
     // 修改异常记录
     UpdateExc (str) {
