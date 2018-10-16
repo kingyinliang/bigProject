@@ -46,6 +46,8 @@
                 </el-table-column>
                 <el-table-column
                   type="index"
+                  label="序号"
+                  :index="indexMethod"
                   width="55">
                 </el-table-column>
                 <el-table-column
@@ -198,6 +200,10 @@ export default {
           })
         })
       }
+    },
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
     },
     // 改变每页条数
     handleSizeChange (val) {
