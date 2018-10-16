@@ -4,7 +4,8 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.41:8080'
-// let HOST = 'http://10.10.5.63:8080'
+// let HOST = 'http://10.1.9.133:8080'
+// let HOST = 'http://10.10.1.58:8080'
 let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境
 // let HOST = 'https://mdssys.shinho.net.cn'// 正式环境
 /*
@@ -41,7 +42,11 @@ export const MAIN_API = {
   /**
    * @property {string} MENULIST_API 功能列表
    */
-  FILE_API: HOST + '/sys/dept/fileUpLoad'
+  FILE_API: HOST + '/sys/dept/fileUpLoad',
+  /**
+   * @property {string} MENULIST_API 功能列表
+   */
+  PRINTLTK_API: HOST + '/reports/printLtk'
 }
 /*
 *基础数据api
