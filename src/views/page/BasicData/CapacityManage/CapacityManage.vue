@@ -52,8 +52,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="workNum"
-                  label="物料"
-                  width="87">
+                  label="物料">
                 </el-table-column>
                 <el-table-column
                   prop="workNum"
@@ -99,7 +98,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'CapacityManage',
   data () {

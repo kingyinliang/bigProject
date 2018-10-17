@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'SpecificationManage',
   data () {
