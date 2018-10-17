@@ -94,7 +94,7 @@
                       </el-select>
                     </el-form-item>
                   </div>
-                  <el-card class="box-card">
+                  <el-card class="box-card" v-if="readyDate.classes === '' || readyDate.classes === '白班' || readyDate.classes === '多班'">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
@@ -125,7 +125,7 @@
                       </el-form-item>
                     </div>
                   </el-card>
-                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                  <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '中班' || readyDate.classes === '多班')">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
@@ -156,7 +156,7 @@
                       </el-form-item>
                     </div>
                   </el-card>
-                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                  <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '夜班' || readyDate.classes === '多班')">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
