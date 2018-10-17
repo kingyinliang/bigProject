@@ -2528,7 +2528,7 @@ export default {
     addSelcted () {
       this.$refs.userlistTree.getCheckedNodes().forEach((item, index) => {
         let obj = {}
-        obj.label = item.realName + '（' + item.workNum + '）'
+        obj.label = item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'
         if (JSON.stringify(this.selctId).indexOf(JSON.stringify(obj)) === -1) {
           this.selctId.push(obj)
         }
