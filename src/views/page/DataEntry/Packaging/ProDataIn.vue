@@ -84,7 +84,7 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="是否停线交接班：" style="float: right;width: 230px">
-                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                      <el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                       </el-select>
@@ -94,7 +94,7 @@
                       </el-select>
                     </el-form-item>
                   </div>
-                  <el-card class="box-card">
+                  <el-card class="box-card" v-if="readyDate.classes === '' || readyDate.classes === '白班' || readyDate.classes === '多班'">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
@@ -125,7 +125,7 @@
                       </el-form-item>
                     </div>
                   </el-card>
-                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                  <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '中班' || readyDate.classes === '多班')">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
@@ -156,7 +156,7 @@
                       </el-form-item>
                     </div>
                   </el-card>
-                  <el-card class="box-card" v-if="readyDate.isCause == '1'">
+                  <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '夜班' || readyDate.classes === '多班')">
                     <div slot="header" class="clearfix">
                       <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
                     </div>
@@ -1504,6 +1504,12 @@ export default {
     this.getTree()
   },
   methods: {
+    isCauseChange (data) {
+      console.log(data)
+      if (data === '0') {
+        this.readyDate.classes = ''
+      }
+    },
     // 初始化data
     clearData () {
       this.readyDate = {
