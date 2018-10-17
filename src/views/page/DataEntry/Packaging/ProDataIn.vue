@@ -1312,7 +1312,7 @@ export default {
       filterText1: '',
       userListTreeProps: {
         label: function (data, node) {
-          return data.realName + '（' + data.workNum + '）'
+          return data.realName + '（' + ((data.workNum !== null && data.workNum !== '') ? data.workNum : data.workNumTemp) + '）'
         },
         children: ''
       },
