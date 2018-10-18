@@ -9,7 +9,7 @@
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList()">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -26,7 +26,7 @@
           <el-col :span="16" v-if="isAuth('sys:user:checkList')">
             <el-card>
               <div slot="header" class="clearfix">
-                <span>人员</span>
+                <span>产能信息</span>
               </div>
               <div>
                 <el-button type="danger" @click="remove()" style="float: right;margin:0 20px 20px 0" size="small">批量删除</el-button>
@@ -53,27 +53,35 @@
                 <el-table-column
                   prop="workNum"
                   label="物料">
+                  <template slot-scope="scope">
+                    {{scope.row.materialCode + ' ' + scope.row.materialName}}
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="workNum"
+                  prop="basicCapacity"
                   label="标准产能"
                   width="87">
                 </el-table-column>
                 <el-table-column
-                  prop="workNum"
+                  prop="until"
+                  label="单位"
+                  width="50">
+                </el-table-column>
+                <el-table-column
+                  prop="changer"
                   label="操作人"
                   width="87">
                 </el-table-column>
                 <el-table-column
-                  prop="workNum"
+                  prop="changed"
                   label="操作时间"
-                  width="87">
+                  width="100">
                 </el-table-column>
                 <el-table-column
                   label="操作"
-                  width="87">
+                  width="50">
                   <template slot-scope="scope">
-                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.userId)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.id)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -98,7 +106,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API} from '@/api/api'
 export default {
   name: 'CapacityManage',
   data () {
@@ -107,6 +115,7 @@ export default {
       capacity: {
         capacity: ''
       },
+      deptId: '',
       OrgTree: [],
       CapacityList: [],
       arrList: [],
@@ -132,12 +141,15 @@ export default {
       })
     },
     // 获取产能列表
-    GetList () {
-      this.$http(`${SYSTEMSETUP_API.USERLIST1_API}`, 'POST', {
+    GetList (data) {
+      if (data) {
+        this.deptId = data.deptId
+      }
+      this.$http(`${BASICDATA_API.CAPALIST_API}`, 'POST', {
         deptId: this.deptId,
-        param: this.capacity.capacity,
-        currPage: this.currPage,
-        pageSize: this.pageSize
+        materialCode: this.capacity.capacity,
+        currPage: JSON.stringify(this.currPage),
+        pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
         if (data.code === 0) {
           this.multipleSelection = []
@@ -159,11 +171,11 @@ export default {
       })
     },
     // 新增  修改
-    addOrupdate (id) {
+    addOrupdate (data) {
       if (this.deptId) {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs.CapacityAddOrUpdate.init(this.deptId, id)
+          this.$refs.CapacityAddOrUpdate.init(this.deptId, data)
         })
       } else {
         this.$message.error('请先选择部门')
@@ -179,7 +191,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          this.$http(`${BASICDATA_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
             console.log(data)
             if (data.code === 0) {
               this.$message({

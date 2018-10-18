@@ -16,13 +16,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="标准产能：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.basicCapacity" placeholder="手动输入"></el-input>
+        </el-form-item>
+        <el-form-item label="单位：">
+          <el-input v-model="dataForm.basicCapacity" placeholder="手动输入"></el-input>
+          <el-select v-model="dataForm.material" filterable placeholder="请选择">
+            <el-option v-for="item in SerchSapList" :label="item.materialCode+' '+item.materialName" :value="item.materialCode+' '+item.materialName"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="维护人：" prop="realName">
-          <el-input v-model="dataForm.realName" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.changer" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="维护时间：">
-          <el-date-picker type="datetime"  v-model="dataForm.post" placeholder="选择"></el-date-picker>
+          <el-date-picker type="datetime"  v-model="dataForm.changed" placeholder="选择"></el-date-picker>
         </el-form-item>
       </el-form>
     </div>
@@ -39,9 +45,20 @@ export default {
   name: 'CapacityAddOrUpdate',
   data () {
     return {
+      deptId: '',
       visible: false,
-      dataForm: {},
-      SerchSapList: []
+      dataForm: {
+        material: '',
+        basicCapacity: '',
+        changer: '',
+        changed: ''
+      },
+      SerchSapList: [],
+      dataRule: {
+        realName: [
+          { required: true, message: '人员姓名不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   mounted () {
@@ -54,8 +71,19 @@ export default {
     })
   },
   methods: {
-    init () {},
-    dataFormSubmit () {}
+    init (deptId, data) {
+      this.deptId = deptId
+      if (data.id) {
+        this.dataForm = data
+      } else {
+        this.dataForm = {}
+      }
+    },
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {}
+      })
+    }
   },
   computed: {},
   components: {}
