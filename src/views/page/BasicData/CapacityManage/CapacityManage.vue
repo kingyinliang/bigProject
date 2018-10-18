@@ -9,7 +9,7 @@
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -23,14 +23,14 @@
               <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="GetList" :expand-on-click-node="false"></el-tree>
             </el-card>
           </el-col>
-          <el-col :span="16" v-if="isAuth('sys:user:checkList')">
+          <el-col :span="16" v-if="isAuth('sys:capacity:listCapa')">
             <el-card>
               <div slot="header" class="clearfix">
                 <span>产能信息</span>
               </div>
               <div>
-                <el-button type="danger" @click="remove()" style="float: right;margin:0 20px 20px 0" size="small">批量删除</el-button>
-                <el-button type="primary" @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small">增加</el-button>
+                <el-button type="danger" @click="remove()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:capacity:deleteCapa')">批量删除</el-button>
+                <el-button type="primary" @click="addOrupdate()" style="float: right;margin:0 20px 20px 0" size="small" v-if="isAuth('sys:capacity:saveOrUpdateCapa')">增加</el-button>
               </div>
               <el-table
                 ref="table1"
@@ -81,7 +81,7 @@
                   label="操作"
                   width="50">
                   <template slot-scope="scope">
-                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:capacity:saveOrUpdateCapa')">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
