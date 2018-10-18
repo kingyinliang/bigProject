@@ -110,7 +110,6 @@ export default {
                 type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.submitType = true
                   this.visible = false
                   this.$emit('refreshDataList')
                 }

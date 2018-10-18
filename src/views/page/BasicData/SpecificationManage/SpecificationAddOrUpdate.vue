@@ -6,7 +6,7 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%">
             <el-option
               v-for="item in SerchSapList"
               :key="item.materialCode+' '+item.materialName"
@@ -51,18 +51,39 @@ export default {
       dataRule: {}
     }
   },
+  props: {
+    SerchSapList: {}
+  },
   mounted () {
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
-      if (data.code === 0) {
-        this.SerchSapList = data.allList
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
   },
   methods: {
-    init () {},
-    dataFormSubmit () {}
+    init (data) {
+      if (data) {}
+      this.visible = true
+    },
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.$http(`${BASICDATA_API.CAPAADDORUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+            if (data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.submitType = true
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.submitType = true
+              this.$message.error(data.msg)
+            }
+          })
+        }
+      })
+    }
   },
   computed: {},
   components: {}

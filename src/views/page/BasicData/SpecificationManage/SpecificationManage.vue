@@ -90,7 +90,7 @@
               label="操作"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.userId)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -108,7 +108,7 @@
         </el-row>
       </el-card>
     </div>
-    <specification-add-or-update v-if="visible" ref="SpecificationAddOrUpdate" @refreshDataList="GetList"></specification-add-or-update>
+    <specification-add-or-update v-if="visible" :SerchSapList="SerchSapList" ref="SpecificationAddOrUpdate" @refreshDataList="GetList"></specification-add-or-update>
     <el-dialog
       title="高级查询"
       :close-on-click-modal="false"
@@ -138,12 +138,13 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 import SpecificationAddOrUpdate from './SpecificationAddOrUpdate'
 export default {
   name: 'SpecificationManage',
   data () {
     return {
+      SerchSapList: [],
       SpecificationList: [],
       multipleSelection: [],
       visible: false,
@@ -155,14 +156,21 @@ export default {
     }
   },
   mounted () {
+    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.allList
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
   },
   methods: {
     GetList () {},
     // 新增  修改
-    addOrupdate (id) {
+    addOrupdate (data) {
       this.visible = true
       this.$nextTick(() => {
-        this.$refs.SpecificationAddOrUpdate.init(this.deptId, id)
+        this.$refs.SpecificationAddOrUpdate.init(data)
       })
     },
     // 删除

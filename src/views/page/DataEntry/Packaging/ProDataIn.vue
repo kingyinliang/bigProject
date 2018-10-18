@@ -967,6 +967,13 @@
                     <el-input size="small" v-model="scope.row.factory" placeholder="手工录入" v-else disabled></el-input>
                   </template>
                 </el-table-column>
+                <el-table-column
+                  label="备注">
+                  <template slot-scope="scope">
+                    <el-input size="small" v-model="scope.row.remark" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                    <el-input size="small" v-model="scope.row.remark" v-else disabled></el-input>
+                  </template>
+                </el-table-column>
               </el-table>
               <el-table
                 ref="table1"
@@ -1452,6 +1459,55 @@ export default {
     }
   },
   watch: {
+    'readyDate.classes' (val) {
+      if (val === '白班') {
+        this.readyDate.midCauseDate = null
+        this.readyDate.midChange = null
+        this.readyDate.midDinner = null
+        this.readyDate.midEndDate = null
+        this.readyDate.midStartDate = null
+        this.readyDate.midStartLineDate = null
+        this.readyDate.nightCauseDate = null
+        this.readyDate.nightChange = null
+        this.readyDate.nightDinner = null
+        this.readyDate.nightEndDate = null
+        this.readyDate.nightStartDate = null
+        this.readyDate.nightStartLineDate = null
+      } else if (val === '中班') {
+        this.readyDate.dayStartDate = null
+        this.readyDate.dayStartLineDate = null
+        this.readyDate.dayChange = null
+        this.readyDate.dayDinner = null
+        this.readyDate.dayCauseDate = null
+        this.readyDate.dayEndDate = null
+        this.readyDate.nightCauseDate = null
+        this.readyDate.nightChange = null
+        this.readyDate.nightDinner = null
+        this.readyDate.nightEndDate = null
+        this.readyDate.nightStartDate = null
+        this.readyDate.nightStartLineDate = null
+      } else if (val === '夜班') {
+        this.readyDate.dayStartDate = null
+        this.readyDate.dayStartLineDate = null
+        this.readyDate.dayChange = null
+        this.readyDate.dayDinner = null
+        this.readyDate.dayCauseDate = null
+        this.readyDate.dayEndDate = null
+        this.readyDate.midCauseDate = null
+        this.readyDate.midChange = null
+        this.readyDate.midDinner = null
+        this.readyDate.midEndDate = null
+        this.readyDate.midStartDate = null
+        this.readyDate.midStartLineDate = null
+      } else if (val === '多班') {
+        this.readyDate.midCauseDate = null
+        this.readyDate.midChange = null
+        this.readyDate.midDinner = null
+        this.readyDate.midEndDate = null
+        this.readyDate.midStartDate = null
+        this.readyDate.midStartLineDate = null
+      }
+    },
     filterText (val) {
       this.$refs.userlistTree.filter(val)
     },

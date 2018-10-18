@@ -63,7 +63,7 @@
                   width="87">
                 </el-table-column>
                 <el-table-column
-                  prop="basicCapacityUnit"
+                  prop="basicCapacityUnitName"
                   label="单位"
                   width="50">
                 </el-table-column>
