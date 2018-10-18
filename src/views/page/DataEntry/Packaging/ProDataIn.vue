@@ -778,7 +778,7 @@
                     label="单位"
                     width="60">
                     <template slot-scope="scope">
-                      <span>{{productUnitName? scope.row.outputUnitName = productUnitName : scope.row.outputUnitName = basicUnitName}}</span>
+                      <span>{{scope.row.outputUnitName = basicUnitName}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -2143,7 +2143,7 @@ export default {
       this.netStatus.orderStatus = false
       this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
-      this.order.countOutputUnit = this.order.properties === '二合一&礼盒产线' ? (this.productUnit ? this.productUnit : this.basicUnit) : 'BOT'// 生产入库单位
+      this.order.countOutputUnit = this.order.properties === '二合一&礼盒产线' ? this.basicUnit : 'BOT'// 生产入库单位
       this.order.countOutput = this.countOutputNum // 生产入库总产量
       this.order.countMan = this.countMan // 实际作业人数
       this.order.expAllDate = this.ExcNum// 总停线时间
