@@ -1506,6 +1506,19 @@ export default {
         this.readyDate.midEndDate = null
         this.readyDate.midStartDate = null
         this.readyDate.midStartLineDate = null
+      } else {
+        this.readyDate.midCauseDate = null
+        this.readyDate.midChange = null
+        this.readyDate.midDinner = null
+        this.readyDate.midEndDate = null
+        this.readyDate.midStartDate = null
+        this.readyDate.midStartLineDate = null
+        this.readyDate.nightCauseDate = null
+        this.readyDate.nightChange = null
+        this.readyDate.nightDinner = null
+        this.readyDate.nightEndDate = null
+        this.readyDate.nightStartDate = null
+        this.readyDate.nightStartLineDate = null
       }
     },
     filterText (val) {
