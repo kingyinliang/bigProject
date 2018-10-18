@@ -139,6 +139,7 @@
 
 <script>
 import {SYSTEMSETUP_API} from '@/api/api'
+import SpecificationAddOrUpdate from './SpecificationAddOrUpdate'
 export default {
   name: 'SpecificationManage',
   data () {
@@ -219,9 +220,7 @@ export default {
   },
   computed: {},
   components: {
-    SpecificationAddOrUpdate: resolve => {
-      require(['./SpecificationAddOrUpdate'], resolve)
-    }
+    SpecificationAddOrUpdate
   }
 }
 </script>

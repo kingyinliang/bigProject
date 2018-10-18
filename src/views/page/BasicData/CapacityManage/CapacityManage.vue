@@ -1,10 +1,10 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col v-loading.fullscreen.lock="loginstatus" element-loading-text="加载中">
     <div class="main">
       <el-card>
         <el-row class="clearfix">
           <div style="float: right">
-            <el-form :inline="true" :model="capacity" size="small" label-width="68px" class="topforms2">
+            <el-form :inline="true" :model="capacity" size="small" label-width="68px" class="topforms2" @keyup.enter.native="GetList()">
               <el-form-item>
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
@@ -63,7 +63,7 @@
                   width="87">
                 </el-table-column>
                 <el-table-column
-                  prop="until"
+                  prop="basicCapacityUnit"
                   label="单位"
                   width="50">
                 </el-table-column>
@@ -81,7 +81,7 @@
                   label="操作"
                   width="50">
                   <template slot-scope="scope">
-                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row.id)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                    <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -101,20 +101,23 @@
         </el-row>
       </el-card>
     </div>
-    <capacity-add-or-update v-if="visible" ref="CapacityAddOrUpdate" @refreshDataList="GetList"></capacity-add-or-update>
+    <capacity-add-or-update v-if="visible" :SerchSapList="SerchSapList" ref="capaaddupdate" @refreshDataList="GetList"></capacity-add-or-update>
   </el-col>
 </template>
 
 <script>
 import {BASICDATA_API} from '@/api/api'
+import CapacityAddOrUpdate from './CapacityAddOrUpdate'
 export default {
   name: 'CapacityManage',
   data () {
     return {
+      loginstatus: false,
       visible: false,
       capacity: {
         capacity: ''
       },
+      SerchSapList: [],
       deptId: '',
       OrgTree: [],
       CapacityList: [],
@@ -127,6 +130,13 @@ export default {
   },
   mounted () {
     this.getTree()
+    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.allList
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
   },
   methods: {
     // 获取组织结构树
@@ -142,6 +152,7 @@ export default {
     },
     // 获取产能列表
     GetList (data) {
+      this.loginstatus = true
       if (data) {
         this.deptId = data.deptId
       }
@@ -161,13 +172,14 @@ export default {
           this.$message.error(data.msg)
         }
         this.visible = false
+        this.loginstatus = false
       })
     },
     // 表格选中
     handleSelectionChange (val) {
       this.multipleSelection = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item.userId)
+        this.multipleSelection.push(item.id)
       })
     },
     // 新增  修改
@@ -175,7 +187,7 @@ export default {
       if (this.deptId) {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs.CapacityAddOrUpdate.init(this.deptId, data)
+          this.$refs.capaaddupdate.init(this.deptId, data)
         })
       } else {
         this.$message.error('请先选择部门')
@@ -191,7 +203,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${BASICDATA_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          this.$http(`${BASICDATA_API.CAPADEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
             console.log(data)
             if (data.code === 0) {
               this.$message({
@@ -229,9 +241,7 @@ export default {
   },
   computed: {},
   components: {
-    CapacityAddOrUpdate: resolve => {
-      require(['./CapacityAddOrUpdate'], resolve)
-    }
+    CapacityAddOrUpdate
   }
 }
 </script>

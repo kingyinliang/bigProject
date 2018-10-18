@@ -1954,9 +1954,14 @@ export default {
           return false
         }
       } else if (this.readyDate.classes === '多班') {
-        if (this.readyDate.dayStartLineDate && this.readyDate.dayChange && this.readyDate.dayDinner && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightChange && this.readyDate.nightDinner && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+        if (this.readyDate.nightStartLineDate && this.readyDate.nightChange && this.readyDate.nightDinner && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
           ty = false
-          this.$message.error('准备时间白班和夜班必填字段未填')
+          this.$message.error('准备时间夜班必填字段未填')
+          return false
+        }
+        if (this.readyDate.dayStartLineDate && this.readyDate.dayChange && this.readyDate.dayDinner && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          ty = false
+          this.$message.error('准备时间白班必填字段未填')
           return false
         }
       }
