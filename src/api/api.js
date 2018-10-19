@@ -1,12 +1,13 @@
-// let HOST = 'http://localhost:8080/'
+// let HOST = 'http://localhost:8080'
 // let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.41:8080'
-// let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境
-let HOST = 'https://mdssys.shinho.net.cn'// 正式环境
+// let HOST = 'http://10.1.9.133:8080'
+// let HOST = 'http://10.10.1.58:8080'
+let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境
+// let HOST = 'https://mdssys.shinho.net.cn'// 正式环境
 /*
 *MAINapi
  */
@@ -41,7 +42,11 @@ export const MAIN_API = {
   /**
    * @property {string} MENULIST_API 功能列表
    */
-  FILE_API: HOST + '/sys/dept/fileUpLoad'
+  FILE_API: HOST + '/sys/dept/fileUpLoad',
+  /**
+   * @property {string} MENULIST_API 功能列表
+   */
+  PRINTLTK_API: HOST + '/reports/printLtk'
 }
 /*
 *基础数据api
@@ -165,7 +170,19 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPORDERUPDATE_API 库位删除
    */
-  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual'
+  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',
+  /**
+   * @property {string} CAPALIST_API 产能列表
+   */
+  CAPALIST_API: HOST + '/sys/capacity/listCapa',
+  /**
+   * @property {string} CAPAADDORUPDATE_API 产能新增修改
+   */
+  CAPAADDORUPDATE_API: HOST + '/sys/capacity/saveOrUpdateCapa',
+  /**
+   * @property {string} CAPADEL_API 产能删除
+   */
+  CAPADEL_API: HOST + '/sys/capacity/deleteCapa'
 }
 /*
 *系统设置api

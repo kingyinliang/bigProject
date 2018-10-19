@@ -52,7 +52,7 @@
     <el-card class="tableCard">
       <!--<el-row style="margin-bottom: 13px;float: right">-->
         <!--<el-button>编辑</el-button>-->
-        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
+        <!--<el-button type="primary" size="small" @click="ltk">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
@@ -174,7 +174,8 @@
     width="760px"
     :close-on-click-modal="false"
     :visible.sync="visible1">
-    <div id="printOrder-data" style="width: 100%;">
+    <a :href="'/static/web/viewer.html?file=' + pdf" target="_blank">打印</a>
+    <div id="printOrder-data" style="width: 100%; display: none">
       <div style="transform: scale(0.4);width: 1700px;margin-left: -490px;margin-top: -100px">
         <el-table
           ref="table1"
@@ -263,11 +264,12 @@
 </template>
 
 <script>
-import {BASICDATA_API, LTK_API} from '@/api/api'
+import {BASICDATA_API, LTK_API, MAIN_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
+      pdf: '',
       visible: false,
       visible1: false,
       factory: [],
@@ -319,6 +321,23 @@ export default {
     })
   },
   methods: {
+    ltk () {
+      this.$http(`${MAIN_API.PRINTLTK_API}`, 'GET').then(({data}) => {
+        this.visible1 = true
+        // let blob = new Blob([data], {
+        //   type: `application/mpdf`
+        // })
+        // console.log(URL.createObjectURL(blob))
+        // this.pdf = URL.createObjectURL(blob)
+        // let objectUrl = URL.createObjectURL(blob)
+        // let link = document.createElement('a')
+        // let fname = `我的文档.pdf`
+        // link.href = objectUrl
+        // link.setAttribute('download', fname)
+        // document.body.appendChild(link)
+        // link.click()
+      })
+    },
     // 打印
     doPrint () {
       let subOutputRankPrint = document.getElementById('printOrder-data')

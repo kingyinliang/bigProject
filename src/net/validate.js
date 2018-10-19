@@ -87,9 +87,9 @@ export function setUserList (data) {
   var res = []
   data.forEach((item, index) => {
     res.push({
-      label: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）',
-      key: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）',
-      screncon: item.realName + '（' + (item.workNum ? item.workNum : item.workNumTemp) + '）'
+      label: item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）',
+      key: item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）',
+      screncon: item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'
     })
   })
   return res
