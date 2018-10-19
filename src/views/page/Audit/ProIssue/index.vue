@@ -157,6 +157,11 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="workShopRemark"
+              label="车间备注"
+              width="80">
+            </el-table-column>
+            <el-table-column
               label="移动类型"
               width="78">
               <template slot-scope="scope">
@@ -204,6 +209,14 @@
               prop="verifyDate"
               label="审核时间"
               width="160">
+            </el-table-column>
+            <el-table-column
+              label="备注"
+              width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" size="small" v-if="scope.row.redact"></el-input>
+                <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
+              </template>
             </el-table-column>
             <el-table-column
               fixed="right"

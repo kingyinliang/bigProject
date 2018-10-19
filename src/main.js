@@ -11,6 +11,7 @@ import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
 import '@/assets/scss/index.scss'
 import $ from 'jquery'
+// import 'script-loader!file-saver'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

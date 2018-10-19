@@ -242,6 +242,7 @@
 
 <script>
 import {BASICDATA_API, AUDIT_API} from '@/api/api'
+// import { export_json_to_excel } from '@/vendor/Export2Excel'
 export default {
   name: 'index',
   data () {
@@ -313,6 +314,18 @@ export default {
         this.dataListLoading = false
       })
     },
+    // exportTable () {
+    //   require.ensure([], () => {
+    //     const tHeader = ['供应商编号', '供应商名称', '输入代码', '税务代码']
+    //     const filterVal = ['num', 'name', 'words', 'shuiwu_num']
+    //     const list = this.tableData
+    //     const data = this.formatJson(filterVal, list)
+    //     export_json_to_excel(tHeader, data, '供应商名称列表')
+    //   })
+    // },
+    // formatJson (filterVal, jsonData) {
+    //   return jsonData.map(v => filterVal.map(j => v[j]))
+    // },
     // 获取工厂
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {

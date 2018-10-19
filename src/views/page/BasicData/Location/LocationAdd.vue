@@ -22,7 +22,7 @@
             <el-select v-model="formatDate.material" filterable placeholder="请选择">
               <el-option
                 v-for="item in SerchSapList"
-                :key="item.materialName"
+                :key="item.materialCode+' '+item.materialName"
                 :label="item.materialCode+' '+item.materialName"
                 :value="item.materialCode+' '+item.materialName">
               </el-option>
