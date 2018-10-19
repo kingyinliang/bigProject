@@ -902,6 +902,7 @@
               </span>
               <el-table
                 ref="table1"
+                :row-class-name="tableRowClassName"
                 header-row-class-name="tableHead"
                 :data="listbomP"
                 border
@@ -1578,6 +1579,12 @@ export default {
       if (data === '0') {
         this.readyDate.classes = ''
       }
+    },
+    tableRowClassName ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'warning-row'
+      }
+      return ''
     },
     // 初始化data
     clearData () {
@@ -2270,44 +2277,16 @@ export default {
       } else {
         if (this.readyDate.status === 'saved') { this.readyDate.status = str } else if (this.readyDate.status === 'noPass' && str === 'submit') { this.readyDate.status = str }
       }
-      if (this.readyDate.isCause === '1') {
-        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
-          this.netStatus.readyState = true
-          if (data.code === 0) {
-            this.tabStatus.ready = true
-            this.Getpkgready()
-          } else {
-            this.$message.error(data.msg)
-          }
-          this.getStatus(str)
-        })
-      } else {
-        this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', {
-          id: this.readyDate.id ? this.readyDate.id : '',
-          status: this.readyDate.status,
-          isCause: this.readyDate.isCause,
-          orderId: this.orderId,
-          dayStartDate: this.readyDate.dayStartDate,
-          dayStartLineDate: this.readyDate.dayStartLineDate,
-          dayChange: this.readyDate.dayChange,
-          dayDinner: this.readyDate.dayDinner,
-          dayCauseDate: this.readyDate.dayCauseDate,
-          dayEndDate: this.readyDate.dayEndDate,
-          shift: this.readyDate.shift,
-          meeting: this.readyDate.meeting,
-          prepared: this.readyDate.prepared,
-          clear: this.readyDate.clear
-        }).then(({data}) => {
-          this.netStatus.readyState = true
-          if (data.code === 0) {
-            this.tabStatus.ready = true
-            this.Getpkgready()
-          } else {
-            this.$message.error(data.msg)
-          }
-          this.getStatus(str)
-        })
-      }
+      this.$http(`${PACKAGING_API.PKGREADYUPDATE_API}`, 'POST', this.readyDate).then(({data}) => {
+        this.netStatus.readyState = true
+        if (data.code === 0) {
+          this.tabStatus.ready = true
+          this.Getpkgready()
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.getStatus(str)
+      })
     },
     // 修改异常记录
     UpdateExc (str) {
@@ -3004,6 +2983,14 @@ export default {
   }
   .notNull{
     color: red;
+  }
+  .el-table .warning-row:hover>td{
+    background: #bbbbbb!important;
+    background-color: #bbbbbb!important;
+  }
+  .el-table .warning-row>td{
+    background: #bbbbbb!important;
+    background-color: #bbbbbb!important;
   }
   // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
 }

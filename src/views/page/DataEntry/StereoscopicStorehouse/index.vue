@@ -323,6 +323,15 @@ export default {
   methods: {
     ltk () {
       this.$http(`${MAIN_API.PRINTLTK_API}`, 'GET').then(({data}) => {
+        let blob = new Blob([data], {
+          type: `application/mspdf`
+        })
+        console.log(data)
+        let objectUrl = URL.createObjectURL(blob)
+        // let objectUrl = encodeURIComponent(data)
+        console.log(objectUrl)
+        window.open(`/static/web/viewer.html?file=${data}`)
+        // window.open(`http://10.1.9.133:8080/reports/printLtk`)
         this.visible1 = true
         // let blob = new Blob([data], {
         //   type: `application/mpdf`
