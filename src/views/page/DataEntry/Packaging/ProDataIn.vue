@@ -1969,10 +1969,10 @@ export default {
           })
           if (no > 0) {
             this.Sapstatus = 'noPass'
-          } else if (sub > 0) {
-            this.Sapstatus = 'submit'
           } else if (sav > 0) {
             this.Sapstatus = 'saved'
+          } else if (sub > 0) {
+            this.Sapstatus = 'submit'
           } else if (che > 0) {
             this.Sapstatus = 'checked'
           }
