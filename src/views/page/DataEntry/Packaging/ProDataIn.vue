@@ -1575,7 +1575,6 @@ export default {
   },
   methods: {
     isCauseChange (data) {
-      console.log(data)
       if (data === '0') {
         this.readyDate.classes = ''
       }
@@ -1834,8 +1833,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间人员列表')
-          console.log(data)
           this.uerDate = data.listForm
           this.UserAudit = data.listApproval
         } else {
@@ -1849,8 +1846,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间准备时间列表')
-          console.log(data)
           if (data.listForm.length > 0) {
             this.readyDate = data.listForm[0]
             this.ReadAudit = data.listApproval
@@ -1864,8 +1859,6 @@ export default {
     GetpkgExc () {
       this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: this.orderId}).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间异常记录列表')
-          console.log(data)
           this.ExcDate = data.listForm
         } else {
           this.$message.error(data.msg)
@@ -1879,8 +1872,6 @@ export default {
         isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'twoAndOne' : this.order.workShopName === '包装三车间' ? 'isPkgThree' : ''
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间生产入库列表')
-          console.log(data)
           this.InDate = data.plist
           this.InVlist = data.vlist
           this.InAudit = data.vrlist
@@ -1933,8 +1924,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间物料领用列表')
-          console.log(data)
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
@@ -1987,8 +1976,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间待杀菌数量列表')
-          console.log(data)
           this.GermsDate = data.listForm
         } else {
           this.$message.error(data.msg)
@@ -2001,8 +1988,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间文本记录列表')
-          console.log(data)
           this.textlist = data.listForm[0]
           this.Text = data.listForm[0].pkgText
           this.textId = data.listForm[0].id
@@ -2195,7 +2180,6 @@ export default {
         }
         this.inrul()
         if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间' && this.instatus === 1) {
-          console.log(this.instatus)
           this.$message.error('机维组未确认，不能提交')
           return false
         }
@@ -2233,6 +2217,7 @@ export default {
       if (str === 'submit') {
         let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
         net9.then(function () {
+          console.log('--------开始提交--------')
           let net10 = new Promise((resolve, reject) => {
             that.ProHours(resolve) // 报工
           })
@@ -2244,6 +2229,7 @@ export default {
           })
           let net13 = Promise.all([net10, net11, net12])
           net13.then(() => {
+            console.log('--------提交成功--------')
             that.lodingStatus1 = false
             that.$message.success('提交成功')
           })
