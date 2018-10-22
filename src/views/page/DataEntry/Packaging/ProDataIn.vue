@@ -1928,7 +1928,7 @@ export default {
       })
     },
     // 获取包装车间物料领用列表
-    GetpkgSap (str) {
+    GetpkgSap (resolve) {
       this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
         order_id: this.orderId
       }).then(({data}) => {
@@ -1938,8 +1938,8 @@ export default {
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
-          if (str) {
-            this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
           }
           let sub = 0
           let che = 0
@@ -2167,6 +2167,7 @@ export default {
     },
     // 保存
     SaveForm (str) {
+      let that = this
       if (str === 'submit') {
         if (!this.readyrul()) {
           return false
@@ -2205,17 +2206,58 @@ export default {
       }
       this.lodingStatus1 = true
       this.isRedact = false
-      this.tableheader(str) // 修改表头
-      this.UpdateReady(str) // 修改准备时间
-      this.UpdateUser(str) // 修改人员
-      this.UpdateExc(str) // 修改异常记录
-      this.UpdateIn(str) // 修改生产入库
-      this.UpdateSap(str) // 修改物料领用
-      this.UpdateGerms(str) // 修改待杀菌数量
-      this.UpdateText(str) // 修改文本
+      let net1 = new Promise((resolve, reject) => {
+        that.tableheader(str, resolve) // 修改准备时间
+      })
+      let net2 = new Promise(function (resolve, reject) {
+        that.UpdateReady(str, resolve) // 修改准备时间
+      })
+      let net3 = new Promise(function (resolve, reject) {
+        that.UpdateUser(str, resolve) // 修改人员
+      })
+      let net4 = new Promise(function (resolve, reject) {
+        that.UpdateExc(str, resolve) // 修改异常记录
+      })
+      let net5 = new Promise(function (resolve, reject) {
+        that.UpdateIn(str, resolve) // 修改生产入库
+      })
+      let net6 = new Promise(function (resolve, reject) {
+        that.UpdateSap(str, resolve) // 修改物料领用
+      })
+      let net7 = new Promise(function (resolve, reject) {
+        that.UpdateGerms(str, resolve) // 修改待杀菌数量
+      })
+      let net8 = new Promise(function (resolve, reject) {
+        that.UpdateText(str, resolve) // 修改文本
+      })
+      if (str === 'submit') {
+        let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
+        net9.then(function () {
+          let net10 = new Promise((resolve, reject) => {
+            that.ProHours(resolve) // 报工
+          })
+          let net11 = new Promise((resolve, reject) => {
+            that.submitIn(resolve) // 入库
+          })
+          let net12 = new Promise((resolve, reject) => {
+            that.subSap(resolve) // 发料
+          })
+          let net13 = Promise.all([net10, net11, net12])
+          net13.then(() => {
+            that.lodingStatus1 = false
+            that.$message.success('提交成功')
+          })
+        })
+      } else {
+        let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
+        net9.then(function () {
+          that.lodingStatus1 = false
+          that.$message.success('保存成功')
+        })
+      }
     },
     // 表头处理
-    tableheader (str) {
+    tableheader (str, resolve) {
       this.netStatus.orderStatus = false
       this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
@@ -2236,14 +2278,17 @@ export default {
         } else {
           this.$message.error('保存表头' + data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     /**
      * @property 以下为七个修改列表
      */
     // 修改人员
-    UpdateUser (str) {
+    UpdateUser (str, resolve) {
       if (this.uerDate.length > 0) {
         this.netStatus.userState = false
         this.uerDate.forEach((item) => {
@@ -2261,15 +2306,21 @@ export default {
           } else {
             this.$message.error('修改人员成功' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.user = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改准备时间
-    UpdateReady (str) {
+    UpdateReady (str, resolve) {
       this.netStatus.readyState = false
       this.readyDate.orderId = this.orderId
       if (!this.readyDate.status) {
@@ -2285,11 +2336,14 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 修改异常记录
-    UpdateExc (str) {
+    UpdateExc (str, resolve) {
       if (this.ExcDate.length > 0) {
         this.netStatus.excState = false
         this.ExcDate.forEach((item) => {
@@ -2303,15 +2357,21 @@ export default {
           } else {
             this.$message.error('异常记录' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.exc = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改生产入库
-    UpdateIn (str) {
+    UpdateIn (str, resolve) {
       if (this.InDate.length > 0) {
         this.netStatus.inState = false
         let types = ''
@@ -2343,15 +2403,21 @@ export default {
           } else {
             this.$message.error('生产入库' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.inpkg = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改物料领用
-    UpdateSap (str) {
+    UpdateSap (str, resolve) {
       this.netStatus.sapState1 = false
       this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
@@ -2372,7 +2438,12 @@ export default {
         this.netStatus.sapState1 = true
         this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
           this.netStatus.sapState2 = true
-          this.GetpkgSap(str)
+          // this.getStatus(str)
+          if (resolve) {
+            this.GetpkgSap(resolve)
+          } else {
+            this.GetpkgSap()
+          }
           if (data.code === 0) {
             this.tabStatus.sap2 = true
           } else {
@@ -2387,7 +2458,7 @@ export default {
       })
     },
     // 修改待杀菌数量
-    UpdateGerms (str) {
+    UpdateGerms (str, resolve) {
       if (this.GermsDate.length > 0) {
         this.netStatus.meState = false
         this.GermsDate.forEach((item) => {
@@ -2401,15 +2472,21 @@ export default {
           } else {
             this.$message.error('修改待杀菌数量' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.me = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改文本
-    UpdateText (str) {
+    UpdateText (str, resolve) {
       this.netStatus.textState = false
       this.$http(`${PACKAGING_API.PKGTEXTUPDATE_API}`, 'POST', {
         id: this.textId,
@@ -2429,31 +2506,11 @@ export default {
         } else {
           this.$message.error('修改文本' + data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
-    },
-    // 判断状态
-    getStatus (str) {
-      if (this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
-        if (str !== 'submit' && this.tabStatus.ready && this.tabStatus.user && this.tabStatus.exc && this.tabStatus.inpkg && this.tabStatus.sap1 && this.tabStatus.sap2 && this.tabStatus.me && this.tabStatus.text) {
-          this.lodingStatus1 = false
-          this.$message.success('操作成功')
-        }
-        this.tabStatus.user = false
-        this.tabStatus.ready = false
-        this.tabStatus.exc = false
-        this.tabStatus.inpkg = false
-        this.tabStatus.sap1 = false
-        this.tabStatus.sap2 = false
-        this.tabStatus.me = false
-        this.tabStatus.text = false
-        if (str === 'submit' && this.St) {
-          this.st = false
-          this.ProHours()
-          this.submitIn(str)
-          this.subSap()
-        }
-      }
     },
     /**
      * @property 以下为提交
@@ -2470,7 +2527,7 @@ export default {
       })
     },
     // 报工提交
-    ProHours () {
+    ProHours (resolve) {
       if (this.readyDate.isCause === '1') {
         this.readyDate.dayDinner === null ? this.readyDate.dayDinner = this.readyDate.dayDinner : this.readyDate.dayDinner = this.readyDate.dayDinner + ''
         this.readyDate.midDinner === null ? this.readyDate.midDinner = this.readyDate.midDinner : this.readyDate.midDinner = this.readyDate.midDinner + ''
@@ -2491,45 +2548,43 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 入库提交
-    submitIn (str) {
+    submitIn (resolve) {
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subin = true
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 物料提交
-    subSap () {
+    subSap (resolve) {
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subsap1 = true
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
+          if (data.code === 0) {
+            this.tabStatus.subsap2 = true
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       })
-      this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
-        this.$message.success('提交完成')
-        if (data.code === 0) {
-          this.tabStatus.subsap2 = true
-        } else {
-          this.$message.error(data.msg)
-        }
-        this.subStatus()
-        this.lodingStatus1 = false
-      })
-    },
-    subStatus () {
-      if (this.tabStatus.subhour && this.tabStatus.subsap1 && this.tabStatus.subsap2 && this.tabStatus.subin) {
-        this.$message.success('提交成功')
-      }
     },
     // 我是分割线
     // 搜索人员
