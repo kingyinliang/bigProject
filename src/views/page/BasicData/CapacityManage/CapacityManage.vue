@@ -52,6 +52,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="workNum"
+                  :show-overflow-tooltip="true"
                   label="物料">
                   <template slot-scope="scope">
                     {{scope.row.materialCode + ' ' + scope.row.materialName}}
@@ -60,22 +61,26 @@
                 <el-table-column
                   prop="basicCapacity"
                   label="标准产能"
+                  :show-overflow-tooltip="true"
                   width="87">
                 </el-table-column>
                 <el-table-column
                   prop="basicCapacityUnitName"
                   label="单位"
-                  width="50">
+                  width="50"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   prop="changer"
                   label="操作人"
-                  width="87">
+                  width="87"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   prop="changed"
                   label="操作时间"
-                  width="100">
+                  width="120"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   label="操作"

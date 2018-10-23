@@ -1018,7 +1018,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="过滤日期">
                   <template slot-scope="scope">
                     <div class="required">
@@ -1048,7 +1048,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="换罐时间">
                   <template slot-scope="scope">
                     <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
@@ -1056,7 +1056,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="用完时间">
                   <template slot-scope="scope">
                     <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
