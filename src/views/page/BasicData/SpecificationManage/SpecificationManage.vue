@@ -156,9 +156,9 @@ export default {
   mounted () {
     this.GetList()
     // 物料下拉
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
-        this.SerchSapList = data.allList
+        this.SerchSapList = data.list
       } else {
         this.$message.error(data.msg)
       }

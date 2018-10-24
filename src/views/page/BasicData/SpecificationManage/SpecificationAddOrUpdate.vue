@@ -9,9 +9,9 @@
           <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%">
             <el-option
               v-for="item in SerchSapList"
-              :key="item.materialCode+' '+item.materialName"
-              :label="item.materialCode+' '+item.materialName"
-              :value="item.materialCode+' '+item.materialName">
+              :key="item.sapCode+' '+item.itemName"
+              :label="item.sapCode+' '+item.itemName"
+              :value="item.sapCode+' '+item.itemName">
             </el-option>
           </el-select>
         </el-form-item>

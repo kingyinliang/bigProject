@@ -170,6 +170,10 @@ export const BASICDATA_API = {
    */
   SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList',
   /**
+   * @property {string} FINDSAP_API 获取全部物料
+   */
+  FINDSAP_API: HOST + '/sys/sapmaterialitem/productList',
+  /**
    * @property {string} SAPORDERUPDATE_API 同步订单
    */
   SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',

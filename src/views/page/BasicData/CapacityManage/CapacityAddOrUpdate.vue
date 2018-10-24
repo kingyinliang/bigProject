@@ -6,12 +6,12 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：" prop="material">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" @change="set">
             <el-option
               v-for="item in SerchSapList"
-              :key="item.materialCode+' '+item.materialName"
-              :label="item.materialCode+' '+item.materialName"
-              :value="item.materialCode+' '+item.materialName">
+              :key="item.sapCode+' '+item.itemName"
+              :label="item.sapCode+' '+item.itemName"
+              :value="item.sapCode+' '+item.itemName">
             </el-option>
           </el-select>
         </el-form-item>
