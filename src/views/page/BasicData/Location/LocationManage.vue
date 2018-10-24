@@ -120,7 +120,7 @@
         <el-button type="primary" @click="GetLocationList()">确定</el-button>
       </span>
     </el-dialog>
-    <location-add v-if="visible" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
+    <location-add v-if="visible" :SerchSapList="SerchSapList" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
   </el-col>
 </template>
 
@@ -144,6 +144,7 @@ export default {
       multipleSelection: [],
       sapList: [],
       workshop: [],
+      SerchSapList: [],
       currPage: 1,
       pageSize: 10,
       totalCount: 0
@@ -161,6 +162,13 @@ export default {
     this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_type`, 'POST').then(({data}) => {
       if (data.code === 0) {
         this.sapList = data.dicList
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
+    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.allList
       } else {
         this.$message.error(data.msg)
       }

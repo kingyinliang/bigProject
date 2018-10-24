@@ -7,8 +7,8 @@
 // let HOST = 'http://10.1.9.133:8080'
 // let HOST = 'http://10.10.1.58:8080'
 // HOST
-// let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
-let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
+let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
+// let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
 // let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
 /*
 *MAINapi
@@ -104,11 +104,11 @@ export const BASICDATA_API = {
   SAPDETAIL_API: HOST + '/sys/sapmaterialitem/info',
   // 容器管理
   /**
-   * @property {string} CONTAINERLIST_API 容器列表
+   * @property {string} CONTAINERLIST_API 容器列表 不带权限
    */
   CONTAINERLIST_API: HOST + '/sys/holder/list',
   /**
-   * @property {string} CONTAINERLIST_API 容器列表
+   * @property {string} CONTAINERLIST_API 容器列表 带权限
    */
   CONTAINERLIST1_API: HOST + '/sys/holder/checkList',
   /**
@@ -129,11 +129,11 @@ export const BASICDATA_API = {
   CONTAINERDEL_API: HOST + '/sys/holder/delete',
   // 设备管理
   /**
-   * @property {string} CONTAINERDEL_API 设备列表
+   * @property {string} CONTAINERDEL_API 设备列表 不带权限
    */
   DEVICELIST_API: HOST + '/sys/device/list',
   /**
-   * @property {string} DEVICELIST1_API 设备列表
+   * @property {string} DEVICELIST1_API 设备列表 带权限
    */
   DEVICELIST1_API: HOST + '/sys/device/checkList',
   /**
@@ -145,7 +145,7 @@ export const BASICDATA_API = {
    */
   DEVICEADD_API: HOST + '/sys/device/save',
   /**
-   * @property {string} DEVICEADD_API 设备新增
+   * @property {string} DEVICEADD_API 设备修改
    */
   DEVICEUPDATE_API: HOST + '/sys/device/update',
   // 订单管理
@@ -166,11 +166,11 @@ export const BASICDATA_API = {
    */
   LOCATIONDEL_API: HOST + '/sys/sto/delete',
   /**
-   * @property {string} LOCATIONDEL_API 库位删除
+   * @property {string} LOCATIONDEL_API 获取全部物料
    */
   SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList',
   /**
-   * @property {string} SAPORDERUPDATE_API 库位删除
+   * @property {string} SAPORDERUPDATE_API 同步订单
    */
   SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',
   /**
@@ -184,7 +184,23 @@ export const BASICDATA_API = {
   /**
    * @property {string} CAPADEL_API 产能删除
    */
-  CAPADEL_API: HOST + '/sys/capacity/deleteCapa'
+  CAPADEL_API: HOST + '/sys/capacity/deleteCapa',
+  /**
+   * @property {string} SPECLIST_API 规格列表
+   */
+  SPECLIST_API: HOST + '/sys/spec/listSpec',
+  /**
+   * @property {string} SPECSAVE_API 规格新增
+   */
+  SPECSAVE_API: HOST + '/sys/spec/saveSpec',
+  /**
+   * @property {string} SPECUPDATE_API 规格修改
+   */
+  SPECUPDATE_API: HOST + '/sys/spec/updateSpec',
+  /**
+   * @property {string} SPECDEL_API 规格删除
+   */
+  SPECDEL_API: HOST + '/sys/spec/delSpec'
 }
 /*
 *系统设置api

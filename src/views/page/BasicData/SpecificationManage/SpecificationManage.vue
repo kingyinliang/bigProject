@@ -6,12 +6,12 @@
           <el-row style="float: right">
             <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
               <el-form-item>
-                <el-input v-model="form.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
                 <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                <el-button type="primary" size="small" @click="addOrupdate">新增</el-button>
+                <el-button type="primary" size="small" @click="addOrupdate()">新增</el-button>
                 <el-button type="danger" @click="remove()" size="small">批量删除</el-button>
               </el-form-item>
             </el-form>
@@ -45,50 +45,43 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="brand"
               label="品牌"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="largeClass"
               label="大类"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="boxSpec"
               label="箱规格"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="boxSpecUnit"
               label="单位"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="productSpec"
               label="瓶规格"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="productSpecUnit"
               label="单位"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="changer"
               label="维护人"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
-              label="操作"
-              :show-overflow-tooltip="true">
+              width="60"
+              label="操作">
               <template slot-scope="scope">
                 <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
               </template>
@@ -116,16 +109,16 @@
       <div class="formdata">
         <el-form :model="form" size="small" label-width="110px" class="orderdialog">
           <el-form-item label="物料：">
-            <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
-          </el-form-item>
-          <el-form-item label="品牌：">
             <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
           </el-form-item>
+          <el-form-item label="品牌：">
+            <el-input v-model="form.brand" placeholder="手工录入"></el-input>
+          </el-form-item>
           <el-form-item label="箱规格：">
-            <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
+            <el-input v-model="form.boxSpec" placeholder="手工录入"></el-input>
           </el-form-item>
           <el-form-item label="瓶规格：">
-            <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
+            <el-input v-model="form.productSpec" placeholder="手工录入"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -138,7 +131,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API} from '@/api/api'
 import SpecificationAddOrUpdate from './SpecificationAddOrUpdate'
 export default {
   name: 'SpecificationManage',
@@ -149,13 +142,20 @@ export default {
       multipleSelection: [],
       visible: false,
       visible1: false,
-      form: {},
+      form: {
+        brand: '',
+        materialCode: '',
+        boxSpec: '',
+        productSpec: ''
+      },
       currPage: 1,
       pageSize: 10,
       totalCount: 1
     }
   },
   mounted () {
+    this.GetList()
+    // 物料下拉
     this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
         this.SerchSapList = data.allList
@@ -165,7 +165,25 @@ export default {
     })
   },
   methods: {
-    GetList () {},
+    GetList () {
+      this.$http(`${BASICDATA_API.SPECLIST_API}`, 'POST', {
+        brand: this.form.brand,
+        materialCode: this.form.materialCode,
+        boxSpec: this.form.boxSpec,
+        productSpec: this.form.productSpec,
+        currPage: JSON.stringify(this.currPage),
+        pageSize: JSON.stringify(this.pageSize)
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.SpecificationList = data.page.list
+          this.currPage = data.page.currPage
+          this.pageSize = data.page.pageSize
+          this.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 新增  修改
     addOrupdate (data) {
       this.visible = true
@@ -176,14 +194,14 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$message.error('请选择要删除的规格')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('确认删除规格, 是否继续?', '删除规格', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          this.$http(`${BASICDATA_API.SPECDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
             console.log(data)
             if (data.code === 0) {
               this.$message({

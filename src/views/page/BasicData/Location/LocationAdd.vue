@@ -61,7 +61,6 @@ export default {
       visible: false,
       sapList: [],
       workshop: [],
-      SerchSapList: [],
       formatDate: {
         deptId: '',
         storageLocation: '',
@@ -87,14 +86,10 @@ export default {
       }
     }
   },
+  props: {
+    SerchSapList: {}
+  },
   mounted () {
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
-      if (data.code === 0) {
-        this.SerchSapList = data.allList
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
   },
   methods: {
     init () {

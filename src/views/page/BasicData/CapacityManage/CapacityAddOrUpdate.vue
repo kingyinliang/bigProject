@@ -89,7 +89,11 @@ export default {
       this.deptId = deptId
       if (data) {
         this.CapacityId = data.id
-        this.dataForm = data
+        this.dataForm.basicCapacity = data.basicCapacity
+        this.dataForm.basicCapacityUnit = data.basicCapacityUnit
+        this.dataForm.changer = data.changer
+        this.dataForm.changed = data.changed
+        this.dataForm.id = data.id
         this.dataForm.material = data.materialCode + ' ' + data.materialName
       } else {
         this.CapacityId = ''

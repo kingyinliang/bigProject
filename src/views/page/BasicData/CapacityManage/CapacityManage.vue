@@ -201,9 +201,9 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$message.error('请选择要删除的产能')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('确认删除该物料产能, 是否继续?', '删除产能', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
