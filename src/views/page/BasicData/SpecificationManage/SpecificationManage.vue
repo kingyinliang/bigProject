@@ -50,7 +50,7 @@
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-              prop="largeClass"
+              prop="largeClassName"
               label="大类"
               :show-overflow-tooltip="true">
             </el-table-column>
@@ -60,7 +60,7 @@
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-              prop="boxSpecUnit"
+              prop="boxSpecUnitName"
               label="单位"
               :show-overflow-tooltip="true">
             </el-table-column>
@@ -70,7 +70,7 @@
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-              prop="productSpecUnit"
+              prop="productSpecUnitName"
               label="单位"
               :show-overflow-tooltip="true">
             </el-table-column>
@@ -226,7 +226,7 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item.deviceId)
+        this.multipleSelection.push(item.id)
       })
     },
     // 序号

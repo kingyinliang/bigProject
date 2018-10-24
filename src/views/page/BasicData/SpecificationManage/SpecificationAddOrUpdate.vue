@@ -6,17 +6,17 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：" prop="material">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%" @change="setBrand">
             <el-option
               v-for="item in SerchSapList"
-              :key="item.sapCode+' '+item.itemName"
-              :label="item.sapCode+' '+item.itemName"
-              :value="item.sapCode+' '+item.itemName">
+              :key="item.sapCode+' '+item.itemName+' '+item.kondm"
+              :label="item.sapCode+' '+item.itemName+' '+item.kondm"
+              :value="item.sapCode+' '+item.itemName+' '+item.kondm">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="品牌：" prop="brand">
-          <el-input v-model="dataForm.brand" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.brand" placeholder="手动输入" disabled></el-input>
         </el-form-item>
         <el-form-item label="大类：" prop="largeClass">
           <el-select v-model="dataForm.largeClass" filterable placeholder="请选择" style="width: 100%">
@@ -103,6 +103,10 @@ export default {
     this.GetUnit()
   },
   methods: {
+    // 设置品牌
+    setBrand (val) {
+      this.dataForm.brand = val.split(' ')[2]
+    },
     // 大类下拉
     GetLargeClass () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=category`, 'POST').then(({data}) => {
@@ -144,8 +148,9 @@ export default {
     dataFormSubmit () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          this.dataForm.materialCode = this.dataForm.material.substring(0, this.dataForm.material.indexOf(' '))
-          this.dataForm.materialName = this.dataForm.material.substring(this.dataForm.material.indexOf(' ') + 1)
+          this.dataForm.materialCode = this.dataForm.material.split(' ')[0]
+          this.dataForm.materialName = this.dataForm.material.split(' ')[1]
+          this.dataForm.brand = this.dataForm.material.split(' ')[2]
           this.$http(`${!this.SpecificationId ? BASICDATA_API.SPECSAVE_API : BASICDATA_API.SPECUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
             if (data.code === 0) {
               this.$message({

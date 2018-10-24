@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="small" @click="GetList">查询</el-button>
-              <el-button type="primary" size="small" @click="GetList">密码重置</el-button>
+              <el-button type="primary" size="small" @click="PasswordReset ">密码重置</el-button>
               <el-button type="primary" size="small" @click="GetList">导出</el-button>
             </el-form-item>
           </el-form>
@@ -83,6 +83,13 @@ export default {
   mounted () {
   },
   methods: {
+    PasswordReset () {
+      this.$confirm('确认重置密码, 是否继续?', '重置密码', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {})
+    },
     GetList () {},
     // 表格选中
     handleSelectionChange (val) {
