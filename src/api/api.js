@@ -361,7 +361,15 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} SCHEDULELIST_API 失败信息
    */
-  LOGINFO_API: HOST + '/sys/scheduleLog/info'
+  LOGINFO_API: HOST + '/sys/scheduleLog/info',
+  /**
+   * @property {string} USERLISTPASS_API 用户管理
+   */
+  USERLISTPASS_API: HOST + '/sys/user/userManagementList',
+  /**
+   * @property {string} PASSWORDRESET_API 用户管理重置密码
+   */
+  PASSWORDRESET_API: HOST + '/sys/user/userManagementList'
 }
 /*
 *包装车间api

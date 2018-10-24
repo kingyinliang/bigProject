@@ -9,10 +9,10 @@
                 <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
-                <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                <el-button type="primary" size="small" @click="addOrupdate()">新增</el-button>
-                <el-button type="danger" @click="remove()" size="small">批量删除</el-button>
+                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:spec:listSpec')">查询</el-button>
+                <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:spec:listSpec')">高级查询</el-button>
+                <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:spec:saveSpec')">新增</el-button>
+                <el-button type="danger" @click="remove()" size="small" v-if="isAuth('sys:spec:delSpec')">批量删除</el-button>
               </el-form-item>
             </el-form>
           </el-row>
@@ -83,7 +83,7 @@
               width="60"
               label="操作">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:spec:updateSpec')">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>

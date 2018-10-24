@@ -1,15 +1,15 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col v-loading.fullscreen.lock="lodings" element-loading-text="加载中">
     <div class="main">
       <el-card>
         <el-row>
-          <el-form :inline="true" :model="capacity" size="small" label-width="68px" class="topforms2">
+          <el-form :inline="true" :model="dataForm" size="small" label-width="68px" class="topforms2">
             <el-form-item>
-              <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
+              <el-input v-model="dataForm.workNum" placeholder="用户名" suffix-icon="el-icon-search"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="GetList">查询</el-button>
-              <el-button type="primary" size="small" @click="PasswordReset ">密码重置</el-button>
+              <el-button type="primary" size="small" @click="GetList" v-if="isAuth('sys:user:userManagementList')">查询</el-button>
+              <el-button type="primary" size="small" @click="PasswordReset" v-if="isAuth('sys:user:reset')">密码重置</el-button>
               <el-button type="primary" size="small" @click="GetList">导出</el-button>
             </el-form-item>
           </el-form>
@@ -39,13 +39,14 @@
               width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                {{ scope.row.materialCode }} {{ scope.row.materialName }}
+                {{ `${scope.row.realName}（${scope.row.workNum}）` }}
               </template>
             </el-table-column>
             <el-table-column
               label="角色名称"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
+                <el-button style="padding: 0;" type="text" @click="addOrupdate(item)" v-if="isAuth('sys:user:userManagementList')" v-for="(item, index) in scope.row.roleName" :key="index">{{item}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -67,13 +68,16 @@
 </template>
 
 <script>
+import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
     return {
-      capacity: {
-        capacity: ''
+      lodings: false,
+      dataForm: {
+        workNum: ''
       },
+      UserListArr: [],
       UserList: [],
       currPage: 1,
       pageSize: 10,
@@ -81,6 +85,7 @@ export default {
     }
   },
   mounted () {
+    this.GetList()
   },
   methods: {
     PasswordReset () {
@@ -90,7 +95,28 @@ export default {
         type: 'warning'
       }).then(() => {})
     },
-    GetList () {},
+    dataPro (num) {
+      this.UserList = this.UserListArr.slice((num - 1) * this.pageSize, num * this.pageSize)
+      this.totalCount = this.UserListArr.length
+      this.currPage = num
+    },
+    GetList () {
+      this.lodings = true
+      this.$http(`${SYSTEMSETUP_API.USERLISTPASS_API}`, 'POST', {
+        workNum: this.dataForm.workNum
+      }).then(({data}) => {
+        this.lodings = false
+        if (data.code === 0) {
+          this.UserListArr = data.page
+          this.dataPro(1)
+          // this.totalCount = data.page.totalCount
+          // this.currPage = data.page.currPage
+          // this.pageSize = data.page.pageSize
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 表格选中
     handleSelectionChange (val) {
       this.multipleSelection = []
@@ -110,7 +136,7 @@ export default {
     // 跳转页数
     handleCurrentChange (val) {
       this.currPage = val
-      this.GetList()
+      this.dataPro(val)
     }
   },
   computed: {},
