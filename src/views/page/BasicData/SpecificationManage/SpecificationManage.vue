@@ -4,12 +4,12 @@
       <el-card>
         <div class="clearfix">
           <el-row style="float: right">
-            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
+            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="GetList(true)" @submit.native.prevent>
               <el-form-item>
                 <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:spec:listSpec')">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:spec:listSpec')">查询</el-button>
                 <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:spec:listSpec')">高级查询</el-button>
                 <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:spec:saveSpec')">新增</el-button>
                 <el-button type="danger" @click="remove()" size="small" v-if="isAuth('sys:spec:delSpec')">批量删除</el-button>
@@ -124,7 +124,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="GetList(form)">确定</el-button>
+          <el-button type="primary" @click="GetList(true)">确定</el-button>
         </span>
     </el-dialog>
   </el-col>
@@ -165,7 +165,10 @@ export default {
     })
   },
   methods: {
-    GetList () {
+    GetList (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.$http(`${BASICDATA_API.SPECLIST_API}`, 'POST', {
         brand: this.form.brand,
         materialCode: this.form.materialCode,

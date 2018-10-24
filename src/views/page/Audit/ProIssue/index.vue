@@ -47,7 +47,7 @@
                     <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
                   </el-form-item>
                   <el-form-item style="margin-left: 67px;">
-                    <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('verify:material:list')">查询</el-button>
+                    <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:material:list')">查询</el-button>
                     <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('verify:material:update')">审核通过</el-button>
                     <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
                   </el-form-item>
@@ -322,7 +322,10 @@ export default {
   },
   methods: {
     // 获取列表
-    GetAuditList () {
+    GetAuditList (st) {
+      if (st) {
+        this.plantList.currPage = 1
+      }
       this.plantList.headerTxt = ''
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITISSUELIST_API}`, 'POST', this.plantList).then(({data}) => {

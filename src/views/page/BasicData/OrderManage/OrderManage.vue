@@ -10,12 +10,12 @@
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys(true)" @submit.native.prevent>
                 <el-form-item>
                   <el-input v-model="form.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="querys()" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
+                  <el-button type="primary" size="small" @click="querys(true)" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="visible = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
                   <el-button type="primary" size="small" @click="sapOrderUpdate" v-if="isAuth('sys:sapOrder:syncOrderManual')">同步</el-button>
                 </el-form-item>
@@ -149,7 +149,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="querys(form)">确定</el-button>
+          <el-button type="primary" @click="querys(true)">确定</el-button>
         </span>
       </el-dialog>
     </el-col>
@@ -215,7 +215,10 @@ export default {
       })
     },
     // 查询
-    querys () {
+    querys (st) {
+      if (st) {
+        this.form.currPage = 1
+      }
       this.GetOrderList()
     },
     // 改变每页条数

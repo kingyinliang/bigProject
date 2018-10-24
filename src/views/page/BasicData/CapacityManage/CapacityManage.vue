@@ -9,7 +9,7 @@
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList(false,true)" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -156,10 +156,13 @@ export default {
       })
     },
     // 获取产能列表
-    GetList (data) {
+    GetList (data, st) {
       this.loginstatus = true
       if (data) {
         this.deptId = data.deptId
+      }
+      if (st) {
+        this.plantList.currPage = 1
       }
       this.$http(`${BASICDATA_API.CAPALIST_API}`, 'POST', {
         deptId: this.deptId,

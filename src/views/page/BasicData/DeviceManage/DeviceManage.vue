@@ -10,12 +10,12 @@
       <el-card>
         <el-row class="clearfix">
           <div style="float: right">
-            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()" @submit.native.prevent>
+            <el-form :inline="true" :model="param" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList(true)" @submit.native.prevent>
               <el-form-item>
                 <el-input v-model="param.param" placeholder="设备编号" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="getList()" v-if="isAuth('sys:device:checkList')">查询</el-button>
+                <el-button type="primary" size="small" @click="getList(true)" v-if="isAuth('sys:device:checkList')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -139,7 +139,10 @@ export default {
       this.getList()
     },
     // 获取列表
-    getList () {
+    getList (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.$http(`${BASICDATA_API.DEVICELIST1_API}`, 'POST', {
         param: this.param.param,
         deptId: this.deptId,

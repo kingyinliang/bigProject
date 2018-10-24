@@ -39,7 +39,7 @@
         </el-col>
         <el-col style="width: 260px">
           <el-row>
-            <el-button type="primary" size="small" @click="GetMaintainList">查询</el-button>
+            <el-button type="primary" size="small" @click="GetMaintainList(true)">查询</el-button>
             <el-button type="primary" size="small" @click="save()" v-if="isAuth('sys:verifyJWZ:update')">保存</el-button>
             <el-button type="primary" size="small" @click="submit()" v-if="isAuth('sys:verifyJWZ:finished')">提交</el-button>
           </el-row>
@@ -255,7 +255,10 @@ export default {
   },
   methods: {
     // 获取列表
-    GetMaintainList () {
+    GetMaintainList (st) {
+      if (st) {
+        this.plantList.currPage = 1
+      }
       this.$http(`${MAINTAIN_API.MAINTAINLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.noMaintainList = data.page.list

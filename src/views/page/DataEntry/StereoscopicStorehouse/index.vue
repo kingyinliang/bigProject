@@ -10,7 +10,7 @@
     <el-card class="searchCard" style="margin: 0">
       <el-row type="flex">
         <el-col>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetLtkList()" @submit.native.prevent>
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetLtkList(true)" @submit.native.prevent>
             <el-form-item label="工厂：">
               <el-select v-model="plantList.factory" placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>
@@ -36,7 +36,7 @@
               <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
             <el-form-item style="margin-left: 67px;">
-              <el-button type="primary" size="small" @click="GetLtkList()">查询</el-button>
+              <el-button type="primary" size="small" @click="GetLtkList(true)">查询</el-button>
               <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyLTK:auditing')">审核不通过</el-button>
             </el-form-item>
@@ -360,7 +360,10 @@ export default {
       return false
     },
     // 获取列表
-    GetLtkList () {
+    GetLtkList (st) {
+      if (st) {
+        this.plantList.currPage = 1
+      }
       this.$http(`${LTK_API.LTKLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.LtkList = data.page.list
