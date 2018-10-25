@@ -1359,7 +1359,7 @@ export default {
       },
       countOutput: {},
       readyDate: {
-        classes: '白班',
+        classes: '多班',
         id: '',
         status: '',
         orderId: '',
@@ -1507,19 +1507,6 @@ export default {
         this.readyDate.midEndDate = null
         this.readyDate.midStartDate = null
         this.readyDate.midStartLineDate = null
-      } else {
-        this.readyDate.midCauseDate = null
-        this.readyDate.midChange = null
-        this.readyDate.midDinner = null
-        this.readyDate.midEndDate = null
-        this.readyDate.midStartDate = null
-        this.readyDate.midStartLineDate = null
-        this.readyDate.nightCauseDate = null
-        this.readyDate.nightChange = null
-        this.readyDate.nightDinner = null
-        this.readyDate.nightEndDate = null
-        this.readyDate.nightStartDate = null
-        this.readyDate.nightStartLineDate = null
       }
     },
     filterText (val) {
@@ -1576,7 +1563,10 @@ export default {
   methods: {
     isCauseChange (data) {
       if (data === '0') {
-        this.readyDate.classes = ''
+        this.readyDate.classes = '白班'
+      }
+      if (data === '1') {
+        this.readyDate.classes = '多班'
       }
     },
     tableRowClassName ({row, rowIndex}) {
@@ -2002,35 +1992,29 @@ export default {
     // 校验
     readyrul () {
       let ty = true
-      if (this.order.workShopName !== '组装车间2（礼盒）') {
-        if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
-          } else {
-            ty = false
-            this.$message.error('准备时间白班必填字段未填')
-            return false
-          }
-        } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {
-          } else {
-            ty = false
-            this.$message.error('准备时间中班必填字段未填')
-            return false
-          }
-        } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
-          } else {
-            ty = false
-            this.$message.error('准备时间夜班必填字段未填')
-            return false
-          }
-        } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
-          } else {
-            ty = false
-            this.$message.error('准备时间白班和夜班必填字段未填')
-            return false
-          }
+      if (this.readyDate.classes === '白班') {
+        if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          ty = false
+          this.$message.error('准备时间白班必填字段未填')
+          return false
+        }
+      } else if (this.readyDate.classes === '中班') {
+        if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          ty = false
+          this.$message.error('准备时间中班必填字段未填')
+          return false
+        }
+      } else if (this.readyDate.classes === '夜班') {
+        if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          ty = false
+          this.$message.error('准备时间夜班必填字段未填')
+          return false
+        }
+      } else if (this.readyDate.classes === '多班') {
+        if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          ty = false
+          this.$message.error('准备时间白班和夜班必填字段未填')
+          return false
         }
       }
       return ty
