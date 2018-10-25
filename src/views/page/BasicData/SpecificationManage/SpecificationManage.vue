@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
     <div class="main">
       <el-card>
         <div class="clearfix">
@@ -137,6 +137,7 @@ export default {
   name: 'SpecificationManage',
   data () {
     return {
+      lodingS: false,
       SerchSapList: [],
       SpecificationList: [],
       multipleSelection: [],
@@ -166,6 +167,7 @@ export default {
   },
   methods: {
     GetList (st) {
+      this.lodingS = true
       if (st) {
         this.currPage = 1
       }
@@ -185,6 +187,9 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.visible = false
+        this.lodingS = false
+        this.visible1 = false
       })
     },
     // 新增  修改

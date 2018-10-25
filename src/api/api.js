@@ -1,9 +1,9 @@
-// let HOST = 'http://localhost:8080'
+// let HOST = 'http://localhost:8081'
 // let HOST = 'http://10.8.4.153:50080/api'
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.41:8080'
+// let HOST = 'http://10.10.5.63:8080'
 // let HOST = 'http://10.1.9.133:8080'
 // let HOST = 'http://10.10.1.58:8080'
 // HOST
@@ -369,7 +369,7 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} PASSWORDRESET_API 用户管理重置密码
    */
-  PASSWORDRESET_API: HOST + '/sys/user/userManagementList'
+  PASSWORDRESET_API: HOST + '/sys/user/reset'
 }
 /*
 *包装车间api
@@ -539,9 +539,13 @@ export const AUDIT_API = {
    */
   AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
   /**
-   * @property {string} GOAUDIT_API 生产入库审核
+   * @property {string} GOAUDIT_API 生产入库审核sys/verifyInStorage/update
    */
   GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
+  /**
+   * @property {string} GOAUDIT_API 生产入库修改
+   */
+  INUPDATE_API: HOST + '/sys/verifyInStorage/update',
   /**
    * @property {string} AUDITHOURSLIST_API 生产报工列表
    */
