@@ -285,7 +285,7 @@ export default {
       this.plantList.workshop = ''
       this.plantList.productline = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {

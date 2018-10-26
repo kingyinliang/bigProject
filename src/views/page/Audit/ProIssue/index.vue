@@ -159,6 +159,7 @@
             <el-table-column
               prop="workShopRemark"
               label="车间备注"
+              :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
             <el-table-column
@@ -365,7 +366,7 @@ export default {
       this.plantList.workShop = ''
       this.plantList.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {

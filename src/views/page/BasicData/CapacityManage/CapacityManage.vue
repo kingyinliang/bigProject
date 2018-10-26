@@ -162,7 +162,7 @@ export default {
         this.deptId = data.deptId
       }
       if (st) {
-        this.plantList.currPage = 1
+        this.currPage = 1
       }
       this.$http(`${BASICDATA_API.CAPALIST_API}`, 'POST', {
         deptId: this.deptId,

@@ -346,7 +346,7 @@ export default {
       this.plantList.workShop = ''
       this.plantList.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -464,6 +464,7 @@ export default {
             item.headerTxt = this.plantList.headerTxt
           })
           this.lodingStatus1 = true
+          console.log(this.multipleSelection)
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.plantList.headerTxt = ''
             this.lodingStatus1 = false

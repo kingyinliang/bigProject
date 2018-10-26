@@ -50,8 +50,7 @@
   </div>
   <div class="main" style="padding-top: 0px">
     <el-card class="tableCard">
-      <!--<el-row style="margin-bottom: 13px;float: right">-->
-        <!--<el-button>编辑</el-button>-->
+        <el-button type="primary" size="small" @click="visible1 = true">打印</el-button>
         <!--<el-button type="primary" size="small" @click="ltk">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
@@ -171,12 +170,18 @@
       </span>
   </el-dialog>
   <el-dialog
-    width="760px"
+    width="310mm"
     :close-on-click-modal="false"
     :visible.sync="visible1">
-    <a :href="'/static/web/viewer.html?file=' + pdf" target="_blank">打印</a>
-    <div id="printOrder-data" style="width: 100%; display: none">
-      <div style="transform: scale(0.4);width: 1700px;margin-left: -490px;margin-top: -100px">
+    <!--<a :href="'/static/web/viewer.html?file=' + pdf" target="_blank">打印</a>-->
+    <div class="clearfix">
+      <div style="float: right">
+        <el-button @click="visible1 = false">取消</el-button>
+        <el-button type="primary" @click="doPrint()">确定</el-button>
+      </div>
+    </div>
+    <div id="printOrder-data" style="margin: auto">
+      <div id="printMain">
         <el-table
           ref="table1"
           :fit="true"
@@ -185,80 +190,57 @@
           border
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
-            label="生产订单号"
-            width="120">
+            label="生产订单号">
             <template slot-scope="scope">{{ scope.row.orderNo }}</template>
           </el-table-column>
           <el-table-column
+            width="300mm"
             prop="name"
-            label="品项"
-            width="360">
+            label="品项">
             <template slot-scope="scope">
               <span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="batch"
-            label="生产批次"
-            width="105">
+            label="生产批次">
           </el-table-column>
           <el-table-column
+            width="80mm"
             prop="input"
-            label="订单入库量"
-            width="91">
+            label="订单入库量">
           </el-table-column>
           <el-table-column
+            width="90mm"
             prop="manSolid"
-            label="人工码垛数-立体库"
-            width="140">
+            label="人工码垛数-立体库">
           </el-table-column>
           <el-table-column
+            width="90mm"
             prop="aiShelves"
-            label="自动上架-立体库"
-            width="140">
+            label="自动上架-立体库">
           </el-table-column>
           <el-table-column
+            width="90mm"
             prop="aiSolid"
-            label="自动码垛-立体库"
-            width="140">
+            label="自动码垛-立体库">
           </el-table-column>
           <el-table-column
+            width="50mm"
             prop="unitName"
-            label="单位"
-            width="50">
+            label="单位">
           </el-table-column>
           <el-table-column
             prop="workShopMan"
-            label="车间确认人"
-            width="92">
+            label="车间确认人">
           </el-table-column>
           <el-table-column
             prop="ltkMan"
-            label="立体库确认人"
-            width="105">
-          </el-table-column>
-          <el-table-column
-            prop="memo"
-            label="审核意见"
-            width="78">
-          </el-table-column>
-          <el-table-column
-            prop="verifyDate"
-            label="审核时间"
-            width="220">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="备注"
-            width="50">
+            label="立体库确认人">
           </el-table-column>
         </el-table>
       </div>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible1 = false">取消</el-button>
-      <el-button type="primary" @click="doPrint()">确定</el-button>
-    </span>
   </el-dialog>
 </el-col>
 </template>
@@ -322,30 +304,31 @@ export default {
   },
   methods: {
     ltk () {
-      this.$http(`${MAIN_API.PRINTLTK_API}`, 'GET').then(({data}) => {
-        let blob = new Blob([data], {
-          type: `application/mspdf`
-        })
-        console.log(data)
-        let objectUrl = URL.createObjectURL(blob)
-        // let objectUrl = encodeURIComponent(data)
-        console.log(objectUrl)
-        window.open(`/static/web/viewer.html?file=${data}`)
-        // window.open(`http://10.1.9.133:8080/reports/printLtk`)
-        this.visible1 = true
-        // let blob = new Blob([data], {
-        //   type: `application/mpdf`
-        // })
-        // console.log(URL.createObjectURL(blob))
-        // this.pdf = URL.createObjectURL(blob)
-        // let objectUrl = URL.createObjectURL(blob)
-        // let link = document.createElement('a')
-        // let fname = `我的文档.pdf`
-        // link.href = objectUrl
-        // link.setAttribute('download', fname)
-        // document.body.appendChild(link)
-        // link.click()
-      })
+      window.open(`${MAIN_API.PRINTLTK_API}`)
+      // this.$http(`${MAIN_API.PRINTLTK_API}`, 'GET').then(({data}) => {
+      //   let blob = new Blob([data], {
+      //     type: `application/mspdf`
+      //   })
+      //   console.log(data)
+      //   let objectUrl = URL.createObjectURL(blob)
+      //   // let objectUrl = encodeURIComponent(data)
+      //   console.log(objectUrl)
+      //   window.open(`/static/web/viewer.html?file=${data}`)
+      //   // window.open(`http://10.1.9.133:8080/reports/printLtk`)
+      //   this.visible1 = true
+      //   // let blob = new Blob([data], {
+      //   //   type: `application/mpdf`
+      //   // })
+      //   // console.log(URL.createObjectURL(blob))
+      //   // this.pdf = URL.createObjectURL(blob)
+      //   // let objectUrl = URL.createObjectURL(blob)
+      //   // let link = document.createElement('a')
+      //   // let fname = `我的文档.pdf`
+      //   // link.href = objectUrl
+      //   // link.setAttribute('download', fname)
+      //   // document.body.appendChild(link)
+      //   // link.click()
+      // })
     },
     // 打印
     doPrint () {
@@ -390,7 +373,7 @@ export default {
       this.plantList.workshop = ''
       this.plantList.productline = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -505,6 +488,19 @@ export default {
 
 </style>
 <style lang="scss">
+  #printMain{
+    width: 297mm;
+    height: 210mm;
+    td,th,tr{
+      font-size: 12px;
+      text-align: center!important;
+    }
+    table{
+      td{
+        padding: 2px 5px;
+      }
+    }
+  }
   .searchCard { margin-bottom: 0; }
   .searchCard, .tableCard {
     position: relative;

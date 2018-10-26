@@ -84,11 +84,11 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="是否停线交接班：" style="float: right;width: 230px">
-                      <el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <el-option label="是" value="1"></el-option>
-                        <el-option label="否" value="0"></el-option>
-                      </el-select>
-                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
+                      <!--<el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">-->
+                        <!--<el-option label="是" value="1"></el-option>-->
+                        <!--<el-option label="否" value="0"></el-option>-->
+                      <!--</el-select>-->
+                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" disabled>
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                       </el-select>

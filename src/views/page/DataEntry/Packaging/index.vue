@@ -128,7 +128,7 @@ export default {
     Getdeptbyid (id, typ) {
       this.plantList.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (this.PkgworkShop === '' && this.workshop.length === 1) {
