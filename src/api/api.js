@@ -3,12 +3,12 @@
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.41:8080'
-// let HOST = 'http://10.1.9.133:8080'
+// let HOST = 'http://10.10.5.63:8080'
+// let HOST = 'http://10.10.1.13:8080'
 // let HOST = 'http://10.10.1.58:8080'
 // HOST
-// let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
-let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
+let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
+// let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
 // let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
 /*
 *MAINapi
@@ -104,11 +104,11 @@ export const BASICDATA_API = {
   SAPDETAIL_API: HOST + '/sys/sapmaterialitem/info',
   // 容器管理
   /**
-   * @property {string} CONTAINERLIST_API 容器列表
+   * @property {string} CONTAINERLIST_API 容器列表 不带权限
    */
   CONTAINERLIST_API: HOST + '/sys/holder/list',
   /**
-   * @property {string} CONTAINERLIST_API 容器列表
+   * @property {string} CONTAINERLIST_API 容器列表 带权限
    */
   CONTAINERLIST1_API: HOST + '/sys/holder/checkList',
   /**
@@ -129,11 +129,11 @@ export const BASICDATA_API = {
   CONTAINERDEL_API: HOST + '/sys/holder/delete',
   // 设备管理
   /**
-   * @property {string} CONTAINERDEL_API 设备列表
+   * @property {string} CONTAINERDEL_API 设备列表 不带权限
    */
   DEVICELIST_API: HOST + '/sys/device/list',
   /**
-   * @property {string} DEVICELIST1_API 设备列表
+   * @property {string} DEVICELIST1_API 设备列表 带权限
    */
   DEVICELIST1_API: HOST + '/sys/device/checkList',
   /**
@@ -145,7 +145,7 @@ export const BASICDATA_API = {
    */
   DEVICEADD_API: HOST + '/sys/device/save',
   /**
-   * @property {string} DEVICEADD_API 设备新增
+   * @property {string} DEVICEADD_API 设备修改
    */
   DEVICEUPDATE_API: HOST + '/sys/device/update',
   // 订单管理
@@ -166,11 +166,15 @@ export const BASICDATA_API = {
    */
   LOCATIONDEL_API: HOST + '/sys/sto/delete',
   /**
-   * @property {string} LOCATIONDEL_API 库位删除
+   * @property {string} LOCATIONDEL_API 获取全部物料
    */
   SERCHSAPLIST_API: HOST + '/sys/sapmaterial/findAllList',
   /**
-   * @property {string} SAPORDERUPDATE_API 库位删除
+   * @property {string} FINDSAP_API 获取全部物料
+   */
+  FINDSAP_API: HOST + '/sys/sapmaterialitem/productList',
+  /**
+   * @property {string} SAPORDERUPDATE_API 同步订单
    */
   SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',
   /**
@@ -184,7 +188,23 @@ export const BASICDATA_API = {
   /**
    * @property {string} CAPADEL_API 产能删除
    */
-  CAPADEL_API: HOST + '/sys/capacity/deleteCapa'
+  CAPADEL_API: HOST + '/sys/capacity/deleteCapa',
+  /**
+   * @property {string} SPECLIST_API 规格列表
+   */
+  SPECLIST_API: HOST + '/sys/spec/listSpec',
+  /**
+   * @property {string} SPECSAVE_API 规格新增
+   */
+  SPECSAVE_API: HOST + '/sys/spec/saveSpec',
+  /**
+   * @property {string} SPECUPDATE_API 规格修改
+   */
+  SPECUPDATE_API: HOST + '/sys/spec/updateSpec',
+  /**
+   * @property {string} SPECDEL_API 规格删除
+   */
+  SPECDEL_API: HOST + '/sys/spec/delSpec'
 }
 /*
 *系统设置api
@@ -341,7 +361,15 @@ export const SYSTEMSETUP_API = {
   /**
    * @property {string} SCHEDULELIST_API 失败信息
    */
-  LOGINFO_API: HOST + '/sys/scheduleLog/info'
+  LOGINFO_API: HOST + '/sys/scheduleLog/info',
+  /**
+   * @property {string} USERLISTPASS_API 用户管理
+   */
+  USERLISTPASS_API: HOST + '/sys/user/userManagementList',
+  /**
+   * @property {string} PASSWORDRESET_API 用户管理重置密码
+   */
+  PASSWORDRESET_API: HOST + '/sys/user/reset'
 }
 /*
 *包装车间api
@@ -511,9 +539,13 @@ export const AUDIT_API = {
    */
   AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
   /**
-   * @property {string} GOAUDIT_API 生产入库审核
+   * @property {string} GOAUDIT_API 生产入库审核sys/verifyInStorage/update
    */
   GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
+  /**
+   * @property {string} GOAUDIT_API 生产入库修改
+   */
+  INUPDATE_API: HOST + '/sys/verifyInStorage/update',
   /**
    * @property {string} AUDITHOURSLIST_API 生产报工列表
    */

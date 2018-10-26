@@ -9,7 +9,7 @@
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList(false,true)" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -135,9 +135,9 @@ export default {
   },
   mounted () {
     this.getTree()
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
-        this.SerchSapList = data.allList
+        this.SerchSapList = data.list
       } else {
         this.$message.error(data.msg)
       }
@@ -156,10 +156,13 @@ export default {
       })
     },
     // 获取产能列表
-    GetList (data) {
+    GetList (data, st) {
       this.loginstatus = true
       if (data) {
         this.deptId = data.deptId
+      }
+      if (st) {
+        this.currPage = 1
       }
       this.$http(`${BASICDATA_API.CAPALIST_API}`, 'POST', {
         deptId: this.deptId,
@@ -201,9 +204,9 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$message.error('请选择要删除的产能')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('确认删除该物料产能, 是否继续?', '删除产能', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

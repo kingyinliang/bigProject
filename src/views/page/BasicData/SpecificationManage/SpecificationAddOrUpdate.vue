@@ -5,30 +5,42 @@
     :visible.sync="visible">
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
-        <el-form-item label="物料：">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%">
+        <el-form-item label="物料：" prop="material">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%" @change="setBrand">
             <el-option
               v-for="item in SerchSapList"
-              :key="item.materialCode+' '+item.materialName"
-              :label="item.materialCode+' '+item.materialName"
-              :value="item.materialCode+' '+item.materialName">
+              :key="item.sapCode+' '+item.itemName+' '+item.kondm"
+              :label="item.sapCode+' '+item.itemName+' '+item.kondm"
+              :value="item.sapCode+' '+item.itemName+' '+item.kondm">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="品牌：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+        <el-form-item label="品牌：" prop="brand">
+          <el-input v-model="dataForm.brand" placeholder="手动输入" disabled></el-input>
         </el-form-item>
-        <el-form-item label="大类：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+        <el-form-item label="大类：" prop="largeClass">
+          <el-select v-model="dataForm.largeClass" filterable placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in largeClass" :key="item.code" :label="item.value" :value="item.code"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="箱规格：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+        <el-form-item label="箱规格：" prop="boxSpec">
+          <el-input v-model="dataForm.boxSpec" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="瓶规格：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+        <el-form-item label="单位：" prop="boxSpecUnit">
+          <el-select v-model="dataForm.boxSpecUnit" filterable placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="维护人：">
-          <el-input v-model="dataForm.workNumTemp" placeholder="手动输入"></el-input>
+        <el-form-item label="瓶规格：" prop="productSpec">
+          <el-input v-model="dataForm.productSpec" placeholder="手动输入"></el-input>
+        </el-form-item>
+        <el-form-item label="单位：" prop="productSpecUnit">
+          <el-select v-model="dataForm.productSpecUnit" filterable placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="维护人：" v-if="SpecificationId">
+          <el-input v-model="dataForm.changer" placeholder="手动输入" disabled></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -40,31 +52,106 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'SpecificationAddOrUpdate',
   data () {
     return {
       visible: false,
       SpecificationId: '',
-      dataForm: {},
-      dataRule: {}
+      largeClass: [],
+      Unit: [],
+      dataForm: {
+        material: '',
+        brand: '',
+        largeClass: '',
+        boxSpec: '',
+        boxSpecUnit: '',
+        productSpec: '',
+        productSpecUnit: ''
+      },
+      dataRule: {
+        material: [
+          { required: true, message: '物料不能为空', trigger: 'blur' }
+        ],
+        brand: [
+          { required: true, message: '品牌不能为空', trigger: 'blur' }
+        ],
+        largeClass: [
+          { required: true, message: '大类不能为空', trigger: 'blur' }
+        ],
+        boxSpec: [
+          { required: true, message: '箱规格不能为空', trigger: 'blur' }
+        ],
+        boxSpecUnit: [
+          { required: true, message: '箱规格单位不能为空', trigger: 'blur' }
+        ],
+        productSpec: [
+          { required: true, message: '瓶规格不能为空', trigger: 'blur' }
+        ],
+        productSpecUnit: [
+          { required: true, message: '瓶规格单位不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   props: {
     SerchSapList: {}
   },
   mounted () {
+    this.GetLargeClass()
+    this.GetUnit()
   },
   methods: {
+    // 设置品牌
+    setBrand (val) {
+      this.dataForm.brand = val.split(' ')[2]
+    },
+    // 大类下拉
+    GetLargeClass () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=category`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.largeClass = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 单位下拉
+    GetUnit () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=spe_unit`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.Unit = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     init (data) {
-      if (data) {}
+      if (data) {
+        this.SpecificationId = data.id
+        this.dataForm.id = data.id
+        this.dataForm.material = data.materialCode + ' ' + data.materialName
+        this.dataForm.brand = data.brand
+        this.dataForm.largeClass = data.largeClass
+        this.dataForm.boxSpec = data.boxSpec
+        this.dataForm.boxSpecUnit = data.boxSpecUnit
+        this.dataForm.productSpec = data.productSpec
+        this.dataForm.productSpecUnit = data.productSpecUnit
+        this.dataForm.changer = data.changer
+      } else {
+        this.SpecificationId = ''
+        this.dataForm = {}
+      }
       this.visible = true
     },
     dataFormSubmit () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          this.$http(`${BASICDATA_API.CAPAADDORUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
+          this.dataForm.materialCode = this.dataForm.material.split(' ')[0]
+          this.dataForm.materialName = this.dataForm.material.split(' ')[1]
+          this.dataForm.brand = this.dataForm.material.split(' ')[2]
+          this.$http(`${!this.SpecificationId ? BASICDATA_API.SPECSAVE_API : BASICDATA_API.SPECUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
             if (data.code === 0) {
               this.$message({
                 message: '操作成功',

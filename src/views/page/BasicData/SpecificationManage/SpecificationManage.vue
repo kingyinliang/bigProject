@@ -1,18 +1,18 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
     <div class="main">
       <el-card>
         <div class="clearfix">
           <el-row style="float: right">
-            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
+            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="GetList(true)" @submit.native.prevent>
               <el-form-item>
-                <el-input v-model="form.orderNo" placeholder="订单号" suffix-icon="el-icon-search"></el-input>
+                <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
-                <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                <el-button type="primary" size="small" @click="addOrupdate">新增</el-button>
-                <el-button type="danger" @click="remove()" size="small">批量删除</el-button>
+                <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:spec:listSpec')">查询</el-button>
+                <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:spec:listSpec')">高级查询</el-button>
+                <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:spec:saveSpec')">新增</el-button>
+                <el-button type="danger" @click="remove()" size="small" v-if="isAuth('sys:spec:delSpec')">批量删除</el-button>
               </el-form-item>
             </el-form>
           </el-row>
@@ -45,52 +45,45 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="brand"
               label="品牌"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="largeClassName"
               label="大类"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="boxSpec"
               label="箱规格"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="boxSpecUnitName"
               label="单位"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="productSpec"
               label="瓶规格"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="productSpecUnitName"
               label="单位"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
+              prop="changer"
               label="维护人"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-              </template>
             </el-table-column>
             <el-table-column
-              label="操作"
-              :show-overflow-tooltip="true">
+              width="60"
+              label="操作">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:user:update') && isAuth('sys:user:info')">编辑</el-button>
+                <el-button style="padding: 0;" type="text" @click="addOrupdate(scope.row)" v-if="isAuth('sys:spec:updateSpec')">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -116,56 +109,89 @@
       <div class="formdata">
         <el-form :model="form" size="small" label-width="110px" class="orderdialog">
           <el-form-item label="物料：">
-            <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
-          </el-form-item>
-          <el-form-item label="品牌：">
             <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
           </el-form-item>
+          <el-form-item label="品牌：">
+            <el-input v-model="form.brand" placeholder="手工录入"></el-input>
+          </el-form-item>
           <el-form-item label="箱规格：">
-            <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
+            <el-input v-model="form.boxSpec" placeholder="手工录入"></el-input>
           </el-form-item>
           <el-form-item label="瓶规格：">
-            <el-input v-model="form.dispatchMan" placeholder="手工录入"></el-input>
+            <el-input v-model="form.productSpec" placeholder="手工录入"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="GetList(form)">确定</el-button>
+          <el-button type="primary" @click="GetList(true)">确定</el-button>
         </span>
     </el-dialog>
   </el-col>
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API} from '@/api/api'
 import SpecificationAddOrUpdate from './SpecificationAddOrUpdate'
 export default {
   name: 'SpecificationManage',
   data () {
     return {
+      lodingS: false,
       SerchSapList: [],
       SpecificationList: [],
       multipleSelection: [],
       visible: false,
       visible1: false,
-      form: {},
+      form: {
+        brand: '',
+        materialCode: '',
+        boxSpec: '',
+        productSpec: ''
+      },
       currPage: 1,
       pageSize: 10,
       totalCount: 1
     }
   },
   mounted () {
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+    this.GetList()
+    // 物料下拉
+    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
-        this.SerchSapList = data.allList
+        this.SerchSapList = data.list
       } else {
         this.$message.error(data.msg)
       }
     })
   },
   methods: {
-    GetList () {},
+    GetList (st) {
+      this.lodingS = true
+      if (st) {
+        this.currPage = 1
+      }
+      this.$http(`${BASICDATA_API.SPECLIST_API}`, 'POST', {
+        brand: this.form.brand,
+        materialCode: this.form.materialCode,
+        boxSpec: this.form.boxSpec,
+        productSpec: this.form.productSpec,
+        currPage: JSON.stringify(this.currPage),
+        pageSize: JSON.stringify(this.pageSize)
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.SpecificationList = data.page.list
+          this.currPage = data.page.currPage
+          this.pageSize = data.page.pageSize
+          this.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.visible = false
+        this.lodingS = false
+        this.visible1 = false
+      })
+    },
     // 新增  修改
     addOrupdate (data) {
       this.visible = true
@@ -176,14 +202,14 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$message.error('请选择要删除的规格')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('确认删除规格, 是否继续?', '删除规格', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          this.$http(`${BASICDATA_API.SPECDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
             console.log(data)
             if (data.code === 0) {
               this.$message({
@@ -208,7 +234,7 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item.deviceId)
+        this.multipleSelection.push(item.id)
       })
     },
     // 序号

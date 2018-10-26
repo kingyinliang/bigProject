@@ -84,11 +84,11 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="是否停线交接班：" style="float: right;width: 230px">
-                      <el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <el-option label="是" value="1"></el-option>
-                        <el-option label="否" value="0"></el-option>
-                      </el-select>
-                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
+                      <!--<el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">-->
+                        <!--<el-option label="是" value="1"></el-option>-->
+                        <!--<el-option label="否" value="0"></el-option>-->
+                      <!--</el-select>-->
+                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" disabled>
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                       </el-select>
@@ -1507,19 +1507,6 @@ export default {
         this.readyDate.midEndDate = null
         this.readyDate.midStartDate = null
         this.readyDate.midStartLineDate = null
-      } else {
-        this.readyDate.midCauseDate = null
-        this.readyDate.midChange = null
-        this.readyDate.midDinner = null
-        this.readyDate.midEndDate = null
-        this.readyDate.midStartDate = null
-        this.readyDate.midStartLineDate = null
-        this.readyDate.nightCauseDate = null
-        this.readyDate.nightChange = null
-        this.readyDate.nightDinner = null
-        this.readyDate.nightEndDate = null
-        this.readyDate.nightStartDate = null
-        this.readyDate.nightStartLineDate = null
       }
     },
     filterText (val) {
@@ -1576,7 +1563,10 @@ export default {
   methods: {
     isCauseChange (data) {
       if (data === '0') {
-        this.readyDate.classes = ''
+        this.readyDate.classes = '白班'
+      }
+      if (data === '1') {
+        this.readyDate.classes = '多班'
       }
     },
     tableRowClassName ({row, rowIndex}) {

@@ -10,12 +10,12 @@
       <el-card>
         <div class="clearfix">
           <el-row style="float: right">
-            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
+            <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="GetLocationList(true)" @submit.native.prevent>
               <el-form-item>
                 <el-input v-model="form.deptName" placeholder="车间" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetLocationList()" v-if="isAuth('sys:sto:list')">查询</el-button>
+                <el-button type="primary" size="small" @click="GetLocationList(true)" v-if="isAuth('sys:sto:list')">查询</el-button>
                 <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sto:list')">高级查询</el-button>
                 <el-button type="primary" size="small" @click="addLocation()" v-if="isAuth('sys:sto:save')">新增</el-button>
                 <el-button type="danger" size="small" @click="remove()" v-if="isAuth('sys:sto:delete')">批量删除</el-button>
@@ -117,10 +117,10 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible1 = false">取消</el-button>
-        <el-button type="primary" @click="GetLocationList()">确定</el-button>
+        <el-button type="primary" @click="GetLocationList(true)">确定</el-button>
       </span>
     </el-dialog>
-    <location-add v-if="visible" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
+    <location-add v-if="visible" :SerchSapList="SerchSapList" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
   </el-col>
 </template>
 
@@ -144,6 +144,7 @@ export default {
       multipleSelection: [],
       sapList: [],
       workshop: [],
+      SerchSapList: [],
       currPage: 1,
       pageSize: 10,
       totalCount: 0
@@ -165,6 +166,13 @@ export default {
         this.$message.error(data.msg)
       }
     })
+    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.allList
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
   },
   methods: {
     // 序号
@@ -172,7 +180,10 @@ export default {
       return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
     },
     // 获取库位列表
-    GetLocationList () {
+    GetLocationList (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.$http(`${BASICDATA_API.LOCATIONLIST_API}`, 'POST', {
         deptId: this.form.deptId,
         deptName: this.form.deptName,

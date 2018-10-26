@@ -47,7 +47,7 @@
                     <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
                   </el-form-item>
                   <el-form-item style="margin-left: 67px;">
-                    <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
+                    <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
                     <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyInStorage:auditing')">审核通过</el-button>
                     <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyInStorage:auditing')">审核不通过</el-button>
                   </el-form-item>
@@ -313,7 +313,10 @@ export default {
   },
   methods: {
     // 获取列表
-    GetAuditList () {
+    GetAuditList (st) {
+      if (st) {
+        this.plantList.currPage = 1
+      }
       this.plantList.headerTxt = ''
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITLIST_API}`, 'POST', this.plantList).then(({data}) => {
@@ -343,7 +346,7 @@ export default {
       this.plantList.workShop = ''
       this.plantList.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -394,7 +397,7 @@ export default {
         row.pstngDate = this.plantList.pstngDate
         row.status = ''
         this.lodingStatus = true
-        this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', [row]).then(({data}) => {
+        this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus = false
           if (data.code === 0) {
             this.$message.success('操作成功')
@@ -461,6 +464,7 @@ export default {
             item.headerTxt = this.plantList.headerTxt
           })
           this.lodingStatus1 = true
+          console.log(this.multipleSelection)
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.plantList.headerTxt = ''
             this.lodingStatus1 = false
