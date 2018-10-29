@@ -2394,7 +2394,7 @@ export default {
             this.productUnit ? item.manSolidUnit = this.productUnit : item.manSolidUnit = this.basicUnit
             item.badUnit = this.basicUnit
             item.sampleUnit = this.basicUnit
-            this.productUnit ? item.outputUnit = this.productUnit : item.outputUnit = this.basicUnit
+            item.outputUnit = this.basicUnit
           }
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
