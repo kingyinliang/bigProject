@@ -1,15 +1,14 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col v-loading.fullscreen.lock="lodings" element-loading-text="加载中">
     <div class="main">
       <el-card>
         <el-row>
-          <el-form :inline="true" :model="capacity" size="small" label-width="68px" class="topforms2">
+          <el-form :inline="true" :model="dataForm" size="small" label-width="68px" class="topforms2">
             <el-form-item>
-              <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
+              <el-input v-model="dataForm.workNum" placeholder="用户名" suffix-icon="el-icon-search"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="GetList">查询</el-button>
-              <el-button type="primary" size="small" @click="GetList">密码重置</el-button>
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:user:userManagementList')">查询</el-button>
               <el-button type="primary" size="small" @click="GetList">导出</el-button>
             </el-form-item>
           </el-form>
@@ -19,15 +18,10 @@
             class="orderTable"
             ref="table1"
             border
-            @selection-change="handleSelectionChange"
             header-row-class-name="tableHead"
             :data="UserList"
             tooltip-effect="dark"
             style="width: 100%;margin-bottom: 20px">
-            <el-table-column
-              type="selection"
-              width="34">
-            </el-table-column>
             <el-table-column
               type="index"
               label="序号"
@@ -39,13 +33,22 @@
               width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                {{ scope.row.materialCode }} {{ scope.row.materialName }}
+                {{ `${scope.row.realName}（${scope.row.workNum}）` }}
               </template>
             </el-table-column>
             <el-table-column
               label="角色名称"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
+                <el-button style="padding: 0;" type="text" @click="addOrupdate(item.roleId)" v-if="isAuth('sys:user:userManagementList')" v-for="(item, index) in scope.row.roleName" :key="index">{{item.roleName}}</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="80"
+              label="操作">
+              <template slot-scope="scope">
+                <!--<el-button style="padding: 0;" type="text" @click="PasswordReset(scope.row.user_id)" v-if="isAuth('sys:user:reset')">重置密码</el-button>-->
+                <el-button style="padding: 0;" type="text" v-if="isAuth('sys:user:reset')">重置密码</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -67,13 +70,16 @@
 </template>
 
 <script>
+import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
     return {
-      capacity: {
-        capacity: ''
+      lodings: false,
+      dataForm: {
+        workNum: ''
       },
+      UserListArr: [],
       UserList: [],
       currPage: 1,
       pageSize: 10,
@@ -81,9 +87,48 @@ export default {
     }
   },
   mounted () {
+    this.GetList()
   },
   methods: {
-    GetList () {},
+    PasswordReset (id) {
+      this.$confirm('确认重置密码, 是否继续?', '重置密码', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${SYSTEMSETUP_API.PASSWORDRESET_API}`, 'POST', {userId: id}).then(({data}) => {
+          this.lodings = false
+          if (data.code === 0) {
+            this.$message.success('重置成功')
+            this.GetList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      })
+    },
+    dataPro (num) {
+      this.UserList = this.UserListArr.slice((num - 1) * this.pageSize, num * this.pageSize)
+      this.totalCount = this.UserListArr.length
+      this.currPage = num
+    },
+    GetList (st) {
+      if (st) {
+        this.currPage = 1
+      }
+      this.lodings = true
+      this.$http(`${SYSTEMSETUP_API.USERLISTPASS_API}`, 'POST', {
+        workNum: this.dataForm.workNum
+      }).then(({data}) => {
+        this.lodings = false
+        if (data.code === 0) {
+          this.UserListArr = data.page
+          this.dataPro(1)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 表格选中
     handleSelectionChange (val) {
       this.multipleSelection = []
@@ -103,7 +148,7 @@ export default {
     // 跳转页数
     handleCurrentChange (val) {
       this.currPage = val
-      this.GetList()
+      this.dataPro(val)
     }
   },
   computed: {},

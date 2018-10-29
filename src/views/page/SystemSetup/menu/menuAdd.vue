@@ -88,7 +88,7 @@ export default {
       }
     }
     return {
-      iconList: ['factory-shouye', 'factory-shezhi', 'factory-luru', 'factory-shenhe', 'factory-baobiao', 'factory-yibiao'],
+      iconList: ['factory-shouye', 'factory-shezhi', 'factory-luru', 'factory-shenhe', 'factory-baobiao', 'factory-yibiao', 'factory-icon-test'],
       visible: false,
       type: true,
       dataForm: {

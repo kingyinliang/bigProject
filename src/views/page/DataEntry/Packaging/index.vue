@@ -128,7 +128,7 @@ export default {
     Getdeptbyid (id, typ) {
       this.plantList.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (this.PkgworkShop === '' && this.workshop.length === 1) {
@@ -170,7 +170,6 @@ export default {
           productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
-          console.log(data.list[0].realOutput)
           if (data.code === 0) {
             row.orderNo2 = row.orderNo
             row.materialCode = data.list[0].materialCode
@@ -189,7 +188,6 @@ export default {
     },
     // 数据处理
     orderList (data) {
-      console.log(data)
       let result = []
       for (let i = 0; i < data.length; i++) {
         let orderNo = [data[i].orderNo]

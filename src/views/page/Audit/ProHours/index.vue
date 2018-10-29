@@ -31,7 +31,7 @@
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item style="margin-left: 67px;">
-                  <el-button type="primary" size="small" @click="GetAuditList()" v-if="isAuth('verify:time:list')">查询</el-button>
+                  <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:time:update')">审核通过</el-button>
                   <el-button type="danger" size="small" @click="repulseAutios" v-if="isAuth('verify:time:update')">审核不通过</el-button>
                 </el-form-item>
@@ -300,7 +300,10 @@ export default {
   },
   methods: {
     // 获取列表
-    GetAuditList () {
+    GetAuditList (st) {
+      if (st) {
+        this.plantList.currPage = 1
+      }
       this.dataListLoading = true
       this.$http(`${AUDIT_API.AUDITHOURSLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
@@ -341,7 +344,7 @@ export default {
       this.plantList.workShop = ''
       this.plantList.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}/${id}`, 'GET').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {

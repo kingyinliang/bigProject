@@ -10,14 +10,14 @@
         <el-card>
           <el-row type="flex">
             <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="85px" class="topforms" @keyup.enter.native="GetRoleList()">
+              <el-form :inline="true" :model="form" size="small" label-width="85px" class="topforms" @keyup.enter.native="GetRoleList(true)">
                 <el-form-item label="角色名称：">
                   <el-input v-model="form.username" placeholder="角色名称"></el-input>
                 </el-form-item>
               </el-form>
             </el-col>
             <el-col style="width: 200px">
-              <el-button type="primary" @click="GetRoleList()" size="small" v-if="isAuth('sys:role:list')">查询</el-button>
+              <el-button type="primary" @click="GetRoleList(true)" size="small" v-if="isAuth('sys:role:list')">查询</el-button>
               <el-button type="primary" @click="roleAddOrUpdate()" size="small" v-if="isAuth('sys:role:save')">新增</el-button>
             </el-col>
           </el-row>
@@ -132,7 +132,10 @@ export default {
       return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
     },
     // 获取角色列表
-    GetRoleList () {
+    GetRoleList (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.$http(`${SYSTEMSETUP_API.ROLELIST_API}`, 'POST', {
         roleName: this.form.username,
         currPage: JSON.stringify(this.currPage),

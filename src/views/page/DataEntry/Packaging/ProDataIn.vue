@@ -84,11 +84,11 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="是否停线交接班：" style="float: right;width: 230px">
-                      <el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
-                        <el-option label="是" value="1"></el-option>
-                        <el-option label="否" value="0"></el-option>
-                      </el-select>
-                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" v-else disabled>
+                      <!--<el-select style="width: 100px" @change="isCauseChange" v-model="readyDate.isCause" placeholder="是否停线交接班" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">-->
+                        <!--<el-option label="是" value="1"></el-option>-->
+                        <!--<el-option label="否" value="0"></el-option>-->
+                      <!--</el-select>-->
+                      <el-select style="width: 100px" v-model="readyDate.isCause" placeholder="是否停线交接班" disabled>
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                       </el-select>
@@ -1018,7 +1018,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="过滤日期">
                   <template slot-scope="scope">
                     <div class="required">
@@ -1048,7 +1048,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="换罐时间">
                   <template slot-scope="scope">
                     <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.changePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
@@ -1056,7 +1056,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  width="160"
+                  width="250"
                   label="用完时间">
                   <template slot-scope="scope">
                     <el-date-picker type="datetime" size="small" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.usePotDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker>
@@ -1507,19 +1507,6 @@ export default {
         this.readyDate.midEndDate = null
         this.readyDate.midStartDate = null
         this.readyDate.midStartLineDate = null
-      } else {
-        this.readyDate.midCauseDate = null
-        this.readyDate.midChange = null
-        this.readyDate.midDinner = null
-        this.readyDate.midEndDate = null
-        this.readyDate.midStartDate = null
-        this.readyDate.midStartLineDate = null
-        this.readyDate.nightCauseDate = null
-        this.readyDate.nightChange = null
-        this.readyDate.nightDinner = null
-        this.readyDate.nightEndDate = null
-        this.readyDate.nightStartDate = null
-        this.readyDate.nightStartLineDate = null
       }
     },
     filterText (val) {
@@ -1575,9 +1562,11 @@ export default {
   },
   methods: {
     isCauseChange (data) {
-      console.log(data)
       if (data === '0') {
-        this.readyDate.classes = ''
+        this.readyDate.classes = '白班'
+      }
+      if (data === '1') {
+        this.readyDate.classes = '多班'
       }
     },
     tableRowClassName ({row, rowIndex}) {
@@ -1834,8 +1823,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间人员列表')
-          console.log(data)
           this.uerDate = data.listForm
           this.UserAudit = data.listApproval
         } else {
@@ -1849,8 +1836,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间准备时间列表')
-          console.log(data)
           if (data.listForm.length > 0) {
             this.readyDate = data.listForm[0]
             this.ReadAudit = data.listApproval
@@ -1864,8 +1849,6 @@ export default {
     GetpkgExc () {
       this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: this.orderId}).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间异常记录列表')
-          console.log(data)
           this.ExcDate = data.listForm
         } else {
           this.$message.error(data.msg)
@@ -1879,8 +1862,6 @@ export default {
         isPkgThree: this.order.properties === '二合一&礼盒产线' ? 'twoAndOne' : this.order.workShopName === '包装三车间' ? 'isPkgThree' : ''
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间生产入库列表')
-          console.log(data)
           this.InDate = data.plist
           this.InVlist = data.vlist
           this.InAudit = data.vrlist
@@ -1928,18 +1909,16 @@ export default {
       })
     },
     // 获取包装车间物料领用列表
-    GetpkgSap (str) {
+    GetpkgSap (resolve) {
       this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间物料领用列表')
-          console.log(data)
           this.listbomP = data.listFormP
           this.listbomS = data.listFormS
           this.SapAudit = data.listApproval
-          if (str) {
-            this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
           }
           let sub = 0
           let che = 0
@@ -1969,10 +1948,10 @@ export default {
           })
           if (no > 0) {
             this.Sapstatus = 'noPass'
-          } else if (sub > 0) {
-            this.Sapstatus = 'submit'
           } else if (sav > 0) {
             this.Sapstatus = 'saved'
+          } else if (sub > 0) {
+            this.Sapstatus = 'submit'
           } else if (che > 0) {
             this.Sapstatus = 'checked'
           }
@@ -1987,8 +1966,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间待杀菌数量列表')
-          console.log(data)
           this.GermsDate = data.listForm
         } else {
           this.$message.error(data.msg)
@@ -2001,8 +1978,6 @@ export default {
         order_id: this.orderId
       }).then(({data}) => {
         if (data.code === 0) {
-          console.log('获取包装车间文本记录列表')
-          console.log(data)
           this.textlist = data.listForm[0]
           this.Text = data.listForm[0].pkgText
           this.textId = data.listForm[0].id
@@ -2017,29 +1992,55 @@ export default {
     // 校验
     readyrul () {
       let ty = true
-      if (this.readyDate.classes === '白班') {
-        if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
-          ty = false
-          this.$message.error('准备时间白班必填字段未填')
-          return false
-        }
-      } else if (this.readyDate.classes === '中班') {
-        if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
-          ty = false
-          this.$message.error('准备时间中班必填字段未填')
-          return false
-        }
-      } else if (this.readyDate.classes === '夜班') {
-        if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
-          ty = false
-          this.$message.error('准备时间夜班必填字段未填')
-          return false
-        }
-      } else if (this.readyDate.classes === '多班') {
-        if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
-          ty = false
-          this.$message.error('准备时间白班和夜班必填字段未填')
-          return false
+      if (this.order.workShopName !== '组装车间2（礼盒）') {
+        if (this.readyDate.classes === '白班') {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间白班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '中班') {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间中班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '夜班') {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间夜班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '多班') {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间白班和夜班必填字段未填')
+            return false
+          }
+        }if (this.readyDate.classes === '白班') {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间白班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '中班') {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间中班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '夜班') {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间夜班必填字段未填')
+            return false
+          }
+        } else if (this.readyDate.classes === '多班') {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+            ty = false
+            this.$message.error('准备时间白班和夜班必填字段未填')
+            return false
+          }
         }
       }
       return ty
@@ -2167,6 +2168,7 @@ export default {
     },
     // 保存
     SaveForm (str) {
+      let that = this
       if (str === 'submit') {
         if (!this.readyrul()) {
           return false
@@ -2194,7 +2196,6 @@ export default {
         }
         this.inrul()
         if (this.InVlist.length === 0 && this.order.properties !== '二合一&礼盒产线' && this.order.workShopName !== '包装三车间' && this.instatus === 1) {
-          console.log(this.instatus)
           this.$message.error('机维组未确认，不能提交')
           return false
         }
@@ -2205,17 +2206,60 @@ export default {
       }
       this.lodingStatus1 = true
       this.isRedact = false
-      this.tableheader(str) // 修改表头
-      this.UpdateReady(str) // 修改准备时间
-      this.UpdateUser(str) // 修改人员
-      this.UpdateExc(str) // 修改异常记录
-      this.UpdateIn(str) // 修改生产入库
-      this.UpdateSap(str) // 修改物料领用
-      this.UpdateGerms(str) // 修改待杀菌数量
-      this.UpdateText(str) // 修改文本
+      let net1 = new Promise((resolve, reject) => {
+        that.tableheader(str, resolve) // 修改准备时间
+      })
+      let net2 = new Promise(function (resolve, reject) {
+        that.UpdateReady(str, resolve) // 修改准备时间
+      })
+      let net3 = new Promise(function (resolve, reject) {
+        that.UpdateUser(str, resolve) // 修改人员
+      })
+      let net4 = new Promise(function (resolve, reject) {
+        that.UpdateExc(str, resolve) // 修改异常记录
+      })
+      let net5 = new Promise(function (resolve, reject) {
+        that.UpdateIn(str, resolve) // 修改生产入库
+      })
+      let net6 = new Promise(function (resolve, reject) {
+        that.UpdateSap(str, resolve) // 修改物料领用
+      })
+      let net7 = new Promise(function (resolve, reject) {
+        that.UpdateGerms(str, resolve) // 修改待杀菌数量
+      })
+      let net8 = new Promise(function (resolve, reject) {
+        that.UpdateText(str, resolve) // 修改文本
+      })
+      if (str === 'submit') {
+        let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
+        net9.then(function () {
+          console.log('--------开始提交--------')
+          let net10 = new Promise((resolve, reject) => {
+            that.ProHours(resolve) // 报工
+          })
+          let net11 = new Promise((resolve, reject) => {
+            that.submitIn(resolve) // 入库
+          })
+          let net12 = new Promise((resolve, reject) => {
+            that.subSap(resolve) // 发料
+          })
+          let net13 = Promise.all([net10, net11, net12])
+          net13.then(() => {
+            console.log('--------提交成功--------')
+            that.lodingStatus1 = false
+            that.$message.success('提交成功')
+          })
+        })
+      } else {
+        let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
+        net9.then(function () {
+          that.lodingStatus1 = false
+          that.$message.success('保存成功')
+        })
+      }
     },
     // 表头处理
-    tableheader (str) {
+    tableheader (str, resolve) {
       this.netStatus.orderStatus = false
       this.order.orderStatus = str
       this.order.realOutput = this.countOutputNum / this.ratio // 生产入库总产量 COUNT_OUTPUT_UNIT比较 OUTPUT_UNIT 换算
@@ -2236,14 +2280,17 @@ export default {
         } else {
           this.$message.error('保存表头' + data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     /**
      * @property 以下为七个修改列表
      */
     // 修改人员
-    UpdateUser (str) {
+    UpdateUser (str, resolve) {
       if (this.uerDate.length > 0) {
         this.netStatus.userState = false
         this.uerDate.forEach((item) => {
@@ -2261,15 +2308,21 @@ export default {
           } else {
             this.$message.error('修改人员成功' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.user = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改准备时间
-    UpdateReady (str) {
+    UpdateReady (str, resolve) {
       this.netStatus.readyState = false
       this.readyDate.orderId = this.orderId
       if (!this.readyDate.status) {
@@ -2285,11 +2338,14 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 修改异常记录
-    UpdateExc (str) {
+    UpdateExc (str, resolve) {
       if (this.ExcDate.length > 0) {
         this.netStatus.excState = false
         this.ExcDate.forEach((item) => {
@@ -2303,15 +2359,21 @@ export default {
           } else {
             this.$message.error('异常记录' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.exc = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改生产入库
-    UpdateIn (str) {
+    UpdateIn (str, resolve) {
       if (this.InDate.length > 0) {
         this.netStatus.inState = false
         let types = ''
@@ -2332,7 +2394,7 @@ export default {
             this.productUnit ? item.manSolidUnit = this.productUnit : item.manSolidUnit = this.basicUnit
             item.badUnit = this.basicUnit
             item.sampleUnit = this.basicUnit
-            this.productUnit ? item.outputUnit = this.productUnit : item.outputUnit = this.basicUnit
+            item.outputUnit = this.basicUnit
           }
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
@@ -2343,15 +2405,21 @@ export default {
           } else {
             this.$message.error('生产入库' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.inpkg = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改物料领用
-    UpdateSap (str) {
+    UpdateSap (str, resolve) {
       this.netStatus.sapState1 = false
       this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
@@ -2372,7 +2440,12 @@ export default {
         this.netStatus.sapState1 = true
         this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
           this.netStatus.sapState2 = true
-          this.GetpkgSap(str)
+          // this.getStatus(str)
+          if (resolve) {
+            this.GetpkgSap(resolve)
+          } else {
+            this.GetpkgSap()
+          }
           if (data.code === 0) {
             this.tabStatus.sap2 = true
           } else {
@@ -2387,7 +2460,7 @@ export default {
       })
     },
     // 修改待杀菌数量
-    UpdateGerms (str) {
+    UpdateGerms (str, resolve) {
       if (this.GermsDate.length > 0) {
         this.netStatus.meState = false
         this.GermsDate.forEach((item) => {
@@ -2401,15 +2474,21 @@ export default {
           } else {
             this.$message.error('修改待杀菌数量' + data.msg)
           }
-          this.getStatus(str)
+          // this.getStatus(str)
+          if (resolve) {
+            resolve('resolve')
+          }
         })
       } else {
         this.tabStatus.me = true
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 修改文本
-    UpdateText (str) {
+    UpdateText (str, resolve) {
       this.netStatus.textState = false
       this.$http(`${PACKAGING_API.PKGTEXTUPDATE_API}`, 'POST', {
         id: this.textId,
@@ -2429,31 +2508,11 @@ export default {
         } else {
           this.$message.error('修改文本' + data.msg)
         }
-        this.getStatus(str)
+        // this.getStatus(str)
+        if (resolve) {
+          resolve('resolve')
+        }
       })
-    },
-    // 判断状态
-    getStatus (str) {
-      if (this.netStatus.orderStatus && this.netStatus.readyState && this.netStatus.userState && this.netStatus.excState && this.netStatus.inState && this.netStatus.sapState1 && this.netStatus.sapState2 && this.netStatus.meState && this.netStatus.textState) {
-        if (str !== 'submit' && this.tabStatus.ready && this.tabStatus.user && this.tabStatus.exc && this.tabStatus.inpkg && this.tabStatus.sap1 && this.tabStatus.sap2 && this.tabStatus.me && this.tabStatus.text) {
-          this.lodingStatus1 = false
-          this.$message.success('操作成功')
-        }
-        this.tabStatus.user = false
-        this.tabStatus.ready = false
-        this.tabStatus.exc = false
-        this.tabStatus.inpkg = false
-        this.tabStatus.sap1 = false
-        this.tabStatus.sap2 = false
-        this.tabStatus.me = false
-        this.tabStatus.text = false
-        if (str === 'submit' && this.St) {
-          this.st = false
-          this.ProHours()
-          this.submitIn(str)
-          this.subSap()
-        }
-      }
     },
     /**
      * @property 以下为提交
@@ -2470,7 +2529,7 @@ export default {
       })
     },
     // 报工提交
-    ProHours () {
+    ProHours (resolve) {
       if (this.readyDate.isCause === '1') {
         this.readyDate.dayDinner === null ? this.readyDate.dayDinner = this.readyDate.dayDinner : this.readyDate.dayDinner = this.readyDate.dayDinner + ''
         this.readyDate.midDinner === null ? this.readyDate.midDinner = this.readyDate.midDinner : this.readyDate.midDinner = this.readyDate.midDinner + ''
@@ -2491,45 +2550,43 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 入库提交
-    submitIn (str) {
+    submitIn (resolve) {
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subin = true
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        if (resolve) {
+          resolve('resolve')
+        }
       })
     },
     // 物料提交
-    subSap () {
+    subSap (resolve) {
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
           this.tabStatus.subsap1 = true
         } else {
           this.$message.error(data.msg)
         }
-        this.subStatus()
+        this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
+          if (data.code === 0) {
+            this.tabStatus.subsap2 = true
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       })
-      this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
-        this.$message.success('提交完成')
-        if (data.code === 0) {
-          this.tabStatus.subsap2 = true
-        } else {
-          this.$message.error(data.msg)
-        }
-        this.subStatus()
-        this.lodingStatus1 = false
-      })
-    },
-    subStatus () {
-      if (this.tabStatus.subhour && this.tabStatus.subsap1 && this.tabStatus.subsap2 && this.tabStatus.subin) {
-        this.$message.success('提交成功')
-      }
     },
     // 我是分割线
     // 搜索人员

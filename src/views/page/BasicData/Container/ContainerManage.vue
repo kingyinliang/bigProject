@@ -33,7 +33,7 @@
               </el-form>
             </el-col>
             <el-col style="width: 320px">
-              <el-button type="primary" size="small" @click="qurery" v-if="isAuth('sys:holder:checkList')">查询</el-button>
+              <el-button type="primary" size="small" @click="qurery(true)" v-if="isAuth('sys:holder:checkList')">查询</el-button>
               <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:holder:save')">新增</el-button>
               <el-button type="danger" size="small" @click="remove" v-if="isAuth('sys:holder:delete')">批量删除</el-button>
             </el-col>
@@ -206,7 +206,10 @@ export default {
       })
     },
     // 查询
-    qurery () {
+    qurery (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.GetContainerList({
         type: 'holder_type',
         pageSize: this.pageSize,

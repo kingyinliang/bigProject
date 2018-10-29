@@ -9,7 +9,7 @@
                 <el-input v-model="capacity.capacity" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
+                <el-button type="primary" size="small" @click="GetList(false,true)" v-if="isAuth('sys:capacity:listCapa')">查询</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -52,6 +52,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="workNum"
+                  :show-overflow-tooltip="true"
                   label="物料">
                   <template slot-scope="scope">
                     {{scope.row.materialCode + ' ' + scope.row.materialName}}
@@ -60,22 +61,26 @@
                 <el-table-column
                   prop="basicCapacity"
                   label="标准产能"
+                  :show-overflow-tooltip="true"
                   width="87">
                 </el-table-column>
                 <el-table-column
                   prop="basicCapacityUnitName"
                   label="单位"
-                  width="50">
+                  width="50"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   prop="changer"
                   label="操作人"
-                  width="87">
+                  width="87"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   prop="changed"
                   label="操作时间"
-                  width="100">
+                  width="120"
+                  :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
                   label="操作"
@@ -130,9 +135,9 @@ export default {
   },
   mounted () {
     this.getTree()
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
-        this.SerchSapList = data.allList
+        this.SerchSapList = data.list
       } else {
         this.$message.error(data.msg)
       }
@@ -151,10 +156,13 @@ export default {
       })
     },
     // 获取产能列表
-    GetList (data) {
+    GetList (data, st) {
       this.loginstatus = true
       if (data) {
         this.deptId = data.deptId
+      }
+      if (st) {
+        this.currPage = 1
       }
       this.$http(`${BASICDATA_API.CAPALIST_API}`, 'POST', {
         deptId: this.deptId,
@@ -196,9 +204,9 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$message.error('请选择要删除的产能')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('确认删除该物料产能, 是否继续?', '删除产能', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

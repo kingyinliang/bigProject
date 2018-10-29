@@ -10,12 +10,12 @@
         <el-card>
           <el-row class="clearfix">
             <div style="float: right">
-              <el-form :inline="true" :model="condition" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList()">
+              <el-form :inline="true" :model="condition" size="small" label-width="68px" class="topforms2" @keyup.enter.native="getList(true)">
                 <el-form-item>
                   <el-input v-model="condition.param" placeholder="用户名/工号" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="getList">查询</el-button>
+                  <el-button type="primary" size="small" @click="getList(true)">查询</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -168,7 +168,10 @@ export default {
       this.getList()
     },
     // 获取列表
-    getList () {
+    getList (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.$http(`${SYSTEMSETUP_API.USERLIST1_API}`, 'POST', {
         deptId: this.deptId,
         param: this.condition.param,

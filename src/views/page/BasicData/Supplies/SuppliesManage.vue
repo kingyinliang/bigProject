@@ -10,12 +10,12 @@
         <el-card>
           <div class="clearfix">
             <el-row style="float: right">
-              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys()" @submit.native.prevent>
+              <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="querys(true)" @submit.native.prevent>
                 <el-form-item>
                   <el-input v-model="form.param" placeholder="物料/物料类型" suffix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="querys" v-if="isAuth('sys:sapMaterial:list')">查询</el-button>
+                  <el-button type="primary" size="small" @click="querys(true)" v-if="isAuth('sys:sapMaterial:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="SapuUpdate" v-if="isAuth('sys:sapMaterial:syncMaterialManual')">同步</el-button>
                 </el-form-item>
               </el-form>
@@ -143,7 +143,10 @@ export default {
       })
     },
     // 查询
-    querys () {
+    querys (st) {
+      if (st) {
+        this.currPage = 1
+      }
       this.Getsaplist()
     },
     // 改变每页条数
