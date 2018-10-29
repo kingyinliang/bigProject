@@ -50,7 +50,7 @@
   </div>
   <div class="main" style="padding-top: 0px">
     <el-card class="tableCard">
-        <el-button type="primary" size="small" @click="visible1 = true">打印</el-button>
+        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
         <!--<el-button type="primary" size="small" @click="ltk">打印</el-button>-->
       <!--</el-row>-->
       <div class="toggleSearchTop">
