@@ -48,7 +48,7 @@
               label="操作">
               <template slot-scope="scope">
                 <!--<el-button style="padding: 0;" type="text" @click="PasswordReset(scope.row.user_id)" v-if="isAuth('sys:user:reset')">重置密码</el-button>-->
-                <el-button style="padding: 0;" type="text" v-if="isAuth('sys:user:reset')">重置密码</el-button>
+                <el-button style="padding: 0;" type="text" @click="PasswordReset(scope.row.userId)" v-if="isAuth('sys:user:reset')">重置密码</el-button>
               </template>
             </el-table-column>
           </el-table>
