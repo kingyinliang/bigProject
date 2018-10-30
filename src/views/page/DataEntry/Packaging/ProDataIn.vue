@@ -2017,7 +2017,7 @@ export default {
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
           }
-        }if (this.readyDate.classes === '白班') {
+        } else if (this.readyDate.classes === '白班') {
           if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
