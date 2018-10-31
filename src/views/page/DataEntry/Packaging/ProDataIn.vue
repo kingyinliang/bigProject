@@ -2530,6 +2530,7 @@ export default {
     },
     // 报工提交
     ProHours (resolve) {
+      console.log(this.order.properties === '二合一&礼盒产线' ? this.basicUnit : 'BOT')
       if (this.readyDate.isCause === '1') {
         this.readyDate.dayDinner === null ? this.readyDate.dayDinner = this.readyDate.dayDinner : this.readyDate.dayDinner = this.readyDate.dayDinner + ''
         this.readyDate.midDinner === null ? this.readyDate.midDinner = this.readyDate.midDinner : this.readyDate.midDinner = this.readyDate.midDinner + ''
