@@ -57,13 +57,19 @@
           border
           tooltip-effect="dark"
           style="width: 100%;margin-bottom: 20px">
-          <!--<el-table-column-->
-            <!--type="selection"-->
-            <!--width="34">-->
-          <!--</el-table-column>-->
+          <el-table-column
+            type="selection"
+            width="34">
+          </el-table-column>
           <el-table-column
             prop="orderNo"
             label="车间"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="orderNo"
+            label="考勤类型"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
@@ -75,7 +81,7 @@
           </el-table-column>
           <el-table-column
             prop="orderNo"
-            label="产线"
+            label="产线/工序"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
@@ -135,7 +141,8 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            width="120">
+            fixed="right"
+            width="80">
           </el-table-column>
         </el-table>
         <el-row >
