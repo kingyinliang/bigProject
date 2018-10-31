@@ -1775,6 +1775,7 @@ export default {
             this.productUnit = data.sme.productUnit
             this.productUnitName = data.sme.productUnitName
             this.basicUnitName = data.sme.basicUnitName
+            console.log(this.basicUnit)
           } else {
             this.$message.error('比例获取失败')
           }
