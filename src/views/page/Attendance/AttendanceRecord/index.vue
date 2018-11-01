@@ -406,6 +406,7 @@ export default {
     this.GetARtype()
     this.GetARpro()
     this.GetList()
+    this.getTree()
     let $ = this.$
 
     // 搜索切换显隐

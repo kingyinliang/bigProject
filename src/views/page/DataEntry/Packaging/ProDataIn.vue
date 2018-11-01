@@ -970,10 +970,10 @@
                 </el-table-column>
                 <el-table-column
                   label="批次"
+                  :show-overflow-tooltip="true"
                   width="90">
                   <template slot-scope="scope">
-                    <el-input size="small" v-model="scope.row.batch" placeholder="手工录入" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input size="small" v-model="scope.row.batch" placeholder="手工录入" v-else disabled></el-input>
+                    <span>{{scope.row.batch}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
