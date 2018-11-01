@@ -4,7 +4,7 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.13:8080'
+// let HOST = 'http://10.1.9.133:8080'
 // let HOST = 'http://10.10.1.58:8080'
 // HOST
 let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
