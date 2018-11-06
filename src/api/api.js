@@ -4,8 +4,8 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.1.9.133:8080'
-// let HOST = 'http://10.10.1.58:8080'
+// let HOST = 'http://10.10.1.14:8080'
+// let HOST = 'http://10.10.1.17:8080'
 // HOST
 let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
@@ -539,7 +539,7 @@ export const AUDIT_API = {
    */
   AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
   /**
-   * @property {string} GOAUDIT_API 生产入库审核sys/verifyInStorage/update
+   * @property {string} GOAUDIT_API 生产入库审核
    */
   GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
   /**
@@ -562,4 +562,26 @@ export const AUDIT_API = {
    * @property {string} AUDITLIST_API 生产发料审核
    */
   AUDITISSUEUPDATE_API: HOST + '/verify/material/update'
+}
+/*
+*考勤api
+ */
+export const AR_API = {
+  /**
+   * @property {string} ARADD_API 考勤记录新增
+   */
+  ARADD_API: HOST + '/sys/att/saveAtt',
+  /**
+   * @property {string} ARLIST_API 考勤记录列表
+   */
+  ARLIST_API: HOST + '/sys/att/listAtt'
+}
+/*
+*报表api
+ */
+export const REP_API = {
+  /**
+   * @property {string} ARLIST_API 考勤记录列表
+   */
+  REPOUT_API: HOST + '/sys/verifyLTK/exportLtk'
 }

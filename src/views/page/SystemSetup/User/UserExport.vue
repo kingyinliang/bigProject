@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:user:userManagementList')">查询</el-button>
-              <el-button type="primary" size="small" @click="GetList">导出</el-button>
+              <el-button type="primary" size="small" @click="outPut()">导出</el-button>
             </el-form-item>
           </el-form>
         </el-row>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API} from '@/api/api'
+import {SYSTEMSETUP_API, REP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
@@ -90,6 +90,16 @@ export default {
     this.GetList()
   },
   methods: {
+    outPut () {
+      this.$http(`${REP_API.REPOUT_API}`, 'POST').then(({data}) => {
+        console.log(data)
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel'
+        })
+        let objectUrl = URL.createObjectURL(blob)
+        window.location.href = objectUrl
+      })
+    },
     PasswordReset (id) {
       this.$confirm('确认重置密码, 是否继续?', '重置密码', {
         confirmButtonText: '确定',
