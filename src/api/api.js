@@ -568,20 +568,36 @@ export const AUDIT_API = {
  */
 export const AR_API = {
   /**
-   * @property {string} ARADD_API 考勤记录新增
+   * @property {string} ARADD_API 考勤记录新增、保存
    */
   ARADD_API: HOST + '/sys/att/saveAtt',
   /**
+   * @property {string} ARSUBORUP_API 考勤记录提交、修改
+   */
+  ARSUBORUP_API: HOST + '/sys/att/updateAtt',
+  /**
    * @property {string} ARLIST_API 考勤记录列表
    */
-  ARLIST_API: HOST + '/sys/att/listAtt'
+  ARLIST_API: HOST + '/sys/att/listAtt',
+  /**
+   * @property {string} ARDELAPI 考勤记录删除
+   */
+  ARDELAPI: HOST + '/sys/att/deleteAtt',
+  /**
+   * @property {string} ARAUDITLOG_API 考勤记录审核日志
+   */
+  ARAUDITLOG_API: HOST + '/sys/att/listRecordAtt',
+  /**
+   * @property {string} ARAUDIT_API 考勤记录审核
+   */
+  ARAUDIT_API: HOST + '/sys/att/auditAtt'
 }
 /*
 *报表api
  */
 export const REP_API = {
   /**
-   * @property {string} ARLIST_API 考勤记录列表
+   * @property {string} ARLIST_API 打印
    */
   REPOUT_API: HOST + '/sys/verifyLTK/exportLtk'
 }
