@@ -29,6 +29,7 @@
                 </el-form-item>
                 <el-form-item label="考勤类型：">
                   <el-select v-model="plantList.kqdl" placeholder="请选择" size="small">
+                    <el-option label="请选择"  value=""></el-option>
                     <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in ARtype" :key="index"></el-option>
                   </el-select>
                 </el-form-item>
