@@ -52,6 +52,7 @@
         </div>
         <el-row v-if="clearStatus">
           <el-table
+            v-loading="tableLoding"
             ref="table1"
             header-row-class-name="tableHead"
             @selection-change="handleSelectionChange"
@@ -840,9 +841,13 @@ export default {
       this.userlist = []
       this.tree1Status = false
       this.tree2Status = false
-      this.row.userId.forEach((item, index) => {
-        this.selctId.push({label: item})
-      })
+      if (!this.clearStatus) {
+        this.row.userId.forEach((item, index) => {
+          this.selctId.push({label: item})
+        })
+      } else {
+        this.selctId.push({label: this.row.userId})
+      }
       this.visible2 = true
     },
     // 根据部门id查人
@@ -850,7 +855,24 @@ export default {
       this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
         if (data.code === 0) {
           this.userlist = setUserList(data.listUser)
-          this.selctId = this.row.userId
+          console.log(this.userlist)
+          if (!this.clearStatus) {
+            this.selctId = this.row.userId
+          } else {
+            this.selctId = [this.row.userId]
+            let usertemp = 1
+            this.userlist.forEach((item, index) => {
+              if (item.key === this.row.userId) {
+                usertemp++
+              }
+            })
+            if (usertemp === 1) {
+              this.selctId = []
+            } else {
+              this.selctId = [this.row.userId]
+            }
+          }
+          console.log(this.selctId)
           this.visible = true
         } else {
           this.$message.error(data.msg)
@@ -859,7 +881,11 @@ export default {
     },
     // 确定人员
     updatauser (row) {
-      row.userId = this.selctId
+      if (!this.clearStatus) {
+        row.userId = this.selctId
+      } else {
+        row.userId = this.selctId[0]
+      }
       this.visible = false
     },
     // 搜索人员
@@ -928,10 +954,14 @@ export default {
     },
     // 借调人员确定
     saveduser (row) {
-      row.userId = []
-      this.selctId.forEach((item) => {
-        row.userId.push(item.label)
-      })
+      if (!this.clearStatus) {
+        row.userId = []
+        this.selctId.forEach((item) => {
+          row.userId.push(item.label)
+        })
+      } else {
+        row.userId = this.selctId[0].label
+      }
       this.visible2 = false
     },
     // 选择输入临时工
@@ -939,9 +969,13 @@ export default {
       this.row = row
       this.visible1 = true
       this.selctId2 = []
-      this.row.userId.forEach((item) => {
-        this.selctId2.push(item)
-      })
+      if (!this.clearStatus) {
+        this.row.userId.forEach((item) => {
+          this.selctId2.push(item)
+        })
+      } else {
+        this.selctId2.push(this.row.userId)
+      }
     },
     // 临时工添加
     addDayLaborer (row) {
@@ -949,7 +983,11 @@ export default {
     },
     // 临时工确定
     close (row) {
-      row.userId = this.selctId2
+      if (!this.clearStatus) {
+        row.userId = this.selctId2
+      } else {
+        row.userId = this.selctId2[0]
+      }
       this.visible1 = false
     },
     // 临时工删除
@@ -958,8 +996,12 @@ export default {
     },
     // 编辑
     updateAtt (row) {
+      this.tableLoding = true
       if (row.redactStatus) {
         row.redactStatus = false
+        this.datalist.splice(this.datalist.length, 0, {})
+        this.datalist.splice(this.datalist.length - 1, 1)
+        this.tableLoding = false
       } else {
         row.redactStatus = true
         this.Setcode(row)
@@ -977,6 +1019,7 @@ export default {
                 row.Team = data.teamList
                 this.datalist.splice(this.datalist.length, 0, {})
                 this.datalist.splice(this.datalist.length - 1, 1)
+                this.tableLoding = false
               }
             })
           }
