@@ -438,14 +438,14 @@
       :visible.sync="visible1">
       <el-form :model="form" size="small" label-width="120px" class="dialogform">
         <el-row>
-          <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px">新增</el-button>
+          <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px" v-if="!clearStatus">新增</el-button>
         </el-row>
         <el-form-item label="临时工姓名：" v-for="(item, index) in selctId2" :key="index">
           <el-col :span="20">
             <el-input v-model="selctId2[index]"></el-input>
           </el-col>
           <el-col :span="4">
-            <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)" v-if="!clearStatus"></el-button>
           </el-col>
         </el-form-item>
       </el-form>
