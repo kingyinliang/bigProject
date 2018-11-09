@@ -91,15 +91,37 @@ export default {
   },
   methods: {
     outPut () {
-      this.$http(`${REP_API.REPOUT_API}`, 'POST').then(({data}) => {
-        console.log(data)
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', {}, false, true).then(({data}) => {
         let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel'
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
-        let objectUrl = URL.createObjectURL(blob)
-        window.location.href = objectUrl
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = '报表.xlsx'
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
       })
+      // this.DownLoad({url: `${REP_API.REPOUT_API}`, data: {}})
     },
+    // DownLoad (options) {
+    //   var config = $.extend(true, { method: 'post' }, options)
+    //   var $iframe = $('<iframe id="down-file-iframe" />')
+    //   var $form = $('<form target="down-file-iframe" method="' + config.method + '" />')
+    //   $form.attr('action', config.url)
+    //   for (var key in config.data) {
+    //     $form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />')
+    //   }
+    //   $iframe.append($form)
+    //   $(document.body).append($iframe)
+    //   $form[0].submit()
+    //   $iframe.remove()
+    // },
     PasswordReset (id) {
       this.$confirm('确认重置密码, 是否继续?', '重置密码', {
         confirmButtonText: '确定',

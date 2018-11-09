@@ -4,8 +4,8 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.135:8080'
-// let HOST = 'http://10.10.1.17:8080'
+// let HOST = 'http://10.10.1.21:8080'
+// let HOST = 'http://10.10.1.22:8080'
 // HOST
 let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
@@ -599,5 +599,9 @@ export const REP_API = {
   /**
    * @property {string} ARLIST_API 打印
    */
-  REPOUT_API: HOST + '/sys/verifyLTK/exportLtk'
+  REPOUT_API: HOST + '/sys/verifyLTK/exportLtk',
+  /**
+   * @property {string} REPSAPLIST_API 物料报表
+   */
+  REPSAPLIST_API: HOST + '/report/form/listMaterial'
 }

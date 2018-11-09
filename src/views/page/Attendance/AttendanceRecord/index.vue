@@ -826,10 +826,10 @@ export default {
       if (row.userType === '借调') {
         this.SetSelecd()
       } else if (row.userType === '正式') {
-        if (row.deptId) {
-          this.GetUserforteam(row.deptId)
+        if (row.workShop) {
+          this.GetUserforteam(row.workShop)
         } else {
-          this.$message.error('请选择班组')
+          this.$message.error('请选择车间')
         }
       } else {
         this.$message.error('请选择人员属性')

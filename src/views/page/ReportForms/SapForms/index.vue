@@ -14,7 +14,7 @@
         <el-row>
           <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
             <el-form-item label="订单号：">
-              <el-input v-model="plantList.batch" style="width: 200px"></el-input>
+              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
             </el-form-item>
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
@@ -55,25 +55,25 @@
           header-row-class-name="tableHead"
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
-            prop="orderNo"
+            prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
             width="120">
@@ -85,91 +85,103 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="materialNameH"
             label="生产物料"
             :show-overflow-tooltip="true"
             width="120">
+            <template slot-scope="scope">
+              {{scope.row.materialCodeH + scope.row.materialNameH}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="batch"
             label="生产批次"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="materialCode"
             label="组件物料"
             :show-overflow-tooltip="true"
             width="120">
+            <template slot-scope="scope">
+              {{scope.row.materialCode + scope.row.materialName}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="batchP"
             label="组件物料批次"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="unitP"
             label="单位"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="组件发料数量"
+            prop="productUseNumP"
+            label="生产使用"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="classLoss"
+            label="本班损耗"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="belowGradeNum"
             label="不合格数"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="badBatch"
             label="不良批次"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="manufacturers"
             label="厂家"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="potNo"
             label="领用罐号"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="filterDate"
             label="过滤日期"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="productUseNumS"
             label="生产用量"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="unitS"
             label="单位"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="changePotDate"
             label="换罐时间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="usePotDate"
             label="用完时间"
             :show-overflow-tooltip="true"
             width="120">
@@ -181,7 +193,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -190,12 +202,13 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
-        status: 'checked',
+        material: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         orderNo: '',
         factory: '',
         workshop: '',
         productline: '',
-        productdate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -230,7 +243,44 @@ export default {
   },
   methods: {
     GetList (st) {
-      console.log(this.plantList)
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      if (this.plantList.material !== '') {
+        this.plantList.materialCode = this.plantList.material.substring(0, this.dataForm.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.dataForm.material.indexOf(' ') + 1)
+      } else {
+        this.plantList.materialCode = ''
+        this.plantList.materialName = ''
+      }
+      this.$http(`${REP_API.REPSAPLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    ExportExcel () {
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = `立体库审核数据导出${new Date().toString()}.xlsx`
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
+      })
     }
   },
   computed: {},

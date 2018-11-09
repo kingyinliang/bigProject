@@ -161,14 +161,14 @@
               :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="65">
-              <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="!(scope.row.status === 'checked' || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--fixed="right"-->
+              <!--label="操作"-->
+              <!--width="65">-->
+              <!--<template slot-scope="scope">-->
+                <!--<el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="!(scope.row.status === 'checked' || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
           <el-row >
             <el-pagination
