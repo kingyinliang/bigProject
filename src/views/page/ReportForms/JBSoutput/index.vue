@@ -214,8 +214,8 @@ export default {
         this.plantList.currPage = 1
       }
       if (this.plantList.material !== '') {
-        this.plantList.materialCode = this.plantList.material.substring(0, this.dataForm.material.indexOf(' '))
-        this.plantList.materialName = this.plantList.material.substring(this.dataForm.material.indexOf(' ') + 1)
+        this.plantList.materialCode = this.plantList.material.substring(0, this.plantList.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.plantList.material.indexOf(' ') + 1)
       } else {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
