@@ -4,10 +4,10 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.21:8080'
+let HOST = 'http://10.10.1.21:8080'
 // let HOST = 'http://10.10.1.22:8080'
 // HOST
-let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
+// let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
 // let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
 /*
@@ -605,7 +605,11 @@ export const REP_API = {
    */
   REPSAPLIST_API: HOST + '/report/form/listMaterial',
   /**
-   * @property {string} REPSAPLIST_API 物料报表
+   * @property {string} REPJBSLIST_API JBS产出明细
    */
-  REPJBSLIST_API: HOST + '/report/form/listJBS'
+  REPJBSLIST_API: HOST + '/report/form/listJBS',
+  /**
+   * @property {string} REPSAPLIST_API JBS产出明细
+   */
+  REPMADIFFLIST_API: HOST + '/report/form/listJWZPIS'
 }

@@ -12,9 +12,9 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
             <el-form-item label="订单号：">
-              <el-input v-model="plantList.batch" style="width: 200px"></el-input>
+              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
             </el-form-item>
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
@@ -55,28 +55,28 @@
           header-row-class-name="tableHead"
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
-            prop="orderNo"
+            prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="120">
+            width="60">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -88,40 +88,55 @@
             prop="orderNo"
             label="品项"
             :show-overflow-tooltip="true"
-            width="120">
+            width="220">
+            <template slot-scope="scope">
+              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="batch"
             label="生产批次"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="orgnDifferent"
             label="差异数量"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="differentInfo"
             label="差异说明"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="remark"
             label="备注"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
         </el-table>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="plantList.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="plantList.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="plantList.totalCount">
+          </el-pagination>
+        </el-row>
       </el-card>
     </div>
   </el-row>
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -130,12 +145,13 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
-        status: 'checked',
+        material: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         orderNo: '',
         factory: '',
         workshop: '',
         productline: '',
-        productdate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -170,7 +186,56 @@ export default {
   },
   methods: {
     GetList (st) {
-      console.log(this.plantList)
+      this.lodingS = true
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      if (this.plantList.material !== '') {
+        this.plantList.materialCode = this.plantList.material.substring(0, this.dataForm.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.dataForm.material.indexOf(' ') + 1)
+      } else {
+        this.plantList.materialCode = ''
+        this.plantList.materialName = ''
+      }
+      this.$http(`${REP_API.REPMADIFFLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
+    },
+    ExportExcel () {
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = `机维组数量差异报表数据导出${getNewDate()}.xlsx`
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
+      })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetList()
     }
   },
   computed: {},

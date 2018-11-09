@@ -90,7 +90,7 @@
             :show-overflow-tooltip="true"
             width="180">
             <template slot-scope="scope">
-              {{scope.row.materialCodeH + scope.row.materialNameH}}
+              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
           </el-table-column>
           <el-table-column
@@ -105,7 +105,7 @@
             :show-overflow-tooltip="true"
             width="180">
             <template slot-scope="scope">
-              {{scope.row.materialCode + scope.row.materialName}}
+              {{scope.row.materialCode + ' ' + scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column
