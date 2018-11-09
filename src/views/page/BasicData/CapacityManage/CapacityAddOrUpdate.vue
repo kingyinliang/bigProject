@@ -6,7 +6,15 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：" prop="material">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" v-if="CapacityId">
+            <el-option
+              v-for="item in SerchSapList"
+              :key="item.sapCode+' '+item.itemName"
+              :label="item.sapCode+' '+item.itemName"
+              :value="item.sapCode+' '+item.itemName">
+            </el-option>
+          </el-select>
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" disabled v-else>
             <el-option
               v-for="item in SerchSapList"
               :key="item.sapCode+' '+item.itemName"

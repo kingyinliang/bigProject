@@ -18,6 +18,7 @@
             </el-form-item>
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
+                <el-option label="请选择"  value=""></el-option>
                 <el-option
                   v-for="item in SerchSapList"
                   :key="item.sapCode+' '+item.itemName"
@@ -30,6 +31,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                  <span>-</span>
                 </el-col>
                 <el-col :span="12">
                   <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
