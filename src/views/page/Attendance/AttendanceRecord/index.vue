@@ -719,6 +719,7 @@ export default {
       if (row.kqlx === 'CIP_time' || row.kqlx === 'door_time') {
         row.pieceTime = 0
         row.pieceTimeSt = false
+        row.productLineSt = true
       } else if (row.kqlx === 'normal_time') {
         row.pieceTime = 0
         row.pieceTimeSt = false
@@ -1025,6 +1026,7 @@ export default {
                 this.datalist.splice(this.datalist.length, 0, {})
                 this.datalist.splice(this.datalist.length - 1, 1)
                 this.tableLoding = false
+                console.log(row)
               }
             })
           }

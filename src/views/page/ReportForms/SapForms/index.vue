@@ -76,7 +76,7 @@
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -88,7 +88,7 @@
             prop="materialNameH"
             label="生产物料"
             :show-overflow-tooltip="true"
-            width="120">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + scope.row.materialNameH}}
             </template>
@@ -103,7 +103,7 @@
             prop="materialCode"
             label="组件物料"
             :show-overflow-tooltip="true"
-            width="120">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCode + scope.row.materialName}}
             </template>
@@ -117,7 +117,7 @@
           <el-table-column
             label="单位"
             :show-overflow-tooltip="true"
-            width="120">
+            width="60">
             <template slot-scope="scope">
             {{scope.row.unitP ?scope.row.unitP:scope.row.unitS}}
             </template>
@@ -126,37 +126,37 @@
             prop="productUseNumP"
             label="生产使用"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="classLoss"
             label="本班损耗"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="belowGradeNum"
             label="不合格数"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="badBatch"
             label="不良批次"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="manufacturers"
             label="厂家"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="potNo"
             label="领用罐号"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="filterDate"
@@ -168,7 +168,7 @@
             prop="productUseNumS"
             label="生产用量"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="changePotDate"
