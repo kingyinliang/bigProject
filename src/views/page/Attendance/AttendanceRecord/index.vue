@@ -238,7 +238,7 @@
               fixed="right"
               width="50">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="updateAtt(scope.row)" v-if="scope.row.status !== 'checked' && scope.row.status !== 'submit'">{{scope.row.redactStatus?'取消':'编辑'}}</el-button>
+                <el-button style="padding: 0;" type="text" @click="updateAtt(scope.row)" v-if="scope.row.status !== 'checked' && scope.row.status !== 'submit'">{{scope.row.redactStatus?'保存':'编辑'}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -827,9 +827,9 @@ export default {
         this.SetSelecd()
       } else if (row.userType === '正式') {
         if (row.workShop) {
-          this.GetUserforteam(row.workShop)
+          this.GetUserforteam(row.deptId)
         } else {
-          this.$message.error('请选择车间')
+          this.$message.error('请选择班组')
         }
       } else {
         this.$message.error('请选择人员属性')
@@ -998,10 +998,15 @@ export default {
     updateAtt (row) {
       this.tableLoding = true
       if (row.redactStatus) {
-        row.redactStatus = false
-        this.datalist.splice(this.datalist.length, 0, {})
-        this.datalist.splice(this.datalist.length - 1, 1)
-        this.tableLoding = false
+        this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', [row]).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            this.GetList(true)
+          } else {
+            this.$message.error(data.msg)
+          }
+          this.lodingS = false
+        })
       } else {
         row.redactStatus = true
         this.Setcode(row)
@@ -1058,7 +1063,7 @@ export default {
             }
           }
           this.lodingS = true
-          this.$http(`${st === 'saved' ? AR_API.ARADD_API : st === 'submit' ? AR_API.ARSUBORUP_API : ''}`, 'POST', this.saveData).then(({data}) => {
+          this.$http(`${AR_API.ARADD_API}`, 'POST', this.saveData).then(({data}) => {
             if (data.code === 0) {
               this.$message.success('操作成功')
               this.GetList(true)
@@ -1094,7 +1099,7 @@ export default {
         this.multipleSelection.forEach((item, index) => {
           item.status = st
         })
-        this.$http(`${st === 'saved' ? AR_API.ARADD_API : st === 'submit' ? AR_API.ARSUBORUP_API : ''}`, 'POST', this.multipleSelection).then(({data}) => {
+        this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('操作成功')
             this.GetList(true)

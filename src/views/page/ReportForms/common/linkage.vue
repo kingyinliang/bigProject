@@ -1,6 +1,6 @@
 <template>
 <el-col>
-  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
     <el-form-item label="工厂：">
       <el-select v-model="plantList.factory" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>

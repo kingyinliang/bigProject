@@ -6,13 +6,13 @@
           <el-col>
             <linkage :plantList="plantList"></linkage>
           </el-col>
-          <el-col style="width: 200px">
+          <el-col style="width: 150px">
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出Excel</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
         </el-row>
         <el-row>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
             <el-form-item label="订单号：">
               <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
             </el-form-item>
@@ -115,10 +115,12 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="unitP"
             label="单位"
             :show-overflow-tooltip="true"
             width="120">
+            <template slot-scope="scope">
+            {{scope.row.unitP ?scope.row.unitP:scope.row.unitS}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="productUseNumP"
@@ -169,12 +171,6 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="unitS"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
             prop="changePotDate"
             label="换罐时间"
             :show-overflow-tooltip="true"
@@ -187,6 +183,17 @@
             width="120">
           </el-table-column>
         </el-table>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="plantList.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="plantList.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="plantList.totalCount">
+          </el-pagination>
+        </el-row>
       </el-card>
     </div>
   </el-row>
@@ -194,6 +201,7 @@
 
 <script>
 import {BASICDATA_API, REP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -243,6 +251,7 @@ export default {
   },
   methods: {
     GetList (st) {
+      this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
       }
@@ -262,6 +271,7 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.lodingS = false
       })
     },
     ExportExcel () {
@@ -273,7 +283,7 @@ export default {
           navigator.msSaveBlob(blob)
         } else {
           let elink = document.createElement('a')
-          elink.download = `立体库审核数据导出${new Date().toString()}.xlsx`
+          elink.download = `物料领用报表数据导出${getNewDate()}.xlsx`
           elink.style.display = 'none'
           elink.href = URL.createObjectURL(blob)
           document.body.appendChild(elink)
@@ -281,6 +291,16 @@ export default {
           document.body.removeChild(elink)
         }
       })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetList()
     }
   },
   computed: {},

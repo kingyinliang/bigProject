@@ -5,7 +5,7 @@
       <el-row type="flex">
         <el-col>
           <linkage :plantList="plantList"></linkage>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
                 <el-option
@@ -30,7 +30,7 @@
         </el-col>
         <el-col style="width: 200px">
           <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)">导出Excel</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
         </el-col>
       </el-row>
       <div class="toggleSearchBottom">
@@ -50,28 +50,28 @@
         header-row-class-name="tableHead"
         style="width: 100%;margin-bottom: 20px">
         <el-table-column
-          prop="orderNo"
+          prop="productDate"
           label="生产日期"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="factoryName"
           label="工厂"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="workShopName"
           label="车间"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="productLineName"
           label="产线"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
           prop="orderNo"
@@ -80,73 +80,87 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
           label="生产品项"
           :show-overflow-tooltip="true"
-          width="120">
+          width="220">
+          <template slot-scope="scope">
+            {{scope.row.materialCodeH + scope.row.materialNameH}}
+          </template>
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="batch"
           label="生产批次"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="washing"
           label="清洗冲顶"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="changeProduct"
           label="换罐冲顶"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="bootHeader"
           label="开机冲顶"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="badMaterial"
           label="包材不良"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="badProduct"
           label="制程不良"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="badSemi"
           label="半成品物料不合格"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="deviceLoss"
           label="设备残留"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="remark"
           label="备注"
           :show-overflow-tooltip="true"
           width="120">
         </el-table-column>
       </el-table>
+      <el-row >
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="plantList.currPage"
+          :page-sizes="[10, 15, 20]"
+          :page-size="plantList.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="plantList.totalCount">
+        </el-pagination>
+      </el-row>
     </el-card>
   </div>
 </el-row>
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -155,12 +169,12 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
-        status: 'checked',
-        orderNo: '',
+        material: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         factory: '',
         workshop: '',
         productline: '',
-        productdate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -195,7 +209,56 @@ export default {
   },
   methods: {
     GetList (st) {
-      console.log(this.plantList)
+      this.lodingS = true
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      if (this.plantList.material !== '') {
+        this.plantList.materialCode = this.plantList.material.substring(0, this.dataForm.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.dataForm.material.indexOf(' ') + 1)
+      } else {
+        this.plantList.materialCode = ''
+        this.plantList.materialName = ''
+      }
+      this.$http(`${REP_API.REPJBSLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
+    },
+    ExportExcel () {
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = `JBS产出明细报表数据导出${getNewDate()}.xlsx`
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
+      })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetList()
     }
   },
   computed: {},

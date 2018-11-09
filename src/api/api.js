@@ -603,5 +603,9 @@ export const REP_API = {
   /**
    * @property {string} REPSAPLIST_API 物料报表
    */
-  REPSAPLIST_API: HOST + '/report/form/listMaterial'
+  REPSAPLIST_API: HOST + '/report/form/listMaterial',
+  /**
+   * @property {string} REPSAPLIST_API 物料报表
+   */
+  REPJBSLIST_API: HOST + '/report/form/listJBS'
 }

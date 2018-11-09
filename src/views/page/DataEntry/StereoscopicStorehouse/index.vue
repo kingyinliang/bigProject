@@ -37,6 +37,7 @@
             </el-form-item>
             <el-form-item style="margin-left: 67px;">
               <el-button type="primary" size="small" @click="GetLtkList(true)">查询</el-button>
+              <el-button type="primary" size="small" @click="doPrint">导出</el-button>
               <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyLTK:auditing')">审核不通过</el-button>
             </el-form-item>
@@ -50,8 +51,6 @@
   </div>
   <div class="main" style="padding-top: 0px">
     <el-card class="tableCard">
-        <el-button type="primary" size="small" @click="doPrint">导出</el-button>
-      <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
       </div>
@@ -173,6 +172,7 @@
 
 <script>
 import {BASICDATA_API, LTK_API, REP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -239,7 +239,7 @@ export default {
           navigator.msSaveBlob(blob)
         } else {
           let elink = document.createElement('a')
-          elink.download = `立体库审核数据导出${new Date().toString()}.xlsx`
+          elink.download = `立体库审核数据导出${getNewDate()}.xlsx`
           elink.style.display = 'none'
           elink.href = URL.createObjectURL(blob)
           document.body.appendChild(elink)
