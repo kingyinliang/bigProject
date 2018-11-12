@@ -107,3 +107,10 @@ export function toDate (dateString) {
   }
   return null
 }
+/**
+ * 是否有权限
+ * @param {*} null
+ */
+export function getNewDate () {
+  return new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate()))
+}

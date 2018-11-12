@@ -37,6 +37,7 @@
             </el-form-item>
             <el-form-item style="margin-left: 67px;">
               <el-button type="primary" size="small" @click="GetLtkList(true)">查询</el-button>
+              <el-button type="primary" size="small" @click="doPrint">导出</el-button>
               <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyLTK:auditing')">审核不通过</el-button>
             </el-form-item>
@@ -50,9 +51,6 @@
   </div>
   <div class="main" style="padding-top: 0px">
     <el-card class="tableCard">
-        <!--<el-button type="primary" size="small" @click="visible1 = true">打印</el-button>-->
-        <!--<el-button type="primary" size="small" @click="ltk">打印</el-button>-->
-      <!--</el-row>-->
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
       </div>
@@ -169,84 +167,12 @@
         <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
   </el-dialog>
-  <el-dialog
-    width="310mm"
-    :close-on-click-modal="false"
-    :visible.sync="visible1">
-    <!--<a :href="'/static/web/viewer.html?file=' + pdf" target="_blank">打印</a>-->
-    <div class="clearfix">
-      <div style="float: right">
-        <el-button @click="visible1 = false">取消</el-button>
-        <el-button type="primary" @click="doPrint()">确定</el-button>
-      </div>
-    </div>
-    <div id="printOrder-data" style="margin: auto">
-      <div id="printMain">
-        <el-table
-          ref="table1"
-          :fit="true"
-          header-row-class-name="tableHead"
-          :data="LtkList"
-          border
-          style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            label="生产订单号">
-            <template slot-scope="scope">{{ scope.row.orderNo }}</template>
-          </el-table-column>
-          <el-table-column
-            width="300mm"
-            prop="name"
-            label="品项">
-            <template slot-scope="scope">
-              <span>{{ scope.row.materialCode + ' ' + scope.row.materialName}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="batch"
-            label="生产批次">
-          </el-table-column>
-          <el-table-column
-            width="80mm"
-            prop="input"
-            label="订单入库量">
-          </el-table-column>
-          <el-table-column
-            width="90mm"
-            prop="manSolid"
-            label="人工码垛数-立体库">
-          </el-table-column>
-          <el-table-column
-            width="90mm"
-            prop="aiShelves"
-            label="自动上架-立体库">
-          </el-table-column>
-          <el-table-column
-            width="90mm"
-            prop="aiSolid"
-            label="自动码垛-立体库">
-          </el-table-column>
-          <el-table-column
-            width="50mm"
-            prop="unitName"
-            label="单位">
-          </el-table-column>
-          <el-table-column
-            prop="workShopMan"
-            label="车间确认人">
-          </el-table-column>
-          <el-table-column
-            prop="ltkMan"
-            label="立体库确认人">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-  </el-dialog>
 </el-col>
 </template>
 
 <script>
-import {BASICDATA_API, LTK_API, MAIN_API} from '@/api/api'
+import {BASICDATA_API, LTK_API, REP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -303,44 +229,24 @@ export default {
     })
   },
   methods: {
-    ltk () {
-      window.open(`${MAIN_API.PRINTLTK_API}`)
-      // this.$http(`${MAIN_API.PRINTLTK_API}`, 'GET').then(({data}) => {
-      //   let blob = new Blob([data], {
-      //     type: `application/mspdf`
-      //   })
-      //   console.log(data)
-      //   let objectUrl = URL.createObjectURL(blob)
-      //   // let objectUrl = encodeURIComponent(data)
-      //   console.log(objectUrl)
-      //   window.open(`/static/web/viewer.html?file=${data}`)
-      //   // window.open(`http://10.1.9.133:8080/reports/printLtk`)
-      //   this.visible1 = true
-      //   // let blob = new Blob([data], {
-      //   //   type: `application/mpdf`
-      //   // })
-      //   // console.log(URL.createObjectURL(blob))
-      //   // this.pdf = URL.createObjectURL(blob)
-      //   // let objectUrl = URL.createObjectURL(blob)
-      //   // let link = document.createElement('a')
-      //   // let fname = `我的文档.pdf`
-      //   // link.href = objectUrl
-      //   // link.setAttribute('download', fname)
-      //   // document.body.appendChild(link)
-      //   // link.click()
-      // })
-    },
     // 打印
     doPrint () {
-      let subOutputRankPrint = document.getElementById('printOrder-data')
-      console.log(subOutputRankPrint.innerHTML)
-      let newContent = subOutputRankPrint.innerHTML
-      let oldContent = document.body.innerHTML
-      document.body.innerHTML = newContent
-      window.print()
-      window.location.reload()
-      document.body.innerHTML = oldContent
-      return false
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = `立体库审核数据导出${getNewDate()}.xlsx`
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
+      })
     },
     // 获取列表
     GetLtkList (st) {

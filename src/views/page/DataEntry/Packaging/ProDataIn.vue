@@ -910,7 +910,7 @@
                 style="width: 100%;margin-bottom: 20px">
                 <el-table-column
                   type="index"
-                  width="55"
+                  width="50"
                   label="序号">
                 </el-table-column>
                 <el-table-column
@@ -931,7 +931,7 @@
                 </el-table-column>
                 <el-table-column
                   label="生产使用"
-                  width="150">
+                  width="135">
                   <template slot-scope="scope">
                     <div class="required">
                       <i class="reqI">*</i>
@@ -969,6 +969,14 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  label="批次"
+                  :show-overflow-tooltip="true"
+                  width="90">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.batch}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   label="备注">
                   <template slot-scope="scope">
                     <el-input size="small" v-model="scope.row.remark" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
@@ -987,7 +995,7 @@
                 style="width: 100%;margin-bottom: 20px">
                 <el-table-column
                   type="index"
-                  width="55"
+                  width="50"
                   label="序号">
                 </el-table-column>
                 <el-table-column
