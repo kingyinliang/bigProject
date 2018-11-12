@@ -161,6 +161,12 @@
               :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
+            <el-table-column
+              prop="memo"
+              label="审核意见"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
             <!--<el-table-column-->
               <!--fixed="right"-->
               <!--label="操作"-->
@@ -266,6 +272,13 @@ export default {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=other_time`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.ARtype = data.dicList
+          this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=normal_time`, 'POST').then(({data}) => {
+            if (data.code === 0) {
+              this.ARtype.push(data.dicList[0])
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }

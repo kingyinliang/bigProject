@@ -5,7 +5,7 @@
         <el-row type="flex">
           <el-col>
             <linkage :plantList="plantList"></linkage>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="maintain">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
               <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
                 <el-row>
                   <el-col :span="12">
@@ -20,7 +20,7 @@
           </el-col>
           <el-col style="width: 200px">
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出Excel</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -223,7 +223,7 @@ export default {
       this.$http(`${REP_API.REPEXCLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
-          // this.GetequipmentType()
+          this.GetmaterialShort()
           this.Getenery()
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
@@ -260,6 +260,8 @@ export default {
             data.dicList.forEach((items, index) => {
               if (item.materialShort === items.code) {
                 item.materialShortName = items.value
+                this.dataList.splice(this.dataList.length, 0, {})
+                this.dataList.splice(this.dataList.length - 1, 1)
               }
             })
           })
@@ -274,34 +276,10 @@ export default {
         if (data.code === 0) {
           this.dataList.forEach((item, index) => {
             data.dicList.forEach((items, index) => {
-              // console.log(item.energy)
-              // console.log(items.code)
-              // console.log(item.energyName)
               if (item.energy === items.code) {
                 item.energyName = items.value
-                console.log(item.energyName)
-              }
-            })
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取设备类型
-    GetequipmentType () {
-      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '',
-        deptId: this.order.productLine,
-        currPage: '1',
-        pageSize: '50'
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.equipmentType = data.list.list
-          this.dataList.forEach((item, index) => {
-            data.list.list.forEach((items, index) => {
-              if (item.deviceId === items.deviceNo) {
-                item.deviceName = items.deviceName
+                this.dataList.splice(this.dataList.length, 0, {})
+                this.dataList.splice(this.dataList.length - 1, 1)
               }
             })
           })

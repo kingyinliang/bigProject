@@ -29,10 +29,18 @@
                   <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in ARtype" :key="index"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="审核状态：">
+                <el-select v-model="plantList.status" placeholder="请选择">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option label="未审核"  value="submit"></el-option>
+                  <el-option label="审核通过"  value="checked"></el-option>
+                  <el-option label="审核不通过"  value="noPass"></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate" style="width: 200px"></el-date-picker>
               </el-form-item>
-              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('verify:time:list')" style="margin-right: 20px">查询</el-button>
               <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('verify:time:update')">新增</el-button>
               <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('verify:time:update')">保存</el-button>
               <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('verify:time:update')">提交</el-button>
@@ -204,7 +212,7 @@
               width="100">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.pieceTime" v-if="scope.row.redactStatus" size="small" placeholder="手工录入"></el-input>
-                <span>{{scope.row.pieceTime}}</span>
+                <span v-else>{{scope.row.pieceTime}}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -609,7 +617,8 @@ export default {
       $('.toggleSearchTop').show()
     })
     $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '190px'}, 300, function () {
+      let hei = $('.el-card__body').height()
+      $('.searchCard').animate({height: `${hei + 40}px`}, 300, function () {
         $('.searchCard').parent('.main').css('padding-bottom', '15px')
       })
       $(this).hide()
@@ -716,17 +725,23 @@ export default {
     },
     // 考勤类型下拉
     Setcode (row) {
-      if (row.kqlx === 'CIP_time' || row.kqlx === 'door_time') {
+      if (row.kqlx === 'CIP_time') {
         row.pieceTime = 0
         row.pieceTimeSt = false
         row.productLineSt = true
+      } else if (row.kqlx === 'CIP_time' || row.kqlx === 'door_time') {
+        row.pieceTime = 0
+        row.pieceTimeSt = false
+        row.productLineSt = false
+        row.productLine = ''
       } else if (row.kqlx === 'normal_time') {
         row.pieceTime = 0
         row.pieceTimeSt = false
         row.productLine = ''
         row.productLineSt = false
       } else {
-        row.productLineSt = true
+        row.productLineSt = false
+        row.productLine = ''
         row.pieceTimeSt = true
       }
     },
@@ -747,7 +762,7 @@ export default {
               if (data.code === 0) {
                 this.datalist.push(
                   {
-                    productLineSt: true,
+                    productLineSt: false,
                     pieceTimeSt: true,
                     workShop: this.plantList.workShop,
                     kqdl: '',
@@ -1002,6 +1017,7 @@ export default {
         this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('操作成功')
+            this.tableLoding = false
             this.GetList(true)
           } else {
             this.$message.error(data.msg)
