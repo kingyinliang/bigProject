@@ -40,25 +40,25 @@
           header-row-class-name="tableHead"
           style="width: 100%;margin-bottom: 20px">
           <el-table-column
-            prop="orderNo"
+            prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
             width="120">
@@ -70,103 +70,105 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="生产物料"
+            label="物料"
+            :show-overflow-tooltip="true"
+            width="220">
+            <template slot-scope="scope">
+              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="expCode"
+            label="异常情况"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="生产批次"
+            prop="expInfo"
+            label="异常描述"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="组件物料"
+            prop="expStartDate"
+            label="异常开始时间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="组件物料批次"
+            prop="expEndDate"
+            label="异常结束时间"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
+            prop="expContinue"
+            label="异常时间"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="expContinueUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="deviceName"
+            label="设备"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="materialShortName"
+            label="物料分类简称"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="energyName"
+            label="能源"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="affectProduction"
+            label="影响产量"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="affectProductionUnit"
             label="单位"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="组件发料数量"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="不合格数"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="不良批次"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="厂家"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="领用罐号"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="过滤日期"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="生产用量"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="换罐时间"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orderNo"
-            label="用完时间"
+            prop="remark"
+            label="备注"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
         </el-table>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="plantList.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="plantList.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="plantList.totalCount">
+          </el-pagination>
+        </el-row>
       </el-card>
     </div>
   </el-row>
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API, SYSTEMSETUP_API} from '@/api/api'
+import { getNewDate } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -175,12 +177,11 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
-        status: 'checked',
-        orderNo: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         factory: '',
         workshop: '',
         productline: '',
-        productdate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -215,7 +216,109 @@ export default {
   },
   methods: {
     GetList (st) {
-      console.log(this.plantList)
+      this.lodingS = true
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      this.$http(`${REP_API.REPEXCLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          // this.GetequipmentType()
+          this.Getenery()
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
+    },
+    ExportExcel () {
+      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+        let blob = new Blob([data], {
+          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob)
+        } else {
+          let elink = document.createElement('a')
+          elink.download = `车间异常统计报表数据导出${getNewDate()}.xlsx`
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        }
+      })
+    },
+    // 获取物料分类简称
+    GetmaterialShort () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.dataList.forEach((item, index) => {
+            data.dicList.forEach((items, index) => {
+              if (item.materialShort === items.code) {
+                item.materialShortName = items.value
+              }
+            })
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取能源下拉
+    Getenery () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.dataList.forEach((item, index) => {
+            data.dicList.forEach((items, index) => {
+              // console.log(item.energy)
+              // console.log(items.code)
+              // console.log(item.energyName)
+              if (item.energy === items.code) {
+                item.energyName = items.value
+                console.log(item.energyName)
+              }
+            })
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取设备类型
+    GetequipmentType () {
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: '',
+        deptId: this.order.productLine,
+        currPage: '1',
+        pageSize: '50'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.equipmentType = data.list.list
+          this.dataList.forEach((item, index) => {
+            data.list.list.forEach((items, index) => {
+              if (item.deviceId === items.deviceNo) {
+                item.deviceName = items.deviceName
+              }
+            })
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetList()
     }
   },
   computed: {},

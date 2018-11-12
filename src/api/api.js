@@ -4,7 +4,7 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.21:8080'
+// let HOST = 'http://10.10.1.28:8080'
 // let HOST = 'http://10.10.1.22:8080'
 // HOST
 let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
@@ -609,7 +609,11 @@ export const REP_API = {
    */
   REPJBSLIST_API: HOST + '/report/form/listJBS',
   /**
-   * @property {string} REPSAPLIST_API JBS产出明细
+   * @property {string} REPSAPLIST_API 机维组差异
    */
-  REPMADIFFLIST_API: HOST + '/report/form/listJWZPIS'
+  REPMADIFFLIST_API: HOST + '/report/form/listJWZPIS',
+  /**
+   * @property {string} REPSAPLIST_API 车间异常统计
+   */
+  REPEXCLIST_API: HOST + '/report/form/listExc'
 }
