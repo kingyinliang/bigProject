@@ -91,22 +91,24 @@ export default {
   },
   methods: {
     outPut () {
-      this.$http(`${REP_API.REPOUT_API}`, 'POST', {}, false, true).then(({data}) => {
-        let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        })
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob)
-        } else {
-          let elink = document.createElement('a')
-          elink.download = '报表.xlsx'
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          document.body.removeChild(elink)
-        }
-      })
+      this.$message.error('敬请期待')
+      return false
+      // this.$http(`${REP_API.REPOUT_API}`, 'POST', {}, false, true).then(({data}) => {
+      //   let blob = new Blob([data], {
+      //     type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      //   })
+      //   if (window.navigator.msSaveOrOpenBlob) {
+      //     navigator.msSaveBlob(blob)
+      //   } else {
+      //     let elink = document.createElement('a')
+      //     elink.download = '报表.xlsx'
+      //     elink.style.display = 'none'
+      //     elink.href = URL.createObjectURL(blob)
+      //     document.body.appendChild(elink)
+      //     elink.click()
+      //     document.body.removeChild(elink)
+      //   }
+      // })
       // this.DownLoad({url: `${REP_API.REPOUT_API}`, data: {}})
     },
     // DownLoad (options) {

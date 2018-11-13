@@ -40,12 +40,16 @@
               <el-form-item label="日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate" style="width: 200px"></el-date-picker>
               </el-form-item>
-              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('verify:time:list')" style="margin-right: 20px">查询</el-button>
-              <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('verify:time:update')">新增</el-button>
-              <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('verify:time:update')">保存</el-button>
-              <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('verify:time:update')">提交</el-button>
-              <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('verify:time:update')">批量删除</el-button>
             </el-form>
+          </el-col>
+          <el-col style="width: 250px">
+            <el-row style="margin-bottom: 18px">
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('verify:time:list')" style="margin-right: 48px">查询</el-button>
+              <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('verify:time:update')">批量删除</el-button>
+            </el-row>
+            <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('verify:time:update')">新增</el-button>
+            <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('verify:time:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('verify:time:update')">提交</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
