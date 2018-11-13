@@ -9,7 +9,7 @@ import { HTTP_METHOD } from './http'
 * @param {string} url api地址
 * @param {string} [method] {@link module:constants/http method}
 * */
-export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) => {
+export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, responseType = false) => {
 // export default (url, method = HTTP_METHOD.GET, data = {}, login = false, ContentType = false) => {
 //   let cancel, promiseArr = {}
 //   const CancelToken = axios.CancelToken
@@ -24,6 +24,9 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false) =
     // }),
     timeout: 1000 * 60 * 20,
     withCredentials: false
+  }
+  if (responseType) {
+    options.responseType = 'blob'
   }
   if (ContentType) {
     options.headers['Content-Type'] = 'application/x-www-form-urlencoded'

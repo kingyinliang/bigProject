@@ -4,8 +4,8 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.13:8080'
-// let HOST = 'http://10.10.1.58:8080'
+// let HOST = 'http://10.10.1.28:8080'
+// let HOST = 'http://10.10.1.22:8080'
 // HOST
 // let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
@@ -539,7 +539,7 @@ export const AUDIT_API = {
    */
   AUDITLIST_API: HOST + '/sys/verifyInStorage/list',
   /**
-   * @property {string} GOAUDIT_API 生产入库审核sys/verifyInStorage/update
+   * @property {string} GOAUDIT_API 生产入库审核
    */
   GOAUDIT_API: HOST + '/sys/verifyInStorage/auditing',
   /**
@@ -562,4 +562,58 @@ export const AUDIT_API = {
    * @property {string} AUDITLIST_API 生产发料审核
    */
   AUDITISSUEUPDATE_API: HOST + '/verify/material/update'
+}
+/*
+*考勤api
+ */
+export const AR_API = {
+  /**
+   * @property {string} ARADD_API 考勤记录新增、保存
+   */
+  ARADD_API: HOST + '/sys/att/saveAtt',
+  /**
+   * @property {string} ARSUBORUP_API 考勤记录提交、修改
+   */
+  ARSUBORUP_API: HOST + '/sys/att/updateAtt',
+  /**
+   * @property {string} ARLIST_API 考勤记录列表
+   */
+  ARLIST_API: HOST + '/sys/att/listAtt',
+  /**
+   * @property {string} ARDELAPI 考勤记录删除
+   */
+  ARDELAPI: HOST + '/sys/att/deleteAtt',
+  /**
+   * @property {string} ARAUDITLOG_API 考勤记录审核日志
+   */
+  ARAUDITLOG_API: HOST + '/sys/att/listRecordAtt',
+  /**
+   * @property {string} ARAUDIT_API 考勤记录审核
+   */
+  ARAUDIT_API: HOST + '/sys/att/auditAtt'
+}
+/*
+*报表api
+ */
+export const REP_API = {
+  /**
+   * @property {string} ARLIST_API 打印
+   */
+  REPOUT_API: HOST + '/sys/verifyLTK/exportLtk',
+  /**
+   * @property {string} REPSAPLIST_API 物料报表
+   */
+  REPSAPLIST_API: HOST + '/report/form/listMaterial',
+  /**
+   * @property {string} REPJBSLIST_API JBS产出明细
+   */
+  REPJBSLIST_API: HOST + '/report/form/listJBS',
+  /**
+   * @property {string} REPSAPLIST_API 机维组差异
+   */
+  REPMADIFFLIST_API: HOST + '/report/form/listJWZPIS',
+  /**
+   * @property {string} REPSAPLIST_API 车间异常统计
+   */
+  REPEXCLIST_API: HOST + '/report/form/listExc'
 }

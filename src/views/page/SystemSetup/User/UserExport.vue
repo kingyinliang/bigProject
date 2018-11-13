@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:user:userManagementList')">查询</el-button>
-              <el-button type="primary" size="small" @click="GetList">导出</el-button>
+              <el-button type="primary" size="small" @click="outPut()">导出</el-button>
             </el-form-item>
           </el-form>
         </el-row>
@@ -48,7 +48,7 @@
               label="操作">
               <template slot-scope="scope">
                 <!--<el-button style="padding: 0;" type="text" @click="PasswordReset(scope.row.user_id)" v-if="isAuth('sys:user:reset')">重置密码</el-button>-->
-                <el-button style="padding: 0;" type="text" v-if="isAuth('sys:user:reset')">重置密码</el-button>
+                <el-button style="padding: 0;" type="text" @click="PasswordReset(scope.row.userId)" v-if="isAuth('sys:user:reset')">重置密码</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API} from '@/api/api'
+import {SYSTEMSETUP_API, REP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
@@ -90,6 +90,40 @@ export default {
     this.GetList()
   },
   methods: {
+    outPut () {
+      this.$message.error('敬请期待')
+      return false
+      // this.$http(`${REP_API.REPOUT_API}`, 'POST', {}, false, true).then(({data}) => {
+      //   let blob = new Blob([data], {
+      //     type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      //   })
+      //   if (window.navigator.msSaveOrOpenBlob) {
+      //     navigator.msSaveBlob(blob)
+      //   } else {
+      //     let elink = document.createElement('a')
+      //     elink.download = '报表.xlsx'
+      //     elink.style.display = 'none'
+      //     elink.href = URL.createObjectURL(blob)
+      //     document.body.appendChild(elink)
+      //     elink.click()
+      //     document.body.removeChild(elink)
+      //   }
+      // })
+      // this.DownLoad({url: `${REP_API.REPOUT_API}`, data: {}})
+    },
+    // DownLoad (options) {
+    //   var config = $.extend(true, { method: 'post' }, options)
+    //   var $iframe = $('<iframe id="down-file-iframe" />')
+    //   var $form = $('<form target="down-file-iframe" method="' + config.method + '" />')
+    //   $form.attr('action', config.url)
+    //   for (var key in config.data) {
+    //     $form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />')
+    //   }
+    //   $iframe.append($form)
+    //   $(document.body).append($iframe)
+    //   $form[0].submit()
+    //   $iframe.remove()
+    // },
     PasswordReset (id) {
       this.$confirm('确认重置密码, 是否继续?', '重置密码', {
         confirmButtonText: '确定',

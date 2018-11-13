@@ -5,7 +5,7 @@
         <el-card class="searchCard">
           <el-row type="flex">
             <el-col>
-              <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+              <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetAuditList()" @submit.native.prevent>
                 <el-form-item label="工厂：">
                   <el-select v-model="plantList.factory" placeholder="请选择">
                     <el-option label="请选择"  value=""></el-option>
@@ -24,46 +24,43 @@
                     <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="订单号：">
-                  <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
+                <el-form-item label="日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="生产日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.prodDate"></el-date-picker>
+                <el-form-item label="考勤类型：">
+                  <el-select v-model="plantList.kqdl" placeholder="请选择" size="small">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in ARtype" :key="index"></el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="订单状态：">
+                <el-form-item label="人员：">
+                  <el-input v-model="plantList.userId" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="审核状态：">
                   <el-select v-model="plantList.status" placeholder="请选择">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option label="未审核"  value="submit"></el-option>
                     <el-option label="审核通过"  value="checked"></el-option>
                     <el-option label="审核不通过"  value="noPass"></el-option>
-                    <el-option label="接口失败"  value="0"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-row>
-                  <el-form-item label="过账日期：">
-                    <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="抬头文本：">
-                    <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
-                  </el-form-item>
-                  <el-form-item style="margin-left: 67px;">
-                    <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
-                    <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyInStorage:auditing')">审核通过</el-button>
-                    <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyInStorage:auditing')">审核不通过</el-button>
-                  </el-form-item>
-                </el-row>
+                <el-form-item style="margin-left: 67px;">
+                  <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
+                  <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:time:update')">审核通过</el-button>
+                  <el-button type="danger" size="small" @click="repulseAutios" v-if="isAuth('verify:time:update')">审核不通过</el-button>
+                </el-form-item>
               </el-form>
             </el-col>
           </el-row>
           <div class="toggleSearchBottom">
-              <i class="el-icon-caret-top"></i>
+            <i class="el-icon-caret-top"></i>
           </div>
         </el-card>
       </div>
-      <div class="main" style="padding-top: 0px">
+      <div class="main" style="padding-top: 0">
         <el-card class="tableCard">
           <div class="toggleSearchTop">
-              <i class="el-icon-caret-bottom"></i>
+            <i class="el-icon-caret-bottom"></i>
           </div>
           <el-table
             ref="table1"
@@ -83,140 +80,101 @@
               label="审核状态"
               width="100">
               <template slot-scope="scope">
-                {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? (scope.row.interfaceReturnStatus === '0'? '接口失败': '审核通过'): scope.row.status === 'noPass'? '审核不通过':''}}
+                {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
               </template>
             </el-table-column>
             <el-table-column
-              prop="orderNo"
-              label="生产订单号"
+              prop="workShopName"
+              label="车间"
               :show-overflow-tooltip="true"
               width="120">
             </el-table-column>
             <el-table-column
-              label="生产物料"
+              prop="kqdlName"
+              label="考勤大类"
               :show-overflow-tooltip="true"
-              width="360">
-              <template slot-scope="scope">
-                {{ scope.row.materialCode + ' ' + scope.row.materialName}}
-              </template>
+              width="80">
             </el-table-column>
             <el-table-column
-              prop="planOutput"
-              label="计划生产数量"
-              width="105">
-            </el-table-column>
-            <el-table-column
-              prop="outputUnitName"
-              label="单位"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="entryQnt"
-              label="入库数量"
-              width="78">
-            </el-table-column>
-            <el-table-column
-              prop="entryUomName"
-              label="单位"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              label="是否样品"
-              width="78">
-              <template slot-scope="scope">
-                {{scope.row.isSample === '0'? '否':'是'}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="batch"
-              label="物料批次"
-              width="105">
-            </el-table-column>
-            <el-table-column
-              label="生产日期"
-              width="105">
-              <template slot-scope="scope">
-                {{scope.row.prodDate | SetDate}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="入库库位"
-              width="78">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.stgeLoc" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.stgeLoc }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="移动类型"
-              width="78">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.moveType" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.moveType }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="库存类型"
-              width="78">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.stckType" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.stckType }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="交货已完成标识"
-              width="120">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.noMoreGr" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.noMoreGr }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="货架寿命到期日"
-              width="120">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.expirydate" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.expirydate }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="interfaceReturn"
-              label="接口回写"
+              prop="kqlxName"
+              label="考勤类型"
               :show-overflow-tooltip="true"
-              width="150">
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="productLineName"
+              label="产线"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="deptIdName"
+              label="班组"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="userType"
+              label="人员属性"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="userId"
+              label="姓名（工号）"
+              :show-overflow-tooltip="true"
+              width="160">
+            </el-table-column>
+            <el-table-column
+              prop="classTypeName"
+              label="白/中/夜班"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="content"
+              label="工作内容"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="timedTime"
+              label="计时时数（小时）"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="pieceTime"
+              label="计件时数（小时）"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="workTime"
+              label="出勤时数（小时）"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="remark"
+              label="考勤备注"
+              :show-overflow-tooltip="true"
+              width="80">
             </el-table-column>
             <el-table-column
               prop="memo"
               label="审核意见"
               :show-overflow-tooltip="true"
-              width="150">
+              width="80">
             </el-table-column>
-            <el-table-column
-              prop="verifyMan"
-              label="审核人"
-              width="160">
-            </el-table-column>
-            <el-table-column
-              prop="verifyDate"
-              label="审核时间"
-              width="160">
-            </el-table-column>
-            <el-table-column
-              :show-overflow-tooltip="true"
-              label="备注">
-              <template slot-scope="scope">
-                <el-input  v-model="scope.row.remark" placeholder="手工录入" size="small" v-if="scope.row.redact"></el-input>
-                <span v-if="!scope.row.redact">{{ scope.row.remark }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="65">
-              <template slot-scope="scope">
-                <el-button style="padding: 0;" @click="redact(scope.row)" type="text" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('sys:verifyInStorage:auditing')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--fixed="right"-->
+              <!--label="操作"-->
+              <!--width="65">-->
+              <!--<template slot-scope="scope">-->
+                <!--<el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="!(scope.row.status === 'checked' || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
           <el-row >
             <el-pagination
@@ -247,7 +205,8 @@
 </template>
 
 <script>
-import {BASICDATA_API, AUDIT_API} from '@/api/api'
+import {BASICDATA_API, AUDIT_API, SYSTEMSETUP_API, AR_API} from '@/api/api'
+// import { export_json_to_excel } from '@/vendor/Export2Excel'
 export default {
   name: 'index',
   data () {
@@ -258,15 +217,17 @@ export default {
       factory: [],
       workshop: [],
       productline: [],
+      ARtype: [],
       Text: '',
       plantList: {
+        isAudit: '1',
         orderNo: '',
         factory: '',
         workShop: '',
         productLine: '',
-        prodDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
-        pstngDate: '',
-        headerTxt: '',
+        setDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
+        kqdl: '',
+        userId: '',
         status: '',
         currPage: 1,
         pageSize: 10,
@@ -284,15 +245,9 @@ export default {
       this.GetParentline(n)
     }
   },
-  filters: {
-    SetDate: function (value) {
-      return value.slice(0, value.indexOf(' '))
-    }
-  },
   mounted () {
-    // this.GetAuditList()
-    this.plantList.pstngDate = new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate()))
     this.Getdeptcode()
+    this.GetARtype()
     let $ = this.$
 
     // 搜索切换显隐
@@ -312,14 +267,30 @@ export default {
     })
   },
   methods: {
+    // 获取考勤类型
+    GetARtype () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=other_time`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.ARtype = data.dicList
+          this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=normal_time`, 'POST').then(({data}) => {
+            if (data.code === 0) {
+              this.ARtype.push(data.dicList[0])
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取列表
     GetAuditList (st) {
       if (st) {
         this.plantList.currPage = 1
       }
-      this.plantList.headerTxt = ''
       this.dataListLoading = true
-      this.$http(`${AUDIT_API.AUDITLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${AR_API.ARLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.AuditList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -381,7 +352,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
+      if (row.status === 'checked' || row.status === 'noPass') {
         return 0
       } else {
         return 1
@@ -394,11 +365,11 @@ export default {
         this.AuditList.splice(this.AuditList.length, 0, {})
         this.AuditList.splice(this.AuditList.length - 1, 1)
       } else {
-        row.pstngDate = this.plantList.pstngDate
+        row.postgDate = this.plantList.postgDate
         row.status = ''
-        this.lodingStatus = true
-        this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', [row]).then(({data}) => {
-          this.lodingStatus = false
+        this.lodingStatus1 = true
+        this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
+          this.lodingStatus1 = false
           if (data.code === 0) {
             this.$message.success('操作成功')
             row.redact = false
@@ -411,10 +382,14 @@ export default {
         })
       }
     },
+    // 序号
+    indexMethod (index) {
+      return index + 1 + (this.plantList.currPage * 1 - 1) * (this.plantList.pageSize * 1)
+    },
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$message.error('请选择考勤')
       } else {
         this.visible = true
       }
@@ -431,15 +406,15 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'noPass'
             item.memo = this.Text
-            item.pstngDate = this.plantList.pstngDate
           })
-          this.lodingStatus = true
-          this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.lodingStatus = false
+          this.lodingStatus1 = true
+          this.$http(`${AR_API.ARAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            this.lodingStatus1 = false
             if (data.code === 0) {
               this.visible = false
-              this.$message.success('操作成功')
+              this.Text = ''
               this.GetAuditList()
+              this.$message.success('操作成功')
             } else {
               this.$message.error(data.msg)
             }
@@ -460,17 +435,14 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'checked'
             item.memo = '审核通过'
-            item.pstngDate = this.plantList.pstngDate
-            item.headerTxt = this.plantList.headerTxt
           })
           this.lodingStatus1 = true
-          console.log(this.multipleSelection)
-          this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.plantList.headerTxt = ''
+          this.$http(`${AR_API.ARAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.lodingStatus1 = false
             if (data.code === 0) {
               this.$message.success('操作成功')
               this.GetAuditList()
+              if (data) {}
             } else {
               this.GetAuditList()
               this.$message.error(data.msg)
@@ -517,11 +489,6 @@ export default {
     }
     input{
       width: 240px!important;
-    }
-    .formtextarea{
-      .el-form-item__content{
-        width: 500px;
-      }
     }
   }
 </style>

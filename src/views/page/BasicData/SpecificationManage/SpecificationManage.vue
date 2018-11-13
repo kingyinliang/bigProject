@@ -47,36 +47,43 @@
             <el-table-column
               prop="brand"
               label="品牌"
+              width="100"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="largeClassName"
               label="大类"
+              width="100"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="boxSpec"
+              width="80"
               label="箱规格"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="boxSpecUnitName"
               label="单位"
+              width="80"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="productSpec"
+              width="80"
               label="瓶规格"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="productSpecUnitName"
               label="单位"
+              width="80"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
               prop="changer"
               label="维护人"
+              width="150"
               :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
@@ -107,7 +114,7 @@
       :close-on-click-modal="false"
       :visible.sync="visible1">
       <div class="formdata">
-        <el-form :model="form" size="small" label-width="110px" class="orderdialog">
+        <el-form :model="form" size="small" label-width="110px" class="orderdialog" @keyup.enter.native="GetList(true)">
           <el-form-item label="物料：">
             <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
           </el-form-item>
@@ -123,7 +130,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
+          <el-button @click="visible1 = false">取消</el-button>
           <el-button type="primary" @click="GetList(true)">确定</el-button>
         </span>
     </el-dialog>

@@ -6,7 +6,15 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：" prop="material">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" v-if="CapacityId">
+            <el-option
+              v-for="item in SerchSapList"
+              :key="item.sapCode+' '+item.itemName"
+              :label="item.sapCode+' '+item.itemName"
+              :value="item.sapCode+' '+item.itemName">
+            </el-option>
+          </el-select>
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" disabled v-else>
             <el-option
               v-for="item in SerchSapList"
               :key="item.sapCode+' '+item.itemName"
@@ -16,7 +24,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="标准产能：" prop="basicCapacity">
-          <el-input v-model="dataForm.basicCapacity" placeholder="手动输入" style="width: 200px"></el-input>
+          <el-input v-model="dataForm.basicCapacity" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="单位：" prop="basicCapacityUnit">
           <el-select v-model="dataForm.basicCapacityUnit" filterable placeholder="请选择">
@@ -133,5 +141,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .el-select {
+    display: block;
+    position: relative;
+  }
 </style>
