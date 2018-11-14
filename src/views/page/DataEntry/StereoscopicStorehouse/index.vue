@@ -1,5 +1,5 @@
 <template>
-<el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+<el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
   <!--<div class="topTitle">-->
     <!--<el-breadcrumb separator="/">-->
       <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
@@ -67,6 +67,13 @@
           type="selection"
           :selectable='checkboxT'
           width="34">
+        </el-table-column>
+        <el-table-column
+          label="审核状态"
+          width="100">
+          <template slot-scope="scope">
+            {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? '审核通过' : scope.row.status === 'noPass'? '审核不通过':''}}
+          </template>
         </el-table-column>
         <el-table-column
           label="生产订单号"
@@ -178,6 +185,7 @@ export default {
   data () {
     return {
       pdf: '',
+      lodingS: false,
       visible: false,
       visible1: false,
       factory: [],
@@ -231,6 +239,7 @@ export default {
   methods: {
     // 打印
     doPrint () {
+      this.lodingS = true
       this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
         let blob = new Blob([data], {
           type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -246,10 +255,12 @@ export default {
           elink.click()
           document.body.removeChild(elink)
         }
+        this.lodingS = false
       })
     },
     // 获取列表
     GetLtkList (st) {
+      this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
       }
@@ -262,6 +273,7 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.lodingS = false
       })
     },
     // 获取工厂
@@ -310,7 +322,7 @@ export default {
     },
     // 审核通过禁用
     checkboxT (row) {
-      if (row.status === 'checked') {
+      if (row.status === 'checked' || row.status === 'noPass') {
         return 0
       } else {
         return 1

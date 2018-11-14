@@ -277,7 +277,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+      this.lodingS = true
+      this.$http(`${REP_API.REPSAPOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
         let blob = new Blob([data], {
           type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
@@ -292,6 +293,7 @@ export default {
           elink.click()
           document.body.removeChild(elink)
         }
+        this.lodingS = false
       })
     },
     // 改变每页条数
