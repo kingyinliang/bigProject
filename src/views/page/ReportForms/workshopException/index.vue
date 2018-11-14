@@ -61,7 +61,7 @@
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -78,7 +78,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="expCode"
+            prop="expCodeName"
             label="异常情况"
             :show-overflow-tooltip="true"
             width="120">
@@ -114,7 +114,7 @@
             width="60">
           </el-table-column>
           <el-table-column
-            prop="deviceName"
+            prop="deviceIdName"
             label="设备"
             :show-overflow-tooltip="true"
             width="120">
@@ -138,7 +138,7 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="affectProductionUnit"
+            prop="affectProductionUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="120">
@@ -223,8 +223,8 @@ export default {
       this.$http(`${REP_API.REPEXCLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
-          this.GetmaterialShort()
-          this.Getenery()
+          // this.GetmaterialShort()
+          // this.Getenery()
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount

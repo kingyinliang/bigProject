@@ -411,8 +411,8 @@
                   <template slot-scope="scope">
                     <div class="required">
                       <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                     </div>
                   </template>
                 </el-table-column>
@@ -422,8 +422,8 @@
                   <template slot-scope="scope">
                     <div class="required">
                       <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
                     </div>
                   </template>
                 </el-table-column>
