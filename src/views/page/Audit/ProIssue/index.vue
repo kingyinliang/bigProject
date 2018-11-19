@@ -87,6 +87,12 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="productDate"
+              label="生产日期"
+              :show-overflow-tooltip="true"
+              width="120">
+            </el-table-column>
+            <el-table-column
               prop="orderNo"
               label="生产订单号"
               :show-overflow-tooltip="true"
@@ -130,7 +136,8 @@
             </el-table-column>
             <el-table-column
               label="物料批次"
-              width="105">
+              :show-overflow-tooltip="true"
+              width="130">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.batch" size="small" v-if="scope.row.redact"></el-input>
                 <el-input v-model="scope.row.batch" size="small" v-else disabled></el-input>

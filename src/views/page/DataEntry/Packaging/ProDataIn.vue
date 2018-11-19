@@ -1040,8 +1040,11 @@
                   width="150"
                   label="批次">
                   <template slot-scope="scope">
-                    <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -2154,23 +2157,42 @@ export default {
       // })
       return ty
     },
-    saprul () {
+    saprul (st) {
       let ty = true
-      this.listbomP.forEach((item) => {
-        if (item.delFlag !== '1') {
-          if (item.productUseNum === 0 || item.productUseNum) {} else {
-            ty = false
+      for (var i = 0; i < this.listbomS.length - 1; i++) {
+        for (var j = i + 1; j < this.listbomS.length; j++) {
+          if (this.listbomS[i].delFlag !== '1' && this.listbomS[j].delFlag !== '1') {
+            if (this.listbomS[i].potNo !== '' && this.listbomS[i].batch !== '' && this.listbomS[j].potNo !== '' && this.listbomS[j].batch !== '' && this.listbomS[i].materialCode === this.listbomS[j].materialCode && this.listbomS[i].potNo === this.listbomS[j].potNo && this.listbomS[i].batch === this.listbomS[j].batch) {
+              ty = false
+              this.$message.error('存在重复批次，请核实')
+              return false
+            }
           }
         }
-      })
-      if (this.order.properties !== '二合一&礼盒产线') {
-        this.listbomS.forEach((item) => {
+      }
+      if (st === 'submit') {
+        this.listbomP.forEach((item) => {
           if (item.delFlag !== '1') {
-            if (item.potNo && item.filterDate && item.productUseNum) {} else {
+            if (item.productUseNum === 0 || item.productUseNum) {
+            } else {
               ty = false
+              this.$message.error('物料必填项未填')
+              return false
             }
           }
         })
+        if (this.order.properties !== '二合一&礼盒产线') {
+          this.listbomS.forEach((item, index) => {
+            if (item.delFlag !== '1') {
+              if (item.potNo && item.filterDate && item.productUseNum) {
+              } else {
+                ty = false
+                this.$message.error('物料半成品必填项未填')
+                return false
+              }
+            }
+          })
+        }
       }
       return ty
     },
@@ -2207,10 +2229,13 @@ export default {
           this.$message.error('机维组未确认，不能提交')
           return false
         }
-        if (!this.saprul()) {
-          this.$message.error('物料领用必填项未填')
+        if (!this.saprul(str)) {
           return false
         }
+      }
+      if (!this.saprul(str)) {
+        console.log(this.listbomS)
+        return false
       }
       this.lodingStatus1 = true
       this.isRedact = false
@@ -2810,6 +2835,7 @@ export default {
     // 新增物料半成品
     addSapS (form, row) {
       form.push({
+        batch: '',
         orderId: this.order.orderId,
         status: '',
         id: '',

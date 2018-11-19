@@ -4,8 +4,8 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.19:8080'
-// let HOST = 'http://10.10.1.22:8080'
+// let HOST = 'http://10.10.5.63:8080'
+// let HOST = 'http://10.10.1.120:8080'
 // HOST
 let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev

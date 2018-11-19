@@ -98,6 +98,16 @@
               width="120">
             </el-table-column>
             <el-table-column
+              prop="kqrq"
+              label="考勤日期"
+              :show-overflow-tooltip="true"
+              width="120">
+              <template slot-scope="scope">
+                <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择" v-model="scope.row.kqrq" v-if="scope.row.redactStatus"></el-date-picker>
+                <span v-else>{{scope.row.kqrq}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               label="考勤大类"
               :show-overflow-tooltip="true"
               width="100">
@@ -645,7 +655,12 @@ export default {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.kqdl}`, 'POST').then(({data}) => {
         if (data.code === 0) {
           row.ARpro = data.dicList
-          row.kqlx = ''
+          if (row.kqdl === 'normal_time') {
+            row.kqlx = 'normal_time'
+            this.Setcode(row)
+          } else {
+            row.kqlx = ''
+          }
           this.datalist.splice(this.datalist.length, 0, {})
           this.datalist.splice(this.datalist.length - 1, 1)
         } else {
@@ -764,23 +779,26 @@ export default {
             let productlineList = data.childList
             this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workShop}).then(({data}) => {
               if (data.code === 0) {
-                this.datalist.push(
-                  {
-                    productLineSt: false,
-                    pieceTimeSt: true,
-                    workShop: this.plantList.workShop,
-                    kqdl: '',
-                    kqlx: '',
-                    userType: '',
-                    classType: '',
-                    deptId: '',
-                    productlineList: productlineList,
-                    Team: data.teamList,
-                    userId: [],
-                    timedTime: 0,
-                    pieceTime: 0
-                  }
-                )
+                let Listobj = {
+                  productLineSt: false,
+                  pieceTimeSt: true,
+                  workShop: this.plantList.workShop,
+                  kqdl: this.plantList.kqdl,
+                  kqlx: '',
+                  userType: '',
+                  classType: '',
+                  deptId: '',
+                  productlineList: productlineList,
+                  Team: data.teamList,
+                  userId: [],
+                  timedTime: 0,
+                  pieceTime: 0
+                }
+                if (this.plantList.kqdl === 'normal_time') {
+                  this.GetARpro(Listobj)
+                  this.Setcode(Listobj)
+                }
+                this.datalist.push(Listobj)
                 this.tableLoding = false
               } else {
                 this.$message.error(data.msg)
@@ -1112,7 +1130,7 @@ export default {
         }
       }
     },
-    // 提交
+    // updata
     subAutio (st) {
       if (this.multipleSelection.length <= 0) {
         this.$message.error('请选择考勤')

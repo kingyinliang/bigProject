@@ -76,6 +76,12 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="productDate"
+          label="生产日期"
+          :show-overflow-tooltip="true"
+          width="120">
+        </el-table-column>
+        <el-table-column
           label="生产订单号"
           width="120">
           <template slot-scope="scope">{{ scope.row.orderNo }}</template>

@@ -90,7 +90,7 @@
               width="120">
             </el-table-column>
             <el-table-column
-              prop="changed"
+              prop="kqrq"
               label="日期"
               :show-overflow-tooltip="true"
               width="120">

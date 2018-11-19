@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API, REP_API} from '@/api/api'
+import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
