@@ -235,12 +235,6 @@ export default {
         this.$message.error(data.msg)
       }
     })
-    // this.$http(`https://apimarket-dev.shinho.net.cn/devops-platform/sys/role/listByCondition`, 'POST').then(({data}) => {
-    //   if (data.code === 0) {
-    //   } else {
-    //     this.$message.error(data.msg)
-    //   }
-    // })
   },
   methods: {
     GetList (st) {
