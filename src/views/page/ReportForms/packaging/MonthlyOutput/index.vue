@@ -75,6 +75,22 @@
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
+          <el-table-column :label="(index+1).toString()" v-for="(item,index) in dataList[0].moth.length" :key="item">
+            <el-table-column
+              label="d1"
+              width="60">
+              <template slot-scope="scope">
+                {{scope.row.moth[index]?scope.row.moth[index][0].d1 : ''}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="d2"
+              width="60">
+              <template slot-scope="scope">
+                {{scope.row.moth[index]?scope.row.moth[index][0].d2 : ''}}
+              </template>
+            </el-table-column>
+          </el-table-column>
           <el-table-column
             prop="batch"
             label="月计"
@@ -190,7 +206,16 @@ export default {
     return {
       lodingS: false,
       SerchSapList: [],
-      dataList: [],
+      dataList: [
+        {
+          a1: '222',
+          moth: [[{d1: 1, d2: 2, d3: 3}], [{d1: 2, d2: 2, d3: 2}], [{d1: 2, d2: 2, d3: 2}], [{d1: 2, d2: 2, d3: 2}]]
+        },
+        {
+          a1: '111',
+          moth: [[{}], [{}], [{}]]
+        }
+      ],
       plantList: {
         material: '',
         factory: '',
@@ -210,6 +235,12 @@ export default {
         this.$message.error(data.msg)
       }
     })
+    // this.$http(`https://apimarket-dev.shinho.net.cn/devops-platform/sys/role/listByCondition`, 'POST').then(({data}) => {
+    //   if (data.code === 0) {
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // })
   },
   methods: {
     GetList (st) {
