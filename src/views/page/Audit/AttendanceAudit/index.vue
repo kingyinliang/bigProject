@@ -28,7 +28,7 @@
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="考勤类型：">
-                  <el-select v-model="plantList.kqdl" placeholder="请选择" size="small">
+                  <el-select v-model="plantList.kqlx" placeholder="请选择" size="small">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in ARtype" :key="index"></el-option>
                   </el-select>
@@ -39,7 +39,8 @@
                 <el-form-item label="审核状态：">
                   <el-select v-model="plantList.status" placeholder="请选择">
                     <el-option label="请选择"  value=""></el-option>
-                    <el-option label="未审核"  value="submit"></el-option>
+                    <el-option label="已保存"  value="saved"></el-option>
+                    <el-option label="已提交"  value="submit"></el-option>
                     <el-option label="审核通过"  value="checked"></el-option>
                     <el-option label="审核不通过"  value="noPass"></el-option>
                   </el-select>
@@ -82,6 +83,18 @@
               <template slot-scope="scope">
                 {{scope.row.status === 'submit'? '未审核': scope.row.status === 'checked'? '审核通过': scope.row.status === 'noPass'? '审核不通过':''}}
               </template>
+            </el-table-column>
+            <el-table-column
+              prop="reqno"
+              label="订单号"
+              :show-overflow-tooltip="true"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="kqrq"
+              label="日期"
+              :show-overflow-tooltip="true"
+              width="120">
             </el-table-column>
             <el-table-column
               prop="workShopName"
@@ -226,7 +239,7 @@ export default {
         workShop: '',
         productLine: '',
         setDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
-        kqdl: '',
+        kqlx: '',
         userId: '',
         status: '',
         currPage: 1,

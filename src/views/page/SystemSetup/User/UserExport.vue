@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API, REP_API} from '@/api/api'
+import {SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'UserExport',
   data () {
@@ -93,6 +93,7 @@ export default {
     outPut () {
       this.$message.error('敬请期待')
       return false
+      // this.lodingS = true
       // this.$http(`${REP_API.REPOUT_API}`, 'POST', {}, false, true).then(({data}) => {
       //   let blob = new Blob([data], {
       //     type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -108,6 +109,7 @@ export default {
       //     elink.click()
       //     document.body.removeChild(elink)
       //   }
+      // this.lodingS = false
       // })
       // this.DownLoad({url: `${REP_API.REPOUT_API}`, data: {}})
     },
