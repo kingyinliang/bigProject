@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：" class="dateinput">
-                <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.commitDateTwo" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
@@ -26,6 +26,156 @@
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
             <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
+        </el-row>
+        <div class="toggleSearchBottom">
+          <i class="el-icon-caret-top"></i>
+        </div>
+      </el-card>
+    </div>
+    <div class="main" style="padding-top: 0">
+      <el-card class="tableCard">
+        <div class="toggleSearchTop">
+          <i class="el-icon-caret-bottom"></i>
+        </div>
+        <el-table
+          :data="dataList"
+          border
+          tooltip-effect="dark"
+          header-row-class-name="tableHead"
+          style="width: 100%;margin-bottom: 20px">
+          <el-table-column
+            prop="factoryName"
+            label="工厂"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="workShopName"
+            label="车间"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="productLineName"
+            label="产线"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            label="生产品项"
+            :show-overflow-tooltip="true"
+            width="220">
+            <template slot-scope="scope">
+              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="batch"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="washing"
+            label="品牌"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="changeProduct"
+            label="类别"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="bootHeader"
+            label="箱规格"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badMaterial"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badProduct"
+            label="瓶规格"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badSemi"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="remark"
+            label="备注"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+        </el-table>
+        <el-row >
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="plantList.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="plantList.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="plantList.totalCount">
+          </el-pagination>
         </el-row>
       </el-card>
     </div>
@@ -61,7 +211,34 @@ export default {
       }
     })
   },
-  methods: {},
+  methods: {
+    GetList (st) {
+      this.lodingS = true
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      if (this.plantList.material !== '') {
+        this.plantList.materialCode = this.plantList.material.substring(0, this.plantList.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.plantList.material.indexOf(' ') + 1)
+      } else {
+        this.plantList.materialCode = ''
+        this.plantList.materialName = ''
+      }
+    },
+    ExportExcel () {
+      this.lodingS = true
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.plantList.pageSize = val
+      this.GetList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.plantList.currPage = val
+      this.GetList()
+    }
+  },
   computed: {},
   components: {
     Linkage: resolve => {

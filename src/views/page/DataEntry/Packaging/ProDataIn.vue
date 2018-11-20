@@ -2184,7 +2184,7 @@ export default {
         if (this.order.properties !== '二合一&礼盒产线') {
           this.listbomS.forEach((item, index) => {
             if (item.delFlag !== '1') {
-              if (item.potNo && item.filterDate && item.productUseNum) {
+              if (item.potNo && item.filterDate && item.productUseNum && item.batch) {
               } else {
                 ty = false
                 this.$message.error('物料半成品必填项未填')
