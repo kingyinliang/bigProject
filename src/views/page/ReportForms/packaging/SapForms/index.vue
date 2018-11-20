@@ -6,9 +6,9 @@
           <el-col>
             <linkage :plantList="plantList"></linkage>
           </el-col>
-          <el-col style="width: 200px">
+          <el-col style="width: 150px">
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出Excel</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -78,7 +78,7 @@
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="60">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -87,10 +87,10 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="品项"
+            prop="materialNameH"
+            label="生产物料"
             :show-overflow-tooltip="true"
-            width="220">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
@@ -102,22 +102,87 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orgnDifferent"
-            label="差异数量"
+            prop="materialCode"
+            label="组件物料"
+            :show-overflow-tooltip="true"
+            width="180">
+            <template slot-scope="scope">
+              {{scope.row.materialCode + ' ' + scope.row.materialName}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="batchP"
+            label="组件物料批次"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="60">
+            <template slot-scope="scope">
+            {{scope.row.unitP ?scope.row.unitP:scope.row.unitS}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="productUseNumP"
+            label="生产使用"
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="differentInfo"
-            label="差异说明"
+            prop="classLoss"
+            label="本班损耗"
             :show-overflow-tooltip="true"
-            width="100">
+            width="80">
           </el-table-column>
           <el-table-column
-            prop="remark"
-            label="备注"
+            prop="belowGradeNum"
+            label="不合格数"
             :show-overflow-tooltip="true"
-            width="100">
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badBatch"
+            label="不良批次"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="manufacturers"
+            label="厂家"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="potNo"
+            label="领用罐号"
+            :show-overflow-tooltip="true"
+            width="90">
+          </el-table-column>
+          <el-table-column
+            prop="filterDate"
+            label="过滤日期"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="productUseNumS"
+            label="生产用量"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="changePotDate"
+            label="换罐时间"
+            :show-overflow-tooltip="true"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="usePotDate"
+            label="用完时间"
+            :show-overflow-tooltip="true"
+            width="120">
           </el-table-column>
         </el-table>
         <el-row >
@@ -199,7 +264,7 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
-      this.$http(`${REP_API.REPMADIFFLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPSAPLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -212,7 +277,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.$http(`${REP_API.REPOUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
+      this.lodingS = true
+      this.$http(`${REP_API.REPSAPOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
         let blob = new Blob([data], {
           type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
@@ -220,13 +286,14 @@ export default {
           navigator.msSaveBlob(blob)
         } else {
           let elink = document.createElement('a')
-          elink.download = `机维组数量差异报表数据导出${getNewDate()}.xlsx`
+          elink.download = `物料领用报表数据导出${getNewDate()}.xlsx`
           elink.style.display = 'none'
           elink.href = URL.createObjectURL(blob)
           document.body.appendChild(elink)
           elink.click()
           document.body.removeChild(elink)
         }
+        this.lodingS = false
       })
     },
     // 改变每页条数

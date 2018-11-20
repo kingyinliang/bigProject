@@ -6,7 +6,7 @@
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
         <el-form-item label="物料：" prop="material">
-          <el-select v-model="dataForm.material" filterable placeholder="请选择" v-if="CapacityId">
+          <el-select v-model="dataForm.material" filterable placeholder="请选择" v-if="!CapacityId">
             <el-option
               v-for="item in SerchSapList"
               :key="item.sapCode+' '+item.itemName"

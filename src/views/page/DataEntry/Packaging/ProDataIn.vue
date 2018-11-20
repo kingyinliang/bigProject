@@ -411,8 +411,8 @@
                   <template slot-scope="scope">
                     <div class="required">
                       <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-if="!isRedact" disabled size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" v-else size="small"></el-date-picker>
                     </div>
                   </template>
                 </el-table-column>
@@ -422,8 +422,8 @@
                   <template slot-scope="scope">
                     <div class="required">
                       <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss.0" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate"  v-if="!isRedact" disabled="" size="small"></el-date-picker>
+                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" v-else size="small"></el-date-picker>
                     </div>
                   </template>
                 </el-table-column>
@@ -1040,8 +1040,11 @@
                   width="150"
                   label="批次">
                   <template slot-scope="scope">
-                    <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-                    <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
+                    <div class="required">
+                      <i class="reqI">*</i>
+                      <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+                      <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -2003,49 +2006,49 @@ export default {
       let ty = true
       if (this.order.workShopName !== '组装车间2（礼盒）') {
         if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner !== '' || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner !== '' || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner !== '' || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
@@ -2155,23 +2158,42 @@ export default {
       // })
       return ty
     },
-    saprul () {
+    saprul (st) {
       let ty = true
-      this.listbomP.forEach((item) => {
-        if (item.delFlag !== '1') {
-          if (item.productUseNum === 0 || item.productUseNum) {} else {
-            ty = false
+      for (var i = 0; i < this.listbomS.length - 1; i++) {
+        for (var j = i + 1; j < this.listbomS.length; j++) {
+          if (this.listbomS[i].delFlag !== '1' && this.listbomS[j].delFlag !== '1') {
+            if (this.listbomS[i].potNo !== '' && this.listbomS[i].batch !== '' && this.listbomS[j].potNo !== '' && this.listbomS[j].batch !== '' && this.listbomS[i].materialCode === this.listbomS[j].materialCode && this.listbomS[i].potNo === this.listbomS[j].potNo && this.listbomS[i].batch === this.listbomS[j].batch) {
+              ty = false
+              this.$message.error('存在重复批次，请核实')
+              return false
+            }
           }
         }
-      })
-      if (this.order.properties !== '二合一&礼盒产线') {
-        this.listbomS.forEach((item) => {
+      }
+      if (st === 'submit') {
+        this.listbomP.forEach((item) => {
           if (item.delFlag !== '1') {
-            if (item.potNo && item.filterDate && item.productUseNum) {} else {
+            if (item.productUseNum === 0 || item.productUseNum) {
+            } else {
               ty = false
+              this.$message.error('物料必填项未填')
+              return false
             }
           }
         })
+        if (this.order.properties !== '二合一&礼盒产线') {
+          this.listbomS.forEach((item, index) => {
+            if (item.delFlag !== '1') {
+              if (item.potNo && item.filterDate && item.productUseNum && item.batch) {
+              } else {
+                ty = false
+                this.$message.error('物料半成品必填项未填')
+                return false
+              }
+            }
+          })
+        }
       }
       return ty
     },
@@ -2208,10 +2230,13 @@ export default {
           this.$message.error('机维组未确认，不能提交')
           return false
         }
-        if (!this.saprul()) {
-          this.$message.error('物料领用必填项未填')
+        if (!this.saprul(str)) {
           return false
         }
+      }
+      if (!this.saprul(str)) {
+        console.log(this.listbomS)
+        return false
       }
       this.lodingStatus1 = true
       this.isRedact = false
@@ -2812,6 +2837,7 @@ export default {
     // 新增物料半成品
     addSapS (form, row) {
       form.push({
+        batch: '',
         orderId: this.order.orderId,
         status: '',
         id: '',
