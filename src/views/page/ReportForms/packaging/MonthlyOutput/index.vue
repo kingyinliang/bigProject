@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：" class="dateinput">
-                <el-date-picker type="month" v-model="plantList.commitDateTwo" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
@@ -75,7 +75,8 @@
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
-          <el-table-column :label="(index+1).toString()" v-for="(item,index) in dataList[0].moth.length" :key="item">
+          <div v-if="dataList.length > 0">
+            <el-table-column :label="(index+1).toString()" v-for="(item,index) in dataList[0].moth.length" :key="item">
             <el-table-column
               label="d1"
               width="60">
@@ -91,6 +92,7 @@
               </template>
             </el-table-column>
           </el-table-column>
+          </div>
           <el-table-column
             prop="batch"
             label="月计"
@@ -199,7 +201,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -217,6 +219,7 @@ export default {
         }
       ],
       plantList: {
+        productDate: '',
         material: '',
         factory: '',
         workshop: '',
@@ -238,6 +241,10 @@ export default {
   },
   methods: {
     GetList (st) {
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
       this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
@@ -249,6 +256,17 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
+      this.$http(`${REP_API.REPPRODUCTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
     },
     ExportExcel () {
       this.lodingS = true

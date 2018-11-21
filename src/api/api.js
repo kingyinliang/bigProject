@@ -629,7 +629,11 @@ export const REP_API = {
    */
   REPEXCLIST_API: HOST + '/report/form/listExc',
   /**
+   * @property {string} REPEXCOUTPUT_API 车间异常统计
+   */
+  REPEXCOUTPUT_API: HOST + '/report/form/exportExc',
+  /**
    * @property {string} REPEXCOUTPUT_API 车间异常统计 导出
    */
-  REPEXCOUTPUT_API: HOST + '/report/form/exportExc'
+  REPPRODUCTMLIST_API: HOST + '/report/form/listProductM'
 }
