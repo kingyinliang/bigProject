@@ -2006,7 +2006,7 @@ export default {
       if (this.order.workShopName !== '组装车间2（礼盒）') {
         if (this.readyDate.classes === '白班') {
           if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
-            if (((toDate(this.readyDate.dayCauseDate) - toDate(this.readyDate.dayEndDate)) / 60000) < 0) {
+            if (((toDate(this.readyDate.dayEndDate) - toDate(this.readyDate.dayCauseDate)) / 60000) < 0) {
               ty = false
               this.$message.error('准备时间白班工作结束时间不能早于停线时间')
               return false
