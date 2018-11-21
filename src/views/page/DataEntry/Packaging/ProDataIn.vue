@@ -2005,49 +2005,107 @@ export default {
       let ty = true
       if (this.order.workShopName !== '组装车间2（礼盒）') {
         if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
+            if (((toDate(this.readyDate.dayCauseDate) - toDate(this.readyDate.dayEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {
+            if (((toDate(this.readyDate.midCauseDate) - toDate(this.readyDate.midEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间中班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.nightCauseDate) - toDate(this.readyDate.nightEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.dayCauseDate) - toDate(this.readyDate.dayEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+            if (((toDate(this.readyDate.nightCauseDate) - toDate(this.readyDate.nightEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
+            if (((toDate(this.readyDate.dayCauseDate) - toDate(this.readyDate.dayEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {
+            if (((toDate(this.readyDate.midCauseDate) - toDate(this.readyDate.midEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间中班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.nightCauseDate) - toDate(this.readyDate.nightEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.dayCauseDate) - toDate(this.readyDate.dayEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+            if (((toDate(this.readyDate.nightCauseDate) - toDate(this.readyDate.nightEndDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
@@ -2112,6 +2170,11 @@ export default {
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
           item.aiShelves = item.aiShelves + ''
+          if (item.output) {
+            ty = false
+            this.$message.error('生产入库产出数不能为空或0')
+            return false
+          }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false
