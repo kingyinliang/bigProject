@@ -135,8 +135,23 @@ export function exportFile (url, fileName, vue) {
  * 动画
  * @param {*}
  */
-export function headanimation() {
-  
+export function headanimation ($) {
+  // 搜索切换显隐
+  $('.toggleSearchBottom').click(function () {
+    $('.searchCard').animate({height: 0}, 300, function () {
+      $('.searchCard').parent('.main').css('padding-bottom', 0)
+    })
+    $(this).hide()
+    $('.toggleSearchTop').show()
+  })
+  $('.toggleSearchTop').click(function () {
+    let hei = $('.el-card__body').height()
+    $('.searchCard').animate({height: `${hei + 40}px`}, 300, function () {
+      $('.searchCard').parent('.main').css('padding-bottom', '15px')
+    })
+    $(this).hide()
+    $('.toggleSearchBottom').show()
+  })
 }
 /**
  * 是否有权限

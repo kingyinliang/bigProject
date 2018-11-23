@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import { headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -134,6 +135,7 @@ export default {
     }
   },
   mounted () {
+    headanimation(this.$)
   },
   methods: {
     // 改变每页条数

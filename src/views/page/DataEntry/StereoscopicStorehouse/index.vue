@@ -185,7 +185,7 @@
 
 <script>
 import {BASICDATA_API, LTK_API, REP_API} from '@/api/api'
-import { exportFile } from '@/net/validate'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -225,22 +225,7 @@ export default {
   mounted () {
     // this.GetLtkList()
     this.Getdeptcode()
-    let $ = this.$
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '140px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     // 打印

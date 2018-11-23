@@ -210,7 +210,7 @@
 
 <script>
 import {BASICDATA_API, REP_API} from '@/api/api'
-import { exportFile } from '@/net/validate'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -241,6 +241,7 @@ export default {
         this.$message.error(data.msg)
       }
     })
+    headanimation(this.$)
   },
   methods: {
     GetList (st) {
