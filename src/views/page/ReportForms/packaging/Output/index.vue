@@ -60,25 +60,25 @@
             prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -90,7 +90,7 @@
             prop="orderNo"
             label="品项"
             :show-overflow-tooltip="true"
-            width="220">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialName}}
             </template>
@@ -105,7 +105,7 @@
             prop="outPutUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="50">
+            width="40">
           </el-table-column>
           <el-table-column
             prop="realOutPut"
@@ -117,7 +117,7 @@
             prop="realOutPutUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="50">
+            width="40">
           </el-table-column>
           <el-table-column
             prop="allBad"
@@ -129,67 +129,67 @@
             prop="badUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="50">
+            width="40">
           </el-table-column>
           <el-table-column
             prop="allSample"
             label="样品"
             :show-overflow-tooltip="true"
-            width="80">
+            width="60">
           </el-table-column>
           <el-table-column
             prop="sampleUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="50">
+            width="40">
           </el-table-column>
           <el-table-column
             prop="allNum"
             label="实际作业人数"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="allTime"
-            label="实际投入时间（MIN）"
+            label="实际投入时间"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="shift"
             label="交接班"
             :show-overflow-tooltip="true"
-            width="80">
+            width="60">
           </el-table-column>
           <el-table-column
             prop="meeting"
             label="班前会"
             :show-overflow-tooltip="true"
-            width="80">
+            width="60">
           </el-table-column>
           <el-table-column
             prop="prepared"
             label="生产前的准备"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="dinnerTime"
             label="用餐时间"
             :show-overflow-tooltip="true"
-            width="80">
+            width="60">
           </el-table-column>
           <el-table-column
             prop="clear"
             label="生产后清理时间"
             :show-overflow-tooltip="true"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
             prop="changeTime"
-            label="切换时间（实际）"
+            label="切换时间"
             :show-overflow-tooltip="true"
-            width="80">
+            width="60">
           </el-table-column>
         </el-table>
         <el-row >

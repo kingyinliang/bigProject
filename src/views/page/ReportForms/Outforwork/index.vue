@@ -42,19 +42,19 @@
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="workShopName"
@@ -128,7 +128,8 @@
 </template>
 
 <script>
-import { headanimation } from '@/net/validate'
+import { REP_API } from '@/api/api'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -151,6 +152,27 @@ export default {
     headanimation(this.$)
   },
   methods: {
+    GetList (st) {
+      this.lodingS = true
+      if (st) {
+        this.plantList.currPage = 1
+      }
+      this.$http(`${REP_API.REPATTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
+    },
+    ExportExcel () {
+      let that = this
+      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
+    },
     // 改变每页条数
     handleSizeChange (val) {
       this.plantList.pageSize = val

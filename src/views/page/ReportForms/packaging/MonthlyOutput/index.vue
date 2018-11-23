@@ -47,149 +47,146 @@
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             label="生产品项"
             :show-overflow-tooltip="true"
-            width="220">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
           </el-table-column>
           <el-table-column
-            prop="unitName"
+            prop="production"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="productionUnit"
             label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="basic"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="basicUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="ml"
+            label="月计"
+            :show-overflow-tooltip="true"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="mlUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="cubic"
+            label="月计"
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
+          <el-table-column
+            prop="cubicUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="brand"
+            label="品牌"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="largeClass"
+            label="类别"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="boxSpec"
+            label="箱规格"
+            :show-overflow-tooltip="true"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            prop="boxSpecUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="productSpec"
+            label="瓶规格"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="productSpecUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="unitName"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="50">
+          </el-table-column>
           <div v-if="dataList.length > 0">
-            <el-table-column :label="plantList.productDate.substring(plantList.productDate.indexOf('-')+1) + '月' + (index+1).toString() + '日'" v-for="(item,index) in dataList[0].listMonth.length" :key="item">
+            <el-table-column :label="month + '月' + (index+1).toString() + '日'" v-for="(item,index) in dataList[0].listMonth.length" :key="item">
               <el-table-column
                 label="白班产量"
-                width="60">
+                :show-overflow-tooltip="true"
+                width="80">
                 <template slot-scope="scope">
                   {{scope.row.listMonth[index].dayProduction}}
                 </template>
               </el-table-column>
               <el-table-column
                 label="中班产量"
-                width="60">
+                :show-overflow-tooltip="true"
+                width="80">
                 <template slot-scope="scope">
                   {{scope.row.listMonth[index].midProduction}}
                 </template>
               </el-table-column>
               <el-table-column
                 label="夜班产量"
-                width="60">
+                :show-overflow-tooltip="true"
+                width="80">
                 <template slot-scope="scope">
                   {{scope.row.listMonth[index].nigProduction}}
                 </template>
               </el-table-column>
             </el-table-column>
           </div>
-          <el-table-column
-            prop="production"
-            label="月计"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="productionUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="basic"
-            label="月计"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="basicUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="ml"
-            label="月计"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="mlUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="cubic"
-            label="月计"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="cubicUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="brand"
-            label="品牌"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="largeClass"
-            label="类别"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="boxSpec"
-            label="箱规格"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="boxSpecUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="productSpec"
-            label="瓶规格"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="productSpecUnit"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="备注"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
         </el-table>
         <el-row >
           <el-pagination
@@ -214,6 +211,7 @@ export default {
   name: 'index',
   data () {
     return {
+      month: '',
       lodingS: false,
       SerchSapList: [],
       dataList: [],
@@ -263,6 +261,7 @@ export default {
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
+          this.month = this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).split('')[0] === '0' ? this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).slice(1) : this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1)
         } else {
           this.$message.error(data.msg)
         }

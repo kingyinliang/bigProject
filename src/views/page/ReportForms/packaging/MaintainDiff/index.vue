@@ -60,25 +60,25 @@
             prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="60">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -89,8 +89,7 @@
           <el-table-column
             prop="orderNo"
             label="品项"
-            :show-overflow-tooltip="true"
-            width="220">
+            :show-overflow-tooltip="true">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
