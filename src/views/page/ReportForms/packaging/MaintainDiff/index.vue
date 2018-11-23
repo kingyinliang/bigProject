@@ -138,7 +138,7 @@
 
 <script>
 import {BASICDATA_API, REP_API} from '@/api/api'
-import { getNewDate } from '@/net/validate'
+import { exportFile } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -212,24 +212,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.lodingS = true
-      this.$http(`${REP_API.REPMADIFFOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
-        let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        })
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob)
-        } else {
-          let elink = document.createElement('a')
-          elink.download = `机维组数量差异报表数据导出${getNewDate()}.xlsx`
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          document.body.removeChild(elink)
-        }
-        this.lodingS = false
-      })
+      let that = this
+      exportFile(`${REP_API.REPMADIFFOUTPUT_API}`, '机维组数量差异报表数据导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

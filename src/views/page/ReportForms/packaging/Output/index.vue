@@ -5,23 +5,40 @@
         <el-row type="flex">
           <el-col>
             <linkage :plantList="plantList"></linkage>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
-              <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
-                <el-row>
-                  <el-col :span="12">
-                    <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-            </el-form>
           </el-col>
           <el-col style="width: 200px">
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
             <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+            <el-form-item label="订单号：">
+              <el-input v-model="plantList.orderNo" style="width: 200px" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="品项：">
+              <el-select v-model="plantList.material" filterable placeholder="请选择">
+                <el-option label="请选择"  value=""></el-option>
+                <el-option
+                  v-for="item in SerchSapList"
+                  :key="item.sapCode+' '+item.itemName"
+                  :label="item.sapCode+' '+item.itemName"
+                  :value="item.sapCode+' '+item.itemName">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
+              <el-row>
+                <el-col :span="12">
+                  <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                  <span>-</span>
+                </el-col>
+                <el-col :span="12">
+                  <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -65,89 +82,114 @@
           </el-table-column>
           <el-table-column
             prop="orderNo"
-            label="生产订单"
+            label="生产订单号"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            label="物料"
+            prop="orderNo"
+            label="品项"
             :show-overflow-tooltip="true"
             width="220">
             <template slot-scope="scope">
-              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+              {{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column
-            prop="expCodeName"
-            label="异常情况"
+            prop="planOutput"
+            label="计划产量"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
-            prop="expInfo"
-            label="异常描述"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="expStartDate"
-            label="异常开始时间"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="expEndDate"
-            label="异常结束时间"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="expContinue"
-            label="异常时间"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="expContinueUnit"
+            prop="outPutUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="60">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="deviceIdName"
-            label="设备"
+            prop="realOutPut"
+            label="实际产量"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
-            prop="materialShortName"
-            label="物料分类简称"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="energyName"
-            label="能源"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="affectProduction"
-            label="影响产量"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="affectProductionUnitName"
+            prop="realOutPutUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="120">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="remark"
-            label="备注"
+            prop="allBad"
+            label="不良品数"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            prop="allSample"
+            label="样品"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="sampleUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            prop="allNum"
+            label="实际作业人数"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="allTime"
+            label="实际投入时间（MIN）"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="shift"
+            label="交接班"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="meeting"
+            label="班前会"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="prepared"
+            label="生产前的准备"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="dinnerTime"
+            label="用餐时间"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="clear"
+            label="生产后清理时间"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="changeTime"
+            label="切换时间（实际）"
+            :show-overflow-tooltip="true"
+            width="80">
           </el-table-column>
         </el-table>
         <el-row >
@@ -167,7 +209,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, REP_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
 import { exportFile } from '@/net/validate'
 export default {
   name: 'index',
@@ -177,8 +219,11 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
+        orderNo: '',
         commitDateOne: '',
         commitDateTwo: '',
+        material: '',
+        productDate: '',
         factory: '',
         workshop: '',
         productline: '',
@@ -196,23 +241,6 @@ export default {
         this.$message.error(data.msg)
       }
     })
-
-    let $ = this.$
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '140px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
   },
   methods: {
     GetList (st) {
@@ -220,11 +248,16 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
-      this.$http(`${REP_API.REPEXCLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      if (this.plantList.material !== '') {
+        this.plantList.materialCode = this.plantList.material.substring(0, this.plantList.material.indexOf(' '))
+        this.plantList.materialName = this.plantList.material.substring(this.plantList.material.indexOf(' ') + 1)
+      } else {
+        this.plantList.materialCode = ''
+        this.plantList.materialName = ''
+      }
+      this.$http(`${REP_API.REPOUTPUTLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
-          // this.GetmaterialShort()
-          // this.Getenery()
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
@@ -236,43 +269,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPEXCOUTPUT_API}`, '车间异常统计报表数据导出', that)
-    },
-    // 获取物料分类简称
-    GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.dataList.forEach((item, index) => {
-            data.dicList.forEach((items, index) => {
-              if (item.materialShort === items.code) {
-                item.materialShortName = items.value
-                this.dataList.splice(this.dataList.length, 0, {})
-                this.dataList.splice(this.dataList.length - 1, 1)
-              }
-            })
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取能源下拉
-    Getenery () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.dataList.forEach((item, index) => {
-            data.dicList.forEach((items, index) => {
-              if (item.energy === items.code) {
-                item.energyName = items.value
-                this.dataList.splice(this.dataList.length, 0, {})
-                this.dataList.splice(this.dataList.length - 1, 1)
-              }
-            })
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      exportFile(`${REP_API.REPYIELDOUTPUT_API}`, '产量汇总报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

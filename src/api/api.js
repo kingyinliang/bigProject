@@ -633,7 +633,19 @@ export const REP_API = {
    */
   REPEXCOUTPUT_API: HOST + '/report/form/exportExc',
   /**
-   * @property {string} REPEXCOUTPUT_API 车间异常统计 导出
+   * @property {string} REPPRODUCTMLIST_API 产量月汇总
    */
-  REPPRODUCTMLIST_API: HOST + '/report/form/listProductM'
+  REPPRODUCTMLIST_API: HOST + '/report/form/listProductM',
+  /**
+   * @property {string} REPPRODUCTMOUTPUT_API 产量月汇总 导出
+   */
+  REPPRODUCTMOUTPUT_API: HOST + '/report/form/exportProductM',
+  /**
+   * @property {string} REPOUTPUTLIST_API 产量汇总
+   */
+  REPOUTPUTLIST_API: HOST + '/report/formh/collectList',
+  /**
+   * @property {string} REPYIELDOUTPUT_API 产量汇总 导出
+   */
+  REPYIELDOUTPUT_API: HOST + '/report/formh/exportCollect'
 }

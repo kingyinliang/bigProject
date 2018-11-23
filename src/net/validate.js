@@ -108,6 +108,37 @@ export function toDate (dateString) {
   return null
 }
 /**
+ * 导出
+ * @param {*} ulr fileName vue
+ */
+export function exportFile (url, fileName, vue) {
+  vue.lodingS = true
+  vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
+    let blob = new Blob([data], {
+      type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+    if (window.navigator.msSaveOrOpenBlob) {
+      navigator.msSaveBlob(blob)
+    } else {
+      let elink = document.createElement('a')
+      elink.download = `${fileName}${getNewDate()}.xlsx`
+      elink.style.display = 'none'
+      elink.href = URL.createObjectURL(blob)
+      document.body.appendChild(elink)
+      elink.click()
+      document.body.removeChild(elink)
+    }
+    vue.lodingS = false
+  })
+}
+/**
+ * 动画
+ * @param {*}
+ */
+export function headanimation() {
+  
+}
+/**
  * 是否有权限
  * @param {*} null
  */
