@@ -655,5 +655,13 @@ export const REP_API = {
   /**
    * @property {string} REPYIELDOUTPUT_API 计时考勤 导出
    */
-  REPATTMOUTPUT_API: HOST + '/report/form/exportAttM'
+  REPATTMOUTPUT_API: HOST + '/report/form/exportAttM',
+  /**
+   * @property {string} REPOUTPUTANDATTMLIST_API 产量&考勤
+   */
+  REPOUTPUTANDATTMLIST_API: HOST + '/report/formh/collectOnWorkList',
+  /**
+   * @property {string} REPOUTPUTANDATTMOUTPUT_API 产量&考勤 导出
+   */
+  REPOUTPUTANDATTMOUTPUT_API: HOST + '/report/formh/exportCheckOnWorkCollect'
 }

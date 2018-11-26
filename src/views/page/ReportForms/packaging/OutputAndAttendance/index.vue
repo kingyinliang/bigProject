@@ -5,40 +5,44 @@
         <el-row type="flex">
           <el-col>
             <linkage :plantList="plantList"></linkage>
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form-item label="班组：">
+                <el-select v-model="plantList.teamId" filterable placeholder="请选择">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="订单号：">
+                <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
+              </el-form-item>
+              <el-form-item label="品项：">
+                <el-select v-model="plantList.material" filterable placeholder="请选择">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option
+                    v-for="item in SerchSapList"
+                    :key="item.sapCode+' '+item.itemName"
+                    :label="item.sapCode+' '+item.itemName"
+                    :value="item.sapCode+' '+item.itemName">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
+                <el-row>
+                  <el-col :span="12">
+                    <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                    <span>-</span>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+            </el-form>
           </el-col>
-          <el-col style="width: 150px">
-            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listMaterial')">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportMaterial')">导出</el-button>
+          <el-col style="width: 200px">
+            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
-            <el-form-item label="订单号：">
-              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
-            </el-form-item>
-            <el-form-item label="品项：">
-              <el-select v-model="plantList.material" filterable placeholder="请选择">
-                <el-option label="请选择"  value=""></el-option>
-                <el-option
-                  v-for="item in SerchSapList"
-                  :key="item.sapCode+' '+item.itemName"
-                  :label="item.sapCode+' '+item.itemName"
-                  :value="item.sapCode+' '+item.itemName">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
-              <el-row>
-                <el-col :span="12">
-                  <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                  <span>-</span>
-                </el-col>
-                <el-col :span="12">
-                  <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-form>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -87,100 +91,64 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="materialNameH"
             label="生产物料"
             :show-overflow-tooltip="true"
             width="180">
             <template slot-scope="scope">
-              {{scope.row.materialH}}
+              {{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column
-            prop="batch"
-            label="生产批次"
+            prop="boxSpec"
+            label="箱规格"
             :show-overflow-tooltip="true"
-            width="120">
+            width="65">
           </el-table-column>
           <el-table-column
-            prop="materialCode"
-            label="组件物料"
+            prop="allPack"
+            label="包材库"
             :show-overflow-tooltip="true"
-            width="180">
-            <template slot-scope="scope">
-              {{scope.row.material}}
-            </template>
+            width="65">
           </el-table-column>
           <el-table-column
-            prop="batchP"
-            label="组件物料批次"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
+            prop="packUnit"
             label="单位"
             :show-overflow-tooltip="true"
             width="50">
-            <template slot-scope="scope">
-            {{scope.row.unitP}}
-            </template>
           </el-table-column>
           <el-table-column
-            prop="productUseNumP"
-            label="生产使用"
+            prop="allltk"
+            label="立体库"
             :show-overflow-tooltip="true"
-            width="80">
+            width="65">
           </el-table-column>
           <el-table-column
-            prop="classLoss"
-            label="本班损耗"
+            prop="ltkUnit"
+            label="单位"
             :show-overflow-tooltip="true"
-            width="80">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="belowGradeNum"
-            label="不合格数"
+            prop="team"
+            label="生产班组"
             :show-overflow-tooltip="true"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
-            prop="badBatch"
-            label="不良批次"
+            prop="userType"
+            label="人员属性"
             :show-overflow-tooltip="true"
-            width="80">
+            width="78">
           </el-table-column>
           <el-table-column
-            prop="manufacturers"
-            label="厂家"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="potNo"
-            label="领用罐号"
-            :show-overflow-tooltip="true"
-            width="90">
-          </el-table-column>
-          <el-table-column
-            prop="filterDate"
-            label="过滤日期"
+            prop="userId"
+            label="人员"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="productUseNumS"
-            label="生产用量"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="changePotDate"
-            label="换罐时间"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="usePotDate"
-            label="用完时间"
+            prop="workTime"
+            label="出勤时数（H）"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
@@ -210,12 +178,13 @@ export default {
     return {
       lodingS: false,
       SerchSapList: [],
+      Team: [],
       dataList: [],
       plantList: {
+        teamId: '',
         material: '',
         commitDateOne: '',
         commitDateTwo: '',
-        orderNo: '',
         factory: '',
         workshop: '',
         productline: '',
@@ -226,6 +195,7 @@ export default {
     }
   },
   mounted () {
+    this.GetTeam()
     this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
       if (data.code === 0) {
         this.SerchSapList = data.list
@@ -237,6 +207,16 @@ export default {
     headanimation(this.$)
   },
   methods: {
+    // 获取班组
+    GetTeam () {
+      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.Team = data.teamList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     GetList (st) {
       this.lodingS = true
       if (st) {
@@ -249,7 +229,7 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
-      this.$http(`${REP_API.REPSAPLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPOUTPUTANDATTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -263,7 +243,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPSAPOUTPUT_API}`, '物料领用报表数据导出', that)
+      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, 'JBS产出明细报表数据导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {
