@@ -219,6 +219,7 @@
 
 <script>
 import {BASICDATA_API, AUDIT_API, SYSTEMSETUP_API, AR_API} from '@/api/api'
+import { headanimation } from '@/net/validate'
 // import { export_json_to_excel } from '@/vendor/Export2Excel'
 export default {
   name: 'index',
@@ -261,23 +262,7 @@ export default {
   mounted () {
     this.Getdeptcode()
     this.GetARtype()
-    let $ = this.$
-
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '190px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     // 获取考勤类型

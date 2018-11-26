@@ -100,24 +100,24 @@
                     </div>
                     <div class="dayshiftBox">
                       <el-form-item label="工作开始时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="开线时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="切换时间：">
                         <el-input v-model="readyDate.dayChange" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
                         <el-input v-model="readyDate.dayChange" placeholder="手工录入" v-else disabled></el-input>
                       </el-form-item>
                       <el-form-item label="工作结束时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="停线时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="用餐时间：" >
                         <el-input v-model="readyDate.dayDinner" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')" placeholder="手工录入"></el-input>
@@ -131,24 +131,24 @@
                     </div>
                     <div class="middleshiftBox">
                       <el-form-item label="工作开始时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="开线时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="切换时间：">
                         <el-input v-model="readyDate.midChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
                         <el-input v-model="readyDate.midChange" placeholder="手工录入" v-else disabled></el-input>
                       </el-form-item>
                       <el-form-item label="工作结束时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="停线时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="用餐时间：" >
                         <el-input v-model="readyDate.midDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
@@ -162,24 +162,24 @@
                     </div>
                     <div class="nightshiftBox">
                       <el-form-item label="工作开始时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="开线时间：" >
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="切换时间：" >
                         <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
                         <el-input v-model="readyDate.nightChange" placeholder="手工录入" v-else disabled></el-input>
                       </el-form-item>
                       <el-form-item label="工作结束时间：">
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="停线时间：">
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
-                        <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-date-picker>
+                        <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" v-else disabled></el-date-picker>
                       </el-form-item>
                       <el-form-item label="用餐时间：" >
                         <el-input v-model="readyDate.nightDinner" placeholder="手工录入" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
@@ -253,10 +253,10 @@
                       label="班组/工序"
                       width="100">
                       <template slot-scope="scope">
-                        <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
+                        <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
                           <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
                         </el-select>
-                        <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" v-else disabled>
+                        <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" v-else disabled>
                           <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
                         </el-select>
                       </template>
@@ -2005,49 +2005,107 @@ export default {
       let ty = true
       if (this.order.workShopName !== '组装车间2（礼盒）') {
         if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
+            if (((toDate(this.readyDate.dayEndDate) - toDate(this.readyDate.dayCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {
+            if (((toDate(this.readyDate.midEndDate) - toDate(this.readyDate.midCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间中班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.nightEndDate) - toDate(this.readyDate.nightCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.dayEndDate) - toDate(this.readyDate.dayCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+            if (((toDate(this.readyDate.nightEndDate) - toDate(this.readyDate.nightCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '白班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate) {
+            if (((toDate(this.readyDate.dayEndDate) - toDate(this.readyDate.dayCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '中班') {
-          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner && this.readyDate.midDinner !== '' && this.readyDate.midDinner !== 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {} else {
+          if (this.readyDate.midCauseDate && this.readyDate.midStartDate && (this.readyDate.midDinner || this.readyDate.midDinner === 0) && this.readyDate.midCauseDate && this.readyDate.midEndDate) {
+            if (((toDate(this.readyDate.midEndDate) - toDate(this.readyDate.midCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间中班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间中班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '夜班') {
-          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.nightEndDate) - toDate(this.readyDate.nightCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间夜班必填字段未填')
             return false
           }
         } else if (this.readyDate.classes === '多班') {
-          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner && this.readyDate.dayDinner !== '' && this.readyDate.dayDinner !== 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner && this.readyDate.nightDinner !== '' && this.readyDate.nightDinner !== 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {} else {
+          if (this.readyDate.dayStartLineDate && this.readyDate.dayStartDate && (this.readyDate.dayDinner || this.readyDate.dayDinner === 0) && this.readyDate.dayCauseDate && this.readyDate.dayEndDate && this.readyDate.nightStartLineDate && this.readyDate.nightStartDate && (this.readyDate.nightDinner || this.readyDate.nightDinner === 0) && this.readyDate.nightCauseDate && this.readyDate.nightEndDate) {
+            if (((toDate(this.readyDate.dayEndDate) - toDate(this.readyDate.dayCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间白班工作结束时间不能早于停线时间')
+              return false
+            }
+            if (((toDate(this.readyDate.nightEndDate) - toDate(this.readyDate.nightCauseDate)) / 60000) < 0) {
+              ty = false
+              this.$message.error('准备时间夜班工作结束时间不能早于停线时间')
+              return false
+            }
+          } else {
             ty = false
             this.$message.error('准备时间白班和夜班必填字段未填')
             return false
@@ -2112,6 +2170,11 @@ export default {
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
           item.aiShelves = item.aiShelves + ''
+          if (!item.output) {
+            ty = false
+            this.$message.error('生产入库产出数不能为空或0')
+            return false
+          }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false

@@ -60,25 +60,25 @@
             prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -203,7 +203,7 @@
 
 <script>
 import {BASICDATA_API, REP_API} from '@/api/api'
-import { getNewDate } from '@/net/validate'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -234,22 +234,7 @@ export default {
       }
     })
 
-    let $ = this.$
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '140px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     GetList (st) {
@@ -277,24 +262,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.lodingS = true
-      this.$http(`${REP_API.REPSAPOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
-        let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        })
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob)
-        } else {
-          let elink = document.createElement('a')
-          elink.download = `物料领用报表数据导出${getNewDate()}.xlsx`
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          document.body.removeChild(elink)
-        }
-        this.lodingS = false
-      })
+      let that = this
+      exportFile(`${REP_API.REPSAPOUTPUT_API}`, '物料领用报表数据导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

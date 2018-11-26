@@ -14,7 +14,7 @@
         <el-row>
           <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
             <el-form-item label="订单号：">
-              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
+              <el-input v-model="plantList.orderNo" style="width: 200px" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
@@ -82,41 +82,114 @@
           </el-table-column>
           <el-table-column
             prop="orderNo"
-            label="生产订单"
+            label="生产订单号"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
             prop="orderNo"
             label="品项"
-            :show-overflow-tooltip="true">
+            :show-overflow-tooltip="true"
+            width="180">
             <template slot-scope="scope">
-              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+              {{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column
-            prop="batch"
-            label="生产批次"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orgnDifferent"
-            label="差异数量"
+            prop="planOutput"
+            label="计划产量"
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="differentInfo"
-            label="差异说明"
+            prop="outPutUnit"
+            label="单位"
             :show-overflow-tooltip="true"
-            width="100">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="remark"
-            label="备注"
+            prop="realOutPut"
+            label="实际产量"
             :show-overflow-tooltip="true"
-            width="100">
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="realOutPutUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="allBad"
+            label="不良品数"
+            :show-overflow-tooltip="true"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="badUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="allSample"
+            label="样品"
+            :show-overflow-tooltip="true"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="sampleUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="allNum"
+            label="实际作业人数"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="allTime"
+            label="实际投入时间"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="shift"
+            label="交接班"
+            :show-overflow-tooltip="true"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="meeting"
+            label="班前会"
+            :show-overflow-tooltip="true"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="prepared"
+            label="生产前的准备"
+            :show-overflow-tooltip="true"
+            width="70">
+          </el-table-column>
+          <el-table-column
+            prop="dinnerTime"
+            label="用餐时间"
+            :show-overflow-tooltip="true"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="clear"
+            label="生产后清理时间"
+            :show-overflow-tooltip="true"
+            width="78">
+          </el-table-column>
+          <el-table-column
+            prop="changeTime"
+            label="切换时间"
+            :show-overflow-tooltip="true"
+            width="60">
           </el-table-column>
         </el-table>
         <el-row >
@@ -146,10 +219,11 @@ export default {
       SerchSapList: [],
       dataList: [],
       plantList: {
-        material: '',
+        orderNo: '',
         commitDateOne: '',
         commitDateTwo: '',
-        orderNo: '',
+        material: '',
+        productDate: '',
         factory: '',
         workshop: '',
         productline: '',
@@ -167,7 +241,6 @@ export default {
         this.$message.error(data.msg)
       }
     })
-
     headanimation(this.$)
   },
   methods: {
@@ -183,7 +256,7 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
-      this.$http(`${REP_API.REPMADIFFLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPOUTPUTLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -197,7 +270,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPMADIFFOUTPUT_API}`, '机维组数量差异报表数据导出', that)
+      exportFile(`${REP_API.REPYIELDOUTPUT_API}`, '产量汇总报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

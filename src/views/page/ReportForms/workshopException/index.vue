@@ -43,25 +43,25 @@
             prop="productDate"
             label="生产日期"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             prop="orderNo"
@@ -72,7 +72,7 @@
           <el-table-column
             label="物料"
             :show-overflow-tooltip="true"
-            width="220">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
@@ -81,13 +81,13 @@
             prop="expCodeName"
             label="异常情况"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="expInfo"
             label="异常描述"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="expStartDate"
@@ -105,49 +105,49 @@
             prop="expContinue"
             label="异常时间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="77">
           </el-table-column>
           <el-table-column
             prop="expContinueUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="60">
+            width="50">
           </el-table-column>
           <el-table-column
             prop="deviceIdName"
             label="设备"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="materialShortName"
             label="物料分类简称"
             :show-overflow-tooltip="true"
-            width="120">
+            width="105">
           </el-table-column>
           <el-table-column
             prop="energyName"
             label="能源"
             :show-overflow-tooltip="true"
-            width="120">
+            width="50">
           </el-table-column>
           <el-table-column
             prop="affectProduction"
             label="影响产量"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="affectProductionUnitName"
             label="单位"
             :show-overflow-tooltip="true"
-            width="120">
+            width="50">
           </el-table-column>
           <el-table-column
             prop="remark"
             label="备注"
             :show-overflow-tooltip="true"
-            width="120">
+            width="80">
           </el-table-column>
         </el-table>
         <el-row >
@@ -168,7 +168,7 @@
 
 <script>
 import {BASICDATA_API, REP_API, SYSTEMSETUP_API} from '@/api/api'
-import { getNewDate } from '@/net/validate'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -197,22 +197,7 @@ export default {
       }
     })
 
-    let $ = this.$
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '140px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     GetList (st) {
@@ -235,24 +220,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.lodingS = true
-      this.$http(`${REP_API.REPEXCOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
-        let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        })
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob)
-        } else {
-          let elink = document.createElement('a')
-          elink.download = `车间异常统计报表数据导出${getNewDate()}.xlsx`
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          document.body.removeChild(elink)
-        }
-        this.lodingS = false
-      })
+      let that = this
+      exportFile(`${REP_API.REPEXCOUTPUT_API}`, '车间异常统计报表数据导出', that)
     },
     // 获取物料分类简称
     GetmaterialShort () {
