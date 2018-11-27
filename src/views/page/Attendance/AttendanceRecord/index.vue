@@ -44,12 +44,12 @@
           </el-col>
           <el-col style="width: 250px">
             <el-row style="margin-bottom: 18px">
-              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('verify:time:list')" style="margin-right: 48px">查询</el-button>
-              <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('verify:time:update')">批量删除</el-button>
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:att:listAtt')" style="margin-right: 48px">查询</el-button>
+              <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('sys:att:deleteAtt')">批量删除</el-button>
             </el-row>
-            <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('verify:time:update')">新增</el-button>
-            <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('verify:time:update')">保存</el-button>
-            <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('verify:time:update')">提交</el-button>
+            <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('sys:att:saveAtt')">新增</el-button>
+            <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('sys:att:updateAtt')">保存</el-button>
+            <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('sys:att:updateAtt')">提交</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -260,7 +260,9 @@
               fixed="right"
               width="50">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="updateAtt(scope.row)" v-if="scope.row.status !== 'checked' && scope.row.status !== 'submit'">{{scope.row.redactStatus?'保存':'编辑'}}</el-button>
+                <div v-if="isAuth('sys:att:updateAtt')">
+                  <el-button style="padding: 0;" type="text" @click="updateAtt(scope.row)" v-if="scope.row.status !== 'checked' && scope.row.status !== 'submit'">{{scope.row.redactStatus?'保存':'编辑'}}</el-button>
+                </div>
               </template>
             </el-table-column>
           </el-table>

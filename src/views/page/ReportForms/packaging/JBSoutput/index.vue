@@ -31,8 +31,8 @@
           </el-form>
         </el-col>
         <el-col style="width: 200px">
-          <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+          <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listJBS')">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportJBS')">导出</el-button>
         </el-col>
       </el-row>
       <div class="toggleSearchBottom">

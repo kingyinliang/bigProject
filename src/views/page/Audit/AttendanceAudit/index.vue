@@ -46,9 +46,9 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item style="margin-left: 67px;">
-                  <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
-                  <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:time:update')">审核通过</el-button>
-                  <el-button type="danger" size="small" @click="repulseAutios" v-if="isAuth('verify:time:update')">审核不通过</el-button>
+                  <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('sys:att:listAtt')">查询</el-button>
+                  <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('sys:att:auditAtt')">审核通过</el-button>
+                  <el-button type="danger" size="small" @click="repulseAutios" v-if="isAuth('sys:att:auditAtt')">审核不通过</el-button>
                 </el-form-item>
               </el-form>
             </el-col>
