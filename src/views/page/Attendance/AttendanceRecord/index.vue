@@ -211,15 +211,6 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="计时时数（小时）"
-              :show-overflow-tooltip="true"
-              width="100">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.timedTime" v-if="scope.row.redactStatus" size="small" placeholder="手工录入"></el-input>
-                <span v-else>{{scope.row.timedTime}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
               prop="pieceTime"
               label="计件时数（小时）"
               :show-overflow-tooltip="true"
@@ -227,6 +218,15 @@
               <template slot-scope="scope">
                 <el-input v-model="scope.row.pieceTime" v-if="scope.row.redactStatus" size="small" placeholder="手工录入"></el-input>
                 <span v-else>{{scope.row.pieceTime}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="计时时数（小时）"
+              :show-overflow-tooltip="true"
+              width="100">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.timedTime" v-if="scope.row.redactStatus" size="small" placeholder="手工录入"></el-input>
+                <span v-else>{{scope.row.timedTime}}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -377,14 +377,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="计时时数（小时）"
-            :show-overflow-tooltip="true"
-            width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.timedTime" size="small" placeholder="手工录入"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column
             prop="orderNo"
             label="计件时数（小时）"
             :show-overflow-tooltip="true"
@@ -392,6 +384,14 @@
             <template slot-scope="scope">
               <el-input v-model="scope.row.pieceTime" size="small" placeholder="手工录入" v-if="scope.row.pieceTimeSt"></el-input>
               <el-input v-model="scope.row.pieceTime" size="small" placeholder="手工录入" disabled v-else></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="计时时数（小时）"
+            :show-overflow-tooltip="true"
+            width="100">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.timedTime" size="small" placeholder="手工录入"></el-input>
             </template>
           </el-table-column>
           <el-table-column
