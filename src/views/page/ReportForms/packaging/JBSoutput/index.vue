@@ -55,25 +55,25 @@
           prop="productDate"
           label="生产日期"
           :show-overflow-tooltip="true"
-          width="120">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="factoryName"
           label="工厂"
           :show-overflow-tooltip="true"
-          width="120">
+          width="90">
         </el-table-column>
         <el-table-column
           prop="workShopName"
           label="车间"
           :show-overflow-tooltip="true"
-          width="120">
+          width="95">
         </el-table-column>
         <el-table-column
           prop="productLineName"
           label="产线"
           :show-overflow-tooltip="true"
-          width="80">
+          width="70">
         </el-table-column>
         <el-table-column
           prop="orderNo"
@@ -84,7 +84,7 @@
         <el-table-column
           label="生产品项"
           :show-overflow-tooltip="true"
-          width="220">
+          width="180">
           <template slot-scope="scope">
             {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
           </template>
@@ -99,43 +99,43 @@
           prop="washing"
           label="清洗冲顶"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="changeProduct"
           label="换罐冲顶"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="bootHeader"
           label="开机冲顶"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="badMaterial"
           label="包材不良"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="badProduct"
           label="制程不良"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="badSemi"
           label="半成品物料不合格"
           :show-overflow-tooltip="true"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
           prop="deviceLoss"
           label="设备残留"
           :show-overflow-tooltip="true"
-          width="80">
+          width="50">
         </el-table-column>
         <el-table-column
           prop="remark"
@@ -162,7 +162,7 @@
 
 <script>
 import {BASICDATA_API, REP_API} from '@/api/api'
-import { getNewDate } from '@/net/validate'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -192,22 +192,7 @@ export default {
       }
     })
 
-    let $ = this.$
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '140px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     GetList (st) {
@@ -235,24 +220,8 @@ export default {
       })
     },
     ExportExcel () {
-      this.lodingS = true
-      this.$http(`${REP_API.REPJBSOUTPUT_API}`, 'POST', this.plantList, false, true).then(({data}) => {
-        let blob = new Blob([data], {
-          type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        })
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob)
-        } else {
-          let elink = document.createElement('a')
-          elink.download = `JBS产出明细报表数据导出${getNewDate()}.xlsx`
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          document.body.removeChild(elink)
-        }
-        this.lodingS = false
-      })
+      let that = this
+      exportFile(`${REP_API.REPJBSOUTPUT_API}`, 'JBS产出明细报表数据导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

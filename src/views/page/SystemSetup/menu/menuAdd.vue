@@ -19,14 +19,14 @@
       <el-popover
         ref="menuListPopover"
         placement="bottom-start"
-        trigger="click">
+        trigger="click" style="height: 100%;overflow: auto">
         <el-tree
           :data="menuList"
           :props="menuListTreeProps"
           node-key="menuId"
           ref="menuListTree"
           @current-change="menuListTreeCurrentChangeHandle"
-          :default-expand-all="true"
+          :default-expand-all="false"
           :highlight-current="true"
           :expand-on-click-node="false">
         </el-tree>

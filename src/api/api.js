@@ -629,7 +629,39 @@ export const REP_API = {
    */
   REPEXCLIST_API: HOST + '/report/form/listExc',
   /**
-   * @property {string} REPEXCOUTPUT_API 车间异常统计 导出
+   * @property {string} REPEXCOUTPUT_API 车间异常统计
    */
-  REPEXCOUTPUT_API: HOST + '/report/form/exportExc'
+  REPEXCOUTPUT_API: HOST + '/report/form/exportExc',
+  /**
+   * @property {string} REPPRODUCTMLIST_API 产量月汇总
+   */
+  REPPRODUCTMLIST_API: HOST + '/report/form/listProductM',
+  /**
+   * @property {string} REPPRODUCTMOUTPUT_API 产量月汇总 导出
+   */
+  REPPRODUCTMOUTPUT_API: HOST + '/report/form/exportProductM',
+  /**
+   * @property {string} REPOUTPUTLIST_API 产量汇总
+   */
+  REPOUTPUTLIST_API: HOST + '/report/formh/collectList',
+  /**
+   * @property {string} REPYIELDOUTPUT_API 产量汇总 导出
+   */
+  REPYIELDOUTPUT_API: HOST + '/report/formh/exportCollect',
+  /**
+   * @property {string} REPYIELDOUTPUT_API 计时考勤
+   */
+  REPATTMLIST_API: HOST + '/report/form/listAttM',
+  /**
+   * @property {string} REPYIELDOUTPUT_API 计时考勤 导出
+   */
+  REPATTMOUTPUT_API: HOST + '/report/form/exportAttM',
+  /**
+   * @property {string} REPOUTPUTANDATTMLIST_API 产量&考勤
+   */
+  REPOUTPUTANDATTMLIST_API: HOST + '/report/formh/collectOnWorkList',
+  /**
+   * @property {string} REPOUTPUTANDATTMOUTPUT_API 产量&考勤 导出
+   */
+  REPOUTPUTANDATTMOUTPUT_API: HOST + '/report/formh/exportCheckOnWorkCollect'
 }

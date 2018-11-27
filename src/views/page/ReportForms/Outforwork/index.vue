@@ -5,40 +5,22 @@
         <el-row type="flex">
           <el-col>
             <linkage :plantList="plantList"></linkage>
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form-item label="品项：">
+                <el-select v-model="plantList.deptId" filterable placeholder="请选择">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="日期：" class="dateinput">
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+              </el-form-item>
+            </el-form>
           </el-col>
           <el-col style="width: 200px">
             <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
             <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
-            <el-form-item label="订单号：">
-              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
-            </el-form-item>
-            <el-form-item label="品项：">
-              <el-select v-model="plantList.material" filterable placeholder="请选择">
-                <el-option label="请选择"  value=""></el-option>
-                <el-option
-                  v-for="item in SerchSapList"
-                  :key="item.sapCode+' '+item.itemName"
-                  :label="item.sapCode+' '+item.itemName"
-                  :value="item.sapCode+' '+item.itemName">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
-              <el-row>
-                <el-col :span="12">
-                  <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                  <span>-</span>
-                </el-col>
-                <el-col :span="12">
-                  <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-form>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -56,12 +38,6 @@
           tooltip-effect="dark"
           header-row-class-name="tableHead"
           style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            prop="productDate"
-            label="生产日期"
-            :show-overflow-tooltip="true"
-            width="100">
-          </el-table-column>
           <el-table-column
             prop="factoryName"
             label="工厂"
@@ -81,42 +57,58 @@
             width="70">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="生产订单"
+            prop="workShopName"
+            label="班组"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="orderNo"
-            label="品项"
-            :show-overflow-tooltip="true">
-            <template slot-scope="scope">
-              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="batch"
-            label="生产批次"
-            :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="orgnDifferent"
-            label="差异数量"
+            prop="productLineName"
+            label="人员"
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="differentInfo"
-            label="差异说明"
-            :show-overflow-tooltip="true"
-            width="100">
+            label="8.1">
+            <el-table-column
+              prop="productLineName"
+              label="白班时数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="productLineName"
+              label="夜班时数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
           </el-table-column>
           <el-table-column
-            prop="remark"
-            label="备注"
-            :show-overflow-tooltip="true"
-            width="100">
+            label="统计">
+            <el-table-column
+              prop="productLineName"
+              label="白班天数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="productLineName"
+              label="夜班天数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="productLineName"
+              label="总计出勤数（H）"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="productLineName"
+              label="休班天数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
           </el-table-column>
         </el-table>
         <el-row >
@@ -136,20 +128,17 @@
 </template>
 
 <script>
-import {BASICDATA_API, REP_API} from '@/api/api'
+import { REP_API } from '@/api/api'
 import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
     return {
       lodingS: false,
-      SerchSapList: [],
+      Team: [],
       dataList: [],
       plantList: {
-        material: '',
-        commitDateOne: '',
-        commitDateTwo: '',
-        orderNo: '',
+        productDate: '',
         factory: '',
         workshop: '',
         productline: '',
@@ -160,14 +149,6 @@ export default {
     }
   },
   mounted () {
-    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
-      if (data.code === 0) {
-        this.SerchSapList = data.list
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
-
     headanimation(this.$)
   },
   methods: {
@@ -176,14 +157,7 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
-      if (this.plantList.material !== '') {
-        this.plantList.materialCode = this.plantList.material.substring(0, this.plantList.material.indexOf(' '))
-        this.plantList.materialName = this.plantList.material.substring(this.plantList.material.indexOf(' ') + 1)
-      } else {
-        this.plantList.materialCode = ''
-        this.plantList.materialName = ''
-      }
-      this.$http(`${REP_API.REPMADIFFLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPATTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -197,7 +171,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPMADIFFOUTPUT_API}`, '机维组数量差异报表数据导出', that)
+      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

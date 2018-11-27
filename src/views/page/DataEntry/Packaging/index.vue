@@ -50,9 +50,7 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="品项：" style="margin-bottom: 10px;">
-                      <el-tooltip class="item" effect="dark" :content="item.materialCode + ' ' + item.materialName" placement="top-start">
-                        <p class="hiddenP">{{item.materialCode + ' ' + item.materialName}}</p>
-                      </el-tooltip>
+                      <p class="hiddenP">{{item.materialCode + ' ' + item.materialName}}</p>
                     </el-form-item>
                     <el-form-item label="计划产量：" style="margin-bottom: 10px;">
                       <p>{{item.planOutput + ' ' + item.outputUnit}}</p>

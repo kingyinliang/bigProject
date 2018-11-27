@@ -265,6 +265,7 @@
 
 <script>
 import {BASICDATA_API, AUDIT_API, SYSTEMSETUP_API} from '@/api/api'
+import { headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -306,27 +307,9 @@ export default {
     }
   },
   mounted () {
-    console.log('-----------' + this.lodingStatus)
-    // this.GetAuditList()
     this.Getdeptcode()
     this.GetMoveReas()
-    let $ = this.$
-
-    // 搜索切换显隐
-    $('.toggleSearchBottom').click(function () {
-      $('.searchCard').animate({height: 0}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', 0)
-      })
-      $(this).hide()
-      $('.toggleSearchTop').show()
-    })
-    $('.toggleSearchTop').click(function () {
-      $('.searchCard').animate({height: '190px'}, 300, function () {
-        $('.searchCard').parent('.main').css('padding-bottom', '15px')
-      })
-      $(this).hide()
-      $('.toggleSearchBottom').show()
-    })
+    headanimation(this.$)
   },
   methods: {
     // 获取列表

@@ -24,7 +24,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="品牌：" prop="brand">
-          <el-input v-model="dataForm.brand" placeholder="手动输入" disabled></el-input>
+          <el-input v-model="dataForm.brand" placeholder="请先选择物料" disabled></el-input>
         </el-form-item>
         <el-form-item label="大类：" prop="largeClass">
           <el-select v-model="dataForm.largeClass" filterable placeholder="请选择" style="width: 100%">
@@ -39,10 +39,10 @@
             <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="瓶规格：" prop="productSpec">
+        <el-form-item label="瓶规格：">
           <el-input v-model="dataForm.productSpec" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="单位：" prop="productSpecUnit">
+        <el-form-item label="单位：">
           <el-select v-model="dataForm.productSpecUnit" filterable placeholder="请选择" style="width: 100%">
             <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
           </el-select>
@@ -93,12 +93,6 @@ export default {
         ],
         boxSpecUnit: [
           { required: true, message: '箱规格单位不能为空', trigger: 'blur' }
-        ],
-        productSpec: [
-          { required: true, message: '瓶规格不能为空', trigger: 'blur' }
-        ],
-        productSpecUnit: [
-          { required: true, message: '瓶规格单位不能为空', trigger: 'blur' }
         ]
       }
     }

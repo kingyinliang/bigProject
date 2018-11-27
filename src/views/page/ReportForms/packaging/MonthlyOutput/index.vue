@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：" class="dateinput">
-                <el-date-picker type="month" v-model="plantList.commitDateTwo" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
@@ -47,140 +47,146 @@
             prop="factoryName"
             label="工厂"
             :show-overflow-tooltip="true"
-            width="120">
+            width="90">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
             :show-overflow-tooltip="true"
-            width="120">
+            width="95">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
             label="生产品项"
             :show-overflow-tooltip="true"
-            width="220">
+            width="180">
             <template slot-scope="scope">
               {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
             </template>
           </el-table-column>
           <el-table-column
-            prop="batch"
-            label="单位"
-            :show-overflow-tooltip="true"
-            width="80">
-          </el-table-column>
-          <el-table-column :label="(index+1).toString()" v-for="(item,index) in dataList[0].moth.length" :key="item">
-            <el-table-column
-              label="d1"
-              width="60">
-              <template slot-scope="scope">
-                {{scope.row.moth[index]?scope.row.moth[index][0].d1 : ''}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="d2"
-              width="60">
-              <template slot-scope="scope">
-                {{scope.row.moth[index]?scope.row.moth[index][0].d2 : ''}}
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column
-            prop="batch"
+            prop="production"
             label="月计"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="productionUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="80">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="basic"
             label="月计"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="basicUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="80">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="ml"
             label="月计"
             :show-overflow-tooltip="true"
-            width="120">
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="mlUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="80">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="batch"
+            prop="cubic"
             label="月计"
             :show-overflow-tooltip="true"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="batch"
-            label="单位"
-            :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="washing"
+            prop="cubicUnit"
+            label="单位"
+            :show-overflow-tooltip="true"
+            width="40">
+          </el-table-column>
+          <el-table-column
+            prop="brand"
             label="品牌"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
-            prop="changeProduct"
+            prop="largeClass"
             label="类别"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
-            prop="bootHeader"
+            prop="boxSpec"
             label="箱规格"
             :show-overflow-tooltip="true"
-            width="80">
+            width="50">
           </el-table-column>
           <el-table-column
-            prop="badMaterial"
+            prop="boxSpecUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="80">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="badProduct"
+            prop="productSpec"
             label="瓶规格"
             :show-overflow-tooltip="true"
-            width="80">
+            width="70">
           </el-table-column>
           <el-table-column
-            prop="badSemi"
+            prop="productSpecUnit"
             label="单位"
             :show-overflow-tooltip="true"
-            width="120">
+            width="40">
           </el-table-column>
           <el-table-column
-            prop="remark"
-            label="备注"
+            prop="unitName"
+            label="单位"
             :show-overflow-tooltip="true"
-            width="120">
+            width="50">
           </el-table-column>
+          <div v-if="dataList.length > 0">
+            <el-table-column :label="month + '月' + (index+1).toString() + '日'" v-for="(item,index) in dataList[0].listMonth.length" :key="item">
+              <el-table-column
+                label="白班产量"
+                :show-overflow-tooltip="true"
+                width="80">
+                <template slot-scope="scope">
+                  {{scope.row.listMonth[index].dayProduction}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="中班产量"
+                :show-overflow-tooltip="true"
+                width="80">
+                <template slot-scope="scope">
+                  {{scope.row.listMonth[index].midProduction}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="夜班产量"
+                :show-overflow-tooltip="true"
+                width="80">
+                <template slot-scope="scope">
+                  {{scope.row.listMonth[index].nigProduction}}
+                </template>
+              </el-table-column>
+            </el-table-column>
+          </div>
         </el-table>
         <el-row >
           <el-pagination
@@ -199,24 +205,18 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, REP_API} from '@/api/api'
+import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
     return {
+      month: '',
       lodingS: false,
       SerchSapList: [],
-      dataList: [
-        {
-          a1: '222',
-          moth: [[{d1: 1, d2: 2, d3: 3}], [{d1: 2, d2: 2, d3: 2}], [{d1: 2, d2: 2, d3: 2}], [{d1: 2, d2: 2, d3: 2}]]
-        },
-        {
-          a1: '111',
-          moth: [[{}], [{}], [{}]]
-        }
-      ],
+      dataList: [],
       plantList: {
+        productDate: '',
         material: '',
         factory: '',
         workshop: '',
@@ -235,9 +235,14 @@ export default {
         this.$message.error(data.msg)
       }
     })
+    headanimation(this.$)
   },
   methods: {
     GetList (st) {
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
       this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
@@ -249,9 +254,27 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
+      this.$http(`${REP_API.REPPRODUCTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          console.log(data.page.list)
+          this.dataList = data.page.list
+          this.plantList.currPage = data.page.currPage
+          this.plantList.pageSize = data.page.pageSize
+          this.plantList.totalCount = data.page.totalCount
+          this.month = this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).split('')[0] === '0' ? this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).slice(1) : this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1)
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.lodingS = false
+      })
     },
     ExportExcel () {
-      this.lodingS = true
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
+      let that = this
+      exportFile(`${REP_API.REPPRODUCTMOUTPUT_API}`, '产量月汇总', that)
     },
     // 改变每页条数
     handleSizeChange (val) {
