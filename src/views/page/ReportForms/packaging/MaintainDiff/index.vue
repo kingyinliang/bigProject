@@ -91,7 +91,7 @@
             label="品项"
             :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+              {{scope.row.materialH}}
             </template>
           </el-table-column>
           <el-table-column
