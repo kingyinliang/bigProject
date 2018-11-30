@@ -54,6 +54,22 @@
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
+        <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead">
+          <el-table-column prop="productDate" label="生产日期" width="100"></el-table-column>
+          <el-table-column prop="factoryName" label="工厂" width="120" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="workShopName" label="车间" width="110"></el-table-column>
+          <el-table-column prop="productLineName" label="产线" width="120"></el-table-column>
+          <el-table-column prop="orderNo" label="生产订单号" width="140"></el-table-column>
+          <el-table-column prop="materialName" label="生产品项" width="120" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="batch" label="生产批次" width="120" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="className" label="班次" width="50"></el-table-column>
+          <el-table-column prop="team" label="班组" width="80"></el-table-column>
+          <el-table-column prop="realOutPut" label="产量" width="80"></el-table-column>
+          <el-table-column prop="realOutPutUnit" label="单位" width="50"></el-table-column>
+          <el-table-column prop="allSample" label="样品" width="50"></el-table-column>
+          <el-table-column prop="sampleUnit" label="单位" width="50"></el-table-column>
+          <el-table-column prop="workTime" label="人工工时（H）" width="80"></el-table-column>
+        </el-table>
         <el-row >
           <el-pagination
             @size-change="handleSizeChange"
@@ -130,7 +146,7 @@ export default {
         this.plantList.materialCode = ''
         this.plantList.materialName = ''
       }
-      this.$http(`${REP_API.REPOUTPUTANDATTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPOUTPUTMANHOUR_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -144,7 +160,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, 'JBS产出明细报表数据导出', that)
+      exportFile(`${REP_API.REPOUTPUTMANHOUREXPORT_API}`, '产量总工时报表数据导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {
