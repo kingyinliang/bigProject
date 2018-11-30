@@ -388,7 +388,7 @@ export default {
         row.pstngDate = this.plantList.pstngDate
         row.status = ''
         this.lodingStatus = true
-        this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', [row]).then(({data}) => {
+        this.$http(`${AUDIT_API.INUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus = false
           if (data.code === 0) {
             this.$message.success('操作成功')

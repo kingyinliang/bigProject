@@ -93,7 +93,7 @@
               :show-overflow-tooltip="true"
               width="80">
               <template slot-scope="scope">
-                {{scope.row.listMonth[index].pieceTime}}
+                {{scope.row.listMonth[index].timedTime}}
               </template>
             </el-table-column>
             <el-table-column
@@ -102,7 +102,7 @@
               :show-overflow-tooltip="true"
               width="80">
               <template slot-scope="scope">
-                {{scope.row.listMonth[index].timedTime}}
+                {{scope.row.listMonth[index].pieceTime}}
               </template>
             </el-table-column>
           </el-table-column>
