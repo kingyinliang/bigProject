@@ -671,5 +671,9 @@ export const REP_API = {
   /**
    * @property {string} REPMANHOUROUTPUT_API 车间工时报表 导出
    */
-  REPMANHOUROUTPUT_API: HOST + '/report/form/exportWorkshopWHoursM'
+  REPMANHOUROUTPUT_API: HOST + '/report/form/exportWorkshopWHoursM',
+  /**
+   *  车间出勤汇总表
+   *  */
+  REPATTM_API: HOST + '/report/form/listShopAttM'
 }

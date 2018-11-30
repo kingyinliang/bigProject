@@ -57,54 +57,54 @@
             width="70">
           </el-table-column>
           <el-table-column
-            prop="workShopName"
+            prop="teamName"
             label="班组"
             :show-overflow-tooltip="true"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="productLineName"
+            prop="userId"
             label="人员"
             :show-overflow-tooltip="true"
             width="80">
           </el-table-column>
-          <el-table-column
-            label="8.1">
-            <el-table-column
-              prop="productLineName"
-              label="白班时数"
-              :show-overflow-tooltip="true"
-              width="80">
+          <template v-if="dataList.length > 0">
+            <el-table-column :label="month + '月'">
+              <el-table-column  v-for="(item, index) in dataList[0].listMonth" :key="index" :label="(index+1) + '日'" :show-overflow-tooltip="true">
+                <el-table-column label="白班/夜班" :show-overflow-tooltip="true" width="100">
+                  <template slot-scope="scope">
+                    <span v-if="item.dayTime>0">{{item.dayTime}}</span>
+                    <span v-else>0</span>
+                    /
+                    <span v-if="item.nightTime>0">{{item.nightTime}}</span>
+                    <span v-else> 0</span>
+                  </template>
+                </el-table-column>
+              </el-table-column>
             </el-table-column>
-            <el-table-column
-              prop="productLineName"
-              label="夜班时数"
-              :show-overflow-tooltip="true"
-              width="80">
-            </el-table-column>
-          </el-table-column>
+          </template>
           <el-table-column
             label="统计">
             <el-table-column
-              prop="productLineName"
+              prop="dayAllDay"
               label="白班天数"
               :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
             <el-table-column
-              prop="productLineName"
+              prop="nightAllDay"
               label="夜班天数"
               :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
             <el-table-column
-              prop="productLineName"
+              prop="allTime"
               label="总计出勤数（H）"
               :show-overflow-tooltip="true"
               width="80">
             </el-table-column>
             <el-table-column
-              prop="productLineName"
+              prop="offDutyAllDay"
               label="休班天数"
               :show-overflow-tooltip="true"
               width="80">
@@ -134,6 +134,7 @@ export default {
   name: 'index',
   data () {
     return {
+      month: '',
       lodingS: false,
       Team: [],
       dataList: [],
@@ -153,16 +154,21 @@ export default {
   },
   methods: {
     GetList (st) {
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
       this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
       }
-      this.$http(`${REP_API.REPATTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPATTM_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
+          this.month = this.plantList.productDate
         } else {
           this.$message.error(data.msg)
         }
