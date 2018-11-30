@@ -546,6 +546,7 @@
 <script>
 import {BASICDATA_API, SYSTEMSETUP_API, AR_API} from '@/api/api'
 import { setUserList, headanimation } from '@/net/validate'
+// import { async } from ''
 export default {
   name: 'index',
   data () {
@@ -636,7 +637,7 @@ export default {
       })
     },
     // 获取考勤属性
-    GetARpro (row) {
+    GetARpro (row, callback) {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.kqdl}`, 'POST').then(({data}) => {
         if (data.code === 0) {
           row.ARpro = data.dicList
@@ -650,6 +651,9 @@ export default {
           this.datalist.splice(this.datalist.length - 1, 1)
         } else {
           this.$message.error(data.msg)
+        }
+        if (callback) {
+          callback(null, 'one')
         }
       })
     },
@@ -728,7 +732,7 @@ export default {
       })
     },
     // 考勤类型下拉
-    Setcode (row) {
+    Setcode (row, callback) {
       if (row.kqlx === 'CIP_time') {
         row.pieceTime = 0
         row.pieceTimeSt = false
@@ -747,6 +751,9 @@ export default {
         row.productLineSt = false
         row.productLine = ''
         row.pieceTimeSt = true
+      }
+      if (callback) {
+        callback(null, 'two')
       }
     },
     // 新增
@@ -779,12 +786,17 @@ export default {
                   timedTime: 0,
                   pieceTime: 0
                 }
-                if (this.plantList.kqdl === 'normal_time') {
-                  this.GetARpro(Listobj)
-                  this.Setcode(Listobj)
-                }
-                this.datalist.push(Listobj)
-                this.tableLoding = false
+                let that = this
+                let asyncfn = require('async')
+                asyncfn.series([(callback) => {
+                  that.GetARpro(Listobj, callback)
+                }, (callback) => {
+                  that.Setcode(Listobj, callback)
+                }], (callback, results) => {
+                  console.log(results)
+                  that.datalist.push(Listobj)
+                  that.tableLoding = false
+                })
               } else {
                 this.$message.error(data.msg)
               }

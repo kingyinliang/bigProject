@@ -629,7 +629,7 @@ export const REP_API = {
    */
   REPEXCLIST_API: HOST + '/report/form/listExc',
   /**
-   * @property {string} REPEXCOUTPUT_API 车间异常统计
+   * @property {string} REPEXCOUTPUT_API 车间异常统计 导出
    */
   REPEXCOUTPUT_API: HOST + '/report/form/exportExc',
   /**
@@ -663,5 +663,13 @@ export const REP_API = {
   /**
    * @property {string} REPOUTPUTANDATTMOUTPUT_API 产量&考勤 导出
    */
-  REPOUTPUTANDATTMOUTPUT_API: HOST + '/report/formh/exportCheckOnWorkCollect'
+  REPOUTPUTANDATTMOUTPUT_API: HOST + '/report/formh/exportCheckOnWorkCollect',
+  /**
+   * @property {string} REPMANHOURLIST_API 车间工时报表
+   */
+  REPMANHOURLIST_API: HOST + '/report/form/listWorkshopWHoursM',
+  /**
+   * @property {string} REPMANHOUROUTPUT_API 车间工时报表 导出
+   */
+  REPMANHOUROUTPUT_API: HOST + '/report/form/exportWorkshopWHoursM'
 }

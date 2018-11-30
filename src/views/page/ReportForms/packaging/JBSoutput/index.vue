@@ -86,7 +86,7 @@
           :show-overflow-tooltip="true"
           width="180">
           <template slot-scope="scope">
-            {{scope.row.materialCodeH + ' ' + scope.row.materialNameH}}
+            {{scope.row.materialH}}
           </template>
         </el-table-column>
         <el-table-column
