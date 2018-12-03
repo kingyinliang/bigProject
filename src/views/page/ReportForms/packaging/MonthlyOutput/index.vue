@@ -23,8 +23,8 @@
             </el-form>
           </el-col>
           <el-col style="width: 200px">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listProductM')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportProductM')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -76,7 +76,7 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="productionUnit"
+            prop="productionUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
@@ -88,7 +88,7 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="basicUnit"
+            prop="basicUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
@@ -100,7 +100,7 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="mlUnit"
+            prop="mlUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
@@ -112,7 +112,7 @@
             width="80">
           </el-table-column>
           <el-table-column
-            prop="cubicUnit"
+            prop="cubicUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
@@ -136,7 +136,7 @@
             width="50">
           </el-table-column>
           <el-table-column
-            prop="boxSpecUnit"
+            prop="boxSpecUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
@@ -148,7 +148,7 @@
             width="70">
           </el-table-column>
           <el-table-column
-            prop="productSpecUnit"
+            prop="productSpecUnitName"
             label="单位"
             :show-overflow-tooltip="true"
             width="40">
