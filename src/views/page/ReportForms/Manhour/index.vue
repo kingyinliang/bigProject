@@ -35,20 +35,17 @@
           <el-table-column
             prop="factoryName"
             label="工厂"
-            :show-overflow-tooltip="true"
-            width="120">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
-            :show-overflow-tooltip="true"
-            width="120">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
-            :show-overflow-tooltip="true"
-            width="80">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="boxSpec"
