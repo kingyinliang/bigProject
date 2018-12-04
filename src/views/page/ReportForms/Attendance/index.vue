@@ -24,7 +24,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
