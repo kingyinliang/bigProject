@@ -243,7 +243,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, 'JBS产出明细报表数据导出', that)
+      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, '产量考勤报表导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

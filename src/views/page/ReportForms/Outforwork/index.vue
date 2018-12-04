@@ -177,7 +177,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
+      exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

@@ -677,6 +677,10 @@ export const REP_API = {
    *  */
   REPATTM_API: HOST + '/report/form/listShopAttM',
   /**
+   *  车间出勤汇总表 导出
+   *  */
+  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttM',
+  /**
    *  包装车间 - 产量总工时、导出
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
