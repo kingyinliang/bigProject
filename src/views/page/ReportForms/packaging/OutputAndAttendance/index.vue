@@ -4,8 +4,8 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList"></linkage>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+            <linkage :plantList="plantList" :lablewidth="true"></linkage>
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px">
               <el-form-item label="班组：">
                 <el-select v-model="plantList.teamId" filterable placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
@@ -13,7 +13,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="订单号：">
-                <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
+                <el-input v-model="plantList.orderNo" style="width: 200px" placeholder="请输入"></el-input>
               </el-form-item>
               <el-form-item label="品项：">
                 <el-select v-model="plantList.material" filterable placeholder="请选择">

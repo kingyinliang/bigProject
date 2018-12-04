@@ -4,7 +4,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList"></linkage>
+            <linkage :plantList="plantList" :lablewidth="true"></linkage>
           </el-col>
           <el-col style="width: 150px">
             <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listMaterial')">查询</el-button>
@@ -12,9 +12,9 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px">
             <el-form-item label="订单号：">
-              <el-input v-model="plantList.orderNo" style="width: 200px"></el-input>
+              <el-input v-model="plantList.orderNo" style="width: 200px" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">

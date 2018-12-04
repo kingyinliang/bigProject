@@ -1,6 +1,26 @@
 <template>
 <el-col>
-  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" v-if="!lablewidth">
+    <el-form-item label="工厂：">
+      <el-select v-model="plantList.factory" placeholder="请选择">
+        <el-option label="请选择"  value=""></el-option>
+        <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="车间：">
+      <el-select v-model="plantList.workshop" placeholder="请选择">
+        <el-option label="请选择"  value=""></el-option>
+        <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="产线：">
+      <el-select v-model="plantList.productline" placeholder="产线">
+        <el-option label="请选择"  value=""></el-option>
+        <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px" v-if="lablewidth">
     <el-form-item label="工厂：">
       <el-select v-model="plantList.factory" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>
@@ -45,7 +65,8 @@ export default {
     }
   },
   props: {
-    plantList: {}
+    plantList: {},
+    lablewidth: {}
   },
   mounted () {
     this.Getdeptcode()
