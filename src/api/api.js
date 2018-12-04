@@ -8,8 +8,8 @@
 // let HOST = 'http://10.10.1.23:8080'
 // HOST
 // let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
-let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
-// let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
+// let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
+let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
 /*
 *MAINapi
  */
