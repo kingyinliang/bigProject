@@ -12,14 +12,14 @@
                   <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="日期：" class="dateinput">
-                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+              <el-form-item label="日期：">
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
           <el-col style="width: 200px">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listShopAttM')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportShopAttM')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -69,17 +69,22 @@
             width="80">
           </el-table-column>
           <template v-if="dataList.length > 0">
-            <el-table-column :label="month + '月'">
-              <el-table-column  v-for="(item, index) in dataList[0].listMonth" :key="index" :label="(index+1) + '日'" :show-overflow-tooltip="true">
-                <el-table-column label="白班/夜班" :show-overflow-tooltip="true" width="100">
-                  <template slot-scope="scope">
-                    <span v-if="item.dayTime>0">{{item.dayTime}}</span>
-                    <span v-else>0</span>
-                    /
-                    <span v-if="item.nightTime>0">{{item.nightTime}}</span>
-                    <span v-else> 0</span>
-                  </template>
-                </el-table-column>
+            <el-table-column :label="month + '月' + (index+1).toString() + '日'" v-for="(item,index) in dataList[0].listMonth.length" :key="item">
+              <el-table-column
+                label="白班时数"
+                :show-overflow-tooltip="true"
+                width="80">
+                <template slot-scope="scope">
+                  {{scope.row.listMonth[index].dayTime}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="夜班时数"
+                :show-overflow-tooltip="true"
+                width="80">
+                <template slot-scope="scope">
+                  {{scope.row.listMonth[index].nightTime}}
+                </template>
               </el-table-column>
             </el-table-column>
           </template>
@@ -168,8 +173,7 @@ export default {
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
-          this.month = this.plantList.productDate
-        } else {
+          this.month = this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).split('')[0] === '0' ? this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).slice(1) : this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1)} else {
           this.$message.error(data.msg)
         }
         this.lodingS = false
@@ -177,7 +181,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
+      exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

@@ -40,8 +40,8 @@
             </el-form>
           </el-col>
           <el-col style="width: 200px">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formh:dayCheckOnWorkList')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportCheckOnWorkCollect')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -243,7 +243,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, 'JBS产出明细报表数据导出', that)
+      exportFile(`${REP_API.REPOUTPUTANDATTMOUTPUT_API}`, '产量考勤报表导出', that)
     },
     // 改变每页条数
     handleSizeChange (val) {

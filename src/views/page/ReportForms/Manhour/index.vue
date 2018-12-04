@@ -7,13 +7,13 @@
             <linkage :plantList="plantList"></linkage>
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
               <el-form-item label="日期：">
-                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
           <el-col style="width: 200px">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listWorkshopWHoursM')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportWorkshopWHoursM')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -35,20 +35,17 @@
           <el-table-column
             prop="factoryName"
             label="工厂"
-            :show-overflow-tooltip="true"
-            width="120">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="workShopName"
             label="车间"
-            :show-overflow-tooltip="true"
-            width="120">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="productLineName"
             label="产线"
-            :show-overflow-tooltip="true"
-            width="80">
+            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column
             prop="boxSpec"
