@@ -4,8 +4,8 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList"></linkage>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+            <linkage :plantList="plantList" :lablewidth="true"></linkage>
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px">
               <el-form-item label="品项：">
                 <el-select v-model="plantList.material" filterable placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：" class="dateinput">
-                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 170px"></el-date-picker>
+                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
