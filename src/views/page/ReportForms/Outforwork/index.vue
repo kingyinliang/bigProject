@@ -109,6 +109,12 @@
               width="80">
             </el-table-column>
             <el-table-column
+              prop="workAllDay"
+              label="上班天数"
+              :show-overflow-tooltip="true"
+              width="80">
+            </el-table-column>
+            <el-table-column
               prop="offDutyAllDay"
               label="休班天数"
               :show-overflow-tooltip="true"
