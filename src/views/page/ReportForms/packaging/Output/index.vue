@@ -4,7 +4,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList" :lablewidth="true"></linkage>
+            <linkage :plantList="plantList" :lablewidth="true" :isPackaging="true"></linkage>
           </el-col>
           <el-col style="width: 200px">
             <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formh:collectList')">查询</el-button>

@@ -1,11 +1,5 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <!--<div class="topTitle">-->
-      <!--<el-breadcrumb separator="/">-->
-        <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
-        <!--<el-breadcrumb-item>包装车间</el-breadcrumb-item>-->
-      <!--</el-breadcrumb>-->
-    <!--</div>-->
     <div class="main">
       <el-card>
         <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>

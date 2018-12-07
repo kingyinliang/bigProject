@@ -66,7 +66,8 @@ export default {
   },
   props: {
     plantList: {},
-    lablewidth: {}
+    lablewidth: {},
+    isPackaging: {}
   },
   mounted () {
     this.Getdeptcode()
@@ -87,7 +88,7 @@ export default {
       this.plantList.workshop = ''
       this.plantList.productline = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', this.isPackaging ? {deptId: id, deptName: '包装 组装'} : {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
