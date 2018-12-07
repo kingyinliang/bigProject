@@ -129,6 +129,9 @@
             label="生产使用"
             :show-overflow-tooltip="true"
             width="80">
+            <template slot-scope="scope">
+              {{scope.row.productUseNumP?scope.row.productUseNumP : scope.row.productUseNumS}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="classLoss"
@@ -165,12 +168,6 @@
             label="过滤日期"
             :show-overflow-tooltip="true"
             width="120">
-          </el-table-column>
-          <el-table-column
-            prop="productUseNumS"
-            label="生产用量"
-            :show-overflow-tooltip="true"
-            width="80">
           </el-table-column>
           <el-table-column
             prop="changePotDate"
