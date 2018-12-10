@@ -742,7 +742,7 @@
                     label="单位"
                     width="60">
                     <template slot-scope="scope">
-                      <span>{{ productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName}}</span>
+                      <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = basicUnitName):(productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName)}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -778,7 +778,7 @@
                   <el-table-column
                     label="产出数"
                     width="120">
-                    <template slot-scope="scope">{{ scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1) }}</template>
+                    <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1)) }}</template>
                   </el-table-column>
                   <el-table-column
                     label="单位"
