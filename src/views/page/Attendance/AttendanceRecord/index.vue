@@ -32,7 +32,8 @@
               <el-form-item label="审核状态：">
                 <el-select v-model="plantList.status" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
-                  <el-option label="未审核"  value="submit"></el-option>
+                  <el-option label="已保存"  value="saved"></el-option>
+                  <el-option label="已提交"  value="submit"></el-option>
                   <el-option label="审核通过"  value="checked"></el-option>
                   <el-option label="审核不通过"  value="noPass"></el-option>
                 </el-select>
@@ -783,8 +784,8 @@ export default {
                   productlineList: productlineList,
                   Team: data.teamList,
                   userId: [],
-                  timedTime: 0,
-                  pieceTime: 0
+                  timedTime: '0',
+                  pieceTime: '0'
                 }
                 let that = this
                 let asyncfn = require('async')
@@ -1072,11 +1073,13 @@ export default {
      * 保存
      */
     // 校验
-    datarul () {
+    datarul (data) {
       let st = true
-      this.datalist.forEach((item, index) => {
-        if (item.kqdl === '' || item.kqlx === '' || item.userType === '' || item.userId.length === 0 || item.classType === '' || item.timedTime === '' || !item.timedTime) {
+      data.forEach((item, index) => {
+        if (item.kqdl && item.kqlx && item.userType && item.userId.length !== 0 && item.classType && (item.timedTime || item.timedTime === 0)) {} else {
           this.$message.error('考勤必填项未填写')
+          st = false
+          return false
         }
       })
       return st
@@ -1095,7 +1098,7 @@ export default {
         if (!this.clearStatus) {
           this.disData(st)
           if (st === 'submit') {
-            if (!this.datarul()) {
+            if (!this.datarul(this.datalist)) {
               return false
             }
           }
@@ -1132,6 +1135,11 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$message.error('请选择考勤')
       } else {
+        if (st === 'submit') {
+          if (!this.datarul(this.multipleSelection)) {
+            return false
+          }
+        }
         this.lodingS = true
         this.multipleSelection.forEach((item, index) => {
           item.status = st

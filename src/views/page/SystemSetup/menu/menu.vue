@@ -1,11 +1,5 @@
 <template>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <!--<div class="topTitle">-->
-        <!--<el-breadcrumb separator="/">-->
-          <!--<el-breadcrumb-item>系统管理</el-breadcrumb-item>-->
-          <!--<el-breadcrumb-item>菜单管理</el-breadcrumb-item>-->
-        <!--</el-breadcrumb>-->
-      <!--</div>-->
       <div class="main">
         <el-card>
           <el-row>

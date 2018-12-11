@@ -5,17 +5,6 @@
         <el-row type="flex">
           <el-col>
             <linkage :plantList="plantList"></linkage>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
-              <el-form-item label="品项：">
-                <el-select v-model="plantList.deptId" filterable placeholder="请选择">
-                  <el-option label="请选择"  value=""></el-option>
-                  <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="日期：">
-                <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
-              </el-form-item>
-            </el-form>
           </el-col>
           <el-col style="width: 200px">
             <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listShopAttM')">查询</el-button>
@@ -150,6 +139,7 @@ export default {
       Team: [],
       dataList: [],
       plantList: {
+        deptId: '',
         productDate: '',
         factory: '',
         workshop: '',

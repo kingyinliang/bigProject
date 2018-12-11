@@ -4,7 +4,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList" :lablewidth="true"></linkage>
+            <linkage :plantList="plantList" :lablewidth="true" :isPackaging="true"></linkage>
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px">
               <el-form-item label="班组：">
                 <el-select v-model="plantList.teamId" filterable placeholder="请选择">

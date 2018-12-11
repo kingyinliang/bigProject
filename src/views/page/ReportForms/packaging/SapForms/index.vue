@@ -4,7 +4,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <linkage :plantList="plantList" :lablewidth="true"></linkage>
+            <linkage :plantList="plantList" :lablewidth="true" :isPackaging="true"></linkage>
           </el-col>
           <el-col style="width: 150px">
             <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listMaterial')">查询</el-button>
@@ -129,6 +129,9 @@
             label="生产使用"
             :show-overflow-tooltip="true"
             width="80">
+            <template slot-scope="scope">
+              {{scope.row.productUseNumP?scope.row.productUseNumP : scope.row.productUseNumS}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="classLoss"
@@ -165,12 +168,6 @@
             label="过滤日期"
             :show-overflow-tooltip="true"
             width="120">
-          </el-table-column>
-          <el-table-column
-            prop="productUseNumS"
-            label="生产用量"
-            :show-overflow-tooltip="true"
-            width="80">
           </el-table-column>
           <el-table-column
             prop="changePotDate"

@@ -533,12 +533,15 @@
                     label="白/中/夜班"
                     width="120">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
-                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
+                      <div class="required">
+                        <i class="reqI">*</i>
+                        <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                        <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -708,12 +711,15 @@
                     label="白/中/夜班"
                     width="120">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
-                      <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
-                        <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-                      </el-select>
+                      <div class="required">
+                        <i class="reqI">*</i>
+                        <el-select v-model="scope.row.classType" placeholder="请选择" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                        <el-select v-model="scope.row.classType" placeholder="请选择" size="small" v-else disabled>
+                          <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+                        </el-select>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -736,7 +742,7 @@
                     label="单位"
                     width="60">
                     <template slot-scope="scope">
-                      <span>{{ productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName}}</span>
+                      <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = basicUnitName):(productUnitName? scope.row.manSolidUnitName = productUnitName : scope.row.manSolidUnitName = basicUnitName)}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -772,7 +778,7 @@
                   <el-table-column
                     label="产出数"
                     width="120">
-                    <template slot-scope="scope">{{ scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1) }}</template>
+                    <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio*1) + scope.row.sample*1)) }}</template>
                   </el-table-column>
                   <el-table-column
                     label="单位"
@@ -2174,6 +2180,11 @@ export default {
           if (!item.output) {
             ty = false
             this.$message.error('生产入库产出数不能为空或0')
+            return false
+          }
+          if (!item.classType) {
+            ty = false
+            this.$message.error('生产入库班次不能为空')
             return false
           }
           if (item.batch) {
