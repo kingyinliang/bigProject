@@ -1,0 +1,143 @@
+<template>
+  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+    <div class="main">
+      <el-card class="searchCard" style="margin: 0">
+        <el-row type="flex">
+          <el-col>
+            <form-header :formHeader="formHeader"></form-header>
+          </el-col>
+          <el-col style="width: 210px">
+            <el-row>
+              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
+              <el-button type="primary" size="small" :disabled="isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+            </el-row>
+            <el-row v-if="isRedact">
+              <el-button type="primary" size="small">保存</el-button>
+              <el-button type="primary" size="small">提交</el-button>
+            </el-row>
+          </el-col>
+        </el-row>
+        <div class="toggleSearchBottom">
+          <i class="el-icon-caret-top"></i>
+        </div>
+      </el-card>
+    </div>
+    <div class="main" style="padding-top: 0px">
+      <el-card class="tableCard">
+        <div class="toggleSearchTop">
+          <i class="el-icon-caret-bottom"></i>
+        </div>
+        <el-tabs v-model="activeName" id="DaatTtabs">
+          <el-tab-pane name="1">
+            <span slot="label">
+              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+                <el-button>准备时间</el-button>
+              </el-tooltip>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="2">
+            <span slot="label">
+              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+                <el-button>人员</el-button>
+              </el-tooltip>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="3">
+            <span slot="label">
+              <el-button>异常记录</el-button>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="4">
+            <span slot="label">
+              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+                <el-button>生产入库</el-button>
+              </el-tooltip>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="5">
+            <span slot="label">
+              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+                <el-button>物料领用</el-button>
+              </el-tooltip>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="6">
+            <span slot="label">
+              <el-button :Text="Text">文本记录</el-button>
+            </span>
+            <text-record></text-record>
+          </el-tab-pane>
+        </el-tabs>
+      </el-card>
+    </div>
+  </el-col>
+</template>
+
+<script>
+import { headanimation } from '@/net/validate'
+import FormHeader from '../common/formHeader'
+import TextRecord from '../common/textRecord'
+export default {
+  name: 'dataEntryIndex',
+  data () {
+    return {
+      lodingS: false,
+      isRedact: false,
+      formHeader: {
+        productDate: ''
+      },
+      activeName: '1',
+      Text: ''
+    }
+  },
+  mounted () {
+    headanimation(this.$)
+  },
+  methods: {},
+  computed: {},
+  components: {
+    FormHeader,
+    TextRecord
+  }
+}
+</script>
+
+<style lang="scss">
+#DaatTtabs{
+  h3{
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+  }
+  border-top: 1px solid #e8e8e8;
+  span{
+    .el-button{
+      background-color: white!important;
+      font-size: 16px;
+      padding: 0;
+      border: none;
+    }
+  }
+  .el-tabs__item{
+    height: 50px;
+    line-height: 50px;
+  }
+  table{
+    .el-form-item{
+      margin-bottom: 0;
+    }
+  }
+  .notNull{
+    color: red;
+  }
+  .el-table .warning-row:hover>td{
+    background: #bbbbbb!important;
+    background-color: #bbbbbb!important;
+  }
+  .el-table .warning-row>td{
+    background: #bbbbbb!important;
+    background-color: #bbbbbb!important;
+  }
+  // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
+}
+</style>
