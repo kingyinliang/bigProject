@@ -1,5 +1,5 @@
 <template>
-  <div><el-input type="textarea" v-model="Text" class="textarea" style="width: 100%;height: 200px"></el-input></div>
+  <div><el-input type="textarea" v-model="Text" class="textarea" :disabled="!isRedact" style="width: 100%;height: 200px"></el-input></div>
 </template>
 
 <script>
@@ -9,6 +9,7 @@ export default {
     return {}
   },
   props: {
+    isRedact: {},
     Text: {}
   },
   mounted () {
@@ -19,7 +20,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .textarea textarea{
   width: 100%;
   height: 100%!important;

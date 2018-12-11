@@ -7,9 +7,9 @@
             <form-header :formHeader="formHeader"></form-header>
           </el-col>
           <el-col style="width: 210px">
-            <el-row>
+            <el-row style="margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" :disabled="isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact">
               <el-button type="primary" size="small">保存</el-button>
@@ -46,6 +46,7 @@
             <span slot="label">
               <el-button>异常记录</el-button>
             </span>
+            <exc-record :isRedact="isRedact" :ExcDate="ExcDate"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
@@ -63,7 +64,7 @@
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
-              <el-button :Text="Text">文本记录</el-button>
+              <el-button :isRedact="isRedact" :Text="Text">文本记录</el-button>
             </span>
             <text-record></text-record>
           </el-tab-pane>
@@ -76,6 +77,7 @@
 <script>
 import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
+import ExcRecord from '../common/excRecord'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -87,6 +89,7 @@ export default {
         productDate: ''
       },
       activeName: '1',
+      ExcDate: [],
       Text: ''
     }
   },
@@ -97,6 +100,7 @@ export default {
   computed: {},
   components: {
     FormHeader,
+    ExcRecord,
     TextRecord
   }
 }
@@ -139,5 +143,15 @@ export default {
     background-color: #bbbbbb!important;
   }
   // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
+}
+.required{
+  position: relative;
+  padding-left: 15px;
+  .reqI{
+    color: red;
+    position: absolute;
+    left: 0;
+    line-height: 32px;
+  }
 }
 </style>
