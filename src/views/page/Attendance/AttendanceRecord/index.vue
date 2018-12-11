@@ -32,7 +32,8 @@
               <el-form-item label="审核状态：">
                 <el-select v-model="plantList.status" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
-                  <el-option label="未审核"  value="submit"></el-option>
+                  <el-option label="已保存"  value="saved"></el-option>
+                  <el-option label="已提交"  value="submit"></el-option>
                   <el-option label="审核通过"  value="checked"></el-option>
                   <el-option label="审核不通过"  value="noPass"></el-option>
                 </el-select>
