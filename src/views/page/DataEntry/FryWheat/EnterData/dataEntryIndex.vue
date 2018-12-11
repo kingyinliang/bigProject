@@ -34,6 +34,7 @@
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
+            <audit-log :tableData="TimeAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
@@ -41,6 +42,7 @@
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
+            <audit-log :tableData="WorkerAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label">
@@ -54,6 +56,7 @@
                 <el-button>生产入库</el-button>
               </el-tooltip>
             </span>
+            <audit-log :tableData="ProInStorageAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
@@ -61,12 +64,13 @@
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
+            <audit-log :tableData="MaterielAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
-              <el-button :isRedact="isRedact" :Text="Text">文本记录</el-button>
+              <el-button>文本记录</el-button>
             </span>
-            <text-record></text-record>
+            <text-record :isRedact="isRedact" :Text="Text"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -93,6 +97,10 @@ export default {
         productDate: ''
       },
       activeName: '1',
+      TimeAudit: [],
+      WorkerAudit: [],
+      ProInStorageAudit: [],
+      MaterielAudit: [],
       ExcDate: [],
       Text: ''
     }
@@ -114,6 +122,9 @@ export default {
       }).then(({data}) => {
         this.formHeader = data.list[0]
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+        if (this.orderStatus !== '已同步') {
+          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+        }
       })
     }
   },
@@ -134,7 +145,10 @@ export default {
   components: {
     FormHeader,
     ExcRecord,
-    TextRecord
+    TextRecord,
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
   }
 }
 </script>

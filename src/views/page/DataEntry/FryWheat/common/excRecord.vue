@@ -87,13 +87,12 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API, BASICDATA_API} from '@/api/api'
+import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
 import { toDate } from '@/net/validate'
 export default {
   name: 'excRecord',
   data () {
     return {
-      num: 0,
       stoppageType: [],
       equipmentType: [],
       materialShort: [],
@@ -110,11 +109,52 @@ export default {
     isRedact: {}
   },
   methods: {
+    // 获取异常情况
+    GetExcDate (id) {
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
+        if (data.code === 0) {
+          this.ExcDate = data.listForm
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 异常记录校验
     excrul () {
       let ty = true
       this.ExcDate.forEach((item) => {
-        if (item.delFlag !== '1') {}
+        if (item.delFlag !== '1') {
+          if (item.expCode && item.expStartDate && item.expEndDate) {
+            if ((item.expContinue * 1) < 0) {
+              ty = false
+              this.$message.error('异常开始时间大于结束时间')
+              return false
+            }
+            if (item.expCode === '001' || item.expCode === '002') {
+              if (!item.deviceId) {
+                ty = false
+                this.$message.error('异常记录设备必填')
+                return false
+              }
+            } else if (item.expCode === '003' || item.expCode === '004') {
+              if (!item.materialShort) {
+                ty = false
+                this.$message.error('异常记录物料分类必填')
+                return false
+              }
+            } else if (item.expCode === '005') {
+              if (!item.energy) {
+                ty = false
+                this.$message.error('异常记录能源必填')
+                return false
+              }
+            }
+          } else {
+            ty = false
+            this.$message.error('异常记录必填项未填')
+            return false
+          }
+        }
       })
       return ty
     },
@@ -184,8 +224,6 @@ export default {
     // 删除
     dellistbomS (row) {
       row.delFlag = '1'
-      this.num++
-      console.log(this.ExcDate)
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
