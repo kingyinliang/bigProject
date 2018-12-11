@@ -3,7 +3,7 @@
     <div class="clearfix topBox">
       <h3>录入数据单位：MIN</h3>
       <div style="float: right">
-        <el-button type="primary" @click="AddExcDate(ExcDate)" size="small">新增</el-button>
+        <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" :disabled="!isRedact">新增</el-button>
       </div>
     </div>
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -93,6 +93,7 @@ export default {
   name: 'excRecord',
   data () {
     return {
+      num: 0,
       stoppageType: [],
       equipmentType: [],
       materialShort: [],
@@ -109,6 +110,14 @@ export default {
     isRedact: {}
   },
   methods: {
+    // 异常记录校验
+    excrul () {
+      let ty = true
+      this.ExcDate.forEach((item) => {
+        if (item.delFlag !== '1') {}
+      })
+      return ty
+    },
     // 获取异常情况
     GetstoppageType () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=stoppage_type`, 'POST').then(({data}) => {
@@ -120,10 +129,10 @@ export default {
       })
     },
     // 获取设备类型
-    GetequipmentType () {
+    GetequipmentType (productLine) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
         param: '',
-        deptId: this.order.productLine,
+        deptId: productLine,
         currPage: '1',
         pageSize: '50'
       }).then(({data}) => {
@@ -172,6 +181,12 @@ export default {
         delFlag: '0'
       })
     },
+    // 删除
+    dellistbomS (row) {
+      row.delFlag = '1'
+      this.num++
+      console.log(this.ExcDate)
+    },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
@@ -199,7 +214,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .rowDel{
   display: none;
 }
