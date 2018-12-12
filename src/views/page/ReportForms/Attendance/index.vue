@@ -204,7 +204,7 @@ export default {
           this.ARtype = data.dicList
           this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=normal_time`, 'POST').then(({data}) => {
             if (data.code === 0) {
-              this.ARtype.push(data.dicList[0])
+              this.ARtype = this.ARtype.concat(data.dicList)
             } else {
               this.$message.error(data.msg)
             }
