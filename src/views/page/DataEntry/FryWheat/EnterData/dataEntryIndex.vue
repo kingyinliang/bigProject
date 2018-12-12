@@ -12,8 +12,8 @@
               <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
-              <el-button type="primary" size="small">保存</el-button>
-              <el-button type="primary" size="small">提交</el-button>
+              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+              <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -34,7 +34,6 @@
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <audit-log :tableData="TimeAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label">
@@ -42,13 +41,12 @@
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
-            <audit-log :tableData="WorkerAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label">
               <el-button>异常记录</el-button>
             </span>
-            <exc-record ref="excrecord" :isRedact="isRedact" :ExcDate="ExcDate"></exc-record>
+            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
@@ -56,7 +54,6 @@
                 <el-button>生产入库</el-button>
               </el-tooltip>
             </span>
-            <audit-log :tableData="ProInStorageAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
@@ -64,13 +61,12 @@
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
-            <audit-log :tableData="MaterielAudit"></audit-log>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
               <el-button>文本记录</el-button>
             </span>
-            <text-record :isRedact="isRedact" :Text="Text"></text-record>
+            <text-record :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -96,13 +92,7 @@ export default {
       formHeader: {
         productDate: ''
       },
-      activeName: '1',
-      TimeAudit: [],
-      WorkerAudit: [],
-      ProInStorageAudit: [],
-      MaterielAudit: [],
-      ExcDate: [],
-      Text: ''
+      activeName: '1'
     }
   },
   mounted () {
@@ -126,6 +116,32 @@ export default {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
         }
       })
+    },
+    // 保存
+    savedOrSubmitForm (str) {
+      if (str === 'submit') {
+        if (!this.$refs.excrecord.excrul()) {
+          return false
+        }
+      }
+      this.lodingS = true
+      let that = this
+      let net1 = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(str, resolve)
+      })
+      if (str === 'submit') {
+        let net10 = Promise.all([net1])
+        net10.then(function () {
+          that.lodingS = false
+          that.$message.success('提交成功')
+        })
+      } else {
+        let net10 = Promise.all([net1])
+        net10.then(function () {
+          that.lodingS = false
+          that.$message.success('保存成功')
+        })
+      }
     }
   },
   computed: {
@@ -145,10 +161,7 @@ export default {
   components: {
     FormHeader,
     ExcRecord,
-    TextRecord,
-    AuditLog: resolve => {
-      require(['@/views/components/AuditLog'], resolve)
-    }
+    TextRecord
   }
 }
 </script>

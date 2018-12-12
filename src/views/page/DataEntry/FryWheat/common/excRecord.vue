@@ -96,7 +96,8 @@ export default {
       stoppageType: [],
       equipmentType: [],
       materialShort: [],
-      enery: []
+      enery: [],
+      ExcDate: []
     }
   },
   mounted () {
@@ -105,11 +106,19 @@ export default {
     this.Getenery()
   },
   props: {
-    ExcDate: {},
     isRedact: {}
   },
   methods: {
-    // 获取异常情况
+    // 保存or提交
+    saveOrSubmitExc (str, resolve) {
+      if (this.ExcDate.length > 0) {
+        console.log(this.ExcDate)
+        if (resolve) {
+          resolve('resolve')
+        }
+      }
+    },
+    // 获取异常数据
     GetExcDate (id) {
       this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
         if (data.code === 0) {
