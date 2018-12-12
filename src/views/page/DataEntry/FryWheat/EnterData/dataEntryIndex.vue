@@ -7,13 +7,13 @@
             <form-header :formHeader="formHeader"></form-header>
           </el-col>
           <el-col style="width: 210px">
-            <el-row style="margin-bottom: 13px">
+            <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
               <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
-            <el-row v-if="isRedact">
-              <el-button type="primary" size="small">保存</el-button>
-              <el-button type="primary" size="small">提交</el-button>
+            <el-row v-if="isRedact" style="float:right;">
+              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+              <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -46,7 +46,7 @@
             <span slot="label">
               <el-button>异常记录</el-button>
             </span>
-            <exc-record :isRedact="isRedact" :ExcDate="ExcDate"></exc-record>
+            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
@@ -64,9 +64,9 @@
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
-              <el-button :isRedact="isRedact" :Text="Text">文本记录</el-button>
+              <el-button>文本记录</el-button>
             </span>
-            <text-record></text-record>
+            <text-record :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
@@ -85,19 +86,78 @@ export default {
     return {
       lodingS: false,
       isRedact: false,
+      orderNo: '',
+      productDate: '',
+      workShop: '',
       formHeader: {
         productDate: ''
       },
-      activeName: '1',
-      ExcDate: [],
-      Text: ''
+      activeName: '1'
     }
   },
   mounted () {
     headanimation(this.$)
+    this.orderNo = this.PkgorderNo
+    this.productDate = this.PkgproductDate
+    this.workShop = this.PkgworkShop
+    this.GetOrderList()
   },
-  methods: {},
-  computed: {},
+  methods: {
+    // 获取表头
+    GetOrderList () {
+      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        workShop: this.workShop,
+        productDate: this.productDate,
+        orderNo: this.orderNo
+      }).then(({data}) => {
+        this.formHeader = data.list[0]
+        this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+        if (this.orderStatus !== '已同步') {
+          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+        }
+      })
+    },
+    // 保存
+    savedOrSubmitForm (str) {
+      if (str === 'submit') {
+        if (!this.$refs.excrecord.excrul()) {
+          return false
+        }
+      }
+      this.lodingS = true
+      let that = this
+      let net1 = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(str, resolve)
+      })
+      if (str === 'submit') {
+        let net10 = Promise.all([net1])
+        net10.then(function () {
+          that.lodingS = false
+          that.$message.success('提交成功')
+        })
+      } else {
+        let net10 = Promise.all([net1])
+        net10.then(function () {
+          that.lodingS = false
+          that.$message.success('保存成功')
+        })
+      }
+    }
+  },
+  computed: {
+    PkgworkShop: {
+      get () { return this.$store.state.common.PkgworkShop },
+      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    },
+    PkgproductDate: {
+      get () { return this.$store.state.common.PkgproductDate },
+      set (val) { this.$store.commit('common/updateProductDate', val) }
+    },
+    PkgorderNo: {
+      get () { return this.$store.state.common.PkgorderNo },
+      set (val) { this.$store.commit('common/updateOrderNo', val) }
+    }
+  },
   components: {
     FormHeader,
     ExcRecord,

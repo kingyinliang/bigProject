@@ -3,7 +3,7 @@
     <div class="clearfix topBox">
       <h3>录入数据单位：MIN</h3>
       <div style="float: right">
-        <el-button type="primary" @click="AddExcDate(ExcDate)" size="small">新增</el-button>
+        <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" :disabled="!isRedact">新增</el-button>
       </div>
     </div>
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API, BASICDATA_API} from '@/api/api'
+import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
 import { toDate } from '@/net/validate'
 export default {
   name: 'excRecord',
@@ -96,7 +96,8 @@ export default {
       stoppageType: [],
       equipmentType: [],
       materialShort: [],
-      enery: []
+      enery: [],
+      ExcDate: []
     }
   },
   mounted () {
@@ -105,10 +106,67 @@ export default {
     this.Getenery()
   },
   props: {
-    ExcDate: {},
     isRedact: {}
   },
   methods: {
+    // 保存or提交
+    saveOrSubmitExc (str, resolve) {
+      if (this.ExcDate.length > 0) {
+        console.log(this.ExcDate)
+        if (resolve) {
+          resolve('resolve')
+        }
+      }
+    },
+    // 获取异常数据
+    GetExcDate (id) {
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
+        if (data.code === 0) {
+          this.ExcDate = data.listForm
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 异常记录校验
+    excrul () {
+      let ty = true
+      this.ExcDate.forEach((item) => {
+        if (item.delFlag !== '1') {
+          if (item.expCode && item.expStartDate && item.expEndDate) {
+            if ((item.expContinue * 1) < 0) {
+              ty = false
+              this.$message.error('异常开始时间大于结束时间')
+              return false
+            }
+            if (item.expCode === '001' || item.expCode === '002') {
+              if (!item.deviceId) {
+                ty = false
+                this.$message.error('异常记录设备必填')
+                return false
+              }
+            } else if (item.expCode === '003' || item.expCode === '004') {
+              if (!item.materialShort) {
+                ty = false
+                this.$message.error('异常记录物料分类必填')
+                return false
+              }
+            } else if (item.expCode === '005') {
+              if (!item.energy) {
+                ty = false
+                this.$message.error('异常记录能源必填')
+                return false
+              }
+            }
+          } else {
+            ty = false
+            this.$message.error('异常记录必填项未填')
+            return false
+          }
+        }
+      })
+      return ty
+    },
     // 获取异常情况
     GetstoppageType () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=stoppage_type`, 'POST').then(({data}) => {
@@ -120,10 +178,10 @@ export default {
       })
     },
     // 获取设备类型
-    GetequipmentType () {
+    GetequipmentType (productLine) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
         param: '',
-        deptId: this.order.productLine,
+        deptId: productLine,
         currPage: '1',
         pageSize: '50'
       }).then(({data}) => {
@@ -172,6 +230,10 @@ export default {
         delFlag: '0'
       })
     },
+    // 删除
+    dellistbomS (row) {
+      row.delFlag = '1'
+    },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
@@ -199,7 +261,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .rowDel{
   display: none;
 }
