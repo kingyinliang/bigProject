@@ -6,11 +6,12 @@
 export default {
   name: 'textRecord',
   data () {
-    return {}
+    return {
+      Text: ''
+    }
   },
   props: {
-    isRedact: {},
-    Text: {}
+    isRedact: {}
   },
   mounted () {
   },
