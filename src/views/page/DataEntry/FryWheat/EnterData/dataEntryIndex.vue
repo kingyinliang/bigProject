@@ -50,10 +50,12 @@
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
                 <el-button>生产入库</el-button>
-              </el-tooltip>
+              </el-tooltip> -->
+              <el-button>生产入库</el-button>
             </span>
+            <in-stock ref="instock" :isRedact="isRedact"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
@@ -79,6 +81,7 @@ import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
+import InStock from '../common/inStock'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -161,7 +164,8 @@ export default {
   components: {
     FormHeader,
     ExcRecord,
-    TextRecord
+    TextRecord,
+    InStock
   }
 }
 </script>
