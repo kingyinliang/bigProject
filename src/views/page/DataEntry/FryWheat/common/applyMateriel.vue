@@ -6,14 +6,14 @@
       <el-col :span="24">
         <div class="clearfix topBox">
           <div class="btn">
-            <el-button type="primary" @click="AddMaterielData(materielData)" size="small" v-if="isRedact">新增</el-button>
-            <el-button type="primary" @click="AddMaterielData(materielData)" size="small" v-else disabled>新增</el-button>
+            <el-button type="primary" @click="AddMaterielData()" size="small" v-if="isRedact">新增</el-button>
+            <el-button type="primary" @click="AddMaterielData()" size="small" v-else disabled>新增</el-button>
           </div>
         </div>
         <el-table
           ref="table1"
           header-row-class-name="tableHead"
-          :data="materielData"
+          :data="materielDataList"
           :row-class-name="RowDelFlag"
           border
           tooltip-effect="dark"
@@ -38,8 +38,8 @@
               </div> -->
               <div class="required">
                 <i class="reqI">*</i>
-                <el-input v-model="scope.row.materialNum" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.materialNum" v-else size="small" placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.materialNumber" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.materialNumber" v-else size="small" placeholder="手工录入"></el-input>
               </div>
             </template>
           </el-table-column>
@@ -48,8 +48,17 @@
             :show-overflow-tooltip="true"
             width="220">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.granary" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-              <el-input v-model="scope.row.granary" v-else size="small" placeholder="手工录入"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.granaryNumber" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                  <el-option label="粮仓一" value="粮仓1#"></el-option>
+                  <el-option label="粮仓二" value="粮仓2#"></el-option>
+                </el-select>
+                <el-select v-model="scope.row.granaryNumber" placeholder="请选择" v-else size="small" >
+                  <el-option label="粮仓一" value="粮仓1#"></el-option>
+                  <el-option label="粮仓二" value="粮仓2#"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -69,8 +78,8 @@
             <template slot-scope="scope">
               <div class="required">
                 <i class="reqI">*</i>
-                <el-input v-model="scope.row.wheat" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.wheat" v-else size="small" placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.wheatWeight" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.wheatWeight" v-else size="small" placeholder="手工录入"></el-input>
               </div>
             </template>
           </el-table-column>
@@ -79,7 +88,7 @@
             width="80">
             <template slot-scope="scope">
               <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-              <span>{{ scope.row.unit}}</span>
+              <span>{{ scope.row.unit = 'KG'}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -87,7 +96,7 @@
             label="操作"
             width="60">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row, delFlagnum.excnum)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
               <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
             </template>
           </el-table-column>
@@ -98,47 +107,39 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
 import { toDate } from '@/net/validate'
 export default {
-  name: 'excRecord',
   data () {
     return {
-      stoppageType: [],
-      equipmentType: [],
-      materialShort: [],
-      enery: [],
-      stockData: [],
-      materielData: []
+      materielDataList: []
     }
   },
   mounted () {
-    this.GetstoppageType()
-    this.GetmaterialShort()
-    this.Getenery()
+    this.GetMaterielData(this.orderNo)
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    orderNo: String
   },
   methods: {
     // 保存or提交
-    saveOrSubmitExc (str, resolve) {
-      if (this.ExcDate.length > 0) {
-        console.log(this.ExcDate)
+    saveOrSubmitMateriel (str, resolve) {
+      if (this.materielDataList.length > 0) {
+        console.log(this.materielDataList)
         if (resolve) {
           resolve('resolve')
         }
       }
     },
     // 获取异常数据
-    GetExcDate (id) {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.ExcDate = data.listForm
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+    GetMaterielData (id) {
+      // this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
+      //   if (data.code === 0) {
+      //     this.ExcDate = data.listForm
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
     },
     // 异常记录校验
     excrul () {
@@ -179,63 +180,36 @@ export default {
       })
       return ty
     },
-    // 获取异常情况
-    GetstoppageType () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=stoppage_type`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.stoppageType = data.dicList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取设备类型
-    GetequipmentType (productLine) {
-      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '',
-        deptId: productLine,
-        currPage: '1',
-        pageSize: '50'
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.equipmentType = data.list.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取物料分类简称
-    GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.materialShort = data.dicList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取能源下拉
-    Getenery () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.enery = data.dicList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
     // 新增异常记录
-    AddMaterielData (form) {
-      form.push({
-        id: '',
-        orderId: '',
-        materielNum: '',
-        granary: '',
+    AddMaterielData () {
+      this.materielDataList.push({
+        orderNo: this.orderNo,
+        recordId: this.uuid(),
+        // 物料编码
+        materielNumber: '',
+        // 粮仓号
+        granaryNumber: '',
+        // 批次号
         batchNumber: '',
-        wheat: '',
-        unit: 'KG',
+        wheatWeight: '',
+        unit: '',
         delFlag: '0'
       })
+      console.log('+++++++++++++++++++++= ' + this.materielDataList.length)
+    },
+    uuid () {
+      var s = []
+      var hexDigits = '0123456789abcdef'
+      for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
+      }
+      s[14] = '4'
+      // bits 12-15 of the time_hi_and_version field to 0010
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)
+      // bits 6-7 of the clock_seq_hi_and_reserved to 01
+      s[8] = s[13] = s[18] = s[23] = '-'
+      var uuid = s.join('')
+      return uuid
     },
     // 删除
     dellistbomS (row) {

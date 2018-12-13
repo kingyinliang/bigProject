@@ -64,7 +64,7 @@
               </el-tooltip> -->
               <el-button>物料领用</el-button>
             </span>
-            <materiel ref="meteriel" :isRedact="isRedact"></materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact" :orderNo="'11111'"></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
@@ -84,7 +84,7 @@ import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
 import InStock from '../common/inStock'
-import Materiel from '../common/materiel'
+import ApplyMateriel from '../common/applyMateriel'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -169,7 +169,7 @@ export default {
     ExcRecord,
     TextRecord,
     InStock,
-    Materiel
+    ApplyMateriel
   }
 }
 </script>
