@@ -25,7 +25,7 @@
           </el-table-column>
           <el-table-column
             label="物料"
-            width="150">
+            width="200">
             <template slot-scope="scope">
               <!-- <div class="required">
                 <i class="reqI">*</i>
@@ -38,8 +38,8 @@
               </div> -->
               <div class="required">
                 <i class="reqI">*</i>
-                <el-input v-model="scope.row.materialNumber" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.materialNumber" v-else size="small" placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.materielNumber" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.materielNumber" v-else size="small" placeholder="手工录入"></el-input>
               </div>
             </template>
           </el-table-column>
@@ -186,7 +186,7 @@ export default {
         orderNo: this.orderNo,
         recordId: this.uuid(),
         // 物料编码
-        materielNumber: '',
+        materielNumber: 'M010200001  小麦',
         // 粮仓号
         granaryNumber: '',
         // 批次号

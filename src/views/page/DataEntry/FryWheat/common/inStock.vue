@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     addNewRecord (stockNumber) {
-      this.stockForm = Object.assign({}, {'orderNo': this.orderNo, stockNumber, 'recordId': this.uuid(), 'date': new Date()})
+      this.stockForm = Object.assign({orderNo: '', recordId: '', stockNumber: '', granaryNumber: '', startWeight: '', endWeight: '', batchNumber: '', operateTime: '', operator: ''}, {'orderNo': this.orderNo, stockNumber, 'recordId': this.uuid(), 'date': new Date()})
       this.dialogFormVisible = true
     },
     modifyOldRecord (row) {
@@ -194,7 +194,7 @@ export default {
       if (currentRecord && currentRecord.length > 0) {
         // modify
         Object.assign(currentRecord[0], this.stockForm)
-        // this.stockListData.push(this.stockForm)
+        // this.stockListData.puush(this.stockForm)
       } else {
         // new
         this.stockListData.push(this.stockForm)
