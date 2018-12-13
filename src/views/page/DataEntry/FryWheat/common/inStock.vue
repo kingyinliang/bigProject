@@ -12,38 +12,33 @@
                   <div class="stock-img"></div>
                   <div class="stock-text">1#麦粉计量仓</div>
                   <div class="clearfix"></div>
-                  <div class="stock-button" @click="dialogFormVisible = true">入罐</div>
+                  <div class="stock-button" @click="addNewRecord('1#计量仓')">入罐</div>
                 </div>
             </el-col>
             <el-col :span="8">
               <div class="stock-box">
                 <div class="stock-img"></div>
-                <div class="stock-text">1#麦粉计量仓</div>
+                <div class="stock-text">2#麦粉计量仓</div>
                 <div class="clearfix"></div>
-                <div class="stock-button" @click="dialogFormVisible = true">入罐</div>
+                <div class="stock-button" @click="addNewRecord('2#计量仓')">入罐</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="stock-box">
                 <div class="stock-img"></div>
-                <div class="stock-text">1#麦粉计量仓</div>
+                <div class="stock-text">3#麦粉计量仓</div>
                 <div class="clearfix"></div>
-                <div class="stock-button" @click="dialogFormVisible = true">入罐</div>
+                <div class="stock-button" @click="addNewRecord('3#计量仓')">入罐</div>
               </div>
             </el-col>
           </el-row>
           <!--table-->
           <el-row style="margin-top:20px;">
             <el-col>
-              <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+              <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData" :row-class-name="RowDelFlag" border tooltip-effect="dark">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
-                    <div class="required">
-                      <i class="reqI">*</i>
-                      <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small">
-                        <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                      </el-select>
-                    </div>
+                    {{scope.row.date}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -51,59 +46,47 @@
                   :show-overflow-tooltip="true"
                   width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+                    {{scope.row.stockNumber}}
                   </template>
                 </el-table-column>
                 <el-table-column width="80" label="粮仓">
                   <template slot-scope="scope">
-                    <div class="required">
-                      <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small"></el-date-picker>
-                    </div>
+                    {{scope.row.granaryNumber}}
                   </template>
                 </el-table-column>
                 <el-table-column width="90" label="起始">
                   <template slot-scope="scope">
-                    <div class="required">
-                      <i class="reqI">*</i>
-                      <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small"></el-date-picker>
-                    </div>
+                    {{scope.row.startWeight}}
                   </template>
                 </el-table-column>
                 <el-table-column label="结束" width="90">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate, scope.row) }}</span>
+                    <span>{{scope.row.endWeight}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库数" width="120">
                   <template slot-scope="scope">
-                    <span>{{scope.row.expContinueUnit = 'MIN'}}</span>
+                    <span>{{scope.row.unit = 'AAA'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="80">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.deviceId" filterable  placeholder="设备" size="small" :disabled="!(isRedact && (scope.row.expCode === '001' || scope.row.expCode === '002'))" >
-                      <el-option :label="item.deviceName" v-for="(item, index) in equipmentType" :key="index" :value="item.deviceNo"></el-option>
-                    </el-select>
+                     <span>{{scope.row.unit = 'KG'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库批次" width="150">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.materialShort" filterable placeholder="选择简称" :disabled="!(isRedact && (scope.row.expCode === '003' || scope.row.expCode === '004'))" size="small" >
-                      <el-option :label="item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code"></el-option>
-                    </el-select>
+                     <span>{{scope.row.batchNumber}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作人员" width="100">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.energy" placeholder="选择能源" :disabled="!(isRedact && scope.row.expCode === '005')"  size="small">
-                      <el-option :label="item.value" v-for="(item, index) in enery" :key="index" :value="item.code"></el-option>
-                    </el-select>
+                     <span>{{scope.row.operator}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作时间" width="100">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+                     <span>{{scope.row.operateTime}}</span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -116,136 +99,163 @@
     <el-row style="margin-top:30px;">
       <el-col :span="24">
         <el-card>
-          <div style="margin-bottom:10px;">审核日志</div>
-          <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
-            <el-table-column label="序号" width="150">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small">
-                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                  </el-select>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="审核动作"
-              :show-overflow-tooltip="true"
-              width="220">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column width="241" label="审核意见">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small"></el-date-picker>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="241" label="审核人">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small"></el-date-picker>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="审核时间" width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.expContinue = mistiming(scope.row.expEndDate, scope.row.expStartDate, scope.row) }}</span>
-              </template>
-            </el-table-column>
-          </el-table>
+          <auditLog :tableData="readAudit"></auditLog>
         </el-card>
       </el-col>
     </el-row>
     <el-dialog title="1#麦粉计量仓入库" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+      <el-form :model="stockForm">
+        {{stockForm.recordId}}
         <el-form-item label="粮仓" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择粮仓">
-            <el-option label="粮仓一" value="shanghai"></el-option>
-            <el-option label="粮仓二" value="beijing"></el-option>
+          <el-select v-model="stockForm.granaryNumber" placeholder="请选择粮仓">
+            <el-option label="粮仓一" value="粮仓1#"></el-option>
+            <el-option label="粮仓二" value="粮仓2#"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="起始(KG)" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="stockForm.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="结束(KG)" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="stockForm.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="入库批次" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="stockForm.batchNumber" autocomplete="off"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="stockForm.operateTime" autocomplete="off"></el-input>
         </el-form-item>
          <el-form-item label="操作人" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="stockForm.operator" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="saveStockData()">保存</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {SYSTEMSETUP_API, PACKAGING_API, BASICDATA_API} from '@/api/api'
+import {SYSTEMSETUP_API} from '@/api/api'
 import { toDate } from '@/net/validate'
 export default {
-  name: 'excRecord',
   data () {
     return {
-      stoppageType: [],
-      equipmentType: [],
-      materialShort: [],
-      enery: [],
-      ExcDate: [],
+      // stoppageType: [],
+      // equipmentType: [],
+      // materialShort: [],
+      // enery: [],
+      stockListData: [],
+      readAudit: [],
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      stockForm: {
+        // 订单号
+        orderNo: '',
+        // ID
+        recordId: '',
+        // 计量仓号
+        stockNumber: '',
+        // 粮仓号
+        granaryNumber: '',
+        startWeight: '',
+        endWeight: '',
+        // 入库批次
+        batchNumber: '',
+        operateTime: '',
+        operator: ''
+      }
     }
   },
   mounted () {
-    this.GetstoppageType()
-    this.GetmaterialShort()
-    this.Getenery()
+    // this.GetstoppageType()
+    // this.GetmaterialShort()
+    // this.Getenery()
+    console.log('+++++++++++++++++++++++++' + this.orderNo)
+    this.GetStockData(this.orderNo)
+    this.GetEditLog()
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    orderNo: String
   },
   methods: {
+    addNewRecord (stockNumber) {
+      this.stockForm = Object.assign({}, {'orderNo': this.orderNo, stockNumber, 'recordId': this.uuid(), 'date': new Date()})
+      this.dialogFormVisible = true
+    },
+    modifyOldRecord (row) {
+      this.stockForm = Object.assign({}, row)
+      this.dialogFormVisible = true
+    },
+    saveStockData () {
+      let currentRecord = this.stockListData.filter(data => data.recordId === this.stockForm.recordId)
+      if (currentRecord && currentRecord.length > 0) {
+        // modify
+        Object.assign(currentRecord[0], this.stockForm)
+        // this.stockListData.push(this.stockForm)
+      } else {
+        // new
+        this.stockListData.push(this.stockForm)
+      }
+      this.dialogFormVisible = false
+    },
     // 保存or提交
-    saveOrSubmitExc (str, resolve) {
-      if (this.ExcDate.length > 0) {
-        console.log(this.ExcDate)
+    saveOrSubmitStock (str, resolve) {
+      if (this.stockListData.length > 0) {
+        console.log(this.stockListData)
         if (resolve) {
           resolve('resolve')
         }
       }
     },
-    // 获取异常数据
-    GetExcDate (id) {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.ExcDate = data.listForm
-        } else {
-          this.$message.error(data.msg)
+    // 获取入库数据
+    GetStockData (id) {
+      // this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
+      //   if (data.code === 0) {
+      //     this.stockListData = data.listForm
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
+      this.stockListData = []
+    },
+    GetEditLog () {
+      this.readAudit = [
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
+        },
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
+        },
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
         }
-      })
+      ]
+    },
+    uuid () {
+      var s = []
+      var hexDigits = '0123456789abcdef'
+      for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
+      }
+      s[14] = '4'
+      // bits 12-15 of the time_hi_and_version field to 0010
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)
+      // bits 6-7 of the clock_seq_hi_and_reserved to 01
+      s[8] = s[13] = s[18] = s[23] = '-'
+      var uuid = s.join('')
+      return uuid
     },
     // 异常记录校验
     excrul () {
@@ -296,63 +306,6 @@ export default {
         }
       })
     },
-    // 获取设备类型
-    GetequipmentType (productLine) {
-      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '',
-        deptId: productLine,
-        currPage: '1',
-        pageSize: '50'
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.equipmentType = data.list.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取物料分类简称
-    GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.materialShort = data.dicList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取能源下拉
-    Getenery () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.enery = data.dicList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 新增异常记录
-    AddExcDate (form) {
-      form.push({
-        id: '',
-        orderId: '',
-        expCode: '',
-        expInfo: '',
-        expStartDate: null,
-        expEndDate: null,
-        expContinue: '',
-        expContinueUnit: '',
-        deviceId: '',
-        materialShort: '',
-        energy: '',
-        remark: '',
-        delFlag: '0'
-      })
-    },
-    // 删除
-    dellistbomS (row) {
-      row.delFlag = '1'
-    },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
@@ -376,7 +329,11 @@ export default {
       }
     }
   },
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 

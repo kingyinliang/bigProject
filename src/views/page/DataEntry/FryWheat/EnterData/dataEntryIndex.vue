@@ -55,14 +55,16 @@
               </el-tooltip> -->
               <el-button>生产入库</el-button>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact"></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :orderNo="'11111'"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
                 <el-button>物料领用</el-button>
-              </el-tooltip>
+              </el-tooltip> -->
+              <el-button>物料领用</el-button>
             </span>
+            <materiel ref="meteriel" :isRedact="isRedact"></materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
@@ -82,6 +84,7 @@ import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
 import InStock from '../common/inStock'
+import Materiel from '../common/materiel'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -165,7 +168,8 @@ export default {
     FormHeader,
     ExcRecord,
     TextRecord,
-    InStock
+    InStock,
+    Materiel
   }
 }
 </script>
