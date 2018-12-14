@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button @click="go()">数据录入</el-button>
+    <el-button @click="go(1)">数据录入</el-button>
+    <el-button @click="go(2)">pw小麦</el-button>
   </div>
 </template>
 
@@ -13,8 +14,12 @@ export default {
   mounted () {
   },
   methods: {
-    go () {
-      this.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+    go (flag) {
+      if (flag === 1) {
+        this.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+      } else {
+        this.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
+      }
     }
   },
   computed: {},

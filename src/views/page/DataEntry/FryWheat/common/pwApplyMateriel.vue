@@ -6,8 +6,7 @@
       <el-col :span="24">
         <div class="clearfix topBox">
           <div class="btn">
-            <el-button type="primary" @click="AddMaterielData()" size="small" v-if="isRedact">新增</el-button>
-            <el-button type="primary" @click="AddMaterielData()" size="small" v-else disabled>新增</el-button>
+            <el-button type="primary" size="small">申请订单</el-button>
           </div>
         </div>
         <el-table
@@ -24,18 +23,9 @@
             label="序号">
           </el-table-column>
           <el-table-column
-            label="物料"
+            label="生产物料"
             width="200">
             <template slot-scope="scope">
-              <!-- <div class="required">
-                <i class="reqI">*</i>
-                <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                  <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                </el-select>
-                <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                  <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                </el-select>
-              </div> -->
               <div class="required">
                 <i class="reqI">*</i>
                 <el-input v-model="scope.row.materielNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
@@ -44,60 +34,134 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="粮仓"
-            :show-overflow-tooltip="true"
-            width="220">
+            width="241"
+            label="生产数">
             <template slot-scope="scope">
               <div class="required">
                 <i class="reqI">*</i>
-                <el-select v-model="scope.row.granaryNo" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                  <el-option label="粮仓一" value="粮仓1#"></el-option>
-                  <el-option label="粮仓二" value="粮仓2#"></el-option>
-                </el-select>
-                <el-select v-model="scope.row.granaryNo" placeholder="请选择" v-else size="small" >
-                  <el-option label="粮仓一" value="粮仓1#"></el-option>
-                  <el-option label="粮仓二" value="粮仓2#"></el-option>
-                </el-select>
+                <el-input v-model="scope.row.produceNumber" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.produceNumber" v-else size="small" placeholder="手工录入"></el-input>
               </div>
             </template>
           </el-table-column>
           <el-table-column
             width="241"
-            label="物料批次">
+            label="单位">
             <template slot-scope="scope">
               <div class="required">
                 <i class="reqI">*</i>
-                <el-input v-model="scope.row.batchNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.batchNo" v-else size="small" placeholder="手工录入"></el-input>
+                {{scope.row.unit}}
               </div>
             </template>
           </el-table-column>
           <el-table-column
             width="241"
-            label="小麦领用数">
+            label="发料料号">
             <template slot-scope="scope">
               <div class="required">
                 <i class="reqI">*</i>
-                <el-input v-model="scope.row.wheatWeight" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.wheatWeight" v-else size="small" placeholder="手工录入"></el-input>
+                {{scope.row.unit}}
               </div>
             </template>
           </el-table-column>
           <el-table-column
-            label="单位"
-            width="80">
+            width="241"
+            label="小麦数量">
             <template slot-scope="scope">
-              <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-              <span>{{ scope.row.unit = 'KG'}}</span>
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
-            label="操作"
-            width="60">
+            width="241"
+            label="麸皮">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="小颗粒">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="报废小麦">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="发料批次">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="入库数">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="入库批次">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="库存数">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="备注">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="241"
+            label="生产订单">
+            <template slot-scope="scope">
+              <div class="required">
+                <i class="reqI">*</i>
+                {{scope.row.unit}}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -119,8 +183,8 @@ import { toDate } from '@/net/validate'
 export default {
   data () {
     return {
-      readAudit: [],
-      materielDataList: []
+      materielDataList: [],
+      readAudit: []
     }
   },
   mounted () {
@@ -128,8 +192,7 @@ export default {
     this.GetEditLog()
   },
   props: {
-    isRedact: {},
-    orderNo: String
+    isRedact: {}
   },
   methods: {
     // 保存or提交
@@ -150,28 +213,6 @@ export default {
       //     this.$message.error(data.msg)
       //   }
       // })
-    },
-    GetEditLog () {
-      this.readAudit = [
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        }
-      ]
     },
     // 异常记录校验
     excrul () {
@@ -240,6 +281,28 @@ export default {
       } else {
         return ''
       }
+    },
+    GetEditLog () {
+      this.readAudit = [
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
+        },
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
+        },
+        {
+          'status': 'noPass',
+          'memo': '数据不对',
+          'verify_man': '张三',
+          'verify_date': '2018-03-21 10:21:40'
+        }
+      ]
     }
   },
   computed: {
