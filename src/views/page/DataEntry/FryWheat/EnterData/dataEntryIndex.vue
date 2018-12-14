@@ -64,7 +64,7 @@
               </el-tooltip> -->
               <el-button>物料领用</el-button>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact"></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label">
@@ -85,7 +85,6 @@ import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
 import InStock from '../common/inStock'
 import ApplyMateriel from '../common/applyMateriel'
-import PwApplyMateriel from '../common/pwApplyMateriel'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -170,8 +169,7 @@ export default {
     ExcRecord,
     TextRecord,
     InStock,
-    ApplyMateriel,
-    PwApplyMateriel
+    ApplyMateriel
   }
 }
 </script>
