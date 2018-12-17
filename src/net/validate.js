@@ -154,9 +154,30 @@ export function headanimation ($) {
   })
 }
 /**
- * 是否有权限
+ * 获取时间
  * @param {*} null
  */
 export function getNewDate () {
   return new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate()))
+}
+
+/**
+ * 准备时间动画
+ */
+export function Readyanimation ($) {
+  $('.readyshiftBtn').click(function () {
+    var $shiftBox = $('.' + $(this).attr('name') + 'Box')
+    if ($(this).find('i').hasClass('el-icon-caret-top')) {
+      $(this).html('展开<i class="el-icon-caret-bottom"></i>')
+      $shiftBox.data('heightData', $shiftBox.height())
+      $shiftBox.css('overflow', 'hidden')
+      $shiftBox.animate({height: 0}, 300, function () {})
+    } else {
+      $shiftBox.css('overflow', 'auto')
+      $(this).html('收起<i class="el-icon-caret-top"></i>')
+      $shiftBox.animate({height: $shiftBox.data('heightData')}, 300, function () {
+        $shiftBox.css('height', 'auto')
+      })
+    }
+  })
 }
