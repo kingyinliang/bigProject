@@ -3,12 +3,24 @@
   <div style="background:#e9e9e9;">
     <!--数据录入-->
     <el-row>
-      <el-col :span="24">
-        <div class="clearfix topBox">
-          <div class="btn">
-            <el-button type="primary" size="small">申请订单</el-button>
-          </div>
+      <el-col span="12"  style="margin-top:10px;">
+        <el-form ref="form" :model="form" label-width="100px">
+          <el-form-item label="生产调度员">
+            <el-select value="tp1">
+              <el-option label="TP1" value="tp1" selected ></el-option>
+              <el-option label="TP2" value="tp2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-col>
+      <el-col span="12" style="margin-top:10px;">
+        <div class="btn" style="float:right;margin-right:10px;">
+          <el-button type="primary" size="small">申请订单</el-button>
         </div>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="24">
         <el-table
           ref="table1"
           header-row-class-name="tableHead"
@@ -24,7 +36,7 @@
           </el-table-column>
           <el-table-column
             label="生产物料"
-            width="200">
+            width="100">
             <template slot-scope="scope">
               <div class="required">
                 <i class="reqI">*</i>
@@ -34,7 +46,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="生产数">
             <template slot-scope="scope">
               <div class="required">
@@ -45,7 +57,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="60"
             label="单位">
             <template slot-scope="scope">
               <div class="required">
@@ -55,7 +67,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="发料料号">
             <template slot-scope="scope">
               <div class="required">
@@ -65,7 +77,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="小麦数量">
             <template slot-scope="scope">
               <div class="required">
@@ -75,7 +87,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="麸皮">
             <template slot-scope="scope">
               <div class="required">
@@ -85,7 +97,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="小颗粒">
             <template slot-scope="scope">
               <div class="required">
@@ -95,7 +107,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="报废小麦">
             <template slot-scope="scope">
               <div class="required">
@@ -105,7 +117,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="发料批次">
             <template slot-scope="scope">
               <div class="required">
@@ -115,7 +127,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="入库数">
             <template slot-scope="scope">
               <div class="required">
@@ -125,7 +137,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="120"
             label="入库批次">
             <template slot-scope="scope">
               <div class="required">
@@ -135,7 +147,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="库存数">
             <template slot-scope="scope">
               <div class="required">
@@ -145,7 +157,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="备注">
             <template slot-scope="scope">
               <div class="required">
@@ -155,7 +167,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="241"
+            width="100"
             label="生产订单">
             <template slot-scope="scope">
               <div class="required">
