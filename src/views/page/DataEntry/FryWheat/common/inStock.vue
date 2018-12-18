@@ -1,6 +1,6 @@
 <!--生产入库-->
 <template>
-  <div style="background:#e9e9e9;">
+  <div>
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
@@ -12,7 +12,8 @@
                   <div class="stock-img"></div>
                   <div class="stock-text">1#麦粉计量仓</div>
                   <div class="clearfix"></div>
-                  <div class="stock-button" @click="addNewRecord('0001', '1#麦粉计量仓')">入罐</div>
+                  <div class="stock-button enabled" @click="addNewRecord('0001', '1#麦粉计量仓')" v-if="isRedact"> 入罐</div>
+                  <div class="stock-button disabled"  else="isRedact"> 入罐</div>
                 </div>
             </el-col>
             <el-col :span="8">
@@ -20,7 +21,8 @@
                 <div class="stock-img"></div>
                 <div class="stock-text">2#麦粉计量仓</div>
                 <div class="clearfix"></div>
-                <div class="stock-button" @click="addNewRecord('0002', '2#麦粉计量仓')">入罐</div>
+                <div class="stock-button enabled" @click="addNewRecord('0002', '2#麦粉计量仓')" v-if="isRedact">入罐</div>
+                <div class="stock-button disabled"  else="isRedact"> 入罐</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -28,12 +30,13 @@
                 <div class="stock-img"></div>
                 <div class="stock-text">3#麦粉计量仓</div>
                 <div class="clearfix"></div>
-                <div class="stock-button" @click="addNewRecord('0003', '3#麦粉计量仓')">入罐</div>
+                <div class="stock-button enabled" @click="addNewRecord('0003', '3#麦粉计量仓')" v-if="isRedact">入罐</div>
+                <div class="stock-button disabled"  else="isRedact"> 入罐</div>
               </div>
             </el-col>
           </el-row>
           <!--table-->
-          <el-row style="margin-top:20px;">
+          <el-row  style="margin-top:20px;">
             <el-col>
               <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark">
                 <el-table-column label="日期" width="130">
@@ -96,40 +99,38 @@
       </el-col>
     </el-row>
     <!--审批-->
-    <el-row style="margin-top:30px;">
+    <el-row>
       <el-col :span="24">
-        <el-card>
-          <auditLog :tableData="readAudit"></auditLog>
-        </el-card>
+        <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
     <el-dialog :title="this.stockForm.stockName" :visible.sync="dialogFormVisible" width="450px">
       <el-form :model="stockForm">
         <el-form-item label="粮仓" :label-width="formLabelWidth" >
-          <el-select v-model="stockForm.granaryNo" value-key="granaryNo" placeholder="请选择粮仓" style="width:220px">
+          <el-select v-model="stockForm.granaryNo" value-key="granaryNo" placeholder="请选择粮仓" style="width:220px" :disabled="!isRedact">
             <el-option v-for="item in granaryList" :key="item.granaryNo" :label="item.granaryName" :value="item.granaryNo" ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="起始(KG)" :label-width="formLabelWidth" >
-          <el-input v-model="stockForm.startNumber" autocomplete="off" style="width:220px;"></el-input>
+          <el-input v-model="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="结束(KG)" :label-width="formLabelWidth">
-          <el-input v-model="stockForm.endNumber" autocomplete="off" style="width:220px;"></el-input>
+          <el-input v-model="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="入库批次" :label-width="formLabelWidth">
-          <el-input v-model="stockForm.batchNo" autocomplete="off" style="width:220px;"></el-input>
+          <el-input v-model="stockForm.batchNo" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
           <!-- <el-input v-model="stockForm.operateTime" autocomplete="off"></el-input> -->
-          <el-date-picker type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-model="stockForm.operateTime"></el-date-picker>
+          <el-date-picker type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-model="stockForm.operateTime" :disabled="!isRedact"></el-date-picker>
         </el-form-item>
          <el-form-item label="操作人" :label-width="formLabelWidth">
-          <el-input v-model="stockForm.operatorId" autocomplete="off" style="width:220px;"></el-input>
+          <el-input v-model="stockForm.operatorId" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveStockData()">保存</el-button>
+        <el-button @click="dialogFormVisible = false" :disabled="!isRedact">取消</el-button>
+        <el-button type="primary" @click="saveStockData()" :disabled="!isRedact">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -369,12 +370,20 @@ export default {
       text-align:center;
       border-top:1px solid #e9e9e9;
       border-radius: 0 0 2px 2px;
-      color:rgba(0, 0, 0, 0.45);
+    }
+    .enabled{
       background:#F7F9FA;
       &:hover{
         color:#fff;
         background:#1890FF;
         cursor:pointer
+      }
+    }
+    .disabled{
+      color:rgba(0, 0, 0, 0.45);
+      background:#F7F9FA;
+      &:hover{
+        cursor:not-allowed
       }
     }
   }

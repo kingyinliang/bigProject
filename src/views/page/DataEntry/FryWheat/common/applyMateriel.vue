@@ -1,114 +1,112 @@
 <!--生产入库-->
 <template>
-  <div style="background:#e9e9e9;">
+  <div>
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
-        <div class="clearfix topBox">
-          <div class="btn">
-            <el-button type="primary" @click="AddMaterielData()" size="small" v-if="isRedact">新增</el-button>
-            <el-button type="primary" @click="AddMaterielData()" size="small" v-else disabled>新增</el-button>
+        <el-card>
+          <div class="clearfix topBox">
+            <div class="btn">
+              <el-button  style="float:right;"  type="primary" @click="AddMaterielData()" size="small" :disabled="!isRedact">新增</el-button>
+            </div>
           </div>
-        </div>
-        <el-table
-          ref="table1"
-          header-row-class-name="tableHead"
-          :data="materielDataList"
-          :row-class-name="RowDelFlag"
-          border
-          tooltip-effect="dark"
-          style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            type="index"
-            width="55"
-            label="序号">
-          </el-table-column>
-          <el-table-column
-            label="物料"
-            width="200">
-            <template slot-scope="scope">
-              <!-- <div class="required">
-                <i class="reqI">*</i>
-                <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                  <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                </el-select>
-                <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
-                  <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-                </el-select>
-              </div> -->
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.materielNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.materielNo" v-else size="small" placeholder="手工录入"></el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="粮仓"
-            :show-overflow-tooltip="true"
-            width="220">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-select v-model="scope.row.granaryNo" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                  <el-option label="粮仓一" value="粮仓1#"></el-option>
-                  <el-option label="粮仓二" value="粮仓2#"></el-option>
-                </el-select>
-                <el-select v-model="scope.row.granaryNo" placeholder="请选择" v-else size="small" >
-                  <el-option label="粮仓一" value="粮仓1#"></el-option>
-                  <el-option label="粮仓二" value="粮仓2#"></el-option>
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="241"
-            label="物料批次">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.batchNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.batchNo" v-else size="small" placeholder="手工录入"></el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="241"
-            label="小麦领用数">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.wheatWeight" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.wheatWeight" v-else size="small" placeholder="手工录入"></el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="单位"
-            width="80">
-            <template slot-scope="scope">
-              <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-              <span>{{ scope.row.unit = 'KG'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="60">
-            <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="isRedact" @click="dellistbomS(scope.row)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" circle size="small" v-else disabled></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-table
+            ref="table1"
+            header-row-class-name="tableHead"
+            :data="materielDataList"
+            :row-class-name="RowDelFlag"
+            border
+            tooltip-effect="dark"
+            style="width: 100%; margin-top:20px; margin-bottom: 20px">
+            <el-table-column
+              type="index"
+              width="55"
+              label="序号">
+            </el-table-column>
+            <el-table-column
+              label="物料"
+              width="200">
+              <template slot-scope="scope">
+                <!-- <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.expCode" placeholder="请选择" v-else size="small" @change="setnull(scope.row)">
+                    <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+                  </el-select>
+                </div> -->
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.materielNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.materielNo" v-else size="small" placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="粮仓"
+              :show-overflow-tooltip="true"
+              width="220">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select v-model="scope.row.granaryNo" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
+                    <el-option label="粮仓一" value="粮仓1#"></el-option>
+                    <el-option label="粮仓二" value="粮仓2#"></el-option>
+                  </el-select>
+                  <el-select v-model="scope.row.granaryNo" placeholder="请选择" v-else size="small" >
+                    <el-option label="粮仓一" value="粮仓1#"></el-option>
+                    <el-option label="粮仓二" value="粮仓2#"></el-option>
+                  </el-select>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="241"
+              label="物料批次">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.batchNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.batchNo" v-else size="small" placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="241"
+              label="小麦领用数">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.wheatWeight" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.wheatWeight" v-else size="small" placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="单位"
+              width="80">
+              <template slot-scope="scope">
+                <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
+                <span>{{ scope.row.unit = 'KG'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="60">
+              <template slot-scope="scope">
+                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="dellistbomS(scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
     </el-row>
     <!--审批-->
-    <el-row style="margin-top:30px;">
+    <el-row >
       <el-col :span="24">
-        <el-card>
-          <auditLog :tableData="readAudit"></auditLog>
-        </el-card>
+        <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
   </div>
