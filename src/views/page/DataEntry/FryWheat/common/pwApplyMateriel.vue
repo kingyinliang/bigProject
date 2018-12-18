@@ -1,190 +1,186 @@
 <!--生产入库-->
 <template>
-  <div style="background:#e9e9e9;">
+  <div>
     <!--数据录入-->
-    <el-row>
-      <el-col span="12"  style="margin-top:10px;">
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="生产调度员">
-            <el-select value="tp1">
-              <el-option label="TP1" value="tp1" selected ></el-option>
-              <el-option label="TP2" value="tp2"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <el-col span="12" style="margin-top:10px;">
-        <div class="btn" style="float:right;margin-right:10px;">
-          <el-button type="primary" size="small">申请订单</el-button>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24">
-        <el-table
-          ref="table1"
-          header-row-class-name="tableHead"
-          :data="materielDataList"
-          :row-class-name="RowDelFlag"
-          border
-          tooltip-effect="dark"
-          style="width: 100%;margin-bottom: 20px">
-          <el-table-column
-            type="index"
-            width="55"
-            label="序号">
-          </el-table-column>
-          <el-table-column
-            label="生产物料"
-            width="100">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.materielNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.materielNo" v-else size="small" placeholder="手工录入"></el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="生产数">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.produceNumber" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                <el-input v-model="scope.row.produceNumber" v-else size="small" placeholder="手工录入"></el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="60"
-            label="单位">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="发料料号">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="小麦数量">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="麸皮">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="小颗粒">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="报废小麦">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="发料批次">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="入库数">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="120"
-            label="入库批次">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="库存数">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="备注">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="100"
-            label="生产订单">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                {{scope.row.unit}}
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
+    <el-card>
+      <el-row>
+        <el-col span="12"  style="margin-top:10px;">
+          <el-form ref="form" :model="form" label-width="100px">
+            <el-form-item label="生产调度员">
+              <el-select value="tp1" :disabled="!isRedact">
+                <el-option label="TP1" value="tp1" selected ></el-option>
+                <el-option label="TP2" value="tp2"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col span="12" style="margin-top:10px;">
+          <div class="btn" style="float:right;">
+            <el-button type="primary" size="small" :disabled="!isRedact">申请订单</el-button>
+            <el-button type="primary" size="small" :disabled="!isRedact" @click="AddMaterielData()">新增</el-button>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            ref="table1"
+            header-row-class-name="tableHead"
+            :data="materielDataList"
+            :row-class-name="RowDelFlag"
+            border
+            tooltip-effect="dark"
+            style="width: 100%;margin-bottom: 20px">
+            <el-table-column
+              label="生产物料"
+              width="200">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.materielNo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="生产数">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.produceNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="60"
+              label="单位">
+              <template slot-scope="scope">
+                {{scope.row.unit = 'KG'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="发料料号">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.materielId" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="小麦数量">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.wheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="麸皮">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.branNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="小颗粒">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.smallWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="报废小麦">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.scrapWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="发料批次">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.materielBatchNo" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="入库数">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.inboundNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="入库批次">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.batchNo" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="库存数">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.inventoryNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="140"
+              label="备注">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.note" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="100"
+              label="生产订单">
+              <template slot-scope="scope">
+                {{scope.row.orderNo}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="60">
+              <template slot-scope="scope">
+                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="dellistbomS(scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+    </el-card>
     <!--审批-->
-    <el-row style="margin-top:30px;">
+    <el-row >
       <el-col :span="24">
-        <el-card>
-          <auditLog :tableData="readAudit"></auditLog>
-        </el-card>
+        <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
   </div>
@@ -196,11 +192,12 @@ export default {
   data () {
     return {
       materielDataList: [],
-      readAudit: []
+      readAudit: [],
+      orderId: this.orderNo
     }
   },
   mounted () {
-    this.GetMaterielData(this.orderNo)
+    this.GetMaterielData(this.orderId)
     this.GetEditLog()
   },
   props: {
@@ -268,15 +265,33 @@ export default {
     // 新增异常记录
     AddMaterielData () {
       this.materielDataList.push({
-        orderNo: this.orderNo,
+        orderNo: this.orderId,
         recordId: this.uuid(),
         // 物料编码
         materielNo: 'M010200001  小麦',
         // 粮仓号
-        granaryNo: '',
-        // 批次号
+        produceNumber: '',
+        // 发料料号
+        materielId: '',
+        // 小麦数量
+        wheatNumber: '',
+        // 麸皮
+        branNumber: '',
+        // 小颗粒
+        smallWheatNumber: '',
+        // 报废小麦
+        scrapWheatNumber: '',
+        // 发料批次
+        materielBatchNo: '',
+        // 入库数
+        inboundNumber: '',
+        // 入库批次
         batchNo: '',
-        wheatWeight: '',
+        // 库存数
+        inventoryNumber: '',
+        // 备注
+        note: '',
+        // 单位
         unit: '',
         delFlag: '0'
       })

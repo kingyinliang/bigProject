@@ -33,8 +33,7 @@
                 </div> -->
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.materielNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.materielNo" v-else size="small" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.materielNo"  size="small" :disabled="!isRedact" placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -45,11 +44,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-select v-model="scope.row.granaryNo" placeholder="请选择"  v-if="!isRedact" size="small" disabled>
-                    <el-option label="粮仓一" value="粮仓1#"></el-option>
-                    <el-option label="粮仓二" value="粮仓2#"></el-option>
-                  </el-select>
-                  <el-select v-model="scope.row.granaryNo" placeholder="请选择" v-else size="small" >
+                  <el-select v-model="scope.row.granaryNo" placeholder="请选择" :disabled="!isRedact" size="small" >
                     <el-option label="粮仓一" value="粮仓1#"></el-option>
                     <el-option label="粮仓二" value="粮仓2#"></el-option>
                   </el-select>
@@ -62,8 +57,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.batchNo" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.batchNo" v-else size="small" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.batchNo"  size="small" :disabled="!isRedact" placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -73,8 +67,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.wheatWeight" v-if="!isRedact" size="small" disabled placeholder="手工录入"></el-input>
-                  <el-input v-model="scope.row.wheatWeight" v-else size="small" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.wheatWeight" size="small" :disabled="!isRedact" placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
