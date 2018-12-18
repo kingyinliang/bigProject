@@ -1,6 +1,6 @@
 <!--生产入库-->
 <template>
-  <div style="background:#e9e9e9;">
+  <div>
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
@@ -33,7 +33,7 @@
             </el-col>
           </el-row>
           <!--table-->
-          <el-row style="margin-top:20px;">
+          <el-row>
             <el-col>
               <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark">
                 <el-table-column label="日期" width="130">
@@ -96,11 +96,9 @@
       </el-col>
     </el-row>
     <!--审批-->
-    <el-row style="margin-top:30px;">
+    <el-row>
       <el-col :span="24">
-        <el-card>
-          <auditLog :tableData="readAudit"></auditLog>
-        </el-card>
+        <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
     <el-dialog :title="this.stockForm.stockName" :visible.sync="dialogFormVisible" width="450px">
