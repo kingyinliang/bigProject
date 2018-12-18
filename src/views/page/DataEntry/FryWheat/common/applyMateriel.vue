@@ -19,11 +19,6 @@
             tooltip-effect="dark"
             style="width: 100%; margin-top:20px; margin-bottom: 20px">
             <el-table-column
-              type="index"
-              width="55"
-              label="序号">
-            </el-table-column>
-            <el-table-column
               label="物料"
               width="200">
               <template slot-scope="scope">

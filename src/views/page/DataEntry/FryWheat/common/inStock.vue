@@ -38,7 +38,7 @@
           <!--table-->
           <el-row  style="margin-top:20px;">
             <el-col>
-              <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark">
+              <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark" :row-class-name="RowDelFlag">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
                     {{scope.row.date}}
@@ -69,7 +69,7 @@
                 </el-table-column>
                 <el-table-column label="入库数" width="120">
                   <template slot-scope="scope">
-                    <span>{{scope.row.unit = 'AAA'}}</span>
+                    <span>{{scope.row.diffNumber}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="80">
@@ -92,6 +92,14 @@
                      <span>{{scope.row.operateTime}}</span>
                   </template>
                 </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="60">
+                  <template slot-scope="scope">
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="dellistbomS(scope.row)"></el-button>
+                  </template>
+                </el-table-column>
               </el-table>
             </el-col>
           </el-row>
@@ -105,27 +113,29 @@
       </el-col>
     </el-row>
     <el-dialog :title="this.stockForm.stockName" :visible.sync="dialogFormVisible" width="450px">
-      <el-form :model="stockForm">
-        <el-form-item label="粮仓" :label-width="formLabelWidth" >
-          <el-select v-model="stockForm.granaryNo" value-key="granaryNo" placeholder="请选择粮仓" style="width:220px" :disabled="!isRedact">
+      <el-form :model="stockForm" :rules="dataRule" ref="stockForm">
+        <el-form-item label="粮仓" :label-width="formLabelWidth" required prop="granaryNo">
+          <el-select @change="changeGranary" v-model="stockForm.granaryNo" value-key="granaryNo" placeholder="请选择粮仓" style="width:220px" :disabled="!isRedact">
             <el-option v-for="item in granaryList" :key="item.granaryNo" :label="item.granaryName" :value="item.granaryNo" ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="起始(KG)" :label-width="formLabelWidth" >
-          <el-input v-model="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+        <el-form-item label="起始(KG)" :label-width="formLabelWidth" required prop="startNumber">
+          <el-input v-model.number="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
-        <el-form-item label="结束(KG)" :label-width="formLabelWidth">
-          <el-input v-model="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+        <el-form-item label="结束(KG)" :label-width="formLabelWidth" required prop="endNumber">
+          <el-input v-model.number="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
-        <el-form-item label="入库批次" :label-width="formLabelWidth">
+        <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="batchNo">
           <el-input v-model="stockForm.batchNo" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
           <!-- <el-input v-model="stockForm.operateTime" autocomplete="off"></el-input> -->
-          <el-date-picker type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-model="stockForm.operateTime" :disabled="!isRedact"></el-date-picker>
+          <label>{{stockForm.operateTime}}</label>
+          <!-- <el-date-picker type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-model="stockForm.operateTime" :disabled="!isRedact"></el-date-picker> -->
         </el-form-item>
          <el-form-item label="操作人" :label-width="formLabelWidth">
-          <el-input v-model="stockForm.operatorId" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+          <label>{{operator}}</label>
+          <!-- <el-input v-model="stockForm.operatorId" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -137,7 +147,7 @@
 </template>
 
 <script>
-import { toDate } from '@/net/validate'
+import { dateFormat, toDate } from '@/net/validate'
 export default {
   data () {
     return {
@@ -165,11 +175,29 @@ export default {
         granaryName: '',
         startNumber: '',
         endNumber: '',
+        diffNumber: 0,
         // 入库批次
         batchNo: '',
         operateTime: '',
-        operatorId: '',
-        operatorName: ''
+        operatorId: this.$store.state.user.name,
+        operatorName: this.$store.state.user.realName,
+        delFlag: '0'
+      },
+      dataRule: {
+        granaryNo: [
+          {required: true, message: '必选', trigger: 'click'}
+        ],
+        startNumber: [
+          {required: true, message: '必填', trigger: 'blur'},
+          {type: 'number', message: '必须为数字', trigger: 'blur'}
+        ],
+        endNumber: [
+          {required: true, message: '必填', trigger: 'blur'},
+          {type: 'number', message: '必须为数字', trigger: 'blur'}
+        ],
+        batchNo: [
+          {required: true, message: '必填', trigger: 'blur'}
+        ]
       }
     }
   },
@@ -189,34 +217,48 @@ export default {
   methods: {
     addNewRecord (stockNo, stockName) {
       let now = new Date()
-      let year = now.getFullYear()
-      let month = now.getMonth() + 1
-      let day = now.getDate()
-      let hour = now.getHours()
-      let min = now.getMinutes()
-      let sec = now.getSeconds()
-      let operateTime = `${year}-${month}-${day} ${hour}:${min}:${sec}`
+      // let year = now.getFullYear()
+      // let month = now.getMonth() + 1
+      // let day = now.getDate()
+      // let hour = now.getHours()
+      // let min = now.getMinutes()
+      // let sec = now.getSeconds()
+      let operateTime = dateFormat(now, 'yyyy-MM-dd hh:mm:ss')
       let operatorId = this.$store.state.user.name
       let operatorName = this.$store.state.user.realName
-      let date = `${year}-${month}-${day}`
-      let batchNo = `${year}${month}${day}${stockNo}`
-      this.stockForm = {granaryNo: '', granaryName: '', startNumber: '', endNumber: '', operateTime, operatorId, operatorName, orderNo: this.orderNo, stockNo, stockName, recordId: this.uuid(), date, batchNo}
+      let date = dateFormat(now, 'yyyy-MM-dd')
+      let batchNo = ''
+      this.stockForm = {granaryNo: '', granaryName: '', startNumber: '', endNumber: '', operateTime, operatorId, operatorName, orderNo: this.orderNo, stockNo, stockName, recordId: this.uuid(), date, batchNo, delFlag: '0'}
       this.dialogFormVisible = true
+      if (this.$refs['stockForm'] !== undefined) {
+        this.$refs['stockForm'].resetFields()
+      }
     },
     modifyOldRecord (row) {
-      this.stockForm = Object.assign({}, row)
+      if (!this.isRedact) {
+        return
+      }
       this.dialogFormVisible = true
+      // if (this.$refs['stockForm'] !== undefined) {
+      //   this.$refs['stockForm'].resetFields()
+      // }
+      this.stockForm = Object.assign({}, row)
     },
     saveStockData () {
-      let currentRecord = this.stockListData.filter(data => data.recordId === this.stockForm.recordId)
-      if (currentRecord && currentRecord.length > 0) {
-        // modify
-        Object.assign(currentRecord[0], this.stockForm)
-      } else {
-        // add
-        this.stockListData.push(this.stockForm)
-      }
-      this.dialogFormVisible = false
+      this.$refs['stockForm'].validate((valid) => {
+        if (valid) {
+          let currentRecord = this.stockListData.filter(data => data.recordId === this.stockForm.recordId)
+          this.stockForm.diffNumber = this.stockForm.endNumber - this.stockForm.startNumber
+          if (currentRecord && currentRecord.length > 0) {
+            // modify
+            Object.assign(currentRecord[0], this.stockForm)
+          } else {
+            // add
+            this.stockListData.push(this.stockForm)
+          }
+          this.dialogFormVisible = false
+        }
+      })
     },
     // 保存or提交
     saveOrSubmitStock (str, resolve) {
@@ -261,7 +303,22 @@ export default {
       ]
     },
 
-    GetGranaryList () {
+    GetGranaryList (obj) {
+      // if (!obj) {
+      //   obj = {
+      //     type: 'holder_type',
+      //     pageSize: 100000,
+      //     currPage: 0
+      //   }
+      // }
+      // this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', obj).then(({data}) => {
+      //   console.log(data)
+      //   if (data.code === 0) {
+      //     this.granaryList = data.page.list
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
       this.granaryList = [
         {
           'granaryNo': '0001',
@@ -315,10 +372,28 @@ export default {
         }
       })
       return ty
+    },
+    changeGranary () {
+      let now = new Date()
+      this.stockForm.batchNo = dateFormat(now, 'yyMMdd') + this.stockForm.granaryNo
+    },
+    // 删除
+    dellistbomS (row) {
+      row.delFlag = '1'
+    },
+    // RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     }
   },
   computed: {
-
+    operator: function () {
+      return `(${this.stockForm.operatorId})${this.stockForm.operatorName}`
+    },
     mistiming: function () {
       return function (end, start, row) {
         if (end && start && row.delFlag !== '1') {
@@ -380,7 +455,7 @@ export default {
       }
     }
     .disabled{
-      color:rgba(0, 0, 0, 0.45);
+      color:rgba(0, 0, 0, 0.6);
       background:#F7F9FA;
       &:hover{
         cursor:not-allowed

@@ -57,7 +57,7 @@
               </el-tooltip> -->
               <el-button>生产入库</el-button>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :orderNo="'11111'"></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :orderNo="PkgorderNo"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
@@ -65,7 +65,7 @@
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :isRedact="isRedact"></apply-materiel>
+            <apply-materiel ref="applymateriel" :orderNo="PkgorderNo" :isRedact="isRedact"></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
@@ -123,6 +123,16 @@ export default {
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         // this.formHeader.workShop = '870E6BA5A8E94EF0A178F91A58036FAF'
         this.formHeader.workShop = 'DA8DB9D19B4043B8A600B52D9FEF93E3'
+        // let obj = {
+        //   type: 'holder_type',
+        //   pageSize: 100000,
+        //   currPage: 0,
+        //   holder_type: this.formHeader.holderType,
+        //   holder_no: this.formHeader.holderNo,
+        //   holder_hold: this.formHeader.holderHold,
+        //   dept_id: this.formHeader.workShop
+        // }
+        // this.$refs.instock.GetGranaryList(obj)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
         if (this.orderStatus !== '已同步') {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
