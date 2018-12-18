@@ -7,7 +7,7 @@
 // let HOST = 'http://10.10.1.155:8080'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
-let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
+let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
 // let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
 // let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
 /*

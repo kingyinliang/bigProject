@@ -42,7 +42,8 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
    * 请求拦截
    */
   axios.interceptors.request.use(config => {
-    config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
+    // config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
+    config.headers['Authorization'] = Vue.cookie.get('token') // 请求头带上token
     // console.log(Vue.prototype.lodingStatus)
     Vue.prototype.lodingStatus = true
     // if (promiseArr[config.url]) {
