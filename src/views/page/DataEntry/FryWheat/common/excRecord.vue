@@ -2,7 +2,7 @@
   <div>
     <div class="clearfix topBox">
       <h3>录入数据单位：MIN</h3>
-      <div style="float: right">
+      <div style="float: right;margin-bottom: 10px">
         <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" :disabled="!isRedact">新增</el-button>
       </div>
     </div>

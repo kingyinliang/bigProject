@@ -75,6 +75,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <audit-log></audit-log>
     <official-worker v-if="officialWorkerStatus" ref="officialWorker" @changeUser="changeUser"></official-worker>
     <loaned-personnel v-if="loanedPersonnelStatus" ref="loanedPersonnel" @changeUser="changeUser" :OrgTree="OrgTree" :arrList="arrList"></loaned-personnel>
     <temporary-worker v-if="temporaryWorkerStatus" ref="temporaryWorker" @changeUser="changeUser"></temporary-worker>
@@ -219,7 +220,10 @@ export default {
   components: {
     OfficialWorker,
     LoanedPersonnel,
-    TemporaryWorker
+    TemporaryWorker,
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
   }
 }
 </script>

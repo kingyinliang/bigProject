@@ -37,6 +37,12 @@
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
           </el-tab-pane>
+          <el-tab-pane name="2">
+            <span slot="label" class="spanview">
+              <el-button>工时录入</el-button>
+            </span>
+            <pw-time ref="excrecord" :isRedact="isRedact"></pw-time>
+          </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
               <el-button>异常记录</el-button>
@@ -60,8 +66,7 @@ import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
 import ExcRecord from '../common/excRecord'
-import InStock from '../common/inStock'
-import ApplyMateriel from '../common/applyMateriel'
+import PwTime from '../common/pwTime'
 import PwApplyMateriel from '../common/pwApplyMateriel'
 import TextRecord from '../common/textRecord'
 export default {
@@ -146,8 +151,7 @@ export default {
     FormHeader,
     ExcRecord,
     TextRecord,
-    InStock,
-    ApplyMateriel,
+    PwTime,
     PwApplyMateriel
   }
 }
