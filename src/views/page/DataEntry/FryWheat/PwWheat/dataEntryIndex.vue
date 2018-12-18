@@ -37,6 +37,18 @@
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
           </el-tab-pane>
+          <el-tab-pane name="3">
+            <span slot="label" class="spanview">
+              <el-button>异常记录</el-button>
+            </span>
+            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          </el-tab-pane>
+          <el-tab-pane name="4">
+            <span slot="label" class="spanview">
+              <el-button>文本记录</el-button>
+            </span>
+            <text-record :isRedact="isRedact"></text-record>
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
