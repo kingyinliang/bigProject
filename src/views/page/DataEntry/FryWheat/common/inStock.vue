@@ -35,7 +35,7 @@
           <!--table-->
           <el-row style="margin-top:20px;">
             <el-col>
-              <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+              <el-table @row-click="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
                     {{scope.row.date}}
