@@ -120,13 +120,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="起始(KG)" :label-width="formLabelWidth" required prop="startNumber">
-          <el-input v-model.number="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input tyle='number' v-model.number="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="结束(KG)" :label-width="formLabelWidth" required prop="endNumber">
-          <el-input v-model.number="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input tyle='number' v-model.number="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="batchNo">
-          <el-input v-model="stockForm.batchNo" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input  v-model="stockForm.batchNo" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
           <!-- <el-input v-model="stockForm.operateTime" autocomplete="off"></el-input> -->
