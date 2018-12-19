@@ -44,7 +44,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.produceNumber" @change="changeProduceNumber(scope.row)" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.produceNumber" @input="changeProduceNumber(scope.row)" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
