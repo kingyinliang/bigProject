@@ -4,7 +4,7 @@
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
-        <el-card>
+        <el-card body-style="padding-top:10px;">
           <div class="clearfix topBox">
             <div class="btn">
               <el-button  style="float:right;"  type="primary" @click="AddMaterielData()" size="small" :disabled="!isRedact">新增</el-button>
@@ -17,7 +17,7 @@
             :row-class-name="RowDelFlag"
             border
             tooltip-effect="dark"
-            style="width: 100%; margin-top:20px; margin-bottom: 20px">
+            style="width: 100%;  margin-bottom: 20px">
             <el-table-column
               label="物料"
               width="200">
