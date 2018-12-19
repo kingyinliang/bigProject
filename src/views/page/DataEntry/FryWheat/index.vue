@@ -2,8 +2,7 @@
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
       <el-card>
-        <el-row style="border-bottom: 1px #E9E9E9 dashed;">
-          <h1>查询条件</h1><br>
+        <el-row>
           <el-col :span="21">
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="90px">
               <el-form-item label="工厂：">
@@ -19,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" v-model="plantList.productDate"></el-date-picker>
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyyMMdd"></el-date-picker>
               </el-form-item>
               <el-form-item label="生产状态：">
                 <el-select v-model="plantList.status">
@@ -30,66 +29,84 @@
             </el-form>
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
+            <el-row>
+              <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
+            </el-row>
+            <el-row v-if="type === 'abnormal'" style="margin-top:20px">
+              <el-button type="primary" size="small" @click="AddPeople(addRowStatus)">新增</el-button>
+              <el-button type="primary" size="small">保存</el-button>
+            </el-row>
           </el-col>
         </el-row>
-        <el-row v-if="type === 'normal'" class="normalContent">
-
-          <el-col :span="12" style="margin: 20px 0;border-right: 1px dashed #E9E9E9;padding-right:15px;">
-            <el-form>
-              <div style="padding-bottom:20px;">PW小麦<span style="display:block; float:right">已提交</span></div>
-              <div style="width:170px; float:left; border:1px solid; margin-top:6px;"><img src="123" alt="" style="width:120px;"></div>
-              <div style="width:332px; float:left; margin-left:10px">
-                <el-row>
-                  <el-col :span="20">
-                    <el-form-item label="订单号：" style="font-size: 22px;">
-                      <el-select v-model="orders" placeholder="请选择" size="small">
-                        <el-option :value="123" :label="123" :key="123"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="primary" size="small" style="margin-top:3px;" @click="go()">数据录入</el-button>
-                  </el-col>
-                </el-row>
-                <el-form-item label="品项：">123</el-form-item>
-                <el-form-item label="计划产量：">123</el-form-item>
-                <el-form-item label="实时产量：">123</el-form-item>
-              </div>
-            </el-form>
+        <el-row v-if="type === 'normal'"  :gutter="10">
+          <el-col :span="12" style="margin-bottom: 10px">
+            <el-card class="box-card">
+              <el-form  size="small" label-position="right" label-width="85px">
+                <div class="clearfix pro-line">
+                  <el-form-item label="工序：">
+                    <p>
+                      炒麦
+                      <el-button @click="go()" type="primary" size="small" style="float: right">数据录入</el-button>
+                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
+                    </p>
+                  </el-form-item>
+                </div>
+                <div class="clearfix item">
+                  <img :src="'data:image/gif;base64,'" alt="">
+                  <div class="itemForm">
+                      <el-form-item label="订单号：" style="margin-bottom: 10px;">
+                        <el-select placeholder="请选择"></el-select>
+                      </el-form-item>
+                      <el-form-item label="品项：" style="margin-bottom: 10px;">
+                        <p class="hiddenP"></p>
+                      </el-form-item>
+                      <el-form-item label="计划产量：" style="margin-bottom: 10px;">
+                        <p></p>
+                      </el-form-item>
+                      <el-form-item label="实时产量：" style="margin-bottom: 10px;">
+                        <p></p>
+                      </el-form-item>
+                  </div>
+                </div>
+              </el-form>
+            </el-card>
           </el-col>
-          <el-col :span="12" style="padding:20px">
-            <el-form>
-              <div style="padding-bottom:20px;">PW小麦<span style="display:block; float:right">已提交</span></div>
-              <div style="width:170px; float:left; border:1px solid; margin-top:6px;"><img src="123" alt="" style="width:120px;"></div>
-              <div style="width:332px; float:left; margin-left:10px">
-                <el-row>
-                  <el-col :span="20">
-                    <el-form-item label="订单号：" style="font-size: 22px;">
-                      <el-select v-model="orders" placeholder="请选择" size="small">
-                        <el-option :value="123" :label="123" :key="123"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="primary" size="small" style="margin-top:3px;">数据录入</el-button>
-                  </el-col>
-                </el-row>
-                <el-form-item label="品项：">123</el-form-item>
-                <el-form-item label="计划产量：">123</el-form-item>
-                <el-form-item label="实时产量：">123</el-form-item>
-              </div>
-            </el-form>
+          <el-col :span="12" style="margin-bottom: 10px">
+            <el-card class="box-card">
+              <el-form size="small" label-position="right" label-width="85px">
+                <div class="clearfix pro-line">
+                  <el-form-item label="工序：">
+                    <p>
+                      PW小麦
+                      <el-button @click="go2()" type="primary" size="small" style="float: right">数据录入</el-button>
+                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
+                    </p>
+                  </el-form-item>
+                </div>
+                <div class="clearfix item">
+                  <img :src="'data:image/gif;base64,'" alt="">
+                  <div class="itemForm">
+                      <el-form-item label="订单号：" style="margin-bottom: 10px;">
+                        <el-select placeholder="请选择">
+                        </el-select>
+                      </el-form-item>
+                      <el-form-item label="品项：" style="margin-bottom: 10px;">
+                        <p class="hiddenP"></p>
+                      </el-form-item>
+                      <el-form-item label="计划产量：" style="margin-bottom: 10px;">
+                        <p></p>
+                      </el-form-item>
+                      <el-form-item label="实时产量：" style="margin-bottom: 10px;">
+                        <p></p>
+                      </el-form-item>
+                  </div>
+                </div>
+              </el-form>
+            </el-card>
           </el-col>
         </el-row>
         <el-row v-else-if="type === 'abnormal'">
-          <el-row style="margin-top:20px;">
-            <el-col :span="21"><h1>人员考勤</h1></el-col>
-            <el-col :span="3">
-              <el-button type="primary" size="small" @click="AddPeople(addRowStatus)">新增</el-button>
-            </el-col>
-          </el-row>
-          <el-table border style="margin-top:20px" header-row-class-name="tableHead" :data="datalist" @selection-change="handleSelectionChange">
+          <el-table border  header-row-class-name="tableHead" :data="datalist" @selection-change="handleSelectionChange">
             <el-table-column label="序号" width="50" prop="id"></el-table-column>
             <el-table-column label="中/白/夜班" prop="dayType" width="120">
               <template slot-scope="scope">
@@ -274,15 +291,16 @@ export default {
       plantList: {
         factoryid: '',
         workshopid: '',
-        productDate: new Date(),
+        productDate: '',
         status: 'normal',
         currPage: 1,
         pageSize: 10,
-        totalCount: 0
+        totalCount: 0,
+        orderNo: ''
       },
       factory: '',
       workshop: '',
-      type: 'normal',
+      type: '',
       datalist: [],
       addRowStatus: 0,
       dayTypeList: [{value: '白班'}, {value: '中班'}, {value: '夜班'}],
@@ -329,12 +347,18 @@ export default {
     }
   },
   mounted () {
+    if (this.plantList.productDate === '') {
+      this.plantList.productDate = new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate()))
+    }
     this.GetfactoryList()
     this.getTree()
   },
   methods: {
     go () {
       this.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+    },
+    go2 () {
+      this.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
     },
     // 获取工厂
     GetfactoryList () {
@@ -405,7 +429,7 @@ export default {
           this.$message.error('请选择生产时间')
           return
         }
-      } else {
+      } else if (this.plantList.status === 'abnormal') {
         // 无生产
         this.addRowStatus = 0
         this.datalist = [{
@@ -422,6 +446,9 @@ export default {
           id: 2,
           userType: '临时'
         }]
+      } else {
+        this.$message.error('请选择生产状态')
+        return
       }
       this.type = this.plantList.status
     },
@@ -649,7 +676,32 @@ export default {
 }
 </script>
 
-<style scoped>
-h1{font-weight: bold; line-height: 32px;}
-.normalContent .el-form-item{margin-bottom: 0}
+<style lang="scss" scoped>
+.box-card{
+  .pro-line { border-bottom: 1px solid #dcdfe6; }
+  .pro-line p { color: red; font-size: 16px; letter-spacing: .1em; }
+  b{
+    font-size: 16px;
+    line-height: 32px;
+    float: left;
+  }
+  .item{
+    margin-top: 20px;
+    display: flex;
+    img{
+      float: left;
+      width: 220px;
+      height: 220px;
+      border-radius: 6px;
+      border: 1px solid #dcdfe6;
+      margin-right: 20px;
+    }
+    .itemForm{
+      flex: 1;
+      p{
+        color: #8a979e;
+      }
+    }
+  }
+}
 </style>
