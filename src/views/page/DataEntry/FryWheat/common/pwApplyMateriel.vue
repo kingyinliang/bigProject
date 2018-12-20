@@ -17,7 +17,7 @@
         <el-col span="12">
           <div class="btn" style="float:right;">
             <el-button type="primary" size="small" :disabled="!isRedact" @click="AddMaterielData()">新增</el-button>
-            <el-button type="primary" size="small" :disabled="!isRedact">申请订单</el-button>
+            <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact">申请订单</el-button>
           </div>
         </el-col>
       </el-row>
