@@ -1,21 +1,21 @@
 <template>
   <div>
     <el-card class="box-card" style="margin-bottom: 20px">
-      <div class="clearfix" style="margin-bottom: 20px">
-        <h3 style="font-size: 14px;">准备工时 (单位:min)</h3>
-        <el-button type="text" class="readyshiftBtn" name="ready">收起<i class="el-icon-caret-top"></i></el-button>
-      </div>
-      <div class="readyBox" style="overflow: hidden">
-        <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
-          <el-row>
-            <el-form-item label="班次：">
-              <el-select v-model="readyTimeDate.classes" placeholder="请选择" :disabled="!isRedact">
-                <el-option label="单班" value="单班"></el-option>
-                <el-option label="多班" value="多班"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-row>
-          <el-row>
+      <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
+        <div class="clearfix" style="">
+          <h3 style="font-size: 14px;line-height: 32px">准备工时 (单位:min)</h3>
+          <el-button type="text" class="readyshiftBtn" name="ready">收起<i class="el-icon-caret-top"></i></el-button>
+          <el-form-item label="班次：" style="float: right">
+            <el-select v-model="readyTimeDate.classes" placeholder="请选择" :disabled="!isRedact">
+              <el-option label="白班" value="白班"></el-option>
+              <el-option label="中班" value="中班"></el-option>
+              <el-option label="夜班" value="夜班"></el-option>
+              <el-option label="多班" value="多班"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="readyBox" style="overflow: hidden">
+          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（白班）：">
               <el-input v-model="readyTimeDate.dayShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -29,7 +29,7 @@
               <el-input v-model="readyTimeDate.dayClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
-          <el-row>
+          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '中班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（中班）：">
               <el-input v-model="readyTimeDate.midShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -43,7 +43,7 @@
               <el-input v-model="readyTimeDate.midClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
-          <el-row>
+          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '夜班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（夜班）：">
               <el-input v-model="readyTimeDate.nightShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -57,12 +57,12 @@
               <el-input v-model="readyTimeDate.nightClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
-        </el-form>
-      </div>
+        </div>
+      </el-form>
     </el-card>
     <el-card class="box-card">
       <div class="clearfix" style="margin-bottom: 20px">
-        <h3 style="font-size: 14px;">机器工时 (单位:min)</h3>
+        <h3 style="font-size: 14px;line-height: 32px">机器工时 (单位:min)</h3>
         <el-button type="text" class="readyshiftBtn" name="machine">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="machineBox" style="overflow: hidden">
@@ -126,12 +126,58 @@ export default {
     return {
       visible: false,
       visible1: false,
-      readyTimeDate: {},
+      readyTimeDate: {
+        classes: '',
+        dayShift: '',
+        dayPeeting: '',
+        dayPrepared: '',
+        dayClear: '',
+        midShift: '',
+        midPeeting: '',
+        midPrepared: '',
+        midClear: '',
+        nightShift: '',
+        nightPeeting: '',
+        nightPrepared: '',
+        nightClear: ''
+      },
       machineTimeData: []
     }
   },
   props: {
     isRedact: {}
+  },
+  watch: {
+    'readyTimeDate.classes' (val) {
+      if (val === '白班') {
+        this.readyTimeDate.midShift = null
+        this.readyTimeDate.midPeeting = null
+        this.readyTimeDate.midPrepared = null
+        this.readyTimeDate.midClear = null
+        this.readyTimeDate.nightShift = null
+        this.readyTimeDate.nightPeetin = null
+        this.readyTimeDate.nightPrepar = null
+        this.readyTimeDate.nightClea = null
+      } else if (val === '中班') {
+        this.readyTimeDate.dayShift = null
+        this.readyTimeDate.dayPeeting = null
+        this.readyTimeDate.dayPrepared = null
+        this.readyTimeDate.dayClear = null
+        this.readyTimeDate.nightShift = null
+        this.readyTimeDate.nightPeetin = null
+        this.readyTimeDate.nightPrepar = null
+        this.readyTimeDate.nightClea = null
+      } else if (val === '夜班') {
+        this.readyTimeDate.dayShift = null
+        this.readyTimeDate.dayPeeting = null
+        this.readyTimeDate.dayPrepared = null
+        this.readyTimeDate.dayClear = null
+        this.readyTimeDate.midShift = null
+        this.readyTimeDate.midPeeting = null
+        this.readyTimeDate.midPrepared = null
+        this.readyTimeDate.midClear = null
+      }
+    }
   },
   mounted () {
     Readyanimation(this.$)
@@ -205,7 +251,9 @@ export default {
 }
 .readyshiftBtn{
   padding: 0;
-  float: right;
+  margin-left: 15px;
+  line-height: 32px;
+  /*float: right;*/
 }
 .machineBox{
   .box-card{
