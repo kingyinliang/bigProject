@@ -254,7 +254,8 @@ export default {
             Object.assign(currentRecord[0], this.stockForm)
           } else {
             // add
-            this.stockListData.push(this.stockForm)
+            let clone = Object.assign({}, this.stockForm)
+            this.stockListData.push(clone)
           }
           this.dialogFormVisible = false
         }

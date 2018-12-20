@@ -2,22 +2,22 @@
 <template>
   <div>
     <!--数据录入-->
-    <el-card>
+    <el-card body-style="padding-top:10px;">
       <el-row>
-        <el-col span="12"  style="margin-top:10px;">
+        <el-col span="12">
           <el-form ref="form" :model="form" label-width="100px">
-            <el-form-item label="生产调度员">
-              <el-select value="tp1" :disabled="!isRedact">
+            <el-form-item label="生产调度员" style='margin-bottom:0px;'>
+              <el-select value="tp1" :disabled="!isRedact" size="small">
                 <el-option label="TP1" value="tp1" selected ></el-option>
                 <el-option label="TP2" value="tp2"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col span="12" style="margin-top:10px;">
+        <el-col span="12">
           <div class="btn" style="float:right;">
             <el-button type="primary" size="small" :disabled="!isRedact" @click="AddMaterielData()">新增</el-button>
-            <el-button type="primary" size="small" :disabled="!isRedact">申请订单</el-button>
+            <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact">申请订单</el-button>
           </div>
         </el-col>
       </el-row>
@@ -35,10 +35,7 @@
               label="生产物料"
               width="200">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.materielNo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.materielNo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -47,7 +44,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.produceNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.produceNumber" @input="changeProduceNumber(scope.row)" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -62,50 +59,35 @@
               width="140"
               label="发料料号">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.materielId" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.materielId" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="小麦数量">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.wheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                {{scope.row.wheatNumber = Number(scope.row.branNumber) +  Number(scope.row.smallWheatNumber) +  Number(scope.row.scrapWheatNumber) + Number(scope.row.inboundNumber) }}
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="麸皮">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.branNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.branNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="小颗粒">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.smallWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.smallWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="报废小麦">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.scrapWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.scrapWheatNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -124,7 +106,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.inboundNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.inboundNumber"  :disabled="!isRedact" size="small"  placeholder="手工录入" ></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -132,30 +114,21 @@
               width="140"
               label="入库批次">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.batchNo" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.batchNo" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="库存数">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.inventoryNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.inventoryNumber" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="备注">
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.note" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
-                </div>
+                <el-input v-model="scope.row.note" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -187,7 +160,6 @@
 </template>
 
 <script>
-import { toDate } from '@/net/validate'
 export default {
   data () {
     return {
@@ -272,7 +244,7 @@ export default {
         // 粮仓号
         produceNumber: '',
         // 发料料号
-        materielId: '',
+        materielId: '小麦',
         // 小麦数量
         wheatNumber: '',
         // 麸皮
@@ -330,21 +302,18 @@ export default {
           'verify_date': '2018-03-21 10:21:40'
         }
       ]
-    }
-  },
-  computed: {
-    mistiming: function () {
-      return function (end, start, row) {
-        if (end && start && row.delFlag !== '1') {
-          if (((toDate(end) - toDate(start)) / 60000) < 0) {
-            this.$message.error('异常结束时间早于异常开始时间，请重新录入')
-            return 'NaN'
-          } else {
-            return (toDate(end) - toDate(start)) / 60000
-          }
+    },
+    changeProduceNumber: function (row) {
+      for (let item of this.materielDataList) {
+        if (item.recordId === row.recordId) {
+          item.inboundNumber = item.produceNumber
         }
       }
     }
+  },
+  computed: {
+  },
+  watch: {
   },
   components: {
     AuditLog: resolve => {
