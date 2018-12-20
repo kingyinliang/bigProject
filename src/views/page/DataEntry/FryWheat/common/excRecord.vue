@@ -7,6 +7,8 @@
       </div>
     </div>
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+      <el-table-column type="index" width="55" label="序号">
+      </el-table-column>
       <el-table-column label="异常情况" width="150">
         <template slot-scope="scope">
           <div class="required">
