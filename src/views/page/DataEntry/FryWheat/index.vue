@@ -412,7 +412,6 @@ export default {
           endTime: '2018-12-05 05:59'
         },
         {
-          id: 2,
           userType: '临时工'
         }]
       } else {
@@ -596,6 +595,9 @@ export default {
     // 员工确认
     changeUser (userId) {
       this.row.userId = userId
+      this.row = JSON.parse(JSON.stringify(this.row))
+      this.datalist = JSON.parse(JSON.stringify(this.datalist))
+      console.log(this.row)
     },
     changeProcType (row) {
       row.userId = []
