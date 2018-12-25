@@ -92,6 +92,7 @@ export default {
     return {
       loading: false,
       visible: false,
+      sapTime: {},
       form: {
         param: ''
       },
@@ -133,13 +134,35 @@ export default {
       this.loading = true
       this.$http(`${BASICDATA_API.SAPUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
         if (data.code === 0) {
-          this.loading = false
-          this.$message.success('同步成功')
-          this.Getsaplist()
+          this.sapTime = setInterval(() => {
+            this.GetSapuUpdate()
+          }, 4000)
         } else {
           this.loading = false
           this.$message.error(data.msg)
         }
+      })
+    },
+    GetSapuUpdate () {
+      this.$http(`${BASICDATA_API.GETSAPUPDATE_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          if (data.asyncRecord) {
+            if (data.asyncRecord.asyncStatus === '0') {
+              this.loading = false
+              this.$message.error('同步失败')
+            } else if (data.asyncRecord.asyncStatus === '1') {
+              this.loading = false
+              clearInterval(this.sapTime)
+              this.$message.success('同步成功')
+              this.Getsaplist()
+            }
+          }
+        } else {
+          this.loading = false
+          this.$message.error(data.msg)
+        }
+      }).catch(() => {
+        this.loading = false
       })
     },
     // 查询

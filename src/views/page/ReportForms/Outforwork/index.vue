@@ -177,8 +177,17 @@ export default {
       })
     },
     ExportExcel () {
-      let that = this
-      exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
+      this.lodingS = true
+      this.$http(`${REP_API.REPOUTFORWORKOUTPUT_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.lodingS = false
+        } else {
+          this.lodingS = false
+          this.$message.error(data.msg)
+        }
+      })
+      // let that = this
+      // exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
     },
     // 改变每页条数
     handleSizeChange (val) {
