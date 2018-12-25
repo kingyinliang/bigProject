@@ -4,7 +4,7 @@
       <el-card>
         <el-row>
           <el-col :span="21">
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="90px">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="95px">
               <el-form-item label="工厂：">
                 <el-select v-model="plantList.factoryid">
                   <el-option label="不限" value="">不限</el-option>
@@ -31,9 +31,10 @@
           <el-col :span="3">
             <el-row>
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
+              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn()">编辑</el-button>
             </el-row>
             <el-row v-if="type === 'abnormal'" style="margin-top:20px">
-              <el-button type="primary" size="small" @click="AddPeople(addRowStatus)">新增</el-button>
+              <el-button type="primary" size="small" @click="AddPeople()">新增</el-button>
               <el-button type="primary" size="small">保存</el-button>
             </el-row>
           </el-col>
@@ -54,16 +55,16 @@
                 <div class="clearfix item">
                   <img :src="'data:image/gif;base64,'" alt="">
                   <div class="itemForm">
-                      <el-form-item label="订单号：" style="margin-bottom: 10px;">
+                      <el-form-item label="订单号：" class="margb20px">
                         <el-select placeholder="请选择"></el-select>
                       </el-form-item>
-                      <el-form-item label="品项：" style="margin-bottom: 10px;">
+                      <el-form-item label="品项：" class="margb20px">
                         <p class="hiddenP"></p>
                       </el-form-item>
-                      <el-form-item label="计划产量：" style="margin-bottom: 10px;">
+                      <el-form-item label="计划产量：" class="margb20px">
                         <p></p>
                       </el-form-item>
-                      <el-form-item label="实时产量：" style="margin-bottom: 10px;">
+                      <el-form-item label="实时产量：" class="margb20px">
                         <p></p>
                       </el-form-item>
                   </div>
@@ -106,78 +107,76 @@
           </el-col>
         </el-row>
         <el-row v-else-if="type === 'abnormal'">
-          <el-table border  header-row-class-name="tableHead" :data="datalist" @selection-change="handleSelectionChange">
-            <el-table-column label="序号" width="50" prop="id"></el-table-column>
+          <el-table border  header-row-class-name="tableHead" :data="datalist">
+            <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
             <el-table-column label="中/白/夜班" prop="dayType" width="120">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.dayType" placeholder="请选择" size="small" v-if="addRowStatus==1">
+                <el-select v-model="scope.row.dayType" placeholder="请选择" size="small" :disabled="isdisabled">
                   <el-option v-for="sole in dayTypeList" :key="sole.value" :value="sole.value" :label="sole.value"></el-option>
                 </el-select>
-                <span v-else>{{scope.row.dayType}}</span>
               </template>
             </el-table-column>
             <el-table-column label="工序" prop="processes" width="120">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.processes" placeholder="请选择" size="small" @change="changeProcess(scope.row)" v-if="addRowStatus==1">
+                <el-select v-model="scope.row.processes" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
                   <el-option v-for="sole in processesList" :key="sole.deptId" :value="sole.deptId" :label="sole.deptName"></el-option>
                 </el-select>
-                <span v-else>{{scope.row.processes}}</span>
               </template>
             </el-table-column>
             <el-table-column label="人员属性" prop="userType" width="120">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.userType" placeholder="请选择" size="small" @change="changeuserType(scope.row)" v-if="addRowStatus==1">
+                <el-select v-model="scope.row.userType" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
                   <el-option v-for="sole in userTypeList" :key="sole.value" :value="sole.value" :label="sole.value"></el-option>
                 </el-select>
-                <span v-else>{{scope.row.userType}}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="userId"
-              label="姓名（工号）"
-              :show-overflow-tooltip="true"
-              width="170">
+            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="170">
               <template slot-scope="scope">
-                <el-col v-if="addRowStatus==1">
+                <el-col v-if="!isdisabled">
                   <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="scope.row.userType!=='临时工'">
-                    <i>{{scope.row.userId.join(",")}}</i>
+                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <i>点击选择人员</i>
                   </span>
-                    <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工'">
-                    <i>{{scope.row.userId.join(",")}}</i>
+                  <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工'">
+                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <i>点击输入临时工</i>
                   </span>
                 </el-col>
-                <span v-else>{{scope.row.userId}}</span>
+                <el-col v-else>
+                  <span style="cursor: pointer" v-if="scope.row.userType!=='临时工'">
+                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
+                    <i>点击选择人员</i>
+                  </span>
+                  <span style="cursor: pointer" v-if="scope.row.userType=='临时工'">
+                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
+                    <i>点击输入临时工</i>
+                  </span>
+                </el-col>
               </template>
             </el-table-column>
-            <el-table-column label="开始时间" prop="starTime" width="180">
+            <el-table-column label="开始时间" prop="starTime" width="195">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.starTime" type="date" placeholder="选择日期" size="small" style="width:150px" v-if="addRowStatus==1"></el-date-picker>
-                <span v-else>{{scope.row.starTime}}</span>
+                <el-date-picker v-model="scope.row.starTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="用餐时间(MIN)" prop="eaTime" width="90">
               <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.eaTime" v-if="addRowStatus==1"></el-input>
-                <span v-else>{{scope.row.eaTime}}</span>
+                <el-input size="small" v-model="scope.row.eaTime" :disabled="isdisabled"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="结束时间" prop="endTime" width="180">
+            <el-table-column label="结束时间" prop="endTime" width="195">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.endTime" type="date" placeholder="选择日期" size="small" style="width:150px" v-if="addRowStatus==1"></el-date-picker>
-                <span v-else>{{scope.row.endTime}}</span>
+                <el-date-picker v-model="scope.row.endTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="备注" prop="remark" width="100">
               <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.remark" v-if="addRowStatus==1"></el-input>
-                <span v-else>{{scope.row.remark}}</span>
+                <el-input size="small" v-model="scope.row.remark" :disabled="isdisabled"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" v-if="addRowStatus==1"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="isdisabled"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -217,30 +216,6 @@
         </span>
     </el-dialog>
     <el-dialog
-      width="450px"
-      ref="dayLaborer"
-      title="新增临时工"
-      :close-on-click-modal="false"
-      :visible.sync="visible1">
-      <el-form :model="form" size="small" label-width="120px" class="dialogform">
-        <el-row>
-          <el-button type="primary" @click="addDayLaborer(selctId2)" size="small" style="float: right;margin-bottom: 10px">新增</el-button>
-        </el-row>
-        <el-form-item label="临时工姓名：" v-for="(item, index) in selctId2" :key="index">
-          <el-col :span="20">
-            <el-input v-model="selctId2[index]"></el-input>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="danger" icon="el-icon-delete" circle @click="delselctId2(item)"></el-button>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="visible1 = false">取消</el-button>
-          <el-button type="primary" @click="close(row)">确定</el-button>
-        </span>
-    </el-dialog>
-    <el-dialog
       width="850px"
       title="借调人员"
       :close-on-click-modal="false"
@@ -276,18 +251,20 @@
         <el-button type="primary" @click="saveduser(row)">确定</el-button>
       </span>
     </el-dialog>
+    <temporary-worker ref="temporaryWorker" @changeUser="changeUser"></temporary-worker>
   </el-col>
 </template>
 
 <script>
 import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
-import {setUserList} from '@/net/validate'
+import {setUserList, dateFormat} from '@/net/validate'
+import TemporaryWorker from './common/temporaryWorker'
 export default {
   name: 'index',
   data () {
     return {
-      orders: '',
       lodingStatus: false,
+      isdisabled: true,
       plantList: {
         factoryid: '',
         workshopid: '',
@@ -295,17 +272,16 @@ export default {
         status: 'normal',
         currPage: 1,
         pageSize: 10,
-        totalCount: 0,
-        orderNo: ''
+        totalCount: 0
       },
       factory: '',
       workshop: '',
-      type: '',
-      datalist: [],
-      addRowStatus: 0,
+      type: '', // plantList.status
+      datalist: [], // 查询列表
+      addRowStatus: 0, // 人员新增 1增
       dayTypeList: [{value: '白班'}, {value: '中班'}, {value: '夜班'}],
       userTypeList: [{value: '正式'}, {value: '借调'}, {value: '临时工'}],
-      processesList: [],
+      processesList: [], // 车间工序list
       row: {},
       userlist: [],
       selctId: [],
@@ -316,7 +292,6 @@ export default {
       visible: false,
       visible1: false,
       visible2: false,
-      visible3: false,
       OrgTree: [],
       arrList: [],
       filterText: '',
@@ -348,7 +323,7 @@ export default {
   },
   mounted () {
     if (this.plantList.productDate === '') {
-      this.plantList.productDate = new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate()))
+      this.plantList.productDate = dateFormat(new Date(), 'yyyy-MM-dd')
     }
     this.GetfactoryList()
     this.getTree()
@@ -385,13 +360,6 @@ export default {
         this.workshop = ''
       }
     },
-    // 表格选中
-    handleSelectionChange (val) {
-      this.multipleSelection = []
-      val.forEach((item, index) => {
-        this.multipleSelection.push(item)
-      })
-    },
     // 根据车间获取工序
     GetProcess (id) {
       this.processesList = []
@@ -424,7 +392,7 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      if (this.plantList.status === 'normal') {
+      if (this.plantList.status === 'normal') { // 正常生产
         if (this.plantList.productDate == null) {
           this.$message.error('请选择生产时间')
           return
@@ -432,19 +400,19 @@ export default {
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
         this.addRowStatus = 0
+        this.isdisabled = true
         this.datalist = [{
           id: 1,
-          dayType: '白班',
+          dayType: '中班',
           processes: 'A组',
           userType: '正式',
           userList: '1434345,4234354,2313',
-          starTime: '2018-12-05 07:59:59',
+          starTime: '2018-12-05 07:59',
           eaTime: '60',
-          endTime: '2018-12-05 05:59:59'
+          endTime: '2018-12-05 05:59'
         },
         {
-          id: 2,
-          userType: '临时'
+          userType: '临时工'
         }]
       } else {
         this.$message.error('请选择生产状态')
@@ -452,8 +420,11 @@ export default {
       }
       this.type = this.plantList.status
     },
+    isdisabledFn () {
+      this.isdisabled = false
+    },
     // 新增人员
-    AddPeople (tableData, event) {
+    AddPeople () {
       if (this.plantList.workshopid === '') {
         this.$message.error('请选择车间')
         return
@@ -462,6 +433,7 @@ export default {
         this.datalist = []
       }
       this.addRowStatus = 1
+      this.isdisabled = false
       this.datalist.push({
         eaTime: '60',
         userId: []
@@ -613,51 +585,21 @@ export default {
       }
       this.visible2 = false
     },
-    // 选择输入临时工
+    // 临时工
     dayLaborer (row) {
       this.row = row
-      this.visible1 = true
-      this.selctId2 = []
-      if (!this.clearStatus) {
-        this.row.userId.forEach((item) => {
-          this.selctId2.push(item)
-        })
-      } else {
-        this.selctId2.push(this.row.userId)
-      }
-    },
-    // 临时工添加
-    addDayLaborer (row) {
-      row.push('')
-    },
-    // 临时工确定
-    close (row) {
-      if (!this.clearStatus) {
-        row.userId = this.selctId2
-      } else {
-        row.userId = this.selctId2[0]
-      }
-      this.visible1 = false
-    },
-    // 临时工删除
-    delselctId2 (item) {
-      this.selctId2.splice(this.selctId2.indexOf(item), 1)
-    },
-    datarul (data) {
-      let st = true
-      data.forEach((item, index) => {
-        if (item.kqdl && item.kqlx && item.userType && item.userId.length !== 0 && item.classType && (item.timedTime || item.timedTime === 0)) {} else {
-          this.$message.error('考勤必填项未填写')
-          st = false
-          return false
-        }
+      this.$nextTick(() => {
+        this.$refs.temporaryWorker.init(row)
       })
-      return st
     },
-    changeuserType (row) {
-      row.userId = []
+    // 员工确认
+    changeUser (userId) {
+      this.row.userId = userId
+      this.row = JSON.parse(JSON.stringify(this.row))
+      this.datalist = JSON.parse(JSON.stringify(this.datalist))
+      console.log(this.row)
     },
-    changeProcess (row) {
+    changeProcType (row) {
       row.userId = []
     },
     // 改变每页条数
@@ -672,7 +614,9 @@ export default {
     }
   },
   computed: {},
-  components: {}
+  components: {
+    TemporaryWorker
+  }
 }
 </script>
 
@@ -702,6 +646,7 @@ export default {
         color: #8a979e;
       }
     }
+    .margb20px{margin-bottom: 10px}
   }
 }
 </style>

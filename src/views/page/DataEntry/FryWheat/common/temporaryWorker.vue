@@ -34,6 +34,9 @@ export default {
     init (row) {
       this.visible = true
       this.dayLaborerArr = []
+      if (typeof row.userId === 'undefined') {
+        return
+      }
       row.userId.forEach((item) => {
         this.dayLaborerArr.push(item)
       })
