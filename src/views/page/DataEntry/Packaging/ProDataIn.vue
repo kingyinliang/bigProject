@@ -250,7 +250,7 @@
                       </template>
                     </el-table-column>
                     <el-table-column
-                      label="班组/工序"
+                      label="班组"
                       width="100">
                       <template slot-scope="scope">
                         <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')">
@@ -332,7 +332,7 @@
                     </el-table-column>
                     <el-table-column
                       label="备注"
-                      width="100">@click="delUser()"
+                      width="100">
                       <template slot-scope="scope">
                         <el-input v-model="scope.row.remark" size="small" v-if="isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ==='')"></el-input>
                         <el-input v-model="scope.row.remark" size="small" v-else disabled></el-input>
@@ -2717,7 +2717,7 @@ export default {
         if (row.deptId) {
           this.GetUserforteam(row.deptId)
         } else {
-          this.$message.error('请选择班组/工序')
+          this.$message.error('请选择班组')
         }
       } else {
         this.$message.error('请选择人员属性')

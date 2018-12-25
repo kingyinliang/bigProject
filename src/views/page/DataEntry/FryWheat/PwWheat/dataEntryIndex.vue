@@ -29,20 +29,19 @@
         </div>
         <el-tabs v-model="activeName" id="DaatTtabs">
           <el-tab-pane name="1">
-            <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
-                <el-button>准备时间</el-button>
-              </el-tooltip>
+            <span slot="label">
+              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+                <el-button>物料领用</el-button>
+              </el-tooltip> -->
+              <el-button>物料领用</el-button>
             </span>
-            <ready-time :isRedact="isRedact"></ready-time>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="2">
-            <span slot="label"  class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
-                <el-button>人员</el-button>
-              </el-tooltip>
+            <span slot="label" class="spanview">
+              <el-button>工时录入</el-button>
             </span>
-            <worker ref="workerref" :isRedact="isRedact"></worker>
+            <pw-time ref="excrecord" :isRedact="isRedact"></pw-time>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
@@ -51,23 +50,6 @@
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
-            <span slot="label" class="spanview">
-              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
-                <el-button>生产入库</el-button>
-              </el-tooltip> -->
-              <el-button>生产入库</el-button>
-            </span>
-            <in-stock ref="instock" :isRedact="isRedact" :orderNo="PkgorderNo"></in-stock>
-          </el-tab-pane>
-          <el-tab-pane name="5">
-            <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
-                <el-button>物料领用</el-button>
-              </el-tooltip>
-            </span>
-            <apply-materiel ref="applymateriel" :orderNo="PkgorderNo" :isRedact="isRedact"></apply-materiel>
-          </el-tab-pane>
-          <el-tab-pane name="6">
             <span slot="label" class="spanview">
               <el-button>文本记录</el-button>
             </span>
@@ -83,11 +65,9 @@
 import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '../common/formHeader'
-import ReadyTime from '../common/readyTime'
-import Worker from '../common/worker'
 import ExcRecord from '../common/excRecord'
-import InStock from '../common/inStock'
-import ApplyMateriel from '../common/applyMateriel'
+import PwTime from '../common/pwTime'
+import PwApplyMateriel from '../common/pwApplyMateriel'
 import TextRecord from '../common/textRecord'
 export default {
   name: 'dataEntryIndex',
@@ -121,19 +101,6 @@ export default {
       }).then(({data}) => {
         this.formHeader = data.list[0]
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        // this.formHeader.workShop = '870E6BA5A8E94EF0A178F91A58036FAF'
-        this.formHeader.workShop = 'DA8DB9D19B4043B8A600B52D9FEF93E3'
-        // let obj = {
-        //   type: 'holder_type',
-        //   pageSize: 100000,
-        //   currPage: 0,
-        //   holder_type: this.formHeader.holderType,
-        //   holder_no: this.formHeader.holderNo,
-        //   holder_hold: this.formHeader.holderHold,
-        //   dept_id: this.formHeader.workShop
-        // }
-        // this.$refs.instock.GetGranaryList(obj)
-        this.$refs.workerref.GetTeam(this.formHeader.workShop)
         if (this.orderStatus !== '已同步') {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
         }
@@ -182,12 +149,10 @@ export default {
   },
   components: {
     FormHeader,
-    ReadyTime,
-    Worker,
     ExcRecord,
     TextRecord,
-    InStock,
-    ApplyMateriel
+    PwTime,
+    PwApplyMateriel
   }
 }
 </script>
@@ -200,7 +165,7 @@ export default {
     float: left;
   }
   border-top: 1px solid #e8e8e8;
-  .spanview{
+  span{
     .el-button{
       background-color: white!important;
       font-size: 16px;

@@ -113,13 +113,13 @@
               prop="allTime"
               label="出勤总时数"
               :show-overflow-tooltip="true"
-              width="80">
+              width="95">
             </el-table-column>
             <el-table-column
               prop="allDay"
               label="出勤总天数"
               :show-overflow-tooltip="true"
-              width="80">
+              width="95">
             </el-table-column>
           </el-table-column>
         </el-table>
