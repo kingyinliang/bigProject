@@ -31,11 +31,11 @@
           <el-col :span="3">
             <el-row>
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
-              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn()">编辑</el-button>
+              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
             </el-row>
             <el-row v-if="type === 'abnormal'" style="margin-top:20px">
-              <el-button type="primary" size="small" @click="AddPeople()">新增</el-button>
-              <el-button type="primary" size="small">保存</el-button>
+              <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
+              <el-button type="primary" size="small" @click="save">保存</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -116,9 +116,9 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="工序" prop="processes" width="120">
+            <el-table-column label="工序"  width="120">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.processes" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
+                <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
                   <el-option v-for="sole in processesList" :key="sole.deptId" :value="sole.deptId" :label="sole.deptName"></el-option>
                 </el-select>
               </template>
@@ -133,23 +133,21 @@
             <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="170">
               <template slot-scope="scope">
                 <el-col v-if="!isdisabled">
-                  <span style="cursor: pointer" @click="selectUser(scope.row)" v-if="scope.row.userType!=='临时工'">
+                  <span style="cursor: pointer" @click="selectUser(scope.row)">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <i>点击选择人员</i>
-                  </span>
-                  <span style="cursor: pointer" @click="dayLaborer(scope.row)" v-if="scope.row.userType=='临时工'">
-                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <i>点击输入临时工</i>
+                    <span>
+                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                      <i v-else>点击选择人员</i>
+                    </span>
                   </span>
                 </el-col>
                 <el-col v-else>
-                  <span style="cursor: pointer" v-if="scope.row.userType!=='临时工'">
+                  <span style="cursor: pointer">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <i>点击选择人员</i>
-                  </span>
-                  <span style="cursor: pointer" v-if="scope.row.userType=='临时工'">
-                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <i>点击输入临时工</i>
+                    <span>
+                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                      <i v-else>点击选择人员</i>
+                    </span>
                   </span>
                 </el-col>
               </template>
@@ -194,71 +192,18 @@
         </el-row>
       </el-card>
     </div>
-    <el-dialog
-      title="人员分配"
-      :close-on-click-modal="false"
-      :visible.sync="visible">
-      <el-row>
-        <el-col style="width: 500px">
-          <el-transfer
-            filterable
-            :titles="['未分配人员', '已分配人员']"
-            :filter-method="filterMethod"
-            filter-placeholder="请输入用户名称"
-            v-model="selctId"
-            :data="userlist">
-          </el-transfer>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="updatauser(row)">确定</el-button>
-        </span>
-    </el-dialog>
-    <el-dialog
-      width="850px"
-      title="借调人员"
-      :close-on-click-modal="false"
-      :visible.sync="visible2">
-      <el-row>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <h3 style="font-size: 16px;color: black;margin-bottom: 10px">组织架构</h3>
-            <el-tree :data="OrgTree" node-key="deptId" :default-expanded-keys="arrList" @node-click="setdetail" ref="tree2" :expand-on-click-node="false"></el-tree>
-          </el-card>
-        </el-col>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <el-input v-model="filterText" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree" :filter-node-method="filterNode" node-key="userId" @node-click="treeNodeClick" :data="userlist" show-checkbox :props="userListTreeProps"  :expand-on-click-node="false" @check-change="userTree"></el-tree>
-          </el-card>
-        </el-col>
-        <el-col style="width: 50px;padding: 70px 5px">
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-if="tree2Status"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-left" circle style="margin-bottom: 50px" @click="delSelcted()" v-else disabled></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-if="tree1Status"></el-button>
-          <el-button type="primary" icon="el-icon-arrow-right" circle style="margin-left: 0" @click="addSelcted()" v-else disabled></el-button>
-        </el-col>
-        <el-col style="width: 250px">
-          <el-card style="height: 303px;overflow-y: scroll">
-            <el-input v-model="filterText1" size="small" placeholder="搜索人员"></el-input>
-            <el-tree ref="userlistTree1" :filter-node-method="filterNode1" :data="selctId" show-checkbox :props="selctListTreeProps"  :expand-on-click-node="false" @check-change="userTree1"></el-tree>
-          </el-card>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible2 = false">取消</el-button>
-        <el-button type="primary" @click="saveduser(row)">确定</el-button>
-      </span>
-    </el-dialog>
     <temporary-worker ref="temporaryWorker" @changeUser="changeUser"></temporary-worker>
+    <loaned-personnel ref="loanedPersonnel" @changeUser="changeUser" :OrgTree="OrgTree" :arrList="arrList"></loaned-personnel>
+    <official-worker ref="officialWorker" @changeUser="changeUser"></official-worker>
   </el-col>
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API} from '@/api/api'
-import {setUserList, dateFormat} from '@/net/validate'
+import {BASICDATA_API} from '@/api/api'
+import {dateFormat} from '@/net/validate'
 import TemporaryWorker from './common/temporaryWorker'
+import LoanedPersonnel from './common/loanedPersonnel'
+import officialWorker from './common/officialWorker'
 export default {
   name: 'index',
   data () {
@@ -269,7 +214,7 @@ export default {
         factoryid: '',
         workshopid: '',
         productDate: '',
-        status: 'normal',
+        status: 'abnormal',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -283,34 +228,8 @@ export default {
       userTypeList: [{value: '正式'}, {value: '借调'}, {value: '临时工'}],
       processesList: [], // 车间工序list
       row: {},
-      userlist: [],
-      selctId: [],
-      selctId2: [],
-      tree1Status: false,
-      tree2Status: false,
-      form: {},
-      visible: false,
-      visible1: false,
-      visible2: false,
       OrgTree: [],
-      arrList: [],
-      filterText: '',
-      filterText1: '',
-      userListTreeProps: {
-        label: function (data, node) {
-          return data.realName + '（' + ((data.workNum !== null && data.workNum !== '') ? data.workNum : data.workNumTemp) + '）'
-        },
-        children: ''
-      },
-      selctListTreeProps: {
-        label: function (data, node) {
-          return data.label
-        },
-        children: ''
-      },
-      filterMethod (query, item) {
-        return item.screncon.indexOf(query) > -1
-      }
+      arrList: []
     }
   },
   watch: {
@@ -402,17 +321,18 @@ export default {
         this.addRowStatus = 0
         this.isdisabled = true
         this.datalist = [{
-          id: 1,
           dayType: '中班',
-          processes: 'A组',
+          deptId: 'A组',
           userType: '正式',
-          userList: '1434345,4234354,2313',
           starTime: '2018-12-05 07:59',
           eaTime: '60',
           endTime: '2018-12-05 05:59'
         },
         {
           userType: '临时工'
+        },
+        {
+          userType: '借调'
         }]
       } else {
         this.$message.error('请选择生产状态')
@@ -435,172 +355,63 @@ export default {
       this.addRowStatus = 1
       this.isdisabled = false
       this.datalist.push({
-        eaTime: '60',
-        userId: []
+        eaTime: '60'
       })
     },
     // 人员删除
     delUser (row) {
       this.datalist.splice(this.datalist.indexOf(row), 1)
     },
-    // 选择人员
+    // 选择人员 正式 借调
     selectUser (row) {
       this.row = row
       if (row.userType === '借调') {
-        this.SetSelecd()
+        this.$nextTick(() => {
+          this.$refs.loanedPersonnel.init(row.userId)
+        })
       } else if (row.userType === '正式') {
-        if (row.processes) {
-          this.GetUserforteam(row.processes)
+        if (row.deptId) {
+          this.$nextTick(() => {
+            this.$refs.officialWorker.init(row.deptId, row.userId)
+          })
         } else {
           this.$message.error('请选择工序')
         }
+      } else if (row.userType === '临时工') {
+        this.$nextTick(() => {
+          this.$refs.temporaryWorker.init(row)
+        })
       } else {
         this.$message.error('请选择人员属性')
       }
     },
-    // 反写选中人
-    SetSelecd () {
-      this.selctId = []
-      this.userlist = []
-      this.tree1Status = false
-      this.tree2Status = false
-      if (!this.clearStatus) {
-        this.row.userId.forEach((item, index) => {
-          this.selctId.push({label: item})
-        })
-      } else {
-        this.selctId.push({label: this.row.userId})
-      }
-      this.visible2 = true
-    },
-    // 根据部门id查人
-    GetUserforteam (id) {
-      this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
-        if (data.code === 0) {
-          this.userlist = setUserList(data.listUser)
-          if (!this.clearStatus) {
-            this.selctId = this.row.userId
-          } else {
-            this.selctId = [this.row.userId]
-            let usertemp = 1
-            this.userlist.forEach((item, index) => {
-              if (item.key === this.row.userId) {
-                usertemp++
-              }
-            })
-            if (usertemp === 1) {
-              this.selctId = []
-            } else {
-              this.selctId = [this.row.userId]
-            }
-          }
-          this.visible = true
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 确定人员
-    updatauser (row) {
-      if (!this.clearStatus) {
-        row.userId = this.selctId
-      } else {
-        row.userId = this.selctId[0]
-      }
-      this.visible = false
-    },
-    // 搜索人员
-    filterNode (value, data) {
-      if (!value) return true
-      return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
-    },
-    filterNode1 (value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
-    // 根据组织架构查人
-    setdetail (data) {
-      this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
-        deptId: data.deptId,
-        param: '',
-        currPage: '1',
-        pageSize: '1000'
-      }).then(re => {
-        if (re.data.code === 0) {
-          this.userlist = re.data.page.list
-          this.tree1Status = false
-        } else {
-          this.$message.error(re.data.msg)
-        }
-      })
-    },
-    // 树节点点击
-    treeNodeClick (data) {
-      if (JSON.stringify(this.$refs.userlistTree.getCheckedNodes()).indexOf(JSON.stringify(data)) === -1) {
-        let arr = this.$refs.userlistTree.getCheckedNodes()
-        arr.push(data)
-        this.$refs.userlistTree.setCheckedNodes(arr)
-      }
-    },
-    // 往左
-    delSelcted () {
-      this.$refs.userlistTree1.getCheckedNodes().forEach((item, index) => {
-        this.selctId.splice(this.selctId.indexOf(item), 1)
-      })
-      this.tree2Status = false
-    },
-    // 往右
-    addSelcted () {
-      this.$refs.userlistTree.getCheckedNodes().forEach((item, index) => {
-        let obj = {}
-        obj.label = item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'
-        if (JSON.stringify(this.selctId).indexOf(JSON.stringify(obj)) === -1) {
-          this.selctId.push(obj)
-        }
-      })
-    },
-    userTree () {
-      if (this.$refs.userlistTree.getCheckedNodes().length > 0) {
-        this.tree1Status = true
-      } else {
-        this.tree1Status = false
-      }
-    },
-    userTree1 () {
-      if (this.$refs.userlistTree1.getCheckedNodes().length > 0) {
-        this.tree2Status = true
-      } else {
-        this.tree2Status = false
-      }
-    },
-    // 借调人员确定
-    saveduser (row) {
-      if (!this.clearStatus) {
-        row.userId = []
-        this.selctId.forEach((item) => {
-          row.userId.push(item.label)
-        })
-      } else {
-        row.userId = this.selctId[0].label
-      }
-      this.visible2 = false
-    },
-    // 临时工
-    dayLaborer (row) {
-      this.row = row
-      this.$nextTick(() => {
-        this.$refs.temporaryWorker.init(row)
-      })
-    },
     // 员工确认
     changeUser (userId) {
       this.row.userId = userId
-      this.row = JSON.parse(JSON.stringify(this.row))
-      this.datalist = JSON.parse(JSON.stringify(this.datalist))
-      console.log(this.row)
+      // this.row = JSON.parse(JSON.stringify(this.row))
+      // this.datalist = JSON.parse(JSON.stringify(this.datalist))
+      this.$set(this.row, userId, this.row.userId)
     },
     changeProcType (row) {
       row.userId = []
+    },
+    save () {
+      this.$confirm('确认保存，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(this.datalist)
+        // this.$message({
+        //   type: 'success',
+        //   message: '保存成功'
+        // })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {
@@ -615,7 +426,9 @@ export default {
   },
   computed: {},
   components: {
-    TemporaryWorker
+    TemporaryWorker,
+    LoanedPersonnel,
+    officialWorker
   }
 }
 </script>

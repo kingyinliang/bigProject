@@ -68,6 +68,7 @@ export default {
     init (userId) {
       this.visible = true
       this.selctId = []
+      this.userlist = []
       if (userId && userId.length > 0) {
         userId.forEach((item, index) => {
           this.selctId.push({label: item})
