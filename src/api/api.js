@@ -689,6 +689,10 @@ export const REP_API = {
    *  */
   REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttMThread',
   /**
+   *  车间出勤汇总表 导出 获取状态
+   *  */
+  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  /**
    *  包装车间 - 产量总工时、导出
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',

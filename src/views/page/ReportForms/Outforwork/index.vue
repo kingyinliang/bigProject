@@ -129,11 +129,12 @@
 
 <script>
 import { REP_API } from '@/api/api'
-import { exportFile, headanimation } from '@/net/validate'
+import { headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
     return {
+      ExportTime: {},
       month: '',
       lodingS: false,
       Team: [],
@@ -180,7 +181,9 @@ export default {
       this.lodingS = true
       this.$http(`${REP_API.REPOUTFORWORKOUTPUT_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
-          this.lodingS = false
+          this.ExportTime = setInterval(() => {
+            this.GetExportExcel()
+          }, 4000)
         } else {
           this.lodingS = false
           this.$message.error(data.msg)
@@ -188,6 +191,27 @@ export default {
       })
       // let that = this
       // exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
+    },
+    GetExportExcel () {
+      this.$http(`${REP_API.GETREPOUTFORWORKOUTPUT_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          if (data.asyncRecord) {
+            if (data.asyncRecord.asyncStatus === '0') {
+              this.loading = false
+              this.$message.error('导出失败')
+            } else if (data.asyncRecord.asyncStatus === '1') {
+              this.loading = false
+              clearInterval(this.ExportTime)
+              this.$message.success('同步成功')
+            }
+          }
+        } else {
+          this.loading = false
+          this.$message.error(data.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {
