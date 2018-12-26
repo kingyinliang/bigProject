@@ -97,7 +97,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPLIST_API 物料同步
    */
-  SAPUPDATE_API: HOST + '/sys/sapmaterial/syncMaterialManual',
+  SAPUPDATE_API: HOST + '/sys/sapmaterial/syncMaterialThread',
+  /**
+   * @property {string} SAPLIST_API 获取物料同步状态
+   */
+  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_MATERIAL',
   /**
    * @property {string} SAPDETAIL_API 物料详情
    */
@@ -176,7 +180,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPORDERUPDATE_API 同步订单
    */
-  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',
+  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderThread',
+  /**
+   * @property {string} SAPORDERUPDATE_API 获取同步订单状态
+   */
+  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_ORDER',
   /**
    * @property {string} CAPALIST_API 产能列表
    */
@@ -679,7 +687,11 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出
    *  */
-  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttM',
+  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttMThread',
+  /**
+   *  车间出勤汇总表 导出 获取状态
+   *  */
+  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
   /**
    *  包装车间 - 产量总工时、导出
    */
