@@ -40,33 +40,36 @@
           </el-col>
         </el-row>
         <el-row v-if="type === 'normal'" :gutter="10">
-          <el-col :span="12" style="margin-bottom: 10px">
+          <el-col :span="12" v-for="(item, index) in FryWheatList" :key="index" style="margin-bottom: 10px">
             <el-card class="box-card">
               <el-form  size="small" label-position="right" label-width="85px">
                 <div class="clearfix pro-line">
                   <el-form-item label="工序：">
                     <p>
                       炒麦
-                      <el-button @click="go()" type="primary" size="small" style="float: right">数据录入</el-button>
+                      <el-button @click="go(item)" type="primary" size="small" style="float: right">数据录入</el-button>
                       <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
                     </p>
                   </el-form-item>
                 </div>
                 <div class="clearfix item">
-                  <img :src="'data:image/gif;base64,'" alt="">
+                  <img :src="'data:image/gif;base64,' + item.img" alt="">
                   <div class="itemForm">
-                      <el-form-item label="订单号：" class="margb20px">
-                        <el-select placeholder="请选择"></el-select>
-                      </el-form-item>
-                      <el-form-item label="品项：" class="margb20px">
-                        <p class="hiddenP"></p>
-                      </el-form-item>
-                      <el-form-item label="计划产量：" class="margb20px">
-                        <p></p>
-                      </el-form-item>
-                      <el-form-item label="实时产量：" class="margb20px">
-                        <p></p>
-                      </el-form-item>
+                    <el-form-item label="订单号：" class="margb20px">
+                      <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
+                        <el-option label=""  value=""></el-option>
+                        <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="品项：" class="margb20px">
+                      <p class="hiddenP">{{item.materialCode + ' ' + item.materialName}}</p>
+                    </el-form-item>
+                    <el-form-item label="计划产量：" class="margb20px">
+                      <p>{{item.planOutput + ' ' + item.outputUnit}}</p>
+                    </el-form-item>
+                    <el-form-item label="实时产量：" class="margb20px">
+                      <p>{{item.realOutput? item.realOutput + item.outputUnit: '0' + ' ' + item.outputUnit}}</p>
+                    </el-form-item>
                   </div>
                 </div>
               </el-form>
@@ -199,8 +202,8 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
-import {dateFormat} from '@/net/validate'
+import {BASICDATA_API, PACKAGING_API} from '@/api/api'
+import {dateFormat, orderList} from '@/net/validate'
 import TemporaryWorker from './common/temporaryWorker'
 import LoanedPersonnel from './common/loanedPersonnel'
 import officialWorker from './common/officialWorker'
@@ -208,6 +211,7 @@ export default {
   name: 'index',
   data () {
     return {
+      FryWheatList: [],
       lodingStatus: false,
       isdisabled: true,
       plantList: {
@@ -221,6 +225,9 @@ export default {
       },
       factory: '',
       workshop: '',
+      workShop: '',
+      productDate: '',
+      factoryid: '',
       type: '', // plantList.status
       datalist: [], // 查询列表
       addRowStatus: 0, // 人员新增 1增
@@ -248,8 +255,19 @@ export default {
     this.getTree()
   },
   methods: {
-    go () {
-      this.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+    go (item) {
+      if (item.orderNo && item.properties) {
+        this.FWorderNo = item.orderNo
+        this.FWproductDate = this.productDate
+        this.FWworkShop = this.workShop
+        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+        let that = this
+        setTimeout(function () {
+          that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+        }, 100)
+      } else {
+        this.$message.error('请选择订单号')
+      }
     },
     go2 () {
       this.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
@@ -268,7 +286,7 @@ export default {
     Getworkshop (fid) {
       this.plantList.workshopid = ''
       if (fid) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid}).then(res => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid, deptName: '炒麦 炒麦'}).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
           } else {
@@ -305,6 +323,22 @@ export default {
         }
       })
     },
+    GetorderList () {
+      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        workShop: this.plantList.workshopid,
+        productDate: this.plantList.productDate,
+        orderNo: ''
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.FryWheatList = orderList(data.list)
+          this.workShop = this.plantList.workshopid
+          this.productDate = this.plantList.productDate
+          this.factoryid = this.plantList.factoryid
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 查询
     GetOrderList (st) {
       if (this.plantList.workshopid === '') {
@@ -316,6 +350,7 @@ export default {
           this.$message.error('请选择生产时间')
           return
         }
+        this.GetorderList()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
         this.addRowStatus = 0
@@ -339,6 +374,30 @@ export default {
         return
       }
       this.type = this.plantList.status
+    },
+    // 订单号下拉
+    orderchange (row) {
+      if (row.orderNo && row.orderNo !== row.orderNo2) {
+        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          workShop: this.workShop,
+          productDate: this.productDate,
+          orderNo: row.orderNo
+        }).then(({data}) => {
+          if (data.code === 0) {
+            row.orderNo2 = row.orderNo
+            row.materialCode = data.list[0].materialCode
+            row.materialName = data.list[0].materialName
+            row.planOutput = data.list[0].planOutput
+            row.orderStatus = data.list[0].orderStatus
+            row.outputUnit = data.list[0].outputUnit
+            row.properties = data.list[0].properties
+            row.realOutput = data.list[0].realOutput
+            row.plan = data.list[0].plan
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     isdisabledFn () {
       this.isdisabled = false
@@ -424,7 +483,40 @@ export default {
       this.GetList()
     }
   },
-  computed: {},
+  computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    },
+    mainTabsActiveName: {
+      get () {
+        return this.$store.state.common.mainTabsActiveName
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabsActiveName', val)
+      }
+    },
+    FWfactoryid: {
+      get () { return this.$store.state.common.FWfactoryid },
+      set (val) { this.$store.commit('common/updateFWFactoryid', val) }
+    },
+    FWworkShop: {
+      get () { return this.$store.state.common.FWworkShop },
+      set (val) { this.$store.commit('common/updateFWWorkShop', val) }
+    },
+    FWproductDate: {
+      get () { return this.$store.state.common.FWproductDate },
+      set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    },
+    FWorderNo: {
+      get () { return this.$store.state.common.FWorderNo },
+      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
+    }
+  },
   components: {
     TemporaryWorker,
     LoanedPersonnel,
