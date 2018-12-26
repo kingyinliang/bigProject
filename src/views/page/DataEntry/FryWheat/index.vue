@@ -39,7 +39,7 @@
             </el-row>
           </el-col>
         </el-row>
-        <el-row v-if="type === 'normal'"  :gutter="10">
+        <el-row v-if="type === 'normal'" :gutter="10">
           <el-col :span="12" style="margin-bottom: 10px">
             <el-card class="box-card">
               <el-form  size="small" label-position="right" label-width="85px">
