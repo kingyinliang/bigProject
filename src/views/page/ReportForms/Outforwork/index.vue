@@ -129,7 +129,7 @@
 
 <script>
 import { REP_API } from '@/api/api'
-import { headanimation } from '@/net/validate'
+import { getNewDate, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -178,6 +178,10 @@ export default {
       })
     },
     ExportExcel () {
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
       this.lodingS = true
       this.$http(`${REP_API.REPOUTFORWORKOUTPUT_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
@@ -197,20 +201,27 @@ export default {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
-              this.loading = false
+              this.lodingS = false
               this.$message.error('导出失败')
             } else if (data.asyncRecord.asyncStatus === '1') {
-              this.loading = false
+              this.lodingS = false
               clearInterval(this.ExportTime)
               this.$message.success('同步成功')
+              let elink = document.createElement('a')
+              elink.download = `车间出勤汇总报表${getNewDate()}.xlsx`
+              elink.style.display = 'none'
+              elink.href = data.asyncRecord.fileUrl
+              document.body.appendChild(elink)
+              elink.click()
+              document.body.removeChild(elink)
             }
           }
         } else {
-          this.loading = false
+          this.lodingS = false
           this.$message.error(data.msg)
         }
       }).catch(() => {
-        this.loading = false
+        this.lodingS = false
       })
     },
     // 改变每页条数
