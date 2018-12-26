@@ -57,7 +57,7 @@
               </el-tooltip> -->
               <el-button>生产入库</el-button>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :orderNo="PkgorderNo"></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :orderNo="FWorderNo"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
@@ -65,7 +65,7 @@
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :orderNo="PkgorderNo" :isRedact="isRedact"></apply-materiel>
+            <apply-materiel ref="applymateriel" :orderNo="FWorderNo" :isRedact="isRedact"></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
@@ -106,9 +106,9 @@ export default {
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.PkgorderNo
-    this.productDate = this.PkgproductDate
-    this.workShop = this.PkgworkShop
+    this.orderNo = this.FWorderNo
+    this.productDate = this.FWproductDate
+    this.workShop = this.FWworkShop
     this.GetOrderList()
   },
   methods: {
@@ -167,17 +167,17 @@ export default {
     }
   },
   computed: {
-    PkgworkShop: {
-      get () { return this.$store.state.common.PkgworkShop },
-      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    FWworkShop: {
+      get () { return this.$store.state.common.FWworkShop },
+      set (val) { this.$store.commit('common/updateFWWorkShop', val) }
     },
-    PkgproductDate: {
-      get () { return this.$store.state.common.PkgproductDate },
-      set (val) { this.$store.commit('common/updateProductDate', val) }
+    FWproductDate: {
+      get () { return this.$store.state.common.FWproductDate },
+      set (val) { this.$store.commit('common/updateFWProductDate', val) }
     },
-    PkgorderNo: {
-      get () { return this.$store.state.common.PkgorderNo },
-      set (val) { this.$store.commit('common/updateOrderNo', val) }
+    FWorderNo: {
+      get () { return this.$store.state.common.FWorderNo },
+      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
     }
   },
   components: {
