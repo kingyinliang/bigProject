@@ -20,7 +20,13 @@ export default {
     PkgworkShop: '',
     PkgproductDate: '',
     // 包装车间数据录入传值
-    PkgorderNo: ''
+    PkgorderNo: '',
+    // 炒麦车间
+    FWfactoryid: '',
+    FWworkShop: '',
+    FWproductDate: '',
+    // 包装车间数据录入传值
+    FWorderNo: ''
   },
   mutations: {
     updateDocumentClientHeight (state, height) {
@@ -58,6 +64,18 @@ export default {
     },
     updateOrderNo (state, name) {
       state.PkgorderNo = name
+    },
+    updateFWFactoryid (state, name) {
+      state.FWfactoryid = name
+    },
+    updateFWWorkShop (state, name) {
+      state.FWworkShop = name
+    },
+    updateFWProductDate (state, name) {
+      state.FWproductDate = name
+    },
+    updateFWOrderNo (state, name) {
+      state.FWorderNo = name
     }
   }
 }

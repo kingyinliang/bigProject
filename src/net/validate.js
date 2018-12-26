@@ -201,3 +201,38 @@ export function Readyanimation ($) {
     }
   })
 }
+// 数据处理
+export function orderList (data) {
+  let result = []
+  for (let i = 0; i < data.length; i++) {
+    let orderNo = [data[i].orderNo]
+    for (let j = i + 1; j < data.length; j++) {
+      if (data[i].productLine === data[j].productLine) {
+        j = ++i
+        orderNo.push(data[j].orderNo)
+      }
+    }
+    let orderNos = ''
+    if (orderNo.length === 1) {
+      orderNos = orderNo[0]
+    } else {
+      orderNos = ''
+    }
+    result.push({
+      img: data[i].img,
+      productLine: data[i].productLine,
+      productLineName: data[i].productLineName,
+      orderNo: orderNos,
+      orderNo2: '',
+      order_arr: orderNo,
+      realOutput: '',
+      materialCode: '',
+      materialName: '',
+      orderStatus: '',
+      planOutput: '',
+      outputUnit: '',
+      properties: ''
+    })
+  }
+  return result
+}
