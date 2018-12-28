@@ -699,7 +699,7 @@ export const REP_API = {
   REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours'
 }
 /*
-*报表api
+*炒麦api
  */
 export const WHT_API = {
   /**
@@ -719,7 +719,11 @@ export const WHT_API = {
    */
   MACHINETIMEUPDATE_API: HOST + '/wht/ready/whtMachineUpdate',
   /**
-   * @property {string} MACHINETESTUPDATE_API 机器工时修改
+   * @property {string} MACHINETESTUPDATE_API 机器检测列表
    */
-  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordList'
+  MACHINETESTlist_API: HOST + '/wht/ready/whtCheckRecordList',
+  /**
+   * @property {string} MACHINETESTUPDATE_API 机器检测列表
+   */
+  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate'
 }

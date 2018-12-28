@@ -84,7 +84,7 @@
             </el-card>
           </el-col>
         </el-row>
-        <el-table :data="machineTimeData" header-row-class-name="tableHead" border tooltip-effect="dark">
+        <el-table :data="machineTimeData" header-row-class-name="tableHead" border tooltip-effect="dark" @row-dblclick="rowUpdateMachine" >
           <el-table-column label="日期" width="120" prop="productDate"></el-table-column>
           <el-table-column label="炒麦机" width="120" prop="deviceName"></el-table-column>
           <el-table-column label="开始时间" prop="openTime"></el-table-column>
@@ -97,6 +97,7 @@
     <audit-log></audit-log>
     <machine-time v-if="visible" ref="machinetime" @changeMachineTime="changeMachineTime"></machine-time>
     <machine-test v-if="visible1" ref="machinetest"></machine-test>
+    <machineUpdate v-if="visible2" ref="machinetimeupdate" @updateRow="updateRow"></machineUpdate>
   </div>
 </template>
 
@@ -105,6 +106,7 @@ import { BASICDATA_API, WHT_API } from '@/api/api'
 import { Readyanimation } from '@/net/validate'
 import MachineTime from './machineTime'
 import MachineTest from './machineTest'
+import MachineUpdate from './machineUpdate'
 export default {
   name: 'readyTime',
   data () {
@@ -112,6 +114,7 @@ export default {
       orderId: '',
       visible: false,
       visible1: false,
+      visible2: false,
       readyTimeDate: {
         id: '',
         classes: '',
@@ -134,6 +137,7 @@ export default {
   },
   props: {
     isRedact: {},
+    rows: {},
     formHeader: {}
   },
   watch: {
@@ -223,6 +227,21 @@ export default {
         }
       })
     },
+    // 机器列表双击
+    rowUpdateMachine (row) {
+      if (!this.isRedact) {
+        return false
+      }
+      this.rows = row
+      this.visible2 = true
+      this.$nextTick(() => {
+        this.$refs.machinetimeupdate.init(row)
+      })
+    },
+    updateRow (row) {
+      this.rows = row
+      this.visible2 = false
+    },
     // 炒麦机
     GetMachine (productLine) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
@@ -298,6 +317,7 @@ export default {
   components: {
     MachineTime,
     MachineTest,
+    MachineUpdate,
     AuditLog: resolve => {
       require(['@/views/components/AuditLog'], resolve)
     }
