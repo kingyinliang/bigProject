@@ -17,44 +17,44 @@
         <div class="readyBox" style="overflow: hidden">
           <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（白班）：">
-              <el-input v-model="readyTimeDate.dayShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.dayPeeting" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.dayPrepared" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.dayClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangeAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
           <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '中班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（中班）：">
-              <el-input v-model="readyTimeDate.midShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.midPeeting" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.midPrepared" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.midClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChageAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
           <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '夜班' || readyTimeDate.classes === '多班'">
             <el-form-item label="交接班（夜班）：">
-              <el-input v-model="readyTimeDate.nightShift" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.nightPeeting" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.nightPrepared" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.nightClear" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangeAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
         </div>
@@ -67,46 +67,30 @@
       </div>
       <div class="machineBox" style="overflow: hidden">
         <el-row :gutter="10">
-          <el-col :span="8" style="margin-bottom: 15px">
+          <el-col :span="8" style="margin-bottom: 15px" v-for="(item, index) in Machine" :key="index">
             <el-card class="box-card">
               <div class="clearfix machinediv">
                 <img src="@/assets/img/machineicon.png" alt="">
                 <div style="margin-left: 15px">
-                  <p class="machineTit">1#炒麦机</p>
+                  <p class="machineTit">{{ item.deviceName }}</p>
                   <p class="machineTxt">这台酱油炒麦机是2018年在日本进口的。</p>
                 </div>
               </div>
               <el-row>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(true, '1#炒麦机')" :disabled="!isRedact">开始</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(false, '1#炒麦机')" :disabled="!isRedact">结束</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineTest('1#炒麦机')" :disabled="!isRedact">检测</el-button></el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col :span="8" style="margin-bottom: 15px">
-            <el-card class="box-card">
-              <div class="clearfix machinediv">
-                <img src="@/assets/img/machineicon.png" alt="">
-                <div style="margin-left: 15px">
-                  <p class="machineTit">2#炒麦机</p>
-                  <p class="machineTxt">这台酱油炒麦机是2018年在日本进口的。</p>
-                </div>
-              </div>
-              <el-row>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(true, '2#炒麦机')" :disabled="!isRedact">开始</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(false, '2#炒麦机')" :disabled="!isRedact">结束</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" :disabled="!isRedact">检测</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(true, item)" :disabled="!isRedact">开始</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(false, item)" :disabled="!isRedact">结束</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineTest(item)" :disabled="!isRedact">检测</el-button></el-col>
               </el-row>
             </el-card>
           </el-col>
         </el-row>
         <el-table :data="machineTimeData" header-row-class-name="tableHead" border tooltip-effect="dark">
-          <el-table-column label="日期" width="120" prop="riqi"></el-table-column>
-          <el-table-column label="炒麦机" width="120" prop="machine"></el-table-column>
-          <el-table-column label="开始时间" prop="startDate"></el-table-column>
-          <el-table-column label="开始人" width="140" prop="opener"></el-table-column>
-          <el-table-column label="结束时间" prop="endDate"></el-table-column>
-          <el-table-column label="结束人" width="140" prop="endMan"></el-table-column>
+          <el-table-column label="日期" width="120" prop="productDate"></el-table-column>
+          <el-table-column label="炒麦机" width="120" prop="deviceName"></el-table-column>
+          <el-table-column label="开始时间" prop="openTime"></el-table-column>
+          <el-table-column label="开始人" width="140" prop="openMan"></el-table-column>
+          <el-table-column label="结束时间" prop="closeTime"></el-table-column>
+          <el-table-column label="结束人" width="140" prop="closeMan"></el-table-column>
         </el-table>
       </div>
     </el-card>
@@ -117,6 +101,7 @@
 </template>
 
 <script>
+import { BASICDATA_API, WHT_API } from '@/api/api'
 import { Readyanimation } from '@/net/validate'
 import MachineTime from './machineTime'
 import MachineTest from './machineTest'
@@ -124,28 +109,32 @@ export default {
   name: 'readyTime',
   data () {
     return {
+      orderId: '',
       visible: false,
       visible1: false,
       readyTimeDate: {
+        id: '',
         classes: '',
-        dayShift: '',
-        dayPeeting: '',
-        dayPrepared: '',
-        dayClear: '',
-        midShift: '',
-        midPeeting: '',
-        midPrepared: '',
-        midClear: '',
-        nightShift: '',
-        nightPeeting: '',
-        nightPrepared: '',
-        nightClear: ''
+        dayChange: '',
+        dayChangeBefore: '',
+        dayChangePre: '',
+        dayChangeAfter: '',
+        midChange: '',
+        midChangeBefore: '',
+        midChangePre: '',
+        midChangeAfter: '',
+        nightChange: '',
+        nightChangeBefore: '',
+        nightChangePre: '',
+        nightChangeAfter: ''
       },
+      Machine: [],
       machineTimeData: []
     }
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    formHeader: {}
   },
   watch: {
     'readyTimeDate.classes' (val) {
@@ -183,11 +172,77 @@ export default {
     Readyanimation(this.$)
   },
   methods: {
+    // 获取准备时间数据
+    GetReadyList (id) {
+      this.$http(`${WHT_API.READYTIMELIST_API}`, 'POST', {
+        order_id: id
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.readyTimeDate = data.listForm[0]
+          this.machineTimeData = data.listFormMachine
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 准备时间修改
+    UpdateReady (str, resolve) {
+      this.readyTimeDate.orderId = this.formHeader.orderId
+      if (!this.readyTimeDate.status) {
+        this.readyTimeDate.status = str
+      } else {
+        if (this.readyTimeDate.status === 'saved') { this.readyTimeDate.status = str } else if (this.readyTimeDate.status === 'noPass' && str === 'submit') { this.readyTimeDate.status = str }
+      }
+      this.$http(`${WHT_API.READYTIMEUPDATE_API}`, 'POST', this.readyTimeDate).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
+    // 机器工时修改
+    UpdateMachine (str, resolve) {
+      this.machineTimeData.forEach((item) => {
+        item.orderId = this.formHeader.orderId
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+      })
+      this.$http(`${WHT_API.MACHINETIMEUPDATE_API}`, 'POST', this.machineTimeData).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
+    // 炒麦机
+    GetMachine (productLine) {
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: '',
+        deptId: productLine,
+        currPage: '1',
+        pageSize: '50'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.Machine = data.list.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 开始结束按钮
     machineStartOrEnd (st, me) {
       let tmp = st
       this.machineTimeData.forEach((item, index) => {
-        if (item.machine === me && item.startDate && !item.endDate) {
+        if (item.deviceId === me.deviceId && item.openTime && !item.closeTime) {
           if (st) {
             tmp = false
             this.$message.error('请结束后开始')
@@ -205,10 +260,11 @@ export default {
         this.$message.error('请开始后结束')
       }
     },
-    machineTest (str) {
+    // 检测
+    machineTest (me) {
       this.visible1 = true
       this.$nextTick(() => {
-        this.$refs.machinetest.init(str)
+        this.$refs.machinetest.init(me, this.formHeader.orderId)
       })
     },
     // 更新机器工时
@@ -216,18 +272,24 @@ export default {
       this.visible = false
       if (date.endDate) {
         this.machineTimeData.forEach((item, index) => {
-          if (item.machine === date.machine && !item.endDate) {
-            item.endDate = date.endDate
-            item.endMan = date.changer
+          if (item.deviceId === date.deviceId && !item.closeTime) {
+            item.closeTime = date.endDate
+            item.closeMan = date.changer
+            item.closeOperateTime = ''
           }
         })
       } else if (date.startDate) {
         this.machineTimeData.push({
-          machine: date.machine,
-          startDate: date.startDate,
-          opener: date.changer,
-          endDate: '',
-          endMan: ''
+          id: '',
+          productDate: this.formHeader.productDate,
+          deviceName: date.deviceName,
+          deviceId: date.deviceId,
+          openTime: date.startDate,
+          openOperateTime: '',
+          openMan: date.changer,
+          closeTime: '',
+          closeOperateTime: '',
+          closeMan: ''
         })
       }
     }

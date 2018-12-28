@@ -112,9 +112,21 @@ export default {
   },
   methods: {
     // 保存or提交
-    saveOrSubmitExc (str, resolve) {
+    saveOrSubmitExc (id, str, resolve) {
       if (this.ExcDate.length > 0) {
-        console.log(this.ExcDate)
+        this.ExcDate.forEach((item) => {
+          item.orderId = id
+        })
+        this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('异常记录' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      } else {
         if (resolve) {
           resolve('resolve')
         }

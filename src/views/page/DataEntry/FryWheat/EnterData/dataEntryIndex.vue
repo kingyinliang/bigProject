@@ -15,6 +15,9 @@
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
               <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
             </el-row>
+            <el-row style="position: absolute;right: 0;top: 100px;">
+              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
+            </el-row>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -34,7 +37,7 @@
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-time :isRedact="isRedact"></ready-time>
+            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader"></ready-time>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
@@ -71,7 +74,7 @@
             <span slot="label" class="spanview">
               <el-button>文本记录</el-button>
             </span>
-            <text-record :isRedact="isRedact"></text-record>
+            <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -93,6 +96,7 @@ export default {
   name: 'dataEntryIndex',
   data () {
     return {
+      orderStatus: '',
       lodingS: false,
       isRedact: false,
       orderNo: '',
@@ -120,26 +124,42 @@ export default {
         orderNo: this.orderNo
       }).then(({data}) => {
         this.formHeader = data.list[0]
+        this.orderStatus = data.list[0].orderStatus
+        this.$refs.readytime.GetMachine(this.formHeader.productLine)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        // this.formHeader.workShop = '870E6BA5A8E94EF0A178F91A58036FAF'
-        this.formHeader.workShop = 'DA8DB9D19B4043B8A600B52D9FEF93E3'
-        // let obj = {
-        //   type: 'holder_type',
-        //   pageSize: 100000,
-        //   currPage: 0,
-        //   holder_type: this.formHeader.holderType,
-        //   holder_no: this.formHeader.holderNo,
-        //   holder_hold: this.formHeader.holderHold,
-        //   dept_id: this.formHeader.workShop
-        // }
-        // this.$refs.instock.GetGranaryList(obj)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
         if (this.orderStatus !== '已同步') {
+          this.$refs.readytime.GetReadyList(this.formHeader.orderId)
+          this.$refs.workerref.GetUserList(this.formHeader.orderId)
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+          this.$refs.textrecord.GetText(this.formHeader.orderId)
         }
       })
     },
-    // 保存
+    // 修改表头
+    UpdateformHeader (str, resolve) {
+      this.formHeader.orderStatus = str
+      this.formHeader.realOutput = null
+      this.formHeader.countOutputUnit = null
+      this.formHeader.countOutput = null
+      this.formHeader.countMan = null
+      this.formHeader.expAllDate = null
+      this.formHeader.germs = null
+      if (str !== 'saved') {
+        this.formHeader.operator = `${this.realName}(${this.userName})`
+        this.formHeader.operDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString()
+      }
+      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
+    // 保存 or 提交
     savedOrSubmitForm (str) {
       if (str === 'submit') {
         if (!this.$refs.excrecord.excrul()) {
@@ -148,19 +168,36 @@ export default {
       }
       this.lodingS = true
       let that = this
+      let net0 = new Promise((resolve, reject) => {
+        this.UpdateformHeader(str, resolve)
+      })
       let net1 = new Promise((resolve, reject) => {
-        that.$refs.excrecord.saveOrSubmitExc(str, resolve)
+        that.$refs.readytime.UpdateReady(str, resolve)
+      })
+      let net2 = new Promise((resolve, reject) => {
+        that.$refs.readytime.UpdateMachine(str, resolve)
+      })
+      let net3 = new Promise((resolve, reject) => {
+        that.$refs.workerref.UpdateUser(str, resolve)
+      })
+      let net4 = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
+      })
+      let net7 = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
       if (str === 'submit') {
-        let net10 = Promise.all([net1])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
         net10.then(function () {
           that.lodingS = false
+          that.GetOrderList()
           that.$message.success('提交成功')
         })
       } else {
-        let net10 = Promise.all([net1])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
         net10.then(function () {
           that.lodingS = false
+          that.GetOrderList()
           that.$message.success('保存成功')
         })
       }

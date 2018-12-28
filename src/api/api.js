@@ -4,7 +4,7 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.5.63:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.175:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
@@ -697,4 +697,29 @@ export const REP_API = {
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
   REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours'
+}
+/*
+*报表api
+ */
+export const WHT_API = {
+  /**
+   * @property {string} READYTIME_API 准备时间修改
+   */
+  READYTIMEUPDATE_API: HOST + '/wht/ready/whtReadyUpdate',
+  /**
+   * @property {string} READYTIMELIST_API 获取准备时间
+   */
+  READYTIMELIST_API: HOST + '/wht/ready/whtReadyList',
+  /**
+   * @property {string} MACHINEIMELIST_API 获取机器工时
+   */
+  MACHINETIMELIST_API: HOST + '/wht/ready/whtReadyList',
+  /**
+   * @property {string} MACHINEIMEUPDATE_API 机器工时修改
+   */
+  MACHINETIMEUPDATE_API: HOST + '/wht/ready/whtMachineUpdate',
+  /**
+   * @property {string} MACHINETESTUPDATE_API 机器工时修改
+   */
+  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordList'
 }

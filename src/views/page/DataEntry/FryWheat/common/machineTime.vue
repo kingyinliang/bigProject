@@ -41,20 +41,21 @@ export default {
   mounted () {
   },
   methods: {
-    init (str, st) {
+    init (me, str) {
       this.visible = true
       this.machineTimeData = {
-        machine: '',
+        deviceId: '',
         startDate: '',
         endDate: '',
         changed: getNewDate(),
         changer: ''
       }
-      if (str) {
-        this.machineTimeData.machine = str
+      if (me) {
+        this.machineTimeData.deviceId = me.deviceId
+        this.machineTimeData.deviceName = me.deviceName
       }
-      if (st) {
-        this.status = st
+      if (str) {
+        this.status = str
       }
     },
     updateMachineTime () {

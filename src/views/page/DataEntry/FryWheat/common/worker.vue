@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
+import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
 import OfficialWorker from '../common/officialWorker'
 import LoanedPersonnel from '../common/loanedPersonnel'
 import TemporaryWorker from '../common/temporaryWorker'
@@ -91,7 +91,9 @@ export default {
   name: 'worker',
   data () {
     return {
+      orderId: '',
       WorkerDate: [],
+      UserAudit: [],
       productShift: [],
       Team: [],
       OrgTree: [],
@@ -110,6 +112,47 @@ export default {
     this.getTree()
   },
   methods: {
+    // 人员列表
+    GetUserList (id) {
+      if (id) {
+        this.orderId = id
+      }
+      this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
+        order_id: this.orderId ? this.orderId : id
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.uerDate = data.listForm
+          this.UserAudit = data.listApproval
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 人员保存
+    UpdateUser (str, resolve) {
+      if (this.WorkerDate.length > 0) {
+        this.WorkerDate.forEach((item) => {
+          if (item.status) {
+            if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+          } else {
+            item.status = str
+          }
+        })
+        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.WorkerDate).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('修改人员' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
+      }
+    },
     // 获取生产班次
     GetProductShift () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
