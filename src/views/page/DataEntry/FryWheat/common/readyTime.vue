@@ -15,7 +15,7 @@
           </el-form-item>
         </div>
         <div class="readyBox" style="overflow: hidden">
-          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班'">
+          <el-row v-if="readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（白班）：">
               <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -29,7 +29,7 @@
               <el-input v-model="readyTimeDate.dayChangeAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
-          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '中班' || readyTimeDate.classes === '多班'">
+          <el-row v-if="readyTimeDate.classes === '中班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（中班）：">
               <el-input v-model="readyTimeDate.midChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -43,7 +43,7 @@
               <el-input v-model="readyTimeDate.midChageAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
           </el-row>
-          <el-row v-if="readyTimeDate.classes === '' || readyTimeDate.classes === '夜班' || readyTimeDate.classes === '多班'">
+          <el-row v-if="readyTimeDate.classes === '夜班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（夜班）：">
               <el-input v-model="readyTimeDate.nightChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
             </el-form-item>
@@ -94,7 +94,7 @@
         </el-table>
       </div>
     </el-card>
-    <audit-log></audit-log>
+    <audit-log :tableData="timeAuditlog"></audit-log>
     <machine-time v-if="visible" ref="machinetime" @changeMachineTime="changeMachineTime"></machine-time>
     <machine-test v-if="visible1" ref="machinetest"></machine-test>
     <machineUpdate v-if="visible2" ref="machinetimeupdate" @updateRow="updateRow"></machineUpdate>
@@ -132,12 +132,13 @@ export default {
         nightChangeAfter: ''
       },
       Machine: [],
+      rows: {},
+      timeAuditlog: [],
       machineTimeData: []
     }
   },
   props: {
     isRedact: {},
-    rows: {},
     formHeader: {}
   },
   watch: {
@@ -184,6 +185,7 @@ export default {
         if (data.code === 0) {
           this.readyTimeDate = data.listForm[0]
           this.machineTimeData = data.listFormMachine
+          this.timeAuditlog = data.listApproval
         } else {
           this.$message.error(data.msg)
         }
@@ -239,7 +241,10 @@ export default {
       })
     },
     updateRow (row) {
-      this.rows = row
+      Object.keys(row).forEach((key) => {
+        this.rows[key] = row[key]
+      })
+      console.log(this.machineTimeData)
       this.visible2 = false
     },
     // 炒麦机

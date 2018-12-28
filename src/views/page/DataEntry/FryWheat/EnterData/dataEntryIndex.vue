@@ -162,7 +162,10 @@ export default {
     // 保存 or 提交
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.$refs.excrecord.excrul()) {
+        if (!this.$refs.workerref.excrul()) {
+          return false
+        }
+        if (!this.$refs.excrecord.userrul()) {
           return false
         }
       }

@@ -153,6 +153,23 @@ export default {
         }
       }
     },
+    // 校验
+    userrul () {
+      let ty = true
+      if (this.WorkerDate.length === 0) {
+        ty = false
+        this.$message.error('人员不能为空')
+        return false
+      }
+      this.WorkerDate.forEach((item) => {
+        if (item.userType && item.userId.length !== 0) {} else {
+          ty = false
+          this.$message.error('人员必填项未填')
+          return false
+        }
+      })
+      return ty
+    },
     // 获取生产班次
     GetProductShift () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
