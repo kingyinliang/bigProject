@@ -48,7 +48,7 @@
                     <p>
                       炒麦
                       <el-button @click="go(item)" type="primary" size="small" style="float: right">数据录入</el-button>
-                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
+                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
                     </p>
                   </el-form-item>
                 </div>
@@ -135,17 +135,15 @@
             </el-table-column>
             <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="170">
               <template slot-scope="scope">
-                <el-col v-if="!isdisabled">
-                  <span style="cursor: pointer" @click="selectUser(scope.row)">
+                <el-col>
+                  <span v-if="!isdisabled" style="cursor: pointer" @click="selectUser(scope.row)">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
                       <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
                       <i v-else>点击选择人员</i>
                     </span>
                   </span>
-                </el-col>
-                <el-col v-else>
-                  <span style="cursor: pointer">
+                  <span v-else style="cursor: pointer">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
                       <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
@@ -248,8 +246,10 @@ export default {
     }
   },
   mounted () {
-    if (this.plantList.productDate === '') {
+    if (this.PkgproductDate === '') {
       this.plantList.productDate = dateFormat(new Date(), 'yyyy-MM-dd')
+    } else {
+      this.plantList.productDate = this.PkgproductDate
     }
     this.GetfactoryList()
     this.getTree()
@@ -334,6 +334,7 @@ export default {
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
+          this.PkgproductDate = this.plantList.productDate
         } else {
           this.$message.error(data.msg)
         }
@@ -515,6 +516,10 @@ export default {
     FWorderNo: {
       get () { return this.$store.state.common.FWorderNo },
       set (val) { this.$store.commit('common/updateFWOrderNo', val) }
+    },
+    PkgproductDate: {
+      get () { return this.$store.state.common.PkgproductDate },
+      set (val) { this.$store.commit('common/updateProductDate', val) }
     }
   },
   components: {
