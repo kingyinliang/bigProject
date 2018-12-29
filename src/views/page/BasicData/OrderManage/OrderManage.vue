@@ -218,6 +218,7 @@ export default {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
               this.loading = false
+              clearInterval(this.orderTime)
               this.$message.error('同步失败')
             } else if (data.asyncRecord.asyncStatus === '1') {
               this.loading = false
@@ -228,10 +229,12 @@ export default {
           }
         } else {
           this.loading = false
+          clearInterval(this.orderTime)
           this.$message.error(data.msg)
         }
       }).catch(() => {
         this.loading = false
+        clearInterval(this.orderTime)
       })
     },
     // 查询

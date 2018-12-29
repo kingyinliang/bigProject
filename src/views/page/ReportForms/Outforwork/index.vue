@@ -202,11 +202,12 @@ export default {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
               this.lodingS = false
+              clearInterval(this.ExportTime)
               this.$message.error('导出失败')
             } else if (data.asyncRecord.asyncStatus === '1') {
               this.lodingS = false
               clearInterval(this.ExportTime)
-              this.$message.success('同步成功')
+              this.$message.success('导出成功')
               let elink = document.createElement('a')
               elink.download = `车间出勤汇总报表${getNewDate()}.xlsx`
               elink.style.display = 'none'
@@ -218,10 +219,12 @@ export default {
           }
         } else {
           this.lodingS = false
+          clearInterval(this.ExportTime)
           this.$message.error(data.msg)
         }
       }).catch(() => {
         this.lodingS = false
+        clearInterval(this.ExportTime)
       })
     },
     // 改变每页条数
