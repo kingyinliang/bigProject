@@ -4,7 +4,7 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.175:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.172:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
@@ -725,5 +725,17 @@ export const WHT_API = {
   /**
    * @property {string} MACHINETESTUPDATE_API 机器检测列表
    */
-  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate'
+  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate',
+  /**
+   * 首页人员列表
+   */
+  CINDEXLISTUSER: HOST + '/wht/user/listUser',
+  /**
+   * 首页人员新增修改
+   */
+  CINDEXUPDATEUSER: HOST + '/wht/user/updateUser',
+  /**
+   * 首页人员删除
+   */
+  CINDEXDELUSER: HOST + '/wht/user/delUser'
 }
