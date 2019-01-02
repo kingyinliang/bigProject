@@ -331,7 +331,7 @@ export default {
     GetorderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
-        productDate: this.plantList.productDate,
+        productDate: this.plantList.productDate.replace(/-/g, ''),
         orderNo: ''
       }).then(({data}) => {
         if (data.code === 0) {
@@ -343,6 +343,7 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.lodingStatus = false
       })
     },
     // 查询
@@ -356,6 +357,7 @@ export default {
           this.$message.error('请选择生产时间')
           return
         }
+        this.lodingStatus = true
         if (this.plantList.workshopid === 'DA8DB9D19B4043B8A600B52D9FEF93E3') {
           this.pwshow = true
         } else {
