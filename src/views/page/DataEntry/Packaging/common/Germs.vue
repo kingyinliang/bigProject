@@ -54,7 +54,7 @@
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row, delFlagnum.menum)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -120,6 +120,10 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    // 删除增待杀菌
+    dellistbomS (row) {
+      row.delFlag = '1'
     },
     // 新增待杀菌
     AddGermsDate (form) {

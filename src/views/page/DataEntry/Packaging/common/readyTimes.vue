@@ -214,6 +214,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           if (data.listForm.length > 0) {
+            this.$emit('GetReadyStatus', data.listForm[0].status)
             this.readyDate = data.listForm[0]
             this.ReadAudit = data.listApproval
           }

@@ -122,7 +122,7 @@
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
         <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row, delFlagnum.sapnum)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -199,6 +199,7 @@ export default {
             } else if (che > 0) {
               this.Sapstatus = 'checked'
             }
+            this.$emit('GetlistbomStatus', this.Sapstatus)
           } else {
             this.$message.error(data.msg)
           }
@@ -207,8 +208,6 @@ export default {
     },
     // 修改
     UpdateSap (str, resolve) {
-      this.netStatus.sapState1 = false
-      this.netStatus.sapState2 = false
       this.listbomP.forEach((item) => {
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
@@ -226,21 +225,35 @@ export default {
       this.$http(`${PACKAGING_API.PKGSPAUPDATEP_API}`, 'POST', this.listbomP).then(({data}) => {
         this.$http(`${PACKAGING_API.PKGSPAUPDATES_API}`, 'POST', this.listbomS).then(({data}) => {
           if (resolve) {
-            this.GetpkgSap(resolve)
-          } else {
-            this.GetpkgSap()
+            resolve('resolve')
           }
           if (data.code === 0) {
-            this.tabStatus.sap2 = true
           } else {
             this.$message.error('物料领用' + data.msg)
           }
         })
         if (data.code === 0) {
-          this.tabStatus.sap1 = true
         } else {
           this.$message.error('物料领用' + data.msg)
         }
+      })
+    },
+    // 物料提交
+    subSap (resolve) {
+      this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       })
     },
     // 校验

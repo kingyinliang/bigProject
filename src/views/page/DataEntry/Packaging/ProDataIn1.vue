@@ -33,15 +33,15 @@
         <el-tabs v-model="activeName" id="pkg">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-times ref="readytimes" :isRedact="isRedact"></ready-times>
+            <ready-times ref="readytimes" :isRedact="isRedact" @GetReadyStatus="GetReadyStatus"></ready-times>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
@@ -54,16 +54,20 @@
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
-            <span slot="label" class="spanview">
-              <el-button>生产入库</el-button>
+            <span slot="label"  class="spanview">
+              <el-tooltip class="item" effect="dark" :content="instorageState === 'noPass'? '不通过':instorageState === 'saved'? '已保存':instorageState === 'submit' ? '已提交' : instorageState === 'checked'? '通过':'未录入'" placement="top-start">
+                <el-button>生产入库</el-button>
+              </el-tooltip>
             </span>
-            <in-storage ref="instorage" :isRedact="isRedact" :order="formHeader" :ratio="ratio"></in-storage>
+            <in-storage ref="instorage" :isRedact="isRedact" :order="formHeader" :ratio="ratio" @GetinstorageState="GetinstorageState"></in-storage>
           </el-tab-pane>
           <el-tab-pane name="5">
-            <span slot="label" class="spanview">
-              <el-button>物料领用</el-button>
+            <span slot="label"  class="spanview">
+              <el-tooltip class="item" effect="dark" :content="listbomStatus === 'noPass'? '不通过':listbomStatus === 'saved'? '已保存':listbomStatus === 'submit' ? '已提交' : listbomStatus === 'checked'? '通过':'未录入'" placement="top-start">
+                <el-button>物料领用</el-button>
+              </el-tooltip>
             </span>
-            <list-bom ref="listbom" :isRedact="isRedact" :order="formHeader"></list-bom>
+            <list-bom ref="listbom" :isRedact="isRedact" :order="formHeader" @GetlistbomStatus="GetlistbomStatus"></list-bom>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
@@ -107,6 +111,9 @@ export default {
       formHeader: {
         productDate: ''
       },
+      readyState: '',
+      instorageState: '',
+      listbomStatus: '',
       ratio: {
         basicUnit: '',
         productUnit: '',
@@ -156,7 +163,6 @@ export default {
         this.$refs.listbom.GetPot()
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
-        this.$refs.listbom.GetpkgSap(this.formHeader.orderId, data)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
@@ -165,6 +171,8 @@ export default {
           this.$refs.listbom.GetpkgSap(this.formHeader.orderId)
           this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
           this.$refs.textrecord.GetText(this.formHeader.orderId)
+        } else {
+          this.$refs.listbom.GetpkgSap(this.formHeader.orderId, data)
         }
       })
     },
@@ -176,7 +184,7 @@ export default {
       this.formHeader.countOutput = this.$refs.instorage.countOutputNum
       this.formHeader.countMan = this.$refs.workerref.countMan
       this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
-      this.formHeader.germs = null
+      this.formHeader.germs = this.$refs.excrecord.GermsNum
       if (str !== 'saved') {
         this.formHeader.operator = `${this.realName}(${this.userName})`
         this.formHeader.operDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString()
@@ -224,25 +232,43 @@ export default {
       let net4 = new Promise((resolve, reject) => {
         that.$refs.instorage.UpdateIn(this.formHeader.orderId, str, resolve)
       })
-      let net7 = new Promise((resolve, reject) => {
-        that.$refs.germs.UpdateGerms(str, resolve)
+      let net5 = new Promise((resolve, reject) => {
+        that.$refs.listbom.UpdateSap(str, resolve)
       })
-      let net8 = new Promise((resolve, reject) => {
+      let net6 = new Promise((resolve, reject) => {
+        that.$refs.germs.UpdateGerms(this.formHeader.orderId, str, resolve)
+      })
+      let net7 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
+      let net8 = new Promise((resolve, reject) => {
+        that.ProHours(resolve)
+      })
+      let net9 = new Promise((resolve, reject) => {
+        that.$refs.instorage.submitIn(resolve)
+      })
+      let net10 = new Promise((resolve, reject) => {
+        that.$refs.listbom.subSap(resolve)
+      })
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, net8])
-        net10.then(function () {
-          that.lodingS = false
-          that.GetOrderList()
-          that.$message.success('提交成功')
+        let net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        net11.then(function () {
+          let net12 = Promise.all([net8, net9, net10])
+          net12.then(() => {
+            that.lodingS = false
+            that.GetOrderList()
+            that.$message.success('提交成功')
+          }).catch(() => {
+            that.$message.error('网络错误')
+            that.lodingS = false
+          })
         }).catch(() => {
           that.$message.error('网络错误')
           that.lodingS = false
         })
       } else {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, net8])
-        net10.then(function () {
+        let net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        net11.then(function () {
           that.lodingS = false
           that.GetOrderList()
           that.$message.success('保存成功')
@@ -251,6 +277,45 @@ export default {
           that.lodingS = false
         })
       }
+    },
+    // 报工提交
+    ProHours (resolve) {
+      if (this.$refs.readytimes.readyDate.isCause === '1') {
+        this.$refs.readytimes.readyDate.dayDinner === null ? this.$refs.readytimes.readyDate.dayDinner = this.$refs.readytimes.readyDate.dayDinner : this.$refs.readytimes.readyDate.dayDinner = this.$refs.readytimes.readyDate.dayDinner + ''
+        this.$refs.readytimes.readyDate.midDinner === null ? this.$refs.readytimes.readyDate.midDinner = this.$refs.readytimes.readyDate.midDinner : this.$refs.readytimes.readyDate.midDinner = this.$refs.readytimes.readyDate.midDinner + ''
+        this.$refs.readytimes.readyDate.nightDinner == null ? this.$refs.readytimes.readyDate.nightDinner = this.$refs.readytimes.readyDate.nightDinner : this.$refs.readytimes.readyDate.nightDinner = this.$refs.readytimes.readyDate.nightDinner + ''
+      } else {
+        this.$refs.readytimes.readyDate.dayDinner = this.$refs.readytimes.readyDate.dayDinner + ''
+      }
+      let data = [this.$refs.readytimes.readyDate, {countMan: this.$refs.workerref.countMan.toString()}, this.$refs.workerref.WorkerDate, this.$refs.excrecord.ExcDate, {
+        orderId: this.formHeader.orderId,
+        outputUnit: this.formHeader.outputUnit,
+        realOutput: this.formHeader.realOutput + '',
+        countOutput: this.$refs.instorage.countOutputNum.toString(),
+        countOutputUnit: this.formHeader.properties === '二合一&礼盒产线' ? this.ratio.basicUnit : 'BOT',
+        productDate: this.formHeader.productDate
+      }]
+      this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', data).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
+    // 准备时间状态
+    GetReadyStatus (status) {
+      this.readyState = status
+    },
+    // 入库状态
+    GetinstorageState (status) {
+      this.instorageState = status
+    },
+    // 物料状态
+    GetlistbomStatus (status) {
+      this.listbomStatus = status
     }
   },
   computed: {

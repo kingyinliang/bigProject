@@ -325,6 +325,18 @@ export default {
         }
       }
     },
+    // 入库提交
+    submitIn (resolve) {
+      this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
     // 入库校验
     inrul () {
       let ty = true
@@ -424,6 +436,7 @@ export default {
           } else if (che > 0) {
             this.Instatus = 'checked'
           }
+          this.$emit('GetinstorageState', this.Instatus)
         } else {
           this.$message.error(data.msg)
         }
