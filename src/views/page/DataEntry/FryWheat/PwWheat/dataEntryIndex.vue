@@ -64,11 +64,11 @@
 <script>
 import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
-import FormHeader from '../common/formHeader'
-import ExcRecord from '../common/excRecord'
+import FormHeader from '@/views/components/formHeader'
+import ExcRecord from '@/views/components/excRecord'
 import PwTime from '../common/pwTime'
 import PwApplyMateriel from '../common/pwApplyMateriel'
-import TextRecord from '../common/textRecord'
+import TextRecord from '@/views/components/textRecord'
 export default {
   name: 'dataEntryIndex',
   data () {

@@ -2356,6 +2356,9 @@ export default {
             console.log('--------提交成功--------')
             that.lodingStatus1 = false
             that.$message.success('提交成功')
+          }).catch(() => {
+            that.$message.error('网络错误')
+            that.lodingStatus1 = false
           })
         })
       } else {
@@ -2363,6 +2366,9 @@ export default {
         net9.then(function () {
           that.lodingStatus1 = false
           that.$message.success('保存成功')
+        }).catch(() => {
+          that.$message.error('网络错误')
+          that.lodingStatus1 = false
         })
       }
     },

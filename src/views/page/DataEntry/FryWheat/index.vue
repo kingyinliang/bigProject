@@ -202,9 +202,9 @@
 <script>
 import {BASICDATA_API, PACKAGING_API} from '@/api/api'
 import {dateFormat, orderList} from '@/net/validate'
-import TemporaryWorker from './common/temporaryWorker'
-import LoanedPersonnel from './common/loanedPersonnel'
-import officialWorker from './common/officialWorker'
+import TemporaryWorker from '@/views/components/temporaryWorker'
+import LoanedPersonnel from '@/views/components/loanedPersonnel'
+import officialWorker from '@/views/components/officialWorker'
 export default {
   name: 'index',
   data () {
@@ -334,7 +334,7 @@ export default {
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
-          this.PkgproductDate = this.plantList.productDate
+          this.FWproductDate = this.plantList.productDate
         } else {
           this.$message.error(data.msg)
         }

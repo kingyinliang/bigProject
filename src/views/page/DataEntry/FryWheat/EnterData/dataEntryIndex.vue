@@ -9,7 +9,7 @@
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
@@ -85,13 +85,13 @@
 <script>
 import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
-import FormHeader from '../common/formHeader'
+import FormHeader from '@/views/components/formHeader'
 import ReadyTime from '../common/readyTime'
-import Worker from '../common/worker'
-import ExcRecord from '../common/excRecord'
+import Worker from '@/views/components/worker'
+import ExcRecord from '@/views/components/excRecord'
 import InStock from '../common/inStock'
 import ApplyMateriel from '../common/applyMateriel'
-import TextRecord from '../common/textRecord'
+import TextRecord from '@/views/components/textRecord'
 export default {
   name: 'dataEntryIndex',
   data () {
@@ -233,51 +233,4 @@ export default {
 </script>
 
 <style lang="scss">
-#DaatTtabs{
-  h3{
-    font-size: 16px;
-    font-weight: bold;
-    float: left;
-  }
-  border-top: 1px solid #e8e8e8;
-  .spanview{
-    .el-button{
-      background-color: white!important;
-      font-size: 16px;
-      padding: 0;
-      border: none;
-    }
-  }
-  .el-tabs__item{
-    height: 50px;
-    line-height: 50px;
-  }
-  table{
-    .el-form-item{
-      margin-bottom: 0;
-    }
-  }
-  .notNull{
-    color: red;
-  }
-  .el-table .warning-row:hover>td{
-    background: #bbbbbb!important;
-    background-color: #bbbbbb!important;
-  }
-  .el-table .warning-row>td{
-    background: #bbbbbb!important;
-    background-color: #bbbbbb!important;
-  }
-  // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
-}
-.required{
-  position: relative;
-  padding-left: 15px;
-  .reqI{
-    color: red;
-    position: absolute;
-    left: 0;
-    line-height: 32px;
-  }
-}
 </style>
