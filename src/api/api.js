@@ -4,7 +4,7 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.1.175:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.172:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
@@ -223,6 +223,10 @@ export const SYSTEMSETUP_API = {
    * @property {string} PARAMETERLIST_API 参数类型列表
    */
   PARAMETERLIST_API: HOST + '/sys/dict/findListByType',
+  /**
+   * @property {string} PARAMETERSLIST_API 参数类型列表
+   */
+  PARAMETERSLIST_API: HOST + '/sys/dict/findListByTypes',
   /**
    * @property {string} PARAMETERTYPE_API 参数类型
    */
@@ -726,5 +730,45 @@ export const WHT_API = {
   /**
    * @property {string} MACHINETESTUPDATE_API 机器检测列表
    */
-  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate'
+  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate',
+  /**
+   * 首页人员列表
+   */
+  CINDEXLISTUSER: HOST + '/wht/user/listUser',
+  /**
+   * 首页人员新增修改
+   */
+  CINDEXUPDATEUSER: HOST + '/wht/user/updateUser',
+  /**
+   * 首页人员删除
+   */
+  CINDEXDELUSER: HOST + '/wht/user/delUser',
+  /**
+   * @property {string} INSTORAGELIST_API 生产入库列表
+   */
+  INSTORAGELIST_API: HOST + '/sys/whtInStorage/list',
+  /**
+   * @property {string} INSTORAGESAVE_API 生产入库保存
+   */
+  INSTORAGESAVE_API: HOST + '/sys/whtInStorage/update',
+  /**
+   * @property {string} INSTORAGESUBMIT_API 生产入库提交
+   */
+  INSTORAGESUBMIT_API: HOST + '/sys/whtInStorage/submit',
+  /**
+   * @property {string} MATERIELSAVEORDER_API pw小麦申请订单
+   */
+  MATERIELSAVEORDER_API: HOST + '/sys/whtPwMaterial/getSapOrder',
+  /**
+   * @property {string} MATERIELLIST_API pw小麦list
+   */
+  MATERIELLIST_API: HOST + '/sys/whtPwMaterial/list',
+  /**
+   * @property {string} MATERIELSAVE_API pw小麦保存
+   */
+  MATERIELSAVE_API: HOST + '/sys/whtPwMaterial/update',
+  /**
+   * @property {string} MATERIELSUBMIT_API pw小麦提交
+   */
+  MATERIELSUBMIT_API: HOST + '/sys/whtPwMaterial/submit'
 }
