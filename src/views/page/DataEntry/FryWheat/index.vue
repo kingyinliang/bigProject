@@ -263,7 +263,7 @@ export default {
     go (item) {
       if (item.orderNo && item.properties) {
         this.FWorderNo = item.orderNo
-        this.FWproductDate = this.productDate
+        this.FWproductDate = this.productDate.replace(/-/g, '')
         this.FWworkShop = this.workShop
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
         let that = this
@@ -339,7 +339,7 @@ export default {
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
-          this.FWproductDate = this.plantList.productDate
+          this.FWproductDate = this.plantList.productDate.replace(/-/g, '')
         } else {
           this.$message.error(data.msg)
         }
