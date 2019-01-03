@@ -393,7 +393,7 @@ export default {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
           workShop: this.workShop,
-          productDate: this.productDate,
+          productDate: this.productDate.replace(/-/g, ''),
           orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {
