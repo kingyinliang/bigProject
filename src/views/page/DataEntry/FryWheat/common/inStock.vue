@@ -4,44 +4,46 @@
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
-        <el-card >
+        <el-card>
           <!--录入-->
-          <el-row :gutter="36">
-            <el-col :span="8">
-                <div class="stock-box">
-                  <div class="stock-img"></div>
-                  <div class="stock-text">1#麦粉计量仓</div>
-                  <div class="clearfix"></div>
-                  <div class="stock-button enabled" @click="addNewRecord('0001', '1#麦粉计量仓')" v-if="isRedact"> 入罐</div>
-                  <div class="stock-button disabled"  else="isRedact"> 入罐</div>
-                </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="stock-box">
-                <div class="stock-img"></div>
-                <div class="stock-text">2#麦粉计量仓</div>
-                <div class="clearfix"></div>
-                <div class="stock-button enabled" @click="addNewRecord('0002', '2#麦粉计量仓')" v-if="isRedact">入罐</div>
-                <div class="stock-button disabled"  else="isRedact"> 入罐</div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="stock-box">
-                <div class="stock-img"></div>
-                <div class="stock-text">3#麦粉计量仓</div>
-                <div class="clearfix"></div>
-                <div class="stock-button enabled" @click="addNewRecord('0003', '3#麦粉计量仓')" v-if="isRedact">入罐</div>
-                <div class="stock-button disabled"  else="isRedact"> 入罐</div>
-              </div>
-            </el-col>
-          </el-row>
+          <div v-loading="loading1">
+            <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%3===0" style="margin-top:5px">
+              <el-col :span="8" v-if="index < flourContainerList.length">
+                  <div class="stock-box">
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
+                  </div>
+              </el-col>
+              <el-col :span="8" v-if="index + 1 < flourContainerList.length">
+                  <div class="stock-box">
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 1].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
+                  </div>
+              </el-col>
+              <el-col :span="8" v-if="index + 2 < flourContainerList.length">
+                  <div class="stock-box">
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 2].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
+                  </div>
+              </el-col>
+            </el-row>
+          </div>
           <!--table-->
-          <el-row  style="margin-top:20px;">
+          <el-row  style="margin-top:20px;" v-loading="loading2">
             <el-col>
-              <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="stockListData"  border tooltip-effect="dark" :row-class-name="RowDelFlag">
+              <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="wheatDataList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
-                    {{scope.row.date}}
+                    {{scope.row.inPortDate}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -49,47 +51,47 @@
                   :show-overflow-tooltip="true"
                   width="120">
                   <template slot-scope="scope">
-                    {{scope.row.stockName}}
+                    {{scope.row.flourDeviceName}}
                   </template>
                 </el-table-column>
                 <el-table-column width="80" label="粮仓">
                   <template slot-scope="scope">
-                    {{scope.row.granaryNo}}
+                    {{scope.row.wheatDeviceName}}
                   </template>
                 </el-table-column>
                 <el-table-column width="90" label="起始">
                   <template slot-scope="scope">
-                    {{scope.row.startNumber}}
+                    {{scope.row.startWeight}}
                   </template>
                 </el-table-column>
                 <el-table-column label="结束" width="90">
                   <template slot-scope="scope">
-                    <span>{{scope.row.endNumber}}</span>
+                    <span>{{scope.row.endWeight}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库数" width="120">
                   <template slot-scope="scope">
-                    <span>{{scope.row.diffNumber}}</span>
+                    <span>{{scope.row.inPortWeight}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="80">
                   <template slot-scope="scope">
-                     <span>{{scope.row.unit = 'KG'}}</span>
+                     <span>{{scope.row.weightUnit = 'kg'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库批次" width="150">
                   <template slot-scope="scope">
-                     <span>{{scope.row.batchNo}}</span>
+                     <span>{{scope.row.inPortBatch}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作人员" width="100">
                   <template slot-scope="scope">
-                     <span>{{scope.row.operatorName}}</span>
+                     <span>{{scope.row.changer}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作时间" width="100">
                   <template slot-scope="scope">
-                     <span>{{scope.row.operateTime}}</span>
+                     <span>{{scope.row.changed}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -97,7 +99,7 @@
                   label="操作"
                   width="60">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="dellistbomS(scope.row)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked' "  @click="dellistbomS(scope.row)"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -107,47 +109,48 @@
       </el-col>
     </el-row>
     <!--审批-->
-    <el-row>
+    <el-row v-loading="loading2">
       <el-col :span="24">
         <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
-    <el-dialog :title="this.stockForm.stockName" :visible.sync="dialogFormVisible" width="450px">
+    <el-dialog :title="this.stockForm.flourDeviceName" :visible.sync="dialogFormVisible" width="450px">
       <el-form :model="stockForm" :rules="dataRule" ref="stockForm">
-        <el-form-item label="粮仓" :label-width="formLabelWidth" required prop="granaryNo">
-          <el-select @change="changeGranary" v-model="stockForm.granaryNo" value-key="granaryNo" placeholder="请选择粮仓" style="width:220px" :disabled="!isRedact">
-            <el-option v-for="item in granaryList" :key="item.granaryNo" :label="item.granaryName" :value="item.granaryNo" ></el-option>
+        <el-form-item label="粮仓" :label-width="formLabelWidth" required prop="wheatDeviceId">
+          <el-select @change="changeWheatContainer"  v-model="stockForm.wheatDeviceId" value-key="wheatDeviceId" placeholder="请选择粮仓" style="width:220px" :disabled="!isRedact">
+            <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="起始(KG)" :label-width="formLabelWidth" required prop="startNumber">
-          <el-input tyle='number' v-model.number="stockForm.startNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+        <el-form-item label="起始(KG)" :label-width="formLabelWidth" required prop="startWeight">
+          <el-input tyle='number' v-model.number="stockForm.startWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
-        <el-form-item label="结束(KG)" :label-width="formLabelWidth" required prop="endNumber">
-          <el-input tyle='number' v-model.number="stockForm.endNumber" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+        <el-form-item label="结束(KG)" :label-width="formLabelWidth" required prop="endWeight">
+          <el-input tyle='number' v-model.number="stockForm.endWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
-        <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="batchNo">
-          <el-input  v-model="stockForm.batchNo" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input>
+        <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="inPortBatch">
+          <el-input  v-model="stockForm.inPortBatch"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
-          <!-- <el-input v-model="stockForm.operateTime" autocomplete="off"></el-input> -->
-          <label>{{stockForm.operateTime}}</label>
+          <!-- <el-input v-model="stockForm.operateTime" ></el-input> -->
+          <label>{{stockForm.changed}}</label>
           <!-- <el-date-picker type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-model="stockForm.operateTime" :disabled="!isRedact"></el-date-picker> -->
         </el-form-item>
          <el-form-item label="操作人" :label-width="formLabelWidth">
-          <label>{{operator}}</label>
-          <!-- <el-input v-model="stockForm.operatorId" autocomplete="off" style="width:220px;" :disabled="!isRedact"></el-input> -->
+          <label>{{stockForm.changer}}</label>
+          <!-- <el-input v-model="stockForm.operatorId"  style="width:220px;" :disabled="!isRedact"></el-input> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false" :disabled="!isRedact">取消</el-button>
-        <el-button type="primary" @click="saveStockData()" :disabled="!isRedact">保存</el-button>
+        <el-button type="primary" @click="cacheStockData()" :disabled="!isRedact">保存</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { dateFormat, toDate } from '@/net/validate'
+import { dateFormat } from '@/net/validate'
+import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
     return {
@@ -155,235 +158,242 @@ export default {
       // equipmentType: [],
       // materialShort: [],
       // enery: [],
-      stockListData: [],
+      loading1: true,
+      loading2: true,
+      wheatDataList: [],
       readAudit: [],
-      granaryList: [],
+      flourContainerList: [],
+      wheatContainerList: [],
       dialogFormVisible: false,
       formLabelWidth: '120px',
-      stockForm: {
-        // 订单号
-        orderNo: '',
-        // ID
-        recordId: '',
-        // 日期
-        date: '',
-        // 计量仓号
-        stockNo: '',
-        stockName: '',
-        // 粮仓号
-        granaryNo: '',
-        granaryName: '',
-        startNumber: '',
-        endNumber: '',
-        diffNumber: 0,
-        // 入库批次
-        batchNo: '',
-        operateTime: '',
-        operatorId: this.$store.state.user.name,
-        operatorName: this.$store.state.user.realName,
-        delFlag: '0'
-      },
+      stockForm: {},
       dataRule: {
-        granaryNo: [
+        wheatDeviceId: [
           {required: true, message: '必选', trigger: 'click'}
         ],
-        startNumber: [
+        startWeight: [
           {required: true, message: '必填', trigger: 'blur'},
           {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
-        endNumber: [
+        endWeight: [
           {required: true, message: '必填', trigger: 'blur'},
           {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
-        batchNo: [
+        inPortBatch: [
           {required: true, message: '必填', trigger: 'blur'}
         ]
       }
     }
   },
   mounted () {
-    // this.GetstoppageType()
-    // this.GetmaterialShort()
-    // this.Getenery()
-    console.log('+++++++++++++++++++++++++' + this.orderNo)
-    this.GetStockData(this.orderNo)
-    this.GetEditLog()
-    this.GetGranaryList()
+    this.getFlourContainerList()
+    this.getWheatContainerList()
+    this.getWheatDataList()
   },
   props: {
-    isRedact: {},
-    orderNo: String
+    isRedact: Boolean,
+    order: Object
   },
   methods: {
-    addNewRecord (stockNo, stockName) {
+    getData () {
+      // this.flourContainerList = []
+      // this.wheatContainerList = []
+      // this.wheatDataList = []
+      // this.readAudit = []
+      // let p1 = getFlourContainerList()
+      // let p2 = getWheatContainerList()
+      // let p3 = getWheatDataList()
+      // Promise.all([p1,p2,p3]).then((result) => {
+      //   if(result[0].code === 0){
+      //     this.flourContainerList = result[0].page.list
+      //   }
+      //   if(result[1].code === 0){
+      //     this.wheatContainerList = result[1].page.list
+      //   }
+      //   if(result[2].code === 0){
+      //     this.wheatDataList = result[2].wlist
+      //     this.readAudit = result[2].vrlist
+      //   }
+      // })
+    },
+    getFlourContainerList () {
+      this.flourContainerList = []
+      if (typeof this.order.workShopName === 'undefined') {
+        return
+      }
+      let params = {
+        type: 'holder_type',
+        holder_type: '009',
+        // holder_no: 'MM002',
+        pageSize: 100,
+        workShopName: this.order.workShopName,
+        currPage: 1
+      }
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
+        this.loading1 = false
+        if (data.code === 0) {
+          this.flourContainerList = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 粮仓
+    getWheatContainerList (obj) {
+      this.wheatContainerList = []
+      if (typeof this.order.workShopName === 'undefined') {
+        return
+      }
+      let params = {
+        type: 'holder_type',
+        holder_type: '002',
+        // holder_no: '001',
+        pageSize: 100,
+        workShopName: this.order.workShopName,
+        currPage: 1
+      }
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.wheatContainerList = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取入库数据
+    getWheatDataList () {
+      this.wheatDataList = []
+      this.readAudit = []
+      if (typeof this.order.orderId === 'undefined') {
+        this.loading2 = false
+        return
+      }
+      this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
+        this.loading2 = false
+        if (data.code === 0) {
+          // success
+          this.wheatDataList = data.wlist
+          this.readAudit = data.vrlist
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    addNewRecord (flourDeviceId, flourDeviceName) {
       let now = new Date()
-      // let year = now.getFullYear()
-      // let month = now.getMonth() + 1
-      // let day = now.getDate()
-      // let hour = now.getHours()
-      // let min = now.getMinutes()
-      // let sec = now.getSeconds()
-      let operateTime = dateFormat(now, 'yyyy-MM-dd hh:mm:ss')
-      let operatorId = this.$store.state.user.name
-      let operatorName = this.$store.state.user.realName
-      let date = dateFormat(now, 'yyyy-MM-dd')
-      let batchNo = ''
-      this.stockForm = {granaryNo: '', granaryName: '', startNumber: '', endNumber: '', operateTime, operatorId, operatorName, orderNo: this.orderNo, stockNo, stockName, recordId: this.uuid(), date, batchNo, delFlag: '0'}
+      let dateStr = dateFormat(now, 'yyyy-MM-dd hh:mm:ss')
+      this.stockForm = {
+        wheatDeviceId: '',
+        startWeight: 0,
+        endWeight: 0,
+        created: dateStr,
+        creator: this.$store.state.user.realName,
+        changed: dateStr,
+        changer: this.$store.state.user.realName,
+        orderId: this.order.orderId,
+        flourDeviceId,
+        flourDeviceName,
+        recordId: this.uuid(),
+        inPortDate: dateStr,
+        inPortBatch: '',
+        delFlag: '0',
+        status: 'saved'
+      }
       this.dialogFormVisible = true
       if (this.$refs['stockForm'] !== undefined) {
         this.$refs['stockForm'].resetFields()
       }
     },
     modifyOldRecord (row) {
-      if (!this.isRedact) {
+      // noPass saved
+      if (!this.isRedact || row.status === 'submit' || row.status === 'checked') {
         return
       }
       this.dialogFormVisible = true
       // if (this.$refs['stockForm'] !== undefined) {
       //   this.$refs['stockForm'].resetFields()
       // }
+      // 点击保存之前，不能对列表数据做更改，此处用clone
       this.stockForm = Object.assign({}, row)
+      this.stockForm.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+      this.stockForm.changer = this.$store.state.user.realName
     },
-    saveStockData () {
+    cacheStockData () {
       this.$refs['stockForm'].validate((valid) => {
         if (valid) {
-          let currentRecord = this.stockListData.filter(data => data.recordId === this.stockForm.recordId)
-          this.stockForm.diffNumber = this.stockForm.endNumber - this.stockForm.startNumber
+          let currentRecord = []
+          if (this.stockForm.hasOwnProperty('recordId')) {
+            // 新增行
+            currentRecord = this.wheatDataList.filter(data => data.recordId === this.stockForm.recordId)
+          } else {
+            // 原有行
+            currentRecord = this.wheatDataList.filter(data => data.id === this.stockForm.id)
+          }
+          this.stockForm.inPortWeight = this.stockForm.endWeight - this.stockForm.startWeight
           if (currentRecord && currentRecord.length > 0) {
             // modify
             Object.assign(currentRecord[0], this.stockForm)
           } else {
             // add
             let clone = Object.assign({}, this.stockForm)
-            this.stockListData.push(clone)
+            this.wheatDataList.push(clone)
           }
           this.dialogFormVisible = false
         }
       })
     },
-    // 保存or提交
-    saveOrSubmitStock (str, resolve) {
-      if (this.stockListData.length > 0) {
-        console.log(this.stockListData)
-        if (resolve) {
-          resolve('resolve')
-        }
+    // 保存
+    saveStockList (str, resolve) {
+      if (this.wheatDataList.length > 0) {
+        this.wheatDataList.forEach((item) => {
+          if (item.status !== 'submit' || item.status !== 'checked') {
+            item.status = 'saved'
+          }
+        })
+        this.$http(`${WHT_API.INSTORAGESAVE_API}`, 'POST', this.wheatDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       }
     },
-    // 获取入库数据
-    GetStockData (id) {
-      // this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
-      //   if (data.code === 0) {
-      //     this.stockListData = data.listForm
-      //   } else {
-      //     this.$message.error(data.msg)
-      //   }
-      // })
-      this.stockListData = []
-    },
-    GetEditLog () {
-      this.readAudit = [
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        }
-      ]
-    },
-
-    GetGranaryList (obj) {
-      // if (!obj) {
-      //   obj = {
-      //     type: 'holder_type',
-      //     pageSize: 100000,
-      //     currPage: 0
-      //   }
-      // }
-      // this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', obj).then(({data}) => {
-      //   console.log(data)
-      //   if (data.code === 0) {
-      //     this.granaryList = data.page.list
-      //   } else {
-      //     this.$message.error(data.msg)
-      //   }
-      // })
-      this.granaryList = [
-        {
-          'granaryNo': '0001',
-          'granaryName': '1#粮仓'
-        },
-        {
-          'granaryNo': '0002',
-          'granaryName': '2#粮仓'
-        },
-        {
-          'granaryNo': '0003',
-          'granaryName': '3#粮仓'
-        }
-      ]
-    },
-    // 异常记录校验
-    excrul () {
-      let ty = true
-      this.ExcDate.forEach((item) => {
-        if (item.delFlag !== '1') {
-          if (item.expCode && item.expStartDate && item.expEndDate) {
-            if ((item.expContinue * 1) < 0) {
-              ty = false
-              this.$message.error('异常开始时间大于结束时间')
-              return false
-            }
-            if (item.expCode === '001' || item.expCode === '002') {
-              if (!item.deviceId) {
-                ty = false
-                this.$message.error('异常记录设备必填')
-                return false
-              }
-            } else if (item.expCode === '003' || item.expCode === '004') {
-              if (!item.materialShort) {
-                ty = false
-                this.$message.error('异常记录物料分类必填')
-                return false
-              }
-            } else if (item.expCode === '005') {
-              if (!item.energy) {
-                ty = false
-                this.$message.error('异常记录能源必填')
-                return false
-              }
-            }
-          } else {
-            ty = false
-            this.$message.error('异常记录必填项未填')
-            return false
+    // 提交
+    submitStockList (str, resolve) {
+      if (this.wheatDataList.length > 0) {
+        this.wheatDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
           }
-        }
-      })
-      return ty
+        })
+        this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      }
     },
-    changeGranary () {
+    changeWheatContainer (value) {
+      let wheat = this.wheatContainerList.find((item) => item.holderId === value)
+      if (wheat) {
+        this.stockForm.wheatDeviceName = wheat.holderName
+      }
       let now = new Date()
-      this.stockForm.batchNo = dateFormat(now, 'yyMMdd') + this.stockForm.granaryNo
+      this.stockForm.inPortBatch = dateFormat(now, 'yyMMdd') + this.stockForm.wheatDeviceId
     },
     // 删除
     dellistbomS (row) {
       row.delFlag = '1'
     },
     // RowDelFlag
-    RowDelFlag ({row, rowIndex}) {
+    rowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
         return 'rowDel'
       } else {
@@ -393,19 +403,18 @@ export default {
   },
   computed: {
     operator: function () {
-      return `(${this.stockForm.operatorId})${this.stockForm.operatorName}`
+      return `(${this.stockForm.changer})${this.stockForm.changer}`
+    }
+  },
+  watch: {
+    'order.orderId' (n, o) {
+      this.loading2 = true
+      this.getWheatDataList()
     },
-    mistiming: function () {
-      return function (end, start, row) {
-        if (end && start && row.delFlag !== '1') {
-          if (((toDate(end) - toDate(start)) / 60000) < 0) {
-            this.$message.error('异常结束时间早于异常开始时间，请重新录入')
-            return 'NaN'
-          } else {
-            return (toDate(end) - toDate(start)) / 60000
-          }
-        }
-      }
+    'order.workShopName' (n, o) {
+      this.loading1 = true
+      this.getFlourContainerList()
+      this.getWheatContainerList()
     }
   },
   components: {

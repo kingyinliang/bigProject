@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyyMMdd"></el-date-picker>
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
               <el-form-item label="生产状态：">
                 <el-select v-model="plantList.status">
@@ -75,7 +75,7 @@
               </el-form>
             </el-card>
           </el-col>
-          <el-col :span="12" style="margin-bottom: 10px">
+          <el-col :span="12" style="margin-bottom: 10px" v-if="pwshow">
             <el-card class="box-card">
               <el-form size="small" label-position="right" label-width="85px">
                 <div class="clearfix pro-line">
@@ -111,10 +111,11 @@
         </el-row>
         <el-row v-else-if="type === 'abnormal'">
           <el-table border  header-row-class-name="tableHead" :data="datalist">
+            <!-- <el-table-column prop="orderId"></el-table-column> -->
             <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
-            <el-table-column label="中/白/夜班" prop="dayType" width="120">
+            <el-table-column label="中/白/夜班" prop="classType" width="100">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.dayType" placeholder="请选择" size="small" :disabled="isdisabled">
+                <el-select v-model="scope.row.classType" placeholder="请选择" size="small" :disabled="isdisabled">
                   <el-option v-for="sole in dayTypeList" :key="sole.value" :value="sole.value" :label="sole.value"></el-option>
                 </el-select>
               </template>
@@ -126,14 +127,14 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="人员属性" prop="userType" width="120">
+            <el-table-column label="人员属性" prop="userType" width="110">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.userType" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
                   <el-option v-for="sole in userTypeList" :key="sole.value" :value="sole.value" :label="sole.value"></el-option>
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="170">
+            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="160">
               <template slot-scope="scope">
                 <el-col>
                   <span v-if="!isdisabled" style="cursor: pointer" @click="selectUser(scope.row)">
@@ -153,19 +154,19 @@
                 </el-col>
               </template>
             </el-table-column>
-            <el-table-column label="开始时间" prop="starTime" width="195">
+            <el-table-column label="开始时间" prop="startDate" width="195">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.starTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
+                <el-date-picker v-model="scope.row.startDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="用餐时间(MIN)" prop="eaTime" width="90">
+            <el-table-column label="用餐时间(MIN)" prop="dinner" width="80">
               <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.eaTime" :disabled="isdisabled"></el-input>
+                <el-input size="small" v-model="scope.row.dinner" :disabled="isdisabled"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="结束时间" prop="endTime" width="195">
+            <el-table-column label="结束时间" prop="endDate" width="195">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.endTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
+                <el-date-picker v-model="scope.row.endDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="备注" prop="remark" width="100">
@@ -200,7 +201,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, PACKAGING_API} from '@/api/api'
+import {BASICDATA_API, PACKAGING_API, WHT_API} from '@/api/api'
 import {dateFormat, orderList} from '@/net/validate'
 import TemporaryWorker from '@/views/components/temporaryWorker'
 import LoanedPersonnel from '@/views/components/loanedPersonnel'
@@ -216,10 +217,11 @@ export default {
         factoryid: '',
         workshopid: '',
         productDate: '',
-        status: 'abnormal',
+        status: '',
         currPage: 1,
         pageSize: 10,
-        totalCount: 0
+        totalCount: 0,
+        orderId: ''
       },
       factory: '',
       workshop: '',
@@ -234,7 +236,10 @@ export default {
       processesList: [], // 车间工序list
       row: {},
       OrgTree: [],
-      arrList: []
+      arrList: [],
+      pwshow: false,
+      abnorsave: true,
+      totalList: ''
     }
   },
   watch: {
@@ -326,7 +331,7 @@ export default {
     GetorderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
-        productDate: this.plantList.productDate,
+        productDate: this.plantList.productDate.replace(/-/g, ''),
         orderNo: ''
       }).then(({data}) => {
         if (data.code === 0) {
@@ -338,6 +343,7 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+        this.lodingStatus = false
       })
     },
     // 查询
@@ -351,25 +357,31 @@ export default {
           this.$message.error('请选择生产时间')
           return
         }
+        this.lodingStatus = true
+        if (this.plantList.workshopid === 'DA8DB9D19B4043B8A600B52D9FEF93E3') {
+          this.pwshow = true
+        } else {
+          this.pwshow = false
+        }
         this.GetorderList()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
+        this.lodingStatus = true
         this.addRowStatus = 0
         this.isdisabled = true
-        this.datalist = [{
-          dayType: '中班',
-          deptId: 'A组',
-          userType: '正式',
-          starTime: '2018-12-05 07:59',
-          eaTime: '60',
-          endTime: '2018-12-05 05:59'
-        },
-        {
-          userType: '临时工'
-        },
-        {
-          userType: '借调'
-        }]
+        this.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.plantList.workshopid, productDate: this.plantList.productDate}).then(res => {
+          if (res.data.code === 0) {
+            if (this.plantList.currPage === 1) {
+              this.totalList = res.data.infoUser
+              this.datalist = res.data.infoUser.slice(0, 10)
+            }
+            // /this.datalist = res.data.infoUser
+            this.plantList.totalCount = res.data.infoUser.length
+          } else {
+            this.$message.error(res.data.msg)
+          }
+          this.lodingStatus = false
+        })
       } else {
         this.$message.error('请选择生产状态')
         return
@@ -415,12 +427,32 @@ export default {
       this.addRowStatus = 1
       this.isdisabled = false
       this.datalist.push({
-        eaTime: '60'
+        dinner: '60'
       })
     },
     // 人员删除
     delUser (row) {
-      this.datalist.splice(this.datalist.indexOf(row), 1)
+      if (typeof row.orderId !== 'undefined') {
+        this.$confirm('是否删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${WHT_API.CINDEXDELUSER}`, 'POST', {orderId: row.orderId}).then(({data}) => {
+            if (data.code === 0) {
+              this.datalist.splice(this.datalist.indexOf(row), 1)
+              this.$message({
+                type: 'success',
+                message: '删除成功'
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        })
+      } else {
+        this.datalist.splice(this.datalist.indexOf(row), 1)
+      }
     },
     // 选择人员 正式 借调
     selectUser (row) {
@@ -456,32 +488,57 @@ export default {
       row.userId = []
     },
     save () {
-      this.$confirm('确认保存，是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        console.log(this.datalist)
-        // this.$message({
-        //   type: 'success',
-        //   message: '保存成功'
-        // })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
+      if (this.isdisabled === false) {
+        this.$confirm('确认保存，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.datalist.map((item) => {
+            if (item.classType === undefined || item.deptId === undefined || item.userType === undefined || item.userId === undefined || item.startDate === undefined || item.endDate === undefined || item.dinner === undefined) {
+              this.$message.error('除备注外其他选项必填')
+              this.abnorsave = false
+              return false
+            } else {
+              this.abnorsave = true
+            }
+            if (item.orderId === undefined) {
+              this.$set(item, 'orderId', '')
+            }
+            this.$set(item, 'productDate', this.plantList.productDate)
+            if ((typeof item.dinner) === 'number') {
+              item.dinner = JSON.stringify(item.dinner)
+            }
+          })
+          if (this.abnorsave === true) {
+            this.lodingStatus = true
+            this.$http(`${WHT_API.CINDEXUPDATEUSER}`, 'POST', this.datalist).then(({data}) => {
+              if (data.code === 0) {
+                // this.$message.success('操作成功')
+                this.$message({
+                  type: 'success',
+                  message: '保存成功'
+                })
+                this.GetOrderList(true)
+              } else {
+                this.$message.error(data.msg)
+              }
+              this.lodingStatus = false
+            })
+          }
         })
-      })
+      }
     },
     // 改变每页条数
     handleSizeChange (val) {
       this.plantList.pageSize = val
-      this.GetList()
+      this.GetOrderList()
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.plantList.currPage = val
-      this.GetList()
+      // 0,10   10,20    20,30
+      this.datalist = this.totalList.slice((val - 1) * this.plantList.pageSize, (val - 1) * this.plantList.pageSize + this.plantList.pageSize)
     }
   },
   computed: {

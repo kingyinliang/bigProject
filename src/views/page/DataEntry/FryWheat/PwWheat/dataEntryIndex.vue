@@ -35,7 +35,7 @@
               </el-tooltip> -->
               <el-button>物料领用</el-button>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo"></pw-apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
@@ -131,6 +131,16 @@ export default {
           that.$message.success('保存成功')
         })
       }
+    },
+    updateOrderInfo: function (orderInfo) {
+      // 申请订单之后，订单号回写
+      console.log('hahhahhahhahh   ======== ', orderInfo.orderId)
+      console.log('hahhahhahhahh   ======== ', orderInfo.orderNo)
+      if( typeof this.formHeader === 'undefined') {
+        this.formHeader = {}
+      }
+      this.$set(this.formHeader, 'orderId', orderInfo.orderId)
+      this.$set(this.formHeader, 'orderNo', orderInfo.orderNo)
     }
   },
   computed: {

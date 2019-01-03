@@ -60,7 +60,7 @@
               </el-tooltip> -->
               <el-button>生产入库</el-button>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :orderNo="FWorderNo"></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
@@ -68,7 +68,7 @@
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :orderNo="FWorderNo" :isRedact="isRedact"></apply-materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader"></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
