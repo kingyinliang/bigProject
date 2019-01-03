@@ -136,7 +136,7 @@ export default {
       // 申请订单之后，订单号回写
       console.log('hahhahhahhahh   ======== ', orderInfo.orderId)
       console.log('hahhahhahhahh   ======== ', orderInfo.orderNo)
-      if( typeof this.formHeader === 'undefined') {
+      if (typeof this.formHeader === 'undefined') {
         this.formHeader = {}
       }
       this.$set(this.formHeader, 'orderId', orderInfo.orderId)

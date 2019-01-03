@@ -63,6 +63,8 @@ router.beforeEach((to, from, next) => {
         sessionStorage.setItem('permissions', '[]')
         next()
       }
+    }).catch((error) => {
+      console.log(error)
     })
   }
 })

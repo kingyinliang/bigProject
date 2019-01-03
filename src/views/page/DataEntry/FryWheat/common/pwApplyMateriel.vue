@@ -34,7 +34,7 @@
               label="生产物料"
               width="160">
               <template slot-scope="scope">
-                <el-select @change="changeProduct"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact">
+                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact">
                   <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -60,7 +60,7 @@
               width="160"
               label="发料料号">
               <template slot-scope="scope">
-                <el-select @change="changeIssue"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact">
+                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact">
                   <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -165,14 +165,15 @@
 <script>
 import { WHT_API, SYSTEMSETUP_API } from '@/api/api'
 import { dateFormat } from '@/net/validate'
-const DICT_PW_FEVOR = 'PW_FEVOR'
-const DICT_CM_material_prd = 'CM_material_prd'
-const DICT_CM_material = 'CM_material'
+// const DICT_PW_FEVOR = 'PW_FEVOR'
+// const DICT_CM_material_prd = 'CM_material_prd'
+// const DICT_CM_material = 'CM_material'
 export default {
   data () {
     return {
       dictListObj: {},
       dispatcherCode: 'TP1',
+      dispatcherName: 'PW生产调度员',
       materielDataList: [],
       readAudit: [],
       loading: true,
@@ -194,7 +195,7 @@ export default {
     saveOrderMateriel (str, resolve) {
       if (this.materielDataList.length > 0) {
         // 数据验证
-        if (true) {
+        if (this.validateList()) {
           let nowStr = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
           let user = this.$store.state.user.realName
           for (let item of this.materielDataList) {
@@ -203,9 +204,10 @@ export default {
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
               // 修改orderId
+              console.log(JSON.stringify(data))
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
-              this.$message.error(data.msg)
+              this.$message.error(data.msg || '申请订单失败，请稍后尝试')
             }
             if (resolve) {
               resolve('resolve')
@@ -213,6 +215,24 @@ export default {
           })
         }
       }
+    },
+    validateList () {
+      for (let item of this.materielDataList) {
+        console.log('item.productWeight.length--', item.productWeight.length)
+        if (item.productWeight === '') {
+          this.$message.error('生产数不能为空')
+          return false
+        }
+        if (item.issueBatch.trim() === '') {
+          this.$message.error('发料批次不能为空')
+          return false
+        }
+        if (item.inStorageWeight === '') {
+          this.$message.error('入库数不能为空')
+          return false
+        }
+      }
+      return true
     },
     getDictList () {
       // CM_material 发料物料
@@ -234,6 +254,7 @@ export default {
     },
     getMaterielDataList () {
       this.materielDataList = []
+      this.readAudit = []
       if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
         this.loading = false
         return
@@ -252,7 +273,7 @@ export default {
       this.materielDataList.push({
         branWeight: 0,
         delFlag: '0',
-        dispatchMan: '',
+        dispatchMan: this.dispatcherCode,
         gmCode: '02',
         // 小颗粒
         granuleWeight: 0,
@@ -261,17 +282,18 @@ export default {
         // 发料批次
         issueBatch: '',
         issueCode: 'M010200001',
-        issueNaem: '',
+        issueNaem: '炒麦车间原料',
         // 发料数量
         issueWeight: 0,
         productCode: 'SP07010001',
-        productNaem: '',
+        productNaem: 'PW小麦',
         productUnit: 'KG',
         productWeight: 0,
         remark: '',
         scrappedWeight: 0,
         status: 'submit',
-        storageWeight: 0
+        storageWeight: 0,
+        productDate: this.order.productDate
       })
     },
     // 删除
@@ -286,28 +308,6 @@ export default {
         return ''
       }
     },
-    getEditLog () {
-      this.readAudit = [
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        },
-        {
-          'status': 'noPass',
-          'memo': '数据不对',
-          'verify_man': '张三',
-          'verify_date': '2018-03-21 10:21:40'
-        }
-      ]
-    },
     changeProductWeight: function (row) {
       for (let item of this.materielDataList) {
         if (item.recordId === row.recordId) {
@@ -316,13 +316,22 @@ export default {
       }
     },
     changeDispatcher: function () {
-
+      let dispatcher = this.dictListObj['PW_FEVOR'].find((item) => item.code === this.dispatcherCode)
+      if (dispatcher) {
+        this.dispatcherName = dispatcher.name
+      }
     },
-    changeProduct: function () {
-
+    changeProduct: function (row) {
+      let product = this.dictListObj['CM_material_prd'].find((item) => item.code === row.productCode)
+      if (product) {
+        row.productNaem = product.name
+      }
     },
-    changeIssue: function () {
-
+    changeIssue: function (row) {
+      let issue = this.dictListObj['CM_material'].find((item) => item.code === row.issueCode)
+      if (issue) {
+        row.issueNaem = issue.name
+      }
     }
   },
   computed: {
@@ -333,7 +342,7 @@ export default {
   },
   watch: {
     'order.orderId' (n, o) {
-      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhh')
+      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
       this.loading = true
       this.getMaterielDataList()
     }
