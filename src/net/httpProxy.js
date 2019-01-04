@@ -2,14 +2,44 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '@/router'
 import { HTTP_METHOD } from './http'
+import {Message, Loading} from 'element-ui'
 // import storage, { AUTHORIZATION_KEY } from '@/storage/storage'
+let loading
+// 使用Element loading-start 方法
+function startLoading () {
+  loading = Loading.service({
+    lock: true,
+    text: '加载中……',
+    background: 'rgba(255, 255, 255, 0.7)'
+  })
+}
+// 使用Element loading-close 方法
+function endLoading () {
+  loading.close()
+}
+
+let needLoadingRequestCount = 0
+export function showFullScreenLoading () {
+  if (needLoadingRequestCount === 0 && Vue.prototype.lodingState) {
+    startLoading()
+  }
+  needLoadingRequestCount++
+}
+
+export function tryHideFullScreenLoading () {
+  if (needLoadingRequestCount <= 0) return
+  needLoadingRequestCount--
+  if (needLoadingRequestCount === 0 && Vue.prototype.lodingState) {
+    endLoading()
+  }
+}
 
 /*
 * @method httpProxy
 * @param {string} url api地址
 * @param {string} [method] {@link module:constants/http method}
 * */
-export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, responseType = false) => {
+export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, responseType = false, londingstatus = true) => {
 // export default (url, method = HTTP_METHOD.GET, data = {}, login = false, ContentType = false) => {
 //   let cancel, promiseArr = {}
 //   const CancelToken = axios.CancelToken
@@ -38,20 +68,13 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
     //   return ret
     // }]
   }
+  Vue.prototype.lodingState = londingstatus
   /**
    * 请求拦截
    */
   axios.interceptors.request.use(config => {
-    // config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
     config.headers['Authorization'] = Vue.cookie.get('token') // 请求头带上token
-    // console.log(Vue.prototype.lodingStatus)
-    Vue.prototype.lodingStatus = true
-    // if (promiseArr[config.url]) {
-    //   promiseArr[config.url]('操作取消')
-    //   promiseArr[config.url] = cancel
-    // } else {
-    //   promiseArr[config.url] = cancel
-    // }
+    showFullScreenLoading()// 显示遮罩
     return config
   }, error => {
     return Promise.reject(error)
@@ -60,15 +83,16 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
    * 响应拦截
    */
   axios.interceptors.response.use(response => {
-    // console.log(Vue.prototype.lodingStatus)
-    Vue.prototype.lodingStatus = false
     if (response.data && response.data.code === 401) { // 401, token失效
       Vue.cookie.delete('token')
       router.options.isAddDynamicMenuRoutes = false
       router.push({path: '/login'})
     }
+    tryHideFullScreenLoading()// 关闭遮罩
     return response
   }, error => {
+    Message.error({message: '网络请求失败，请刷新重试'})
+    endLoading() // 关闭遮罩
     return Promise.reject(error)
   })
   if (method !== HTTP_METHOD.GET) {

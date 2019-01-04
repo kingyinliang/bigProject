@@ -135,7 +135,7 @@ export default {
   },
   mounted () {
     this.getTree()
-    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
+    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}, false, false, false).then(({data}) => {
       if (data.code === 0) {
         this.SerchSapList = data.list
       } else {

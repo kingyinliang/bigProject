@@ -192,7 +192,7 @@ export default {
       })
     },
     // 准备时间修改
-    UpdateReady (str, resolve) {
+    UpdateReady (str, resolve, reject) {
       this.readyTimeDate.orderId = this.formHeader.orderId
       if (!this.readyTimeDate.status) {
         this.readyTimeDate.status = str
@@ -206,6 +206,10 @@ export default {
         }
         if (resolve) {
           resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
         }
       })
     },

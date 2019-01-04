@@ -337,7 +337,7 @@ export default {
       return ty
     },
     // 修改准备时间
-    UpdateReady (id, str, resolve) {
+    UpdateReady (id, str, resolve, reject) {
       this.readyDate.orderId = id
       if (!this.readyDate.status) {
         this.readyDate.status = str
@@ -351,6 +351,10 @@ export default {
         }
         if (resolve) {
           resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
         }
       })
     }
