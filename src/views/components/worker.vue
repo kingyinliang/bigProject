@@ -12,7 +12,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="工序" width="100">
+      <el-table-column label="产线/工序" width="100">
         <template slot-scope="scope">
           <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" :disabled="!isRedact">
             <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
@@ -183,13 +183,23 @@ export default {
     },
     // 获取车间下工序
     GetTeam (id) {
-      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.Team = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.Team = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+          if (data.code === 0) {
+            this.Team = data.teamList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 人员属性下拉
     userTypesele (row) {

@@ -23,22 +23,22 @@
       </div>
       <div class="dayshiftBox">
         <el-form-item label="工作开始时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="开线时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="切换时间：">
-          <el-input v-model="readyDate.dayChange" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" placeholder="手工录入" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.dayChange" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" placeholder="手工录入"></el-input>
         </el-form-item>
         <el-form-item label="工作结束时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="停线时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.dayCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="用餐时间：" >
-          <el-input v-model="readyDate.dayDinner" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" placeholder="手工录入" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.dayDinner" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" placeholder="手工录入"></el-input>
         </el-form-item>
       </div>
     </el-card>
@@ -48,22 +48,22 @@
       </div>
       <div class="middleshiftBox">
         <el-form-item label="工作开始时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="开线时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="切换时间：">
-          <el-input v-model="readyDate.midChange" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.midChange" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-input>
         </el-form-item>
         <el-form-item label="工作结束时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="停线时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.midCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="用餐时间：" >
-          <el-input v-model="readyDate.midDinner" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.midDinner" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-input>
         </el-form-item>
       </div>
     </el-card>
@@ -73,22 +73,22 @@
       </div>
       <div class="nightshiftBox">
         <el-form-item label="工作开始时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="开线时间：" >
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightStartLineDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="切换时间：" >
-          <el-input v-model="readyDate.nightChange" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.nightChange" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-input>
         </el-form-item>
         <el-form-item label="工作结束时间：">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightEndDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="停线时间：">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="readyDate.nightCauseDate" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 184px"></el-date-picker>
         </el-form-item>
         <el-form-item label="用餐时间：" >
-          <el-input v-model="readyDate.nightDinner" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))" style="width: 220px"></el-input>
+          <el-input v-model="readyDate.nightDinner" placeholder="手工录入" :disabled="!(isRedact && (readyDate.status ==='noPass' || readyDate.status ==='saved' || readyDate.status ===''))"></el-input>
         </el-form-item>
       </div>
     </el-card>

@@ -70,7 +70,7 @@
             </span>
             <list-bom ref="listbom" :isRedact="isRedact" :order="formHeader" @GetlistbomStatus="GetlistbomStatus"></list-bom>
           </el-tab-pane>
-          <el-tab-pane name="6">
+          <el-tab-pane name="6" v-if="formHeader.properties !== '二合一&礼盒产线'">
             <span slot="label" class="spanview">
               <el-button>待杀菌数量</el-button>
             </span>
@@ -163,7 +163,7 @@ export default {
         this.GetRatio()
         this.$refs.listbom.GetPot()
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        this.$refs.workerref.GetTeam(this.formHeader.workShop)
+        this.$refs.workerref.GetTeam()
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)

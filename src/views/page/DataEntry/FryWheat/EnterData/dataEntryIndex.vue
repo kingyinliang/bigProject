@@ -33,15 +33,15 @@
         <el-tabs v-model="activeName" id="DaatTtabs">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader"></ready-time>
+            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
@@ -105,6 +105,7 @@ export default {
         productDate: ''
       },
       activeName: '1',
+      readyState: '',
       // 生产入库状态
       inStorageState: '',
       // 物料申请状态
@@ -207,6 +208,10 @@ export default {
           that.$message.success('保存成功')
         })
       }
+    },
+    // 准备时间状态
+    SetReadyStatus (status) {
+      this.readyState = status
     },
     // 入库状态
     setInStorageState (status) {

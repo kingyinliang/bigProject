@@ -286,7 +286,7 @@ export default {
     },
     // 获取工厂
     GetfactoryList () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`).then((res) => {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.factory = res.data.typeList
           if (!this.plantList.factoryid) {
@@ -301,7 +301,7 @@ export default {
     Getworkshop (fid) {
       this.plantList.workshopid = ''
       if (fid) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid, deptName: '炒麦 炒麦'}).then(res => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid, deptName: '炒麦 炒麦'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
           } else {
@@ -316,7 +316,7 @@ export default {
     GetProcess (id) {
       this.processesList = []
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.processesList = data.childList
           } else {
@@ -329,7 +329,7 @@ export default {
     },
     // 获取组织结构树
     getTree () {
-      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
+      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
