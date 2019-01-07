@@ -180,6 +180,9 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-row style="font-size:14px; line-height:30px; margin-top:10px">
+            实际作业人数: {{countMan}}
+          </el-row>
           <el-row v-if="addRowStatus!=1">
             <el-pagination
               @size-change="handleSizeChange"
@@ -601,12 +604,19 @@ export default {
       set (val) { this.$store.commit('common/updateFWfactoryName', val) }
     },
     FWworkShopName: {
-      get () {
-        return this.$store.state.common.FWworkShopName
-      },
-      set (val) {
-        this.$store.commit('common/updateFWWorkShopName', val)
+      get () { return this.$store.state.common.FWworkShopName },
+      set (val) { this.$store.commit('common/updateFWWorkShopName', val) }
+    },
+    countMan: function () {
+      let num = 0
+      if (this.datalist) {
+        this.datalist.forEach((item) => {
+          if (item.userId) {
+            num += item.userId.length
+          }
+        })
       }
+      return num
     }
   },
   components: {
