@@ -242,18 +242,18 @@ export default {
       let net7 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
       })
-      let net8 = new Promise((resolve, reject) => {
-        that.ProHours(resolve, reject)
-      })
-      let net9 = new Promise((resolve, reject) => {
-        that.$refs.instorage.submitIn(resolve, reject)
-      })
-      let net10 = new Promise((resolve, reject) => {
-        that.$refs.listbom.subSap(resolve, reject)
-      })
       if (str === 'submit') {
         let net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
         net11.then(function () {
+          let net8 = new Promise((resolve, reject) => {
+            that.ProHours(resolve, reject)
+          })
+          let net9 = new Promise((resolve, reject) => {
+            that.$refs.instorage.submitIn(resolve, reject)
+          })
+          let net10 = new Promise((resolve, reject) => {
+            that.$refs.listbom.subSap(resolve, reject)
+          })
           let net12 = Promise.all([net8, net9, net10])
           net12.then(() => {
             that.lodingS = false

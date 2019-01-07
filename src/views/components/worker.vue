@@ -12,7 +12,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="产线/工序" width="100">
+      <el-table-column label="班组/工序" width="100">
         <template slot-scope="scope">
           <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" :disabled="!isRedact">
             <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
