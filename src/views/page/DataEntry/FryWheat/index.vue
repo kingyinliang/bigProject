@@ -225,7 +225,6 @@ export default {
       },
       factory: '',
       workshop: '',
-      workShop: '',
       productDate: '',
       factoryid: '',
       type: '', // plantList.status
@@ -372,6 +371,15 @@ export default {
           this.pwshow = true
         } else {
           this.pwshow = false
+        }
+
+        let gFWworkShopName = this.workshop.find(item => item.deptId === this.plantList.workshopid)['deptName']
+        if (gFWworkShopName) {
+          this.FWworkShopName = gFWworkShopName
+        }
+        let gFWfactoryName = this.factory.find(item => item.deptId === this.plantList.factoryid)['deptName']
+        if (gFWfactoryName) {
+          this.FWfactoryName = gFWfactoryName
         }
         this.GetorderList()
       } else if (this.plantList.status === 'abnormal') {
@@ -587,6 +595,18 @@ export default {
     PkgproductDate: {
       get () { return this.$store.state.common.PkgproductDate },
       set (val) { this.$store.commit('common/updateProductDate', val) }
+    },
+    FWfactoryName: {
+      get () { return this.$store.state.common.FWfactoryName },
+      set (val) { this.$store.commit('common/updateFWfactoryName', val) }
+    },
+    FWworkShopName: {
+      get () {
+        return this.$store.state.common.FWworkShopName
+      },
+      set (val) {
+        this.$store.commit('common/updateFWWorkShopName', val)
+      }
     }
   },
   components: {
