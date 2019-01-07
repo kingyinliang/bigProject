@@ -25,6 +25,8 @@ export default {
     FWfactoryid: '',
     FWworkShop: '',
     FWproductDate: '',
+    FWfactoryName: '', // 工厂名字
+    FWworkShopName: '', // 车间名字
     // 包装车间数据录入传值
     FWorderNo: ''
   },
@@ -76,6 +78,12 @@ export default {
     },
     updateFWOrderNo (state, name) {
       state.FWorderNo = name
+    },
+    updateFWfactoryName (state, name) {
+      state.FWfactoryName = name
+    },
+    updateFWWorkShopName (state, name) {
+      state.FWworkShopName = name
     }
   }
 }
