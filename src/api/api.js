@@ -692,11 +692,11 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出
    *  */
-  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttMThread',
+  REPOUTFORWORKOUTPUT_API: 'http://internal-alb003-shinho-micro-prd-929565893.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' + '/report/form/exportShopAttMThread',
   /**
    *  车间出勤汇总表 导出 获取状态
    *  */
-  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  GETREPOUTFORWORKOUTPUT_API: 'http://internal-alb003-shinho-micro-prd-929565893.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
   /**
    *  包装车间 - 产量总工时、导出
    */
