@@ -151,7 +151,8 @@ export default {
     }
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    order: {}
   },
   watch: {
     'readyDate.classes' (val) {
