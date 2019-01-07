@@ -206,10 +206,10 @@ export default {
         if (!this.$refs.readytimes.readyrul()) {
           return false
         }
-        if (!this.$refs.workerref.excrul()) {
+        if (!this.$refs.workerref.userrul()) {
           return false
         }
-        if (!this.$refs.excrecord.userrul()) {
+        if (!this.$refs.excrecord.excrul()) {
           return false
         }
         if (!this.$refs.instorage.inrul()) {
