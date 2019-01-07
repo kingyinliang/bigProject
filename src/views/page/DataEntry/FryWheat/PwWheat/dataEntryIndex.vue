@@ -30,12 +30,11 @@
         <el-tabs v-model="activeName" id="DaatTtabs">
           <el-tab-pane name="1">
             <span slot="label">
-              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>物料领用</el-button>
-              </el-tooltip> -->
-              <el-button>物料领用</el-button>
+              </el-tooltip>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo"></pw-apply-materiel>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
@@ -78,33 +77,55 @@ export default {
       orderNo: '',
       productDate: '',
       workShop: '',
+      workShopName: '',
+      factory: '',
+      factoryName: '',
+      productLine: 'BD5B3295DC104413B94AA18B61ACF539',
+      productLineName: '脱皮车间',
       formHeader: {
-        productDate: ''
       },
-      activeName: '1'
+      activeName: '1',
+      appyMaterielState: ''
     }
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.PkgorderNo
-    this.productDate = this.PkgproductDate
-    this.workShop = this.PkgworkShop
+    this.orderNo = this.$store.state.common.FWorderNo
+    this.productDate = this.$store.state.common.FWproductDate
+    this.workShop = this.$store.state.common.FWworkShop
+    this.workShopName = this.$store.state.common.FWworkShopName
+    this.factory = this.$store.state.common.FWfactoryid
+    this.factoryName = this.$store.state.common.FWfactoryName
     this.GetOrderList()
   },
   methods: {
     // 获取表头
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-        workShop: this.workShop,
-        productDate: this.productDate,
-        orderNo: this.orderNo
-      }).then(({data}) => {
-        this.formHeader = data.list[0]
-        this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        if (this.orderStatus !== '已同步') {
-          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
-        }
-      })
+      console.log('根据订单号获取订单头信息', this.orderNo + '_' + this.workShop + '_' + this.productDate)
+      if (this.orderNo) {
+        // 有订单号
+        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          workShop: this.workShop,
+          productDate: this.productDate,
+          orderNo: this.orderNo
+        }).then(({data}) => {
+          this.formHeader = data.list[0]
+          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+          if (this.orderStatus !== '已同步') {
+            this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+          }
+        })
+      } else {
+        // 无订单号，申请订单
+        this.$set(this.formHeader, 'factory', this.factory)
+        this.$set(this.formHeader, 'factoryName', this.factoryName)
+        this.$set(this.formHeader, 'workShop', this.workShop)
+        this.$set(this.formHeader, 'workShopName', this.workShopName)
+        this.$set(this.formHeader, 'productLine', this.productLine)
+        this.$set(this.formHeader, 'productLineName', this.productLineName)
+        this.$set(this.formHeader, 'productDate', this.productDate)
+        console.log('this.formHeader', JSON.stringify(this.formHeader))
+      }
     },
     // 保存
     savedOrSubmitForm (str) {
@@ -134,28 +155,41 @@ export default {
     },
     updateOrderInfo: function (orderInfo) {
       // 申请订单之后，订单号回写
-      console.log('hahhahhahhahh   ======== ', orderInfo.orderId)
-      console.log('hahhahhahhahh   ======== ', orderInfo.orderNo)
-      if (typeof this.formHeader === 'undefined') {
-        this.formHeader = {}
-      }
+      console.log('调用父组件   ======== ', JSON.stringify(orderInfo))
       this.$set(this.formHeader, 'orderId', orderInfo.orderId)
       this.$set(this.formHeader, 'orderNo', orderInfo.orderNo)
+    },
+    setAppyMaterielState: function (state) {
+      this.appyMaterielState = state
     }
   },
   computed: {
-    PkgworkShop: {
-      get () { return this.$store.state.common.PkgworkShop },
-      set (val) { this.$store.commit('common/updateWorkShop', val) }
-    },
-    PkgproductDate: {
-      get () { return this.$store.state.common.PkgproductDate },
-      set (val) { this.$store.commit('common/updateProductDate', val) }
-    },
-    PkgorderNo: {
-      get () { return this.$store.state.common.PkgorderNo },
-      set (val) { this.$store.commit('common/updateOrderNo', val) }
-    }
+    // FWworkShop: {
+    //   get () { return this.$store.state.common.FWworkShop },
+    //   set (val) { this.$store.commit('common/updateFWWorkShop', val) }
+    // },
+    // FWworkShopName: function () {
+    //   return  this.$store.state.common.FWworkShopName
+    // },
+    // FWproductDate: {
+    //   get () { return this.$store.state.common.FWproductDate },
+    //   set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    // },
+    // FWfactory: {
+    //   get () { return this.$store.state.common.FWfactoryid },
+    //   set (val) { this.$store.commit('common/updateFWFactoryid', val) }
+    // },
+    // FWfactoryName: {
+    //   get () { return this.$store.state.common.FWfactoryname },
+    //   set (val) { this.$store.commit('common/updateFWFactoryname', val) }
+    // },
+    // FWproductLine: function () {
+    //   // 脱皮产线的产线号
+    //   return 'BD5B3295DC104413B94AA18B61ACF539'
+    // },
+    // FWproductLineName: function () {
+    //   return '脱皮车间'
+    // }
   },
   components: {
     FormHeader,

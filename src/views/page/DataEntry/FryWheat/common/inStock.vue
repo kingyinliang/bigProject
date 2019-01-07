@@ -7,8 +7,8 @@
         <el-card>
           <!--录入-->
           <div v-loading="loading1">
-            <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%3===0" style="margin-top:5px">
-              <el-col :span="8" v-if="index < flourContainerList.length">
+            <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%4===0" style="margin-top:5px">
+              <el-col :span="6" v-if="index < flourContainerList.length">
                   <div class="stock-box">
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index].holderName}}</div>
@@ -17,7 +17,7 @@
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
-              <el-col :span="8" v-if="index + 1 < flourContainerList.length">
+              <el-col :span="6" v-if="index + 1 < flourContainerList.length">
                   <div class="stock-box">
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 1].holderName}}</div>
@@ -26,12 +26,21 @@
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
-              <el-col :span="8" v-if="index + 2 < flourContainerList.length">
+              <el-col :span="6" v-if="index + 2 < flourContainerList.length">
                   <div class="stock-box">
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 2].holderName}}</div>
                     <div class="clearfix"></div>
                     <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
+                  </div>
+              </el-col>
+              <el-col :span="6" v-if="index + 3 < flourContainerList.length">
+                  <div class="stock-box">
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 3].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -274,6 +283,32 @@ export default {
           // success
           this.wheatDataList = data.wlist
           this.readAudit = data.vrlist
+          let inState = ''
+          let no = 0
+          let sub = 0
+          let che = 0
+          let sav = 0
+          this.wheatDataList.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          if (no > 0) {
+            inState = 'noPass'
+          } else if (sub > 0) {
+            inState = 'submit'
+          } else if (sav > 0) {
+            inState = 'saved'
+          } else if (che > 0) {
+            inState = 'checked'
+          }
+          this.$emit('setInStorageState', inState)
         } else {
           this.$message.error(data.msg)
         }
@@ -296,8 +331,7 @@ export default {
         recordId: this.uuid(),
         inPortDate: dateStr,
         inPortBatch: '',
-        delFlag: '0',
-        status: 'saved'
+        delFlag: '0'
       }
       this.dialogFormVisible = true
       if (this.$refs['stockForm'] !== undefined) {
@@ -434,10 +468,10 @@ export default {
       width:48px;
       height:48px;
       border-radius:24px;
-      background:#FFBF00;
       float:left;
       margin-left:24px;
       margin-top:24px;
+      background: url('~@/assets/img/wheat.png')
     }
     .stock-text{
       float:left;

@@ -1,25 +1,30 @@
 <template>
   <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
-    <el-form-item label="车间：">
-      <p class="el-input">{{formHeader.workShopName}}</p>
+    <el-form-item label="生产车间：">
+      <p class="el-input">{{formHeader.workShopName || ''}}</p>
     </el-form-item>
     <el-form-item label="产线：">
-      <p class="el-input">{{formHeader.productLineName}}</p>
+      <p class="el-input">{{formHeader.productLineName || ''}}</p>
     </el-form-item>
     <el-form-item label="订单号：">
-      <p class="el-input">{{formHeader.orderNo}}</p>
+      <p class="el-input">{{formHeader.orderNo || ''}}</p>
     </el-form-item>
-    <el-form-item label="品项：">
-      <p class="el-input" style="width: 457px;">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
+    <el-form-item label="生产品项：">
+      <el-tooltip class="item" effect="dark" :content="(formHeader.materialCode || '') + ' ' + (formHeader.materialName || '')" placement="top">
+        <p class="el-input" style="text-overflow: ellipsis;" >{{(formHeader.materialCode || '') + ' ' + (formHeader.materialName || '')}}</p>
+      </el-tooltip>
+    </el-form-item>
+    <el-form-item label="订单日期：">
+      <p class="el-input">{{'TODO'}}</p>
     </el-form-item>
     <el-form-item label="计划产量：">
-      <p class="el-input">{{formHeader.planOutput + ' ' + formHeader.outputUnit}}</p>
+      <p class="el-input">{{(formHeader.planOutput || '') + ' ' + (formHeader.outputUnit || '')}}</p>
     </el-form-item>
-    <el-form-item label="日期：">
-      <p class="el-input">{{formHeader.productDate.indexOf(' ')!==-1?formHeader.productDate.substring(0, formHeader.productDate.indexOf(' ')):formHeader.productDate}}</p>
+    <el-form-item label="生产日期：">
+      <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" ></el-date-picker>
     </el-form-item>
     <el-form-item label="提交人员：">
-      <p class="el-input">{{formHeader.operator}}</p>
+      <p class="el-input">{{formHeader.operator || ''}}</p>
     </el-form-item>
     <el-form-item label="提交时间：">
       <p class="el-input">{{formHeader.operDate? (formHeader.operDate.indexOf('.')!==-1?formHeader.operDate.substring(0, formHeader.operDate.indexOf('.')):formHeader.operDate):''}}</p>
