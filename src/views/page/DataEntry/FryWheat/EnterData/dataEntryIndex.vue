@@ -55,20 +55,19 @@
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label" class="spanview">
-              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>生产入库</el-button>
-              </el-tooltip> -->
-              <el-button>生产入库</el-button>
+              </el-tooltip>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader"></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState'></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader"></apply-materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader" @setApplyMaterielState='setApplyMaterielState'></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
@@ -105,7 +104,11 @@ export default {
       formHeader: {
         productDate: ''
       },
-      activeName: '1'
+      activeName: '1',
+      // 生产入库状态
+      inStorageState: '',
+      // 物料申请状态
+      applyMaterielState: ''
     }
   },
   mounted () {
@@ -204,6 +207,14 @@ export default {
           that.$message.success('保存成功')
         })
       }
+    },
+    // 入库状态
+    setInStorageState (status) {
+      this.inStorageState = status
+    },
+    // 物料状态
+    setApplyMaterielState (status) {
+      this.applyMaterielState = status
     }
   },
   computed: {

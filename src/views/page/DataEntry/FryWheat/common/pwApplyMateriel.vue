@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="12">
           <div class="btn" style="float:right;">
-            <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord()">新增</el-button>
+            <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord">新增</el-button>
             <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact || !enableSubmit" @click="saveOrderMateriel">申请订单</el-button>
           </div>
         </el-col>
@@ -32,10 +32,10 @@
             style="width: 100%;margin-bottom: 20px">
             <el-table-column
               label="生产物料"
-              width="160">
+              width="220">
               <template slot-scope="scope">
                 <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact">
-                  <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.name" :value="item.code" ></el-option>
+                  <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -57,11 +57,11 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="160"
+              width="220"
               label="发料料号">
               <template slot-scope="scope">
                 <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact">
-                  <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.name" :value="item.code" ></el-option>
+                  <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -135,7 +135,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="100"
+              width="200"
               label="生产订单">
               <template slot-scope="scope">
                 {{scope.row.orderId}}
@@ -196,15 +196,13 @@ export default {
       if (this.materielDataList.length > 0) {
         // 数据验证
         if (this.validateList()) {
-          let nowStr = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
-          let user = this.$store.state.user.realName
           for (let item of this.materielDataList) {
-            Object.assign(item, {created: nowStr, creator: user, changed: nowStr, changer: user, status: 'submit'})
+            item.status = 'submit'
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
               // 修改orderId
-              console.log(JSON.stringify(data))
+              console.log('订单数据回写', JSON.stringify(data))
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
@@ -218,18 +216,19 @@ export default {
     },
     validateList () {
       for (let item of this.materielDataList) {
-        console.log('item.productWeight.length--', item.productWeight.length)
-        if (item.productWeight === '') {
-          this.$message.error('生产数不能为空')
-          return false
-        }
-        if (item.issueBatch.trim() === '') {
-          this.$message.error('发料批次不能为空')
-          return false
-        }
-        if (item.inStorageWeight === '') {
-          this.$message.error('入库数不能为空')
-          return false
+        if (item.delFlag === '0') {
+          if (item.productWeight === '') {
+            this.$message.error('生产数不能为空')
+            return false
+          }
+          if (item.issueBatch.trim() === '') {
+            this.$message.error('发料批次不能为空')
+            return false
+          }
+          if (item.inStorageWeight === '') {
+            this.$message.error('入库数不能为空')
+            return false
+          }
         }
       }
       return true
@@ -253,16 +252,43 @@ export default {
       })
     },
     getMaterielDataList () {
-      this.materielDataList = []
-      this.readAudit = []
       if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
         this.loading = false
         return
       }
+      this.materielDataList = []
+      this.readAudit = []
       this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
         this.loading = false
         if (data.code === 0) {
-          this.materielDataList = data.list
+          this.materielDataList = data.wlist
+          this.readAudit = data.vrlist
+          let inState = ''
+          let no = 0
+          let sub = 0
+          let che = 0
+          let sav = 0
+          this.materielDataList.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          if (no > 0) {
+            inState = 'noPass'
+          } else if (sub > 0) {
+            inState = 'submit'
+          } else if (sav > 0) {
+            inState = 'saved'
+          } else if (che > 0) {
+            inState = 'checked'
+          }
+          this.$emit('setAppyMaterielState', inState)
         } else {
           this.$message.error(data.msg)
         }
@@ -270,6 +296,8 @@ export default {
     },
     // 新增记录
     addNewRecord () {
+      let nowStr = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+      let user = this.$store.state.user.realName
       this.materielDataList.push({
         branWeight: 0,
         delFlag: '0',
@@ -282,18 +310,31 @@ export default {
         // 发料批次
         issueBatch: '',
         issueCode: 'M010200001',
-        issueNaem: '炒麦车间原料',
+        issueName: '炒麦车间原料',
         // 发料数量
         issueWeight: 0,
         productCode: 'SP07010001',
-        productNaem: 'PW小麦',
+        productName: 'PW小麦',
         productUnit: 'KG',
         productWeight: 0,
         remark: '',
         scrappedWeight: 0,
-        status: 'submit',
         storageWeight: 0,
-        productDate: this.order.productDate
+        // this.order && this.order.productDate
+        productDate: this.order && this.order.productDate,
+        // this.order && this.order.factory
+        factory: this.order && this.order.factory,
+        // this.order && this.order.workShop
+        workShop: this.order && this.order.workShop,
+        // this.order && this.order.productLine
+        productLine: this.order && this.order.productLine,
+        created: nowStr,
+        creator: user,
+        changed: nowStr,
+        changer: user,
+        // 申请订单之后订单号回写，再次新增，订单号带过来
+        orderId: this.order && this.orderId,
+        orderNo: this.order && this.orderNo
       })
     },
     // 删除
@@ -324,13 +365,13 @@ export default {
     changeProduct: function (row) {
       let product = this.dictListObj['CM_material_prd'].find((item) => item.code === row.productCode)
       if (product) {
-        row.productNaem = product.name
+        row.productName = product.name
       }
     },
     changeIssue: function (row) {
       let issue = this.dictListObj['CM_material'].find((item) => item.code === row.issueCode)
       if (issue) {
-        row.issueNaem = issue.name
+        row.issueName = issue.name
       }
     }
   },
@@ -342,7 +383,7 @@ export default {
   },
   watch: {
     'order.orderId' (n, o) {
-      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+      console.log('watch.order.orderId')
       this.loading = true
       this.getMaterielDataList()
     }

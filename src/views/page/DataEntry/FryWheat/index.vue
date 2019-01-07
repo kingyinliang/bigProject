@@ -275,7 +275,14 @@ export default {
       }
     },
     go2 () {
-      this.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
+      this.FWproductDate = this.productDate.replace(/-/g, '')
+      this.FWworkShop = this.workShop
+      this.FWfactoryid = this.factoryid
+      this.FWorderNo = ''
+      let that = this
+      setTimeout(function () {
+        that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
+      }, 100)
     },
     // 获取工厂
     GetfactoryList () {

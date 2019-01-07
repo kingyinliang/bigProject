@@ -7,7 +7,7 @@
         <el-card body-style="padding-top:10px;">
           <div class="clearfix topBox">
             <div class="btn">
-              <el-button  style="float:right;"  type="primary" @click="AddMaterielData()" size="small" :disabled="!isRedact">新增</el-button>
+              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact">新增</el-button>
             </div>
           </div>
           <el-table
@@ -159,47 +159,8 @@ export default {
         }
       ]
     },
-    // 异常记录校验
-    excrul () {
-      let ty = true
-      this.ExcDate.forEach((item) => {
-        if (item.delFlag !== '1') {
-          if (item.expCode && item.expStartDate && item.expEndDate) {
-            if ((item.expContinue * 1) < 0) {
-              ty = false
-              this.$message.error('异常开始时间大于结束时间')
-              return false
-            }
-            if (item.expCode === '001' || item.expCode === '002') {
-              if (!item.deviceId) {
-                ty = false
-                this.$message.error('异常记录设备必填')
-                return false
-              }
-            } else if (item.expCode === '003' || item.expCode === '004') {
-              if (!item.materialShort) {
-                ty = false
-                this.$message.error('异常记录物料分类必填')
-                return false
-              }
-            } else if (item.expCode === '005') {
-              if (!item.energy) {
-                ty = false
-                this.$message.error('异常记录能源必填')
-                return false
-              }
-            }
-          } else {
-            ty = false
-            this.$message.error('异常记录必填项未填')
-            return false
-          }
-        }
-      })
-      return ty
-    },
-    // 新增异常记录
-    AddMaterielData () {
+    // 新增
+    addNewRecord () {
       this.materielDataList.push({
         orderNo: this.orderNo,
         recordId: this.uuid(),
