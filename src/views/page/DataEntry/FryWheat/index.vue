@@ -217,7 +217,7 @@ export default {
         factoryid: '',
         workshopid: '',
         productDate: '',
-        status: '',
+        status: 'normal',
         currPage: 1,
         pageSize: 10,
         totalCount: 0,
@@ -282,6 +282,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`).then((res) => {
         if (res.data.code === 0) {
           this.factory = res.data.typeList
+          if (!this.plantList.factoryid) {
+            this.plantList.factoryid = res.data.typeList[0].deptId
+          }
         } else {
           this.$message.error(res.data.msg)
         }
