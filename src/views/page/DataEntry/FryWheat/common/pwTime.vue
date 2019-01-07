@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" @click="AddpwTimeDate()" size="small" :disabled="!isRedact" style="float: right;margin-bottom: 10px">新增</el-button>
+    <!--<el-button type="primary" @click="AddpwTimeDate()" size="small" :disabled="!isRedact" style="float: right;margin-bottom: 10px">新增</el-button>-->
     <el-table header-row-class-name="tableHead" :data="pwTimeDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column label="生产订单号">
       </el-table-column>
@@ -39,22 +39,34 @@
           <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="60" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delpwTimeDate(scope.row)"></el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="操作" width="60" fixed="right">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delpwTimeDate(scope.row)"></el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
     <audit-log></audit-log>
   </div>
 </template>
 
 <script>
+import {WHT_API} from '@/api/api'
 export default {
   name: 'pwTime',
   data () {
     return {
-      pwTimeDate: []
+      pwTimeDate: [{
+        id: '',
+        orderId: '',
+        status: '',
+        prepareTime: '',
+        prepareTimeUnit: '',
+        machineTime: '',
+        machineTimeUnit: '',
+        humanTime: '',
+        humanTimeUnit: '',
+        remark: ''
+      }]
     }
   },
   props: {
@@ -63,6 +75,16 @@ export default {
   mounted () {
   },
   methods: {
+    GetPwTimeList () {
+      this.$http(`${WHT_API.MATERIELTIMELIST_API}`, 'POST', {
+        orderId: ''
+      }).then(({data}) => {
+      })
+    },
+    PwTimeUpdate () {
+      this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', []).then(({data}) => {
+      })
+    },
     AddpwTimeDate () {
       this.pwTimeDate.push({})
     },
