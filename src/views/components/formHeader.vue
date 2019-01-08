@@ -21,7 +21,7 @@
       <p class="el-input">{{(formHeader.planOutput || '') + ' ' + (formHeader.outputUnit || '')}}</p>
     </el-form-item>
     <el-form-item label="生产日期：">
-      <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" ></el-date-picker>
+      <el-date-picker type="date" @change="updateProductDate" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" ></el-date-picker>
     </el-form-item>
     <el-form-item label="提交人员：">
       <p class="el-input">{{formHeader.operator || ''}}</p>
@@ -39,11 +39,17 @@ export default {
     return {}
   },
   props: {
-    formHeader: {}
+    formHeader: {},
+    isRedact: Boolean,
+    updateProductDateCallback: Function
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    updateProductDate: function (val) {
+      this.$emit('updateProductDateCallback', val)
+    }
+  },
   computed: {},
   components: {}
 }

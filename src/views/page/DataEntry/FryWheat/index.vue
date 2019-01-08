@@ -281,6 +281,7 @@ export default {
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
       this.FWorderNo = ''
+      // 711000005685
       let that = this
       setTimeout(function () {
         that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })

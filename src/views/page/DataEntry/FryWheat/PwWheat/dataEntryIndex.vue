@@ -4,7 +4,7 @@
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <form-header :formHeader="formHeader"></form-header>
+            <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
           </el-col>
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
@@ -90,8 +90,9 @@ export default {
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.$store.state.common.FWorderNo
-    this.productDate = this.$store.state.common.FWproductDate
+    this.orderNo = this.FWorderNo
+    // 20180627
+    this.productDate = this.FWproductDate
     this.workShop = this.$store.state.common.FWworkShop
     this.workShopName = this.$store.state.common.FWworkShopName
     this.factory = this.$store.state.common.FWfactoryid
@@ -101,7 +102,6 @@ export default {
   methods: {
     // 获取表头
     GetOrderList () {
-      console.log('根据订单号获取订单头信息', this.orderNo + '_' + this.workShop + '_' + this.productDate)
       if (this.orderNo) {
         // 有订单号
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -109,11 +109,9 @@ export default {
           productDate: this.productDate,
           orderNo: this.orderNo
         }).then(({data}) => {
+          // 2018-06-27
           this.formHeader = data.list[0]
-          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-          if (this.orderStatus !== '已同步') {
-            this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
-          }
+          console.log('this.formHeader', JSON.stringify(this.formHeader))
         })
       } else {
         // 无订单号，申请订单
@@ -123,8 +121,8 @@ export default {
         this.$set(this.formHeader, 'workShopName', this.workShopName)
         this.$set(this.formHeader, 'productLine', this.productLine)
         this.$set(this.formHeader, 'productLineName', this.productLineName)
-        this.$set(this.formHeader, 'productDate', this.productDate)
-        console.log('this.formHeader', JSON.stringify(this.formHeader))
+        // 2018-06-27
+        this.$set(this.formHeader, 'productDate', `${this.productDate.substring(0, 4)}-${this.productDate.substring(4, 6)}-${this.productDate.substring(6, 8)}`)
       }
     },
     // 保存
@@ -155,15 +153,32 @@ export default {
     },
     updateOrderInfo: function (orderInfo) {
       // 申请订单之后，订单号回写
-      console.log('调用父组件   ======== ', JSON.stringify(orderInfo))
-      this.$set(this.formHeader, 'orderId', orderInfo.orderId)
-      this.$set(this.formHeader, 'orderNo', orderInfo.orderNo)
+      this.orderNo = orderInfo.orderNo
+      // 更新common store里的orderno
+      this.FWorderNo = orderInfo.orderNo
+    },
+    updateProductDate: function (dataStr) {
+      let data = dataStr.replace(/-/g, '')
+      this.productDate = data
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
     }
   },
+  watch: {
+    'orderNo' (n, o) {
+      this.GetOrderList()
+    }
+  },
   computed: {
+    FWproductDate: {
+      get () { return this.$store.state.common.FWproductDate },
+      set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    },
+    FWorderNo: {
+      get () { return this.$store.state.common.FWorderNo },
+      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
+    }
     // FWworkShop: {
     //   get () { return this.$store.state.common.FWworkShop },
     //   set (val) { this.$store.commit('common/updateFWWorkShop', val) }
