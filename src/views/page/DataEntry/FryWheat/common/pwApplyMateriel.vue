@@ -17,6 +17,8 @@
           <div class="btn" style="float:right;">
             <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord">新增</el-button>
             <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact || !enableSubmit" @click="saveOrderMateriel">申请订单</el-button>
+            <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
+            <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button>
           </div>
         </el-col>
       </el-row>
@@ -34,7 +36,7 @@
               label="生产物料"
               width="220">
               <template slot-scope="scope">
-                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact">
+                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'">
                   <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -45,7 +47,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input type="number"  v-model.number="scope.row.productWeight" @input="changeProductWeight(scope.row)" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                  <el-input type="number"  v-model.number="scope.row.productWeight" @input="changeProductWeight(scope.row)" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -60,7 +62,7 @@
               width="220"
               label="发料料号">
               <template slot-scope="scope">
-                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact">
+                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'">
                   <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -76,21 +78,21 @@
               width="140"
               label="麸皮">
               <template slot-scope="scope">
-                <el-input type="number" v-model.number="scope.row.branWeight" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input type="number" v-model.number="scope.row.branWeight" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="小颗粒">
               <template slot-scope="scope">
-                <el-input type="number" v-model.number="scope.row.granuleWeight" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input type="number" v-model.number="scope.row.granuleWeight" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="报废小麦">
               <template slot-scope="scope">
-                <el-input type="number" v-model.number="scope.row.scrappedWeight" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input type="number" v-model.number="scope.row.scrappedWeight" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -99,7 +101,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.issueBatch" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -109,7 +111,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input type="number" v-model.number="scope.row.inStorageWeight"  :disabled="!isRedact" size="small"  placeholder="手工录入" ></el-input>
+                  <el-input type="number" v-model.number="scope.row.inStorageWeight"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入" ></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -117,21 +119,21 @@
               width="140"
               label="入库批次">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.inStorageBatch" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.inStorageBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="库存数">
               <template slot-scope="scope">
-                <el-input type="number" v-model.number="scope.row.storageWeight" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input type="number" v-model.number="scope.row.storageWeight" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
               width="140"
               label="备注">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.remark" :disabled="!isRedact" size="small"  placeholder="手工录入"></el-input>
+                <el-input v-model="scope.row.remark" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -146,7 +148,7 @@
               label="操作"
               width="60">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="dellistbomS(scope.row)"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -191,18 +193,18 @@ export default {
     order: Object
   },
   methods: {
-    // 提交订单
+    // 申请订单
     saveOrderMateriel (str, resolve) {
       if (this.materielDataList.length > 0) {
         // 数据验证
         if (this.validateList()) {
           for (let item of this.materielDataList) {
             item.status = 'submit'
+            item.productDate = this.order && this.order.productDate
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
               // 修改orderId
-              console.log('订单数据回写', JSON.stringify(data))
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
@@ -212,6 +214,46 @@ export default {
             }
           })
         }
+      }
+    },
+    // 保存
+    saveMaterielList (str, resolve) {
+      if (this.materielDataList.length > 0) {
+        if (this.validateList()) {
+          this.materielDataList.forEach((item) => {
+            if (item.status !== 'submit' || item.status !== 'checked') {
+              item.status = 'saved'
+            }
+          })
+          this.$http(`${WHT_API.MATERIELSAVE_API}`, 'POST', this.materielDataList).then(({data}) => {
+            if (data.code === 0) {
+            } else {
+              this.$message.error(data.msg)
+            }
+            if (resolve) {
+              resolve('resolve')
+            }
+          })
+        }
+      }
+    },
+    // 提交
+    submitMaterielList (str, resolve) {
+      if (this.materielDataList.length > 0) {
+        this.materielDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        this.$http(`${WHT_API.MATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       }
     },
     validateList () {
@@ -333,8 +375,8 @@ export default {
         changed: nowStr,
         changer: user,
         // 申请订单之后订单号回写，再次新增，订单号带过来
-        orderId: this.order && this.orderId,
-        orderNo: this.order && this.orderNo
+        orderId: this.order && this.order.orderId,
+        orderNo: this.order && this.order.orderNo
       })
     },
     // 删除
@@ -383,7 +425,6 @@ export default {
   },
   watch: {
     'order.orderId' (n, o) {
-      console.log('watch.order.orderId')
       this.loading = true
       this.getMaterielDataList()
     }
