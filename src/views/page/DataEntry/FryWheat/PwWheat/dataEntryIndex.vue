@@ -84,8 +84,8 @@ export default {
         factoryName: this.$store.state.common.FWfactoryName,
         workShop: this.$store.state.common.FWworkShop,
         workShopName: this.$store.state.common.FWworkShopName,
-        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
-        productLineName: '炒麦',
+        productLine: 'BD5B3295DC104413B94AA18B61ACF539',
+        productLineName: '脱皮车间',
         // yyyy-MM-dd
         productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },

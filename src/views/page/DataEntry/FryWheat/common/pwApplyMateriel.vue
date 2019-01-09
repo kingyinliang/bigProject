@@ -190,13 +190,13 @@ export default {
   },
   methods: {
     // 申请订单
-    saveOrderMateriel (resolve) {
+    saveOrderMateriel () {
       if (this.materielDataList.length > 0) {
         // 数据验证
         if (this.validate()) {
           for (let item of this.materielDataList) {
             item.status = 'submit'
-            item.productDate = this.order && this.order.productDate
+            // item.productDate = this.order && this.order.productDate
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
@@ -204,9 +204,6 @@ export default {
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
-            }
-            if (resolve) {
-              resolve('resolve')
             }
           }).catch((error) => {
             console.log('catch data::', error)
@@ -410,9 +407,14 @@ export default {
     }
   },
   watch: {
-    // 'order.orderId' (n, o) {
-    //   this.getMaterielDataList()
-    // }
+    'order.productDate' (n, o) {
+      // 监听头部生产日期
+      this.materielDataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.productDate = n
+        }
+      })
+    }
   },
   components: {
     AuditLog: resolve => {
