@@ -17,8 +17,8 @@
           <div class="btn" style="float:right;">
             <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord">新增</el-button>
             <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact || !enableSubmit" @click="saveOrderMateriel">申请订单</el-button>
-            <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
-            <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button>
+            <!-- <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
+            <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button> -->
           </div>
         </el-col>
       </el-row>
@@ -181,8 +181,6 @@ export default {
     }
   },
   mounted () {
-    // this.getDispatcherList()
-    // this.getMaterialPrdList()
     this.getDictList()
     this.getMaterielDataList()
   },
@@ -192,17 +190,17 @@ export default {
   },
   methods: {
     // 申请订单
-    saveOrderMateriel (str, resolve) {
+    saveOrderMateriel (resolve) {
       if (this.materielDataList.length > 0) {
         // 数据验证
-        if (this.validateList()) {
+        if (this.validate()) {
           for (let item of this.materielDataList) {
             item.status = 'submit'
             item.productDate = this.order && this.order.productDate
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
-              // 申请订单成功，订单号回写
+              // 申请订单成功，订单号回写，触发全局刷新
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
@@ -216,38 +214,24 @@ export default {
         }
       }
     },
-    // 保存
-    saveMaterielList (str, resolve) {
+    // 保存/提交
+    saveOrSubmit (str, resolve) {
       if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
+        if (str === 'saved') {
           this.materielDataList.forEach((item) => {
             if (item.status !== 'submit' || item.status !== 'checked') {
               item.status = 'saved'
             }
           })
-          this.$http(`${WHT_API.MATERIELSAVE_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
+        } else {
+          this.materielDataList.forEach((item) => {
+            if (item.status !== 'checked') {
+              item.status = 'submit'
             }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
           })
         }
-      }
-    },
-    // 提交
-    submitMaterielList (str, resolve) {
-      if (this.materielDataList.length > 0) {
-        this.materielDataList.forEach((item) => {
-          if (item.status !== 'checked') {
-            item.status = 'submit'
-          }
-        })
-        this.$http(`${WHT_API.MATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+        let API = str === 'saved' ? WHT_API.MATERIELSAVE_API : WHT_API.MATERIELSUBMIT_API
+        this.$http(API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -260,7 +244,7 @@ export default {
         })
       }
     },
-    validateList () {
+    validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.productWeight === '') {
@@ -426,9 +410,9 @@ export default {
     }
   },
   watch: {
-    'order.orderNo' (n, o) {
-      this.getMaterielDataList()
-    }
+    // 'order.orderId' (n, o) {
+    //   this.getMaterielDataList()
+    // }
   },
   components: {
     AuditLog: resolve => {

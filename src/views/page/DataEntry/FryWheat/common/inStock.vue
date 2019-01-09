@@ -47,8 +47,8 @@
             </el-row>
           </div>
           <!--table-->
-          <el-button type='primary' size="small" @click="saveStockList">baocun</el-button>
-          <el-button type='primary' size="small" @click="submitStockList">tijiao</el-button>
+          <!-- <el-button type='primary' size="small" @click="saveStockList">baocun</el-button>
+          <el-button type='primary' size="small" @click="submitStockList">tijiao</el-button> -->
           <el-row  style="margin-top:20px;" >
             <el-col>
               <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="wheatDataList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
@@ -197,7 +197,7 @@ export default {
   mounted () {
     this.getFlourContainerList()
     this.getWheatContainerList()
-    this.getWheatDataList()
+    // this.getWheatDataList()
   },
   props: {
     isRedact: Boolean,
@@ -300,6 +300,7 @@ export default {
     addNewRecord (flourDeviceId, flourDeviceName) {
       let now = new Date()
       let dateStr = dateFormat(now, 'yyyy-MM-dd hh:mm:ss')
+      let inPortDateStr = dateFormat(new Date(this.order.productDate), 'yyyy-MM-dd hh:mm:ss')
       this.stockForm = {
         wheatDeviceId: '',
         startWeight: 0,
@@ -312,7 +313,7 @@ export default {
         flourDeviceId,
         flourDeviceName,
         recordId: this.uuid(),
-        inPortDate: this.order && this.order.productDate,
+        inPortDate: inPortDateStr,
         inPortBatch: '',
         delFlag: '0'
       }
@@ -359,36 +360,24 @@ export default {
         }
       })
     },
-    // 保存
-    saveStockList (str, resolve) {
+    // 保存/提交
+    saveOrSubmit (str, resolve) {
       if (this.wheatDataList.length > 0) {
-        this.wheatDataList.forEach((item) => {
-          if (item.status !== 'submit' || item.status !== 'checked') {
-            item.status = 'saved'
-          }
-        })
-        this.$http(`${WHT_API.INSTORAGESAVE_API}`, 'POST', this.wheatDataList).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch((error) => {
-          console.log('catch data::', error)
-        })
-      }
-    },
-    // 提交
-    submitStockList (str, resolve) {
-      if (this.wheatDataList.length > 0) {
-        this.wheatDataList.forEach((item) => {
-          if (item.status !== 'checked') {
-            item.status = 'submit'
-          }
-        })
-        this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
+        if (str === 'saved') {
+          this.wheatDataList.forEach((item) => {
+            if (item.status !== 'submit' || item.status !== 'checked') {
+              item.status = 'saved'
+            }
+          })
+        } else {
+          this.wheatDataList.forEach((item) => {
+            if (item.status !== 'checked') {
+              item.status = 'submit'
+            }
+          })
+        }
+        let API = str === 'saved' ? WHT_API.INSTORAGESAVE_API : WHT_API.INSTORAGESUBMIT_API
+        this.$http(API, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -428,20 +417,11 @@ export default {
     }
   },
   watch: {
-    // 'order.orderId' (n, o) {
-    //   this.loading2 = true
-    //   this.getWheatDataList()
-    // },
-    // 'order.workShopName' (n, o) {
-    //   this.loading1 = true
-    //   this.getFlourContainerList()
-    //   this.getWheatContainerList()
-    // }
     'order.productDate' (n, o) {
       // 监听头部生产日期
       this.wheatDataList.forEach((item) => {
         if (item.status !== 'submit' && item.status !== 'checked') {
-          item.inPortDate = n
+          item.inPortDate = dateFormat(new Date(n), 'yyyy-MM-dd hh:mm:ss')
         }
       })
     }
