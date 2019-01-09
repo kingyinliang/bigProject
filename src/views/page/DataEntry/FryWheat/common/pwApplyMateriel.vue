@@ -406,7 +406,7 @@ export default {
   computed: {
     enableSubmit: function () {
       // 只有进来没订单号的请况下可以提交订单
-      return typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined'
+      return typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined' || this.order.orderId.trim().length === 0
     }
   },
   watch: {

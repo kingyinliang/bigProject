@@ -282,6 +282,7 @@ export default {
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
       this.FWorderNo = ''
+      this.FWorderId = ''
       // 711000005685
       let that = this
       setTimeout(function () {

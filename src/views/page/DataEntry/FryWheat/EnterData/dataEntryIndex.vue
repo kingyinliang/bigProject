@@ -217,14 +217,14 @@ export default {
       let net7 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
-      let net8 = new Promise((resolve, reject) => {
+      let instock = new Promise((resolve, reject) => {
         that.$refs.instock.saveOrSubmit(str, resolve)
       })
-      let net9 = new Promise((resolve, reject) => {
+      let material = new Promise((resolve, reject) => {
         that.$refs.applymateriel.saveOrSubmit(str, resolve)
       })
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, net8, net9])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, instock, material])
         net10.then(function () {
           let net8 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
@@ -237,7 +237,7 @@ export default {
           })
         })
       } else {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, net8, net9])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, instock, material])
         net10.then(function () {
           that.lodingS = false
           that.GetOrderList()
