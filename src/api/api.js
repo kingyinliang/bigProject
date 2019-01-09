@@ -3,11 +3,11 @@
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.63:8080/xhqy-fc'
+let HOST = 'http://10.10.5.63:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.157:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
-let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
+// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
 // let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
@@ -793,5 +793,5 @@ export const WHT_API = {
   /**
    * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
    */
-  APPLYMATERIELSUBMIT_API: HOST + 'wht/material/submitM'
+  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
 }

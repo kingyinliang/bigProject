@@ -142,8 +142,8 @@ export default {
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
-        this.$refs.instock.getWheatDataList()
-        this.$refs.applymateriel.getMaterielDataList()
+        this.$refs.instock.getWheatDataList(this.formHeader.orderId)
+        this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytime.GetReadyList(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
