@@ -780,5 +780,17 @@ export const WHT_API = {
   /**
    * @property {string} MATERIELTIMEUPDATE_API pw小麦工时update
    */
-  MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate'
+  MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate',
+  /**
+   * @property {string} APPLYMATERIELLIST_API 物料申请list
+   */
+  APPLYMATERIELLIST_API: HOST + '/wht/material/list',
+  /**
+   * @property {string} APPLYMATERIELSAVE_API 物料申请保存
+   */
+  APPLYMATERIELSAVE_API: HOST + '/wht/material/updateM',
+  /**
+   * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
+   */
+  APPLYMATERIELSUBMIT_API: HOST + 'wht/material/submitM'
 }
