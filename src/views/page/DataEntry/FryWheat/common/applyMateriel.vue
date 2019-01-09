@@ -206,13 +206,13 @@ export default {
       })
     },
     // 获取物料数据
-    getMaterielDataList () {
+    getMaterielDataList (orderId) {
       this.materielDataList = []
       this.readAudit = []
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
-      this.$http(`${WHT_API.APPLYMATERIELLIST_API}`, 'POST', {order_id: this.order.orderId}).then(({data}) => {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      this.$http(`${WHT_API.APPLYMATERIELLIST_API}`, 'POST', {order_id: orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.materielDataList = data.listForm

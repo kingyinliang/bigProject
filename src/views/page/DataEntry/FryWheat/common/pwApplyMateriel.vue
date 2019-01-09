@@ -182,7 +182,7 @@ export default {
   },
   mounted () {
     this.getDictList()
-    this.getMaterielDataList()
+    // this.getMaterielDataList()
   },
   props: {
     isRedact: Boolean,
@@ -276,13 +276,14 @@ export default {
         console.log('catch data::', error)
       })
     },
-    getMaterielDataList () {
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
+    getMaterielDataList (orderId) {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      // console.log('为什么拿不到orderId', this.order.orderId)
       this.materielDataList = []
       this.readAudit = []
-      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
+      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}).then(({data}) => {
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist

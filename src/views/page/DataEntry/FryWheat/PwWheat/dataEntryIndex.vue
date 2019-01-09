@@ -113,6 +113,8 @@ export default {
         }).then(({data}) => {
           // 2018-06-27
           this.formHeader = data.list[0]
+          // console.log('this.formHeader', JSON.stringify(this.formHeader))
+          this.$refs.pwapplymateriel.getMaterielDataList(this.formHeader.orderId)
         })
       }
     },
@@ -138,12 +140,14 @@ export default {
         let net10 = Promise.all([net1, net2])
         net10.then(function () {
           that.lodingS = false
+          that.GetOrderList()
           that.$message.success('提交成功')
         })
       } else {
         let net10 = Promise.all([net1, net2])
         net10.then(function () {
           that.lodingS = false
+          that.GetOrderList()
           that.$message.success('保存成功')
         })
       }
@@ -156,8 +160,10 @@ export default {
       this.FWorderId = orderInfo.orderId
     },
     updateProductDate: function (dataStr) {
-      let data = dataStr.replace(/-/g, '')
-      this.productDate = data
+      if (dataStr) {
+        let data = dataStr.replace(/-/g, '')
+        this.productDate = data
+      }
       // 不需要更新common store
       // this.FWproductDate = data
     },
@@ -168,6 +174,7 @@ export default {
   watch: {
     'orderNo' (n, o) {
       // 申请订单之后触发全局刷新
+      console.log('刷新全局')
       this.GetOrderList()
     }
   },

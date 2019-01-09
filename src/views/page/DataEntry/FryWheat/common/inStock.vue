@@ -253,13 +253,13 @@ export default {
       })
     },
     // 获取入库数据
-    getWheatDataList () {
+    getWheatDataList (orderId) {
       this.wheatDataList = []
       this.readAudit = []
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
-      this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.wheatDataList = data.wlist
