@@ -268,6 +268,7 @@ export default {
         this.FWproductDate = this.productDate.replace(/-/g, '')
         this.FWworkShop = this.workShop
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+        this.FWorderId = item.orderIdList[item.orderNo][0]
         let that = this
         setTimeout(function () {
           that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
@@ -607,6 +608,10 @@ export default {
     FWworkShopName: {
       get () { return this.$store.state.common.FWworkShopName },
       set (val) { this.$store.commit('common/updateFWWorkShopName', val) }
+    },
+    FWorderId: {
+      get () { return this.$store.state.common.FWorderId },
+      set (val) { this.$store.commit('common/updateFWorderId', val) }
     },
     countMan: function () {
       let num = 0
