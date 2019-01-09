@@ -37,7 +37,7 @@
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-time ref="readytime" :isRedact="isRedact" :order="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
+            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
