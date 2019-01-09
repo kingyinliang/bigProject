@@ -218,6 +218,9 @@ export function orderList (data) {
     let orderNos = ''
     if (orderNo.length === 1) {
       orderNos = orderNo[0]
+      if (orderNo[0] === null) {
+        orderNo = ''
+      }
     } else {
       orderNos = ''
     }
