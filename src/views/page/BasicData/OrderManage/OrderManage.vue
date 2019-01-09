@@ -163,6 +163,7 @@ export default {
     return {
       loading: true,
       visible: false,
+      orderTime: {},
       form: {
         orderNo: '',
         materialCode: '',
@@ -203,15 +204,37 @@ export default {
       this.loading = true
       this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
         if (data.code === 0) {
-          this.loading = false
-          this.$message.success('同步成功')
-          this.GetOrderList()
+          this.orderTime = setInterval(() => {
+            this.GetOrderUpdateStatus()
+          }, 4000)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
+    GetOrderUpdateStatus () {
+      this.$http(`${BASICDATA_API.GETSAPORDERUPDATE_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          if (data.asyncRecord) {
+            if (data.asyncRecord.asyncStatus === '0') {
+              this.loading = false
+              clearInterval(this.orderTime)
+              this.$message.error('同步失败')
+            } else if (data.asyncRecord.asyncStatus === '1') {
+              this.loading = false
+              clearInterval(this.orderTime)
+              this.$message.success('同步成功')
+              this.GetOrderList()
+            }
+          }
         } else {
           this.loading = false
+          clearInterval(this.orderTime)
           this.$message.error(data.msg)
         }
       }).catch(() => {
         this.loading = false
+        clearInterval(this.orderTime)
       })
     },
     // 查询

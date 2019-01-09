@@ -4,12 +4,12 @@
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.5.63:8080'
-// let HOST = 'http://10.10.5.63:8080'
+// let HOST = 'http://10.10.1.157:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
-// let HOST = 'https://mdsdevsys.shinho.net.cn'// 生产环境
-// let HOST = 'https://mdsuatsys.shinho.net.cn'// 测试环境dev
-let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
+let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
+// let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
+// let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
 *MAINapi
  */
@@ -97,7 +97,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPLIST_API 物料同步
    */
-  SAPUPDATE_API: HOST + '/sys/sapmaterial/syncMaterialManual',
+  SAPUPDATE_API: HOST + '/sys/sapmaterial/syncMaterialThread',
+  /**
+   * @property {string} SAPLIST_API 获取物料同步状态
+   */
+  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_MATERIAL',
   /**
    * @property {string} SAPDETAIL_API 物料详情
    */
@@ -176,7 +180,11 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPORDERUPDATE_API 同步订单
    */
-  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderManual',
+  SAPORDERUPDATE_API: HOST + '/sys/saporder/syncOrderThread',
+  /**
+   * @property {string} SAPORDERUPDATE_API 获取同步订单状态
+   */
+  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_ORDER',
   /**
    * @property {string} CAPALIST_API 产能列表
    */
@@ -214,6 +222,10 @@ export const SYSTEMSETUP_API = {
    * @property {string} PARAMETERLIST_API 参数类型列表
    */
   PARAMETERLIST_API: HOST + '/sys/dict/findListByType',
+  /**
+   * @property {string} PARAMETERSLIST_API 参数类型列表
+   */
+  PARAMETERSLIST_API: HOST + '/sys/dict/findListByTypes',
   /**
    * @property {string} PARAMETERTYPE_API 参数类型
    */
@@ -679,10 +691,107 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出
    *  */
-  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttM',
+  REPOUTFORWORKOUTPUT_API: ALB + '/report/form/exportShopAttMThread',
+  /**
+   *  车间出勤汇总表 导出 获取状态
+   *  */
+  GETREPOUTFORWORKOUTPUT_API: ALB + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
   /**
    *  包装车间 - 产量总工时、导出
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
   REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours'
+}
+/*
+*炒麦api
+ */
+export const WHT_API = {
+  /**
+   * @property {string} READYTIME_API 准备时间修改
+   */
+  READYTIMEUPDATE_API: HOST + '/wht/ready/whtReadyUpdate',
+  /**
+   * @property {string} READYTIMELIST_API 获取准备时间
+   */
+  READYTIMELIST_API: HOST + '/wht/ready/whtReadyList',
+  /**
+   * @property {string} MACHINEIMELIST_API 获取机器工时
+   */
+  MACHINETIMELIST_API: HOST + '/wht/ready/whtReadyList',
+  /**
+   * @property {string} MACHINEIMEUPDATE_API 机器工时修改
+   */
+  MACHINETIMEUPDATE_API: HOST + '/wht/ready/whtMachineUpdate',
+  /**
+   * @property {string} MACHINETESTUPDATE_API 机器检测列表
+   */
+  MACHINETESTlist_API: HOST + '/wht/ready/whtCheckRecordList',
+  /**
+   * @property {string} MACHINETESTUPDATE_API 机器检测列表
+   */
+  MACHINETESTUPDATE_API: HOST + '/wht/ready/whtCheckRecordUpdate',
+  /**
+   * 首页人员列表
+   */
+  CINDEXLISTUSER: HOST + '/wht/user/listUser',
+  /**
+   * 首页人员新增修改
+   */
+  CINDEXUPDATEUSER: HOST + '/wht/user/updateUser',
+  /**
+   * 首页人员删除
+   */
+  CINDEXDELUSER: HOST + '/wht/user/delUser',
+  /**
+   * @property {string} INSTORAGELIST_API 生产入库列表
+   */
+  INSTORAGELIST_API: HOST + '/sys/whtInStorage/list',
+  /**
+   * @property {string} INSTORAGESAVE_API 生产入库保存
+   */
+  INSTORAGESAVE_API: HOST + '/sys/whtInStorage/update',
+  /**
+   * @property {string} INSTORAGESUBMIT_API 生产入库提交
+   */
+  INSTORAGESUBMIT_API: HOST + '/sys/whtInStorage/submit',
+  /**
+   * @property {string} MATERIELSAVEORDER_API pw小麦申请订单
+   */
+  MATERIELSAVEORDER_API: HOST + '/sys/whtPwMaterial/getSapOrder',
+  /**
+   * @property {string} MATERIELLIST_API pw小麦list
+   */
+  MATERIELLIST_API: HOST + '/sys/whtPwMaterial/list',
+  /**
+   * @property {string} MATERIELSAVE_API pw小麦保存
+   */
+  MATERIELSAVE_API: HOST + '/sys/whtPwMaterial/update',
+  /**
+   * @property {string} MATERIELSUBMIT_API pw小麦提交
+   */
+  MATERIELSUBMIT_API: HOST + '/sys/whtPwMaterial/submit',
+  /**
+   * @property {string} MATERIELTIMELIST_API pw小麦工时list
+   */
+  MATERIELTIMELIST_API: HOST + '/wht/pw/timeList',
+  /**
+   * @property {string} MATERIELTIMEUPDATE_API pw小麦工时update
+   */
+  MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate',
+  /**
+   * @property {string} MATERIELTIMESUBMIT_API 炒麦报工提交
+   */
+  MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW',
+  /**
+   * @property {string} APPLYMATERIELLIST_API 物料申请list
+   */
+  APPLYMATERIELLIST_API: HOST + '/wht/material/list',
+  /**
+   * @property {string} APPLYMATERIELSAVE_API 物料申请保存
+   */
+  APPLYMATERIELSAVE_API: HOST + '/wht/material/updateM',
+  /**
+   * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
+   */
+  APPLYMATERIELSUBMIT_API: HOST + 'wht/material/submitM'
 }

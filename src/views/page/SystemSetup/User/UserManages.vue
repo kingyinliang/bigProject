@@ -1,11 +1,5 @@
 <template>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <!--<div class="topTitle">-->
-        <!--<el-breadcrumb separator="/">-->
-          <!--<el-breadcrumb-item>系统管理</el-breadcrumb-item>-->
-          <!--<el-breadcrumb-item>管理员列表</el-breadcrumb-item>-->
-        <!--</el-breadcrumb>-->
-      <!--</div>-->
       <div class="main">
         <el-card>
           <el-row class="clearfix">
@@ -172,13 +166,16 @@ export default {
       if (st) {
         this.currPage = 1
       }
+      if (!this.deptId) {
+        this.$message.error('请选择组织层级')
+        return
+      }
       this.$http(`${SYSTEMSETUP_API.USERLIST1_API}`, 'POST', {
         deptId: this.deptId,
         param: this.condition.param,
         currPage: JSON.stringify(this.currPage),
         pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.multipleSelection = []
           this.userArr = data.page.list

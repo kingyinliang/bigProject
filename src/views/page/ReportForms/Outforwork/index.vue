@@ -129,11 +129,12 @@
 
 <script>
 import { REP_API } from '@/api/api'
-import { exportFile, headanimation } from '@/net/validate'
+import { getNewDate, headanimation } from '@/net/validate'
 export default {
   name: 'index',
   data () {
     return {
+      ExportTime: {},
       month: '',
       lodingS: false,
       Team: [],
@@ -177,8 +178,54 @@ export default {
       })
     },
     ExportExcel () {
-      let that = this
-      exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
+      if (!this.plantList.productDate) {
+        this.$message.error('请选择月份')
+        return false
+      }
+      this.lodingS = true
+      this.$http(`${REP_API.REPOUTFORWORKOUTPUT_API}`, 'POST', this.plantList).then(({data}) => {
+        if (data.code === 0) {
+          this.ExportTime = setInterval(() => {
+            this.GetExportExcel()
+          }, 4000)
+        } else {
+          this.lodingS = false
+          this.$message.error(data.msg)
+        }
+      })
+      // let that = this
+      // exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
+    },
+    GetExportExcel () {
+      this.$http(`${REP_API.GETREPOUTFORWORKOUTPUT_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          if (data.asyncRecord) {
+            if (data.asyncRecord.asyncStatus === '0') {
+              this.lodingS = false
+              clearInterval(this.ExportTime)
+              this.$message.error('导出失败')
+            } else if (data.asyncRecord.asyncStatus === '1') {
+              this.lodingS = false
+              clearInterval(this.ExportTime)
+              this.$message.success('导出成功')
+              let elink = document.createElement('a')
+              elink.download = `车间出勤汇总报表${getNewDate()}.xlsx`
+              elink.style.display = 'none'
+              elink.href = data.asyncRecord.fileUrl
+              document.body.appendChild(elink)
+              elink.click()
+              document.body.removeChild(elink)
+            }
+          }
+        } else {
+          this.lodingS = false
+          clearInterval(this.ExportTime)
+          this.$message.error(data.msg)
+        }
+      }).catch(() => {
+        this.lodingS = false
+        clearInterval(this.ExportTime)
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {

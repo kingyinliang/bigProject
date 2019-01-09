@@ -99,7 +99,7 @@ export default {
   methods: {
     // 获取工厂
     Getdeptcode () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
@@ -112,7 +112,7 @@ export default {
       this.plantList.workshop = ''
       this.plantList.productline = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', this.isPackaging ? {deptId: id, deptName: '包装 组装'} : {deptId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', this.isPackaging ? {deptId: id, deptName: '包装 组装'} : {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -125,7 +125,7 @@ export default {
     GetParentline (id) {
       this.plantList.productline = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
@@ -136,7 +136,7 @@ export default {
     },
     // 获取班组
     getTeam () {
-      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workshop}).then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workshop}, false, false, false).then(({data}) => {
         this.Team = data.teamList
       })
     }

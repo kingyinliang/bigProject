@@ -113,13 +113,13 @@
               prop="allTime"
               label="出勤总时数"
               :show-overflow-tooltip="true"
-              width="80">
+              width="95">
             </el-table-column>
             <el-table-column
               prop="allDay"
               label="出勤总天数"
               :show-overflow-tooltip="true"
-              width="80">
+              width="95">
             </el-table-column>
           </el-table-column>
         </el-table>
@@ -176,7 +176,7 @@ export default {
   methods: {
     // 获取工厂
     Getdeptcode () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
@@ -188,7 +188,7 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {

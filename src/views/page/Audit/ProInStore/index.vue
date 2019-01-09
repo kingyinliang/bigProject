@@ -399,6 +399,9 @@ export default {
             this.$message.error(data.msg)
           }
           this.GetAuditList()
+        }).catch(() => {
+          this.$message.error('网络错误')
+          this.lodingStatus = false
         })
       }
     },
@@ -434,6 +437,9 @@ export default {
             } else {
               this.$message.error(data.msg)
             }
+          }).catch(() => {
+            this.$message.error('网络错误')
+            this.lodingStatus = false
           })
         })
       }
@@ -455,7 +461,6 @@ export default {
             item.headerTxt = this.plantList.headerTxt
           })
           this.lodingStatus1 = true
-          console.log(this.multipleSelection)
           this.$http(`${AUDIT_API.GOAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.plantList.headerTxt = ''
             this.lodingStatus1 = false
@@ -466,6 +471,9 @@ export default {
               this.GetAuditList()
               this.$message.error(data.msg)
             }
+          }).catch(() => {
+            this.$message.error('网络错误')
+            this.lodingStatus = false
           })
         })
       }

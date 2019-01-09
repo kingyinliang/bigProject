@@ -150,7 +150,7 @@ export default {
             password: this.ruleForm2.pass
           }).then(res => {
             if (res.data.code === 0) {
-              this.$cookie.set('token', res.data.token)
+              this.$cookie.set('token', res.data.Authorization)
               this.mainTabs = []
               this.Pkgfactoryid = ''
               this.PkgworkShop = ''

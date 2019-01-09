@@ -2,11 +2,13 @@
   <div>
     <div class="clearfix topBox">
       <h3>录入数据单位：MIN</h3>
-      <div style="float: right">
+      <div style="float: right;margin-bottom: 10px">
         <el-button type="primary" @click="AddExcDate(ExcDate)" size="small" :disabled="!isRedact">新增</el-button>
       </div>
     </div>
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+      <el-table-column type="index" width="55" label="序号">
+      </el-table-column>
       <el-table-column label="异常情况" width="150">
         <template slot-scope="scope">
           <div class="required">
@@ -83,6 +85,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <div><p style="line-height: 52px;font-size: 14px">总停线时间：{{ExcNum}}</p></div>
   </div>
 </template>
 
@@ -110,9 +113,21 @@ export default {
   },
   methods: {
     // 保存or提交
-    saveOrSubmitExc (str, resolve) {
+    saveOrSubmitExc (id, str, resolve) {
       if (this.ExcDate.length > 0) {
-        console.log(this.ExcDate)
+        this.ExcDate.forEach((item) => {
+          item.orderId = id
+        })
+        this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('异常记录' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      } else {
         if (resolve) {
           resolve('resolve')
         }
@@ -255,6 +270,14 @@ export default {
           }
         }
       }
+    },
+    ExcNum: function () {
+      let num = 0
+      this.ExcDate.forEach((item) => {
+        num = num + (item.delFlag === '0' ? (item.expContinue ? item.expContinue * 1 : 0) : 0)
+      })
+      // return typeof(this.ExcDate[0].expEndDate)
+      return num
     }
   },
   components: {}
