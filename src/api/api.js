@@ -691,11 +691,11 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出
    *  */
-  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttMThread',
+  REPOUTFORWORKOUTPUT_API: ALB + '/report/form/exportShopAttMThread',
   /**
    *  车间出勤汇总表 导出 获取状态
    *  */
-  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  GETREPOUTFORWORKOUTPUT_API: ALB + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
   /**
    *  包装车间 - 产量总工时、导出
    */
@@ -781,5 +781,17 @@ export const WHT_API = {
   /**
    * @property {string} MATERIELTIMESUBMIT_API 炒麦报工提交
    */
-  MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW'
+  MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW',
+  /**
+   * @property {string} APPLYMATERIELLIST_API 物料申请list
+   */
+  APPLYMATERIELLIST_API: HOST + '/wht/material/list',
+  /**
+   * @property {string} APPLYMATERIELSAVE_API 物料申请保存
+   */
+  APPLYMATERIELSAVE_API: HOST + '/wht/material/updateM',
+  /**
+   * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
+   */
+  APPLYMATERIELSUBMIT_API: HOST + 'wht/material/submitM'
 }

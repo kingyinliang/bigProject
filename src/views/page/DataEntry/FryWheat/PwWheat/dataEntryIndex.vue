@@ -77,12 +77,17 @@ export default {
       orderNo: '',
       productDate: '',
       workShop: '',
-      workShopName: '',
-      factory: '',
-      factoryName: '',
-      productLine: 'BD5B3295DC104413B94AA18B61ACF539',
-      productLineName: '脱皮车间',
       formHeader: {
+        orderNo: this.$store.state.common.FWorderNo,
+        orderId: this.$store.state.common.FWorderId,
+        factory: this.$store.state.common.FWfactoryid,
+        factoryName: this.$store.state.common.FWfactoryName,
+        workShop: this.$store.state.common.FWworkShop,
+        workShopName: this.$store.state.common.FWworkShopName,
+        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
+        productLineName: '炒麦',
+        // yyyy-MM-dd
+        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
       activeName: '1',
       appyMaterielState: ''
@@ -91,12 +96,9 @@ export default {
   mounted () {
     headanimation(this.$)
     this.orderNo = this.FWorderNo
-    // 20180627
+    // yyyyMMdd
     this.productDate = this.FWproductDate
-    this.workShop = this.$store.state.common.FWworkShop
-    this.workShopName = this.$store.state.common.FWworkShopName
-    this.factory = this.$store.state.common.FWfactoryid
-    this.factoryName = this.$store.state.common.FWfactoryName
+    this.workShop = this.FWworkShop
     this.GetOrderList()
   },
   methods: {
@@ -111,18 +113,7 @@ export default {
         }).then(({data}) => {
           // 2018-06-27
           this.formHeader = data.list[0]
-          console.log('this.formHeader', JSON.stringify(this.formHeader))
         })
-      } else {
-        // 无订单号，申请订单
-        this.$set(this.formHeader, 'factory', this.factory)
-        this.$set(this.formHeader, 'factoryName', this.factoryName)
-        this.$set(this.formHeader, 'workShop', this.workShop)
-        this.$set(this.formHeader, 'workShopName', this.workShopName)
-        this.$set(this.formHeader, 'productLine', this.productLine)
-        this.$set(this.formHeader, 'productLineName', this.productLineName)
-        // 2018-06-27
-        this.$set(this.formHeader, 'productDate', `${this.productDate.substring(0, 4)}-${this.productDate.substring(4, 6)}-${this.productDate.substring(6, 8)}`)
       }
     },
     // 保存
@@ -154,12 +145,15 @@ export default {
     updateOrderInfo: function (orderInfo) {
       // 申请订单之后，订单号回写
       this.orderNo = orderInfo.orderNo
-      // 更新common store里的orderno
+      // 更新common store
       this.FWorderNo = orderInfo.orderNo
+      this.FWorderId = orderInfo.orderId
     },
     updateProductDate: function (dataStr) {
       let data = dataStr.replace(/-/g, '')
       this.productDate = data
+      // 不需要更新common store
+      // this.FWproductDate = data
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
@@ -178,33 +172,15 @@ export default {
     FWorderNo: {
       get () { return this.$store.state.common.FWorderNo },
       set (val) { this.$store.commit('common/updateFWOrderNo', val) }
+    },
+    FWorderId: {
+      get () { return this.$store.state.common.FWorderId },
+      set (val) { this.$store.commit('common/updateFWorderId', val) }
+    },
+    FWworkShop: {
+      get () { return this.$store.state.common.FWworkShop },
+      set (val) { this.$store.commit('common/updateFWWorkShop', val) }
     }
-    // FWworkShop: {
-    //   get () { return this.$store.state.common.FWworkShop },
-    //   set (val) { this.$store.commit('common/updateFWWorkShop', val) }
-    // },
-    // FWworkShopName: function () {
-    //   return  this.$store.state.common.FWworkShopName
-    // },
-    // FWproductDate: {
-    //   get () { return this.$store.state.common.FWproductDate },
-    //   set (val) { this.$store.commit('common/updateFWProductDate', val) }
-    // },
-    // FWfactory: {
-    //   get () { return this.$store.state.common.FWfactoryid },
-    //   set (val) { this.$store.commit('common/updateFWFactoryid', val) }
-    // },
-    // FWfactoryName: {
-    //   get () { return this.$store.state.common.FWfactoryname },
-    //   set (val) { this.$store.commit('common/updateFWFactoryname', val) }
-    // },
-    // FWproductLine: function () {
-    //   // 脱皮产线的产线号
-    //   return 'BD5B3295DC104413B94AA18B61ACF539'
-    // },
-    // FWproductLineName: function () {
-    //   return '脱皮车间'
-    // }
   },
   components: {
     FormHeader,

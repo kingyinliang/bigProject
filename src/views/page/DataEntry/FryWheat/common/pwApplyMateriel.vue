@@ -4,7 +4,7 @@
     <!--数据录入-->
     <el-card body-style="padding-top:10px;">
       <el-row>
-        <el-col :span="12"  v-loading="loading2">
+        <el-col :span="12">
           <el-form ref="form" label-width="100px">
             <el-form-item label="生产调度员" style='margin-bottom:0px;'>
               <el-select @change="changeDispatcher" v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact" size="small">
@@ -23,7 +23,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="24" v-loading="loading || loading2">
+        <el-col :span="24" >
           <el-table
             ref="table1"
             header-row-class-name="tableHead"
@@ -36,7 +36,7 @@
               label="生产物料"
               width="220">
               <template slot-scope="scope">
-                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'">
+                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
                   <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -62,7 +62,7 @@
               width="220"
               label="发料料号">
               <template slot-scope="scope">
-                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'">
+                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
                   <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
                 </el-select>
               </template>
@@ -156,7 +156,7 @@
       </el-row>
     </el-card>
     <!--审批-->
-    <el-row v-loading="loading">
+    <el-row>
       <el-col :span="24">
         <auditLog :tableData="readAudit"></auditLog>
       </el-col>
@@ -177,9 +177,7 @@ export default {
       dispatcherCode: 'TP1',
       dispatcherName: 'PW生产调度员',
       materielDataList: [],
-      readAudit: [],
-      loading: true,
-      loading2: true
+      readAudit: []
     }
   },
   mounted () {
@@ -204,7 +202,7 @@ export default {
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
-              // 修改orderId
+              // 申请订单成功，订单号回写
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
@@ -212,6 +210,8 @@ export default {
             if (resolve) {
               resolve('resolve')
             }
+          }).catch((error) => {
+            console.log('catch data::', error)
           })
         }
       }
@@ -233,6 +233,8 @@ export default {
             if (resolve) {
               resolve('resolve')
             }
+          }).catch((error) => {
+            console.log('catch data::', error)
           })
         }
       }
@@ -253,6 +255,8 @@ export default {
           if (resolve) {
             resolve('resolve')
           }
+        }).catch((error) => {
+          console.log('catch data::', error)
         })
       }
     },
@@ -276,32 +280,28 @@ export default {
       return true
     },
     getDictList () {
-      // CM_material 发料物料
-      // CM_material_prd 生产物料
-      // PW_FEVOR  生产调度员
+      // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
       this.dictListObj = {}
       let params = ['PW_FEVOR', 'CM_material_prd', 'CM_material']
       this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
-        this.loading2 = false
         if (data.code === 0) {
           for (let dict of data.dicList) {
             this.$set(this.dictListObj, dict.shname, dict.prolist)
-            // this.dictListObj[] = dict.prolist
           }
         } else {
           this.$message.error(data.msg)
         }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     getMaterielDataList () {
       if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        this.loading = false
         return
       }
       this.materielDataList = []
       this.readAudit = []
       this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
-        this.loading = false
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist
@@ -334,6 +334,8 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     // 新增记录
@@ -424,8 +426,7 @@ export default {
     }
   },
   watch: {
-    'order.orderId' (n, o) {
-      this.loading = true
+    'order.orderNo' (n, o) {
       this.getMaterielDataList()
     }
   },

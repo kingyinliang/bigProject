@@ -4,7 +4,7 @@
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <form-header :formHeader="formHeader"></form-header>
+            <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
           </el-col>
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
@@ -102,7 +102,16 @@ export default {
       productDate: '',
       workShop: '',
       formHeader: {
-        productDate: ''
+        orderNo: this.$store.state.common.FWorderNo,
+        orderId: this.$store.state.common.FWorderId,
+        factory: this.$store.state.common.FWfactoryid,
+        factoryName: this.$store.state.common.FWfactoryName,
+        workShop: this.$store.state.common.FWworkShop,
+        workShopName: this.$store.state.common.FWworkShopName,
+        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
+        productLineName: '炒麦',
+        // yyy-MM-dd
+        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
       activeName: '1',
       readyState: '',
@@ -115,6 +124,7 @@ export default {
   mounted () {
     headanimation(this.$)
     this.orderNo = this.FWorderNo
+    // yyyyMMdd
     this.productDate = this.FWproductDate
     this.workShop = this.FWworkShop
     this.GetOrderList()
@@ -255,6 +265,12 @@ export default {
     // 物料状态
     setApplyMaterielState (status) {
       this.applyMaterielState = status
+    },
+    updateProductDate: function (dataStr) {
+      let data = dataStr.replace(/-/g, '')
+      this.productDate = data
+      // 不需要更新common store
+      // this.FWproductDate = data
     }
   },
   computed: {
@@ -269,6 +285,10 @@ export default {
     FWorderNo: {
       get () { return this.$store.state.common.FWorderNo },
       set (val) { this.$store.commit('common/updateFWOrderNo', val) }
+    },
+    FWorderId: {
+      get () { return this.$store.state.common.FWorderId },
+      set (val) { this.$store.commit('common/updateFWorderId', val) }
     }
   },
   components: {

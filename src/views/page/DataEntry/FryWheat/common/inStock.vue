@@ -6,7 +6,7 @@
       <el-col :span="24">
         <el-card>
           <!--录入-->
-          <div v-loading="loading1">
+          <div>
             <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%4===0" style="margin-top:5px">
               <el-col :span="6" v-if="index < flourContainerList.length">
                   <div class="stock-box">
@@ -47,7 +47,9 @@
             </el-row>
           </div>
           <!--table-->
-          <el-row  style="margin-top:20px;" v-loading="loading2">
+          <el-button type='primary' size="small" @click="saveStockList">baocun</el-button>
+          <el-button type='primary' size="small" @click="submitStockList">tijiao</el-button>
+          <el-row  style="margin-top:20px;" >
             <el-col>
               <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="wheatDataList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                 <el-table-column label="日期" width="130">
@@ -118,7 +120,7 @@
       </el-col>
     </el-row>
     <!--审批-->
-    <el-row v-loading="loading2">
+    <el-row>
       <el-col :span="24">
         <auditLog :tableData="readAudit"></auditLog>
       </el-col>
@@ -167,8 +169,6 @@ export default {
       // equipmentType: [],
       // materialShort: [],
       // enery: [],
-      loading1: true,
-      loading2: true,
       wheatDataList: [],
       readAudit: [],
       flourContainerList: [],
@@ -204,30 +204,10 @@ export default {
     order: Object
   },
   methods: {
-    getData () {
-      // this.flourContainerList = []
-      // this.wheatContainerList = []
-      // this.wheatDataList = []
-      // this.readAudit = []
-      // let p1 = getFlourContainerList()
-      // let p2 = getWheatContainerList()
-      // let p3 = getWheatDataList()
-      // Promise.all([p1,p2,p3]).then((result) => {
-      //   if(result[0].code === 0){
-      //     this.flourContainerList = result[0].page.list
-      //   }
-      //   if(result[1].code === 0){
-      //     this.wheatContainerList = result[1].page.list
-      //   }
-      //   if(result[2].code === 0){
-      //     this.wheatDataList = result[2].wlist
-      //     this.readAudit = result[2].vrlist
-      //   }
-      // })
-    },
+    // 麦粉计量仓容器
     getFlourContainerList () {
       this.flourContainerList = []
-      if (typeof this.order.workShopName === 'undefined') {
+      if (typeof this.order === 'undefined' || typeof this.order.workShopName === 'undefined') {
         return
       }
       let params = {
@@ -239,18 +219,19 @@ export default {
         currPage: 1
       }
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
-        this.loading1 = false
         if (data.code === 0) {
           this.flourContainerList = data.page.list
         } else {
           this.$message.error(data.msg)
         }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     // 粮仓
-    getWheatContainerList (obj) {
+    getWheatContainerList () {
       this.wheatContainerList = []
-      if (typeof this.order.workShopName === 'undefined') {
+      if (typeof this.order === 'undefined' || typeof this.order.workShopName === 'undefined') {
         return
       }
       let params = {
@@ -267,18 +248,18 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     // 获取入库数据
     getWheatDataList () {
       this.wheatDataList = []
       this.readAudit = []
-      if (typeof this.order.orderId === 'undefined') {
-        this.loading2 = false
+      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
         return
       }
       this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
-        this.loading2 = false
         if (data.code === 0) {
           // success
           this.wheatDataList = data.wlist
@@ -312,6 +293,8 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     addNewRecord (flourDeviceId, flourDeviceName) {
@@ -329,7 +312,7 @@ export default {
         flourDeviceId,
         flourDeviceName,
         recordId: this.uuid(),
-        inPortDate: dateStr,
+        inPortDate: this.order && this.order.productDate,
         inPortBatch: '',
         delFlag: '0'
       }
@@ -392,6 +375,8 @@ export default {
           if (resolve) {
             resolve('resolve')
           }
+        }).catch((error) => {
+          console.log('catch data::', error)
         })
       }
     },
@@ -411,6 +396,8 @@ export default {
           if (resolve) {
             resolve('resolve')
           }
+        }).catch((error) => {
+          console.log('catch data::', error)
         })
       }
     },
@@ -441,14 +428,22 @@ export default {
     }
   },
   watch: {
-    'order.orderId' (n, o) {
-      this.loading2 = true
-      this.getWheatDataList()
-    },
-    'order.workShopName' (n, o) {
-      this.loading1 = true
-      this.getFlourContainerList()
-      this.getWheatContainerList()
+    // 'order.orderId' (n, o) {
+    //   this.loading2 = true
+    //   this.getWheatDataList()
+    // },
+    // 'order.workShopName' (n, o) {
+    //   this.loading1 = true
+    //   this.getFlourContainerList()
+    //   this.getWheatContainerList()
+    // }
+    'order.productDate' (n, o) {
+      // 监听头部生产日期
+      this.wheatDataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.inPortDate = n
+        }
+      })
     }
   },
   components: {
