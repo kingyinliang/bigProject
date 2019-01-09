@@ -8,8 +8,8 @@
           <div class="clearfix topBox">
             <div class="btn" style="margin-bottom:8px;">
               <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact">新增</el-button>
-              <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
-              <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button>
+              <!-- <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
+              <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button> -->
               <div class='clearfix'></div>
             </div>
           </div>
@@ -108,60 +108,44 @@ export default {
   mounted () {
     this.getMaterialDictList()
     this.getWheatContainerList()
-    this.getMaterielDataList()
+    // this.getMaterielDataList()
   },
   props: {
     isRedact: Boolean,
     order: Object
   },
   methods: {
-    // 保存
-    saveMaterielList (str, resolve) {
+    // 保存/提交
+    saveOrSubmit (str, resolve) {
       if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
+        if (str === 'saved') {
           this.materielDataList.forEach((item) => {
             if (item.status !== 'submit' || item.status !== 'checked') {
               item.status = 'saved'
             }
           })
-          this.$http(`${WHT_API.APPLYMATERIELSAVE_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
-            }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
-          })
-        }
-      }
-    },
-    // 提交
-    submitMaterielList (str, resolve) {
-      if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
+        } else {
           this.materielDataList.forEach((item) => {
             if (item.status !== 'checked') {
               item.status = 'submit'
             }
           })
-          this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
-            }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
-          })
         }
+        let API = str === 'saved' ? WHT_API.APPLYMATERIELSAVE_API : WHT_API.APPLYMATERIELSUBMIT_API
+        this.$http(API, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
       }
     },
-    validateList () {
+    validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.materialCode === '') {
@@ -322,13 +306,6 @@ export default {
   computed: {
   },
   watch: {
-    // 'order.orderId' (n, o) {
-    //   this.loading = true
-    //   this.getMaterielDataList()
-    // },
-    // 'order.workShopName' (n, o) {
-    //   this.getWheatContainerList()
-    // }
   },
   components: {
     AuditLog: resolve => {

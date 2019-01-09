@@ -122,20 +122,26 @@ export default {
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
+        if (!this.$refs.pwapplymateriel.validate()) {
+          return false
+        }
       }
       this.lodingS = true
       let that = this
       let net1 = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc(str, resolve)
       })
+      let net2 = new Promise((resolve, reject) => {
+        that.$refs.pwapplymateriel.saveOrSubmit(str, resolve)
+      })
       if (str === 'submit') {
-        let net10 = Promise.all([net1])
+        let net10 = Promise.all([net1, net2])
         net10.then(function () {
           that.lodingS = false
           that.$message.success('提交成功')
         })
       } else {
-        let net10 = Promise.all([net1])
+        let net10 = Promise.all([net1, net2])
         net10.then(function () {
           that.lodingS = false
           that.$message.success('保存成功')
@@ -161,6 +167,7 @@ export default {
   },
   watch: {
     'orderNo' (n, o) {
+      // 申请订单之后触发全局刷新
       this.GetOrderList()
     }
   },
