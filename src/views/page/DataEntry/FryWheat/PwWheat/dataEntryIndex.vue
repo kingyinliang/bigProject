@@ -175,7 +175,7 @@ export default {
     },
     FWorderId: {
       get () { return this.$store.state.common.FWorderId },
-      set (val) { this.$store.commit('common/updateFWOrderId', val) }
+      set (val) { this.$store.commit('common/updateFWorderId', val) }
     },
     FWworkShop: {
       get () { return this.$store.state.common.FWworkShop },
