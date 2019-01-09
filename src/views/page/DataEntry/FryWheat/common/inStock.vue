@@ -54,7 +54,7 @@
               <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="wheatDataList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
-                    {{scope.row.inPortDate}}
+                    {{scope.row.inPortDate | formatDate}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -202,6 +202,14 @@ export default {
   props: {
     isRedact: Boolean,
     order: Object
+  },
+  filters: {
+    formatDate (date) {
+      if (date && date.length > 10) {
+        return date.substring(0, 10)
+      }
+      return date
+    }
   },
   methods: {
     // 麦粉计量仓容器
