@@ -13,7 +13,7 @@
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
             </el-row>
             <el-row style="position: absolute;right: 0;top: 100px;">
               <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
@@ -37,7 +37,7 @@
                 <el-button>准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
+            <ready-time ref="readytime" :isRedact="isRedact" :order="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {PACKAGING_API} from '@/api/api'
+import {PACKAGING_API, WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ReadyTime from '../common/readyTime'
@@ -164,6 +164,15 @@ export default {
       })
     },
     // 保存 or 提交
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
         if (!this.$refs.workerref.excrul()) {
@@ -196,9 +205,15 @@ export default {
       if (str === 'submit') {
         let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
         net10.then(function () {
-          that.lodingS = false
-          that.GetOrderList()
-          that.$message.success('提交成功')
+          let net8 = new Promise((resolve, reject) => {
+            that.ProHours(resolve, reject)
+          })
+          let net12 = Promise.all([net8])
+          net12.then(() => {
+            that.lodingS = false
+            that.GetOrderList()
+            that.$message.success('提交成功')
+          })
         })
       } else {
         let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
@@ -208,6 +223,26 @@ export default {
           that.$message.success('保存成功')
         })
       }
+    },
+    // 报工提交
+    ProHours (resolve) {
+      let data = [this.$refs.readytime.readyTimeDate, this.$refs.readytime.machineTimeData, this.$refs.workerref.WorkerDate, {
+        orderId: this.formHeader.orderId,
+        outputUnit: this.formHeader.outputUnit,
+        realOutput: this.formHeader.realOutput + '',
+        countOutput: '',
+        countOutputUnit: '',
+        productDate: this.formHeader.productDate
+      }]
+      this.$http(`${WHT_API.MATERIELTIMESUBMIT_API}`, 'POST', data).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
     },
     // 准备时间状态
     SetReadyStatus (status) {

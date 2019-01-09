@@ -8,11 +8,8 @@
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
-// let HOST = 'http://internal-alb003-shinho-micro-prd-929565893.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 测试正式
 // let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
-// let HOST = 'https://mdssys.shinho.net.cn'// 正式环境master
-// ALB
-let ALB = 'http://internal-alb003-shinho-micro-prd-929565893.cn-north-1.elb.amazonaws.com.cn/xhqy-fc'// alb HOST
+// let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
 *MAINapi
  */
@@ -694,11 +691,11 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出
    *  */
-  REPOUTFORWORKOUTPUT_API: ALB + '/report/form/exportShopAttMThread',
+  REPOUTFORWORKOUTPUT_API: HOST + '/report/form/exportShopAttMThread',
   /**
    *  车间出勤汇总表 导出 获取状态
    *  */
-  GETREPOUTFORWORKOUTPUT_API: ALB + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
   /**
    *  包装车间 - 产量总工时、导出
    */
@@ -780,5 +777,9 @@ export const WHT_API = {
   /**
    * @property {string} MATERIELTIMEUPDATE_API pw小麦工时update
    */
-  MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate'
+  MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate',
+  /**
+   * @property {string} MATERIELTIMESUBMIT_API 炒麦报工提交
+   */
+  MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW'
 }
