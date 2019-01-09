@@ -62,12 +62,21 @@ export default {
     OrgTree: {},
     arrList: {}
   },
+  watch: {
+    filterText (val) {
+      this.$refs.userlistTree.filter(val)
+    },
+    filterText1 (val) {
+      this.$refs.userlistTree1.filter(val)
+    }
+  },
   mounted () {
   },
   methods: {
     init (userId) {
       this.visible = true
       this.selctId = []
+      this.userlist = []
       if (userId && userId.length > 0) {
         userId.forEach((item, index) => {
           this.selctId.push({label: item})

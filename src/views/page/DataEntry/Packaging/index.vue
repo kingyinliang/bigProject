@@ -161,7 +161,7 @@ export default {
           workShop: this.workShop,
           productDate: this.productDate,
           orderNo: row.orderNo
-        }).then(({data}) => {
+        }, false, false, false).then(({data}) => {
           if (data.code === 0) {
             row.orderNo2 = row.orderNo
             row.materialCode = data.list[0].materialCode

@@ -12,7 +12,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="工序" width="100">
+      <el-table-column label="班组/工序" width="100">
         <template slot-scope="scope">
           <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" :disabled="!isRedact">
             <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
@@ -75,7 +75,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <audit-log></audit-log>
+    <p style="font-size: 14px;line-height: 62px">实际作业人数：{{countMan}}</p>
+    <audit-log :tableData="UserAudit"></audit-log>
     <official-worker v-if="officialWorkerStatus" ref="officialWorker" @changeUser="changeUser"></official-worker>
     <loaned-personnel v-if="loanedPersonnelStatus" ref="loanedPersonnel" @changeUser="changeUser" :OrgTree="OrgTree" :arrList="arrList"></loaned-personnel>
     <temporary-worker v-if="temporaryWorkerStatus" ref="temporaryWorker" @changeUser="changeUser"></temporary-worker>
@@ -83,15 +84,17 @@
 </template>
 
 <script>
-import { SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
-import OfficialWorker from '../common/officialWorker'
-import LoanedPersonnel from '../common/loanedPersonnel'
-import TemporaryWorker from '../common/temporaryWorker'
+import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
+import OfficialWorker from './officialWorker'
+import LoanedPersonnel from './loanedPersonnel'
+import TemporaryWorker from './temporaryWorker'
 export default {
   name: 'worker',
   data () {
     return {
+      orderId: '',
       WorkerDate: [],
+      UserAudit: [],
       productShift: [],
       Team: [],
       OrgTree: [],
@@ -110,6 +113,64 @@ export default {
     this.getTree()
   },
   methods: {
+    // 人员列表
+    GetUserList (id) {
+      if (id) {
+        this.orderId = id
+      }
+      this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
+        order_id: this.orderId ? this.orderId : id
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.WorkerDate = data.listForm
+          this.UserAudit = data.listApproval
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 人员保存
+    UpdateUser (str, resolve) {
+      if (this.WorkerDate.length > 0) {
+        this.WorkerDate.forEach((item) => {
+          if (item.status) {
+            if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+          } else {
+            item.status = str
+          }
+        })
+        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.WorkerDate).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('修改人员' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
+      }
+    },
+    // 校验
+    userrul () {
+      let ty = true
+      if (this.WorkerDate.length === 0) {
+        ty = false
+        this.$message.error('人员不能为空')
+        return false
+      }
+      this.WorkerDate.forEach((item) => {
+        if (item.userType && item.userId.length !== 0) {} else {
+          ty = false
+          this.$message.error('人员必填项未填')
+          return false
+        }
+      })
+      return ty
+    },
     // 获取生产班次
     GetProductShift () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
@@ -122,13 +183,23 @@ export default {
     },
     // 获取车间下工序
     GetTeam (id) {
-      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
-        if (data.code === 0) {
-          this.Team = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.Team = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+          if (data.code === 0) {
+            this.Team = data.teamList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 人员属性下拉
     userTypesele (row) {
@@ -216,7 +287,17 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    countMan: function () {
+      let num = 0
+      if (this.WorkerDate) {
+        this.WorkerDate.forEach((item) => {
+          num += item.userId.length
+        })
+        return num
+      }
+    }
+  },
   components: {
     OfficialWorker,
     LoanedPersonnel,

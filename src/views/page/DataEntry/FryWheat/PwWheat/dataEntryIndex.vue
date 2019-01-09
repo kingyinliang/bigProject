@@ -4,7 +4,7 @@
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <form-header :formHeader="formHeader"></form-header>
+            <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
           </el-col>
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
@@ -30,18 +30,17 @@
         <el-tabs v-model="activeName" id="DaatTtabs">
           <el-tab-pane name="1">
             <span slot="label">
-              <!-- <el-tooltip class="item" effect="dark" content="不通过" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>物料领用</el-button>
-              </el-tooltip> -->
-              <el-button>物料领用</el-button>
+              </el-tooltip>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact"></pw-apply-materiel>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
               <el-button>工时录入</el-button>
             </span>
-            <pw-time ref="excrecord" :isRedact="isRedact"></pw-time>
+            <pw-time ref="pwtime" :isRedact="isRedact"></pw-time>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
@@ -64,11 +63,11 @@
 <script>
 import {PACKAGING_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
-import FormHeader from '../common/formHeader'
-import ExcRecord from '../common/excRecord'
+import FormHeader from '@/views/components/formHeader'
+import ExcRecord from '@/views/components/excRecord'
 import PwTime from '../common/pwTime'
 import PwApplyMateriel from '../common/pwApplyMateriel'
-import TextRecord from '../common/textRecord'
+import TextRecord from '@/views/components/textRecord'
 export default {
   name: 'dataEntryIndex',
   data () {
@@ -79,32 +78,43 @@ export default {
       productDate: '',
       workShop: '',
       formHeader: {
-        productDate: ''
+        orderNo: this.$store.state.common.FWorderNo,
+        orderId: this.$store.state.common.FWorderId,
+        factory: this.$store.state.common.FWfactoryid,
+        factoryName: this.$store.state.common.FWfactoryName,
+        workShop: this.$store.state.common.FWworkShop,
+        workShopName: this.$store.state.common.FWworkShopName,
+        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
+        productLineName: '炒麦',
+        // yyyy-MM-dd
+        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
-      activeName: '1'
+      activeName: '1',
+      appyMaterielState: ''
     }
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.PkgorderNo
-    this.productDate = this.PkgproductDate
-    this.workShop = this.PkgworkShop
+    this.orderNo = this.FWorderNo
+    // yyyyMMdd
+    this.productDate = this.FWproductDate
+    this.workShop = this.FWworkShop
     this.GetOrderList()
   },
   methods: {
     // 获取表头
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-        workShop: this.workShop,
-        productDate: this.productDate,
-        orderNo: this.orderNo
-      }).then(({data}) => {
-        this.formHeader = data.list[0]
-        this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        if (this.orderStatus !== '已同步') {
-          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
-        }
-      })
+      if (this.orderNo) {
+        // 有订单号
+        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          workShop: this.workShop,
+          productDate: this.productDate,
+          orderNo: this.orderNo
+        }).then(({data}) => {
+          // 2018-06-27
+          this.formHeader = data.list[0]
+        })
+      }
     },
     // 保存
     savedOrSubmitForm (str) {
@@ -131,20 +141,45 @@ export default {
           that.$message.success('保存成功')
         })
       }
+    },
+    updateOrderInfo: function (orderInfo) {
+      // 申请订单之后，订单号回写
+      this.orderNo = orderInfo.orderNo
+      // 更新common store
+      this.FWorderNo = orderInfo.orderNo
+      this.FWorderId = orderInfo.orderId
+    },
+    updateProductDate: function (dataStr) {
+      let data = dataStr.replace(/-/g, '')
+      this.productDate = data
+      // 不需要更新common store
+      // this.FWproductDate = data
+    },
+    setAppyMaterielState: function (state) {
+      this.appyMaterielState = state
+    }
+  },
+  watch: {
+    'orderNo' (n, o) {
+      this.GetOrderList()
     }
   },
   computed: {
-    PkgworkShop: {
-      get () { return this.$store.state.common.PkgworkShop },
-      set (val) { this.$store.commit('common/updateWorkShop', val) }
+    FWproductDate: {
+      get () { return this.$store.state.common.FWproductDate },
+      set (val) { this.$store.commit('common/updateFWProductDate', val) }
     },
-    PkgproductDate: {
-      get () { return this.$store.state.common.PkgproductDate },
-      set (val) { this.$store.commit('common/updateProductDate', val) }
+    FWorderNo: {
+      get () { return this.$store.state.common.FWorderNo },
+      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
     },
-    PkgorderNo: {
-      get () { return this.$store.state.common.PkgorderNo },
-      set (val) { this.$store.commit('common/updateOrderNo', val) }
+    FWorderId: {
+      get () { return this.$store.state.common.FWorderId },
+      set (val) { this.$store.commit('common/updateFWorderId', val) }
+    },
+    FWworkShop: {
+      get () { return this.$store.state.common.FWworkShop },
+      set (val) { this.$store.commit('common/updateFWWorkShop', val) }
     }
   },
   components: {

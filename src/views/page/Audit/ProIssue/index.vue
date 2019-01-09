@@ -422,6 +422,9 @@ export default {
             this.$message.error(data.msg)
           }
           this.GetAuditList()
+        }).catch(() => {
+          this.$message.error('网络错误')
+          this.lodingStatus1 = false
         })
       }
     },
@@ -457,6 +460,9 @@ export default {
             } else {
               this.$message.error(data.msg)
             }
+          }).catch(() => {
+            this.$message.error('网络错误')
+            this.lodingStatus1 = false
           })
         })
       }
@@ -487,6 +493,9 @@ export default {
               this.$message.error(data.msg)
               this.GetAuditList()
             }
+          }).catch(() => {
+            this.$message.error('网络错误')
+            this.lodingStatus1 = false
           })
         })
       }

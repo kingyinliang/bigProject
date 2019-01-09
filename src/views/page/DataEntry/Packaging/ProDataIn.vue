@@ -1,6 +1,6 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
+    <el-col>
       <div class="main">
         <el-card class="searchCard" style="margin: 0">
           <el-row type="flex">
@@ -2312,7 +2312,7 @@ export default {
         console.log(this.listbomS)
         return false
       }
-      this.lodingStatus1 = true
+      // this.lodingStatus1 = true
       this.isRedact = false
       let net1 = new Promise((resolve, reject) => {
         that.tableheader(str, resolve) // 修改准备时间
@@ -2354,15 +2354,21 @@ export default {
           let net13 = Promise.all([net10, net11, net12])
           net13.then(() => {
             console.log('--------提交成功--------')
-            that.lodingStatus1 = false
+            // that.lodingStatus1 = false
             that.$message.success('提交成功')
+          }).catch(() => {
+            that.$message.error('网络错误')
+            // that.lodingStatus1 = false
           })
         })
       } else {
         let net9 = Promise.all([net1, net2, net3, net4, net5, net6, net7, net8])
         net9.then(function () {
-          that.lodingStatus1 = false
+          // that.lodingStatus1 = false
           that.$message.success('保存成功')
+        }).catch(() => {
+          that.$message.error('网络错误')
+          // that.lodingStatus1 = false
         })
       }
     },

@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, REP_API, SYSTEMSETUP_API} from '@/api/api'
+import {REP_API, SYSTEMSETUP_API} from '@/api/api'
 import { exportFile, headanimation } from '@/net/validate'
 export default {
   name: 'index',
@@ -189,14 +189,6 @@ export default {
     }
   },
   mounted () {
-    this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}).then(({data}) => {
-      if (data.code === 0) {
-        this.SerchSapList = data.list
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
-
     headanimation(this.$)
   },
   methods: {
