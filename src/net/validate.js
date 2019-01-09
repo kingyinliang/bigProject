@@ -204,15 +204,15 @@ export function Readyanimation ($) {
 // 数据处理
 export function orderList (data) {
   let result = []
-  let orderIdList = {}
   for (let i = 0; i < data.length; i++) {
+    let orderIdList = {}
     let orderNo = [data[i].orderNo]
-    orderIdList[data[i].orderNo] = [data[i].orderId]
+    orderIdList[data[i].orderNo] = data[i].orderId
     for (let j = i + 1; j < data.length; j++) {
       if (data[i].productLine === data[j].productLine) {
         j = ++i
         orderNo.push(data[j].orderNo)
-        orderIdList[data[j].orderNo] = [data[j].orderId]
+        orderIdList[data[j].orderNo] = data[j].orderId
       }
     }
     let orderNos = ''

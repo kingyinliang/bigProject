@@ -268,7 +268,7 @@ export default {
         this.FWproductDate = this.productDate.replace(/-/g, '')
         this.FWworkShop = this.workShop
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
-        this.FWorderId = item.orderIdList[item.orderNo][0]
+        this.FWorderId = item.orderIdList[item.orderNo]
         let that = this
         setTimeout(function () {
           that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
