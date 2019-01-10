@@ -142,6 +142,10 @@ export default {
         }).catch((error) => {
           console.log('catch data::', error)
         })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     // 物料提交

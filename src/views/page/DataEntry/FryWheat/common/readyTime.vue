@@ -117,7 +117,7 @@ export default {
       visible2: false,
       readyTimeDate: {
         id: '',
-        classes: '',
+        classes: '多班',
         dayChange: '',
         dayChangeBefore: '',
         dayChangePre: '',
@@ -181,7 +181,7 @@ export default {
     GetReadyList (id) {
       this.$http(`${WHT_API.READYTIMELIST_API}`, 'POST', {
         order_id: id
-      }).then(({data}) => {
+      }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.readyTimeDate = data.listForm[0]
           this.machineTimeData = data.listFormMachine
@@ -236,24 +236,46 @@ export default {
     // 校验
     Readyrul () {
       let ty = true
+      let day = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) && (this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) && (this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) && (this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0))
+      let mid = ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) && (this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) && (this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) && (this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0))
+      let night = ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) && (this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) && (this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) && (this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0))
       if (this.readyTimeDate.classes === '白班') {
-        if ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) && (this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) && (this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) && (this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0)) {} else {
+        if (day) {} else {
           ty = false
           this.$message.error('准备时间必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
-        if ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) && (this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) && (this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) && (this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0)) {} else {
+        if (mid) {} else {
           ty = false
           this.$message.error('准备时间必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
-        if ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) && (this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) && (this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) && (this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0)) {} else {
+        if (night) {} else {
           ty = false
           this.$message.error('准备时间必填项未填写完全')
           return false
         }
+      } else if (this.readyTimeDate.classes === '多班') {
+        if (day && mid && night) {} else {
+          ty = false
+          this.$message.error('准备时间必填项未填写完全')
+          return false
+        }
+      }
+      if (this.machineTimeData.length > 0) {
+        this.machineTimeData.forEach((item, index) => {
+          if (!item.closeTime) {
+            ty = false
+            this.$message.error('机器工时没结束，请结束后提交')
+            return false
+          }
+        })
+      } else {
+        ty = false
+        this.$message.error('机器工时为空数据')
+        return false
       }
       return ty
     },

@@ -45,7 +45,7 @@
                 <el-button>人员</el-button>
               </el-tooltip>
             </span>
-            <worker ref="workerref" :isRedact="isRedact"></worker>
+            <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
@@ -135,7 +135,7 @@ export default {
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
-      }).then(({data}) => {
+      }, false, false, false).then(({data}) => {
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
