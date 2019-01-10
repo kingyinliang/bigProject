@@ -144,32 +144,32 @@ export default {
   watch: {
     'readyTimeDate.classes' (val) {
       if (val === '白班') {
-        this.readyTimeDate.midShift = null
-        this.readyTimeDate.midPeeting = null
-        this.readyTimeDate.midPrepared = null
-        this.readyTimeDate.midClear = null
-        this.readyTimeDate.nightShift = null
-        this.readyTimeDate.nightPeetin = null
-        this.readyTimeDate.nightPrepar = null
-        this.readyTimeDate.nightClea = null
+        this.readyTimeDate.midChange = null
+        this.readyTimeDate.midChangeBefore = null
+        this.readyTimeDate.midChangePre = null
+        this.readyTimeDate.midChangeAfter = null
+        this.readyTimeDate.nightChange = null
+        this.readyTimeDate.nightChangeBefore = null
+        this.readyTimeDate.nightChangePre = null
+        this.readyTimeDate.nightChangeAfter = null
       } else if (val === '中班') {
-        this.readyTimeDate.dayShift = null
-        this.readyTimeDate.dayPeeting = null
-        this.readyTimeDate.dayPrepared = null
-        this.readyTimeDate.dayClear = null
-        this.readyTimeDate.nightShift = null
-        this.readyTimeDate.nightPeetin = null
-        this.readyTimeDate.nightPrepar = null
-        this.readyTimeDate.nightClea = null
+        this.readyTimeDate.dayChange = null
+        this.readyTimeDate.dayChangeBefore = null
+        this.readyTimeDate.dayChangePre = null
+        this.readyTimeDate.dayChangeAfter = null
+        this.readyTimeDate.nightChange = null
+        this.readyTimeDate.nightChangeBefore = null
+        this.readyTimeDate.nightChangePre = null
+        this.readyTimeDate.nightChangeAfter = null
       } else if (val === '夜班') {
-        this.readyTimeDate.dayShift = null
-        this.readyTimeDate.dayPeeting = null
-        this.readyTimeDate.dayPrepared = null
-        this.readyTimeDate.dayClear = null
-        this.readyTimeDate.midShift = null
-        this.readyTimeDate.midPeeting = null
-        this.readyTimeDate.midPrepared = null
-        this.readyTimeDate.midClear = null
+        this.readyTimeDate.dayChange = null
+        this.readyTimeDate.dayChangeBefore = null
+        this.readyTimeDate.dayChangePre = null
+        this.readyTimeDate.dayChangeAfter = null
+        this.readyTimeDate.midChange = null
+        this.readyTimeDate.midChangeBefore = null
+        this.readyTimeDate.midChangePre = null
+        this.readyTimeDate.midChangeAfter = null
       }
     }
   },
@@ -232,6 +232,30 @@ export default {
           resolve('resolve')
         }
       })
+    },
+    // 校验
+    Readyrul () {
+      let ty = true
+      if (this.readyTimeDate.classes === '白班') {
+        if ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) && (this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) && (this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) && (this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0)) {} else {
+          ty = false
+          this.$message.error('准备时间必填项未填写完全')
+          return false
+        }
+      } else if (this.readyTimeDate.classes === '中班') {
+        if ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) && (this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) && (this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) && (this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0)) {} else {
+          ty = false
+          this.$message.error('准备时间必填项未填写完全')
+          return false
+        }
+      } else if (this.readyTimeDate.classes === '夜班') {
+        if ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) && (this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) && (this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) && (this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0)) {} else {
+          ty = false
+          this.$message.error('准备时间必填项未填写完全')
+          return false
+        }
+      }
+      return ty
     },
     // 机器列表双击
     rowUpdateMachine (row) {

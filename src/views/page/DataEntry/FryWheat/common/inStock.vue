@@ -384,8 +384,7 @@ export default {
             }
           })
         }
-        let API = str === 'saved' ? WHT_API.INSTORAGESAVE_API : WHT_API.INSTORAGESUBMIT_API
-        this.$http(API, 'POST', this.wheatDataList).then(({data}) => {
+        this.$http(WHT_API.INSTORAGESAVE_API, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -397,6 +396,20 @@ export default {
           console.log('catch data::', error)
         })
       }
+    },
+    // 入库提交
+    submitIn (resolve) {
+      this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
     },
     changeWheatContainer (value) {
       let wheat = this.wheatContainerList.find((item) => item.holderId === value)

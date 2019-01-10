@@ -131,8 +131,7 @@ export default {
             }
           })
         }
-        let API = str === 'saved' ? WHT_API.APPLYMATERIELSAVE_API : WHT_API.APPLYMATERIELSUBMIT_API
-        this.$http(API, 'POST', this.materielDataList).then(({data}) => {
+        this.$http(WHT_API.APPLYMATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -144,6 +143,20 @@ export default {
           console.log('catch data::', error)
         })
       }
+    },
+    // 物料提交
+    submitMateriel (resolve) {
+      this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
     },
     validate () {
       for (let item of this.materielDataList) {

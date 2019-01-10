@@ -96,7 +96,6 @@ export default {
   data () {
     return {
       orderStatus: '',
-      lodingS: false,
       isRedact: false,
       orderNo: '',
       productDate: '',
@@ -187,10 +186,13 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.$refs.workerref.excrul()) {
+        if (!this.$refs.readytime.Readyrul()) {
           return false
         }
-        if (!this.$refs.excrecord.userrul()) {
+        if (!this.$refs.workerref.userrul()) {
+          return false
+        }
+        if (!this.$refs.excrecord.excrul()) {
           return false
         }
         if (!this.$refs.applymateriel.validate()) {
@@ -213,7 +215,7 @@ export default {
       let net4 = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
       })
-      let net7 = new Promise((resolve, reject) => {
+      let net5 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
       let instock = new Promise((resolve, reject) => {
@@ -223,19 +225,25 @@ export default {
         that.$refs.applymateriel.saveOrSubmit(str, resolve)
       })
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, instock, material])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, instock, material])
         net10.then(function () {
-          let net8 = new Promise((resolve, reject) => {
+          let net6 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
           })
-          let net12 = Promise.all([net8])
+          let net7 = new Promise((resolve, reject) => {
+            that.$refs.instock.submitIn(resolve)
+          })
+          let net8 = new Promise((resolve, reject) => {
+            that.$refs.applymateriel.submitMateriel(resolve)
+          })
+          let net12 = Promise.all([net6, net7, net8])
           net12.then(() => {
             that.GetOrderList()
             that.$message.success('提交成功')
           })
         })
       } else {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7, instock, material])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, instock, material])
         net10.then(function () {
           that.GetOrderList()
           that.$message.success('保存成功')
