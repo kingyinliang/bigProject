@@ -46,7 +46,7 @@
                 <div class="clearfix pro-line">
                   <el-form-item label="工序：">
                     <p>
-                      炒麦
+                      {{item.productLineName}}
                       <el-button @click="go(item)" type="primary" size="small" style="float: right">数据录入</el-button>
                       <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
                     </p>
@@ -70,39 +70,6 @@
                     <el-form-item label="实时产量：" class="margb20px">
                       <p>{{item.realOutput? item.realOutput + item.outputUnit: '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                  </div>
-                </div>
-              </el-form>
-            </el-card>
-          </el-col>
-          <el-col :span="12" style="margin-bottom: 10px" v-if="pwshow">
-            <el-card class="box-card">
-              <el-form size="small" label-position="right" label-width="85px">
-                <div class="clearfix pro-line">
-                  <el-form-item label="工序：">
-                    <p>
-                      PW小麦
-                      <el-button @click="go2()" type="primary" size="small" style="float: right">数据录入</el-button>
-                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
-                    </p>
-                  </el-form-item>
-                </div>
-                <div class="clearfix item">
-                  <img :src="'data:image/gif;base64,'" alt="">
-                  <div class="itemForm">
-                      <el-form-item label="订单号：" style="margin-bottom: 10px;">
-                        <el-select placeholder="请选择">
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="品项：" style="margin-bottom: 10px;">
-                        <p class="hiddenP"></p>
-                      </el-form-item>
-                      <el-form-item label="计划产量：" style="margin-bottom: 10px;">
-                        <p></p>
-                      </el-form-item>
-                      <el-form-item label="实时产量：" style="margin-bottom: 10px;">
-                        <p></p>
-                      </el-form-item>
                   </div>
                 </div>
               </el-form>
@@ -204,7 +171,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, PACKAGING_API, WHT_API} from '@/api/api'
+import {BASICDATA_API, WHT_API} from '@/api/api'
 import {dateFormat, orderList} from '@/net/validate'
 import TemporaryWorker from '@/views/components/temporaryWorker'
 import LoanedPersonnel from '@/views/components/loanedPersonnel'
@@ -263,31 +230,28 @@ export default {
   },
   methods: {
     go (item) {
-      if (item.orderNo && item.properties) {
-        this.FWorderNo = item.orderNo
-        this.FWproductDate = this.productDate.replace(/-/g, '')
-        this.FWworkShop = this.workShop
-        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
-        this.FWorderId = item.orderIdList[item.orderNo]
-        let that = this
-        setTimeout(function () {
-          that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
-        }, 100)
-      } else {
-        this.$message.error('请选择订单号')
-      }
-    },
-    go2 () {
       this.FWproductDate = this.productDate.replace(/-/g, '')
       this.FWworkShop = this.workShop
-      this.FWfactoryid = this.factoryid
-      this.FWorderNo = ''
-      this.FWorderId = ''
-      // 711000005685
-      let that = this
-      setTimeout(function () {
-        that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
-      }, 100)
+      if (item.productLineName === '炒麦') {
+        if (item.orderNo && item.properties) {
+          this.FWorderNo = item.orderNo
+          this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+          this.FWorderId = item.orderIdList[item.orderNo]
+          let that = this
+          setTimeout(function () {
+            that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+          }, 100)
+        } else {
+          this.$message.error('请选择订单号')
+        }
+      } else {
+        this.FWfactoryid = this.factoryid
+        this.FWorderNo = item.orderNo
+        let that = this
+        setTimeout(function () {
+          that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
+        }, 100)
+      }
     },
     // 获取工厂
     GetfactoryList () {
@@ -344,7 +308,7 @@ export default {
       })
     },
     GetorderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+      this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
         productDate: this.plantList.productDate.replace(/-/g, ''),
         orderNo: ''
@@ -415,7 +379,7 @@ export default {
     // 订单号下拉
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
-        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
           productDate: this.productDate.replace(/-/g, ''),
           orderNo: row.orderNo
