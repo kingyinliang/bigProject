@@ -57,7 +57,7 @@ export default {
       if (date) {
         return date
       }
-      return 'muyou'
+      return ''
     }
   }
 }
