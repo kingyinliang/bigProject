@@ -36,19 +36,19 @@
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
           </el-tab-pane>
-          <el-tab-pane name="2">
+          <el-tab-pane name="2" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
               <el-button>工时录入</el-button>
             </span>
             <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
           </el-tab-pane>
-          <el-tab-pane name="3">
+          <el-tab-pane name="3" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
               <el-button>异常记录</el-button>
             </span>
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
-          <el-tab-pane name="4">
+          <el-tab-pane name="4" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
               <el-button>文本记录</el-button>
             </span>
