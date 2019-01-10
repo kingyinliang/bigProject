@@ -233,11 +233,12 @@ export default {
       this.FWproductDate = this.productDate.replace(/-/g, '')
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
-      this.FWorderNo = item.orderNo
-      // this.FWorderId = item.orderId
       if (item.productLineName === '炒麦') {
+        // 存储炒麦的state
+        this.FWorderNo = item.orderNo
+        this.FWproductLine = item.productLine
+        this.FWproductLineName = item.productLineName
         if (item.orderNo && item.properties) {
-          this.FWorderNo = item.orderNo
           this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
           this.FWorderId = item.orderIdList[item.orderNo]
           let that = this
@@ -248,6 +249,14 @@ export default {
           this.$message.error('请选择订单号')
         }
       } else {
+        // 存储脱皮的state
+        let order = {
+          orderNo: item.orderNo ? item.orderNo : '',
+          orderId: '',
+          productLine: item.productLine,
+          productLineName: item.productLineName
+        }
+        this.PWorder = order
         let that = this
         setTimeout(function () {
           that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
@@ -578,6 +587,18 @@ export default {
     FWorderId: {
       get () { return this.$store.state.common.FWorderId },
       set (val) { this.$store.commit('common/updateFWorderId', val) }
+    },
+    FWproductLine: {
+      get () { return this.$store.state.common.FWproductLine },
+      set (val) { this.$store.commit('common/updateFWproductLine', val) }
+    },
+    FWproductLineName: {
+      get () { return this.$store.state.common.FWproductLineName },
+      set (val) { this.$store.commit('common/updateFWproductLineName', val) }
+    },
+    PWorder: {
+      get () { return this.$store.state.common.PWorder },
+      set (val) { this.$store.commit('common/updatePWorder', val) }
     },
     countMan: function () {
       let num = 0

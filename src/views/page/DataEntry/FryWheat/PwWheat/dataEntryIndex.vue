@@ -11,7 +11,7 @@
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
               <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
-            <el-row v-if="isRedact" style="float:right;">
+            <el-row v-if="isRedact && enableOpt" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
               <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
             </el-row>
@@ -78,24 +78,26 @@ export default {
       productDate: '',
       workShop: '',
       formHeader: {
-        orderNo: this.$store.state.common.FWorderNo,
-        orderId: this.$store.state.common.FWorderId,
+        orderNo: this.$store.state.common.PWorder.orderNo,
+        orderId: this.$store.state.common.PWorder.orderId,
         factory: this.$store.state.common.FWfactoryid,
         factoryName: this.$store.state.common.FWfactoryName,
         workShop: this.$store.state.common.FWworkShop,
         workShopName: this.$store.state.common.FWworkShopName,
-        productLine: 'BD5B3295DC104413B94AA18B61ACF539',
-        productLineName: '脱皮车间',
+        productLine: this.$store.state.common.PWorder.productLine,
+        productLineName: this.$store.state.common.PWorder.productLineName,
         // yyyy-MM-dd
         productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
       activeName: '1',
-      appyMaterielState: ''
+      appyMaterielState: '',
+      // save / submit 是否可用
+      enableOpt: false
     }
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.FWorderNo
+    this.orderNo = this.PWorderNo
     // yyyyMMdd
     this.productDate = this.FWproductDate
     this.workShop = this.FWworkShop
@@ -156,8 +158,8 @@ export default {
       // 申请订单之后，订单号回写
       this.orderNo = orderInfo.orderNo
       // 更新common store
-      this.FWorderNo = orderInfo.orderNo
-      this.FWorderId = orderInfo.orderId
+      this.PWorderNo = orderInfo.orderNo
+      this.PWorderId = orderInfo.orderId
     },
     updateProductDate: function (dataStr) {
       if (dataStr) {
@@ -175,25 +177,29 @@ export default {
     'orderNo' (n, o) {
       // 申请订单之后触发全局刷新
       console.log('刷新全局')
+      if (n) {
+        // 有订单号情况下才可用
+        this.enableOpt = true
+      }
       this.GetOrderList()
     }
   },
   computed: {
-    FWproductDate: {
-      get () { return this.$store.state.common.FWproductDate },
-      set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    PWorderNo: {
+      get () { return this.$store.state.common.PWorder.orderNo },
+      set (val) { this.$store.commit('common/updatePWorderNo', val) }
     },
-    FWorderNo: {
-      get () { return this.$store.state.common.FWorderNo },
-      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
-    },
-    FWorderId: {
-      get () { return this.$store.state.common.FWorderId },
-      set (val) { this.$store.commit('common/updateFWorderId', val) }
+    PWorderId: {
+      get () { return this.$store.state.common.PWorder.orderId },
+      set (val) { this.$store.commit('common/updatePWorderId', val) }
     },
     FWworkShop: {
       get () { return this.$store.state.common.FWworkShop },
       set (val) { this.$store.commit('common/updateFWWorkShop', val) }
+    },
+    FWproductDate: {
+      get () { return this.$store.state.common.FWproductDate },
+      set (val) { this.$store.commit('common/updateFWProductDate', val) }
     }
   },
   components: {
