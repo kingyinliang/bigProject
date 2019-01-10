@@ -232,6 +232,9 @@ export default {
     go (item) {
       this.FWproductDate = this.productDate.replace(/-/g, '')
       this.FWworkShop = this.workShop
+      this.FWfactoryid = this.factoryid
+      this.FWorderNo = item.orderNo
+      // this.FWorderId = item.orderId
       if (item.productLineName === '炒麦') {
         if (item.orderNo && item.properties) {
           this.FWorderNo = item.orderNo
@@ -245,8 +248,6 @@ export default {
           this.$message.error('请选择订单号')
         }
       } else {
-        this.FWfactoryid = this.factoryid
-        this.FWorderNo = item.orderNo
         let that = this
         setTimeout(function () {
           that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
