@@ -15,7 +15,7 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="订单日期：">
-      <p class="el-input">{{'TODO'}}</p>
+      <p class="el-input">{{formHeader.orderDate | formatDate}}</p>
     </el-form-item>
     <el-form-item label="计划产量：">
       <p class="el-input">{{(formHeader.planOutput || '') + ' ' + (formHeader.outputUnit || '')}}</p>
@@ -51,7 +51,15 @@ export default {
     }
   },
   computed: {},
-  components: {}
+  components: {},
+  filters: {
+    formatDate (date) {
+      if (date) {
+        return date
+      }
+      return ''
+    }
+  }
 }
 </script>
 
