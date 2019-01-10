@@ -118,7 +118,8 @@ export default {
       // 生产入库状态
       inStorageState: '',
       // 物料申请状态
-      applyMaterielState: ''
+      applyMaterielState: '',
+      lodingStatus2: ''
     }
   },
   mounted () {
