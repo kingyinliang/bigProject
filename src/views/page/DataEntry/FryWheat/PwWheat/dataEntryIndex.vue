@@ -117,6 +117,7 @@ export default {
           this.formHeader = data.list[0]
           // console.log('this.formHeader', JSON.stringify(this.formHeader))
           this.$refs.pwapplymateriel.getMaterielDataList(this.formHeader.orderId)
+          this.$refs.pwtime.GetPwTimeList()
         })
       }
     },
@@ -138,15 +139,21 @@ export default {
       let net2 = new Promise((resolve, reject) => {
         that.$refs.pwapplymateriel.saveOrSubmit(str, resolve)
       })
+      let net3 = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
+      })
+      let net4 = new Promise((resolve, reject) => {
+        that.$refs.pwtime.PwTimeUpdate(str, resolve, reject)
+      })
       if (str === 'submit') {
-        let net10 = Promise.all([net1, net2])
+        let net10 = Promise.all([net1, net2, net3, net4])
         net10.then(function () {
           that.lodingS = false
           that.GetOrderList()
           that.$message.success('提交成功')
         })
       } else {
-        let net10 = Promise.all([net1, net2])
+        let net10 = Promise.all([net1, net2, net3, net4])
         net10.then(function () {
           that.lodingS = false
           that.GetOrderList()

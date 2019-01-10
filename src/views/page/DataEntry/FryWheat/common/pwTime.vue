@@ -6,7 +6,7 @@
       </el-table-column>
       <el-table-column label="准备工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -16,7 +16,7 @@
       </el-table-column>
       <el-table-column label="*机器工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="*人工工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column label="备注" width="110">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <!--<el-table-column label="操作" width="60" fixed="right">-->
@@ -78,13 +78,30 @@ export default {
   methods: {
     GetPwTimeList () {
       this.$http(`${WHT_API.MATERIELTIMELIST_API}`, 'POST', {
-        orderId: ''
+        orderId: this.order.orderId
       }).then(({data}) => {
+        if (data.code === 0) {
+          this.pwTimeDate = data.listForm
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
-    PwTimeUpdate () {
+    PwTimeUpdate (str, resolve, reject) {
       this.pwTimeDate[0].orderId = this.order.orderId
+      this.pwTimeDate[0].status = str
       this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
       })
     },
     AddpwTimeDate () {
