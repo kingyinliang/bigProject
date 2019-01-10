@@ -70,7 +70,8 @@ export default {
     }
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    order: {}
   },
   mounted () {
   },
@@ -82,7 +83,8 @@ export default {
       })
     },
     PwTimeUpdate () {
-      this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', []).then(({data}) => {
+      this.pwTimeDate[0].orderId = this.order.orderId
+      this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate).then(({data}) => {
       })
     },
     AddpwTimeDate () {

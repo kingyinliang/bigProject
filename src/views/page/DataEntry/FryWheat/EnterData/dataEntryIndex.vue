@@ -153,12 +153,16 @@ export default {
     },
     // 修改表头
     UpdateformHeader (str, resolve) {
+      let countOutput = 0
+      this.$refs.instock.wheatDataList.forEach((item) => {
+        countOutput += parseInt(item.inPortWeight)
+      })
       this.formHeader.orderStatus = str
-      this.formHeader.realOutput = null
-      this.formHeader.countOutputUnit = null
-      this.formHeader.countOutput = null
-      this.formHeader.countMan = null
-      this.formHeader.expAllDate = null
+      this.formHeader.realOutput = countOutput + ''
+      this.formHeader.countOutputUnit = 'KG'
+      this.formHeader.countOutput = countOutput + ''
+      this.formHeader.countMan = this.$refs.workerref.countMan
+      this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
       this.formHeader.germs = null
       if (str !== 'saved') {
         this.formHeader.operator = `${this.realName}(${this.userName})`
@@ -255,9 +259,9 @@ export default {
       let data = [this.$refs.readytime.readyTimeDate, this.$refs.readytime.machineTimeData, this.$refs.workerref.WorkerDate, {
         orderId: this.formHeader.orderId,
         outputUnit: this.formHeader.outputUnit,
-        realOutput: this.formHeader.realOutput + '',
-        countOutput: '',
-        countOutputUnit: '',
+        realOutput: this.formHeader.realOutput,
+        countOutput: this.formHeader.countOutput,
+        countOutputUnit: this.formHeader.countOutputUnit,
         productDate: this.formHeader.productDate
       }]
       this.$http(`${WHT_API.MATERIELTIMESUBMIT_API}`, 'POST', data).then(({data}) => {

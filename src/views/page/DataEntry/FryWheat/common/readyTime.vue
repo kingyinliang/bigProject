@@ -194,6 +194,18 @@ export default {
     // 准备时间修改
     UpdateReady (str, resolve, reject) {
       this.readyTimeDate.orderId = this.formHeader.orderId
+      this.readyTimeDate.dayChange = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) ? this.readyTimeDate.dayChange + '' : this.readyTimeDate.dayChange)
+      this.readyTimeDate.dayChangeBefore = ((this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) ? this.readyTimeDate.dayChangeBefore + '' : this.readyTimeDate.dayChangeBefore)
+      this.readyTimeDate.dayChangePre = ((this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) ? this.readyTimeDate.dayChangePre + '' : this.readyTimeDate.dayChangePre)
+      this.readyTimeDate.dayChangeAfter = ((this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0) ? this.readyTimeDate.dayChangeAfter + '' : this.readyTimeDate.dayChangeAfter)
+      this.readyTimeDate.midChange = ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) ? this.readyTimeDate.midChange + '' : this.readyTimeDate.midChange)
+      this.readyTimeDate.midChangeBefore = ((this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) ? this.readyTimeDate.midChangeBefore + '' : this.readyTimeDate.midChangeBefore)
+      this.readyTimeDate.midChangePre = ((this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) ? this.readyTimeDate.midChangePre + '' : this.readyTimeDate.midChangePre)
+      this.readyTimeDate.midChangeAfter = ((this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0) ? this.readyTimeDate.midChangeAfter + '' : this.readyTimeDate.midChangeAfter)
+      this.readyTimeDate.nightChange = ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) ? this.readyTimeDate.nightChange + '' : this.readyTimeDate.nightChange)
+      this.readyTimeDate.nightChangeBefore = ((this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) ? this.readyTimeDate.nightChangeBefore + '' : this.readyTimeDate.nightChangeBefore)
+      this.readyTimeDate.nightChangePre = ((this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) ? this.readyTimeDate.nightChangePre + '' : this.readyTimeDate.nightChangePre)
+      this.readyTimeDate.nightChangeAfter = ((this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0) ? this.readyTimeDate.nightChangeAfter + '' : this.readyTimeDate.nightChangeAfter)
       if (!this.readyTimeDate.status) {
         this.readyTimeDate.status = str
       } else {

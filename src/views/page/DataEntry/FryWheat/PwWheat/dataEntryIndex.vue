@@ -40,7 +40,7 @@
             <span slot="label" class="spanview">
               <el-button>工时录入</el-button>
             </span>
-            <pw-time ref="pwtime" :isRedact="isRedact"></pw-time>
+            <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
