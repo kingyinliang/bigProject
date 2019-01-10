@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+  <el-col>
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -118,8 +118,7 @@ export default {
       // 生产入库状态
       inStorageState: '',
       // 物料申请状态
-      applyMaterielState: '',
-      lodingStatus2: ''
+      applyMaterielState: ''
     }
   },
   mounted () {
@@ -133,7 +132,7 @@ export default {
   methods: {
     // 获取表头
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+      this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
@@ -198,7 +197,6 @@ export default {
           return false
         }
       }
-      this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {
         this.UpdateformHeader(str, resolve)
@@ -232,7 +230,6 @@ export default {
           })
           let net12 = Promise.all([net8])
           net12.then(() => {
-            that.lodingS = false
             that.GetOrderList()
             that.$message.success('提交成功')
           })
@@ -240,7 +237,6 @@ export default {
       } else {
         let net10 = Promise.all([net0, net1, net2, net3, net4, net7, instock, material])
         net10.then(function () {
-          that.lodingS = false
           that.GetOrderList()
           that.$message.success('保存成功')
         })
