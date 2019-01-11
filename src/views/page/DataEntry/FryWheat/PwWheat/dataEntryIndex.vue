@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+  <el-col>
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -9,11 +9,14 @@
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact && enableOpt" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+            </el-row>
+            <el-row style="position: absolute;right: 0;top: 100px;">
+              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
             </el-row>
           </el-col>
         </el-row>
@@ -52,7 +55,7 @@
             <span slot="label" class="spanview">
               <el-button>文本记录</el-button>
             </span>
-            <text-record :isRedact="isRedact"></text-record>
+            <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -61,7 +64,7 @@
 </template>
 
 <script>
-import {PACKAGING_API} from '@/api/api'
+import {PACKAGING_API, WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ExcRecord from '@/views/components/excRecord'
@@ -72,7 +75,7 @@ export default {
   name: 'dataEntryIndex',
   data () {
     return {
-      lodingS: false,
+      orderStatus: '',
       isRedact: false,
       orderNo: '',
       productDate: '',
@@ -106,6 +109,7 @@ export default {
   methods: {
     // 获取表头
     GetOrderList () {
+      this.isRedact = false
       if (this.orderNo) {
         // 有订单号
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -115,14 +119,49 @@ export default {
         }).then(({data}) => {
           // 2018-06-27
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].orderStatus
           // console.log('this.formHeader', JSON.stringify(this.formHeader))
           this.$refs.pwapplymateriel.getMaterielDataList(this.formHeader.orderId)
+          this.$refs.pwtime.GetPwTimeList()
         })
       }
     },
+    // 修改表头
+    OrderUpdate (str, resolve) {
+      let countOutput = 0
+      this.$refs.pwapplymateriel.materielDataList.forEach((item) => {
+        countOutput += parseInt(item.inStorageWeight)
+      })
+      this.formHeader.orderStatus = str
+      this.formHeader.countOutputUnit = 'KG'
+      this.formHeader.countOutput = countOutput + ''
+      this.formHeader.realOutput = countOutput + ''
+      this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
+      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
     // 保存
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.$refs.pwtime.timerul()) {
+          return false
+        }
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
@@ -130,29 +169,63 @@ export default {
           return false
         }
       }
-      this.lodingS = true
       let that = this
+      let net0 = new Promise((resolve, reject) => {
+        that.OrderUpdate(str, resolve)
+      })
       let net1 = new Promise((resolve, reject) => {
-        that.$refs.excrecord.saveOrSubmitExc(str, resolve)
+        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
       })
       let net2 = new Promise((resolve, reject) => {
         that.$refs.pwapplymateriel.saveOrSubmit(str, resolve)
       })
+      let net3 = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
+      })
+      let net4 = new Promise((resolve, reject) => {
+        that.$refs.pwtime.PwTimeUpdate(str, resolve, reject)
+      })
       if (str === 'submit') {
-        let net10 = Promise.all([net1, net2])
+        let net10 = Promise.all([net0, net1, net2, net3, net4])
         net10.then(function () {
-          that.lodingS = false
-          that.GetOrderList()
-          that.$message.success('提交成功')
+          let net5 = new Promise((resolve, reject) => {
+            that.$refs.pwapplymateriel.SubmitMateriel(resolve)
+          })
+          let net6 = new Promise((resolve, reject) => {
+            that.Timeupdate(resolve)
+          })
+          let net12 = Promise.all([net5, net6])
+          net12.then(() => {
+            that.GetOrderList()
+            that.$message.success('提交成功')
+          })
         })
       } else {
-        let net10 = Promise.all([net1, net2])
+        let net10 = Promise.all([net0, net1, net2, net3, net4])
         net10.then(function () {
-          that.lodingS = false
           that.GetOrderList()
           that.$message.success('保存成功')
         })
       }
+    },
+    // 工时提交
+    Timeupdate (resolve) {
+      this.$http(WHT_API.PWMATERIELTIMESUBMIT_API, 'POST', [this.$refs.pwtime.pwTimeDate[0], {
+        orderId: this.formHeader.orderId,
+        outputUnit: this.formHeader.outputUnit,
+        realOutput: this.formHeader.realOutput,
+        countOutput: this.formHeader.countOutput,
+        countOutputUnit: this.formHeader.countOutputUnit,
+        productDate: this.formHeader.productDate
+      }]).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
     },
     updateOrderInfo: function (orderInfo) {
       // 申请订单之后，订单号回写

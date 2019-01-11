@@ -783,6 +783,10 @@ export const WHT_API = {
    */
   MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate',
   /**
+   * @property {string} MATERIELTIMESUBMIT_API pw小麦工时提交
+   */
+  PWMATERIELTIMESUBMIT_API: HOST + '/wht/pw/submitPW',
+  /**
    * @property {string} MATERIELTIMESUBMIT_API 炒麦报工提交
    */
   MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW',
