@@ -36,9 +36,12 @@
               label="生产物料"
               width="220">
               <template slot-scope="scope">
-                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                  <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
+                    <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -62,9 +65,12 @@
               width="220"
               label="发料料号">
               <template slot-scope="scope">
-                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                  <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
+                    <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -174,8 +180,8 @@ export default {
   data () {
     return {
       dictListObj: {},
-      dispatcherCode: 'TP1',
-      dispatcherName: 'PW生产调度员',
+      dispatcherCode: '',
+      dispatcherName: '',
       materielDataList: [],
       readAudit: []
     }
@@ -244,6 +250,18 @@ export default {
     validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
+          if (item.dispatchMan == null || item.dispatchMan.trim() === '') {
+            this.$message.error('生产调度员不能为空')
+            return false
+          }
+          if (item.productCode == null || item.productCode.trim() === '') {
+            this.$message.error('生产物料不能为空')
+            return false
+          }
+          if (item.issueCode == null || item.issueCode.trim() === '') {
+            this.$message.error('发料料号不能为空')
+            return false
+          }
           if (item.productWeight === '') {
             this.$message.error('生产数不能为空')
             return false
@@ -335,12 +353,12 @@ export default {
         inStorageWeight: 0,
         // 发料批次
         issueBatch: '',
-        issueCode: 'M010200001',
-        issueName: '炒麦车间原料',
+        issueCode: '',
+        issueName: '',
         // 发料数量
         issueWeight: 0,
-        productCode: 'SP07010001',
-        productName: 'PW小麦',
+        productCode: '',
+        productName: '',
         productUnit: 'KG',
         productWeight: 0,
         remark: '',
@@ -413,6 +431,14 @@ export default {
       this.materielDataList.forEach((item) => {
         if (item.status !== 'submit' && item.status !== 'checked') {
           item.productDate = n
+        }
+      })
+    },
+    'dispatcherCode' (n, o) {
+      // 调度员切换
+      this.materielDataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.dispatchMan = n
         }
       })
     }

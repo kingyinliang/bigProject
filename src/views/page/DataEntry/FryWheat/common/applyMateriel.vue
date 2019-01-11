@@ -165,15 +165,15 @@ export default {
     validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
-          if (item.materialCode === '') {
+          if (item.materialCode == null || item.materialCode.trim() === '') {
             this.$message.error('物料不能为空')
             return false
           }
-          if (item.deviceId === '') {
+          if (item.deviceId == null || item.deviceId === '') {
             this.$message.error('粮仓不能为空')
             return false
           }
-          if (item.batch.trim() === '') {
+          if (item.batch == null || item.batch.trim() === '') {
             this.$message.error('物料批次不能为空')
             return false
           }
@@ -273,8 +273,8 @@ export default {
         id: '',
         orderId: this.order.orderId,
         // 物料编码默认值
-        materialCode: 'M010200001',
-        materialName: '炒麦车间原料',
+        materialCode: '',
+        materialName: '',
         // 粮仓号
         deviceId: '',
         // 粮仓名称
