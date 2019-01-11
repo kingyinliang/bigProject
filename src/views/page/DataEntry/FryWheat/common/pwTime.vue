@@ -3,10 +3,13 @@
     <!--<el-button type="primary" @click="AddpwTimeDate()" size="small" :disabled="!isRedact" style="float: right;margin-bottom: 10px">新增</el-button>-->
     <el-table header-row-class-name="tableHead" :data="pwTimeDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column label="生产订单号">
+        <template slot-scope="scope">
+          {{scope.row.orderNo}}
+        </template>
       </el-table-column>
       <el-table-column label="准备工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.prepareTime" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -16,7 +19,7 @@
       </el-table-column>
       <el-table-column label="*机器工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.machineTime" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -26,7 +29,7 @@
       </el-table-column>
       <el-table-column label="*人工工时" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.expInfo" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.humanTime" :disabled="!(isRedact && order.orderId)" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -57,14 +60,15 @@ export default {
     return {
       pwTimeDate: [{
         id: '',
+        orderNo: '',
         orderId: '',
         status: '',
         prepareTime: '',
-        prepareTimeUnit: '',
+        prepareTimeUnit: 'H',
         machineTime: '',
-        machineTimeUnit: '',
+        machineTimeUnit: 'H',
         humanTime: '',
-        humanTimeUnit: '',
+        humanTimeUnit: 'H',
         remark: ''
       }]
     }
@@ -77,20 +81,26 @@ export default {
   },
   methods: {
     GetPwTimeList () {
-      this.$http(`${WHT_API.MATERIELTIMELIST_API}`, 'POST', {
-        orderId: this.order.orderId
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.pwTimeDate = data.listForm
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.order.orderId) {
+        this.$http(`${WHT_API.MATERIELTIMELIST_API}`, 'POST', {
+          order_id: this.order.orderId
+        }).then(({data}) => {
+          if (data.code === 0) {
+            if (data.listForm) {
+              this.pwTimeDate = data.listForm
+            } else {
+              this.pwTimeDate.orderNo = this.order.orderNo
+            }
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     PwTimeUpdate (str, resolve, reject) {
       this.pwTimeDate[0].orderId = this.order.orderId
       this.pwTimeDate[0].status = str
-      this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate).then(({data}) => {
+      this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate[0]).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error(data.msg)

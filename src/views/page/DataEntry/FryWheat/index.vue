@@ -256,6 +256,7 @@ export default {
           productLine: item.productLine,
           productLineName: item.productLineName
         }
+        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-PwWheat-dataEntryIndex')
         this.PWorder = order
         let that = this
         setTimeout(function () {

@@ -133,6 +133,7 @@ export default {
   methods: {
     // 获取表头
     GetOrderList () {
+      this.isRedact = false
       this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.workShop,
         productDate: this.productDate,

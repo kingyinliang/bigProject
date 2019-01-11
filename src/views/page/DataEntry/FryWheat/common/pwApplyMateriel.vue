@@ -227,8 +227,7 @@ export default {
             }
           })
         }
-        let API = str === 'saved' ? WHT_API.MATERIELSAVE_API : WHT_API.MATERIELSUBMIT_API
-        this.$http(API, 'POST', this.materielDataList).then(({data}) => {
+        this.$http(WHT_API.MATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -240,6 +239,19 @@ export default {
           console.log('catch data::', error)
         })
       }
+    },
+    SubmitMateriel (resolve) {
+      this.$http(WHT_API.MATERIELSUBMIT_API, 'POST', this.materielDataList).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
     },
     validate () {
       for (let item of this.materielDataList) {
@@ -283,7 +295,7 @@ export default {
       // console.log('为什么拿不到orderId', this.order.orderId)
       this.materielDataList = []
       this.readAudit = []
-      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}).then(({data}) => {
+      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist
