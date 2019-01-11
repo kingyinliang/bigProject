@@ -88,9 +88,13 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
       router.options.isAddDynamicMenuRoutes = false
       router.push({path: '/login'})
     }
+    if (response.data && response.data.code === 500) {
+      Vue.$log.writeNormalLog(`接口错误：${url}`, response.data.msg + '', 'info', {age: 20})
+    }
     tryHideFullScreenLoading()// 关闭遮罩
     return response
-  }, error => {
+  }, (error) => {
+    Vue.$log.writeNormalLog(`接口错误：${url}`, error + '', 'info', {age: 20})
     Message.error({message: '网络请求失败，请刷新重试'})
     endLoading() // 关闭遮罩
     return Promise.reject(error)
