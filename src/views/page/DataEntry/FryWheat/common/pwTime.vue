@@ -80,6 +80,7 @@ export default {
   mounted () {
   },
   methods: {
+    // 获取pw工时数据
     GetPwTimeList () {
       if (this.order.orderId) {
         this.$http(`${WHT_API.MATERIELTIMELIST_API}`, 'POST', {
@@ -97,6 +98,17 @@ export default {
         })
       }
     },
+    // pw工时校验
+    timerul () {
+      let ty = true
+      if ((this.pwTimeDate[0].prepareTime || this.pwTimeDate[0].prepareTime ===0 ) && (this.pwTimeDate[0].machineTime || this.pwTimeDate[0].machineTime ===0 ) && (this.pwTimeDate[0].humanTime || this.pwTimeDate[0].humanTime ===0 )) {} else {
+        ty = false
+        this.$message.error('工时录入必填项未填')
+        return false
+      }
+      return ty
+    },
+    // pw工时修改
     PwTimeUpdate (str, resolve, reject) {
       this.pwTimeDate[0].orderId = this.order.orderId
       this.pwTimeDate[0].status = str

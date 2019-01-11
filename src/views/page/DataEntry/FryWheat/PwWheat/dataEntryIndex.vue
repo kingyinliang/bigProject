@@ -159,6 +159,9 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.$refs.pwtime.timerul()) {
+          return false
+        }
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
