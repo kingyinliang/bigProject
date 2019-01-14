@@ -9,12 +9,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
-import RavenUtil from '@/net/raven'
 import '@/assets/scss/index.scss'
 import $ from 'jquery'
 // import 'script-loader!file-saver'
-
-RavenUtil.install(Vue, {user: {id: 'shinho', name: 'shinho'}, env: 'Local'})
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

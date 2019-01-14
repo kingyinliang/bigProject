@@ -1,7 +1,0 @@
-[defaults]
-url = http://sentry.shinho.net.cn
-org = shinho
-project = factory-wap-ot
-
-[auth]
-token = 92e601cb7d4b4f238fcf76b3e595d5251d78c72ad03543b9b55ab932c3475f6d

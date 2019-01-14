@@ -14,13 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@sentry/webpack-plugin": "^1.6.2",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.4.1",
     "file-saver": "^2.0.0-rc.3",
-    "raven": "^2.6.4",
-    "raven-js": "^3.27.0",
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.5.6",
@@ -70,7 +67,7 @@
     "less-loader": "^4.1.0",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.10.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",

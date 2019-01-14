@@ -10,11 +10,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const SentryPlugin = require('@sentry/webpack-plugin')
-
-const HOST = 'https://mdsdev.shinho.net.cn'
-// const HOST = 'https://mdsuat.shinho.net.cn'
-// const HOST = 'https://mds.shinho.net.cn'
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -53,7 +48,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
-      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`,
+      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
       allChunks: true,
     }),
@@ -124,13 +119,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ]),
-    new SentryPlugin({
-      include: '../dist/static/js',
-      release: 'factory-wap@' + Date.parse(new Date()),
-      configFile: 'sentry.properties',
-      urlPrefix: HOST + '/static/js/'
-    })
+    ])
   ]
 })
 
