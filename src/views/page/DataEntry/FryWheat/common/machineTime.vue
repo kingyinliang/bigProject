@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="machineTimeData.machine" :close-on-click-modal="false" :visible.sync="visible">
+  <el-dialog :title="machineTimeData.deviceName" :close-on-click-modal="false" :visible.sync="visible">
     <el-form :model="machineTimeData" size="small" label-width="125px">
       <el-form-item label="开始时间：" v-if="status">
         <el-date-picker type="datetime" v-model="machineTimeData.startDate" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择"></el-date-picker>

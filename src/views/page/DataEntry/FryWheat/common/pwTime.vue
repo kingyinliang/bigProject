@@ -87,10 +87,22 @@ export default {
           order_id: this.order.orderId
         }).then(({data}) => {
           if (data.code === 0) {
-            if (data.listForm) {
+            if (data.listForm && data.listForm.length !== 0) {
               this.pwTimeDate = data.listForm
             } else {
-              this.pwTimeDate.orderNo = this.order.orderNo
+              this.pwTimeDate = [{
+                id: '',
+                orderNo: this.order.orderNo,
+                orderId: '',
+                status: '',
+                prepareTime: '',
+                prepareTimeUnit: 'H',
+                machineTime: '',
+                machineTimeUnit: 'H',
+                humanTime: '',
+                humanTimeUnit: 'H',
+                remark: ''
+              }]
             }
           } else {
             this.$message.error(data.msg)

@@ -4,9 +4,9 @@
       <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
         <div class="clearfix" style="">
           <h3 style="font-size: 14px;line-height: 32px">准备工时 (单位:min)</h3>
-          <el-button type="text" class="readyshiftBtn" name="ready">收起<i class="el-icon-caret-top"></i></el-button>
+          <el-button type="text" class="readyshiftBtn" name="ready" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
           <el-form-item label="班次：" style="float: right">
-            <el-select v-model="readyTimeDate.classes" placeholder="请选择" :disabled="!isRedact">
+            <el-select v-model="readyTimeDate.classes" placeholder="请选择" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))">
               <el-option label="白班" value="白班"></el-option>
               <el-option label="中班" value="中班"></el-option>
               <el-option label="夜班" value="夜班"></el-option>
@@ -17,44 +17,44 @@
         <div class="readyBox" style="overflow: hidden">
           <el-row v-if="readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（白班）：">
-              <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.dayChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.dayChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.dayChangeAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.dayChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
           <el-row v-if="readyTimeDate.classes === '中班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（中班）：">
-              <el-input v-model="readyTimeDate.midChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.midChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.midChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.midChageAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.midChageAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
           <el-row v-if="readyTimeDate.classes === '夜班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
             <el-form-item label="交接班（夜班）：">
-              <el-input v-model="readyTimeDate.nightChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="班前会：">
-              <el-input v-model="readyTimeDate.nightChangeBefore" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产前准备：">
-              <el-input v-model="readyTimeDate.nightChangePre" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
             <el-form-item label="生产后清场：">
-              <el-input v-model="readyTimeDate.nightChangeAfter" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              <el-input v-model="readyTimeDate.nightChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
         </div>
@@ -63,7 +63,7 @@
     <el-card class="box-card">
       <div class="clearfix" style="margin-bottom: 20px">
         <h3 style="font-size: 14px;line-height: 32px">机器工时 (单位:min)</h3>
-        <el-button type="text" class="readyshiftBtn" name="machine">收起<i class="el-icon-caret-top"></i></el-button>
+        <el-button type="text" class="readyshiftBtn" name="machine" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="machineBox" style="overflow: hidden">
         <el-row :gutter="10">
@@ -77,20 +77,25 @@
                 </div>
               </div>
               <el-row>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(true, item)" :disabled="!isRedact">开始</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(false, item)" :disabled="!isRedact">结束</el-button></el-col>
-                <el-col :span="8"><el-button class="machineBtn" @click="machineTest(item)" :disabled="!isRedact">检测</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(true, item)" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))">开始</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineStartOrEnd(false, item)" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))">结束</el-button></el-col>
+                <el-col :span="8"><el-button class="machineBtn" @click="machineTest(item)" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))">检测</el-button></el-col>
               </el-row>
             </el-card>
           </el-col>
         </el-row>
-        <el-table :data="machineTimeData" header-row-class-name="tableHead" border tooltip-effect="dark" @row-dblclick="rowUpdateMachine" >
+        <el-table :data="machineTimeData" header-row-class-name="tableHead" border tooltip-effect="dark" @row-dblclick="rowUpdateMachine" :row-class-name="RowDelFlag">
           <el-table-column label="日期" width="120" prop="productDate"></el-table-column>
           <el-table-column label="炒麦机" width="120" prop="deviceName"></el-table-column>
           <el-table-column label="开始时间" prop="openTime"></el-table-column>
           <el-table-column label="开始人" width="140" prop="openMan"></el-table-column>
           <el-table-column label="结束时间" prop="closeTime"></el-table-column>
           <el-table-column label="结束人" width="140" prop="closeMan"></el-table-column>
+          <el-table-column label="操作" width="50">
+            <template slot-scope="scope">
+              <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))" @click="delmachine(scope.row)"></el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </el-card>
@@ -184,6 +189,7 @@ export default {
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.readyTimeDate = data.listForm[0]
+          this.$emit('SetReadyStatus', data.listForm[0].status)
           this.machineTimeData = data.listFormMachine
           this.timeAuditlog = data.listApproval
         } else {
@@ -293,7 +299,7 @@ export default {
     },
     // 机器列表双击
     rowUpdateMachine (row) {
-      if (!this.isRedact) {
+      if (!(this.isRedact && (this.readyTimeDate.status === 'noPass' || this.readyTimeDate.status === 'saved' || this.readyTimeDate.status === ''))) {
         return false
       }
       this.rows = row
@@ -308,6 +314,18 @@ export default {
       })
       console.log(this.machineTimeData)
       this.visible2 = false
+    },
+    // 机器删除
+    delmachine (row) {
+      row.delFlag = '1'
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     },
     // 炒麦机
     GetMachine (productLine) {
