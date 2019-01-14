@@ -7,8 +7,8 @@
         <el-col :span="12">
           <el-form ref="form" label-width="100px">
             <el-form-item label="生产调度员" style='margin-bottom:0px;'>
-              <el-select @change="changeDispatcher" v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact" size="small">
-                <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.name" :value="item.code" ></el-option>
+              <el-select v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact" size="small">
+                <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.code" :value="item.code" ></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -146,7 +146,7 @@
               width="200"
               label="生产订单">
               <template slot-scope="scope">
-                {{scope.row.orderId}}
+                {{scope.row.orderNo}}
               </template>
             </el-table-column>
             <el-table-column
@@ -181,7 +181,7 @@ export default {
     return {
       dictListObj: {},
       dispatcherCode: '',
-      dispatcherName: '',
+      // dispatcherName: '',
       materielDataList: [],
       readAudit: []
     }
@@ -412,12 +412,12 @@ export default {
         }
       }
     },
-    changeDispatcher: function () {
-      let dispatcher = this.dictListObj['PW_FEVOR'].find((item) => item.code === this.dispatcherCode)
-      if (dispatcher) {
-        this.dispatcherName = dispatcher.name
-      }
-    },
+    // changeDispatcher: function () {
+    //   let dispatcher = this.dictListObj['PW_FEVOR'].find((item) => item.code === this.dispatcherCode)
+    //   if (dispatcher) {
+    //     this.dispatcherName = dispatcher.name
+    //   }
+    // },
     changeProduct: function (row) {
       let product = this.dictListObj['CM_material_prd'].find((item) => item.code === row.productCode)
       if (product) {

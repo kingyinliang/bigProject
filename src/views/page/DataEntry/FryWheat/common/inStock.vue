@@ -189,7 +189,8 @@ export default {
           {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
         inPortBatch: [
-          {required: true, message: '必填', trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'},
+          {max: 10, message: '长度不能超过10', trigger: 'blur'}
         ]
       }
     }
@@ -413,11 +414,13 @@ export default {
     },
     changeWheatContainer (value) {
       let wheat = this.wheatContainerList.find((item) => item.holderId === value)
+      let holderNo = ''
       if (wheat) {
         this.stockForm.wheatDeviceName = wheat.holderName
+        holderNo = wheat.holderNo
       }
       let now = new Date()
-      this.stockForm.inPortBatch = dateFormat(now, 'yyMMdd') + this.stockForm.wheatDeviceId
+      this.stockForm.inPortBatch = dateFormat(now, 'yyMMdd') + holderNo
     },
     // 删除
     dellistbomS (row) {
