@@ -293,8 +293,8 @@ export default {
     updateProductDate: function (dataStr) {
       let data = dataStr.replace(/-/g, '')
       this.productDate = data
-      // 不需要更新common store
-      // this.FWproductDate = data
+      // 更新common store
+      this.FWproductDate = data
     }
   },
   computed: {
