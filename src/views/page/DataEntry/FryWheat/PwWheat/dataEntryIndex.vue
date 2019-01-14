@@ -90,7 +90,7 @@ export default {
         productLine: this.$store.state.common.PWorder.productLine,
         productLineName: this.$store.state.common.PWorder.productLineName,
         // yyyy-MM-dd
-        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
+        productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
       },
       activeName: '1',
       appyMaterielState: '',
@@ -102,7 +102,7 @@ export default {
     headanimation(this.$)
     this.orderNo = this.PWorderNo
     // yyyyMMdd
-    this.productDate = this.FWproductDate
+    this.productDate = this.$store.state.common.PWorder.productDate
     this.workShop = this.FWworkShop
     this.GetOrderList()
   },
@@ -239,8 +239,8 @@ export default {
         let data = dataStr.replace(/-/g, '')
         this.productDate = data
       }
-      // 不需要更新common store
-      // this.FWproductDate = data
+      // 更新common store
+      this.PWproductDate = data
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
@@ -270,9 +270,9 @@ export default {
       get () { return this.$store.state.common.FWworkShop },
       set (val) { this.$store.commit('common/updateFWWorkShop', val) }
     },
-    FWproductDate: {
-      get () { return this.$store.state.common.FWproductDate },
-      set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    PWproductDate: {
+      get () { return this.$store.state.common.PWorder.productDate },
+      set (val) { this.$store.commit('common/updatePWproductDate', val) }
     }
   },
   components: {

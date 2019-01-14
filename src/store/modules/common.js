@@ -28,6 +28,7 @@ export default {
     FWfactoryName: '',
     FWproductLine: '', // 产线
     FWproductLineName: '',
+    // yyMMdd
     FWproductDate: '', // 生产日期
     FWorderId: '',
     FWorderNo: '',
@@ -36,7 +37,9 @@ export default {
       orderId: '',
       orderNo: '',
       productLine: '', // 产线
-      productLineName: ''
+      productLineName: '',
+      // yyyyMMdd
+      productDate: ''
     }
   },
   mutations: {
@@ -114,10 +117,13 @@ export default {
       state.PWorder.orderNo = name
     },
     updatePWproductLine (state, name) {
-      state.PWorder.PWproductLine = name
+      state.PWorder.productLine = name
     },
     updatePWproductLineName (state, name) {
-      state.PWorder.PWproductLineName = name
+      state.PWorder.productLineName = name
+    },
+    updatePWproductDate (state, name) {
+      state.PWorder.productDate = name
     }
     /* pw 小麦 end */
   }

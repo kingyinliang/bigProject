@@ -230,11 +230,11 @@ export default {
   },
   methods: {
     go (item) {
-      this.FWproductDate = this.productDate.replace(/-/g, '')
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
       if (item.productLineName === '炒麦') {
         // 存储炒麦的state
+        this.FWproductDate = this.productDate.replace(/-/g, '')
         this.FWorderNo = item.orderNo
         this.FWproductLine = item.productLine
         this.FWproductLineName = item.productLineName
@@ -254,7 +254,8 @@ export default {
           orderNo: item.orderNo ? item.orderNo : '',
           orderId: '',
           productLine: item.productLine,
-          productLineName: item.productLineName
+          productLineName: item.productLineName,
+          productDate: this.productDate.replace(/-/g, '')
         }
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-PwWheat-dataEntryIndex')
         this.PWorder = order
