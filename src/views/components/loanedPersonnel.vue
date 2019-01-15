@@ -135,7 +135,9 @@ export default {
     // 部门搜索人员
     filterNode (value, data) {
       if (!value) return true
-      return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
+      // 如果没有workNum, 使用workNumTemp
+      let workNum = data.workNum? data.workNum : data.workNumTemp
+      return data.realName.indexOf(value) !== -1 || workNum.indexOf(value) !== -1
     },
     // 选中搜索人员
     filterNode1 (value, data) {

@@ -2707,7 +2707,8 @@ export default {
     // 搜索人员
     filterNode (value, data) {
       if (!value) return true
-      return data.realName.indexOf(value) !== -1 || data.workNum.indexOf(value) !== -1
+      let workNum = data.workNum? data.workNum : data.workNumTemp
+      return data.realName.indexOf(value) !== -1 || workNum.indexOf(value) !== -1
     },
     filterNode1 (value, data) {
       if (!value) return true
