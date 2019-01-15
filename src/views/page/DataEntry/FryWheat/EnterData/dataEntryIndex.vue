@@ -291,10 +291,12 @@ export default {
     },
     // 表头更改生产日期
     updateProductDate: function (dataStr) {
-      let data = dataStr.replace(/-/g, '')
-      this.productDate = data
-      // 更新common store
-      this.FWproductDate = data
+      if (dataStr) {
+        let data = dataStr.replace(/-/g, '')
+        this.productDate = data
+        // 更新common store
+        this.FWproductDate = data
+      }
     }
   },
   computed: {

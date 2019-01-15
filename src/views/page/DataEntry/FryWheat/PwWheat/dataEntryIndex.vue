@@ -238,9 +238,9 @@ export default {
       if (dataStr) {
         let data = dataStr.replace(/-/g, '')
         this.productDate = data
+        // 更新common store
+        this.PWproductDate = data
       }
-      // 更新common store
-      this.PWproductDate = data
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
