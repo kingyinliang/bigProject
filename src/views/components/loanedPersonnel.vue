@@ -136,7 +136,7 @@ export default {
     filterNode (value, data) {
       if (!value) return true
       // 如果没有workNum, 使用workNumTemp
-      let workNum = data.workNum? data.workNum : data.workNumTemp
+      let workNum = data.workNum ? data.workNum : data.workNumTemp
       return data.realName.indexOf(value) !== -1 || workNum.indexOf(value) !== -1
     },
     // 选中搜索人员
