@@ -29,6 +29,8 @@ export function showFullScreenLoading () {
 export function tryHideFullScreenLoading () {
   if (needLoadingRequestCount <= 0) return
   needLoadingRequestCount--
+  console.log(needLoadingRequestCount)
+  console.log(Vue.prototype.lodingState)
   if (needLoadingRequestCount === 0 && Vue.prototype.lodingState) {
     endLoading()
   }
