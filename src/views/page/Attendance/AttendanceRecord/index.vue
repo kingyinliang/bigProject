@@ -772,20 +772,41 @@ export default {
             let productlineList = data.childList
             this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workShop}).then(({data}) => {
               if (data.code === 0) {
-                let Listobj = {
-                  productLineSt: false,
-                  pieceTimeSt: true,
-                  workShop: this.plantList.workShop,
-                  kqdl: this.plantList.kqdl,
-                  kqlx: '',
-                  userType: '',
-                  classType: '',
-                  deptId: '',
-                  productlineList: productlineList,
-                  Team: data.teamList,
-                  userId: [],
-                  timedTime: '0',
-                  pieceTime: '0'
+                let Listobj = {}
+                if (this.datalist.length === 0) {
+                  Listobj = {
+                    productLineSt: false,
+                    pieceTimeSt: true,
+                    workShop: this.plantList.workShop,
+                    kqdl: this.plantList.kqdl,
+                    kqlx: '',
+                    userType: '',
+                    content: '',
+                    classType: '',
+                    deptId: '',
+                    productlineList: productlineList,
+                    Team: data.teamList,
+                    userId: [],
+                    timedTime: '0',
+                    pieceTime: '0'
+                  }
+                } else {
+                  Listobj = {
+                    productLineSt: false,
+                    pieceTimeSt: true,
+                    workShop: this.datalist[this.datalist.length - 1].workShop,
+                    kqdl: this.datalist[this.datalist.length - 1].kqdl,
+                    kqlx: this.datalist[this.datalist.length - 1].kqlx,
+                    content: this.datalist[this.datalist.length - 1].content,
+                    userType: this.datalist[this.datalist.length - 1].userType,
+                    classType: this.datalist[this.datalist.length - 1].classType,
+                    deptId: this.datalist[this.datalist.length - 1].deptId,
+                    productlineList: productlineList,
+                    Team: data.teamList,
+                    userId: [],
+                    timedTime: this.datalist[this.datalist.length - 1].timedTime,
+                    pieceTime: this.datalist[this.datalist.length - 1].pieceTime
+                  }
                 }
                 let that = this
                 let asyncfn = require('async')
