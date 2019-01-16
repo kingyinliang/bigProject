@@ -39,7 +39,7 @@
                 <div class="required">
                   <i class="reqI">*</i>
                   <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                    <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
                   </el-select>
                 </div>
               </template>
@@ -68,7 +68,7 @@
                 <div class="required">
                   <i class="reqI">*</i>
                   <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                    <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
                   </el-select>
                 </div>
               </template>
@@ -421,13 +421,13 @@ export default {
     changeProduct: function (row) {
       let product = this.dictListObj['CM_material_prd'].find((item) => item.code === row.productCode)
       if (product) {
-        row.productName = product.name
+        row.productName = product.value
       }
     },
     changeIssue: function (row) {
       let issue = this.dictListObj['CM_material'].find((item) => item.code === row.issueCode)
       if (issue) {
-        row.issueName = issue.name
+        row.issueName = issue.value
       }
     }
   },
