@@ -282,7 +282,7 @@ export default {
     Getworkshop (fid) {
       this.plantList.workshopid = ''
       if (fid) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid, deptName: '炒麦 炒麦'}, false, false, false).then(res => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {daptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
           } else {

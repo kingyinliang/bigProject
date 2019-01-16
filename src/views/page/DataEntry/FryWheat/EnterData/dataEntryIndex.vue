@@ -34,7 +34,7 @@
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>准备时间</el-button>
+                <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">准备时间</el-button>
               </el-tooltip>
             </span>
             <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
@@ -42,7 +42,7 @@
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>人员</el-button>
+                <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">人员</el-button>
               </el-tooltip>
             </span>
             <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
@@ -56,7 +56,7 @@
           <el-tab-pane name="4">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>生产入库</el-button>
+                <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
             <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState'></in-stock>
