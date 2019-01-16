@@ -122,6 +122,7 @@ export default {
       visible2: false,
       readyTimeDate: {
         id: '',
+        status: '',
         classes: '多班',
         dayChange: '',
         dayChangeBefore: '',
