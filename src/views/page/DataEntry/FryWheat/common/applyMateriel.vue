@@ -28,7 +28,7 @@
                 <div class="required">
                   <i class="reqI">*</i>
                   <el-select @change="changeProduct(scope.row)"  v-model="scope.row.materialCode" value-key="materialCode" placeholder="请选择物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in materialDictList" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                    <el-option v-for="(item, index) in materialDictList" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
                   </el-select>
                 </div>
               </template>
@@ -308,7 +308,7 @@ export default {
     changeProduct: function (row) {
       let ele = this.materialDictList.find((item) => item.code === row.materialCode)
       if (ele) {
-        row.materialName = ele.name
+        row.materialName = ele.value
       }
     }
     // saveOrSubmitMateriel (str, resolve) {

@@ -34,7 +34,7 @@
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>物料领用</el-button>
+                <el-button :style="{'color': this.appyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
