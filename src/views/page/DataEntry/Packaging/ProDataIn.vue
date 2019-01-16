@@ -157,7 +157,7 @@ export default {
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
-      }).then(({data}) => {
+      }, false, false, false).then(({data}) => {
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.GetRatio()
