@@ -13,7 +13,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -22,7 +22,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 1].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -31,7 +31,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 2].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -40,7 +40,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 3].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -202,6 +202,7 @@ export default {
   },
   props: {
     isRedact: Boolean,
+    inStorageState: String,
     order: Object
   },
   filters: {

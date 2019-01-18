@@ -7,7 +7,7 @@
         <el-card body-style="padding-top:10px;">
           <div class="clearfix topBox">
             <div class="btn" style="margin-bottom:8px;">
-              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact">新增</el-button>
+              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'">新增</el-button>
               <!-- <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
               <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button> -->
               <div class='clearfix'></div>
@@ -112,6 +112,7 @@ export default {
   },
   props: {
     isRedact: Boolean,
+    applyMaterielState: String,
     order: Object
   },
   methods: {

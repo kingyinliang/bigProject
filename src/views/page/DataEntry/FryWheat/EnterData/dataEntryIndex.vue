@@ -59,15 +59,15 @@
                 <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState'></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState' :inStorageState="inStorageState"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>物料领用</el-button>
+                <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader" @setApplyMaterielState='setApplyMaterielState'></apply-materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader" @setApplyMaterielState='setApplyMaterielState' :applyMaterielState='applyMaterielState'></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">

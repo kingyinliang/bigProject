@@ -37,7 +37,7 @@
                 <el-button :style="{'color': this.appyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState' :appyMaterielState="appyMaterielState" ></pw-apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="2" :disabled='!enableOpt'>
             <span slot="label" class="spanview">

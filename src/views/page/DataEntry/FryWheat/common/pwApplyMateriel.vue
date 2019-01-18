@@ -7,7 +7,7 @@
         <el-col :span="12">
           <el-form ref="form" label-width="100px">
             <el-form-item label="生产调度员" style='margin-bottom:0px;'>
-              <el-select v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact" size="small">
+              <el-select v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'" size="small">
                 <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.code" :value="item.code" ></el-option>
               </el-select>
             </el-form-item>
@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="12">
           <div class="btn" style="float:right;">
-            <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord">新增</el-button>
+            <el-button type="primary" size="small" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'" @click="addNewRecord">新增</el-button>
             <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact || !enableSubmit" @click="saveOrderMateriel">申请订单</el-button>
             <!-- <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
             <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button> -->
@@ -192,6 +192,7 @@ export default {
   },
   props: {
     isRedact: Boolean,
+    appyMaterielState: String,
     order: Object
   },
   methods: {
