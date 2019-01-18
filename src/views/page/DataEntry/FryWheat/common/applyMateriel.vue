@@ -47,7 +47,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="241"
+              width="180"
               label="物料批次">
               <template slot-scope="scope">
                 <div class="required">
@@ -57,7 +57,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="241"
+              width="160"
               label="小麦领用数">
               <template slot-scope="scope">
                 <div class="required">
@@ -72,6 +72,14 @@
               <template slot-scope="scope">
                 <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
                 <span>{{ scope.row.weightUnit = 'KG'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="备注"
+              width="160">
+              <template slot-scope="scope">
+                <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
+                <el-input v-model.number="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column

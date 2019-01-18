@@ -7,7 +7,7 @@
         <el-col :span="12">
           <el-form ref="form" label-width="100px">
             <el-form-item label="生产调度员" style='margin-bottom:0px;'>
-              <el-select v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'" size="small">
+              <el-select size="small" v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'" >
                 <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.code" :value="item.code" ></el-option>
               </el-select>
             </el-form-item>
