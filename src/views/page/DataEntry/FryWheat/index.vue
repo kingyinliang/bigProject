@@ -33,9 +33,9 @@
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
               <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
             </el-row>
-            <el-row v-if="type === 'abnormal'" style="margin-top:20px">
-              <el-button type="primary" size="small" @click="AddPeople" :disabled="isdisabled">新增</el-button>
-              <el-button type="primary" size="small" @click="save" :disabled="isdisabled">保存</el-button>
+            <el-row v-if="type === 'abnormal' && isdisabled === false" style="margin-top:20px">
+              <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
+              <el-button type="primary" size="small" @click="save">保存</el-button>
             </el-row>
           </el-col>
         </el-row>
