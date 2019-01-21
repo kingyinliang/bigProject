@@ -31,7 +31,10 @@
           <el-col :span="3">
             <el-row>
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
-              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+              <template  v-if="type === 'abnormal'">
+                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
+              </template>
             </el-row>
             <el-row v-if="type === 'abnormal' && isdisabled === false" style="margin-top:20px">
               <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
@@ -412,6 +415,9 @@ export default {
     },
     isdisabledFn () {
       this.isdisabled = false
+    },
+    disabledFn () {
+      this.isdisabled = true
     },
     // 新增人员
     AddPeople () {
