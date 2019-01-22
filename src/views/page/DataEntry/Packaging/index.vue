@@ -136,23 +136,27 @@ export default {
     },
     // 获取列表
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-        workShop: this.plantList.workShop,
-        productDate: this.plantList.productDate,
-        orderNo: ''
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.Pkgfactoryid = this.plantList.factoryid
-          this.PkgworkShop = this.plantList.workShop
-          this.PkgproductDate = this.plantList.productDate
-          this.list = this.orderList(data.list)
-          this.workShop = this.plantList.workShop
-          this.productDate = this.plantList.productDate
-          this.factoryid = this.plantList.factoryid
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.plantList.workShop) {
+        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          workShop: this.plantList.workShop,
+          productDate: this.plantList.productDate,
+          orderNo: ''
+        }).then(({data}) => {
+          if (data.code === 0) {
+            this.Pkgfactoryid = this.plantList.factoryid
+            this.PkgworkShop = this.plantList.workShop
+            this.PkgproductDate = this.plantList.productDate
+            this.list = this.orderList(data.list)
+            this.workShop = this.plantList.workShop
+            this.productDate = this.plantList.productDate
+            this.factoryid = this.plantList.factoryid
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        // this.$message.error('请选择车间')
+      }
     },
     // 订单号下拉
     orderchange (row) {

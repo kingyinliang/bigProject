@@ -9,10 +9,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
+import SentryUtil from '@/net/sentryUtil'
 import '@/assets/scss/index.scss'
 import $ from 'jquery'
 // import 'script-loader!file-saver'
 
+SentryUtil.init()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
