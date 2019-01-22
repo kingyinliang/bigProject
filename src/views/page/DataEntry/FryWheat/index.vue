@@ -31,9 +31,12 @@
           <el-col :span="3">
             <el-row>
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
-              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+              <template  v-if="type === 'abnormal'">
+                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
+              </template>
             </el-row>
-            <el-row v-if="type === 'abnormal'" style="margin-top:20px">
+            <el-row v-if="type === 'abnormal' && isdisabled === false" style="margin-top:20px">
               <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
               <el-button type="primary" size="small" @click="save">保存</el-button>
             </el-row>
@@ -343,18 +346,17 @@ export default {
         this.$message.error('请选择车间')
         return
       }
+      if (this.plantList.productDate == null) {
+        this.$message.error('请选择生产时间')
+        return
+      }
+      this.lodingStatus = true
       if (this.plantList.status === 'normal') { // 正常生产
-        if (this.plantList.productDate == null) {
-          this.$message.error('请选择生产时间')
-          return
-        }
-        this.lodingStatus = true
         if (this.plantList.workshopid === 'DA8DB9D19B4043B8A600B52D9FEF93E3') {
           this.pwshow = true
         } else {
           this.pwshow = false
         }
-
         let gFWworkShopName = this.workshop.find(item => item.deptId === this.plantList.workshopid)['deptName']
         if (gFWworkShopName) {
           this.FWworkShopName = gFWworkShopName
@@ -366,7 +368,6 @@ export default {
         this.GetorderList()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
-        this.lodingStatus = true
         this.addRowStatus = 0
         this.isdisabled = true
         this.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.plantList.workshopid, productDate: this.plantList.productDate}).then(res => {
@@ -375,7 +376,7 @@ export default {
               this.totalList = res.data.infoUser
               this.datalist = res.data.infoUser.slice(0, 10)
             }
-            // /this.datalist = res.data.infoUser
+            // this.datalist = res.data.infoUser
             this.plantList.totalCount = res.data.infoUser.length
           } else {
             this.$message.error(res.data.msg)
@@ -415,16 +416,19 @@ export default {
     isdisabledFn () {
       this.isdisabled = false
     },
+    disabledFn () {
+      this.isdisabled = true
+    },
     // 新增人员
     AddPeople () {
       if (this.plantList.workshopid === '') {
         this.$message.error('请选择车间')
         return
       }
-      if (this.addRowStatus === 0) {
-        this.datalist = []
-      }
-      this.addRowStatus = 1
+      // if (this.addRowStatus === 0) {
+      //   this.datalist = []
+      // }
+      // this.addRowStatus = 1
       this.isdisabled = false
       this.datalist.push({
         dinner: '60'
