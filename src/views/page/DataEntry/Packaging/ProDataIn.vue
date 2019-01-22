@@ -5,7 +5,7 @@
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <form-header :formHeader="formHeader"></form-header>
+            <form-header :formHeader="formHeader" :isRedact="isRedact"></form-header>
           </el-col>
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">

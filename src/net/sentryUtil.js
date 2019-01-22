@@ -120,7 +120,7 @@ export default {
       // Method called for every captured event
       async beforeSend (event, hint) {
         // 当发送event到服务端时弹出对话框，可以收集用户反馈
-        Sentry.showReportDialog(event.eventId)
+        // Sentry.showReportDialog(event.eventId)
         // event.extra = {
         //   ...event.extra,
         //   added: '可以在此添为event添加更多的信息'

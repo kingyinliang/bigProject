@@ -99,7 +99,9 @@ export default {
     this.Getdeptcode()
     let that = this
     setTimeout(function () {
-      that.GetOrderList()
+      if (that.plantList.workShop) {
+        that.GetOrderList()
+      }
     }, 1000)
   },
   methods: {
@@ -155,7 +157,7 @@ export default {
           }
         })
       } else {
-        // this.$message.error('请选择车间')
+        this.$message.error('请选择车间')
       }
     },
     // 订单号下拉
