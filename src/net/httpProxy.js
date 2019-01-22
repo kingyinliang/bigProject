@@ -29,8 +29,8 @@ export function showFullScreenLoading () {
 export function tryHideFullScreenLoading () {
   if (needLoadingRequestCount <= 0) return
   needLoadingRequestCount--
-  console.log(needLoadingRequestCount)
-  console.log(Vue.prototype.lodingState)
+  // console.log(needLoadingRequestCount)
+  // console.log(Vue.prototype.lodingState)
   if (needLoadingRequestCount === 0 && Vue.prototype.lodingState) {
     endLoading()
   }
@@ -90,9 +90,13 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
       router.options.isAddDynamicMenuRoutes = false
       router.push({path: '/login'})
     }
+    if (response.data && response.data.code === 500) {
+      Vue.$log.writeErrorLog(new Error(`接口错误：${url};msg:${response.data.msg}`))
+    }
     tryHideFullScreenLoading()// 关闭遮罩
     return response
   }, error => {
+    Vue.$log.writeErrorLog(new Error(`接口错误：${url}${error}`))
     Message.error({message: '网络请求失败，请刷新重试'})
     endLoading() // 关闭遮罩
     return Promise.reject(error)

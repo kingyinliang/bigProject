@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@sentry/browser": "^4.5.0",
+    "@sentry/browser": "^4.5.3",
     "@sentry/webpack-plugin": "^1.6.2",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
