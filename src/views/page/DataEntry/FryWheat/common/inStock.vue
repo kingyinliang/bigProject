@@ -371,21 +371,13 @@ export default {
       })
     },
     // 保存/提交
-    saveOrSubmit (str, resolve) {
+    saveIn (resolve) {
       if (this.wheatDataList.length > 0) {
-        if (str === 'saved') {
-          this.wheatDataList.forEach((item) => {
-            if (item.status !== 'submit' || item.status !== 'checked') {
-              item.status = 'saved'
-            }
-          })
-        } else {
-          this.wheatDataList.forEach((item) => {
-            if (item.status !== 'checked') {
-              item.status = 'submit'
-            }
-          })
-        }
+        this.wheatDataList.forEach((item) => {
+          if (item.status !== 'submit' || item.status !== 'checked') {
+            item.status = 'saved'
+          }
+        })
         this.$http(WHT_API.INSTORAGESAVE_API, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
@@ -401,17 +393,24 @@ export default {
     },
     // 入库提交
     submitIn (resolve) {
-      this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
-        }
-      }).catch((error) => {
-        console.log('catch data::', error)
-      })
+      if (this.wheatDataList.length > 0) {
+        this.wheatDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
+      }
     },
     changeWheatContainer (value) {
       let wheat = this.wheatContainerList.find((item) => item.holderId === value)
