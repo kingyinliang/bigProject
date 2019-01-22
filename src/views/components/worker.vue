@@ -146,9 +146,26 @@ export default {
           }
         })
       } else {
-        if (resolve) {
-          resolve('resolve')
-        }
+        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', [{
+          status: '',
+          orderId: this.order.orderId,
+          classType: '',
+          deptId: '',
+          userType: '',
+          userId: [],
+          startDate: '',
+          dinner: '60',
+          endDate: '',
+          remark: ''
+        }]).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('修改人员' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       }
     },
     // 校验

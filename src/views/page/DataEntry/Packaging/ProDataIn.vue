@@ -192,6 +192,8 @@ export default {
       }
       this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
+          this.PkgproductDate = this.formHeader.productDate
+          this.productDate = this.formHeader.productDate
         } else {
           this.$message.error('保存表头' + data.msg)
         }
