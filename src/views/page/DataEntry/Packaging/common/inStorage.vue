@@ -412,6 +412,18 @@ export default {
           this.InDate = data.plist
           this.InVlist = data.vlist
           this.InAudit = data.vrlist
+          if (this.InDate.length === 0) {
+            this.AddInDate(this.InDate)
+          }
+          if (order.orderStatus !== '已同步') {
+            if (order.orderStatus === 'checked') {
+              this.Instatus = 'checked'
+            } else if (order.orderStatus === 'submit') {
+              this.Instatus = 'submit'
+            } else if (order.orderStatus === 'saved') {
+              this.Instatus = 'saved'
+            }
+          }
           let sub = 0
           let che = 0
           let no = 0
@@ -436,6 +448,7 @@ export default {
           } else if (che > 0) {
             this.Instatus = 'checked'
           }
+          console.log(this.Instatus)
           this.$emit('GetinstorageState', this.Instatus)
         } else {
           this.$message.error(data.msg)

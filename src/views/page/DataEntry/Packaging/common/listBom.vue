@@ -156,6 +156,16 @@ export default {
       if (data) {
         this.listbomP = data.listbomP
         this.listbomS = data.listbomS
+        this.listbomS.forEach((item) => {
+          item.isSplit = '0'
+          item.delFlag = '0'
+          item.id = ''
+          item.orderId = data.list[0].orderId
+        })
+        this.listbomP.forEach((item) => {
+          item.id = ''
+          item.orderId = data.list[0].orderId
+        })
       } else {
         this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
           order_id: id
