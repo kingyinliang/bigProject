@@ -188,9 +188,6 @@ export default {
       let net1 = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
       })
-      let net2 = new Promise((resolve, reject) => {
-        that.$refs.pwapplymateriel.saveOrSubmit(str, resolve)
-      })
       let net3 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
@@ -198,10 +195,10 @@ export default {
         that.$refs.pwtime.PwTimeUpdate(str, resolve, reject)
       })
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4])
+        let net10 = Promise.all([net0, net1, net3, net4])
         net10.then(function () {
           let net5 = new Promise((resolve, reject) => {
-            that.$refs.pwapplymateriel.SubmitMateriel(resolve)
+            that.$refs.pwapplymateriel.submitMateriel(resolve)
           })
           let net6 = new Promise((resolve, reject) => {
             that.Timeupdate(resolve)
@@ -213,6 +210,9 @@ export default {
           })
         })
       } else {
+        let net2 = new Promise((resolve, reject) => {
+          that.$refs.pwapplymateriel.saveMateriel(resolve)
+        })
         let net10 = Promise.all([net0, net1, net2, net3, net4])
         net10.then(function () {
           that.GetOrderList()

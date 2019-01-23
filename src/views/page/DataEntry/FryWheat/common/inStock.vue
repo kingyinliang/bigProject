@@ -370,11 +370,16 @@ export default {
         }
       })
     },
-    // 保存/提交
+    // 保存
     saveIn (resolve) {
       if (this.wheatDataList.length > 0) {
         this.wheatDataList.forEach((item) => {
-          if (item.status !== 'submit' || item.status !== 'checked') {
+          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+          // if (item.status !== 'submit' || item.status !== 'checked') {
+          //   item.status = 'saved'
+          // }
+          // 新增行赋值saved
+          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
             item.status = 'saved'
           }
         })
@@ -414,6 +419,10 @@ export default {
         }).catch((error) => {
           console.log('catch data::', error)
         })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     changeWheatContainer (value) {

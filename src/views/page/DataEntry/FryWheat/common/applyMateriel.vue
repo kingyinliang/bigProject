@@ -124,22 +124,19 @@ export default {
     order: Object
   },
   methods: {
-    // 保存/提交
-    saveOrSubmit (str, resolve) {
+    // 保存
+    saveMateriel (resolve) {
       if (this.materielDataList.length > 0) {
-        if (str === 'saved') {
-          this.materielDataList.forEach((item) => {
-            if (item.status !== 'submit' || item.status !== 'checked') {
-              item.status = 'saved'
-            }
-          })
-        } else {
-          this.materielDataList.forEach((item) => {
-            if (item.status !== 'checked') {
-              item.status = 'submit'
-            }
-          })
-        }
+        this.materielDataList.forEach((item) => {
+          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+          // if (item.status !== 'submit' || item.status !== 'checked') {
+          //   item.status = 'saved'
+          // }
+          // 新增行赋值saved
+          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
+            item.status = 'saved'
+          }
+        })
         this.$http(WHT_API.APPLYMATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
@@ -159,17 +156,28 @@ export default {
     },
     // 物料提交
     submitMateriel (resolve) {
-      this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
+      if (this.materielDataList.length > 0) {
+        this.materielDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
+      } else {
         if (resolve) {
           resolve('resolve')
         }
-      }).catch((error) => {
-        console.log('catch data::', error)
-      })
+      }
     },
     validate () {
       for (let item of this.materielDataList) {
