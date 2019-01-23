@@ -261,25 +261,25 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$message.error('准备时间必填项未填写完全')
+          this.$message.error('准备时间白班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$message.error('准备时间必填项未填写完全')
+          this.$message.error('准备时间中班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$message.error('准备时间必填项未填写完全')
+          this.$message.error('准备时间夜班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
-        if (day && mid && night) {} else {
+        if (day && night) {} else {
           ty = false
-          this.$message.error('准备时间必填项未填写完全')
+          this.$message.error('准备时间多班必填项未填写完全')
           return false
         }
       }
