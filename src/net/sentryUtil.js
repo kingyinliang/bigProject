@@ -162,12 +162,12 @@ export default {
       // TODO
       scope.setExtra('basic', {name: 'zhangsan'})
       // TODO
-      scope.setTag('page_local', 'de-at')
+      scope.setTag('page_local', '测试环境')
       // TODO
       scope.setUser({
-        id: 'shinho',
-        name: 'shinho',
-        email: 'shinho@shinho.net.cn'
+        id: JSON.parse(sessionStorage.getItem('vuex')).user.id,
+        name: `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）`,
+        email: ''
       })
       // scope.clear();
     })
