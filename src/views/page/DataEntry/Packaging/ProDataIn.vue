@@ -170,7 +170,7 @@ export default {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
           this.$refs.instorage.Getpkgin(this.formHeader)
           this.$refs.listbom.GetpkgSap(this.formHeader.orderId)
-          if (this.formHeader.properties !== '二合一&礼盒产线') {} else {
+          if (this.formHeader.properties !== '二合一&礼盒产线') {
             this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
           }
           this.$refs.textrecord.GetText(this.formHeader.orderId)
@@ -277,16 +277,16 @@ export default {
           })
           let net12 = Promise.all([net8, net9, net10])
           net12.then(() => {
-            that.lodingS = false
+            that.isRedact = false
             that.GetOrderList()
             that.$message.success('提交成功')
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
-            that.lodingS = false
+            that.isRedact = false
           })
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')
-          that.lodingS = false
+          that.isRedact = false
         })
       } else {
         let net11
@@ -296,12 +296,12 @@ export default {
           net11 = Promise.all([net0, net1, net2, net3, net4, net5, net7])
         }
         net11.then(function () {
-          that.lodingS = false
+          that.isRedact = false
           that.GetOrderList()
           that.$message.success('保存成功')
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')
-          that.lodingS = false
+          that.isRedact = false
         })
       }
     },
