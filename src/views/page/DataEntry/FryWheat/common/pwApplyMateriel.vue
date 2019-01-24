@@ -107,7 +107,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                  <el-input maxlength='10' v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -125,7 +125,7 @@
               width="140"
               label="入库批次">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.inStorageBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                <el-input maxlength='10' v-model="scope.row.inStorageBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -295,8 +295,16 @@ export default {
             this.$message.error('发料批次不能为空')
             return false
           }
+          if (item.issueBatch.trim().length > 10) {
+            this.$message.error('发料批次长度不能超过10')
+            return false
+          }
           if (item.inStorageWeight === '') {
             this.$message.error('入库数不能为空')
+            return false
+          }
+          if (item.inStorageBatch.trim().length > 10) {
+            this.$message.error('入库批次长度不能超过10')
             return false
           }
         }
@@ -365,30 +373,32 @@ export default {
     },
     // 新增记录
     addNewRecord () {
+      let lastArr = this.materielDataList.filter(item => { return item.delFlag === '0' })
+      let last = lastArr && lastArr.length > 0 ? lastArr[lastArr.length - 1] : null
       let nowStr = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       let user = this.$store.state.user.realName
       this.materielDataList.push({
-        branWeight: 0,
+        branWeight: last ? last.branWeight : 0,
         delFlag: '0',
         dispatchMan: this.dispatcherCode,
         gmCode: '02',
         // 小颗粒
-        granuleWeight: 0,
-        inStorageBatch: '',
-        inStorageWeight: 0,
+        granuleWeight: last ? last.granuleWeight : 0,
+        inStorageBatch: last ? last.inStorageBatch : '',
+        inStorageWeight: last ? last.inStorageWeight : 0,
         // 发料批次
-        issueBatch: '',
-        issueCode: '',
-        issueName: '',
+        issueBatch: last ? last.issueBatch : '',
+        issueCode: last ? last.issueCode : '',
+        issueName: last ? last.issueName : '',
         // 发料数量
-        issueWeight: 0,
-        productCode: '',
-        productName: '',
+        issueWeight: last ? last.issueWeight : 0,
+        productCode: last ? last.productCode : '',
+        productName: last ? last.productName : '',
         productUnit: 'KG',
-        productWeight: 0,
-        remark: '',
-        scrappedWeight: 0,
-        storageWeight: 0,
+        productWeight: last ? last.productWeight : 0,
+        remark: last ? last.remark : '',
+        scrappedWeight: last ? last.scrappedWeight : 0,
+        storageWeight: last ? last.storageWeight : 0,
         // this.order && this.order.productDate
         productDate: this.order && this.order.productDate,
         // this.order && this.order.factory

@@ -139,7 +139,7 @@
           <el-input tyle='number' v-model.number="stockForm.endWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="inPortBatch">
-          <el-input  v-model="stockForm.inPortBatch"  style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input  maxlength='10' v-model="stockForm.inPortBatch"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
          <el-form-item label="操作时间" :label-width="formLabelWidth">
           <!-- <el-input v-model="stockForm.operateTime" ></el-input> -->

@@ -30,7 +30,7 @@
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs">
+        <el-tabs v-model="activeName" id="DaatTtabs"  :before-leave='beforeLeave'>
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -39,25 +39,25 @@
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState' :appyMaterielState="appyMaterielState" ></pw-apply-materiel>
           </el-tab-pane>
-          <el-tab-pane name="2" :disabled='!enableOpt'>
+          <el-tab-pane name="2">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.readyState === 'noPass'? '不通过':this.readyState === 'saved'? '已保存':this.readyState === 'submit' ? '已提交' : this.readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>工时录入</el-button>
               </el-tooltip>
             </span>
             <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
           </el-tab-pane>
-          <el-tab-pane name="3" :disabled='!enableOpt'>
+          <el-tab-pane name="3" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="excState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.excState === 'noPass'? '不通过':this.excState === 'saved'? '已保存':this.excState === 'submit' ? '已提交' : this.excState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>异常记录</el-button>
               </el-tooltip>
             </span>
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
-          <el-tab-pane name="4" :disabled='!enableOpt'>
+          <el-tab-pane name="4" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.remarkState === 'noPass'? '不通过':this.remarkState === 'saved'? '已保存':this.remarkState === 'submit' ? '已提交' : this.remarkState === 'checked'? '通过':'未录入'" placement="top-start">
                   <el-button>文本记录</el-button>
               </el-tooltip>
             </span>
@@ -99,15 +99,16 @@ export default {
         productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
       },
       activeName: '1',
-      appyMaterielState: '',
       // save / submit 是否可用
       enableOpt: false,
+      // 物料领用
+      appyMaterielState: '',
       // 准备时间
-      readyState: '请申请订单后操作',
+      readyState: '',
       // 异常
-      excState: '请申请订单后操作',
+      excState: '',
       // remarkState
-      remarkState: '请申请订单后操作'
+      remarkState: ''
     }
   },
   mounted () {
@@ -119,6 +120,13 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    beforeLeave (activeName, oldActiveName) {
+      if (!this.enableOpt && activeName !== '1') {
+        this.$message({type: 'error', message: '请申请订单之后操作', duration: 1000})
+        return false
+      }
+      return true
+    },
     // 获取表头
     GetOrderList () {
       this.isRedact = false
@@ -265,9 +273,9 @@ export default {
       if (n) {
         // 有订单号情况下才可用
         this.enableOpt = true
-        this.readyState = '未通过'
-        this.excState = '未通过'
-        this.remarkState = '未通过'
+        // this.readyState = '未通过'
+        // this.excState = '未通过'
+        // this.remarkState = '未通过'
       }
       this.GetOrderList()
     }
