@@ -59,6 +59,15 @@ Log.writeErrorLog = function (ex, extra, tags, user) {
     }
     Sentry.captureException(ex)
   })
+  Sentry.configureScope(scope => {
+    let id = sessionStorage.getItem('vuex') ? JSON.parse(sessionStorage.getItem('vuex')).user.id : ''
+    let name = sessionStorage.getItem('vuex') ? `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）` : ''
+    scope.setUser({
+      id: id,
+      name: name,
+      email: ''
+    })
+  })
 }
 // 局部上下文， 只对Sentry.captureMessage('bar')起作用
 // Sentry.withScope(scope => {
@@ -162,12 +171,14 @@ export default {
       // TODO
       scope.setExtra('basic', {name: 'zhangsan'})
       // TODO
-      scope.setTag('page_local', 'de-at')
+      scope.setTag('page_local', '测试环境')
       // TODO
+      let id = sessionStorage.getItem('vuex') ? JSON.parse(sessionStorage.getItem('vuex')).user.id : ''
+      let name = sessionStorage.getItem('vuex') ? `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）` : ''
       scope.setUser({
-        id: 'shinho',
-        name: 'shinho',
-        email: 'shinho@shinho.net.cn'
+        id: id,
+        name: name,
+        email: ''
       })
       // scope.clear();
     })
