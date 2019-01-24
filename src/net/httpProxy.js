@@ -91,7 +91,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
       router.push({path: '/login'})
     }
     if (response.data && response.data.code === 500) {
-      Vue.prototype.$log.writeErrorLog(new Error(`接口错误：${url}`), `msg:${response.data.msg},data: ${data}`)
+      Vue.prototype.$log.writeErrorLog(new Error(`接口错误：${url}`), `msg:${response.data.msg},data: ${JSON.stringify(data)}`)
     }
     tryHideFullScreenLoading()// 关闭遮罩
     return response
