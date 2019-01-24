@@ -170,7 +170,9 @@ export default {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
           this.$refs.instorage.Getpkgin(this.formHeader)
           this.$refs.listbom.GetpkgSap(this.formHeader.orderId)
-          this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
+          if (this.formHeader.properties !== '二合一&礼盒产线') {} else {
+            this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
+          }
           this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
           this.$refs.listbom.GetpkgSap(this.formHeader.orderId, data)
@@ -247,14 +249,22 @@ export default {
       let net5 = new Promise((resolve, reject) => {
         that.$refs.listbom.UpdateSap(str, resolve, reject)
       })
-      let net6 = new Promise((resolve, reject) => {
-        that.$refs.germs.UpdateGerms(this.formHeader.orderId, str, resolve, reject)
-      })
+      let net6
+      if (this.formHeader.properties !== '二合一&礼盒产线') {
+        net6 = new Promise((resolve, reject) => {
+          that.$refs.germs.UpdateGerms(this.formHeader.orderId, str, resolve, reject)
+        })
+      }
       let net7 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
       })
       if (str === 'submit') {
-        let net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        let net11
+        if (this.formHeader.properties !== '二合一&礼盒产线') {
+          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        } else {
+          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net7])
+        }
         net11.then(function () {
           let net8 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
@@ -279,7 +289,12 @@ export default {
           that.lodingS = false
         })
       } else {
-        let net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        let net11
+        if (this.formHeader.properties !== '二合一&礼盒产线') {
+          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+        } else {
+          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net7])
+        }
         net11.then(function () {
           that.lodingS = false
           that.GetOrderList()
