@@ -347,7 +347,10 @@ img {
 /* Content
 ------------------------------ */
 .site-content {
-  position: relative;
+  //position: relative;
+  padding-bottom: 60px;
+  min-height: 558px;
+  overflow: hidden;
   //padding: 15px;
 
   &__wrapper {
