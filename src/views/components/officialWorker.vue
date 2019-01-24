@@ -5,10 +5,10 @@
         <el-transfer filterable :titles="['未分配人员', '已分配人员']" :filter-method="filterMethod" filter-placeholder="请输入用户名称" v-model="selctId" :data="userlist"></el-transfer>
       </el-col>
     </el-row>
-    <span slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="updatauser">确定</el-button>
-    </span>
+    </div>
   </el-dialog>
 </template>
 

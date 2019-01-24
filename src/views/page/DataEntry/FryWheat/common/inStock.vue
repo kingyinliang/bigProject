@@ -13,7 +13,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -22,7 +22,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 1].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -31,7 +31,7 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 2].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
@@ -40,21 +40,21 @@
                     <div class="stock-img"></div>
                     <div class="stock-text">{{flourContainerList[index + 3].holderName}}</div>
                     <div class="clearfix"></div>
-                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact"> 入罐</div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
                     <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
             </el-row>
           </div>
           <!--table-->
-          <el-button type='primary' size="small" @click="saveStockList">baocun</el-button>
-          <el-button type='primary' size="small" @click="submitStockList">tijiao</el-button>
+          <!-- <el-button type='primary' size="small" @click="saveStockList">baocun</el-button>
+          <el-button type='primary' size="small" @click="submitStockList">tijiao</el-button> -->
           <el-row  style="margin-top:20px;" >
             <el-col>
               <el-table @row-dblclick="modifyOldRecord" header-row-class-name="tableHead" :data="wheatDataList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                 <el-table-column label="日期" width="130">
                   <template slot-scope="scope">
-                    {{scope.row.inPortDate}}
+                    {{scope.row.inPortDate | formatDate}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -189,7 +189,8 @@ export default {
           {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
         inPortBatch: [
-          {required: true, message: '必填', trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'},
+          {max: 10, message: '长度不能超过10', trigger: 'blur'}
         ]
       }
     }
@@ -197,11 +198,20 @@ export default {
   mounted () {
     this.getFlourContainerList()
     this.getWheatContainerList()
-    this.getWheatDataList()
+    // this.getWheatDataList()
   },
   props: {
     isRedact: Boolean,
+    inStorageState: String,
     order: Object
+  },
+  filters: {
+    formatDate (date) {
+      if (date && date.length > 10) {
+        return date.substring(0, 10)
+      }
+      return date
+    }
   },
   methods: {
     // 麦粉计量仓容器
@@ -253,13 +263,13 @@ export default {
       })
     },
     // 获取入库数据
-    getWheatDataList () {
+    getWheatDataList (orderId) {
       this.wheatDataList = []
       this.readAudit = []
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
-      this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.wheatDataList = data.wlist
@@ -300,19 +310,20 @@ export default {
     addNewRecord (flourDeviceId, flourDeviceName) {
       let now = new Date()
       let dateStr = dateFormat(now, 'yyyy-MM-dd hh:mm:ss')
+      let inPortDateStr = dateFormat(new Date(this.order.productDate), 'yyyy-MM-dd hh:mm:ss')
       this.stockForm = {
         wheatDeviceId: '',
         startWeight: 0,
         endWeight: 0,
         created: dateStr,
-        creator: this.$store.state.user.realName,
+        creator: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         changed: dateStr,
-        changer: this.$store.state.user.realName,
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         orderId: this.order.orderId,
         flourDeviceId,
         flourDeviceName,
         recordId: this.uuid(),
-        inPortDate: this.order && this.order.productDate,
+        inPortDate: inPortDateStr,
         inPortBatch: '',
         delFlag: '0'
       }
@@ -333,7 +344,7 @@ export default {
       // 点击保存之前，不能对列表数据做更改，此处用clone
       this.stockForm = Object.assign({}, row)
       this.stockForm.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
-      this.stockForm.changer = this.$store.state.user.realName
+      this.stockForm.changer = this.$store.state.user.realName + `(${this.$store.state.user.name})`
     },
     cacheStockData () {
       this.$refs['stockForm'].validate((valid) => {
@@ -360,14 +371,19 @@ export default {
       })
     },
     // 保存
-    saveStockList (str, resolve) {
+    saveIn (resolve) {
       if (this.wheatDataList.length > 0) {
         this.wheatDataList.forEach((item) => {
-          if (item.status !== 'submit' || item.status !== 'checked') {
+          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+          // if (item.status !== 'submit' || item.status !== 'checked') {
+          //   item.status = 'saved'
+          // }
+          // 新增行赋值saved
+          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
             item.status = 'saved'
           }
         })
-        this.$http(`${WHT_API.INSTORAGESAVE_API}`, 'POST', this.wheatDataList).then(({data}) => {
+        this.$http(WHT_API.INSTORAGESAVE_API, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -378,10 +394,14 @@ export default {
         }).catch((error) => {
           console.log('catch data::', error)
         })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
-    // 提交
-    submitStockList (str, resolve) {
+    // 入库提交
+    submitIn (resolve) {
       if (this.wheatDataList.length > 0) {
         this.wheatDataList.forEach((item) => {
           if (item.status !== 'checked') {
@@ -399,15 +419,21 @@ export default {
         }).catch((error) => {
           console.log('catch data::', error)
         })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
     changeWheatContainer (value) {
       let wheat = this.wheatContainerList.find((item) => item.holderId === value)
+      let holderNo = ''
       if (wheat) {
         this.stockForm.wheatDeviceName = wheat.holderName
+        holderNo = wheat.holderNo
       }
       let now = new Date()
-      this.stockForm.inPortBatch = dateFormat(now, 'yyMMdd') + this.stockForm.wheatDeviceId
+      this.stockForm.inPortBatch = dateFormat(now, 'yyMMdd') + holderNo
     },
     // 删除
     dellistbomS (row) {
@@ -428,20 +454,11 @@ export default {
     }
   },
   watch: {
-    // 'order.orderId' (n, o) {
-    //   this.loading2 = true
-    //   this.getWheatDataList()
-    // },
-    // 'order.workShopName' (n, o) {
-    //   this.loading1 = true
-    //   this.getFlourContainerList()
-    //   this.getWheatContainerList()
-    // }
     'order.productDate' (n, o) {
       // 监听头部生产日期
       this.wheatDataList.forEach((item) => {
         if (item.status !== 'submit' && item.status !== 'checked') {
-          item.inPortDate = n
+          item.inPortDate = dateFormat(new Date(n), 'yyyy-MM-dd hh:mm:ss')
         }
       })
     }

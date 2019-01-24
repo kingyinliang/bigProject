@@ -150,7 +150,7 @@
               width="100">
             </el-table-column>
             <el-table-column
-              prop="filterDateOther"
+              prop="filterDate"
               label="过滤日期"
               :show-overflow-tooltip="true"
               width="100">

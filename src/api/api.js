@@ -3,12 +3,13 @@
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.63:8080'
+// let HOST = 'http://10.10.5.63:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.157:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // HOST
-// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 生产环境
-let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
+let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
+// let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
+// let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
 *MAINapi
@@ -79,8 +80,8 @@ export const BASICDATA_API = {
    */
   FINDORG_API: HOST + '/sys/dept/findInfoByType',
   /**
- * @property {string} ADDORG_API 组织结构 按部门id查询车间
- */
+   * @property {string} ADDORG_API 组织结构 按部门id查询车间
+   */
   FINDORGBYID_API: HOST + '/sys/dept/findCCById',
   /**
    * @property {string} ADDORG_API 组织结构 按部门id查询子类
@@ -743,6 +744,10 @@ export const WHT_API = {
    */
   CINDEXDELUSER: HOST + '/wht/user/delUser',
   /**
+   * 首页订单接口
+   */
+  CINDEXORDERLIST_API: HOST + '/wht/order/list',
+  /**
    * @property {string} INSTORAGELIST_API 生产入库列表
    */
   INSTORAGELIST_API: HOST + '/sys/whtInStorage/list',
@@ -779,6 +784,10 @@ export const WHT_API = {
    */
   MATERIELTIMEUPDATE_API: HOST + '/wht/pw/timeUpdate',
   /**
+   * @property {string} MATERIELTIMESUBMIT_API pw小麦工时提交
+   */
+  PWMATERIELTIMESUBMIT_API: HOST + '/wht/pw/submitPW',
+  /**
    * @property {string} MATERIELTIMESUBMIT_API 炒麦报工提交
    */
   MATERIELTIMESUBMIT_API: HOST + '/wht/ready/submitW',
@@ -793,5 +802,5 @@ export const WHT_API = {
   /**
    * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
    */
-  APPLYMATERIELSUBMIT_API: HOST + 'wht/material/submitM'
+  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
 }

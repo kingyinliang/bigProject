@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+  <el-col>
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -9,11 +9,14 @@
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
-            <el-row v-if="isRedact" style="float:right;">
+            <el-row v-if="isRedact && enableOpt" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')">提交</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+            </el-row>
+            <el-row style="position: absolute;right: 0;top: 100px;">
+              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
             </el-row>
           </el-col>
         </el-row>
@@ -31,28 +34,34 @@
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>物料领用</el-button>
+                <el-button :style="{'color': this.appyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
-            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState'></pw-apply-materiel>
+            <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState' :appyMaterielState="appyMaterielState" ></pw-apply-materiel>
           </el-tab-pane>
-          <el-tab-pane name="2">
+          <el-tab-pane name="2" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
-              <el-button>工时录入</el-button>
+              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+                <el-button>工时录入</el-button>
+              </el-tooltip>
             </span>
-            <pw-time ref="pwtime" :isRedact="isRedact"></pw-time>
+            <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
           </el-tab-pane>
-          <el-tab-pane name="3">
+          <el-tab-pane name="3" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
-              <el-button>异常记录</el-button>
+              <el-tooltip class="item" effect="dark" :content="excState" placement="top-start">
+                <el-button>异常记录</el-button>
+              </el-tooltip>
             </span>
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
-          <el-tab-pane name="4">
+          <el-tab-pane name="4" :disabled='!enableOpt'>
             <span slot="label" class="spanview">
-              <el-button>文本记录</el-button>
+              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+                  <el-button>文本记录</el-button>
+              </el-tooltip>
             </span>
-            <text-record :isRedact="isRedact"></text-record>
+            <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -61,7 +70,7 @@
 </template>
 
 <script>
-import {PACKAGING_API} from '@/api/api'
+import {PACKAGING_API, WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ExcRecord from '@/views/components/excRecord'
@@ -72,38 +81,47 @@ export default {
   name: 'dataEntryIndex',
   data () {
     return {
-      lodingS: false,
+      orderStatus: '',
       isRedact: false,
       orderNo: '',
       productDate: '',
       workShop: '',
       formHeader: {
-        orderNo: this.$store.state.common.FWorderNo,
-        orderId: this.$store.state.common.FWorderId,
+        orderNo: this.$store.state.common.PWorder.orderNo,
+        orderId: this.$store.state.common.PWorder.orderId,
         factory: this.$store.state.common.FWfactoryid,
         factoryName: this.$store.state.common.FWfactoryName,
         workShop: this.$store.state.common.FWworkShop,
         workShopName: this.$store.state.common.FWworkShopName,
-        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
-        productLineName: '炒麦',
+        productLine: this.$store.state.common.PWorder.productLine,
+        productLineName: this.$store.state.common.PWorder.productLineName,
         // yyyy-MM-dd
-        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
+        productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
       },
       activeName: '1',
-      appyMaterielState: ''
+      appyMaterielState: '',
+      // save / submit 是否可用
+      enableOpt: false,
+      // 准备时间
+      readyState: '请申请订单后操作',
+      // 异常
+      excState: '请申请订单后操作',
+      // remarkState
+      remarkState: '请申请订单后操作'
     }
   },
   mounted () {
     headanimation(this.$)
-    this.orderNo = this.FWorderNo
+    this.orderNo = this.PWorderNo
     // yyyyMMdd
-    this.productDate = this.FWproductDate
+    this.productDate = this.$store.state.common.PWorder.productDate
     this.workShop = this.FWworkShop
     this.GetOrderList()
   },
   methods: {
     // 获取表头
     GetOrderList () {
+      this.isRedact = false
       if (this.orderNo) {
         // 有订单号
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -113,47 +131,128 @@ export default {
         }).then(({data}) => {
           // 2018-06-27
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].orderStatus
+          // console.log('this.formHeader', JSON.stringify(this.formHeader))
+          this.$refs.pwapplymateriel.getMaterielDataList(this.formHeader.orderId)
+          this.$refs.pwtime.GetPwTimeList()
         })
       }
     },
+    // 修改表头
+    OrderUpdate (str, resolve) {
+      let countOutput = 0
+      this.$refs.pwapplymateriel.materielDataList.forEach((item) => {
+        countOutput += parseInt(item.inStorageWeight)
+      })
+      this.formHeader.orderStatus = str
+      this.formHeader.countOutputUnit = 'KG'
+      this.formHeader.countOutput = countOutput + ''
+      this.formHeader.realOutput = countOutput + ''
+      this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
+      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
     // 保存
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.$refs.pwtime.timerul()) {
+          return false
+        }
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
+        if (!this.$refs.pwapplymateriel.validate()) {
+          return false
+        }
       }
-      this.lodingS = true
       let that = this
+      let net0 = new Promise((resolve, reject) => {
+        that.OrderUpdate(str, resolve)
+      })
       let net1 = new Promise((resolve, reject) => {
-        that.$refs.excrecord.saveOrSubmitExc(str, resolve)
+        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
+      })
+      let net3 = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
+      })
+      let net4 = new Promise((resolve, reject) => {
+        that.$refs.pwtime.PwTimeUpdate(str, resolve, reject)
       })
       if (str === 'submit') {
-        let net10 = Promise.all([net1])
+        let net10 = Promise.all([net0, net1, net3, net4])
         net10.then(function () {
-          that.lodingS = false
-          that.$message.success('提交成功')
+          let net5 = new Promise((resolve, reject) => {
+            that.$refs.pwapplymateriel.submitMateriel(resolve)
+          })
+          let net6 = new Promise((resolve, reject) => {
+            that.Timeupdate(resolve)
+          })
+          let net12 = Promise.all([net5, net6])
+          net12.then(() => {
+            that.GetOrderList()
+            that.$message.success('提交成功')
+          })
         })
       } else {
-        let net10 = Promise.all([net1])
+        let net2 = new Promise((resolve, reject) => {
+          that.$refs.pwapplymateriel.saveMateriel(resolve)
+        })
+        let net10 = Promise.all([net0, net1, net2, net3, net4])
         net10.then(function () {
-          that.lodingS = false
+          that.GetOrderList()
           that.$message.success('保存成功')
         })
       }
+    },
+    // 工时提交
+    Timeupdate (resolve) {
+      this.$http(WHT_API.PWMATERIELTIMESUBMIT_API, 'POST', [this.$refs.pwtime.pwTimeDate[0], {
+        orderId: this.formHeader.orderId,
+        outputUnit: this.formHeader.outputUnit,
+        realOutput: this.formHeader.realOutput,
+        countOutput: this.formHeader.countOutput,
+        countOutputUnit: this.formHeader.countOutputUnit,
+        productDate: this.formHeader.productDate
+      }]).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
     },
     updateOrderInfo: function (orderInfo) {
       // 申请订单之后，订单号回写
       this.orderNo = orderInfo.orderNo
       // 更新common store
-      this.FWorderNo = orderInfo.orderNo
-      this.FWorderId = orderInfo.orderId
+      this.PWorderNo = orderInfo.orderNo
+      this.PWorderId = orderInfo.orderId
     },
     updateProductDate: function (dataStr) {
-      let data = dataStr.replace(/-/g, '')
-      this.productDate = data
-      // 不需要更新common store
-      // this.FWproductDate = data
+      if (dataStr) {
+        let data = dataStr.replace(/-/g, '')
+        this.productDate = data
+        // 更新common store
+        this.PWproductDate = data
+      }
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
@@ -161,25 +260,34 @@ export default {
   },
   watch: {
     'orderNo' (n, o) {
+      // 申请订单之后触发全局刷新
+      console.log('刷新全局')
+      if (n) {
+        // 有订单号情况下才可用
+        this.enableOpt = true
+        this.readyState = '未通过'
+        this.excState = '未通过'
+        this.remarkState = '未通过'
+      }
       this.GetOrderList()
     }
   },
   computed: {
-    FWproductDate: {
-      get () { return this.$store.state.common.FWproductDate },
-      set (val) { this.$store.commit('common/updateFWProductDate', val) }
+    PWorderNo: {
+      get () { return this.$store.state.common.PWorder.orderNo },
+      set (val) { this.$store.commit('common/updatePWorderNo', val) }
     },
-    FWorderNo: {
-      get () { return this.$store.state.common.FWorderNo },
-      set (val) { this.$store.commit('common/updateFWOrderNo', val) }
-    },
-    FWorderId: {
-      get () { return this.$store.state.common.FWorderId },
-      set (val) { this.$store.commit('common/updateFWorderId', val) }
+    PWorderId: {
+      get () { return this.$store.state.common.PWorder.orderId },
+      set (val) { this.$store.commit('common/updatePWorderId', val) }
     },
     FWworkShop: {
       get () { return this.$store.state.common.FWworkShop },
       set (val) { this.$store.commit('common/updateFWWorkShop', val) }
+    },
+    PWproductDate: {
+      get () { return this.$store.state.common.PWorder.productDate },
+      set (val) { this.$store.commit('common/updatePWproductDate', val) }
     }
   },
   components: {

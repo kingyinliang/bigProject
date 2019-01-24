@@ -31,9 +31,12 @@
           <el-col :span="3">
             <el-row>
               <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
-              <el-button v-if="type === 'abnormal'" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+              <template  v-if="type === 'abnormal'">
+                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
+              </template>
             </el-row>
-            <el-row v-if="type === 'abnormal'" style="margin-top:20px">
+            <el-row v-if="type === 'abnormal' && isdisabled === false" style="margin-top:20px">
               <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
               <el-button type="primary" size="small" @click="save">保存</el-button>
             </el-row>
@@ -46,7 +49,7 @@
                 <div class="clearfix pro-line">
                   <el-form-item label="工序：">
                     <p>
-                      炒麦
+                      {{item.productLineName}}
                       <el-button @click="go(item)" type="primary" size="small" style="float: right">数据录入</el-button>
                       <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
                     </p>
@@ -70,39 +73,6 @@
                     <el-form-item label="实时产量：" class="margb20px">
                       <p>{{item.realOutput? item.realOutput + item.outputUnit: '0' + ' ' + item.outputUnit}}</p>
                     </el-form-item>
-                  </div>
-                </div>
-              </el-form>
-            </el-card>
-          </el-col>
-          <el-col :span="12" style="margin-bottom: 10px" v-if="pwshow">
-            <el-card class="box-card">
-              <el-form size="small" label-position="right" label-width="85px">
-                <div class="clearfix pro-line">
-                  <el-form-item label="工序：">
-                    <p>
-                      PW小麦
-                      <el-button @click="go2()" type="primary" size="small" style="float: right">数据录入</el-button>
-                      <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：</span>
-                    </p>
-                  </el-form-item>
-                </div>
-                <div class="clearfix item">
-                  <img :src="'data:image/gif;base64,'" alt="">
-                  <div class="itemForm">
-                      <el-form-item label="订单号：" style="margin-bottom: 10px;">
-                        <el-select placeholder="请选择">
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="品项：" style="margin-bottom: 10px;">
-                        <p class="hiddenP"></p>
-                      </el-form-item>
-                      <el-form-item label="计划产量：" style="margin-bottom: 10px;">
-                        <p></p>
-                      </el-form-item>
-                      <el-form-item label="实时产量：" style="margin-bottom: 10px;">
-                        <p></p>
-                      </el-form-item>
                   </div>
                 </div>
               </el-form>
@@ -204,7 +174,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, PACKAGING_API, WHT_API} from '@/api/api'
+import {BASICDATA_API, WHT_API} from '@/api/api'
 import {dateFormat, orderList} from '@/net/validate'
 import TemporaryWorker from '@/views/components/temporaryWorker'
 import LoanedPersonnel from '@/views/components/loanedPersonnel'
@@ -263,30 +233,40 @@ export default {
   },
   methods: {
     go (item) {
-      if (item.orderNo && item.properties) {
-        this.FWorderNo = item.orderNo
-        this.FWproductDate = this.productDate.replace(/-/g, '')
-        this.FWworkShop = this.workShop
-        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
-        this.FWorderId = item.orderIdList[item.orderNo]
-        let that = this
-        setTimeout(function () {
-          that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
-        }, 100)
-      } else {
-        this.$message.error('请选择订单号')
-      }
-    },
-    go2 () {
-      this.FWproductDate = this.productDate.replace(/-/g, '')
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
-      this.FWorderNo = ''
-      // 711000005685
-      let that = this
-      setTimeout(function () {
-        that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
-      }, 100)
+      if (item.productLineName === '炒麦') {
+        // 存储炒麦的state
+        this.FWproductDate = this.productDate.replace(/-/g, '')
+        this.FWorderNo = item.orderNo
+        this.FWproductLine = item.productLine
+        this.FWproductLineName = item.productLineName
+        if (item.orderNo && item.properties) {
+          this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+          this.FWorderId = item.orderIdList[item.orderNo]
+          let that = this
+          setTimeout(function () {
+            that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
+          }, 100)
+        } else {
+          this.$message.error('请选择订单号')
+        }
+      } else {
+        // 存储脱皮的state
+        let order = {
+          orderNo: item.orderNo ? item.orderNo : '',
+          orderId: '',
+          productLine: item.productLine,
+          productLineName: item.productLineName,
+          productDate: this.productDate.replace(/-/g, '')
+        }
+        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-PwWheat-dataEntryIndex')
+        this.PWorder = order
+        let that = this
+        setTimeout(function () {
+          that.$router.push({ name: `DataEntry-FryWheat-PwWheat-dataEntryIndex` })
+        }, 100)
+      }
     },
     // 获取工厂
     GetfactoryList () {
@@ -343,7 +323,7 @@ export default {
       })
     },
     GetorderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+      this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
         productDate: this.plantList.productDate.replace(/-/g, ''),
         orderNo: ''
@@ -366,18 +346,17 @@ export default {
         this.$message.error('请选择车间')
         return
       }
+      if (this.plantList.productDate == null) {
+        this.$message.error('请选择生产时间')
+        return
+      }
+      this.lodingStatus = true
       if (this.plantList.status === 'normal') { // 正常生产
-        if (this.plantList.productDate == null) {
-          this.$message.error('请选择生产时间')
-          return
-        }
-        this.lodingStatus = true
         if (this.plantList.workshopid === 'DA8DB9D19B4043B8A600B52D9FEF93E3') {
           this.pwshow = true
         } else {
           this.pwshow = false
         }
-
         let gFWworkShopName = this.workshop.find(item => item.deptId === this.plantList.workshopid)['deptName']
         if (gFWworkShopName) {
           this.FWworkShopName = gFWworkShopName
@@ -389,7 +368,6 @@ export default {
         this.GetorderList()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
-        this.lodingStatus = true
         this.addRowStatus = 0
         this.isdisabled = true
         this.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.plantList.workshopid, productDate: this.plantList.productDate}).then(res => {
@@ -398,7 +376,7 @@ export default {
               this.totalList = res.data.infoUser
               this.datalist = res.data.infoUser.slice(0, 10)
             }
-            // /this.datalist = res.data.infoUser
+            // this.datalist = res.data.infoUser
             this.plantList.totalCount = res.data.infoUser.length
           } else {
             this.$message.error(res.data.msg)
@@ -414,7 +392,7 @@ export default {
     // 订单号下拉
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
-        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
           productDate: this.productDate.replace(/-/g, ''),
           orderNo: row.orderNo
@@ -438,16 +416,19 @@ export default {
     isdisabledFn () {
       this.isdisabled = false
     },
+    disabledFn () {
+      this.isdisabled = true
+    },
     // 新增人员
     AddPeople () {
       if (this.plantList.workshopid === '') {
         this.$message.error('请选择车间')
         return
       }
-      if (this.addRowStatus === 0) {
-        this.datalist = []
-      }
-      this.addRowStatus = 1
+      // if (this.addRowStatus === 0) {
+      //   this.datalist = []
+      // }
+      // this.addRowStatus = 1
       this.isdisabled = false
       this.datalist.push({
         dinner: '60'
@@ -612,6 +593,18 @@ export default {
     FWorderId: {
       get () { return this.$store.state.common.FWorderId },
       set (val) { this.$store.commit('common/updateFWorderId', val) }
+    },
+    FWproductLine: {
+      get () { return this.$store.state.common.FWproductLine },
+      set (val) { this.$store.commit('common/updateFWproductLine', val) }
+    },
+    FWproductLineName: {
+      get () { return this.$store.state.common.FWproductLineName },
+      set (val) { this.$store.commit('common/updateFWproductLineName', val) }
+    },
+    PWorder: {
+      get () { return this.$store.state.common.PWorder },
+      set (val) { this.$store.commit('common/updatePWorder', val) }
     },
     countMan: function () {
       let num = 0

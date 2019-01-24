@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+  <el-col>
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
@@ -34,18 +34,18 @@
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>准备时间</el-button>
+                <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">准备时间</el-button>
               </el-tooltip>
             </span>
-            <ready-time ref="readytime" :isRedact="isRedact" :order="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
+            <ready-time ref="readytime" :isRedact="isRedact" :formHeader="formHeader" @SetReadyStatus="SetReadyStatus"></ready-time>
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>人员</el-button>
+                <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">人员</el-button>
               </el-tooltip>
             </span>
-            <worker ref="workerref" :isRedact="isRedact"></worker>
+            <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
@@ -56,18 +56,18 @@
           <el-tab-pane name="4">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>生产入库</el-button>
+                <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
-            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState'></in-stock>
+            <in-stock ref="instock" :isRedact="isRedact" :order="formHeader" @setInStorageState='setInStorageState' :inStorageState="inStorageState"></in-stock>
           </el-tab-pane>
           <el-tab-pane name="5">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>物料领用</el-button>
+                <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
-            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader" @setApplyMaterielState='setApplyMaterielState'></apply-materiel>
+            <apply-materiel ref="applymateriel" :isRedact="isRedact" :order="formHeader" @setApplyMaterielState='setApplyMaterielState' :applyMaterielState='applyMaterielState'></apply-materiel>
           </el-tab-pane>
           <el-tab-pane name="6">
             <span slot="label" class="spanview">
@@ -96,7 +96,6 @@ export default {
   data () {
     return {
       orderStatus: '',
-      lodingS: false,
       isRedact: false,
       orderNo: '',
       productDate: '',
@@ -108,8 +107,10 @@ export default {
         factoryName: this.$store.state.common.FWfactoryName,
         workShop: this.$store.state.common.FWworkShop,
         workShopName: this.$store.state.common.FWworkShopName,
-        productLine: 'C6049059024F4EF08290AA40D80F1F4B',
-        productLineName: '炒麦',
+        // 'C6049059024F4EF08290AA40D80F1F4B',
+        productLine: this.$store.state.common.FWproductLine,
+        // '炒麦'
+        productLineName: this.$store.state.common.FWproductLineName,
         // yyy-MM-dd
         productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
@@ -132,16 +133,19 @@ export default {
   methods: {
     // 获取表头
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+      this.isRedact = false
+      this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
-      }).then(({data}) => {
+      }, false, false, false).then(({data}) => {
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
+        this.$refs.instock.getWheatDataList(this.formHeader.orderId)
+        this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytime.GetReadyList(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
@@ -152,12 +156,16 @@ export default {
     },
     // 修改表头
     UpdateformHeader (str, resolve) {
+      let countOutput = 0
+      this.$refs.instock.wheatDataList.forEach((item) => {
+        countOutput += parseInt(item.inPortWeight)
+      })
       this.formHeader.orderStatus = str
-      this.formHeader.realOutput = null
-      this.formHeader.countOutputUnit = null
-      this.formHeader.countOutput = null
-      this.formHeader.countMan = null
-      this.formHeader.expAllDate = null
+      this.formHeader.realOutput = countOutput + ''
+      this.formHeader.countOutputUnit = 'KG'
+      this.formHeader.countOutput = countOutput + ''
+      this.formHeader.countMan = this.$refs.workerref.countMan
+      this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
       this.formHeader.germs = null
       if (str !== 'saved') {
         this.formHeader.operator = `${this.realName}(${this.userName})`
@@ -185,14 +193,19 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.$refs.workerref.excrul()) {
+        if (!this.$refs.readytime.Readyrul()) {
           return false
         }
-        if (!this.$refs.excrecord.userrul()) {
+        if (!this.$refs.workerref.userrul()) {
+          return false
+        }
+        if (!this.$refs.excrecord.excrul()) {
+          return false
+        }
+        if (!this.$refs.applymateriel.validate()) {
           return false
         }
       }
-      this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {
         this.UpdateformHeader(str, resolve)
@@ -209,26 +222,37 @@ export default {
       let net4 = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve)
       })
-      let net7 = new Promise((resolve, reject) => {
+      let net5 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
+      let material = new Promise((resolve, reject) => {
+        that.$refs.applymateriel.saveMateriel(resolve)
+      })
+      // 物料领用点击提交button，先调用save 后调用submit
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, material])
         net10.then(function () {
-          let net8 = new Promise((resolve, reject) => {
+          let net6 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
           })
-          let net12 = Promise.all([net8])
+          let net7 = new Promise((resolve, reject) => {
+            that.$refs.instock.submitIn(resolve)
+          })
+          let net8 = new Promise((resolve, reject) => {
+            that.$refs.applymateriel.submitMateriel(resolve)
+          })
+          let net12 = Promise.all([net6, net7, net8])
           net12.then(() => {
-            that.lodingS = false
             that.GetOrderList()
             that.$message.success('提交成功')
           })
         })
       } else {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net7])
+        let instock = new Promise((resolve, reject) => {
+          that.$refs.instock.saveIn(resolve)
+        })
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, instock, material])
         net10.then(function () {
-          that.lodingS = false
           that.GetOrderList()
           that.$message.success('保存成功')
         })
@@ -239,9 +263,9 @@ export default {
       let data = [this.$refs.readytime.readyTimeDate, this.$refs.readytime.machineTimeData, this.$refs.workerref.WorkerDate, {
         orderId: this.formHeader.orderId,
         outputUnit: this.formHeader.outputUnit,
-        realOutput: this.formHeader.realOutput + '',
-        countOutput: '',
-        countOutputUnit: '',
+        realOutput: this.formHeader.realOutput,
+        countOutput: this.formHeader.countOutput,
+        countOutputUnit: this.formHeader.countOutputUnit,
         productDate: this.formHeader.productDate
       }]
       this.$http(`${WHT_API.MATERIELTIMESUBMIT_API}`, 'POST', data).then(({data}) => {
@@ -266,11 +290,14 @@ export default {
     setApplyMaterielState (status) {
       this.applyMaterielState = status
     },
+    // 表头更改生产日期
     updateProductDate: function (dataStr) {
-      let data = dataStr.replace(/-/g, '')
-      this.productDate = data
-      // 不需要更新common store
-      // this.FWproductDate = data
+      if (dataStr) {
+        let data = dataStr.replace(/-/g, '')
+        this.productDate = data
+        // 更新common store
+        this.FWproductDate = data
+      }
     }
   },
   computed: {
