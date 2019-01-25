@@ -7,6 +7,6 @@ console.log(version)
   if (error) {
     console.log(error)
   } else {
-    console.log('sucess')
+    console.log('sucess! version: ',version)
   }
 })
