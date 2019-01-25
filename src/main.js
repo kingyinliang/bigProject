@@ -9,12 +9,13 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
-// import SentryUtil from '@/net/sentryUtil'
+import SentryUtil from '@/net/sentryUtil'
 import '@/assets/scss/index.scss'
 import $ from 'jquery'
+import {version} from '@/version'
 // import 'script-loader!file-saver'
 
-// SentryUtil.init()
+SentryUtil.init()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
@@ -25,6 +26,7 @@ Vue.prototype.isAuth = isAuth// 权限方法
 Vue.prototype.$ = $// 权限方法
 Vue.prototype.lodingStatus = false// 加载遮罩
 Vue.prototype.lodingState = false// 加载遮罩
+Vue.prototype.version = version // 版本号
 
 // 关闭弹窗清除表单
 Vue.prototype.clearForm = function (form) {
