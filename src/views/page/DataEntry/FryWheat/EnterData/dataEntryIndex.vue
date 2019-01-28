@@ -3,22 +3,38 @@
     <div class="main">
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
-          <el-col>
+          <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
           </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float:right;margin-bottom: 13px">
+          <el-col :span="3" >
+            <div style="float:right; line-height:31px">
+              <div style="float:left">
+                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：
+              </div>
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+            </div>
+            <!-- <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
               <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
               <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-            </el-row>
-            <el-row style="position: absolute;right: 0;top: 100px;">
+            </el-row> -->
+            <!-- <el-row style="position: absolute;right: 0;top: 100px;">
               <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
+            </el-row> -->
           </el-col>
+        </el-row>
+        <el-row>
+          <el-row style="float:right;">
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+          </el-row>
+          <el-row v-if="isRedact" style="float:right;">
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          </el-row>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -331,4 +347,5 @@ export default {
 </script>
 
 <style lang="scss">
+.point{width: 5px; height: 5px; float:left; border-radius: 50%; display: block; line-height: 16px; margin-top:14px; margin-right: 8px;}
 </style>

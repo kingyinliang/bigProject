@@ -625,6 +625,9 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+@import '@/assets/scss/index2.scss';
+</style>
 
 <style lang="scss" scoped>
 .box-card{
