@@ -46,7 +46,7 @@
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs">
+        <el-tabs v-model="activeName" id="DaatTtabs" type="border-card" >
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -347,5 +347,14 @@ export default {
 </script>
 
 <style lang="scss">
-.point{width: 5px; height: 5px; float:left; border-radius: 50%; display: block; line-height: 16px; margin-top:14px; margin-right: 8px;}
+.point {
+  width: 5px;
+  height: 5px;
+  float:left;
+  border-radius: 50%;
+  display: block;
+  line-height: 16px;
+  margin-top:14px;
+  margin-right: 8px;
+}
 </style>

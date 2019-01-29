@@ -30,7 +30,7 @@
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs"  :before-leave='beforeLeave'>
+        <el-tabs v-model="activeName" id="DaatTtabs"  :before-leave='beforeLeave' type="border-card">
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -318,15 +318,15 @@ export default {
   border-top: 1px solid #e8e8e8;
   span{
     .el-button{
-      background-color: white!important;
+      background-color: inherit;
       font-size: 16px;
       padding: 0;
       border: none;
     }
   }
   .el-tabs__item{
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
   }
   table{
     .el-form-item{
