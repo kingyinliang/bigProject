@@ -26,15 +26,15 @@
             </el-row> -->
           </el-col>
         </el-row>
-        <el-row>
-          <el-row style="float:right;">
+        <el-row style="text-align:right">
+          <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-          </el-row>
-          <el-row v-if="isRedact" style="float:right;">
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+          </template>
+          <template v-if="isRedact" style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
             <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-          </el-row>
+          </template>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
