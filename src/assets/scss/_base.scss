@@ -161,9 +161,10 @@ img {
   right: 0;
   left: 0;
   z-index: 1030;
-  height: 50px;
+  height: 32px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   background-color: #002140;
+  margin-left: 170px;
 
   &--inverse {
     .site-navbar__body {
@@ -239,7 +240,7 @@ img {
     }
     .el-dropdown-link {
       > img {
-        width: 36px;
+        width: 28px;
         height: auto;
         margin-right: 5px;
         border-radius: 100%;
@@ -267,8 +268,8 @@ img {
     }
     .el-menu-item,
     .el-submenu .el-submenu__title {
-      height: 50px;
-      line-height: 50px;
+      height: 32px;
+      line-height: 32px;
     }
     .el-submenu > .el-menu {
       top: 55px;
@@ -288,7 +289,7 @@ img {
 ------------------------------ */
 .site-sidebar {
   position: fixed;
-  top: 50px;
+  top: 0px;
   left: 0;
   bottom: 0;
   z-index: 1020;
@@ -355,7 +356,7 @@ img {
 
   &__wrapper {
     position: relative;
-    padding-top: 50px;
+    padding-top: 32px;
     margin-left: 170px;
     min-height: 100%;
     background: $content--background-color;
@@ -366,7 +367,7 @@ img {
   > .el-tabs {
     > .el-tabs__header {
       position: fixed;
-      top: 50px;
+      top: 32px;
       left: 170px;
       right: 0;
       z-index: 930;
@@ -385,7 +386,7 @@ img {
       padding-top: 44px;
       > .site-tabs__tools {
         position: fixed;
-        top: 50px;
+        top: 32px;
         right: 0;
         z-index: 931;
         height: 40px;
