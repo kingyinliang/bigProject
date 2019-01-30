@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="box-card" style="margin-bottom: 20px">
+    <el-card class="box-card newCard" style="margin-bottom: 20px">
       <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
         <div class="clearfix" style="">
           <h3 style="font-size: 14px;line-height: 32px">准备工时 (单位:min)</h3>

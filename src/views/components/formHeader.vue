@@ -63,11 +63,17 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '@/assets/scss/_common.scss';
+  .topform{
+    .el-form-item__content{
+      height: 32px;
+      border-bottom: 1px solid #D8D8D8;
+    }
+  }
 </style>
-<style scoped>
+<style lang="scss" scoped>
+  @import '@/assets/scss/_common.scss';
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    margin-bottom: 12px!important;
+    margin-bottom: 8px!important;
   }
 .el-input{
   width: 145px!important;

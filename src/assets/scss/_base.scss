@@ -164,7 +164,6 @@ img {
   height: 32px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   background-color: #002140;
-  margin-left: 170px;
 
   &--inverse {
     .site-navbar__body {
@@ -196,6 +195,7 @@ img {
   }
 
   &__header {
+    background: #002140;
     position: relative;
     float: left;
     width: 170px;
@@ -249,8 +249,9 @@ img {
     }
   }
   &__body {
+    height: 32px;
     position: relative;
-    //margin-left: 170px;
+    margin-left: 170px;
     padding-right: 15px;
     background-color: #fff;
   }
@@ -289,7 +290,7 @@ img {
 ------------------------------ */
 .site-sidebar {
   position: fixed;
-  top: 0px;
+  top: 50px;
   left: 0;
   bottom: 0;
   z-index: 1020;
@@ -460,4 +461,9 @@ img {
     background-color: #bbbbbb!important;
   }
   // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
+}
+.newCard{
+  .el-card__body {
+    padding: 12px;
+  }
 }

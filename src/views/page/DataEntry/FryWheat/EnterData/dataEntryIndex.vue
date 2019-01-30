@@ -1,7 +1,7 @@
 <template>
   <el-col>
     <div class="main">
-      <el-card class="searchCard" style="margin: 0">
+      <el-card class="searchCard newCard" style="margin: 0">
         <el-row type="flex">
           <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
@@ -13,17 +13,6 @@
               </div>
               <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
             </div>
-            <!-- <el-row style="float:right;margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-            </el-row>
-            <el-row v-if="isRedact" style="float:right;">
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-            </el-row> -->
-            <!-- <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row> -->
           </el-col>
         </el-row>
         <el-row style="text-align:right">
@@ -46,7 +35,7 @@
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
+        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -347,14 +336,20 @@ export default {
 </script>
 
 <style lang="scss">
+.NewDaatTtabs{
+  .el-tabs__item {
+    height: 40px!important;
+    line-height: 40px!important;
+  }
+}
 .point {
-  width: 5px;
-  height: 5px;
-  float:left;
-  border-radius: 50%;
-  display: block;
-  line-height: 16px;
-  margin-top:14px;
-  margin-right: 8px;
+width: 5px;
+height: 5px;
+float:left;
+border-radius: 50%;
+display: block;
+line-height: 16px;
+margin-top:14px;
+margin-right: 8px;
 }
 </style>
