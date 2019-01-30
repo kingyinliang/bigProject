@@ -42,11 +42,11 @@
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card class="tableCard">
+      <div class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs" type="border-card" >
+        <el-tabs v-model="activeName" id="DaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -92,7 +92,7 @@
             <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
-      </el-card>
+      </div>
     </div>
   </el-col>
 </template>

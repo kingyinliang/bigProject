@@ -19,13 +19,13 @@
             <el-form-item label="交接班（白班）：">
               <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="班前会：">
+            <el-form-item label="班前会：" label-width="80px">
               <el-input v-model="readyTimeDate.dayChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产前准备：">
+            <el-form-item label="生产前准备：" label-width="100px">
               <el-input v-model="readyTimeDate.dayChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产后清场：">
+            <el-form-item label="生产后清场：" label-width="100px">
               <el-input v-model="readyTimeDate.dayChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
@@ -33,13 +33,13 @@
             <el-form-item label="交接班（中班）：">
               <el-input v-model="readyTimeDate.midChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="班前会：">
+            <el-form-item label="班前会：" label-width="80px">
               <el-input v-model="readyTimeDate.midChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产前准备：">
+            <el-form-item label="生产前准备：" label-width="100px">
               <el-input v-model="readyTimeDate.midChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产后清场：">
+            <el-form-item label="生产后清场：" label-width="100px">
               <el-input v-model="readyTimeDate.midChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
@@ -47,13 +47,13 @@
             <el-form-item label="交接班（夜班）：">
               <el-input v-model="readyTimeDate.nightChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="班前会：">
+            <el-form-item label="班前会：" label-width="80px">
               <el-input v-model="readyTimeDate.nightChangeBefore" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产前准备：">
+            <el-form-item label="生产前准备：" label-width="100px">
               <el-input v-model="readyTimeDate.nightChangePre" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
-            <el-form-item label="生产后清场：">
+            <el-form-item label="生产后清场：" label-width="100px">
               <el-input v-model="readyTimeDate.nightChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
             </el-form-item>
           </el-row>
@@ -414,7 +414,7 @@ export default {
 <style lang="scss">
 .readyBox{
   input{
-    width: 184px;
+    width: 153px;
   }
 }
 .readyshiftBtn{
