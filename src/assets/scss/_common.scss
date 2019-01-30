@@ -178,6 +178,7 @@ img {
   height: 32px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   background-color: #002140;
+  margin-left: 170px;
 
   &--inverse {
     .site-navbar__body {
@@ -212,7 +213,7 @@ img {
     position: relative;
     float: left;
     width: 170px;
-    height: 32px;
+    //height: 32px;
     overflow: hidden;
   }
   &__brand {
@@ -263,7 +264,7 @@ img {
   }
   &__body {
     position: relative;
-    margin-left: 170px;
+    //margin-left: 170px;
     padding-right: 15px;
     background-color: #fff;
   }
@@ -302,7 +303,7 @@ img {
 ------------------------------ */
 .site-sidebar {
   position: fixed;
-  top: 32px;
+  top: 0px;
   left: 0;
   bottom: 0;
   z-index: 1020;
