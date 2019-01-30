@@ -63,7 +63,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '@/assets/scss/index2.scss';
+@import '@/assets/scss/_common.scss';
 </style>
 <style scoped>
 .el-input{
