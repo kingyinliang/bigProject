@@ -7,7 +7,7 @@
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
           </el-col>
           <el-col :span="3" >
-            <div style="float:right; line-height:31px">
+            <div style="float:right; line-height:31px;font-size: 14px">
               <div style="float:left">
                 <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：
               </div>
