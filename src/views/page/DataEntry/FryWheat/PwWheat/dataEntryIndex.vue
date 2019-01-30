@@ -6,19 +6,19 @@
           <el-col>
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
           </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float:right;margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-            </el-row>
-            <el-row v-if="isRedact && enableOpt" style="float:right;">
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-            </el-row>
-            <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
+          <el-col style="width: 170px;font-size: 14px;line-height:31px">
+            <div><span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
           </el-col>
+        </el-row>
+        <el-row style="text-align:right" class="buttonCss">
+          <template style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+          </template>
+          <template v-if="isRedact && enableOpt" style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          </template>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -26,11 +26,11 @@
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card class="tableCard">
+      <div class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs"  :before-leave='beforeLeave' type="border-card">
+        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs"  :before-leave='beforeLeave' type="border-card">
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -64,7 +64,7 @@
             <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
-      </el-card>
+      </div>
     </div>
   </el-col>
 </template>

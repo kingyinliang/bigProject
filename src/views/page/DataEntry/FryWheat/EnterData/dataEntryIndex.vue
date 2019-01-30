@@ -15,7 +15,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right">
+        <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -336,20 +336,4 @@ export default {
 </script>
 
 <style lang="scss">
-.NewDaatTtabs{
-  .el-tabs__item {
-    height: 40px!important;
-    line-height: 40px!important;
-  }
-}
-.point {
-width: 5px;
-height: 5px;
-float:left;
-border-radius: 50%;
-display: block;
-line-height: 16px;
-margin-top:14px;
-margin-right: 8px;
-}
 </style>
