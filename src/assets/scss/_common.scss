@@ -444,8 +444,8 @@ img {
     }
   }
   .el-tabs__item{
-    height: 40px;
-    line-height: 40px;
+    height: 40px!important;
+    line-height: 40px!important;
   }
   table{
     .el-form-item{
@@ -479,7 +479,7 @@ img {
   background-color: #e8e8e8;
 }
 .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-  margin-bottom: 12px;
+  //margin-bottom: 12px;
 }
 .el-form-item--small .el-form-item__content, .el-form-item--small .el-form-item__label{
   height: 32px;

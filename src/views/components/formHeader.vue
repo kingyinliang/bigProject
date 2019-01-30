@@ -66,8 +66,11 @@ export default {
 @import '@/assets/scss/_common.scss';
 </style>
 <style scoped>
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    margin-bottom: 12px!important;
+  }
 .el-input{
-  width: 145px;
+  width: 145px!important;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
