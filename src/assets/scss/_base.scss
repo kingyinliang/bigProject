@@ -424,7 +424,7 @@ img {
   border-top: 1px solid #e8e8e8;
   .spanview{
     .el-button{
-      background-color: white!important;
+      background-color: white;
       font-size: 16px;
       padding: 0;
       border: none;
@@ -474,6 +474,14 @@ img {
   .el-tabs__item {
     height: 40px!important;
     line-height: 40px!important;
+  }
+  .spanview{
+    .el-button{
+      background-color: inherit!important;
+      font-size: 16px;
+      padding: 0;
+      border: none;
+    }
   }
 }
 .point {
