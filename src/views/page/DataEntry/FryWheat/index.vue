@@ -28,7 +28,7 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width: 320px">
+          <el-col style="width: 340px">
             <el-row class="rowButton">
               <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
               <template v-if="type === 'abnormal'">
@@ -48,7 +48,7 @@
             <div class="sole_cont">
               <el-form size="small" :inline="true" label-position="right" label-width="90px">
                 <div style="position: relative;">
-                  <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; height:181px">
+                  <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; min-height:181px">
                 </div>
                 <div class="title_left">
                   <div style="float: left;font-size: 14px;font-weight: normal;line-height: 60px">
@@ -137,7 +137,7 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="160">
+            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <el-col>
                   <span v-if="!isdisabled" style="cursor: pointer" @click="selectUser(scope.row)">
@@ -157,22 +157,22 @@
                 </el-col>
               </template>
             </el-table-column>
-            <el-table-column label="开始时间" prop="startDate" width="195">
+            <el-table-column label="开始时间" prop="startDate">
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.startDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="用餐时间(MIN)" prop="dinner" width="80">
+            <el-table-column label="用餐时间" prop="dinner" width="80">
               <template slot-scope="scope">
                 <el-input size="small" v-model="scope.row.dinner" :disabled="isdisabled"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="结束时间" prop="endDate" width="195">
+            <el-table-column label="结束时间" prop="endDate">
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.endDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="isdisabled"></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="备注" prop="remark" width="100">
+            <el-table-column label="备注" prop="remark" width="100px">
               <template slot-scope="scope">
                 <el-input size="small" v-model="scope.row.remark" :disabled="isdisabled"></el-input>
               </template>
