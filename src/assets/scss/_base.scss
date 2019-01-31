@@ -350,7 +350,7 @@ img {
 ------------------------------ */
 .site-content {
   //position: relative;
-  padding-bottom: 60px;
+  padding-bottom: 40px;
   min-height: 558px;
   overflow: hidden;
   //padding: 15px;
@@ -465,6 +465,9 @@ img {
 .newCard{
   .el-card__body {
     padding: 12px;
+  }
+  .el-form-item__label{
+    padding: 0;
   }
 }
 .NewDaatTtabs{

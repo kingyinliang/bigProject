@@ -167,7 +167,7 @@ export default {
     text-align: center;
     width: 100%;
     position: absolute;
-    bottom: 24px;
+    bottom: 14px;
     color: rgba(0, 0, 0, 0.45);
     line-height: 20px;
     font-size: 12px;

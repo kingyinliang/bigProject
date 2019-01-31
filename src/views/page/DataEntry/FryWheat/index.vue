@@ -1,58 +1,60 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
-      <el-card>
-        <el-row>
-          <el-col :span="18">
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="54px">
+      <el-card class="newCard" style="min-height: 480px">
+        <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
+          <el-col>
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="42px">
               <el-form-item label="工厂：">
-                <el-select v-model="plantList.factoryid" class="selectwpx">
+                <el-select v-model="plantList.factoryid" class="selectwpx" style="width: 140px">
                   <el-option label="不限" value="">不限</el-option>
                   <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="车间：">
-                <el-select v-model="plantList.workshopid" class="selectwpx">
+                <el-select v-model="plantList.workshopid" class="selectwpx" style="width: 140px">
                   <el-option label="不限" value="">不限</el-option>
                   <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="生产日期：" label-width="82px">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width:135px;"></el-date-picker>
+              <el-form-item label="生产日期：" label-width="70px">
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="生产状态：" label-width="82px">
-                <el-select v-model="plantList.status" class="selectwpx">
+              <el-form-item label="生产状态：" label-width="70px">
+                <el-select v-model="plantList.status" class="selectwpx" style="width: 140px">
                   <el-option label="正常生产" value="normal"></el-option>
                   <el-option label="无生产" value="abnormal"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col :span="6">
-            <el-row>
-              <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
+          <el-col style="width: 320px">
+            <el-row class="rowButton">
+              <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
               <template v-if="type === 'abnormal'">
-                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn">编辑</el-button>
-                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
+                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn" style="float: right">编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn" style="float: right">返回</el-button>
               </template>
               <template v-if="type === 'abnormal' && isdisabled === false">
-                <el-button type="primary" size="small" @click="AddPeople">新增</el-button>
-                <el-button type="primary" size="small" @click="save">保存</el-button>
+                <el-button type="primary" size="small" @click="AddPeople" style="float: right">新增</el-button>
+                <el-button type="primary" size="small" @click="save" style="float: right">保存</el-button>
               </template>
             </el-row>
           </el-col>
         </el-row>
-        <el-row v-if="type === 'normal'" :gutter="20" style="margin:10px auto; width:1066px" >
-          <el-col style="width:532px" v-for="(item, index) in FryWheatList" :key="index" id="normal">
+        <el-row v-if="type === 'normal'" :gutter="20">
+          <el-col v-for="(item, index) in FryWheatList" :key="index" id="normal" :span="12">
+            <div class="title_left" style="font-size: 16px;font-weight: bold;margin-bottom: 8px;">工序： <font style="color:red">{{item.productLineName}}</font></div>
             <div class="sole_cont">
               <el-form size="small" :inline="true" label-position="right" label-width="90px">
                 <div style="position: relative;">
-                  <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; height:230px">
-                  <div class="sole_status">
-                    <span class="point" :style="{'background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : '#7ED321'}"></span>订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></div>
+                  <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; height:181px">
                 </div>
-                <div class="title_left">工序： <font style="color:red">{{item.productLineName}}</font>
-                  <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;">数据录入</el-button>
+                <div class="title_left">
+                  <div style="float: left;font-size: 14px;font-weight: normal;line-height: 60px">
+                    <span class="points" :style="{'background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : '#7ED321'}"></span>订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
+                  </div>
+                  <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white">数据录入</el-button>
                 </div>
                 <div class="normal_bottom">
                     <el-form-item label="订单号：" class="width50b">
@@ -110,6 +112,7 @@
           </el-col> -->
         </el-row>
         <el-row v-else-if="type === 'abnormal'">
+          <div style="min-height: 340px">
           <el-table border  header-row-class-name="tableHead" :data="datalist">
             <!-- <el-table-column prop="orderId"></el-table-column> -->
             <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
@@ -183,6 +186,7 @@
           <el-row style="font-size:14px; line-height:30px; margin-top:10px">
             实际作业人数: {{countMan}}
           </el-row>
+          </div>
           <el-row v-if="addRowStatus!=1">
             <el-pagination
               @size-change="handleSizeChange"
@@ -659,6 +663,11 @@ export default {
 @import '@/assets/scss/_common.scss';
 </style>
 <style lang="scss" scoped>
+  .rowButton{
+    button{
+      margin: 0px 3px!important;
+    }
+  }
 .box-card{
   .pro-line { border-bottom: 1px solid #dcdfe6; }
   .pro-line p { color: red; font-size: 16px; letter-spacing: .1em; }
@@ -693,7 +702,7 @@ export default {
     .sole_status{
       float: right;color: #565656;font-size: 14px;min-width: 150px; position: absolute; right: 15px;top: 20px;
     }
-    .point{width: 5px; height: 5px; border-radius: 50%; display: block; float: left; line-height: 16px; margin-top: 5px; margin-right: 8px;}
+    .points{width: 5px; height: 5px; border-radius: 50%; display: block; float: left;margin-top: 27px;margin-right: 8px}
     .title_left{border-bottom:#E9E9E9 1px solid; padding:0 15px; font-weight: bold;height: 60px;line-height: 60px;display: block;}
     .el-form-item__content{
       width: 61%;
