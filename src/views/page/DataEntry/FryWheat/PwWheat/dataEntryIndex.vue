@@ -1,13 +1,25 @@
 <template>
   <el-col>
     <div class="main">
-      <el-card class="searchCard" style="margin: 0">
+      <el-card class="searchCard newCard" style="margin: 0">
         <el-row type="flex">
-          <el-col>
+          <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
           </el-col>
-          <el-col style="width: 170px;font-size: 14px;line-height:31px">
-            <div><span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
+          <el-col :span="3" >
+            <!-- <div>
+              <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>
+              订单状态：
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">
+                {{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}
+              </span>
+            </div> -->
+            <div style="float:right; line-height:31px;font-size: 14px">
+              <div style="float:left">
+                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：
+              </div>
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+            </div>
           </el-col>
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
