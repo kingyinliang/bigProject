@@ -38,7 +38,7 @@ export function tryHideFullScreenLoading () {
 
 /*
 * @method httpProxy
-* @param {string} url api地址
+* @param {string} url{string} api地址 data{object} 参数 ContentType{boole} post拼接路径 responseType{boole}下载文件流 londingstatus{boole}加载遮罩
 * @param {string} [method] {@link module:constants/http method}
 * */
 export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, responseType = false, londingstatus = true) => {

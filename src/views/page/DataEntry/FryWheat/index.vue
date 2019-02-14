@@ -69,8 +69,8 @@
                     <el-form-item label="品项：" class="width50b">
                       <div style="width:150px; border-bottom:1px solid #ccc">&nbsp;{{item.materialCode + ' ' + item.materialName}}</div>
                     </el-form-item>
-                    <el-form-item label="计划产量：" class="width50b">
-                      <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.planOutput + ' ' + item.outputUnit}}</div>
+                    <el-form-item label="实际产量：" class="width50b">
+                      <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.realOutput + ' ' + item.outputUnit}}</div>
                     </el-form-item>
                 </div>
               </el-form>
