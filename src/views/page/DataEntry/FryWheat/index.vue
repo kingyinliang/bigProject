@@ -47,7 +47,7 @@
             <div class="title_left" style="font-size: 16px;font-weight: bold;margin-bottom: 8px;">工序： <font style="color:red">{{item.productLineName}}</font></div>
             <div class="sole_cont">
               <el-form size="small" :inline="true" label-position="right" label-width="90px">
-                <div style="position: relative;">
+                <div class="itemImg">
                   <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; min-height:181px">
                 </div>
                 <div class="title_left">
@@ -663,6 +663,21 @@ export default {
 @import '@/assets/scss/_common.scss';
 </style>
 <style lang="scss" scoped>
+  .itemImg{
+    position: relative;
+    width:100%;
+    min-height:181px;
+    overflow: hidden;
+    cursor: pointer;
+    img{
+      transition:All 1s ease-in-out;
+    }
+  }
+  .itemImg:hover{
+    img{
+      transform:scale(1.2);
+    }
+  }
   .rowButton{
     button{
       margin: 0px 3px!important;
