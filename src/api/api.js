@@ -14,7 +14,6 @@ let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 /*
 *MAINapi
  */
-export const HOST_API = 'http://10.8.4.153:50080'
 export const MAIN_API = {
   /**
    * @property {string} LOGIN_API 登录接口
