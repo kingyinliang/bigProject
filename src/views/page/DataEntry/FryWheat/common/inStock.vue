@@ -123,7 +123,7 @@
                 </el-table-column>
                 <el-table-column label="单位" width="80">
                   <template slot-scope="scope">
-                     <span>{{scope.row.weightUnit = 'kg'}}</span>
+                     <span>{{scope.row.weightUnit = 'KG'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库批次" width="150">
