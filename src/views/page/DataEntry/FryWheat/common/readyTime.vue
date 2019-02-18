@@ -381,10 +381,12 @@ export default {
             item.closeTime = date.endDate
             item.closeMan = date.changer
             item.closeOperateTime = ''
+            item.delFlag = '0'
           }
         })
       } else if (date.startDate) {
         this.machineTimeData.push({
+          delFlag: '0',
           id: '',
           productDate: this.formHeader.productDate,
           deviceName: date.deviceName,
