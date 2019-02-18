@@ -3,8 +3,14 @@
     :title="type? id? '修改类型':'新增类型':id? '修改参数':'新增参数'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <div style="height: 300px;overflow: auto">
+    <div style="height: 330px;overflow: auto">
       <el-form :model="dataForm" :rules="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="125px">
+        <el-form-item label="工厂：">
+          <span v-if="!type">{{dataForm.deptName}}</span>
+          <el-select v-model="dataForm.factory"  v-if="type" @change="changeFactory">
+            <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="参数类型编码：">
           <span v-if="!type">{{dataForm.type}}</span>
           <el-input v-model="dataForm.type" placeholder="手动输入" v-if="type"></el-input>
@@ -29,13 +35,21 @@
 </template>
 
 <script>
-import {SYSTEMSETUP_API} from '@/api/api'
+import {SYSTEMSETUP_API, BASICDATA_API} from '@/api/api'
+
 export default {
   name: 'ParameterAddorUpdate',
+  props: {
+    factoryList: Array
+  },
   data () {
     return {
       id: false,
       dataForm: {
+        // 工厂ID
+        factory: '',
+        // 工厂Name
+        deptName: '',
         type: '',
         name: '',
         code: '',
@@ -47,6 +61,7 @@ export default {
     }
   },
   mounted () {
+    // this.getFactoryList()
   },
   methods: {
     init (str, id, adds) {
@@ -88,6 +103,25 @@ export default {
             this.$message.error(data.msg)
           }
         })
+      }
+    },
+    // 获取工厂
+    getFactoryList () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
+        if (res.data.code === 0) {
+          this.factoryList = res.data.typeList
+          // if (!this.plantList.factoryid) {
+          //   this.plantList.factoryid = res.data.typeList[0].deptId
+          // }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    changeFactory (value) {
+      let factory = this.factoryList.find((item) => item.deptId === value)
+      if (factory) {
+        this.dataForm.deptName = factory.deptName
       }
     }
   },
