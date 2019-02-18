@@ -6,6 +6,7 @@
 // let HOST = 'http://10.10.5.63:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.192:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
+// let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
