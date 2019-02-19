@@ -137,7 +137,8 @@ export default {
   methods: {
     // 获取类型
     getdictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}?factory=${this.factory}`, 'GET', {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'POST', {
+        factory: this.factory
       }).then(({data}) => {
         if (data.code === 0) {
           this.parameterType = data.list
