@@ -23,7 +23,7 @@
               <el-form-item label="生产状态：" label-width="70px">
                 <el-select v-model="plantList.status" class="selectwpx" style="width: 140px">
                   <el-option label="正常生产" value="normal"></el-option>
-                  <el-option label="无生产" value="abnormal"></el-option>
+                  <el-option label="无生产" value="abnormal" v-if="isAuth('wht:user:listUser')"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -32,7 +32,7 @@
             <el-row class="rowButton">
               <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
               <template v-if="type === 'abnormal'">
-                <el-button v-if="isdisabled === true" type="primary" size="small" @click="isdisabledFn" style="float: right">编辑</el-button>
+                <el-button v-if="isdisabled === true && isAuth('wht:user:updateUser')" type="primary" size="small" @click="isdisabledFn" style="float: right">编辑</el-button>
                 <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn" style="float: right">返回</el-button>
               </template>
               <template v-if="type === 'abnormal' && isdisabled === false">
@@ -54,7 +54,7 @@
                   <div style="float: left;font-size: 14px;font-weight: normal;line-height: 60px">
                     <span class="points" :style="{'background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : '#7ED321'}"></span>订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
                   </div>
-                  <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white">数据录入</el-button>
+                  <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white" v-if="isAuth('wht:order:list') || isAuth('sys:whtPwMaterial:list')">数据录入</el-button>
                 </div>
                 <div class="normal_bottom">
                     <el-form-item label="订单号：" class="width50b">
@@ -179,7 +179,7 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="isdisabled"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="isdisabled" v-if="isAuth('wht:user:delUser')"></el-button>
               </template>
             </el-table-column>
           </el-table>

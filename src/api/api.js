@@ -747,6 +747,10 @@ export const WHT_API = {
    */
   CINDEXORDERLIST_API: HOST + '/wht/order/list',
   /**
+   * @property {string} PKGORDERID_API 炒麦车间order修改
+   */
+  WHTORDERUPDATE_API: HOST + '/wht/order/update',
+  /**
    * @property {string} INSTORAGELIST_API 生产入库列表
    */
   INSTORAGELIST_API: HOST + '/sys/whtInStorage/list',

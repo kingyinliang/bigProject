@@ -10,7 +10,7 @@
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('pkg:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>

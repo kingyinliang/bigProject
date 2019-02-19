@@ -25,11 +25,11 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:whtPwMaterial:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact && enableOpt" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('sys:whtPwMaterial:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtPwMaterial:update')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">

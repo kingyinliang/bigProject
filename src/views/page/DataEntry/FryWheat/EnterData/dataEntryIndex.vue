@@ -18,11 +18,11 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -176,7 +176,7 @@ export default {
         this.formHeader.operator = `${this.realName}(${this.userName})`
         this.formHeader.operDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString()
       }
-      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${WHT_API.WHTORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error('保存表头' + data.msg)
