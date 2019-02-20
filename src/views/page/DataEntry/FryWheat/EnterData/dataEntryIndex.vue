@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {PACKAGING_API, WHT_API} from '@/api/api'
+import {WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ReadyTime from '../common/readyTime'
