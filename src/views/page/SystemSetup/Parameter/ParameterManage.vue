@@ -8,6 +8,13 @@
     <!--</div>-->
     <div class="main mainHeader">
       <el-card>
+        <el-row style="margin-bottom:10px;">
+          <el-select v-model="factory" >
+            <el-option label="请选择" value="" ></el-option>
+            <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+          </el-select>
+          <el-button type="primary" @click="getdictList">查询</el-button>
+        </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
             <el-card>
@@ -103,13 +110,13 @@
         </el-row>
       </el-card>
     </div>
-    <add-or-update ref="addOrupdate" v-if="visible" @refreshDataList="getList()"></add-or-update>
+    <add-or-update ref="addOrupdate" v-if="visible" @refreshDataList="getList()" :factoryList="factoryList"></add-or-update>
   </el-col>
 </template>
 
 <script>
 import addOrUpdate from './ParameterAddorUpdate'
-import {SYSTEMSETUP_API} from '@/api/api'
+import {SYSTEMSETUP_API, BASICDATA_API} from '@/api/api'
 export default {
   name: 'ParameterManage',
   data () {
@@ -118,16 +125,20 @@ export default {
       activeItem: {},
       parameterType: [],
       parameter: [],
-      adds: {}
+      adds: {},
+      factoryList: [],
+      factory: ''
     }
   },
   mounted () {
     this.getdictList()
+    this.getFactoryList()
   },
   methods: {
     // 获取类型
     getdictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'GET', {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'POST', {
+        factory: this.factory
       }).then(({data}) => {
         if (data.code === 0) {
           this.parameterType = data.list
@@ -162,7 +173,8 @@ export default {
       this.adds = {}
       this.adds.name = row.name
       this.adds.type = row.type
-      console.log(this.adds)
+      this.adds.factory = row.factory
+      this.adds.deptName = row.deptName
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.type}`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.parameter = data.dicList
@@ -178,13 +190,25 @@ export default {
     },
     // 新增  修改
     addorupdate (str, id, adds) {
-      console.log(this.adds)
       this.visible = true
       this.$nextTick(() => {
         if (adds) {
           this.$refs.addOrupdate.init(str, id, this.adds)
         } else {
           this.$refs.addOrupdate.init(str, id)
+        }
+      })
+    },
+    // 获取工厂
+    getFactoryList () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
+        if (res.data.code === 0) {
+          this.factoryList = res.data.typeList
+          // if (!this.plantList.factoryid) {
+          //   this.plantList.factoryid = res.data.typeList[0].deptId
+          // }
+        } else {
+          this.$message.error(res.data.msg)
         }
       })
     }
@@ -203,5 +227,5 @@ export default {
   .mainHeader .el-card__header { padding: 0 15px !important; }
 </style>
 <style scoped>
-.el-button { padding: 0; }
+.el-button[type='text'] { padding: 0; }
 </style>

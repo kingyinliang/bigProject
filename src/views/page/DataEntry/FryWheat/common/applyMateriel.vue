@@ -52,7 +52,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.batch"  size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.batch" maxlength='10' size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -194,6 +194,10 @@ export default {
             this.$message.error('物料批次不能为空')
             return false
           }
+          if (item.batch.trim().length > 10) {
+            this.$message.error('物料批次长度不能超过10')
+            return false
+          }
           if (item.wheatWeight === '') {
             this.$message.error('小麦领用数不能为空')
             return false
@@ -286,21 +290,24 @@ export default {
     },
     // 新增
     addNewRecord () {
+      // 复制上一条数据的手动录入部分
+      let lastArr = this.materielDataList.filter(item => { return item.delFlag === '0' })
+      let last = lastArr && lastArr.length > 0 ? lastArr[lastArr.length - 1] : null
       this.materielDataList.push({
         id: '',
         orderId: this.order.orderId,
         // 物料编码默认值
-        materialCode: '',
-        materialName: '',
+        materialCode: last ? last.materialCode : '',
+        materialName: last ? last.materialName : '',
         // 粮仓号
-        deviceId: '',
+        deviceId: last ? last.deviceId : '',
         // 粮仓名称
-        holderName: '',
+        holderName: last ? last.holderName : '',
         // 批次号
-        batch: '',
-        wheatWeight: 0,
+        batch: last ? last.batch : '',
+        wheatWeight: last ? last.wheatWeight : 0,
         weightUnit: 'KG',
-        remark: '',
+        remark: last ? last.remark : '',
         delFlag: '0'
       })
     },

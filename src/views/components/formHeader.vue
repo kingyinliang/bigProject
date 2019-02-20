@@ -21,7 +21,7 @@
       <p class="el-input">{{(formHeader.planOutput || '') + ' ' + (formHeader.outputUnit || '')}}</p>
     </el-form-item>
     <el-form-item label="生产日期：">
-      <el-date-picker size="small" type="date" @change="updateProductDate" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>
+      <el-date-picker size="small" type="date" @change="updateProductDate" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 145px"></el-date-picker>
     </el-form-item>
     <el-form-item label="提交人员：">
       <p class="el-input">{{formHeader.operator || ''}}</p>
@@ -62,10 +62,21 @@ export default {
   }
 }
 </script>
-
-<style scoped>
+<style lang="scss">
+  .topform{
+    .el-form-item__content{
+      height: 32px;
+      border-bottom: 1px solid #D8D8D8;
+    }
+  }
+</style>
+<style lang="scss" scoped>
+  @import '@/assets/scss/_common.scss';
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    margin-bottom: 8px!important;
+  }
 .el-input{
-  width: 180px;
+  width: 145px!important;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

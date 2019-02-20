@@ -29,7 +29,7 @@
                 <el-form-item label="产线：">
                   <p>
                     {{item.productLineName}}
-                    <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button>
+                    <el-button @click="goPro(item)" type="primary" size="small" style="float: right" v-if="isAuth('pkg:order:list')">数据录入</el-button>
                     <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
                   </p>
                 </el-form-item>

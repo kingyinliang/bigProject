@@ -1,24 +1,29 @@
 <template>
   <el-col>
     <div class="main">
-      <el-card class="searchCard" style="margin: 0">
+      <el-card class="searchCard newCard" style="margin: 0">
         <el-row type="flex">
-          <el-col>
+          <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
           </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float:right;margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-            </el-row>
-            <el-row v-if="isRedact" style="float:right;">
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-            </el-row>
-            <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
+          <el-col :span="3" >
+            <div style="float:right; line-height:31px;font-size: 14px">
+              <div style="float:left">
+                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：
+              </div>
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+            </div>
           </el-col>
+        </el-row>
+        <el-row style="text-align:right" class="buttonCss">
+          <template style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+          </template>
+          <template v-if="isRedact" style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+          </template>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -26,11 +31,11 @@
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card class="tableCard">
-        <div class="toggleSearchTop">
+      <div class="tableCard">
+        <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs">
+        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -76,13 +81,13 @@
             <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
-      </el-card>
+      </div>
     </div>
   </el-col>
 </template>
 
 <script>
-import {PACKAGING_API, WHT_API} from '@/api/api'
+import {WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ReadyTime from '../common/readyTime'
@@ -171,7 +176,7 @@ export default {
         this.formHeader.operator = `${this.realName}(${this.userName})`
         this.formHeader.operDate = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString() + '-' + new Date().getDay().toString()
       }
-      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${WHT_API.WHTORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error('保存表头' + data.msg)
@@ -225,12 +230,8 @@ export default {
       let net5 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
-      let material = new Promise((resolve, reject) => {
-        that.$refs.applymateriel.saveMateriel(resolve)
-      })
-      // 物料领用点击提交button，先调用save 后调用submit
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, material])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5])
         net10.then(function () {
           let net6 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
@@ -250,6 +251,9 @@ export default {
       } else {
         let instock = new Promise((resolve, reject) => {
           that.$refs.instock.saveIn(resolve)
+        })
+        let material = new Promise((resolve, reject) => {
+          that.$refs.applymateriel.saveMateriel(resolve)
         })
         let net10 = Promise.all([net0, net1, net2, net3, net4, net5, instock, material])
         net10.then(function () {

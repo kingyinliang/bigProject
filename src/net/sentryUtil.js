@@ -171,7 +171,7 @@ export default {
       // TODO
       scope.setExtra('basic', {name: 'zhangsan'})
       // TODO
-      scope.setTag('page_local', '测试环境')
+      scope.setTag('page_local', '开发环境')
       // TODO
       let id = sessionStorage.getItem('vuex') ? JSON.parse(sessionStorage.getItem('vuex')).user.id : ''
       let name = sessionStorage.getItem('vuex') ? `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）` : ''

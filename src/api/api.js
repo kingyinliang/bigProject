@@ -3,19 +3,19 @@
 // let HOST = 'http://10.10.1.29:8080'
 // let HOST = 'http://10.1.1.74:8080'
 // let HOST = 'http://10.1.1.148:8080'
-// let HOST = 'http://10.10.5.63:8080/xhqy-fc'
-// let HOST = 'http://10.10.1.157:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.156:8080/xhqy-fc'
+// let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
+// let HOST = 'http://10.10.5.40:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // HOST
-// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
+let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
-let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
+// let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
 *MAINapi
  */
-
-export const HOST_API = 'http://10.8.4.153:50080'
 export const MAIN_API = {
   /**
    * @property {string} LOGIN_API 登录接口
@@ -747,6 +747,10 @@ export const WHT_API = {
    * 首页订单接口
    */
   CINDEXORDERLIST_API: HOST + '/wht/order/list',
+  /**
+   * @property {string} PKGORDERID_API 炒麦车间order修改
+   */
+  WHTORDERUPDATE_API: HOST + '/wht/order/update',
   /**
    * @property {string} INSTORAGELIST_API 生产入库列表
    */

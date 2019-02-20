@@ -7,77 +7,41 @@
         <el-card>
           <!--录入-->
           <div>
-            <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%6===0" style="margin-top:5px">
-              <el-col :span="4" v-if="index < flourContainerList.length">
+            <el-row  :gutter="36" v-for="(item, index) in flourContainerList" :key="index" v-if="index%4===0" style="margin-top:5px">
+              <el-col :span="6" v-if="index < flourContainerList.length">
                   <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img1"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index].holderId, flourContainerList[index].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
-              <el-col :span="4" v-if="index + 1 < flourContainerList.length">
+              <el-col :span="6" v-if="index + 1 < flourContainerList.length">
                   <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index + 1].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img2"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 1].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 1].holderId, flourContainerList[index + 1].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
-              <el-col :span="4" v-if="index + 2 < flourContainerList.length">
+              <el-col :span="6" v-if="index + 2 < flourContainerList.length">
                   <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index + 2].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img3"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 2].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 2].holderId, flourContainerList[index + 2].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
-              <el-col :span="4" v-if="index + 3 < flourContainerList.length">
+              <el-col :span="6" v-if="index + 3 < flourContainerList.length">
                   <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index + 3].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img4"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
-                  </div>
-              </el-col>
-               <el-col :span="4" v-if="index + 4 < flourContainerList.length">
-                  <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index + 4].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img5"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 4].holderId, flourContainerList[index + 4].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
-                  </div>
-              </el-col>
-               <el-col :span="4" v-if="index + 5 < flourContainerList.length">
-                  <div class="stock-box">
-                    <div class="stock-title">
-                      <span class="stock-text">{{flourContainerList[index + 5].holderName}}</span>
-                    </div>
-                    <div class="stock-container">
-                      <div class="stock-img img6"></div>
-                      <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 5].holderId, flourContainerList[index + 5].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
-                      <div class="stock-button disabled"  v-else> 入罐</div>
-                    </div>
+                    <div class="stock-img"></div>
+                    <div class="stock-text">{{flourContainerList[index + 3].holderName}}</div>
+                    <div class="clearfix"></div>
+                    <div class="stock-button enabled" @click="addNewRecord(flourContainerList[index + 3].holderId, flourContainerList[index + 3].holderName)" v-if="isRedact && (inStorageState != 'submit' && inStorageState != 'checked')"> 入罐</div>
+                    <div class="stock-button disabled"  v-else> 入罐</div>
                   </div>
               </el-col>
             </el-row>
@@ -123,7 +87,7 @@
                 </el-table-column>
                 <el-table-column label="单位" width="80">
                   <template slot-scope="scope">
-                     <span>{{scope.row.weightUnit = 'KG'}}</span>
+                     <span>{{scope.row.weightUnit = 'kg'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库批次" width="150">
@@ -200,13 +164,6 @@ import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
-    var validate = (rule, value, callback) => {
-      if (value <= 0) {
-        callback(new Error('必须为大于0'))
-      } else {
-        callback()
-      }
-    }
     return {
       // stoppageType: [],
       // equipmentType: [],
@@ -225,13 +182,11 @@ export default {
         ],
         startWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
         endWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {type: 'number', message: '必须为数字', trigger: 'blur'}
         ],
         inPortBatch: [
           {required: true, message: '必填', trigger: 'blur'},
@@ -522,79 +477,48 @@ export default {
   .stock-box{
     height: 184px;
     border: 1px solid #E9E9E9;
-    border-radius: 4px;
-    .stock-title {
-      height: 40px;
-      line-height: 40px;
-      border-radius: 4px 4px 0px 0px;
-      background-color: #EBEBEB;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      .stock-text{
-        margin-left: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        font-family: PingFangSC-Medium;
-        // EBEBEB
+    border-radius: 2px;
+    .stock-img{
+      width:48px;
+      height:48px;
+      border-radius:24px;
+      float:left;
+      margin-left:24px;
+      margin-top:24px;
+      // background: url('../../../../../assets/img/wheat.png')
+      background: url('~@/assets/img/wheat.png')
+      // ~ 表示根目录，@表示src目录
+    }
+    .stock-text{
+      float:left;
+      margin-left:20px;
+      margin-top:30px;
+      font-size:16px;
+      font-weight:500;
+      font-family:PingFangSC-Medium;
+    }
+    .stock-button{
+      height:48px;
+      margin-top:62px;
+      font-size:14px;
+      line-height:48px;
+      text-align:center;
+      border-top:1px solid #e9e9e9;
+      border-radius: 0 0 2px 2px;
+    }
+    .enabled{
+      background:#F7F9FA;
+      &:hover{
+        color:#fff;
+        background:#1890FF;
+        cursor:pointer
       }
     }
-    .stock-container {
-      height:144px;
-      .stock-img{
-        width: 82px;
-        height: 82px;
-        margin: auto;
-        margin-top: 11px;
-        border-radius: 41px;
-        // background: url('../../../../../assets/img/wheat.png')
-        // ~ 表示根目录，@表示src目录
-        // background: url('~@/assets/img/G1.png')
-      }
-      .stock-img.img1 {
-         background: url('~@/assets/img/G1.png')
-      }
-      .stock-img.img2 {
-         background: url('~@/assets/img/G2.png')
-      }
-      .stock-img.img3 {
-         background: url('~@/assets/img/G3.png')
-      }
-      .stock-img.img4 {
-         background: url('~@/assets/img/G4.png')
-      }
-      .stock-img.img5 {
-         background: url('~@/assets/img/G5.png')
-      }
-      .stock-img.img6 {
-         background: url('~@/assets/img/G6.png')
-      }
-      .stock-button{
-        margin: auto;
-        margin-top: 11px;
-        height: 22px;
-        width: 72px;
-        font-size: 14px;
-        line-height: 22px;
-        text-align: center;
-        border-radius: 4px;
-        font-weight:400;
-        border: 1px solid #e9e9e9;
-      }
-      .enabled{
-        background:#F7F9FA;
-        &:hover{
-          color:#fff;
-          background:#1890FF;
-          cursor:pointer
-        }
-      }
-      .disabled{
-        color:rgba(0, 0, 0, 0.6);
-        background:#F7F9FA;
-        &:hover{
-          cursor:not-allowed
-        }
+    .disabled{
+      color:rgba(0, 0, 0, 0.6);
+      background:#F7F9FA;
+      &:hover{
+        cursor:not-allowed
       }
     }
   }

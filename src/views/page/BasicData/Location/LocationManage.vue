@@ -43,6 +43,12 @@
               width="55">
             </el-table-column>
             <el-table-column
+              prop="factoryName"
+              width="120"
+              :show-overflow-tooltip="true"
+              label="工厂">
+            </el-table-column>
+            <el-table-column
               prop="deptName"
               width="120"
               :show-overflow-tooltip="true"

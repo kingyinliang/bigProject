@@ -149,7 +149,7 @@ export default {
         currPage: JSON.stringify(this.currPage),
         pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
-        console.log(data)
+        this.visible = false
         if (data.code === 0) {
           this.deviceList = data.list.list
           this.pageSize = data.list.pageSize

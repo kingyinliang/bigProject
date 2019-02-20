@@ -1,24 +1,36 @@
 <template>
   <el-col>
     <div class="main">
-      <el-card class="searchCard" style="margin: 0">
+      <el-card class="searchCard newCard" style="margin: 0">
         <el-row type="flex">
-          <el-col>
+          <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
           </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float:right;margin-bottom: 13px">
-              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
-              <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('verify:material:save:packing')">{{isRedact?'取消':'编辑'}}</el-button>
-            </el-row>
-            <el-row v-if="isRedact && enableOpt" style="float:right;">
-              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
-            </el-row>
-            <el-row style="position: absolute;right: 0;top: 100px;">
-              <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
+          <el-col :span="3" >
+            <!-- <div>
+              <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>
+              订单状态：
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">
+                {{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}
+              </span>
+            </div> -->
+            <div style="float:right; line-height:31px;font-size: 14px">
+              <div style="float:left">
+                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red': '#7ED321'}"></span>订单状态：
+              </div>
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+            </div>
           </el-col>
+        </el-row>
+        <el-row style="text-align:right" class="buttonCss">
+          <template style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:whtPwMaterial:update')">{{isRedact?'取消':'编辑'}}</el-button>
+          </template>
+          <template v-if="isRedact && enableOpt" style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('sys:whtPwMaterial:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtPwMaterial:update')">提交</el-button>
+          </template>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -26,11 +38,11 @@
       </el-card>
     </div>
     <div class="main" style="padding-top: 0px">
-      <el-card class="tableCard">
+      <div class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs">
+        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs"  :before-leave='beforeLeave' type="border-card">
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -39,32 +51,32 @@
             </span>
             <pw-apply-materiel ref="pwapplymateriel" :isRedact="isRedact" :order="formHeader" @updateOrderInfo="updateOrderInfo" @setAppyMaterielState='setAppyMaterielState' :appyMaterielState="appyMaterielState" ></pw-apply-materiel>
           </el-tab-pane>
-          <el-tab-pane name="2" :disabled='!enableOpt'>
+          <el-tab-pane name="2">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.readyState === 'noPass'? '不通过':this.readyState === 'saved'? '已保存':this.readyState === 'submit' ? '已提交' : this.readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>工时录入</el-button>
               </el-tooltip>
             </span>
             <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
           </el-tab-pane>
-          <el-tab-pane name="3" :disabled='!enableOpt'>
+          <el-tab-pane name="3" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="excState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.excState === 'noPass'? '不通过':this.excState === 'saved'? '已保存':this.excState === 'submit' ? '已提交' : this.excState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button>异常记录</el-button>
               </el-tooltip>
             </span>
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
-          <el-tab-pane name="4" :disabled='!enableOpt'>
+          <el-tab-pane name="4" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="this.remarkState === 'noPass'? '不通过':this.remarkState === 'saved'? '已保存':this.remarkState === 'submit' ? '已提交' : this.remarkState === 'checked'? '通过':'未录入'" placement="top-start">
                   <el-button>文本记录</el-button>
               </el-tooltip>
             </span>
             <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
         </el-tabs>
-      </el-card>
+      </div>
     </div>
   </el-col>
 </template>
@@ -99,15 +111,16 @@ export default {
         productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
       },
       activeName: '1',
-      appyMaterielState: '',
       // save / submit 是否可用
       enableOpt: false,
+      // 物料领用
+      appyMaterielState: '',
       // 准备时间
-      readyState: '请申请订单后操作',
+      readyState: '',
       // 异常
-      excState: '请申请订单后操作',
+      excState: '',
       // remarkState
-      remarkState: '请申请订单后操作'
+      remarkState: ''
     }
   },
   mounted () {
@@ -119,6 +132,13 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    beforeLeave (activeName, oldActiveName) {
+      if (!this.enableOpt && activeName !== '1') {
+        this.$message({type: 'error', message: '请申请订单之后操作', duration: 1000})
+        return false
+      }
+      return true
+    },
     // 获取表头
     GetOrderList () {
       this.isRedact = false
@@ -265,9 +285,9 @@ export default {
       if (n) {
         // 有订单号情况下才可用
         this.enableOpt = true
-        this.readyState = '未通过'
-        this.excState = '未通过'
-        this.remarkState = '未通过'
+        // this.readyState = '未通过'
+        // this.excState = '未通过'
+        // this.remarkState = '未通过'
       }
       this.GetOrderList()
     }
@@ -310,15 +330,15 @@ export default {
   border-top: 1px solid #e8e8e8;
   span{
     .el-button{
-      background-color: white!important;
+      background-color: inherit;
       font-size: 16px;
       padding: 0;
       border: none;
     }
   }
   .el-tabs__item{
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
   }
   table{
     .el-form-item{
