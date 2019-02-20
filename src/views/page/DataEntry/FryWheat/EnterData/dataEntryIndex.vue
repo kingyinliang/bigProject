@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {PACKAGING_API, WHT_API} from '@/api/api'
+import {WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ReadyTime from '../common/readyTime'
@@ -230,12 +230,8 @@ export default {
       let net5 = new Promise((resolve, reject) => {
         that.$refs.textrecord.UpdateText(this.formHeader, str, resolve)
       })
-      let material = new Promise((resolve, reject) => {
-        that.$refs.applymateriel.saveMateriel(resolve)
-      })
-      // 物料领用点击提交button，先调用save 后调用submit
       if (str === 'submit') {
-        let net10 = Promise.all([net0, net1, net2, net3, net4, net5, material])
+        let net10 = Promise.all([net0, net1, net2, net3, net4, net5])
         net10.then(function () {
           let net6 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
@@ -255,6 +251,9 @@ export default {
       } else {
         let instock = new Promise((resolve, reject) => {
           that.$refs.instock.saveIn(resolve)
+        })
+        let material = new Promise((resolve, reject) => {
+          that.$refs.applymateriel.saveMateriel(resolve)
         })
         let net10 = Promise.all([net0, net1, net2, net3, net4, net5, instock, material])
         net10.then(function () {
