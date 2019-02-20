@@ -123,7 +123,7 @@ export default {
       // A release identifier.
       release: `factory-wap@${process.env.RELEASE_VERSION}`,
       // An environment identifier.
-      environment: 'uat',
+      environment: 'prd',
       // Custom event transport that will be used to send things to Sentry
       // transport: HappyTransport
       // Method called for every captured event
@@ -171,7 +171,7 @@ export default {
       // TODO
       scope.setExtra('basic', {name: 'zhangsan'})
       // TODO
-      scope.setTag('page_local', '测试环境')
+      scope.setTag('page_local', '正式环境')
       // TODO
       let id = sessionStorage.getItem('vuex') ? JSON.parse(sessionStorage.getItem('vuex')).user.id : ''
       let name = sessionStorage.getItem('vuex') ? `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）` : ''
