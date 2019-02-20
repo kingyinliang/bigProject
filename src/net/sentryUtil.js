@@ -123,7 +123,7 @@ export default {
       // A release identifier.
       release: `factory-wap@${process.env.RELEASE_VERSION}`,
       // An environment identifier.
-      environment: 'dev',
+      environment: 'uat',
       // Custom event transport that will be used to send things to Sentry
       // transport: HappyTransport
       // Method called for every captured event
