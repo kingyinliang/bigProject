@@ -73,7 +73,7 @@
                 <img src="@/assets/img/machineicon.png" alt="">
                 <div style="margin-left: 15px">
                   <p class="machineTit">{{ item.deviceName }}</p>
-                  <p class="machineTxt">这台酱油炒麦机是2018年在日本进口的。</p>
+                  <!--<p class="machineTxt">这台酱油炒麦机是2018年在日本进口的。</p>-->
                 </div>
               </div>
               <el-row>
@@ -331,7 +331,7 @@ export default {
     // 炒麦机
     GetMachine (productLine) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '',
+        param: '炒麦机',
         deptId: productLine,
         currPage: '1',
         pageSize: '50'
