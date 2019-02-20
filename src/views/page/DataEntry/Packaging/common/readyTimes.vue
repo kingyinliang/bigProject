@@ -19,7 +19,8 @@
     </div>
     <el-card class="box-card" v-if="readyDate.classes === '' || readyDate.classes === '白班' || readyDate.classes === '多班'">
       <div slot="header" class="clearfix">
-        <span class="shiftBtn dayshift" name="dayshift">白班录入 <i class="el-icon-caret-top"></i></span>
+        白班录入
+        <span class="readyshiftBtn dayshift" name="dayshift">收起<i class="el-icon-caret-top"></i></span>
       </div>
       <div class="dayshiftBox">
         <el-form-item label="工作开始时间：" >
@@ -44,7 +45,8 @@
     </el-card>
     <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '中班' || readyDate.classes === '多班')">
       <div slot="header" class="clearfix">
-        <span class="shiftBtn middleshift" name="middleshift">中班录入 <i class="el-icon-caret-top"></i></span>
+        中班录入
+        <span class="readyshiftBtn middleshift" name="middleshift">收起 <i class="el-icon-caret-top"></i></span>
       </div>
       <div class="middleshiftBox">
         <el-form-item label="工作开始时间：" >
@@ -69,7 +71,8 @@
     </el-card>
     <el-card class="box-card" v-if="readyDate.isCause == '1' &&(readyDate.classes === '' || readyDate.classes === '夜班' || readyDate.classes === '多班')">
       <div slot="header" class="clearfix">
-        <span class="shiftBtn nightshift" name="nightshift">夜班录入 <i class="el-icon-caret-top"></i></span>
+        夜班录入
+        <span class="readyshiftBtn nightshift" name="nightshift">收起 <i class="el-icon-caret-top"></i></span>
       </div>
       <div class="nightshiftBox">
         <el-form-item label="工作开始时间：" >
@@ -112,7 +115,7 @@
 
 <script>
 import {PACKAGING_API} from '@/api/api'
-import { toDate } from '@/net/validate'
+import { toDate, Readyanimation } from '@/net/validate'
 export default {
   name: 'readyTimes',
   data () {
@@ -206,6 +209,7 @@ export default {
     }
   },
   mounted () {
+    Readyanimation(this.$)
   },
   methods: {
     // 获取包装车间准备时间列表
@@ -369,5 +373,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .readyshiftBtn{
+    font-weight: normal;
+    cursor: pointer;
+    color: #3a8ee6;
+  }
 </style>

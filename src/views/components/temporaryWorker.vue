@@ -11,10 +11,10 @@
         </el-col>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="updataDayLaborer">确定</el-button>
-    </span>
+    </div>
   </el-dialog>
 </template>
 

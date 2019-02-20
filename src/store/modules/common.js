@@ -22,14 +22,25 @@ export default {
     // 包装车间数据录入传值
     PkgorderNo: '',
     // 炒麦车间
-    FWfactoryid: '',
-    FWworkShop: '',
-    FWproductDate: '',
-    FWfactoryName: '', // 工厂名字
-    FWworkShopName: '', // 车间名字
+    FWworkShop: '', // 车间
+    FWworkShopName: '',
+    FWfactoryid: '', // 工厂
+    FWfactoryName: '',
+    FWproductLine: '', // 产线
+    FWproductLineName: '',
+    // yyMMdd
+    FWproductDate: '', // 生产日期
     FWorderId: '',
-    // 包装车间数据录入传值
-    FWorderNo: ''
+    FWorderNo: '',
+    // 脱皮产线
+    PWorder: {
+      orderId: '',
+      orderNo: '',
+      productLine: '', // 产线
+      productLineName: '',
+      // yyyyMMdd
+      productDate: ''
+    }
   },
   mutations: {
     updateDocumentClientHeight (state, height) {
@@ -88,6 +99,32 @@ export default {
     },
     updateFWorderId (state, name) {
       state.FWorderId = name
+    },
+    updateFWproductLine (state, name) {
+      state.FWproductLine = name
+    },
+    updateFWproductLineName (state, name) {
+      state.FWproductLineName = name
+    },
+    /* pw 小麦 start */
+    updatePWorder (state, name) {
+      state.PWorder = name
+    },
+    updatePWorderId (state, name) {
+      state.PWorder.orderId = name
+    },
+    updatePWorderNo (state, name) {
+      state.PWorder.orderNo = name
+    },
+    updatePWproductLine (state, name) {
+      state.PWorder.productLine = name
+    },
+    updatePWproductLineName (state, name) {
+      state.PWorder.productLineName = name
+    },
+    updatePWproductDate (state, name) {
+      state.PWorder.productDate = name
     }
+    /* pw 小麦 end */
   }
 }

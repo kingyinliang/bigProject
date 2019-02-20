@@ -29,6 +29,8 @@ export function showFullScreenLoading () {
 export function tryHideFullScreenLoading () {
   if (needLoadingRequestCount <= 0) return
   needLoadingRequestCount--
+  // console.log(needLoadingRequestCount)
+  // console.log(Vue.prototype.lodingState)
   if (needLoadingRequestCount === 0 && Vue.prototype.lodingState) {
     endLoading()
   }
@@ -36,7 +38,7 @@ export function tryHideFullScreenLoading () {
 
 /*
 * @method httpProxy
-* @param {string} url api地址
+* @param {string} url{string} api地址 data{object} 参数 ContentType{boole} post拼接路径 responseType{boole}下载文件流 londingstatus{boole}加载遮罩
 * @param {string} [method] {@link module:constants/http method}
 * */
 export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, responseType = false, londingstatus = true) => {
@@ -88,9 +90,13 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
       router.options.isAddDynamicMenuRoutes = false
       router.push({path: '/login'})
     }
+    if (response.data && response.data.code === 500) {
+      Vue.prototype.$log.writeErrorLog(new Error(`接口错误：${url}`), `msg:${response.data.msg},data: ${JSON.stringify(data)}`)
+    }
     tryHideFullScreenLoading()// 关闭遮罩
     return response
   }, error => {
+    Vue.prototype.$log.writeErrorLog(new Error(`网络请求失败，接口：${url}`), `${error}`)
     Message.error({message: '网络请求失败，请刷新重试'})
     endLoading() // 关闭遮罩
     return Promise.reject(error)

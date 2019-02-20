@@ -135,7 +135,7 @@ export default {
     },
     // 获取异常数据
     GetExcDate (id) {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.ExcDate = data.listForm
         } else {

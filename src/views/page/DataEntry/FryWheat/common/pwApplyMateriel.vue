@@ -7,18 +7,18 @@
         <el-col :span="12">
           <el-form ref="form" label-width="100px">
             <el-form-item label="生产调度员" style='margin-bottom:0px;'>
-              <el-select @change="changeDispatcher" v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact" size="small">
-                <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.name" :value="item.code" ></el-option>
+              <el-select size="small" v-model="dispatcherCode" value-key="dispatcherCode" placeholder="请选择生产调度员" :disabled="!isRedact || appyMaterielState == 'submit' || appyMaterielState == 'checked'" >
+                <el-option v-for="(item, index) in this.dictListObj['PW_FEVOR']" :key="index" :label="item.code" :value="item.code" ></el-option>
               </el-select>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <div class="btn" style="float:right;">
-            <el-button type="primary" size="small" :disabled="!isRedact" @click="addNewRecord">新增</el-button>
+            <el-button type="primary" size="small" :disabled="!isRedact || appyMaterielState == 'submit' || appyMaterielState == 'checked'" @click="addNewRecord">新增</el-button>
             <el-button type="primary" style="margin-left:0px;" size="small" :disabled="!isRedact || !enableSubmit" @click="saveOrderMateriel">申请订单</el-button>
-            <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
-            <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button>
+            <!-- <el-button type='primary' size="small" @click="saveMaterielList">baocun</el-button>
+            <el-button type='primary' size="small" @click="submitMaterielList">tijiao</el-button> -->
           </div>
         </el-col>
       </el-row>
@@ -36,9 +36,12 @@
               label="生产物料"
               width="220">
               <template slot-scope="scope">
-                <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                  <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select @change="changeProduct(scope.row)"  v-model="scope.row.productCode" value-key="productCode" placeholder="请选择生产物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
+                    <el-option v-for="(item, index) in dictListObj['CM_material_prd']" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -62,9 +65,12 @@
               width="220"
               label="发料料号">
               <template slot-scope="scope">
-                <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                  <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select @change="changeIssue(scope.row)"  v-model="scope.row.issueCode" value-key="issueCode" placeholder="请选择发料料号"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
+                    <el-option v-for="(item, index) in dictListObj['CM_material']" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -101,7 +107,7 @@
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                  <el-input maxlength='10' v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
@@ -119,7 +125,7 @@
               width="140"
               label="入库批次">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.inStorageBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                <el-input maxlength='10' v-model="scope.row.inStorageBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -140,7 +146,7 @@
               width="200"
               label="生产订单">
               <template slot-scope="scope">
-                {{scope.row.orderId}}
+                {{scope.row.orderNo}}
               </template>
             </el-table-column>
             <el-table-column
@@ -174,80 +180,58 @@ export default {
   data () {
     return {
       dictListObj: {},
-      dispatcherCode: 'TP1',
-      dispatcherName: 'PW生产调度员',
+      dispatcherCode: '',
+      // dispatcherName: '',
       materielDataList: [],
       readAudit: []
     }
   },
   mounted () {
-    // this.getDispatcherList()
-    // this.getMaterialPrdList()
     this.getDictList()
-    this.getMaterielDataList()
+    // this.getMaterielDataList()
   },
   props: {
     isRedact: Boolean,
+    appyMaterielState: String,
     order: Object
   },
   methods: {
     // 申请订单
-    saveOrderMateriel (str, resolve) {
+    saveOrderMateriel () {
       if (this.materielDataList.length > 0) {
         // 数据验证
-        if (this.validateList()) {
+        if (this.validate()) {
           for (let item of this.materielDataList) {
             item.status = 'submit'
-            item.productDate = this.order && this.order.productDate
+            // item.productDate = this.order && this.order.productDate
           }
           this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
-              // 申请订单成功，订单号回写
+              // 申请订单成功，订单号回写，触发全局刷新
               this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
             } else {
               this.$message.error(data.msg || '申请订单失败，请稍后尝试')
             }
-            if (resolve) {
-              resolve('resolve')
-            }
           }).catch((error) => {
             console.log('catch data::', error)
           })
         }
       }
     },
-    // 保存
-    saveMaterielList (str, resolve) {
-      if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
-          this.materielDataList.forEach((item) => {
-            if (item.status !== 'submit' || item.status !== 'checked') {
-              item.status = 'saved'
-            }
-          })
-          this.$http(`${WHT_API.MATERIELSAVE_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
-            }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
-          })
-        }
-      }
-    },
-    // 提交
-    submitMaterielList (str, resolve) {
+    // 保存/提交
+    saveMateriel (resolve) {
       if (this.materielDataList.length > 0) {
         this.materielDataList.forEach((item) => {
-          if (item.status !== 'checked') {
-            item.status = 'submit'
+          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+          // if (item.status !== 'submit' || item.status !== 'checked') {
+          //   item.status = 'saved'
+          // }
+          // 新增行赋值saved
+          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
+            item.status = 'saved'
           }
         })
-        this.$http(`${WHT_API.MATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+        this.$http(WHT_API.MATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
             this.$message.error(data.msg)
@@ -258,11 +242,51 @@ export default {
         }).catch((error) => {
           console.log('catch data::', error)
         })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
       }
     },
-    validateList () {
+    submitMateriel (resolve) {
+      if (this.materielDataList.length > 0) {
+        this.materielDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        this.$http(WHT_API.MATERIELSUBMIT_API, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
+        }
+      }
+    },
+    validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
+          if (item.dispatchMan == null || item.dispatchMan.trim() === '') {
+            this.$message.error('生产调度员不能为空')
+            return false
+          }
+          if (item.productCode == null || item.productCode.trim() === '') {
+            this.$message.error('生产物料不能为空')
+            return false
+          }
+          if (item.issueCode == null || item.issueCode.trim() === '') {
+            this.$message.error('发料料号不能为空')
+            return false
+          }
           if (item.productWeight === '') {
             this.$message.error('生产数不能为空')
             return false
@@ -271,8 +295,16 @@ export default {
             this.$message.error('发料批次不能为空')
             return false
           }
+          if (item.issueBatch.trim().length > 10) {
+            this.$message.error('发料批次长度不能超过10')
+            return false
+          }
           if (item.inStorageWeight === '') {
             this.$message.error('入库数不能为空')
+            return false
+          }
+          if (item.inStorageBatch.trim().length > 10) {
+            this.$message.error('入库批次长度不能超过10')
             return false
           }
         }
@@ -295,13 +327,14 @@ export default {
         console.log('catch data::', error)
       })
     },
-    getMaterielDataList () {
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
+    getMaterielDataList (orderId) {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      // console.log('为什么拿不到orderId', this.order.orderId)
       this.materielDataList = []
       this.readAudit = []
-      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId: this.order.orderId}).then(({data}) => {
+      this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist
@@ -340,30 +373,32 @@ export default {
     },
     // 新增记录
     addNewRecord () {
+      let lastArr = this.materielDataList.filter(item => { return item.delFlag === '0' })
+      let last = lastArr && lastArr.length > 0 ? lastArr[lastArr.length - 1] : null
       let nowStr = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       let user = this.$store.state.user.realName
       this.materielDataList.push({
-        branWeight: 0,
+        branWeight: last ? last.branWeight : 0,
         delFlag: '0',
         dispatchMan: this.dispatcherCode,
         gmCode: '02',
         // 小颗粒
-        granuleWeight: 0,
-        inStorageBatch: '',
-        inStorageWeight: 0,
+        granuleWeight: last ? last.granuleWeight : 0,
+        inStorageBatch: last ? last.inStorageBatch : '',
+        inStorageWeight: last ? last.inStorageWeight : 0,
         // 发料批次
-        issueBatch: '',
-        issueCode: 'M010200001',
-        issueName: '炒麦车间原料',
+        issueBatch: last ? last.issueBatch : '',
+        issueCode: last ? last.issueCode : '',
+        issueName: last ? last.issueName : '',
         // 发料数量
-        issueWeight: 0,
-        productCode: 'SP07010001',
-        productName: 'PW小麦',
+        issueWeight: last ? last.issueWeight : 0,
+        productCode: last ? last.productCode : '',
+        productName: last ? last.productName : '',
         productUnit: 'KG',
-        productWeight: 0,
-        remark: '',
-        scrappedWeight: 0,
-        storageWeight: 0,
+        productWeight: last ? last.productWeight : 0,
+        remark: last ? last.remark : '',
+        scrappedWeight: last ? last.scrappedWeight : 0,
+        storageWeight: last ? last.storageWeight : 0,
         // this.order && this.order.productDate
         productDate: this.order && this.order.productDate,
         // this.order && this.order.factory
@@ -400,34 +435,47 @@ export default {
         }
       }
     },
-    changeDispatcher: function () {
-      let dispatcher = this.dictListObj['PW_FEVOR'].find((item) => item.code === this.dispatcherCode)
-      if (dispatcher) {
-        this.dispatcherName = dispatcher.name
-      }
-    },
+    // changeDispatcher: function () {
+    //   let dispatcher = this.dictListObj['PW_FEVOR'].find((item) => item.code === this.dispatcherCode)
+    //   if (dispatcher) {
+    //     this.dispatcherName = dispatcher.name
+    //   }
+    // },
     changeProduct: function (row) {
       let product = this.dictListObj['CM_material_prd'].find((item) => item.code === row.productCode)
       if (product) {
-        row.productName = product.name
+        row.productName = product.value
       }
     },
     changeIssue: function (row) {
       let issue = this.dictListObj['CM_material'].find((item) => item.code === row.issueCode)
       if (issue) {
-        row.issueName = issue.name
+        row.issueName = issue.value
       }
     }
   },
   computed: {
     enableSubmit: function () {
       // 只有进来没订单号的请况下可以提交订单
-      return typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined'
+      return typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined' || this.order.orderId.trim().length === 0
     }
   },
   watch: {
-    'order.orderNo' (n, o) {
-      this.getMaterielDataList()
+    'order.productDate' (n, o) {
+      // 监听头部生产日期
+      this.materielDataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.productDate = n
+        }
+      })
+    },
+    'dispatcherCode' (n, o) {
+      // 调度员切换
+      this.materielDataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.dispatchMan = n
+        }
+      })
     }
   },
   components: {

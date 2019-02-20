@@ -7,9 +7,9 @@
         <el-card body-style="padding-top:10px;">
           <div class="clearfix topBox">
             <div class="btn" style="margin-bottom:8px;">
-              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact">新增</el-button>
-              <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
-              <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button>
+              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'">新增</el-button>
+              <!-- <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
+              <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button> -->
               <div class='clearfix'></div>
             </div>
           </div>
@@ -28,7 +28,7 @@
                 <div class="required">
                   <i class="reqI">*</i>
                   <el-select @change="changeProduct(scope.row)"  v-model="scope.row.materialCode" value-key="materialCode" placeholder="请选择物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in materialDictList" :key="index" :label="item.code + ' ' + item.name" :value="item.code" ></el-option>
+                    <el-option v-for="(item, index) in materialDictList" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
                   </el-select>
                 </div>
               </template>
@@ -47,17 +47,17 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="241"
+              width="180"
               label="物料批次">
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
-                  <el-input v-model="scope.row.batch"  size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
+                  <el-input v-model="scope.row.batch" maxlength='10' size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              width="241"
+              width="160"
               label="小麦领用数">
               <template slot-scope="scope">
                 <div class="required">
@@ -72,6 +72,14 @@
               <template slot-scope="scope">
                 <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
                 <span>{{ scope.row.weightUnit = 'KG'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="备注"
+              width="160">
+              <template slot-scope="scope">
+                <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
+                <el-input v-model.number="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -108,72 +116,86 @@ export default {
   mounted () {
     this.getMaterialDictList()
     this.getWheatContainerList()
-    this.getMaterielDataList()
+    // this.getMaterielDataList()
   },
   props: {
     isRedact: Boolean,
+    applyMaterielState: String,
     order: Object
   },
   methods: {
     // 保存
-    saveMaterielList (str, resolve) {
+    saveMateriel (resolve) {
       if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
-          this.materielDataList.forEach((item) => {
-            if (item.status !== 'submit' || item.status !== 'checked') {
-              item.status = 'saved'
-            }
-          })
-          this.$http(`${WHT_API.APPLYMATERIELSAVE_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
-            }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
-          })
+        this.materielDataList.forEach((item) => {
+          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+          // if (item.status !== 'submit' || item.status !== 'checked') {
+          //   item.status = 'saved'
+          // }
+          // 新增行赋值saved
+          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
+            item.status = 'saved'
+          }
+        })
+        this.$http(WHT_API.APPLYMATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
         }
       }
     },
-    // 提交
-    submitMaterielList (str, resolve) {
+    // 物料提交
+    submitMateriel (resolve) {
       if (this.materielDataList.length > 0) {
-        if (this.validateList()) {
-          this.materielDataList.forEach((item) => {
-            if (item.status !== 'checked') {
-              item.status = 'submit'
-            }
-          })
-          this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-            } else {
-              this.$message.error(data.msg)
-            }
-            if (resolve) {
-              resolve('resolve')
-            }
-          }).catch((error) => {
-            console.log('catch data::', error)
-          })
+        this.materielDataList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        }).catch((error) => {
+          console.log('catch data::', error)
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
         }
       }
     },
-    validateList () {
+    validate () {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
-          if (item.materialCode === '') {
+          if (item.materialCode == null || item.materialCode.trim() === '') {
             this.$message.error('物料不能为空')
             return false
           }
-          if (item.deviceId === '') {
+          if (item.deviceId == null || item.deviceId === '') {
             this.$message.error('粮仓不能为空')
             return false
           }
-          if (item.batch.trim() === '') {
+          if (item.batch == null || item.batch.trim() === '') {
             this.$message.error('物料批次不能为空')
+            return false
+          }
+          if (item.batch.trim().length > 10) {
+            this.$message.error('物料批次长度不能超过10')
             return false
           }
           if (item.wheatWeight === '') {
@@ -222,13 +244,13 @@ export default {
       })
     },
     // 获取物料数据
-    getMaterielDataList () {
+    getMaterielDataList (orderId) {
       this.materielDataList = []
       this.readAudit = []
-      if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
-        return
-      }
-      this.$http(`${WHT_API.APPLYMATERIELLIST_API}`, 'POST', {order_id: this.order.orderId}).then(({data}) => {
+      // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
+      //   return
+      // }
+      this.$http(`${WHT_API.APPLYMATERIELLIST_API}`, 'POST', {order_id: orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.materielDataList = data.listForm
@@ -268,21 +290,24 @@ export default {
     },
     // 新增
     addNewRecord () {
+      // 复制上一条数据的手动录入部分
+      let lastArr = this.materielDataList.filter(item => { return item.delFlag === '0' })
+      let last = lastArr && lastArr.length > 0 ? lastArr[lastArr.length - 1] : null
       this.materielDataList.push({
         id: '',
         orderId: this.order.orderId,
         // 物料编码默认值
-        materialCode: 'M010200001',
-        materialName: '炒麦车间原料',
+        materialCode: last ? last.materialCode : '',
+        materialName: last ? last.materialName : '',
         // 粮仓号
-        deviceId: '',
+        deviceId: last ? last.deviceId : '',
         // 粮仓名称
-        holderName: '',
+        holderName: last ? last.holderName : '',
         // 批次号
-        batch: '',
-        wheatWeight: 0,
+        batch: last ? last.batch : '',
+        wheatWeight: last ? last.wheatWeight : 0,
         weightUnit: 'KG',
-        remark: '',
+        remark: last ? last.remark : '',
         delFlag: '0'
       })
     },
@@ -307,7 +332,7 @@ export default {
     changeProduct: function (row) {
       let ele = this.materialDictList.find((item) => item.code === row.materialCode)
       if (ele) {
-        row.materialName = ele.name
+        row.materialName = ele.value
       }
     }
     // saveOrSubmitMateriel (str, resolve) {
@@ -322,13 +347,6 @@ export default {
   computed: {
   },
   watch: {
-    // 'order.orderId' (n, o) {
-    //   this.loading = true
-    //   this.getMaterielDataList()
-    // },
-    // 'order.workShopName' (n, o) {
-    //   this.getWheatContainerList()
-    // }
   },
   components: {
     AuditLog: resolve => {

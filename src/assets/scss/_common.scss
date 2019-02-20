@@ -1,3 +1,17 @@
+// 站点主色
+// tips: 要达到整站主题修改效果, 请确保[$--color-primary]站点主色与[/src/element-ui-theme/index.js]文件中[import './element-[#17B3A3]/index.css']当前主题色一致
+$--color-primary: #17B3A3;
+
+// Navbar
+$navbar--background-color: $--color-primary;
+
+// Sidebar
+$sidebar--background-color-dark: #001529;
+$sidebar--color-text-dark: #8a979e;
+
+// Content
+$content--background-color: #f1f4f5;
+
 *,
 *:before,
 *:after {
@@ -164,6 +178,7 @@ img {
   height: 32px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   background-color: #002140;
+  margin-left: 170px;
 
   &--inverse {
     .site-navbar__body {
@@ -195,18 +210,17 @@ img {
   }
 
   &__header {
-    background: #002140;
     position: relative;
     float: left;
     width: 170px;
-    height: 50px;
+    //height: 32px;
     overflow: hidden;
   }
   &__brand {
     display: table-cell;
     vertical-align: middle;
     width: 170px;
-    height: 50px;
+    height: 32px;
     margin: 0;
     line-height: 50px;
     font-size: 20px;
@@ -249,9 +263,8 @@ img {
     }
   }
   &__body {
-    height: 32px;
     position: relative;
-    margin-left: 170px;
+    //margin-left: 170px;
     padding-right: 15px;
     background-color: #fff;
   }
@@ -290,7 +303,7 @@ img {
 ------------------------------ */
 .site-sidebar {
   position: fixed;
-  top: 50px;
+  top: 0px;
   left: 0;
   bottom: 0;
   z-index: 1020;
@@ -350,14 +363,14 @@ img {
 ------------------------------ */
 .site-content {
   //position: relative;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
   min-height: 558px;
   overflow: hidden;
   //padding: 15px;
 
   &__wrapper {
     position: relative;
-    padding-top: 32px;
+    padding-top: 50px;
     margin-left: 170px;
     min-height: 100%;
     background: $content--background-color;
@@ -384,7 +397,7 @@ img {
     }
     > .el-tabs__content {
       //padding: 0 15px 15px;
-      padding-top: 44px;
+      padding-top: 20px;
       > .site-tabs__tools {
         position: fixed;
         top: 32px;
@@ -424,15 +437,15 @@ img {
   border-top: 1px solid #e8e8e8;
   .spanview{
     .el-button{
-      background-color: white;
+      background-color: inherit !important;
       font-size: 16px;
       padding: 0;
       border: none;
     }
   }
   .el-tabs__item{
-    height: 50px;
-    line-height: 50px;
+    height: 40px!important;
+    line-height: 40px!important;
   }
   table{
     .el-form-item{
@@ -462,51 +475,26 @@ img {
   }
   // .el-input--small .el-input__inner { height: 22px; line-height: 22px; }
 }
-.newCard{
-  .el-card__body {
-    padding: 12px;
-  }
-  .el-form-item__label{
-    padding: 0;
-  }
+.el-tabs--border-card>.el-tabs__header {
+  background-color: #e8e8e8;
 }
-.NewDaatTtabs{
-  .el-tabs__item {
-    height: 40px!important;
-    line-height: 40px!important;
-  }
-  .spanview{
-    .el-button{
-      background-color: inherit!important;
-      font-size: 16px;
-      padding: 0;
-      border: none;
-    }
-  }
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+  //margin-bottom: 12px;
 }
-.point {
-  width: 5px;
-  height: 5px;
-  float:left;
-  border-radius: 50%;
-  display: block;
-  line-height: 16px;
-  margin-top:14px;
-  margin-right: 8px;
+.el-form-item--small .el-form-item__content, .el-form-item--small .el-form-item__label{
+  height: 32px;
 }
-.buttonCss{
-  .el-button--primary,.el-button--primary:focus{
-    color: #000000;
-    background-color: #FFFFFF;
-    border-color: #D9D9D9;
-  }
-  .el-button--primary:hover{
-    background-color: #1890FF;
-    color: #FFFFFF
-  }
-  .el-button--primary:first-child{
-    background-color: #1890FF;
-    color: #FFFFFF;
-    border-color: #1890FF;
-  }
+.el-button--primary,.el-button--primary:focus{
+  color: #000000;
+  background-color: #FFFFFF;
+  border-color: #D9D9D9;
+}
+.el-button--primary:hover{
+  background-color: #1890FF;
+  color: #FFFFFF
+}
+.el-button--primary:first-child{
+  background-color: #1890FF;
+  color: #FFFFFF;
+  border-color: #1890FF;
 }

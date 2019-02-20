@@ -92,7 +92,6 @@ export default {
   name: 'worker',
   data () {
     return {
-      orderId: '',
       WorkerDate: [],
       UserAudit: [],
       productShift: [],
@@ -106,7 +105,8 @@ export default {
     }
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    order: {}
   },
   mounted () {
     this.GetProductShift()
@@ -115,12 +115,9 @@ export default {
   methods: {
     // 人员列表
     GetUserList (id) {
-      if (id) {
-        this.orderId = id
-      }
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
-        order_id: this.orderId ? this.orderId : id
-      }).then(({data}) => {
+        order_id: id
+      }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.WorkerDate = data.listForm
           this.UserAudit = data.listApproval
@@ -149,9 +146,26 @@ export default {
           }
         })
       } else {
-        if (resolve) {
-          resolve('resolve')
-        }
+        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', [{
+          status: '',
+          orderId: this.order.orderId,
+          classType: '',
+          deptId: '',
+          userType: '',
+          userId: [],
+          startDate: '',
+          dinner: '60',
+          endDate: '',
+          remark: ''
+        }]).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('修改人员' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
       }
     },
     // 校验
@@ -261,7 +275,7 @@ export default {
       if (form.length) {
         form.push({
           status: '',
-          orderId: this.orderId,
+          orderId: this.order.orderId,
           classType: '',
           deptId: '',
           userType: '',
@@ -274,7 +288,7 @@ export default {
       } else {
         form.push({
           status: '',
-          orderId: this.orderId,
+          orderId: this.order.orderId,
           classType: '',
           deptId: '',
           userType: '',

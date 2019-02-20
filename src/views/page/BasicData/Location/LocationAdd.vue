@@ -6,6 +6,12 @@
       class="locationdialog1">
       <div style="width: 400px;margin: auto">
         <el-form ref="addLo" :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent>
+          <el-form-item label="工厂：" prop="deptId">
+            <el-select v-model="formatDate.factory" placeholder="请选择">
+              <el-option label=""  value=""></el-option>
+              <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="车间：" prop="deptId">
             <el-select v-model="formatDate.deptId" placeholder="请选择">
               <el-option label=""  value=""></el-option>
@@ -60,8 +66,10 @@ export default {
     return {
       visible: false,
       sapList: [],
+      factory: [],
       workshop: [],
       formatDate: {
+        factory: '',
         deptId: '',
         storageLocation: '',
         materialType: '',
@@ -86,20 +94,43 @@ export default {
       }
     }
   },
+  watch: {
+    'formatDate.factory' (n, o) {
+      this.Getdeptbyid(n)
+    }
+  },
   props: {
     SerchSapList: {}
   },
   mounted () {
+    this.Getdeptcode()
   },
   methods: {
-    init () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
-          this.workshop = data.typeList
+          this.factory = data.typeList
         } else {
           this.$message.error(data.msg)
         }
       })
+    },
+    // 获取车间
+    Getdeptbyid (id) {
+      this.formatDate.deptId = ''
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    init () {
+      this.Getdeptbyid()
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_type`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.sapList = data.dicList

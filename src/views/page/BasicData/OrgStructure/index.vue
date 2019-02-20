@@ -155,13 +155,12 @@
 </template>
 
 <script>
-import {BASICDATA_API, SYSTEMSETUP_API, MAIN_API, HOST_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API, MAIN_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
       FILE_API: '',
-      HOST_API: '',
       filterText: '',
       form: {},
       adddepform: {
@@ -197,7 +196,6 @@ export default {
   mounted () {
     this.fileReader = new FileReader()
     this.FILE_API = MAIN_API.FILE_API
-    this.HOST_API = HOST_API
     document.addEventListener('click', (e) => {
       if (e.target.className !== 'menuli') this.menuVisible = false
     })

@@ -29,7 +29,7 @@
                 <el-form-item label="产线：">
                   <p>
                     {{item.productLineName}}
-                    <el-button @click="goPro(item)" type="primary" size="small" style="float: right">数据录入</el-button>
+                    <el-button @click="goPro(item)" type="primary" size="small" style="float: right" v-if="isAuth('pkg:order:list')">数据录入</el-button>
                     <span style="float: right;color: #8a979e;font-size: 14px;min-width: 150px">订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i></span>
                   </p>
                 </el-form-item>
@@ -99,7 +99,9 @@ export default {
     this.Getdeptcode()
     let that = this
     setTimeout(function () {
-      that.GetOrderList()
+      if (that.plantList.workShop) {
+        that.GetOrderList()
+      }
     }, 1000)
   },
   methods: {
@@ -136,23 +138,27 @@ export default {
     },
     // 获取列表
     GetOrderList () {
-      this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
-        workShop: this.plantList.workShop,
-        productDate: this.plantList.productDate,
-        orderNo: ''
-      }).then(({data}) => {
-        if (data.code === 0) {
-          this.Pkgfactoryid = this.plantList.factoryid
-          this.PkgworkShop = this.plantList.workShop
-          this.PkgproductDate = this.plantList.productDate
-          this.list = this.orderList(data.list)
-          this.workShop = this.plantList.workShop
-          this.productDate = this.plantList.productDate
-          this.factoryid = this.plantList.factoryid
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.plantList.workShop) {
+        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          workShop: this.plantList.workShop,
+          productDate: this.plantList.productDate,
+          orderNo: ''
+        }).then(({data}) => {
+          if (data.code === 0) {
+            this.Pkgfactoryid = this.plantList.factoryid
+            this.PkgworkShop = this.plantList.workShop
+            this.PkgproductDate = this.plantList.productDate
+            this.list = this.orderList(data.list)
+            this.workShop = this.plantList.workShop
+            this.productDate = this.plantList.productDate
+            this.factoryid = this.plantList.factoryid
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.$message.error('请选择车间')
+      }
     },
     // 订单号下拉
     orderchange (row) {

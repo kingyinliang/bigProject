@@ -27,7 +27,7 @@ export default {
       }
       this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', {
         order_id: this.orderId ? this.orderId : id
-      }).then(({data}) => {
+      }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.textlist = data.listForm[0]
           this.Text = data.listForm[0].pkgText

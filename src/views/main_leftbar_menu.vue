@@ -13,7 +13,7 @@
       v-for="item in menu.list"
       :key="item.menuId"
       :menu="item"
-      v-if="item.type != '3'"
+      v-if="item.type != '3'&& item.type != '2'"
       :dynamicMenuRoutes="dynamicMenuRoutes">
     </sub-menu>
   </el-submenu>

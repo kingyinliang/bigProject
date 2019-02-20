@@ -34,10 +34,10 @@
       </template>
     </el-table-column>
   </el-table>
-  <span slot="footer" class="dialog-footer">
+  <div slot="footer" class="dialog-footer">
     <el-button @click="visible = false" size="small">取消</el-button>
     <el-button type="primary" @click="updateMachineTest" size="small">保存</el-button>
-  </span>
+  </div>
 </el-dialog>
 </template>
 
