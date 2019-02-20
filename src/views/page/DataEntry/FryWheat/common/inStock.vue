@@ -200,6 +200,13 @@ import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
+    var validate = (rule, value, callback) => {
+      if (value <= 0) {
+        callback(new Error('必须为大于0'))
+      } else {
+        callback()
+      }
+    }
     return {
       // stoppageType: [],
       // equipmentType: [],
@@ -218,11 +225,13 @@ export default {
         ],
         startWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'}
+          {type: 'number', message: '必须为数字', trigger: 'blur'},
+          {validator: validate, trigger: 'blur'}
         ],
         endWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'}
+          {type: 'number', message: '必须为数字', trigger: 'blur'},
+          {validator: validate, trigger: 'blur'}
         ],
         inPortBatch: [
           {required: true, message: '必填', trigger: 'blur'},
