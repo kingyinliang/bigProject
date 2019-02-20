@@ -169,10 +169,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="起始(KG)" :label-width="formLabelWidth" required prop="startWeight">
-          <el-input tyle='number' v-model.number="stockForm.startWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input type='number' v-model.number="stockForm.startWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="结束(KG)" :label-width="formLabelWidth" required prop="endWeight">
-          <el-input tyle='number' v-model.number="stockForm.endWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
+          <el-input type='number' v-model.number="stockForm.endWeight"  style="width:220px;" :disabled="!isRedact"></el-input>
         </el-form-item>
         <el-form-item label="入库批次" :label-width="formLabelWidth" required prop="inPortBatch">
           <el-input  maxlength='10' v-model="stockForm.inPortBatch"  style="width:220px;" :disabled="!isRedact"></el-input>
@@ -200,9 +200,9 @@ import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
-    var validate = (rule, value, callback) => {
+    let validate = (rule, value, callback) => {
       if (value <= 0) {
-        callback(new Error('必须为大于0'))
+        callback(new Error('必须大于0'))
       } else {
         callback()
       }
@@ -225,12 +225,10 @@ export default {
         ],
         startWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'},
           {validator: validate, trigger: 'blur'}
         ],
         endWeight: [
           {required: true, message: '必填', trigger: 'blur'},
-          {type: 'number', message: '必须为数字', trigger: 'blur'},
           {validator: validate, trigger: 'blur'}
         ],
         inPortBatch: [
