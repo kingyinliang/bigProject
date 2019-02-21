@@ -257,6 +257,17 @@ export default {
     }
   },
   methods: {
+    validate () {
+      for (let item of this.wheatDataList) {
+        if (item.delFlag === '0') {
+          if (item.inPortWeight <= 0) {
+            this.$message.error('入库数必须大于0')
+            return false
+          }
+        }
+      }
+      return true
+    },
     // 麦粉计量仓容器
     getFlourContainerList () {
       this.flourContainerList = []

@@ -202,6 +202,10 @@ export default {
             this.$message.error('小麦领用数不能为空')
             return false
           }
+          if (item.wheatWeight <= 0) {
+            this.$message.error('小麦领用数必须大于0')
+            return false
+          }
         }
       }
       return true
