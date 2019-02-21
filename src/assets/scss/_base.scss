@@ -510,3 +510,6 @@ img {
     border-color: #1890FF;
   }
 }
+.el-input.is-disabled .el-input__inner {
+  color: #606266 !important;
+}
