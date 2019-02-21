@@ -345,7 +345,7 @@ export default {
         this.processesList = []
       }
     },
-    // 获取组织结构树,ces
+    // 获取组织结构树
     getTree () {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
