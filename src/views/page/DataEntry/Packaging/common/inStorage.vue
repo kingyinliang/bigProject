@@ -385,19 +385,21 @@ export default {
         }
       })
       let that = this
-      Object.keys(obj).forEach(function (key) {
-        let tmp = true
-        that.InVlist.forEach((item) => {
-          if (item.batch === key && item.aiShelves === obj[key]) {
-            tmp = false
+      if (this.order.workShopName !== '包装三车间') {
+        Object.keys(obj).forEach(function (key) {
+          let tmp = true
+          that.InVlist.forEach((item) => {
+            if (item.batch === key && item.aiShelves === obj[key]) {
+              tmp = false
+            }
+          })
+          if (tmp) {
+            ty = false
+            that.$message.error('机维组未确认，请保存后等待机维组确认后提交')
+            return false
           }
         })
-        if (tmp) {
-          ty = false
-          that.$message.error('机维组未确认，请保存后等待机维组确认后提交')
-          return false
-        }
-      })
+      }
       return ty
     },
     // 获取生产班次
