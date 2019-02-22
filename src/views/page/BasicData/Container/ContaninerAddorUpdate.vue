@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="100px">
         <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
