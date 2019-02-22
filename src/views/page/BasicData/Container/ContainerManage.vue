@@ -24,9 +24,13 @@
                 <el-form-item label="容器量：">
                   <el-input v-model="form.holderHold" placeholder="手动输入"></el-input>
                 </el-form-item>
+                <el-form-item label="归属工厂：" >
+                  <el-select v-model="form.factoryId" placeholder="请选择">
+                    <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="归属车间：">
                   <el-select v-model="form.deptId" placeholder="请选择">
-                    <el-option label=""  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
@@ -136,6 +140,7 @@ export default {
     return {
       visible: false,
       form: {},
+      factoryList: [],
       workshop: [],
       currPage: 1,
       pageSize: 10,
@@ -148,7 +153,8 @@ export default {
   mounted () {
     this.GetContainerList()
     this.getDictList()
-    this.Getdeptcode()
+    this.getFactoryList()
+    // this.Getdeptcode(this.form.factoryId)
   },
   methods: {
     // 序号
@@ -165,7 +171,6 @@ export default {
         }
       }
       this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', obj).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.multipleSelection = []
           this.list = data.page.list
@@ -188,15 +193,27 @@ export default {
         }
       })
     },
-    // 获取归属车间
-    Getdeptcode () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
+    getFactoryList () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
+        if (res.data.code === 0) {
+          this.factoryList = res.data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$message.error(res.data.msg)
         }
       })
+    },
+    // 获取归属车间,根据工厂ID
+    Getdeptcode (factoryId) {
+      if (factoryId) {
+        this.$set(this.form, 'deptId', '')
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}).then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 表格选中
     handleSelectionChange (val) {
@@ -217,6 +234,7 @@ export default {
         holder_type: this.form.holderType,
         holder_no: this.form.holderNo,
         holder_hold: this.form.holderHold,
+        factory: this.form.factoryId,
         dept_id: this.form.deptId
       })
     },
@@ -229,7 +247,6 @@ export default {
     },
     // 删除
     remove () {
-      console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
         this.$message.error('请选择要删除的容器')
       } else {
@@ -239,7 +256,6 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http(`${BASICDATA_API.CONTAINERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 type: 'success',
@@ -282,6 +298,11 @@ export default {
         pageSize: this.pageSize,
         currPage: val
       })
+    }
+  },
+  watch: {
+    'form.factoryId' (n) {
+      this.Getdeptcode(n)
     }
   },
   computed: {},

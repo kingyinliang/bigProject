@@ -4,6 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
+     <!-- <el-form ref="form" :model="ffff" label-width="80px">
+        <el-form-item label="活动名称">
+          <el-input v-model="ffff.name"></el-input>
+        </el-form-item>
+      </el-form> -->
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
         <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
@@ -25,6 +30,12 @@
         </el-form-item>
         <el-form-item label="物理区域：">
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
+        </el-form-item>
+        <el-form-item label="归属工厂：" prop="factory">
+          <el-select  @change="changeFactory" v-model="factoryId" placeholder="请选择" style="width: 100%">
+            <el-option label=""  value=""></el-option>
+            <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="归属车间：" prop="deptId">
           <el-select v-model="dataForm.deptId" placeholder="请选择" style="width: 100%">
@@ -57,8 +68,11 @@ export default {
         holderHold: 0,
         holderPatch: '',
         holderArea: '',
+        factory: '',
         deptId: ''
       },
+      factoryId: '',
+      factoryList: [],
       workshop: [],
       submitType: true,
       dataRule: {
@@ -68,6 +82,9 @@ export default {
         holderNo: [
           { required: true, message: '容器号不能为空', trigger: 'blur' }
         ],
+        factory: [
+          { required: true, message: '归属工厂不能为空', trigger: 'blur' }
+        ],
         deptId: [
           { required: true, message: '归属车间不能为空', trigger: 'blur' }
         ]
@@ -76,12 +93,14 @@ export default {
   },
   mounted () {
     this.getDictList()
-    this.Getdeptcode()
+    this.getFactoryList()
+    // this.Getdeptcode(this.dataForm.factory)
   },
   methods: {
     init (id) {
-      this.dataForm = {}
       if (id) {
+        // 修改
+        // this.dataForm = {}
         this.conid = id
         this.$http(`${BASICDATA_API.CONTAINERDETAIL_API}/${id}`, 'POST').then(({data}) => {
           if (data.code === 0) {
@@ -92,7 +111,10 @@ export default {
             this.dataForm.holderHold = data.sysHolder.holderHold
             this.dataForm.holderPatch = data.sysHolder.holderPatch
             this.dataForm.holderArea = data.sysHolder.holderArea
+            // this.dataForm.factory = data.sysHolder.factory
+            this.factoryId = data.sysHolder.factory
             this.dataForm.deptId = data.sysHolder.deptId
+            this.Getdeptcode(data.sysHolder.factory, false)
           } else {
             this.$message.error(data.msg)
           }
@@ -103,15 +125,35 @@ export default {
         this.visible = true
       }
     },
-    // 获取归属车间
-    Getdeptcode () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
-        if (data.code === 0) {
-          this.workshop = data.typeList
+    changeFactory (value) {
+      this.dataForm.factory = value
+    },
+    // 工厂数据
+    getFactoryList () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
+        if (res.data.code === 0) {
+          this.factoryList = res.data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$message.error(res.data.msg)
         }
       })
+    },
+    // 获取归属车间
+    Getdeptcode (factoryId, flag) {
+      if (factoryId) {
+        if (flag) {
+          // 清除车间选项值
+          this.dataForm.deptId = ''
+        }
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}).then(({data}) => {
+          if (data.code === 0) {
+            console.log('------------------------------------------------------', data.typeList.length)
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 容器参数下拉
     getDictList () {
@@ -172,6 +214,15 @@ export default {
           }
         })
       }
+    }
+  },
+  watch: {
+    'dataForm.factory' (n) {
+      console.log('****************1*********************')
+      this.Getdeptcode(n, true)
+    },
+    'workshop' (n) {
+      console.log('****************2*********************')
     }
   },
   computed: {},
