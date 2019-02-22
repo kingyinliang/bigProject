@@ -258,6 +258,10 @@ export default {
   },
   methods: {
     validate () {
+      if (this.wheatDataList === undefined || this.wheatDataList.length === 0) {
+        this.$message.error('生产入库未录入数据')
+        return false
+      }
       for (let item of this.wheatDataList) {
         if (item.delFlag === '0') {
           if (item.inPortWeight <= 0) {

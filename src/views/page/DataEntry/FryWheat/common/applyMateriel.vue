@@ -180,6 +180,10 @@ export default {
       }
     },
     validate () {
+      if (this.materielDataList === undefined || this.materielDataList.length === 0) {
+        this.$message.error('物料领用未录入数据')
+        return false
+      }
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.materialCode == null || item.materialCode.trim() === '') {
