@@ -3,7 +3,7 @@
   <div class="clearfix">
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ===''))" style="float: right">新增</el-button>
   </div>
-  <div v-if="order.properties !== '二合一&礼盒产线'">
+  <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties !== '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
@@ -26,6 +26,7 @@
     </el-table-column>
     <el-table-column label="人工码垛-包材库" width="140">
       <template slot-scope="scope">
+        {{scope.row.manPacking}}
         <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
@@ -117,7 +118,7 @@
     </el-table-column>
   </el-table>
   </div>
-  <div v-if="order.properties === '二合一&礼盒产线'">
+  <div v-if="order.properties && order.properties === '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties === '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
