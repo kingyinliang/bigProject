@@ -105,7 +105,7 @@ export default {
     }, 1000)
   },
   methods: {
-    // 获取工厂
+    // 获取工厂,ceshi
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {

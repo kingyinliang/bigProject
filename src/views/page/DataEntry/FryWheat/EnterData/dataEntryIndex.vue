@@ -207,6 +207,9 @@ export default {
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
+        if (!this.$refs.instock.validate()) {
+          return false
+        }
         if (!this.$refs.applymateriel.validate()) {
           return false
         }
