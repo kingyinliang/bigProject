@@ -140,7 +140,7 @@
     </el-table-column>
     <el-table-column label="单位1" width="60">
       <template slot-scope="scope">
-        <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
+        <span>{{'manSolidUnitName' + scope.row.manSolidUnitName}}{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
       </template>
     </el-table-column>
     <el-table-column label="不良品" width="120">
@@ -150,7 +150,7 @@
     </el-table-column>
     <el-table-column label="单位2" width="120">
       <template slot-scope="scope">
-        <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
+        <span>{{'badUnitName' + scope.row.badUnitName}}{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="样品" width="120">
@@ -164,7 +164,7 @@
       </template>
     </el-table-column>
     <el-table-column label="产出数" width="120">
-      <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
+      <template slot-scope="scope">产出数{{scope.row.output}}{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
@@ -287,7 +287,7 @@ export default {
     let that = this
     setTimeout(() => {
       console.log(that.InDate)
-    }, 2000)
+    }, 10000)
   },
   methods: {
     // 修改生产入库
