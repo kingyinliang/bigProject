@@ -136,40 +136,40 @@
         <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="人工码垛-立体库" width="120">
+    <el-table-column label="人工码垛-立体库" width="130">
       <template slot-scope="scope">
         <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="不良品" width="120">
+    <el-table-column label="不良品" width="90">
       <template slot-scope="scope">
         <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="120">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="样品" width="120">
+    <el-table-column label="样品" width="90">
       <template slot-scope="scope">
         <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="产出数" width="120">
+    <el-table-column label="产出数" width="90">
       <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
       </template>
