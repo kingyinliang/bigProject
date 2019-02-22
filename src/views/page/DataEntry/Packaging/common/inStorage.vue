@@ -138,7 +138,7 @@
         <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位1" width="60">
       <template slot-scope="scope">
         <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
       </template>
@@ -148,7 +148,7 @@
         <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="120">
+    <el-table-column label="单位2" width="120">
       <template slot-scope="scope">
         <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
@@ -284,6 +284,10 @@ export default {
   },
   mounted () {
     this.GetProductShift()
+    let that = this
+    setTimeout(() => {
+      console.log(that.InDate)
+    }, 2000)
   },
   methods: {
     // 修改生产入库

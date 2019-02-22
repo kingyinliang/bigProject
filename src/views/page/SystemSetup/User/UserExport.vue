@@ -40,7 +40,7 @@
               label="角色名称"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" @click="addOrupdate(item.roleId)" v-if="isAuth('sys:user:userManagementList')" v-for="(item, index) in scope.row.roleName" :key="index">{{item.roleName}}</el-button>
+                <el-button style="padding: 0;" type="text" v-if="isAuth('sys:user:userManagementList')" v-for="(item, index) in scope.row.roleName" :key="index">{{item.roleName}}</el-button>
               </template>
             </el-table-column>
             <el-table-column
