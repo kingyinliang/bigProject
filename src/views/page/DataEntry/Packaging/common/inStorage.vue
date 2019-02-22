@@ -151,7 +151,7 @@
         <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位2" width="120">
+    <el-table-column label="单位" width="120">
       <template slot-scope="scope">
         <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
