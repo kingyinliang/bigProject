@@ -25,14 +25,15 @@
             </el-select>
           </el-form-item>
           <el-form-item label="物料编码：">
-            <el-select v-model="formatDate.material" filterable placeholder="请选择">
-              <el-option
-                v-for="item in SerchSapList"
-                :key="item.materialCode+' '+item.materialName"
-                :label="item.materialCode+' '+item.materialName"
-                :value="item.materialCode+' '+item.materialName">
-              </el-option>
-            </el-select>
+            <el-input v-model="formatDate.material" placeholder="手工录入"></el-input>
+            <!--<el-select v-model="formatDate.material" filterable placeholder="请选择">-->
+              <!--<el-option-->
+                <!--v-for="item in SerchSapList"-->
+                <!--:key="item.materialCode+' '+item.materialName"-->
+                <!--:label="item.materialCode+' '+item.materialName"-->
+                <!--:value="item.materialCode+' '+item.materialName">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
           </el-form-item>
           <el-form-item label="库位：" prop="storageLocation">
             <el-input v-model="formatDate.storageLocation" placeholder="手工录入"></el-input>
@@ -100,7 +101,7 @@ export default {
     }
   },
   props: {
-    SerchSapList: {}
+    // SerchSapList: {}
   },
   mounted () {
     this.Getdeptcode()
@@ -142,6 +143,10 @@ export default {
     },
     // 新增
     dataFormSubmit () {
+      if (this.formatDate.material && this.formatDate.material.length !== 10) {
+        this.$message.error('物料编码为10位非必填')
+        return false
+      }
       if (this.submitType) {
         this.submitType = false
         this.$refs.addLo.validate((valid) => {
