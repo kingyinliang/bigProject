@@ -3,7 +3,8 @@
   <div class="clearfix">
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ===''))" style="float: right">新增</el-button>
   </div>
-  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties !== '二合一&礼盒产线'">
+  <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
+  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
       <template slot-scope="scope">
@@ -95,8 +96,8 @@
     </el-table-column>
     <el-table-column label="产出数" width="120">
       <template slot-scope="scope">
-        <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-        <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+        <span  v-if="order.workShopName === '包装三车间'">sss{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+        <span v-else>111{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -115,7 +116,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties === '二合一&礼盒产线'">
+  </div>
+  <div v-if="order.properties && order.properties === '二合一&礼盒产线'">
+  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties === '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
       <template slot-scope="scope">
@@ -133,40 +136,40 @@
         <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="人工码垛-立体库" width="120">
+    <el-table-column label="人工码垛-立体库" width="130">
       <template slot-scope="scope">
         <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="不良品" width="120">
+    <el-table-column label="不良品" width="90">
       <template slot-scope="scope">
         <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="120">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="样品" width="120">
+    <el-table-column label="样品" width="90">
       <template slot-scope="scope">
         <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="产出数" width="120">
+    <el-table-column label="产出数" width="90">
       <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
     </el-table-column>
-    <el-table-column label="单位" width="60">
+    <el-table-column label="单位" width="50">
       <template slot-scope="scope">
         <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
       </template>
@@ -192,6 +195,7 @@
       </template>
     </el-table-column>
   </el-table>
+  </div>
   <div><p style="line-height: 52px;font-size: 14px">产出数合计：{{countOutputNum}}</p></div>
   <div class="clearfix" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
     <span style="font-size: 14px;font-weight: 700;line-height: 40px;">机维组数量确认</span>
@@ -284,6 +288,10 @@ export default {
   },
   mounted () {
     this.GetProductShift()
+    let that = this
+    setTimeout(() => {
+      console.log(that.InDate)
+    }, 10000)
   },
   methods: {
     // 修改生产入库
