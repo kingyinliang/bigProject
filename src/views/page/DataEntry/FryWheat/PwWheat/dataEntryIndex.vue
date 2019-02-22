@@ -39,7 +39,7 @@
     </div>
     <div class="main" style="padding-top: 0px">
       <div class="tableCard">
-        <div class="toggleSearchTop">
+        <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs"  :before-leave='beforeLeave' type="border-card">
