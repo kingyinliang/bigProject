@@ -3,6 +3,7 @@
   <div class="clearfix">
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ===''))" style="float: right">新增</el-button>
   </div>
+  <div v-if="order.properties !== '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties !== '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
@@ -95,8 +96,8 @@
     </el-table-column>
     <el-table-column label="产出数" width="120">
       <template slot-scope="scope">
-        <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-        <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+        <span  v-if="order.workShopName === '包装三车间'">sss{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+        <span v-else>111{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -115,6 +116,8 @@
       </template>
     </el-table-column>
   </el-table>
+  </div>
+  <div v-if="order.properties === '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties === '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
     <el-table-column label="白/中/夜班" width="120">
@@ -192,6 +195,7 @@
       </template>
     </el-table-column>
   </el-table>
+  </div>
   <div><p style="line-height: 52px;font-size: 14px">产出数合计：{{countOutputNum}}</p></div>
   <div class="clearfix" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
     <span style="font-size: 14px;font-weight: 700;line-height: 40px;">机维组数量确认</span>
