@@ -40,6 +40,17 @@ export default {
       productLineName: '',
       // yyyyMMdd
       productDate: ''
+    },
+    // 制曲车间共享数据
+    ZQWorkShop: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      // 制曲日期
+      zqDate: '',
+      // 生产状态
+      productStatus: ''
     }
   },
   mutations: {
