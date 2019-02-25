@@ -152,6 +152,11 @@
               </el-table>
             </el-col>
           </el-row>
+          <el-row style="margin-top:20px;">
+            <el-col>
+              <div><span>入库数合计：</span>{{totalInstock}} KG</div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -415,7 +420,7 @@ export default {
             // 原有行
             currentRecord = this.wheatDataList.filter(data => data.id === this.stockForm.id)
           }
-          this.stockForm.inPortWeight = this.stockForm.endWeight - this.stockForm.startWeight
+          this.stockForm.inPortWeight = (this.stockForm.endWeight - this.stockForm.startWeight).toFixed(2)
           if (currentRecord && currentRecord.length > 0) {
             // modify
             Object.assign(currentRecord[0], this.stockForm)
@@ -509,6 +514,15 @@ export default {
   computed: {
     operator: function () {
       return `(${this.stockForm.changer})${this.stockForm.changer}`
+    },
+    totalInstock: function () {
+      let total = 0
+      for (let ele of this.wheatDataList) {
+        if (ele.delFlag === '0') {
+          total += parseFloat(ele.inPortWeight)
+        }
+      }
+      return total
     }
   },
   watch: {
