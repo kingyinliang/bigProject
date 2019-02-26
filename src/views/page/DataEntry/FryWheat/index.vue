@@ -7,13 +7,13 @@
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="42px">
               <el-form-item label="工厂：">
                 <el-select v-model="plantList.factoryid" class="selectwpx" style="width: 140px">
-                  <el-option label="不限" value="">不限</el-option>
+                  <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="车间：">
                 <el-select v-model="plantList.workshopid" class="selectwpx" style="width: 140px">
-                  <el-option label="不限" value="">不限</el-option>
+                  <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
@@ -376,6 +376,10 @@ export default {
     },
     // 查询
     GetOrderList (st) {
+      if (this.plantList.factoryid === '') {
+        this.$message.error('请选择工厂')
+        return
+      }
       if (this.plantList.workshopid === '') {
         this.$message.error('请选择车间')
         return

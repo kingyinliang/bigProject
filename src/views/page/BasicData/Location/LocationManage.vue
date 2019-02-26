@@ -126,7 +126,7 @@
         <el-button type="primary" @click="GetLocationList(true)">确定</el-button>
       </span>
     </el-dialog>
-    <location-add v-if="visible" :SerchSapList="SerchSapList" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
+    <location-add v-if="visible" ref="locationAdd" @refreshDataList="GetLocationList()"></location-add>
   </el-col>
 </template>
 
@@ -172,13 +172,13 @@ export default {
         this.$message.error(data.msg)
       }
     })
-    this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
-      if (data.code === 0) {
-        this.SerchSapList = data.allList
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
+    // this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
+    //   if (data.code === 0) {
+    //     this.SerchSapList = data.allList
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // })
   },
   methods: {
     // 序号

@@ -1,12 +1,10 @@
 // let HOST = 'http://localhost:8080'
 // let HOST = 'http://10.8.4.153:50080/api'
-// let HOST = 'http://10.10.1.29:8080'
-// let HOST = 'http://10.1.1.74:8080'
-// let HOST = 'http://10.1.1.148:8080'
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.5.40:8080/xhqy-fc'
+// let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.156:8080/xhqy-fc' // yc
 // HOST
 // let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb

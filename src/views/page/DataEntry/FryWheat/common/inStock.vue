@@ -152,6 +152,11 @@
               </el-table>
             </el-col>
           </el-row>
+          <el-row style="margin-top:20px;">
+            <el-col>
+              <div><span>入库数合计：</span>{{totalInstock}} KG</div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -200,13 +205,13 @@ import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
-    let validate = (rule, value, callback) => {
-      if (value <= 0) {
-        callback(new Error('必须大于0'))
-      } else {
-        callback()
-      }
-    }
+    // let validate = (rule, value, callback) => {
+    //   if (value <= 0) {
+    //     callback(new Error('必须大于0'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       // stoppageType: [],
       // equipmentType: [],
@@ -224,12 +229,10 @@ export default {
           {required: true, message: '必选', trigger: 'click'}
         ],
         startWeight: [
-          {required: true, message: '必填', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'}
         ],
         endWeight: [
-          {required: true, message: '必填', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'}
         ],
         inPortBatch: [
           {required: true, message: '必填', trigger: 'blur'},
@@ -239,6 +242,7 @@ export default {
     }
   },
   mounted () {
+    console.log('子组件mounted执行ing。。。')
     this.getFlourContainerList()
     this.getWheatContainerList()
     // this.getWheatDataList()
@@ -327,12 +331,12 @@ export default {
       // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
       //   return
       // }
+      let inState = ''
       this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.wheatDataList = data.wlist
           this.readAudit = data.vrlist
-          let inState = ''
           let no = 0
           let sub = 0
           let che = 0
@@ -357,12 +361,13 @@ export default {
           } else if (che > 0) {
             inState = 'checked'
           }
-          this.$emit('setInStorageState', inState)
         } else {
           this.$message.error(data.msg)
         }
       }).catch((error) => {
         console.log('catch data::', error)
+      }).finally(() => {
+        this.$emit('setInStorageState', inState)
       })
     },
     addNewRecord (flourDeviceId, flourDeviceName) {
@@ -415,7 +420,7 @@ export default {
             // 原有行
             currentRecord = this.wheatDataList.filter(data => data.id === this.stockForm.id)
           }
-          this.stockForm.inPortWeight = this.stockForm.endWeight - this.stockForm.startWeight
+          this.stockForm.inPortWeight = (this.stockForm.endWeight - this.stockForm.startWeight).toFixed(2)
           if (currentRecord && currentRecord.length > 0) {
             // modify
             Object.assign(currentRecord[0], this.stockForm)
@@ -509,6 +514,15 @@ export default {
   computed: {
     operator: function () {
       return `(${this.stockForm.changer})${this.stockForm.changer}`
+    },
+    totalInstock: function () {
+      let total = 0
+      for (let ele of this.wheatDataList) {
+        if (ele.delFlag === '0') {
+          total += parseFloat(ele.inPortWeight)
+        }
+      }
+      return total
     }
   },
   watch: {

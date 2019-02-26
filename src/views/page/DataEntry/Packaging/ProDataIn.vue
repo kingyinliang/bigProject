@@ -164,7 +164,7 @@ export default {
         this.$refs.listbom.GetPot()
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam()
-        // this.$refs.workerref.getTree(this.formHeader.factory)
+        this.$refs.workerref.getTree(this.formHeader.factory)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
