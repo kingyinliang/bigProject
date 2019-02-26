@@ -205,13 +205,13 @@ import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API } from '@/api/api'
 export default {
   data () {
-    let validate = (rule, value, callback) => {
-      if (value <= 0) {
-        callback(new Error('必须大于0'))
-      } else {
-        callback()
-      }
-    }
+    // let validate = (rule, value, callback) => {
+    //   if (value <= 0) {
+    //     callback(new Error('必须大于0'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       // stoppageType: [],
       // equipmentType: [],
@@ -229,12 +229,10 @@ export default {
           {required: true, message: '必选', trigger: 'click'}
         ],
         startWeight: [
-          {required: true, message: '必填', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'}
         ],
         endWeight: [
-          {required: true, message: '必填', trigger: 'blur'},
-          {validator: validate, trigger: 'blur'}
+          {required: true, message: '必填', trigger: 'blur'}
         ],
         inPortBatch: [
           {required: true, message: '必填', trigger: 'blur'},
@@ -244,6 +242,7 @@ export default {
     }
   },
   mounted () {
+    console.log('子组件mounted执行ing。。。')
     this.getFlourContainerList()
     this.getWheatContainerList()
     // this.getWheatDataList()
@@ -369,6 +368,8 @@ export default {
       }).catch((error) => {
         console.log('catch data::', error)
       })
+      // .finally(() => {
+      // })
     },
     addNewRecord (flourDeviceId, flourDeviceName) {
       let now = new Date()
