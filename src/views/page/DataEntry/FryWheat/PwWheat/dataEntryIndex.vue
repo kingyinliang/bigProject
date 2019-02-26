@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {PACKAGING_API, WHT_API} from '@/api/api'
+import {WHT_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHeader from '@/views/components/formHeader'
 import ExcRecord from '@/views/components/excRecord'
@@ -169,7 +169,7 @@ export default {
       this.formHeader.countOutput = countOutput + ''
       this.formHeader.realOutput = countOutput + ''
       this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
-      this.$http(`${PACKAGING_API.PKGORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${WHT_API.WHTORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error('保存表头' + data.msg)
