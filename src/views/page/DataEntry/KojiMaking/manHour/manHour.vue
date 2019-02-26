@@ -28,64 +28,26 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden;min-height: 300px">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">
-            <el-button>原料领用</el-button>
-          </span>
-          <meateriel :isRedact="isRedact"></meateriel>
-        </el-tab-pane>
-        <el-tab-pane name="2">
-          <span slot="label" class="spanview">
-            <el-button>生产入库</el-button>
-          </span>
-          <in-stock :isRedact="isRedact"></in-stock>
-        </el-tab-pane>
-        <el-tab-pane name="3">
-          <span slot="label" class="spanview">
-            <el-button>工艺控制</el-button>
-          </span>
-          <craft-control :isRedact="isRedact"></craft-control>
-        </el-tab-pane>
-        <el-tab-pane name="4">
-          <span slot="label" class="spanview">
-            <el-button>异常记录</el-button>
-          </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
-        </el-tab-pane>
-        <el-tab-pane name="5">
-          <span slot="label" class="spanview">
-            <el-button>文本记录</el-button>
-          </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
-        </el-tab-pane>
-      </el-tabs>
     </div>
   </div>
 </template>
 
 <script>
 import { headanimation } from '@/net/validate'
-import FormHead from './Outcomponents/formHead'
-import Meateriel from './Outcomponents/materiel'
-import InStock from './Outcomponents/inStock'
-import CraftControl from './Outcomponents/craftControl'
-import ExcRecord from '@/views/components/excRecord'
-import TextRecord from '@/views/components/textRecord'
+import FormHead from './formHead'
 export default {
-  name: 'index',
+  name: 'manHour',
   data () {
     return {
       isRedact: false,
-      formHeader: {},
       orderStatus: '',
-      activeName: '1'
+      formHeader: {}
     }
   },
   mounted () {
@@ -94,12 +56,7 @@ export default {
   methods: {},
   computed: {},
   components: {
-    FormHead,
-    Meateriel,
-    InStock,
-    CraftControl,
-    ExcRecord,
-    TextRecord
+    FormHead
   }
 }
 </script>
