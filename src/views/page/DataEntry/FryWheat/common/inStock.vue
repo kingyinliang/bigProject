@@ -242,7 +242,6 @@ export default {
     }
   },
   mounted () {
-    console.log('子组件mounted执行ing。。。')
     this.getFlourContainerList()
     this.getWheatContainerList()
     // this.getWheatDataList()
