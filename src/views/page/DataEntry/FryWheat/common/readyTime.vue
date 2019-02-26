@@ -185,17 +185,20 @@ export default {
   methods: {
     // 获取准备时间数据
     GetReadyList (id) {
+      let status = ''
       this.$http(`${WHT_API.READYTIMELIST_API}`, 'POST', {
         order_id: id
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.readyTimeDate = data.listForm[0]
-          this.$emit('SetReadyStatus', data.listForm[0].status)
+          status = data.listForm[0].status
           this.machineTimeData = data.listFormMachine
           this.timeAuditlog = data.listApproval
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('SetReadyStatus', status)
       })
     },
     // 准备时间修改
