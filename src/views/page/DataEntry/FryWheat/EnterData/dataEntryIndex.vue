@@ -198,6 +198,7 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
+      this.activeName = '1'
       if (str === 'submit') {
         if (!this.$refs.readytime.Readyrul()) {
           return false
@@ -294,6 +295,7 @@ export default {
       } else {
         this.activeName = active + ''
       }
+      console.log('SetReadyStatus', this.activeName)
       this.readyState = status
     },
     // 入库状态
@@ -304,6 +306,7 @@ export default {
       } else {
         this.activeName = active + ''
       }
+      console.log('setInStorageState', this.activeName)
       this.inStorageState = status
     },
     // 物料状态
@@ -314,6 +317,7 @@ export default {
       } else {
         this.activeName = active + ''
       }
+      console.log('setApplyMaterielState', this.activeName)
       this.applyMaterielState = status
     },
     // 表头更改生产日期
