@@ -144,7 +144,7 @@ export default {
       this.isRedact = false
       if (this.orderNo) {
         // 有订单号
-        this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
           productDate: this.productDate,
           orderNo: this.orderNo
