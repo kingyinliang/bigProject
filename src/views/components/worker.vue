@@ -110,7 +110,7 @@ export default {
   },
   mounted () {
     this.GetProductShift()
-    this.getTree()
+    // this.getTree()
   },
   methods: {
     // 人员列表
@@ -220,9 +220,9 @@ export default {
       row.userId = []
     },
     // 获取组织结构树
-    getTree () {
-      // this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}).then(({data}) => {
-      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
+    getTree (factory) {
+      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}).then(({data}) => {
+      // this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]

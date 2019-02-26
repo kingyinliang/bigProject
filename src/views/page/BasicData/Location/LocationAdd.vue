@@ -25,7 +25,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="物料编码：">
-            <el-input v-model="formatDate.material" placeholder="手工录入"></el-input>
+            <el-input v-model="formatDate.materialCode" placeholder="手工录入"></el-input>
             <!--<el-select v-model="formatDate.material" filterable placeholder="请选择">-->
               <!--<el-option-->
                 <!--v-for="item in SerchSapList"-->
@@ -74,7 +74,7 @@ export default {
         deptId: '',
         storageLocation: '',
         materialType: '',
-        material: '',
+        materialCode: '',
         isSample: '0',
         materialOperation: ''
       },
@@ -143,7 +143,7 @@ export default {
     },
     // 新增
     dataFormSubmit () {
-      if (this.formatDate.material && this.formatDate.material.length !== 10) {
+      if (this.formatDate.materialCode && this.formatDate.materialCode.length !== 10) {
         this.$message.error('物料编码为10位非必填')
         return false
       }
@@ -151,8 +151,6 @@ export default {
         this.submitType = false
         this.$refs.addLo.validate((valid) => {
           if (valid) {
-            this.formatDate.materialCode = this.formatDate.material.substring(0, this.formatDate.material.indexOf(' '))
-            this.formatDate.materialName = this.formatDate.material.substring(this.formatDate.material.indexOf(' ') + 1)
             this.formatDate.materialTypeCode = this.formatDate.materialType.substring(0, this.formatDate.materialType.indexOf(' '))
             this.formatDate.materialTypeName = this.formatDate.materialType.substring(this.formatDate.materialType.indexOf(' ') + 1)
             this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
