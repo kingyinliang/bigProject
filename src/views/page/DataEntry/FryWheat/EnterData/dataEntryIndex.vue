@@ -119,7 +119,7 @@ export default {
         // yyy-MM-dd
         productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
       },
-      activeName: '0',
+      activeName: '1',
       readyState: '',
       // 生产入库状态
       inStorageState: '',
@@ -288,17 +288,32 @@ export default {
     },
     // 准备时间状态
     SetReadyStatus (status) {
-      this.activeName = '1'
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.readyState = status
     },
     // 入库状态
     setInStorageState (status) {
-      this.activeName = '1'
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.inStorageState = status
     },
     // 物料状态
     setApplyMaterielState (status) {
-      this.activeName = '1'
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.applyMaterielState = status
     },
     // 表头更改生产日期
