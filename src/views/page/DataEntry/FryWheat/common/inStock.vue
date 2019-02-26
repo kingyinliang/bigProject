@@ -331,12 +331,12 @@ export default {
       // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
       //   return
       // }
+      let inState = ''
       this.$http(`${WHT_API.INSTORAGELIST_API}`, 'POST', {orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.wheatDataList = data.wlist
           this.readAudit = data.vrlist
-          let inState = ''
           let no = 0
           let sub = 0
           let che = 0
@@ -361,15 +361,14 @@ export default {
           } else if (che > 0) {
             inState = 'checked'
           }
-          this.$emit('setInStorageState', inState)
         } else {
           this.$message.error(data.msg)
         }
       }).catch((error) => {
         console.log('catch data::', error)
+      }).finally(() => {
+        this.$emit('setInStorageState', inState)
       })
-      // .finally(() => {
-      // })
     },
     addNewRecord (flourDeviceId, flourDeviceName) {
       let now = new Date()
