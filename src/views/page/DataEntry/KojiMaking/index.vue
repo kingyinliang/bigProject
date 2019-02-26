@@ -188,9 +188,25 @@ import {Employee, EMPTypeList, DayTypeList} from './Employee.ts'
     officialWorker
   }
 })
+
 export default class Index extends Vue {
+  // $refs: {
+  //   temporaryWorker: TemporaryWorker,
+  //   loanedPersonnel: LoanedPersonnel,
+  //   officialWorker: officialWorker
+  // }
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkShop))
+  // params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
+  params = {
+    factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
+    factoryName: '烟台欣和企业食品有限公司工厂',
+    workshopId: 'DA8DB9D19B4043B8A600B52D9FEF93E3',
+    workshopName: '炒麦一车间',
+    // 制曲日期
+    zqDate: '2019-02-24',
+    // normal/abnormal 正常生产/无生产
+    productStatus: 'normal'
+  }
   factoryList = []
   workshopList = []
   processesList = []
@@ -201,6 +217,9 @@ export default class Index extends Vue {
   totalList: Array<Employee> = []
   OrgTree = []
   arrList = []
+  row = {
+    userId: []
+  }
   currPage: number = 0
   pageSize: number = 10
   totalCount: number = 0
@@ -241,6 +260,9 @@ export default class Index extends Vue {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item.deptName
     }
+  }
+  changeProcType (row) {
+    row.userId = []
   }
   // 获取工厂
   getFactory () {
@@ -334,55 +356,58 @@ export default class Index extends Vue {
   }
   // 人员删除
   delUser (row) {
-    // if (typeof row.orderId !== 'undefined') {
-    //   this.$confirm('是否删除?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.$http(`${WHT_API.CINDEXDELUSER}`, 'POST', {orderId: row.orderId}).then(({data}) => {
-    //       if (data.code === 0) {
-    //         this.datalist.splice(this.datalist.indexOf(row), 1)
-    //         this.$message({
-    //           type: 'success',
-    //           message: '删除成功'
-    //         })
-    //       } else {
-    //         this.$message.error(data.msg)
-    //       }
-    //     })
-    //   })
-    // } else {
-    //   this.datalist.splice(this.datalist.indexOf(row), 1)
-    // }
+    if (typeof row.orderId !== 'undefined') {
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.prototype.$http(`${WHT_API.CINDEXDELUSER}`, 'POST', {orderId: row.orderId}).then(({data}) => {
+          if (data.code === 0) {
+            this.datalist.splice(this.datalist.indexOf(row), 1)
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      })
+    } else {
+      this.datalist.splice(this.datalist.indexOf(row), 1)
+    }
   }
   // 选择人员 正式 借调
   selectUser (row) {
-    // this.row = row
-    // if (row.userType === '借调') {
-    //   this.$nextTick(() => {
-    //     this.$refs.loanedPersonnel.init(row.userId)
-    //   })
-    // } else if (row.userType === '正式') {
-    //   if (row.deptId) {
-    //     this.$nextTick(() => {
-    //       this.$refs.officialWorker.init(row.deptId, row.userId)
-    //     })
-    //   } else {
-    //     this.$message.error('请选择工序')
-    //   }
-    // } else if (row.userType === '临时工') {
-    //   this.$nextTick(() => {
-    //     this.$refs.temporaryWorker.init(row)
-    //   })
-    // } else {
-    //   this.$message.error('请选择人员属性')
-    // }
+    this.row = row
+    let loanedPersonnel: any = this.$refs.loanedPersonnel
+    let officialWorker: any = this.$refs.officialWorker
+    let temporaryWorker: any = this.$refs.temporaryWorker
+    if (row.userType === EMPTypeList.TRANSFER) {
+      this.$nextTick(() => {
+        loanedPersonnel.init(row.userId)
+      })
+    } else if (row.userType === EMPTypeList.FORMAL) {
+      if (row.deptId) {
+        this.$nextTick(() => {
+          officialWorker.init(row.deptId, row.userId)
+        })
+      } else {
+        this.$message.error('请选择工序')
+      }
+    } else if (row.userType === EMPTypeList.TEMP) {
+      this.$nextTick(() => {
+        temporaryWorker.init(row)
+      })
+    } else {
+      this.$message.error('请选择人员属性')
+    }
   }
   // 员工确认
   changeUser (userId) {
-    // this.row.userId = userId
-    // this.$set(this.row, userId, this.row.userId)
+    this.row.userId = userId
+    this.$set(this.row, userId, this.row.userId)
   }
   // 改变每页条数
   handleSizeChange (val: number) {
