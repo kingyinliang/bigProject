@@ -149,6 +149,7 @@ export default {
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam(this.formHeader.workShop)
+        this.$refs.workerref.getTree(this.formHeader.factory)
         this.$refs.instock.getWheatDataList(this.formHeader.orderId)
         this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)
         if (this.orderStatus !== '已同步') {
@@ -287,14 +288,32 @@ export default {
     },
     // 准备时间状态
     SetReadyStatus (status) {
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.readyState = status
     },
     // 入库状态
     setInStorageState (status) {
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.inStorageState = status
     },
     // 物料状态
     setApplyMaterielState (status) {
+      let active = parseInt(this.activeName) + 1
+      if (active === 4) {
+        this.activeName = '1'
+      } else {
+        this.activeName = active + ''
+      }
       this.applyMaterielState = status
     },
     // 表头更改生产日期

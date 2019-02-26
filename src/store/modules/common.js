@@ -40,6 +40,17 @@ export default {
       productLineName: '',
       // yyyyMMdd
       productDate: ''
+    },
+    // 制曲车间共享数据
+    ZQWorkshop: {
+      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
+      factoryName: '烟台欣和企业食品有限公司工厂',
+      workshopId: 'DA8DB9D19B4043B8A600B52D9FEF93E3',
+      workshopName: '炒麦一车间',
+      // 制曲日期
+      zqDate: '2019-02-24',
+      // normal/abnormal 正常生产/无生产
+      productStatus: 'normal'
     }
   },
   mutations: {
@@ -124,7 +135,12 @@ export default {
     },
     updatePWproductDate (state, name) {
       state.PWorder.productDate = name
-    }
+    },
     /* pw 小麦 end */
+    /** 制曲 start */
+    updateZQWorkshop (state, name) {
+      state.ZQWorkshop = name
+    }
+    /** 制曲 end */
   }
 }

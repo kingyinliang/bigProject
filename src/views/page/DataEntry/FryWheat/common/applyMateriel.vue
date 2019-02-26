@@ -258,12 +258,12 @@ export default {
       // if (typeof this.order === 'undefined' || typeof this.order.orderId === 'undefined') {
       //   return
       // }
+      let inState = ''
       this.$http(`${WHT_API.APPLYMATERIELLIST_API}`, 'POST', {order_id: orderId}).then(({data}) => {
         if (data.code === 0) {
           // success
           this.materielDataList = data.listForm
           this.readAudit = data.listApproval
-          let inState = ''
           let no = 0
           let sub = 0
           let che = 0
@@ -288,12 +288,13 @@ export default {
           } else if (che > 0) {
             inState = 'checked'
           }
-          this.$emit('setApplyMaterielState', inState)
         } else {
           this.$message.error(data.msg)
         }
       }).catch((error) => {
         this.$message.error(error)
+      }).finally(() => {
+        this.$emit('setApplyMaterielState', inState)
       })
     },
     // 新增
