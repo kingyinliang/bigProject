@@ -230,6 +230,9 @@ export default {
           return false
         }
       }
+      if (!this.$refs.listbom.saprul(str)) {
+        return false
+      }
       this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {
