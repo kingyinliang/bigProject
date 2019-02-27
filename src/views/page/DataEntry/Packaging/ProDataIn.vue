@@ -229,6 +229,9 @@ export default {
         if (!this.$refs.instorage.inrul()) {
           return false
         }
+        if (!this.$refs.listbom.saprul(str)) {
+          return false
+        }
       }
       this.lodingS = true
       let that = this
