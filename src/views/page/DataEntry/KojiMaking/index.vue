@@ -1,7 +1,7 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
-      <el-card class="newCard" style="min-height: 480px">
+      <el-card class="newCard">
         <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
           <el-col>
             <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
@@ -28,9 +28,9 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width: 340px">
+          <el-col style="width:340px">
             <el-row class="rowButton">
-              <el-button type="primary" size="small" @click="getOrderList(true)" style="float: right">查询</el-button>
+              <el-button type="primary" size="small" @click="getOrderList()" style="float: right">查询</el-button>
               <template v-if="params.productStatus === 'abnormal'">
                 <el-button v-if="searched && disabled && isAuth('wht:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float: right">编辑</el-button>
                 <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float: right">返回</el-button>
@@ -42,129 +42,270 @@
             </el-row>
           </el-col>
         </el-row>
-        <el-row v-if="params.productStatus === 'normal' && searched" :gutter="20">
-          <!-- <el-col v-for="(item, index) in FryWheatList" :key="index" id="normal" :span="12">
-            <div class="title_left" style="font-size: 16px;font-weight: bold;margin-bottom: 8px;">工序： <font style="color:red">{{item.productLineName}}</font></div>
-            <div class="sole_cont">
-              <el-form size="small" :inline="true" label-position="right" label-width="90px">
-                <div class="itemImg">
-                  <img :src="'data:image/gif;base64,' + item.img" alt="" style="width:100%; min-height:181px">
-                </div>
-                <div class="title_left">
-                  <div style="float: left;font-size: 14px;font-weight: normal;line-height: 60px">
-                    <span class="points" :style="{'background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : item.orderStatus === 'submit'? '#1890ff' : item.orderStatus === 'saved'? '#1890ff' : '#7ED321'}"></span>订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
-                  </div>
-                  <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white" v-if="isAuth('wht:order:list') || isAuth('sys:whtPwMaterial:list')">数据录入</el-button>
-                </div>
-                <div class="normal_bottom">
-                    <el-form-item label="订单号：" class="width50b">
-                      <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)" style="width:150px">
-                        <el-option label=""  value=""></el-option>
-                        <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="计划产量：" class="width50b">
-                      <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.planOutput + ' ' + item.outputUnit}}</div>
-                    </el-form-item>
-                    <el-form-item label="品项：" class="width50b">
-                      <div style="width:150px; border-bottom:1px solid #ccc">&nbsp;{{item.materialCode + ' ' + item.materialName}}</div>
-                    </el-form-item>
-                    <el-form-item label="实际产量：" class="width50b">
-                      <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.realOutput + ' ' + item.outputUnit}}</div>
-                    </el-form-item>
-                </div>
-              </el-form>
-            </div>
-          </el-col> -->
-        </el-row>
-        <el-row v-show="params.productStatus === 'abnormal' && searched">
-          <div style="min-height: 340px">
-          <el-table border  header-row-class-name="tableHead" :data="datalist">
-            <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
-            <el-table-column label="中/白/夜班" prop="classType" width="100">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.classType" placeholder="请选择" size="small" :disabled="disabled">
-                  <el-option v-for="sole in DayTypeList" :key="sole" :value="sole" :label="sole"></el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="工序"  width="120">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="disabled">
-                  <el-option v-for="sole in processesList" :key="sole.deptId" :value="sole.deptId" :label="sole.deptName"></el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="人员属性" prop="userType" width="110">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.userType" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="disabled">
-                  <el-option v-for="sole in EmployeeTypeList" :key="sole" :value="sole" :label="sole"></el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <el-col>
-                  <span v-if="!disabled" style="cursor: pointer" @click="selectUser(scope.row)">
-                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <span>
-                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
-                      <i v-else>点击选择人员</i>
-                    </span>
-                  </span>
-                  <span v-else style="cursor: pointer">
-                    <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
-                    <span>
-                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
-                      <i v-else>点击选择人员</i>
-                    </span>
-                  </span>
-                </el-col>
-              </template>
-            </el-table-column>
-            <el-table-column label="开始时间" prop="startDate">
-              <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.startDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
-              </template>
-            </el-table-column>
-            <el-table-column label="用餐时间" prop="dinner" width="80">
-              <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.dinner" :disabled="disabled"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="结束时间" prop="endDate">
-              <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.endDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
-              </template>
-            </el-table-column>
-            <el-table-column label="备注" prop="remark" width="100px">
-              <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.remark" :disabled="disabled"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right" width="50">
-              <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" v-if="isAuth('wht:user:delUser')"></el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-row style="font-size:14px; line-height:30px; margin-top:10px">
-            实际作业人数: {{countMan}}
-          </el-row>
-          </div>
-          <el-row v-if="addRowStatus!=1">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount">
-            </el-pagination>
-          </el-row>
-        </el-row>
       </el-card>
+      <el-row v-if="params.productStatus === 'normal' && searched" style="margin-top:20px;">
+        <el-col>
+          <el-row :gutter="32">
+            <el-col :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div>1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+            <el-col  :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div style="background:#5BD171">1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div style="background:#2C92F6">1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="32">
+            <el-col :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div>1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+            <el-col  :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div style="background:#5BD171">1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="box-item">
+                <div class="box-item-top">
+                  <div class="box-item-title">
+                    <div class="box-item-title-name"><div style="background:#2C92F6">1-1</div><div>1-1# 发酵罐</div></div>
+                    <div class="box-item-title-state">状态：已保存</div>
+                  </div>
+                  <div class="box-item-container">
+                    <div class="box-item-container-left">
+                      <div class="box-item-container-img"></div>
+                    </div>
+                    <div class="box-item-container-right">
+                      <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
+                      <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                      <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
+                      <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-item-bottom">
+                  <div class="box-item-bottom-item">煮豆</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">看曲</div>
+                  <div class="box-item-bottom-split"></div>
+                  <div class="box-item-bottom-item">出曲</div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row v-show="params.productStatus === 'abnormal' && searched" style="margin-top:20px;">
+        <div style="min-height: 340px">
+        <el-table border  header-row-class-name="tableHead" :data="datalist">
+          <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
+          <el-table-column label="中/白/夜班" prop="classType" width="100">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.classType" placeholder="请选择" size="small" :disabled="disabled">
+                <el-option v-for="sole in DayTypeList" :key="sole" :value="sole" :label="sole"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="工序"  width="120">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="disabled">
+                <el-option v-for="sole in processesList" :key="sole.deptId" :value="sole.deptId" :label="sole.deptName"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="人员属性" prop="userType" width="110">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.userType" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="disabled">
+                <el-option v-for="sole in EmployeeTypeList" :key="sole" :value="sole" :label="sole"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <el-col>
+                <span v-if="!disabled" style="cursor: pointer" @click="selectUser(scope.row)">
+                  <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
+                  <span>
+                    <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                    <i v-else>点击选择人员</i>
+                  </span>
+                </span>
+                <span v-else style="cursor: pointer">
+                  <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
+                  <span>
+                    <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                    <i v-else>点击选择人员</i>
+                  </span>
+                </span>
+              </el-col>
+            </template>
+          </el-table-column>
+          <el-table-column label="开始时间" prop="startDate">
+            <template slot-scope="scope">
+              <el-date-picker v-model="scope.row.startDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column label="用餐时间" prop="dinner" width="80">
+            <template slot-scope="scope">
+              <el-input size="small" v-model="scope.row.dinner" :disabled="disabled"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="结束时间" prop="endDate">
+            <template slot-scope="scope">
+              <el-date-picker v-model="scope.row.endDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" prop="remark" width="100px">
+            <template slot-scope="scope">
+              <el-input size="small" v-model="scope.row.remark" :disabled="disabled"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" width="50">
+            <template slot-scope="scope">
+              <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" v-if="isAuth('wht:user:delUser')"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-row style="font-size:14px; line-height:30px; margin-top:10px">
+          实际作业人数: {{countMan}}
+        </el-row>
+        </div>
+        <el-row v-if="addRowStatus!=1">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        </el-row>
+      </el-row>
     </div>
     <temporary-worker ref="temporaryWorker" @changeUser="changeUser"></temporary-worker>
     <loaned-personnel ref="loanedPersonnel" @changeUser="changeUser" :OrgTree="OrgTree" :arrList="arrList"></loaned-personnel>
@@ -196,17 +337,7 @@ export default class Index extends Vue {
   //   officialWorker: officialWorker
   // }
   // 将common中的参数复制一份到本地
-  // params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
-  params = {
-    factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
-    factoryName: '烟台欣和企业食品有限公司工厂',
-    workshopId: 'DA8DB9D19B4043B8A600B52D9FEF93E3',
-    workshopName: '炒麦一车间',
-    // 制曲日期
-    zqDate: '2019-02-24',
-    // normal/abnormal 正常生产/无生产
-    productStatus: 'normal'
-  }
+  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
   factoryList = []
   workshopList = []
   processesList = []
@@ -437,7 +568,6 @@ export default class Index extends Vue {
   }
   @Watch('params.productStatus')
   onChangeValue (newVal: string, oldVal: string) {
-    console.log('params.productStatus')
     this.searched = false
     this.setDisabled(true)
   }
@@ -447,19 +577,133 @@ export default class Index extends Vue {
 @import '@/assets/scss/_common.scss';
 </style>
 <style lang="scss" scoped>
-  .itemImg{
-    position: relative;
-    width:100%;
-    min-height:181px;
-    overflow: hidden;
-    cursor: pointer;
-    img{
-      transition:All 1s ease-in-out;
+  .box-item{
+    height:220px;
+    box-sizing:border-box;
+    background:rgba(255,255,255,1);
+    border-radius:2px;
+    border:1px solid rgba(232,232,232,1);
+    .box-item-top{
+      height:178px;
+      padding:10px 10px;
+      padding-bottom:0px;
+      border-bottom: 1px solid rgba(232,232,232,1);
+      .box-item-title{
+        display:flex;
+        justify-content:space-between;
+        flex:1;
+        height:34px;
+        .box-item-title-name{
+          display:flex;
+          flex:1;
+          :first-child{
+            height:30px;
+            width:30px;
+            border-radius:15px;
+            background:#FFBF00;
+            font-size:12px;
+            font-weight:500;
+            color:#fff;
+            line-height:30px;
+            text-align:center;
+          }
+          :nth-child(2){
+            font-size:16px;
+            font-weight:400;
+            color:rgba(0,0,0,0.85);
+            line-height:22px;
+            margin-top:4px;
+            margin-left:5px;
+          }
+        }
+        .box-item-title-state{
+          flex:1;
+          font-size:14px;
+          font-weight:500;
+          color:rgba(0,0,0,0.65);
+          line-height:20px;
+          text-align:right;
+          margin-top:4px;
+          &:before{
+            content:'';
+            display: inline-block;
+            height:6px;
+            width:6px;
+            margin-right:10px;
+            margin-bottom:2px;
+            background:rgba(126,211,33,1)
+          }
+        }
+      }
+      .box-item-container{
+        display:flex;
+        flex:1;
+        justify-content:space-between;
+        height:129px;
+        .box-item-container-left{
+          display:flex;
+          justify-content:center;
+          width:130px;
+          padding-top:10px;
+          .box-item-container-img{
+            width:94px;
+            height:86px;
+            background: url('~@/assets/img/fajiaoguan.png')
+          }
+        }
+        .box-item-container-right{
+          flex:1;
+          display:flex;
+          flex-direction:column;
+          margin-left:10px;
+          .box-item-container-item{
+            flex:1;
+            display:flex;
+            justify-content:space-between;
+            .name{
+              width:60px;
+              font-size:12px;
+              font-weight:400;
+              color:rgba(0,0,0,0.45);
+              line-height:20px;
+            }
+            .detail{
+              flex:1;
+              font-size:14px;
+              font-weight:500;
+              color:rgba(0,0,0,0.65);
+              line-height:17px;
+            }
+          }
+        }
+      }
     }
-  }
-  .itemImg:hover{
-    img{
-      transform:scale(1.2);
+    .box-item-bottom{
+      height:40px;
+      box-sizing:border-box;
+      display:flex;
+      justify-content:space-between;
+      background:rgba(247,249,250,1);
+      border-radius:0px 0px 2px 2px;
+      .box-item-bottom-item{
+        flex:1;
+        text-align:center;
+        line-height:40px;
+        font-size:12px;
+        font-weight:500;
+        color:rgba(0,0,0,0.65);
+        &:hover{
+          color:#fff;
+          background:#1890FF;
+          cursor:pointer
+        }
+      }
+      .box-item-bottom-split{
+        width:1px;
+        height:16px;
+        background:rgba(232,232,232,1);
+        margin-top:12px;
+      }
     }
   }
   .rowButton{
@@ -495,23 +739,10 @@ export default class Index extends Vue {
     .margb20px{margin-bottom: 10px}
   }
 }
-#normal{
-  .sole_cont{
-    border: #E9E9E9 1px solid;
-    .sole_status{
-      float: right;color: #565656;font-size: 14px;min-width: 150px; position: absolute; right: 15px;top: 20px;
-    }
-    .points{width: 5px; height: 5px; border-radius: 50%; display: block; float: left;margin-top: 27px;margin-right: 8px}
-    .title_left{border-bottom:#E9E9E9 1px solid; padding:0 15px; font-weight: bold;height: 60px;line-height: 60px;display: block;}
-    .el-form-item__content{
-      width: 61%;
-      border-bottom: #ccc solid 1px;
-    }
-    .width50b{ width: 49%; margin: 5px 0}
-    .normal_bottom{padding: 5px 0}
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
   }
-}
-.selectwpx{
-  width:120px;
 }
 </style>
