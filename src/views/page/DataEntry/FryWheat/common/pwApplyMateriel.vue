@@ -341,11 +341,11 @@ export default {
       // console.log('为什么拿不到orderId', this.order.orderId)
       this.materielDataList = []
       this.readAudit = []
+      let inState = ''
       this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist
-          let inState = ''
           let no = 0
           let sub = 0
           let che = 0
@@ -370,12 +370,14 @@ export default {
           } else if (che > 0) {
             inState = 'checked'
           }
-          this.$emit('setAppyMaterielState', inState)
+          // this.$emit('setAppyMaterielState', inState)
         } else {
           this.$message.error(data.msg)
         }
       }).catch((error) => {
         console.log('catch data::', error)
+      }).finally(() => {
+        this.$emit('setAppyMaterielState', inState)
       })
     },
     // 新增记录

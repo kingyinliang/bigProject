@@ -57,21 +57,17 @@
                 <el-button>工时录入</el-button>
               </el-tooltip>
             </span>
-            <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader"></pw-time>
+            <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader" @SetReadyStatus="SetReadyStatus"></pw-time>
           </el-tab-pane>
           <el-tab-pane name="3" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="this.excState === 'noPass'? '不通过':this.excState === 'saved'? '已保存':this.excState === 'submit' ? '已提交' : this.excState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>异常记录</el-button>
-              </el-tooltip>
+              <el-button>异常记录</el-button>
             </span>
             <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4" >
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="this.remarkState === 'noPass'? '不通过':this.remarkState === 'saved'? '已保存':this.remarkState === 'submit' ? '已提交' : this.remarkState === 'checked'? '通过':'未录入'" placement="top-start">
-                  <el-button>文本记录</el-button>
-              </el-tooltip>
+              <el-button>文本记录</el-button>
             </span>
             <text-record ref="textrecord" :isRedact="isRedact"></text-record>
           </el-tab-pane>
@@ -116,11 +112,7 @@ export default {
       // 物料领用
       appyMaterielState: '',
       // 准备时间
-      readyState: '',
-      // 异常
-      excState: '',
-      // remarkState
-      remarkState: ''
+      readyState: ''
     }
   },
   mounted () {
@@ -276,18 +268,18 @@ export default {
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
+    },
+    // 准备时间状态
+    SetReadyStatus (status) {
+      this.readyState = status
     }
   },
   watch: {
     'orderNo' (n, o) {
       // 申请订单之后触发全局刷新
-      console.log('刷新全局')
       if (n) {
         // 有订单号情况下才可用
         this.enableOpt = true
-        // this.readyState = '未通过'
-        // this.excState = '未通过'
-        // this.remarkState = '未通过'
       }
       this.GetOrderList()
     }

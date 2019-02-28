@@ -343,6 +343,7 @@ export default class Index extends Vue {
   modifyDetial () {
     let detail = this.orderDetailList.find(item => item.detailId === this.detailForm.detailId)
     if (detail) {
+      console.log('modifyDetial', JSON.stringify(detail))
       Object.assign(detail, this.detailForm)
     }
   }
@@ -433,7 +434,8 @@ export default class Index extends Vue {
   }
   orderSplit (row) {
     this.dialogFormVisible = true
-    let detail:OrderDetail = JSON.parse(JSON.stringify(row))
+    let detail:OrderDetail = new OrderDetail()
+    Object.assign(detail, JSON.parse(JSON.stringify(row)))
     detail.isFirst = true
     detail.detailId = Vue.prototype.uuid()
     this.orderDetailList = []

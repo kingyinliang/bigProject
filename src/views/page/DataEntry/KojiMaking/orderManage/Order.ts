@@ -26,13 +26,13 @@ export class Order {
 }
 
 export class OrderDetail extends Order {
-  detailId: string
-  status: string = '空置'
-  inPotNo: string = '39802390200'
-  kojiMakingRoomNo: string = '一号曲房'
-  continuityNo: string = '8392392382'
-  kojiMakingDate: string = '2019-03-01'
-  productDate: string = '2019-03-01'
+  detailId: string = ''
+  status: string = ''
+  inPotNo: string = ''
+  kojiMakingRoomNo: string = ''
+  continuityNo: string = ''
+  kojiMakingDate: string = ''
+  productDate: string = ''
   isFirst: boolean = false
   constructor () {
     super()
