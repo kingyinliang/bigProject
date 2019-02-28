@@ -197,7 +197,7 @@ export default {
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
-        if (!this.$refs.pwapplymateriel.validate()) {
+        if (!this.$refs.pwapplymateriel.validate('submit')) {
           return false
         }
       }
