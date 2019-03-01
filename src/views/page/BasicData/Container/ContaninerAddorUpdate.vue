@@ -1,14 +1,10 @@
 <template>
   <el-dialog
     :title="conid?'修改容器':'新增容器'"
+    @close="closeDialog"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-     <!-- <el-form ref="form" :model="ffff" label-width="80px">
-        <el-form-item label="活动名称">
-          <el-input v-model="ffff.name"></el-input>
-        </el-form-item>
-      </el-form> -->
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
         <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
@@ -46,7 +42,7 @@
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <el-button @click="closeDialog">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit">确定</el-button>
     </span>
   </el-dialog>
@@ -62,6 +58,16 @@ export default {
       visible: false,
       dictList: [],
       dataForm: {
+        holderType: '',
+        holderNo: '',
+        holderName: '',
+        holderHold: 0,
+        holderPatch: '',
+        holderArea: '',
+        factory: '',
+        deptId: ''
+      },
+      dataForm1: {
         holderType: '',
         holderNo: '',
         holderName: '',
@@ -97,7 +103,12 @@ export default {
     // this.Getdeptcode(this.dataForm.factory)
   },
   methods: {
+    closeDialog () {
+      this.visible = false
+      this.$refs['dataForm'].resetFields()
+    },
     init (id) {
+      // this.$refs.dataForm.resetFields()
       if (id) {
         // 修改
         // this.dataForm = {}
@@ -121,6 +132,8 @@ export default {
           this.visible = true
         })
       } else {
+        this.dataForm = Object.assign({}, this.dataForm1)
+        this.factoryId = ''
         this.conid = 0
         this.visible = true
       }
