@@ -3,23 +3,23 @@
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
       <div class="main">
         <el-card class="newCard">
-          <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
+          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
             <el-col>
               <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
                 <el-form-item label="工厂：">
-                  <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
+                  <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="计划日期：" label-width="70px">
-                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -33,8 +33,8 @@
         <el-row :gutter="12" v-if="searched" style="margin-top:20px;">
           <el-col :span="12">
             <el-card>
-              <el-row style="margin-bottom:10px;">
-                <el-col>订单管理</el-col>
+              <el-row style="margin-bottom:5px;" >
+                <el-col style="font-size:16px;font-weight:500;color:#000">订单管理</el-col>
               </el-row>
               <el-row>
                 <el-col>
@@ -42,7 +42,7 @@
                     <el-table-column type="index" width="55" label="序号"></el-table-column>
                     <el-table-column label="订单状态" width="100">
                       <template slot-scope="scope">
-                        {{scope.row.status}}
+                        {{scope.row.state}}
                       </template>
                     </el-table-column>
                     <el-table-column label="订单日期" width="130">
@@ -94,14 +94,30 @@
           </el-col>
           <el-col :span="12" v-if="showdetails">
             <el-card>
-              <el-row  style="margin-bottom:10px;">
-                <el-col>
+              <el-row  style="margin-bottom:5px;">
+                <el-col :span="12" style="font-size:16px;font-weight:500;color:#000">
                   订单明细
+                </el-col>
+                <el-col :span="12" class="rowButton">
+                   <el-button type="primary" size="small"  style="float:right" @click="delDetail">删除</el-button>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col>
-                  <el-table header-row-class-name="tableHead" :data="orderDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
+                  <el-table
+                    ref="multipleTable"
+                    header-row-class-name="tableHead"
+                    :data="orderDetailList"
+                    border
+                    tooltip-effect="dark"
+                    :row-class-name="rowDelFlag"
+                    @selection-change="handleChange"
+                    @row-dblclick="showModifyDetial"
+                    >
+                    <el-table-column
+                      type="selection"
+                      width="55">
+                    </el-table-column>
                     <el-table-column type="index" width="55" label="序号"></el-table-column>
                     <el-table-column label="曲房状态" width="80">
                       <template slot-scope="scope">
@@ -147,65 +163,77 @@
           </el-col>
         </el-row>
       </div>
-      <el-dialog title="订单分配" :visible.sync="dialogFormVisible" width="900px">
+      <el-dialog title="订单分配" :visible.sync="dialogFormVisible" width="1200px">
         <div>
           <el-table header-row-class-name="tableHead" :data="orderDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
-            <el-table-column label="订单号" width="80">
-              <template slot-scope="scope">
-                {{scope.row.status}}
-              </template>
-            </el-table-column>
-            <el-table-column label="品项" width="180">
+            <el-table-column label="订单号" width="120">
               <template slot-scope="scope">
                 {{scope.row.orderNo}}
               </template>
             </el-table-column>
+            <el-table-column label="品项" width="140">
+              <template slot-scope="scope">
+                {{scope.row.item}}
+              </template>
+            </el-table-column>
             <el-table-column
               label="订单日期"
-              width="180">
+              width="120">
               <template slot-scope="scope">
-                {{scope.row.inPotNo}}
+                {{scope.row.orderDate}}
               </template>
             </el-table-column>
-            <el-table-column width="100" label="订单数量">
+            <el-table-column width="80" label="数量">
               <template slot-scope="scope">
-                {{scope.row.kojiMakingRoomNo}}
+                {{scope.row.number}}
               </template>
             </el-table-column>
-            <el-table-column width="150" label="单位">
+            <el-table-column width="60" label="单位">
               <template slot-scope="scope">
-                {{scope.row.continuityNo}}
+                {{scope.row.unit}}
               </template>
             </el-table-column>
-            <el-table-column label="订单备注" width="100">
+            <el-table-column label="备注" width="100">
               <template slot-scope="scope">
-                <span>{{scope.row.kojiMakingDate}}</span>
+                <span>{{scope.row.remark}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="入罐号" width="100">
+            <el-table-column label="入罐号" width="140">
               <template slot-scope="scope">
-                <span>{{scope.row.productDate}}</span>
+                <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
+                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
+                  <el-option  key="74874929" label="一号罐" value="74874929" ></el-option>
+                  <el-option  key="57459465" label="二号罐" value="57459465" ></el-option>
+                </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="曲房" width="100">
+            <el-table-column label="曲房" width="140">
               <template slot-scope="scope">
-                <span>{{scope.row.productDate}}</span>
+                <el-select  v-model="scope.row.kojiMakingRoomNo" filterable placeholder="请选择"  size="small">
+                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
+                  <el-option  key="43434343" label="一号曲房" value="43434343" ></el-option>
+                  <el-option  key="65656566" label="二号曲房" value="65656566" ></el-option>
+                </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="连续蒸煮号" width="100">
+            <el-table-column label="连续蒸煮号" width="140">
               <template slot-scope="scope">
-                <span>{{scope.row.productDate}}</span>
+                <el-select  v-model="scope.row.continuityNo" filterable placeholder="请选择"  size="small">
+                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
+                  <el-option  key="43434343" label="一号蒸煮" value="43434343" ></el-option>
+                  <el-option  key="65656566" label="二号蒸煮" value="65656566" ></el-option>
+                </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="入曲日期" width="100">
+            <el-table-column label="制曲日期" width="150">
               <template slot-scope="scope">
-                <span>{{scope.row.productDate}}</span>
+                <el-date-picker v-model="scope.row.kojiMakingDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="生产日期" width="100">
+            <el-table-column label="生产日期" width="150">
               <template slot-scope="scope">
-                <span>{{scope.row.productDate}}</span>
+                <el-date-picker v-model="scope.row.productDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small"  style="width:135px"></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column
@@ -213,7 +241,8 @@
               label="操作"
               width="60">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-plus" circle size="small" ></el-button>
+                <el-button v-if="scope.row.isFirst" type="primary" icon="el-icon-plus" circle size="small"  @click="addRow(scope.row)"></el-button>
+                <el-button v-else type="primary" icon="el-icon-minus" circle size="small" @click="delRow(scope.row)" ></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -223,13 +252,49 @@
           <el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="明细修改" :visible.sync="dialogFormVisible2" width="450px">
+        <el-form :model="detailForm"  ref="detailForm">
+          <el-form-item label="订单号" :label-width="formLabelWidth">
+            <label>{{detailForm.orderNo}}</label>
+          </el-form-item>
+          <el-form-item label="入罐号" :label-width="formLabelWidth" >
+            <el-select  v-model="detailForm.inPotNo"  placeholder="请选择">
+                <el-option  key="74874929" label="一号罐" value="74874929" ></el-option>
+                <el-option  key="57459465" label="二号罐" value="57459465" ></el-option>
+              <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
+            </el-select>
+          </el-form-item>
+          <el-form-item label="曲房" :label-width="formLabelWidth" >
+            <el-select  v-model="detailForm.kojiMakingRoomNo"  placeholder="请选择">
+              <el-option  key="43434343" label="一号曲房" value="43434343" ></el-option>
+              <el-option  key="65656566" label="二号曲房" value="65656566" ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="连续蒸煮" :label-width="formLabelWidth" >
+            <el-select  v-model="detailForm.continuityNo"  placeholder="请选择">
+              <el-option  key="43434343" label="一号蒸煮" value="43434343" ></el-option>
+              <el-option  key="65656566" label="二号蒸煮" value="65656566" ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="制曲日期" :label-width="formLabelWidth">
+            <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.kojiMakingDate" ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="生产日期" :label-width="formLabelWidth">
+            <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.productDate" ></el-date-picker>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible2 = false">取消</el-button>
+          <el-button type="primary" @click="dialogFormVisible2 = false;modifyDetial()">保存</el-button>
+        </div>
+      </el-dialog>
     </el-col>
   </el-row>
 </template>
 
 <script lang="ts">
 import {BASICDATA_API} from '@/api/api'
-import {Vue, Component, Watch} from 'vue-property-decorator'
+import {Vue, Component} from 'vue-property-decorator'
 import {Order, OrderDetail} from './Order.ts'
 
 @Component({
@@ -247,36 +312,39 @@ export default class Index extends Vue {
   params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
   orderList:Order[] = []
   orderDetailList:OrderDetail[] = []
+  selectedDetailList:OrderDetail[] = []
+  detailForm:OrderDetail = new OrderDetail()
   dialogFormVisible:boolean = false
+  dialogFormVisible2:boolean = false
   factoryList = []
   workshopList = []
-  processesList = []
   searched: boolean = false
-  showdetails: boolean = false
-  disabled: boolean = true
-  OrgTree = []
-  arrList = []
-  row = {
-    userId: []
-  }
-  currPage: number = 0
-  pageSize: number = 10
-  totalCount: number = 0
-  addRowStatus: number = 0
-
+  showdetails: boolean = true
+  formLabelWidth:string = '120px'
   mounted () {
     console.log('mounted', this.params)
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getProcess(this.params.workshopId)
-    this.getTree()
+    // this.getProcess(this.params.workshopId)
+    // this.getTree()
   }
 
   showDetail (row) {
     this.showdetails = true
-    let detail = new OrderDetail()
-    for (let i = 0; i < 5; i++) {
-      this.orderDetailList.push(detail)
+    // 请求接口
+    this.orderDetailList = []
+    this.selectedDetailList = []
+  }
+
+  showModifyDetial (row: OrderDetail) {
+    this.detailForm = JSON.parse(JSON.stringify(row))
+    this.dialogFormVisible2 = true
+  }
+  modifyDetial () {
+    let detail = this.orderDetailList.find(item => item.detailId === this.detailForm.detailId)
+    if (detail) {
+      console.log('modifyDetial', JSON.stringify(detail))
+      Object.assign(detail, this.detailForm)
     }
   }
   changeOptions (flag: string) {
@@ -288,6 +356,7 @@ export default class Index extends Vue {
       this.params.workshopName = item.deptName
     }
   }
+
   // 获取工厂
   getFactory () {
     this.factoryList = []
@@ -312,22 +381,6 @@ export default class Index extends Vue {
       })
     }
   }
-  // 根据车间获取工序
-  getProcess (wsid: string) {
-    this.processesList = []
-    if (wsid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wsid}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.processesList = data.childList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    }
-  }
-  setDisabled (flag: boolean) {
-    this.disabled = flag
-  }
   setStore (params) {
     this.$store.commit('common/updateZQWorkshop', params)
   }
@@ -347,25 +400,11 @@ export default class Index extends Vue {
     // 保存选项值到common store
     // this.setStore(this.params)
     this.searched = true
-    let order = new Order()
-    let orderDetail = new OrderDetail()
     for (let i = 0; i < 5; i++) {
+      let order = new Order()
+      order.orderNo = Vue.prototype.uuid()
       this.orderList.push(order)
-      this.orderDetailList.push(orderDetail)
     }
-  }
-  // 获取组织结构树
-  getTree () {
-    this.OrgTree = []
-    this.arrList = []
-    Vue.prototype.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}, false, false, false).then(({data}) => {
-      if (data.code === 0) {
-        this.OrgTree = data.deptList
-        this.arrList = [this.OrgTree[0].children[0].deptId]
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
   }
   rowDelFlag ({row, rowIndex}) {
     if (row.delFlag === '1') {
@@ -374,16 +413,37 @@ export default class Index extends Vue {
       return ''
     }
   }
+  // 删除
+  delRow (row) {
+    row.delFlag = '1'
+  }
+  // 增加
+  addRow (row) {
+    let detail:OrderDetail = JSON.parse(JSON.stringify(row))
+    detail.isFirst = false
+    detail.detailId = Vue.prototype.uuid()
+    this.orderDetailList.push(detail)
+  }
+  handleChange (selections) {
+    this.selectedDetailList = selections
+  }
+  delDetail () {
+    this.selectedDetailList.forEach(item => {
+      item.delFlag = '1'
+    })
+  }
   orderSplit (row) {
     this.dialogFormVisible = true
+    let detail:OrderDetail = new OrderDetail()
+    Object.assign(detail, JSON.parse(JSON.stringify(row)))
+    detail.isFirst = true
+    detail.detailId = Vue.prototype.uuid()
+    this.orderDetailList = []
+    this.selectedDetailList = []
+    this.orderDetailList.push(detail)
   }
   orderCheck (row) {
     this.$router.push({ name: `DataEntry-KojiMaking-orderAuditing-index` })
-  }
-  @Watch('params.productStatus')
-  onChangeValue (newVal: string, oldVal: string) {
-    this.searched = false
-    this.setDisabled(true)
   }
 }
 </script>
@@ -562,5 +622,10 @@ export default class Index extends Vue {
     width:1px;
     background:rgba(233,233,233,1);
   }
+}
+</style>
+<style>
+.rowDel{
+  display: none;
 }
 </style>

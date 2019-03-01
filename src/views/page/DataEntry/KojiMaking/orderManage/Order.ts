@@ -1,7 +1,7 @@
 export class Order {
-  status: string = '已提交'
+  state: string = '已提交'
   orderDate: string = '2018-02-05'
-  orderNo: string = '291792738211833'
+  orderNo: string
   item: string = 'SS01010001 小麦粉'
   number: number = 200
   unit: string = 'KG'
@@ -25,12 +25,16 @@ export class Order {
   // }
 }
 
-export class OrderDetail {
-  status: string = '空置'
-  orderNo: string = '291792738211833'
-  inPotNo: string = '39802390200'
-  kojiMakingRoomNo: string = '一号曲房'
-  continuityNo: string = '8392392382'
-  kojiMakingDate: string = '2019-03-01'
-  productDate: string = '2019-03-01'
+export class OrderDetail extends Order {
+  detailId: string = ''
+  status: string = ''
+  inPotNo: string = ''
+  kojiMakingRoomNo: string = ''
+  continuityNo: string = ''
+  kojiMakingDate: string = ''
+  productDate: string = ''
+  isFirst: boolean = false
+  constructor () {
+    super()
+  }
 }

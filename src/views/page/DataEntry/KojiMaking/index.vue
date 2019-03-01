@@ -3,26 +3,26 @@
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
       <div class="main">
         <el-card class="newCard">
-          <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
+          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
             <el-col>
               <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
                 <el-form-item label="工厂：">
-                  <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
+                  <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="制曲日期：" label-width="70px">
-                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="生产状态：" label-width="70px">
-                  <el-select v-model="params.productStatus" class="selectwpx" style="width: 140px">
+                  <el-select v-model="params.productStatus" class="selectwpx" style="width:140px">
                     <el-option label="正常生产" value="normal"></el-option>
                     <el-option label="无生产" value="abnormal" v-if="isAuth('wht:user:listUser')"></el-option>
                   </el-select>
@@ -31,14 +31,14 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float: right">查询</el-button>
+                <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
                 <template v-if="params.productStatus === 'abnormal'">
-                  <el-button v-if="searched && disabled && isAuth('wht:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float: right">编辑</el-button>
-                  <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float: right">返回</el-button>
+                  <el-button v-if="searched && disabled && isAuth('wht:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
+                  <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float:right">返回</el-button>
                 </template>
                 <template v-if="params.productStatus === 'abnormal' && !disabled">
-                  <el-button type="primary" size="small" @click="addPeople" style="float: right">新增</el-button>
-                  <el-button type="primary" size="small" @click="save" style="float: right">保存</el-button>
+                  <el-button type="primary" size="small" @click="addPeople" style="float:right">新增</el-button>
+                  <el-button type="primary" size="small" @click="save" style="float:right">保存</el-button>
                 </template>
               </el-row>
             </el-col>
@@ -221,7 +221,7 @@
           </el-col>
         </el-row>
         <el-row v-show="params.productStatus === 'abnormal' && searched" style="margin-top:20px;">
-          <div style="min-height: 340px">
+          <div style="min-height:340px">
           <el-table border  header-row-class-name="tableHead" :data="datalist">
             <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
             <el-table-column label="中/白/夜班" prop="classType" width="100">
@@ -248,14 +248,14 @@
             <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <el-col>
-                  <span v-if="!disabled" style="cursor: pointer" @click="selectUser(scope.row)">
+                  <span v-if="!disabled" style="cursor:pointer" @click="selectUser(scope.row)">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
                       <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
                       <i v-else>点击选择人员</i>
                     </span>
                   </span>
-                  <span v-else style="cursor: pointer">
+                  <span v-else style="cursor:pointer">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
                       <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
@@ -291,7 +291,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-row style="font-size:14px; line-height:30px; margin-top:10px">
+          <el-row style="font-size:14px;line-height:30px;margin-top:10px">
             实际作业人数: {{countMan}}
           </el-row>
           </div>
