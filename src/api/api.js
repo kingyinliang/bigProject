@@ -808,3 +808,14 @@ export const WHT_API = {
    */
   APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
 }
+
+/*
+*制曲api
+ */
+export const KJM_API = {
+  // 订单管理
+  /**
+   * @property {string} ORDERLIST_API 订单列表
+   */
+  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist'
+}

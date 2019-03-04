@@ -19,7 +19,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="计划日期：" label-width="70px">
-                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -42,34 +42,34 @@
                     <el-table-column type="index" width="55" label="序号"></el-table-column>
                     <el-table-column label="订单状态" width="100">
                       <template slot-scope="scope">
-                        {{scope.row.state}}
+                        {{scope.row.orderStatus}}
                       </template>
                     </el-table-column>
-                    <el-table-column label="订单日期" width="130">
+                    <el-table-column label="订单日期" width="110">
                       <template slot-scope="scope">
                         {{scope.row.orderDate}}
                       </template>
                     </el-table-column>
                     <el-table-column
                       label="订单号"
-                      width="180">
+                      width="140">
                       <template slot-scope="scope">
                         {{scope.row.orderNo}}
                       </template>
                     </el-table-column>
-                    <el-table-column width="200" label="品项">
+                    <el-table-column width="180" label="品项">
                       <template slot-scope="scope">
-                        {{scope.row.item}}
+                        {{scope.row.materialCode + ' ' + scope.row.materialName}}
                       </template>
                     </el-table-column>
-                    <el-table-column width="90" label="数量">
+                    <el-table-column width="80" label="数量">
                       <template slot-scope="scope">
-                        {{scope.row.number}}
+                        {{scope.row.planOutput}}
                       </template>
                     </el-table-column>
                     <el-table-column label="单位" width="60">
                       <template slot-scope="scope">
-                        <span>{{scope.row.unit}}</span>
+                        <span>{{scope.row.outputUnit}}</span>
                       </template>
                     </el-table-column>
                     <el-table-column label="备注" width="140">
@@ -80,11 +80,11 @@
                     <el-table-column
                       label="操作"
                       fixed="right"
+                      align="center"
                       width="120">
                       <template slot-scope="scope">
-                        <span class="operator" @click="orderSplit(scope.row)">拆分</span>
-                        <span class="operator"></span>
-                        <span class="operator" @click="orderCheck(scope.row)">核对</span>
+                        <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
+                        <span class="operator" v-if="scope.row.orderStatus === 'toBeAudited'" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -124,7 +124,7 @@
                         {{scope.row.status}}
                       </template>
                     </el-table-column>
-                    <el-table-column label="订单号" width="180">
+                    <el-table-column label="订单号" width="160">
                       <template slot-scope="scope">
                         {{scope.row.orderNo}}
                       </template>
@@ -167,34 +167,34 @@
         <div>
           <el-table header-row-class-name="tableHead" :data="orderDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
-            <el-table-column label="订单号" width="120">
+            <el-table-column label="订单号" width="140">
               <template slot-scope="scope">
                 {{scope.row.orderNo}}
               </template>
             </el-table-column>
-            <el-table-column label="品项" width="140">
+            <el-table-column label="品项" width="180">
               <template slot-scope="scope">
-                {{scope.row.item}}
+                {{scope.row.materialCode + ' ' + scope.row.materialName}}
               </template>
             </el-table-column>
             <el-table-column
               label="订单日期"
-              width="120">
+              width="110">
               <template slot-scope="scope">
                 {{scope.row.orderDate}}
               </template>
             </el-table-column>
             <el-table-column width="80" label="数量">
               <template slot-scope="scope">
-                {{scope.row.number}}
+                {{scope.row.planOutput}}
               </template>
             </el-table-column>
             <el-table-column width="60" label="单位">
               <template slot-scope="scope">
-                {{scope.row.unit}}
+                {{scope.row.outputUnit}}
               </template>
             </el-table-column>
-            <el-table-column label="备注" width="100">
+            <el-table-column label="备注" width="140">
               <template slot-scope="scope">
                 <span>{{scope.row.remark}}</span>
               </template>
@@ -293,8 +293,8 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API} from '@/api/api'
-import {Vue, Component} from 'vue-property-decorator'
+import {BASICDATA_API, KJM_API} from '@/api/api'
+import {Vue, Component, Watch} from 'vue-property-decorator'
 import {Order, OrderDetail} from './Order.ts'
 
 @Component({
@@ -322,11 +322,8 @@ export default class Index extends Vue {
   showdetails: boolean = true
   formLabelWidth:string = '120px'
   mounted () {
-    console.log('mounted', this.params)
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    // this.getProcess(this.params.workshopId)
-    // this.getTree()
   }
 
   showDetail (row) {
@@ -340,20 +337,21 @@ export default class Index extends Vue {
     this.detailForm = JSON.parse(JSON.stringify(row))
     this.dialogFormVisible2 = true
   }
+
   modifyDetial () {
     let detail = this.orderDetailList.find(item => item.detailId === this.detailForm.detailId)
     if (detail) {
-      console.log('modifyDetial', JSON.stringify(detail))
       Object.assign(detail, this.detailForm)
     }
   }
+
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
-      this.params.factoryName = item.deptName
+      this.params.factoryName = item ? item.deptName : ''
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
-      this.params.workshopName = item.deptName
+      this.params.workshopName = item ? item.deptName : ''
     }
   }
 
@@ -368,11 +366,12 @@ export default class Index extends Vue {
       }
     })
   }
+
   // 根据工厂获车间
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '制曲'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
@@ -393,18 +392,32 @@ export default class Index extends Vue {
       this.$message.error('请选择车间')
       return
     }
-    if (this.params.zqDate === null || this.params.zqDate === '') {
-      this.$message.error('请选择计划时间')
+    if (this.params.orderDate === null || this.params.orderDate === '') {
+      this.$message.error('请选择计划日期')
       return
     }
     // 保存选项值到common store
-    // this.setStore(this.params)
+    this.setStore(this.params)
     this.searched = true
-    for (let i = 0; i < 5; i++) {
-      let order = new Order()
-      order.orderNo = Vue.prototype.uuid()
-      this.orderList.push(order)
+    let params = {
+      productLine: this.params.workshopId,
+      orderDate: this.params.orderDate,
+      orderNo: ''
     }
+    this.retrieveOrderData(params)
+  }
+  retrieveOrderData (params) {
+    this.orderList = []
+    Vue.prototype.$http(`${KJM_API.ORDERLIST_API}`, `POST`, params, false, false, false).then((res) => {
+      if (res.data.code === 0) {
+        this.orderList = res.data.list
+      } else {
+        this.$message.error(res.data.msg)
+        Vue.prototype.$log.writeErrorLog(new Error(res.data.msg), {'params': params})
+      }
+    }).catch(err => {
+      Vue.prototype.$log.writeErrorLog(err, {'params': params})
+    })
   }
   rowDelFlag ({row, rowIndex}) {
     if (row.delFlag === '1') {
@@ -444,6 +457,17 @@ export default class Index extends Vue {
   }
   orderCheck (row) {
     this.$router.push({ name: `DataEntry-KojiMaking-orderAuditing-index` })
+  }
+
+  @Watch('params', {deep: true})
+  onChangeValue (newVal: string, oldVal: string) {
+    this.searched = false
+  }
+  @Watch('params.factoryId')
+  onFactoryValue (newVal: string, oldVal: string) {
+    this.params.workshopId = ''
+    this.params.workshopName = ''
+    this.getWorkshop(newVal)
   }
 }
 </script>
@@ -604,7 +628,7 @@ export default class Index extends Vue {
     background: url('~@/assets/img/chaifen.png');
   }
 }
-.operator:nth-child(3){
+.operator:nth-child(2){
   &:before{
     content:'';
     display: inline-block;
@@ -614,15 +638,15 @@ export default class Index extends Vue {
     background: url('~@/assets/img/heshi.png');
   }
 }
-.operator:nth-child(2){
-  &:after{
-    content:'';
-    display: inline-block;
-    height:14px;
-    width:1px;
-    background:rgba(233,233,233,1);
-  }
-}
+// .operator:nth-child(2){
+//   &:after{
+//     content:'';
+//     display: inline-block;
+//     height:14px;
+//     width:1px;
+//     background:rgba(233,233,233,1);
+//   }
+// }
 </style>
 <style>
 .rowDel{

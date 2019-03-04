@@ -359,7 +359,6 @@ export default class Index extends Vue {
   addRowStatus: number = 0
 
   mounted () {
-    console.log('mounted', this.params)
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getProcess(this.params.workshopId)
@@ -388,10 +387,10 @@ export default class Index extends Vue {
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
-      this.params.factoryName = item.deptName
+      this.params.factoryName = item ? item.deptName : ''
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
-      this.params.workshopName = item.deptName
+      this.params.workshopName = item ? item.deptName : ''
     }
   }
   changeProcType (row) {
@@ -412,7 +411,7 @@ export default class Index extends Vue {
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '制曲'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
@@ -467,6 +466,7 @@ export default class Index extends Vue {
       // 无生产
       this.addRowStatus = 0
       this.disabled = true
+      this.datalist = []
       Vue.prototype.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.params.workshopId, productDate: this.params.zqDate}).then(res => {
         // this.lodingStatus = false
         if (res.data.code === 0) {
@@ -568,10 +568,21 @@ export default class Index extends Vue {
       }
     })
   }
-  @Watch('params.productStatus')
+  @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
-    this.setDisabled(true)
+    this.disabled = true
+  }
+  @Watch('params.factoryId')
+  onFactoryValue (newVal: string, oldVal: string) {
+    this.params.workshopId = ''
+    this.params.workshopName = ''
+    this.getWorkshop(newVal)
+  }
+  @Watch('params.workshopId')
+  onWorkshopValue (newVal: string, oldVal: string) {
+    console.log('车间变了吗')
+    this.getProcess(newVal)
   }
 }
 </script>

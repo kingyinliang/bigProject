@@ -45,12 +45,14 @@ export default {
     ZQWorkshop: {
       factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
       factoryName: '烟台欣和企业食品有限公司工厂',
-      workshopId: 'DA8DB9D19B4043B8A600B52D9FEF93E3',
-      workshopName: '炒麦一车间',
+      workshopId: '7E0AA796139E46738A949E88E1272578',
+      workshopName: '制曲一车间',
       // 制曲日期
       zqDate: '2019-02-24',
       // normal/abnormal 正常生产/无生产
-      productStatus: 'normal'
+      productStatus: 'normal',
+      // 订单管理的计划日期
+      orderDate: '2019-02-24'
     }
   },
   mutations: {
