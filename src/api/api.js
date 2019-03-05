@@ -815,10 +815,6 @@ export const WHT_API = {
 export const KJM_API = {
   // 订单管理
   /**
-   * @property {string} ORDERLIST_API 订单列表
-   */
-  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',
-  /**
    * @property {string} FORMHEAD_API 表头
    */
   FORMHEAD_API: HOST + '/sys/kjmOrderHouse/headList',
@@ -833,5 +829,14 @@ export const KJM_API = {
   /**
    * @property {string} OUTMATERIELSUBMIT_API 出曲原料领用提交
    */
-  OUTMATERIELSUBMIT_API: HOST + '/sys/kjmOutMaterial/submit'
+  OUTMATERIELSUBMIT_API: HOST + '/sys/kjmOutMaterial/submit',
+  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',
+  /**
+   * @property {string} ORDERDETAILLIST_API 订单详情列表
+   */
+  ORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/list',
+  /**
+   * @property {string} SPLITORDERDETAILLIST_API 订单拆分
+   */
+  SPLITORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/mySaveOrUpdate'
 }
