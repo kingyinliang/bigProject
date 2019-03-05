@@ -39,7 +39,7 @@
           <span slot="label" class="spanview">
             <el-button>原料领用</el-button>
           </span>
-          <meateriel :isRedact="isRedact"></meateriel>
+          <meateriel ref="meateriel" :isRedact="isRedact" :formHeader="formHeader"></meateriel>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import {KJM_API} from '@/api/api'
 import { headanimation } from '@/net/validate'
 import FormHead from './Outcomponents/formHead'
 import Meateriel from './Outcomponents/materiel'
@@ -90,8 +91,60 @@ export default {
   },
   mounted () {
     headanimation(this.$)
+    this.GetOrderList()
   },
-  methods: {},
+  methods: {
+    // 获取表头
+    GetOrderList () {
+      this.$http(`${KJM_API.FORMHEAD_API}`, 'POST', {
+        workShop: '7E0AA796139E46738A949E88E1272578',
+        productDate: '2019-03-04',
+        orderNo: this.orderNo
+      }, false, false, false).then(({data}) => {
+        this.formHeader = data.list[0]
+        this.$refs.meateriel.GetBrineTankNo(this.formHeader)
+        if (this.orderStatus !== '已同步') {
+          this.$refs.meateriel.GetmaterielDate(this.formHeader)
+        }
+      })
+    },
+    // 保存
+    savedOrSubmitForm (str) {
+      let that = this
+      let meaterielSave = new Promise((resolve, reject) => {
+        that.$refs.meateriel.SaveMateriel(str, resolve)
+      })
+      if (str === 'submit') {
+        let saveNet = Promise.all([meaterielSave])
+        saveNet.then(function () {
+          let meaterielSubmit = new Promise((resolve, reject) => {
+            that.$refs.meateriel.SubmitMateriel(resolve)
+          })
+          let submitNet = Promise.all([meaterielSubmit])
+          submitNet.then(function () {
+            that.GetOrderList()
+            that.$message.success('提交成功')
+          })
+        })
+      } else {
+        let saveNet = Promise.all([meaterielSave])
+        saveNet.then(function () {
+          that.GetOrderList()
+          that.$message.success('保存成功')
+        })
+      }
+    },
+    // 提交
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    }
+  },
   computed: {},
   components: {
     FormHead,

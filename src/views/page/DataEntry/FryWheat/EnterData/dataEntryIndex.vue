@@ -218,7 +218,7 @@ export default {
       }
       let that = this
       let net0 = new Promise((resolve, reject) => {
-        this.UpdateformHeader(str, resolve)
+        that.UpdateformHeader(str, resolve)
       })
       let net1 = new Promise((resolve, reject) => {
         that.$refs.readytime.UpdateReady(str, resolve)

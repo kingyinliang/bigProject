@@ -48,7 +48,7 @@
         <!--</template>-->
       <!--</el-table-column>-->
     </el-table>
-    <audit-log></audit-log>
+    <audit-log :tableData="timeAudit"></audit-log>
   </div>
 </template>
 
@@ -70,7 +70,8 @@ export default {
         humanTime: '',
         humanTimeUnit: 'H',
         remark: ''
-      }]
+      }],
+      timeAudit: []
     }
   },
   props: {
@@ -91,6 +92,7 @@ export default {
             if (data.listForm && data.listForm.length !== 0) {
               this.pwTimeDate = data.listForm
               status = data.listForm[0].status
+              this.timeAudit = data.listApproval
             } else {
               this.pwTimeDate = [{
                 id: '',
