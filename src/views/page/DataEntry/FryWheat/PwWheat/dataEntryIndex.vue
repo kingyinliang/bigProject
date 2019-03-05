@@ -54,7 +54,7 @@
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="this.readyState === 'noPass'? '不通过':this.readyState === 'saved'? '已保存':this.readyState === 'submit' ? '已提交' : this.readyState === 'checked'? '通过':'未录入'" placement="top-start">
-                <el-button>工时录入</el-button>
+                <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">工时录入</el-button>
               </el-tooltip>
             </span>
             <pw-time ref="pwtime" :isRedact="isRedact" :order="formHeader" @SetReadyStatus="SetReadyStatus"></pw-time>

@@ -817,5 +817,21 @@ export const KJM_API = {
   /**
    * @property {string} ORDERLIST_API 订单列表
    */
-  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist'
+  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',
+  /**
+   * @property {string} FORMHEAD_API 表头
+   */
+  FORMHEAD_API: HOST + '/sys/kjmOrderHouse/headList',
+  /**
+   * @property {string} OUTMATERIELLIST_API 出曲原料领用列表
+   */
+  OUTMATERIELLIST_API: HOST + '/sys/kjmOutMaterial/list',
+  /**
+   * @property {string} OUTMATERIELSAVE_API 出曲原料领用保存
+   */
+  OUTMATERIELSAVE_API: HOST + '/sys/kjmOutMaterial/mySaveOrUpdate',
+  /**
+   * @property {string} OUTMATERIELSUBMIT_API 出曲原料领用提交
+   */
+  OUTMATERIELSUBMIT_API: HOST + '/sys/kjmOutMaterial/submit'
 }
