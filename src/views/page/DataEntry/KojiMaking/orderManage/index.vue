@@ -164,7 +164,7 @@
         </el-row>
       </div>
       <el-dialog title="订单分配" :visible.sync="dialogFormVisible" width="1200px">
-        <div>
+        <div class="orderForm">
           <el-table header-row-class-name="tableHead" :data="splitDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
             <el-table-column label="订单号" width="140">
@@ -201,16 +201,22 @@
             </el-table-column>
             <el-table-column label="入罐号" width="140">
               <template slot-scope="scope">
-                <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
-                  <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
+                    <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="曲房" width="140">
               <template slot-scope="scope">
-                <el-select  v-model="scope.row.houseNo" filterable placeholder="请选择"  size="small">
-                  <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-                </el-select>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select  v-model="scope.row.houseNo" filterable placeholder="请选择"  size="small">
+                    <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+                  </el-select>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="连续蒸煮号" width="140">
@@ -222,12 +228,18 @@
             </el-table-column>
             <el-table-column label="制曲日期" width="150">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.inKjmDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-date-picker v-model="scope.row.inKjmDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="生产日期" width="150">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.productDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small"  style="width:135px"></el-date-picker>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-date-picker v-model="scope.row.productDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small"  style="width:135px"></el-date-picker>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -247,16 +259,16 @@
         </div>
       </el-dialog>
       <el-dialog title="明细修改" :visible.sync="dialogFormVisible2" width="450px">
-        <el-form :model="detailForm"  ref="detailForm">
+        <el-form :model="detailForm"  ref="detailForm" class='orderForm'>
           <el-form-item label="订单号" :label-width="formLabelWidth">
             <label>{{detailForm.orderNo}}</label>
           </el-form-item>
-          <el-form-item label="入罐号" :label-width="formLabelWidth" >
+          <el-form-item label="入罐号" :label-width="formLabelWidth" required >
             <el-select  v-model="detailForm.inPotNo"  placeholder="请选择" @change="changeOptions('inPot')">
               <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="曲房" :label-width="formLabelWidth" >
+          <el-form-item label="曲房" :label-width="formLabelWidth" required>
             <el-select  v-model="detailForm.houseNo"  placeholder="请选择" @change="changeOptions('house')">
               <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
@@ -266,10 +278,10 @@
               <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="制曲日期" :label-width="formLabelWidth">
+          <el-form-item label="制曲日期" :label-width="formLabelWidth" required>
             <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.inKjmDate" ></el-date-picker>
           </el-form-item>
-          <el-form-item label="生产日期" :label-width="formLabelWidth">
+          <el-form-item label="生产日期" :label-width="formLabelWidth" required>
             <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.productDate" ></el-date-picker>
           </el-form-item>
         </el-form>
@@ -286,7 +298,7 @@
 import {BASICDATA_API, KJM_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {Order, OrderDetail} from './Order.ts'
-
+import { dateFormat } from '@/net/validate'
 @Component({
   components: {
   }
@@ -410,6 +422,8 @@ export default class Index extends Vue {
     // 保存选项值到common store
     this.setStore(this.params)
     this.searched = true
+    this.orderDetailList = []
+    this.selectedDetailList = []
     let params = {
       workShop: this.params.workshopId,
       orderDate: this.params.orderDate,
@@ -427,10 +441,9 @@ export default class Index extends Vue {
         }
       } else {
         this.$message.error(res.data.msg)
-        Vue.prototype.$log.writeErrorLog(new Error(res.data.msg), {'params': params})
       }
     }).catch(err => {
-      Vue.prototype.$log.writeErrorLog(err, {'params': params})
+      console.log('catch data::', err)
     })
   }
   // 订单拆分
@@ -439,6 +452,8 @@ export default class Index extends Vue {
     let detail:OrderDetail = new OrderDetail(row.orderId, row.orderNo, row.orderDate, row.orderStatus, row.materialCode, row.materialName, row.planOutput, row.outputUnit, row.remark, row.delFlag)
     // Object.assign(detail, JSON.parse(JSON.stringify(row)))
     detail.isFirst = true
+    detail.inKjmDate = dateFormat(new Date(), 'yyyy-MM-dd')
+    detail.productDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.splitDetailList = []
     this.splitDetailList.push(detail)
   }
@@ -471,10 +486,33 @@ export default class Index extends Vue {
         })
       }
     }
+    for (let item of params) {
+      if (!item.inPotNo || item.inPotNo.length === 0) {
+        this.$message.error('入罐号不能为空')
+        return
+      }
+      if (!item.houseNo || item.houseNo.length === 0) {
+        this.$message.error('曲房不能为空')
+        return
+      }
+      if (!item.inKjmDate || item.inKjmDate.length === 0) {
+        this.$message.error('制曲日期不能为空')
+        return
+      }
+      if (!item.productDate || item.productDate.length === 0) {
+        this.$message.error('生产日期不能为空')
+        return
+      }
+    }
     Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
-      this.dialogFormVisible = false
+      if (res.data.code === 0) {
+        this.dialogFormVisible = false
+        this.retrieveDetail(this.splitDetailList[0].orderId)
+      } else {
+        this.$message.error(res.data.msg)
+      }
     }).catch(err => {
-      Vue.prototype.$log.writeErrorLog(err, {'params': params})
+      console.log('catch data::', err)
     })
   }
   showDetail (row) {
@@ -510,6 +548,8 @@ export default class Index extends Vue {
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      console.log('catch data::', err)
     })
   }
   // 多选
@@ -519,20 +559,25 @@ export default class Index extends Vue {
   // 删除订单详情
   delDetail () {
     if (!this.selectedDetailList || this.selectedDetailList.length === 0) {
+      this.$message.error('请选择删除项')
       return
     }
-    this.$confirm('是否删除订单详情?', '提示', {
+    this.$confirm('是否删除所选项?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      this.selectedDetailList.forEach(item => {
-        item.delFlag = '1'
-      })
+      // this.selectedDetailList.forEach(item => {
+      //   item.delFlag = '1'
+      // })
       Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList, false, false, false).then((res) => {
-        this.retrieveDetail(this.selectedDetailList[0].orderId)
+        if (res.data.code === 0) {
+          this.showDetail(this.selectedDetailList[0].orderId)
+        } else {
+          this.$message.error(res.data.msg)
+        }
       }).catch(err => {
-        Vue.prototype.$log.writeErrorLog(err, {'params': this.selectedDetailList})
+        console.log('catch data::', err)
       })
     })
   }
@@ -542,12 +587,32 @@ export default class Index extends Vue {
     this.dialogFormVisible2 = true
   }
   modifyDetial () {
+    if (!this.detailForm.inPotNo || this.detailForm.inPotNo.length === 0) {
+      this.$message.error('入罐号不能为空')
+      return false
+    }
+    if (!this.detailForm.houseNo || this.detailForm.houseNo.length === 0) {
+      this.$message.error('曲房不能为空')
+      return false
+    }
+    if (!this.detailForm.inKjmDate || this.detailForm.inKjmDate.length === 0) {
+      this.$message.error('制曲日期不能为空')
+      return false
+    }
+    if (!this.detailForm.productDate || this.detailForm.productDate.length === 0) {
+      this.$message.error('生产日期不能为空')
+      return false
+    }
     let params: OrderDetail[] = [this.detailForm]
     Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
-      this.dialogFormVisible2 = false
-      this.retrieveDetail(this.detailForm.orderId)
+      if (res.data.code === 0) {
+        this.dialogFormVisible2 = false
+        this.retrieveDetail(this.detailForm.orderId)
+      } else {
+        this.$message.error(res.data.msg)
+      }
     }).catch(err => {
-      Vue.prototype.$log.writeErrorLog(err, {'params': this.detailForm})
+      console.log('catch data::', err)
     })
   }
   rowDelFlag ({row, rowIndex}) {
@@ -748,6 +813,18 @@ export default class Index extends Vue {
 //     background:rgba(233,233,233,1);
 //   }
 // }
+.orderForm {
+  .required{
+    position: relative;
+    padding-left: 15px;
+    .reqI{
+      color: red;
+      position: absolute;
+      left: 0;
+      line-height: 32px;
+    }
+  }
+}
 </style>
 <style>
 .rowDel{
