@@ -84,7 +84,7 @@
                       width="120">
                       <template slot-scope="scope">
                         <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
-                        <span class="operator" v-if="scope.row.orderStatus === 'toBeAudited'" @click="orderCheck(scope.row)">核对</span>
+                        <span class="operator" v-if="scope.row.orderStatus === '待审核'" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -133,22 +133,22 @@
                       label="入罐号"
                       width="180">
                       <template slot-scope="scope">
-                        {{scope.row.inPotNo}}
+                        {{scope.row.inPotName}}
                       </template>
                     </el-table-column>
                     <el-table-column width="100" label="曲房">
                       <template slot-scope="scope">
-                        {{scope.row.kojiMakingRoomNo}}
+                        {{scope.row.houseName}}
                       </template>
                     </el-table-column>
                     <el-table-column width="150" label="连续蒸煮">
                       <template slot-scope="scope">
-                        {{scope.row.continuityNo}}
+                        {{scope.row.cookingName}}
                       </template>
                     </el-table-column>
                     <el-table-column label="制曲日期" width="100">
                       <template slot-scope="scope">
-                        <span>{{scope.row.kojiMakingDate}}</span>
+                        <span>{{scope.row.inKjmDate}}</span>
                       </template>
                     </el-table-column>
                     <el-table-column label="生产日期" width="100">
@@ -252,17 +252,17 @@
             <label>{{detailForm.orderNo}}</label>
           </el-form-item>
           <el-form-item label="入罐号" :label-width="formLabelWidth" >
-            <el-select  v-model="detailForm.inPotNo"  placeholder="请选择">
+            <el-select  v-model="detailForm.inPotNo"  placeholder="请选择" @change="changeOptions('inPot')">
               <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="曲房" :label-width="formLabelWidth" >
-            <el-select  v-model="detailForm.houseNo"  placeholder="请选择">
+            <el-select  v-model="detailForm.houseNo"  placeholder="请选择" @change="changeOptions('house')">
               <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="连续蒸煮" :label-width="formLabelWidth" >
-            <el-select  v-model="detailForm.cookingNo"  placeholder="请选择">
+            <el-select  v-model="detailForm.cookingNo"  placeholder="请选择" @change="changeOptions('cooking')">
               <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
@@ -275,7 +275,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible2 = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible2 = false;modifyDetial()">保存</el-button>
+          <el-button type="primary" @click="modifyDetial()">保存</el-button>
         </div>
       </el-dialog>
     </el-col>
@@ -329,6 +329,15 @@ export default class Index extends Vue {
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
+    } else if (flag === 'inPot') {
+      let item = this.potList.find(ele => ele.holderId === this.detailForm.inPotNo)
+      this.detailForm.inPotName = item ? item.holderName : ''
+    } else if (flag === 'house') {
+      let item = this.kjmRoomList.find(ele => ele.holderId === this.detailForm.houseNo)
+      this.detailForm.houseName = item ? item.holderName : ''
+    } else if (flag === 'cooking') {
+      let item = this.continueList.find(ele => ele.holderId === this.detailForm.cookingNo)
+      this.detailForm.cookingName = item ? item.holderName : ''
     }
   }
   // 获取工厂
@@ -412,7 +421,10 @@ export default class Index extends Vue {
     this.orderList = []
     Vue.prototype.$http(`${KJM_API.ORDERLIST_API}`, `POST`, params, false, false, false).then((res) => {
       if (res.data.code === 0) {
-        this.orderList = res.data.list
+        for (let item of res.data.list) {
+          let order = new Order(item.orderId, item.orderNo, item.orderDate, item.orderStatus, item.materialCode, item.materialName, item.planOutput, item.outputUnit, item.remark, item.delFlag)
+          this.orderList.push(order)
+        }
       } else {
         this.$message.error(res.data.msg)
         Vue.prototype.$log.writeErrorLog(new Error(res.data.msg), {'params': params})
@@ -424,8 +436,8 @@ export default class Index extends Vue {
   // 订单拆分
   orderSplit (row) {
     this.dialogFormVisible = true
-    let detail:OrderDetail = new OrderDetail()
-    Object.assign(detail, JSON.parse(JSON.stringify(row)))
+    let detail:OrderDetail = new OrderDetail(row.orderId, row.orderNo, row.orderDate, row.orderStatus, row.materialCode, row.materialName, row.planOutput, row.outputUnit, row.remark, row.delFlag)
+    // Object.assign(detail, JSON.parse(JSON.stringify(row)))
     detail.isFirst = true
     this.splitDetailList = []
     this.splitDetailList.push(detail)
@@ -436,8 +448,9 @@ export default class Index extends Vue {
   }
   // 增加
   addRow (row) {
-    let detail:OrderDetail = JSON.parse(JSON.stringify(row))
-    detail.isFirst = false
+    let detail:OrderDetail = new OrderDetail(row.orderId, row.orderNo, row.orderDate, row.orderStatus,
+      row.materialCode, row.materialName, row.planOutput, row.outputUnit, row.remark, row.delFlag,
+      row.id, row.status, row.inPotNo, row.inPotName, row.houseNo, row.houseName, row.cookingNo, row.cookingName, row.inKjmDate, row.productDate, false)
     this.splitDetailList.push(detail)
   }
   // 拆分订单保存
@@ -447,6 +460,7 @@ export default class Index extends Vue {
       if (item.delFlag === '0') {
         params.push({
           orderId: item.orderId,
+          orderNo: item.orderNo,
           status: '',
           inPotNo: item.inPotNo,
           houseNo: item.houseNo,
@@ -460,21 +474,39 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
       this.dialogFormVisible = false
     }).catch(err => {
-    // Vue.prototype.$log.writeErrorLog(err, {'params': params})
+      Vue.prototype.$log.writeErrorLog(err, {'params': params})
     })
   }
   showDetail (row) {
+    this.retrieveDetail(row.orderId)
+  }
+  retrieveDetail (orderId) {
     this.showdetails = true
     this.selectedDetailList = []
     this.orderDetailList = []
     let params = {
-      orderId: row.orderId,
-      currPage: 1,
-      pageSize: 9999
+      orderId: orderId,
+      currPage: '1',
+      pageSize: '9999'
     }
     Vue.prototype.$http(`${KJM_API.ORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
       if (res.data.code === 0) {
-        this.orderDetailList = res.data.page.list
+        for (let item of res.data.page.list) {
+          let detail = new OrderDetail()
+          detail.id = item.id
+          detail.status = item.status
+          detail.orderId = item.orderId
+          detail.orderNo = item.orderNo
+          detail.inPotNo = item.inPotNo
+          detail.houseNo = item.houseNo
+          detail.cookingNo = item.cookingNo
+          detail.inKjmDate = item.inKjmDate
+          detail.productDate = item.productDate
+          detail.inPotName = item.inPotName
+          detail.houseName = item.houseName
+          detail.cookingName = item.cookingName
+          this.orderDetailList.push(detail)
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -486,20 +518,37 @@ export default class Index extends Vue {
   }
   // 删除订单详情
   delDetail () {
-    this.selectedDetailList.forEach(item => {
-      item.delFlag = '1'
+    if (!this.selectedDetailList || this.selectedDetailList.length === 0) {
+      return
+    }
+    this.$confirm('是否删除订单详情?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      this.selectedDetailList.forEach(item => {
+        item.delFlag = '1'
+      })
+      Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList, false, false, false).then((res) => {
+        this.retrieveDetail(this.selectedDetailList[0].orderId)
+      }).catch(err => {
+        Vue.prototype.$log.writeErrorLog(err, {'params': this.selectedDetailList})
+      })
     })
   }
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
-    this.detailForm = JSON.parse(JSON.stringify(row))
+    this.detailForm = row.clone()
     this.dialogFormVisible2 = true
   }
   modifyDetial () {
-    let detail = this.orderDetailList.find(item => item.id === this.detailForm.id)
-    if (detail) {
-      Object.assign(detail, this.detailForm)
-    }
+    let params: OrderDetail[] = [this.detailForm]
+    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+      this.dialogFormVisible2 = false
+      this.retrieveDetail(this.detailForm.orderId)
+    }).catch(err => {
+      Vue.prototype.$log.writeErrorLog(err, {'params': this.detailForm})
+    })
   }
   rowDelFlag ({row, rowIndex}) {
     if (row.delFlag === '1') {
