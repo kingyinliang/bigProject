@@ -165,7 +165,7 @@
       </div>
       <el-dialog title="订单分配" :visible.sync="dialogFormVisible" width="1200px">
         <div>
-          <el-table header-row-class-name="tableHead" :data="orderDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
+          <el-table header-row-class-name="tableHead" :data="splitDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
             <el-table-column label="订单号" width="140">
               <template slot-scope="scope">
@@ -202,33 +202,27 @@
             <el-table-column label="入罐号" width="140">
               <template slot-scope="scope">
                 <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
-                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
-                  <el-option  key="74874929" label="一号罐" value="74874929" ></el-option>
-                  <el-option  key="57459465" label="二号罐" value="57459465" ></el-option>
+                  <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
             <el-table-column label="曲房" width="140">
               <template slot-scope="scope">
-                <el-select  v-model="scope.row.kojiMakingRoomNo" filterable placeholder="请选择"  size="small">
-                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
-                  <el-option  key="43434343" label="一号曲房" value="43434343" ></el-option>
-                  <el-option  key="65656566" label="二号曲房" value="65656566" ></el-option>
+                <el-select  v-model="scope.row.houseNo" filterable placeholder="请选择"  size="small">
+                  <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
             <el-table-column label="连续蒸煮号" width="140">
               <template slot-scope="scope">
-                <el-select  v-model="scope.row.continuityNo" filterable placeholder="请选择"  size="small">
-                  <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
-                  <el-option  key="43434343" label="一号蒸煮" value="43434343" ></el-option>
-                  <el-option  key="65656566" label="二号蒸煮" value="65656566" ></el-option>
+                <el-select  v-model="scope.row.cookingNo" filterable placeholder="请选择"  size="small">
+                  <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
             <el-table-column label="制曲日期" width="150">
               <template slot-scope="scope">
-                <el-date-picker v-model="scope.row.kojiMakingDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
+                <el-date-picker v-model="scope.row.inKjmDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="生产日期" width="150">
@@ -249,7 +243,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
+          <el-button type="primary" @click="splitOrder()">保存</el-button>
         </div>
       </el-dialog>
       <el-dialog title="明细修改" :visible.sync="dialogFormVisible2" width="450px">
@@ -259,25 +253,21 @@
           </el-form-item>
           <el-form-item label="入罐号" :label-width="formLabelWidth" >
             <el-select  v-model="detailForm.inPotNo"  placeholder="请选择">
-                <el-option  key="74874929" label="一号罐" value="74874929" ></el-option>
-                <el-option  key="57459465" label="二号罐" value="57459465" ></el-option>
-              <!-- <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option> -->
+              <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="曲房" :label-width="formLabelWidth" >
-            <el-select  v-model="detailForm.kojiMakingRoomNo"  placeholder="请选择">
-              <el-option  key="43434343" label="一号曲房" value="43434343" ></el-option>
-              <el-option  key="65656566" label="二号曲房" value="65656566" ></el-option>
+            <el-select  v-model="detailForm.houseNo"  placeholder="请选择">
+              <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="连续蒸煮" :label-width="formLabelWidth" >
-            <el-select  v-model="detailForm.continuityNo"  placeholder="请选择">
-              <el-option  key="43434343" label="一号蒸煮" value="43434343" ></el-option>
-              <el-option  key="65656566" label="二号蒸煮" value="65656566" ></el-option>
+            <el-select  v-model="detailForm.cookingNo"  placeholder="请选择">
+              <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="制曲日期" :label-width="formLabelWidth">
-            <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.kojiMakingDate" ></el-date-picker>
+            <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.inKjmDate" ></el-date-picker>
           </el-form-item>
           <el-form-item label="生产日期" :label-width="formLabelWidth">
             <el-date-picker type="date"  value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="detailForm.productDate" ></el-date-picker>
@@ -313,38 +303,25 @@ export default class Index extends Vue {
   orderList:Order[] = []
   orderDetailList:OrderDetail[] = []
   selectedDetailList:OrderDetail[] = []
+  splitDetailList:OrderDetail[] = []
   detailForm:OrderDetail = new OrderDetail()
   dialogFormVisible:boolean = false
   dialogFormVisible2:boolean = false
   factoryList = []
   workshopList = []
+  potList = []
+  kjmRoomList = []
+  continueList = []
   searched: boolean = false
   showdetails: boolean = true
   formLabelWidth:string = '120px'
   mounted () {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
+    this.getHolderList('入罐')
+    this.getHolderList('曲房')
+    this.getHolderList('连续蒸煮')
   }
-
-  showDetail (row) {
-    this.showdetails = true
-    // 请求接口
-    this.orderDetailList = []
-    this.selectedDetailList = []
-  }
-
-  showModifyDetial (row: OrderDetail) {
-    this.detailForm = JSON.parse(JSON.stringify(row))
-    this.dialogFormVisible2 = true
-  }
-
-  modifyDetial () {
-    let detail = this.orderDetailList.find(item => item.detailId === this.detailForm.detailId)
-    if (detail) {
-      Object.assign(detail, this.detailForm)
-    }
-  }
-
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
@@ -354,7 +331,6 @@ export default class Index extends Vue {
       this.params.workshopName = item ? item.deptName : ''
     }
   }
-
   // 获取工厂
   getFactory () {
     this.factoryList = []
@@ -366,7 +342,6 @@ export default class Index extends Vue {
       }
     })
   }
-
   // 根据工厂获车间
   getWorkshop (fid: string) {
     this.workshopList = []
@@ -379,6 +354,33 @@ export default class Index extends Vue {
         }
       })
     }
+  }
+  // 入罐/曲房/蒸煮
+  getHolderList (type) {
+    let params = {
+      type: 'holder_type',
+      holder_type: type === '入罐' ? '001' : type === '曲房' ? '005' : type === '连续蒸煮' ? '008' : '',
+      pageSize: 100,
+      currPage: 1
+    }
+    if (params.holder_type === '') {
+      return
+    }
+    Vue.prototype.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
+      if (data.code === 0) {
+        if (type === '入罐') {
+          this.potList = data.page.list
+        } else if (type === '曲房') {
+          this.kjmRoomList = data.page.list
+        } else if (type === '连续蒸煮') {
+          this.continueList = data.page.list
+        }
+      } else {
+        this.$message.error(data.msg)
+      }
+    }).catch((error) => {
+      console.log('catch data::', error)
+    })
   }
   setStore (params) {
     this.$store.commit('common/updateZQWorkshop', params)
@@ -400,7 +402,7 @@ export default class Index extends Vue {
     this.setStore(this.params)
     this.searched = true
     let params = {
-      productLine: this.params.workshopId,
+      workShop: this.params.workshopId,
       orderDate: this.params.orderDate,
       orderNo: ''
     }
@@ -419,12 +421,14 @@ export default class Index extends Vue {
       Vue.prototype.$log.writeErrorLog(err, {'params': params})
     })
   }
-  rowDelFlag ({row, rowIndex}) {
-    if (row.delFlag === '1') {
-      return 'rowDel'
-    } else {
-      return ''
-    }
+  // 订单拆分
+  orderSplit (row) {
+    this.dialogFormVisible = true
+    let detail:OrderDetail = new OrderDetail()
+    Object.assign(detail, JSON.parse(JSON.stringify(row)))
+    detail.isFirst = true
+    this.splitDetailList = []
+    this.splitDetailList.push(detail)
   }
   // 删除
   delRow (row) {
@@ -434,31 +438,79 @@ export default class Index extends Vue {
   addRow (row) {
     let detail:OrderDetail = JSON.parse(JSON.stringify(row))
     detail.isFirst = false
-    detail.detailId = Vue.prototype.uuid()
-    this.orderDetailList.push(detail)
+    this.splitDetailList.push(detail)
   }
+  // 拆分订单保存
+  splitOrder () {
+    let params = []
+    for (let item of this.splitDetailList) {
+      if (item.delFlag === '0') {
+        params.push({
+          orderId: item.orderId,
+          status: '',
+          inPotNo: item.inPotNo,
+          houseNo: item.houseNo,
+          cookingNo: item.cookingNo,
+          inKjmDate: item.inKjmDate,
+          productDate: item.productDate,
+          delFlag: item.delFlag
+        })
+      }
+    }
+    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+      this.dialogFormVisible = false
+    }).catch(err => {
+    // Vue.prototype.$log.writeErrorLog(err, {'params': params})
+    })
+  }
+  showDetail (row) {
+    this.showdetails = true
+    this.selectedDetailList = []
+    this.orderDetailList = []
+    let params = {
+      orderId: row.orderId,
+      currPage: 1,
+      pageSize: 9999
+    }
+    Vue.prototype.$http(`${KJM_API.ORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+      if (res.data.code === 0) {
+        this.orderDetailList = res.data.page.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 多选
   handleChange (selections) {
     this.selectedDetailList = selections
   }
+  // 删除订单详情
   delDetail () {
     this.selectedDetailList.forEach(item => {
       item.delFlag = '1'
     })
   }
-  orderSplit (row) {
-    this.dialogFormVisible = true
-    let detail:OrderDetail = new OrderDetail()
-    Object.assign(detail, JSON.parse(JSON.stringify(row)))
-    detail.isFirst = true
-    detail.detailId = Vue.prototype.uuid()
-    this.orderDetailList = []
-    this.selectedDetailList = []
-    this.orderDetailList.push(detail)
+  // 订单详情修改
+  showModifyDetial (row: OrderDetail) {
+    this.detailForm = JSON.parse(JSON.stringify(row))
+    this.dialogFormVisible2 = true
+  }
+  modifyDetial () {
+    let detail = this.orderDetailList.find(item => item.id === this.detailForm.id)
+    if (detail) {
+      Object.assign(detail, this.detailForm)
+    }
+  }
+  rowDelFlag ({row, rowIndex}) {
+    if (row.delFlag === '1') {
+      return 'rowDel'
+    } else {
+      return ''
+    }
   }
   orderCheck (row) {
     this.$router.push({ name: `DataEntry-KojiMaking-orderAuditing-index` })
   }
-
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
