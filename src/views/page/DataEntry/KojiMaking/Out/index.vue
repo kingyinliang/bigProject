@@ -45,7 +45,7 @@
           <span slot="label" class="spanview">
             <el-button>生产入库</el-button>
           </span>
-          <in-stock :isRedact="isRedact"></in-stock>
+          <in-stock ref="outinstorage" :isRedact="isRedact" :formHeader="formHeader"></in-stock>
         </el-tab-pane>
         <el-tab-pane name="3">
           <span slot="label" class="spanview">
@@ -103,6 +103,8 @@ export default {
       }, false, false, false).then(({data}) => {
         this.formHeader = data.list[0]
         this.$refs.meateriel.GetBrineTankNo(this.formHeader)
+        this.$refs.outinstorage.GetThreeNum(this.formHeader)
+        this.$refs.outinstorage.GetOutInStorage(this.formHeader)
         if (this.orderStatus !== '已同步') {
           this.$refs.meateriel.GetmaterielDate(this.formHeader)
         }
@@ -111,26 +113,33 @@ export default {
     // 保存
     savedOrSubmitForm (str) {
       let that = this
-      let meaterielSave = new Promise((resolve, reject) => {
-        that.$refs.meateriel.SaveMateriel(str, resolve)
-      })
       if (str === 'submit') {
-        let saveNet = Promise.all([meaterielSave])
-        saveNet.then(function () {
-          let meaterielSubmit = new Promise((resolve, reject) => {
-            that.$refs.meateriel.SubmitMateriel(resolve)
-          })
-          let submitNet = Promise.all([meaterielSubmit])
-          submitNet.then(function () {
-            that.GetOrderList()
-            that.$message.success('提交成功')
-          })
+        let meaterielSubmit = new Promise((resolve, reject) => {
+          that.$refs.meateriel.SaveOrSubmitMateriel(str, resolve, reject)
+        })
+        let InstockSubmit = new Promise((resolve, reject) => {
+          that.$refs.outinstorage.SaveOrSubmitInStock(str, resolve, reject)
+        })
+        let submitNet = Promise.all([meaterielSubmit, InstockSubmit])
+        submitNet.then(function () {
+          that.GetOrderList()
+          that.$message.success('提交成功')
+        }, err => {
+          that.$message.error(err)
         })
       } else {
-        let saveNet = Promise.all([meaterielSave])
+        let meaterielSave = new Promise((resolve, reject) => {
+          that.$refs.meateriel.SaveOrSubmitMateriel(str, resolve, reject)
+        })
+        let InstockSave = new Promise((resolve, reject) => {
+          that.$refs.outinstorage.SaveOrSubmitInStock(str, resolve, reject)
+        })
+        let saveNet = Promise.all([meaterielSave, InstockSave])
         saveNet.then(function () {
           that.GetOrderList()
           that.$message.success('保存成功')
+        }, err => {
+          that.$message.error(err)
         })
       }
     },

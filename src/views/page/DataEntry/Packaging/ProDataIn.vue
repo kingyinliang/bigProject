@@ -239,16 +239,13 @@ export default {
         this.UpdateformHeader(str, resolve)
       })
       let net1 = new Promise((resolve, reject) => {
-        that.$refs.readytimes.UpdateReady(this.formHeader.orderId, str, resolve, reject)
+        that.$refs.readytimes.UpdateReady(that.formHeader.orderId, str, resolve, reject)
       })
       let net2 = new Promise((resolve, reject) => {
         that.$refs.workerref.UpdateUser(str, resolve, reject)
       })
       let net3 = new Promise((resolve, reject) => {
-        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
-      })
-      let net4 = new Promise((resolve, reject) => {
-        that.$refs.instorage.UpdateIn(this.formHeader.orderId, str, resolve, reject)
+        that.$refs.excrecord.saveOrSubmitExc(that.formHeader.orderId, str, resolve, reject)
       })
       let net5 = new Promise((resolve, reject) => {
         that.$refs.listbom.UpdateSap(str, resolve, reject)
@@ -256,25 +253,25 @@ export default {
       let net6
       if (this.formHeader.properties !== '二合一&礼盒产线') {
         net6 = new Promise((resolve, reject) => {
-          that.$refs.germs.UpdateGerms(this.formHeader.orderId, str, resolve, reject)
+          that.$refs.germs.UpdateGerms(that.formHeader.orderId, str, resolve, reject)
         })
       }
       let net7 = new Promise((resolve, reject) => {
-        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+        that.$refs.textrecord.UpdateText(that.formHeader, str, resolve, reject)
       })
       if (str === 'submit') {
         let net11
         if (this.formHeader.properties !== '二合一&礼盒产线') {
-          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
+          net11 = Promise.all([net0, net1, net2, net3, net5, net6, net7])
         } else {
-          net11 = Promise.all([net0, net1, net2, net3, net4, net5, net7])
+          net11 = Promise.all([net0, net1, net2, net3, net5, net7])
         }
         net11.then(function () {
           let net8 = new Promise((resolve, reject) => {
             that.ProHours(resolve, reject)
           })
           let net9 = new Promise((resolve, reject) => {
-            that.$refs.instorage.submitIn(resolve, reject)
+            that.$refs.instorage.submitIn(that.formHeader.orderId, str, resolve)
           })
           let net10 = new Promise((resolve, reject) => {
             that.$refs.listbom.subSap(resolve, reject)
@@ -294,6 +291,9 @@ export default {
         })
       } else {
         let net11
+        let net4 = new Promise((resolve, reject) => {
+          that.$refs.instorage.UpdateIn(that.formHeader.orderId, str, resolve, reject)
+        })
         if (this.formHeader.properties !== '二合一&礼盒产线') {
           net11 = Promise.all([net0, net1, net2, net3, net4, net5, net6, net7])
         } else {

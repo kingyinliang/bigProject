@@ -334,7 +334,28 @@ export default {
       }
     },
     // 入库提交
-    submitIn (resolve) {
+    submitIn (id, str, resolve) {
+      let types = ''
+      if (this.order.properties === '二合一&礼盒产线') {
+        types = 'twoAndOne'
+      } else if (this.order.workShopName === '包装三车间') {
+        types = 'isPkgThree'
+      }
+      this.InDate.forEach((item) => {
+        item.orderId = id
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+        item.isPkgThree = types
+        if (this.order.properties === '二合一&礼盒产线') {
+          this.ratio.productUnit ? item.manSolidUnit = this.ratio.productUnit : item.manSolidUnit = this.ratio.basicUnit
+          item.badUnit = this.ratio.basicUnit
+          item.sampleUnit = this.ratio.basicUnit
+          item.outputUnit = this.ratio.basicUnit
+        }
+      })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
         } else {

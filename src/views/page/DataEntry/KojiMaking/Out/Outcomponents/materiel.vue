@@ -85,7 +85,7 @@ export default {
       })
     },
     // 保存
-    SaveMateriel (str, resolve) {
+    SaveOrSubmitMateriel (str, resolve, reject) {
       this.MaterielDate.forEach((item) => {
         item.orderHouseId = this.formHeader.orderHouseId
         if (item.status) {
@@ -94,25 +94,16 @@ export default {
           item.status = str
         }
       })
-      this.$http(`${KJM_API.OUTMATERIELSAVE_API}`, 'POST', this.MaterielDate).then(({data}) => {
+      this.$http(`${str === 'submit' ? KJM_API.OUTMATERIELSUBMIT_API : KJM_API.OUTMATERIELSAVE_API}`, 'POST', this.MaterielDate).then(({data}) => {
         if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
           this.$message.error(data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
-        }
-      })
-    },
-    // 提交
-    SubmitMateriel (resolve) {
-      this.$http(`${KJM_API.OUTMATERIELSUBMIT_API}`, 'POST', this.MaterielDate).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error(data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
+          if (reject) {
+            reject('原料领用' + data.msg)
+          }
         }
       })
     },
