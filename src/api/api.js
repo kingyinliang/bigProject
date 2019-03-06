@@ -847,6 +847,18 @@ export const KJM_API = {
    */
   OUTINSUBMIT_API: HOST + '/sys/kjmOutInStorage/submit',
   /**
+   * @property {string} OUTMATERIELLIST_API 出曲工艺控制列表
+   */
+  OUTTECHLIST_API: HOST + '/sys/kjmOutTech/list',
+  /**
+   * @property {string} OUTMATERIELSAVE_API 出曲工艺控制保存
+   */
+  OUTTECHSAVE_API: HOST + '/sys/kjmOutTech/mySaveOrUpdate',
+  /**
+   * @property {string} OUTMATERIELSUBMIT_API 出曲工艺控制提交
+   */
+  OUTTECHSUBMIT_API: HOST + '/sys/kjmOutInStorage/submit',
+  /**
    * @property {string} ORDERLIST_API 订单列表
    */
   ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',
