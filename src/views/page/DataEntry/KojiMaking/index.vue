@@ -46,174 +46,88 @@
         </el-card>
         <el-row v-if="params.productStatus === 'normal' && searched" style="margin-top:20px;">
           <el-col>
-            <el-row :gutter="32">
-              <el-col :span="8">
+            <el-row :gutter="32" v-for="(item, index) in orderList" :key="index" v-if="index%3===0">
+              <el-col :span="8" v-if="index < orderList.length">
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div>1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
+                      <div class="box-item-title-name"><div>{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
                   </div>
                 </div>
               </el-col>
-              <el-col  :span="8">
+              <el-col  :span="8" v-if="index + 1 < orderList.length">
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#5BD171">1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
+                      <div class="box-item-title-name"><div style="background:#5BD171">{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" v-if="index + 2 < orderList.length">
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#2C92F6">1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
+                      <div class="box-item-title-name"><div style="background:#2C92F6">{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row :gutter="32">
-              <el-col :span="8">
-                <div class="box-item">
-                  <div class="box-item-top">
-                    <div class="box-item-title">
-                      <div class="box-item-title-name"><div>1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
-                    </div>
-                    <div class="box-item-container">
-                      <div class="box-item-container-left">
-                        <div class="box-item-container-img"></div>
-                      </div>
-                      <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
-                        <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col  :span="8">
-                <div class="box-item">
-                  <div class="box-item-top">
-                    <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#5BD171">1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
-                    </div>
-                    <div class="box-item-container">
-                      <div class="box-item-container-left">
-                        <div class="box-item-container-img"></div>
-                      </div>
-                      <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
-                        <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="box-item">
-                  <div class="box-item-top">
-                    <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#2C92F6">1-1</div><div>1-1# 发酵罐</div></div>
-                      <div class="box-item-title-state">状态：已保存</div>
-                    </div>
-                    <div class="box-item-container">
-                      <div class="box-item-container-left">
-                        <div class="box-item-container-img"></div>
-                      </div>
-                      <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">43473949384939</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">优质</div></div>
-                        <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">2018-01-02 12:30</div></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="box-item-bottom">
-                    <div class="box-item-bottom-item">煮豆</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">看曲</div>
-                    <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
                   </div>
                 </div>
               </el-col>
@@ -223,7 +137,7 @@
         <el-row v-show="params.productStatus === 'abnormal' && searched" style="margin-top:20px;">
           <div style="min-height:340px">
           <el-table border  header-row-class-name="tableHead" :data="datalist">
-            <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column>
+            <!-- <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column> -->
             <el-table-column label="中/白/夜班" prop="classType" width="100">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.classType" placeholder="请选择" size="small" :disabled="disabled">
@@ -245,42 +159,42 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true">
+            <el-table-column prop="userId" label="姓名（工号）" :show-overflow-tooltip="true" width="200">
               <template slot-scope="scope">
                 <el-col>
                   <span v-if="!disabled" style="cursor:pointer" @click="selectUser(scope.row)">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
-                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                      <i v-if="scope.row.userType === '临时工'">点击输入临时工</i>
                       <i v-else>点击选择人员</i>
                     </span>
                   </span>
                   <span v-else style="cursor:pointer">
                     <i v-if="scope.row.userId!== undefined">{{scope.row.userId.join(",")}}</i>
                     <span>
-                      <i v-if="scope.row.userType == '临时工'">点击输入临时工</i>
+                      <i v-if="scope.row.userType === '临时工'">点击输入临时工</i>
                       <i v-else>点击选择人员</i>
                     </span>
                   </span>
                 </el-col>
               </template>
             </el-table-column>
-            <el-table-column label="开始时间" prop="startDate">
+            <el-table-column label="开始时间" prop="startDate" width="190">
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.startDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="用餐时间" prop="dinner" width="80">
+            <el-table-column label="用餐时间" prop="dinner" width="100">
               <template slot-scope="scope">
-                <el-input size="small" v-model="scope.row.dinner" :disabled="disabled"></el-input>
+                <el-input type='number' size="small" v-model="scope.row.dinner" :disabled="disabled"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="结束时间" prop="endDate">
+            <el-table-column label="结束时间" prop="endDate" width="190">
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.endDate" type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" placeholder="选择时间" size="small" style="width:175px" :disabled="disabled"></el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column label="备注" prop="remark" width="100px">
+            <el-table-column label="备注" prop="remark" width="150px">
               <template slot-scope="scope">
                 <el-input size="small" v-model="scope.row.remark" :disabled="disabled"></el-input>
               </template>
@@ -295,7 +209,7 @@
             实际作业人数: {{countMan}}
           </el-row>
           </div>
-          <el-row v-if="addRowStatus!=1">
+          <el-row>
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -316,7 +230,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, WHT_API} from '@/api/api'
+import {BASICDATA_API, WHT_API, KJM_API} from '@/api/api'
 // import {dateFormat, orderList} from '@/net/validate'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
@@ -345,7 +259,6 @@ export default class Index extends Vue {
   processesList = []
   searched: boolean = false
   disabled: boolean = true
-  // lodingStatus: boolean = false
   datalist: Array<Employee> = []
   totalList: Array<Employee> = []
   OrgTree = []
@@ -353,10 +266,11 @@ export default class Index extends Vue {
   row = {
     userId: []
   }
-  currPage: number = 0
+  currPage: number = 1
   pageSize: number = 10
   totalCount: number = 0
-  addRowStatus: number = 0
+  // 首页订单
+  orderList = []
 
   mounted () {
     this.getFactory()
@@ -367,8 +281,8 @@ export default class Index extends Vue {
 
   get countMan (): number {
     let num: number = 0
-    if (this.datalist) {
-      this.datalist.forEach((item) => {
+    if (this.totalList && this.totalList.length > 0) {
+      this.totalList.forEach((item) => {
         if (item.userId) {
           num += item.userId.length
         }
@@ -461,35 +375,56 @@ export default class Index extends Vue {
     // his.lodingStatus = true
     this.searched = true
     if (this.params.productStatus === 'normal') { // 正常生产
-      // this.GetorderList()
+      let params = {
+        factory: this.params.factoryId,
+        workShop: this.params.workshopId,
+        inKjmDate: this.params.zqDate
+      }
+      this.retrieveOrderList(params)
     } else if (this.params.productStatus === 'abnormal') {
       // 无生产
-      this.addRowStatus = 0
       this.disabled = true
       this.datalist = []
+      this.totalList = []
       Vue.prototype.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.params.workshopId, productDate: this.params.zqDate}).then(res => {
         // this.lodingStatus = false
         if (res.data.code === 0) {
-          this.datalist = res.data.infoUser
-          // if (this.currPage === 1) {
-          //   this.totalList = res.data.infoUser
-          //   this.datalist = res.data.infoUser.slice(0, 10)
-          // }
+          for (let item of res.data.infoUser) {
+            // 请求回来的数据做类型和格式转换，莫名其妙的接口
+            item.productDate = item.productDate ? item.productDate.substring(0, 10) : item.productDate
+            item.dinner = item.dinner + ''
+          }
           this.totalCount = res.data.infoUser.length
+          this.totalList = res.data.infoUser
+          this.datalist = res.data.infoUser.slice(0, this.pageSize)
         } else {
           this.$message.error(res.data.msg)
         }
+      }).catch(err => {
+        console.log('catch data::', err)
       })
     }
   }
+  retrieveOrderList (params) {
+    Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', params).then(res => {
+      if (res.data.code === 0) {
+        this.orderList = res.data.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+  }
   // 新增人员
   addPeople () {
-    let p = new Employee()
+    let p = new Employee('', this.params.zqDate, '60')
     this.datalist.push(p)
   }
   // 人员删除
   delUser (row) {
-    if (typeof row.orderId !== 'undefined') {
+    if (row.orderId && row.orderId !== '') {
+      // 原始数据后端删除
       this.$confirm('是否删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -508,6 +443,7 @@ export default class Index extends Vue {
         })
       })
     } else {
+      // 新增数据前端删除
       this.datalist.splice(this.datalist.indexOf(row), 1)
     }
   }
@@ -522,7 +458,7 @@ export default class Index extends Vue {
         loanedPersonnel.init(row.userId)
       })
     } else if (row.userType === EMPTypeList.FORMAL) {
-      if (row.deptId) {
+      if (row.deptId && row.deptId !== '') {
         this.$nextTick(() => {
           officialWorker.init(row.deptId, row.userId)
         })
@@ -545,15 +481,67 @@ export default class Index extends Vue {
   // 改变每页条数
   handleSizeChange (val: number) {
     this.pageSize = val
-    this.getOrderList()
+    this.currPage = 1
+    this.datalist = this.totalList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
   }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
-    // 0,10   10,20    20,30
-    this.datalist = this.totalList.slice((val - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
+    this.datalist = this.totalList.slice((this.currPage - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
   }
   save () {
+    if (!this.datalist || this.datalist.length === 0) {
+      this.$message.error('请先新增数据')
+      return
+    }
+    this.$confirm('确认保存，是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      for (let item of this.datalist) {
+        if (!item.classType) {
+          this.$message.error('班次不能为空')
+          return
+        }
+        if (!item.deptId || item.deptId === '') {
+          this.$message.error('工序不能为空')
+          return
+        }
+        if (!item.userType) {
+          this.$message.error('人员属性不能为空')
+          return
+        }
+        if (!item.userId || item.userId.length === 0) {
+          this.$message.error('作业人员不能为空')
+          return
+        }
+        if (!item.startDate || item.startDate === '') {
+          this.$message.error('开始时间不能为空')
+          return
+        }
+        if (!item.dinner || item.dinner === '') {
+          this.$message.error('用餐时间不能为空')
+          return
+        }
+        if (!item.endDate || item.endDate === '') {
+          this.$message.error('结束时间不能为空')
+          return
+        }
+      }
+      Vue.prototype.$http(`${WHT_API.CINDEXUPDATEUSER}`, 'POST', this.datalist).then(({data}) => {
+        if (data.code === 0) {
+          this.$message({
+            type: 'success',
+            message: '保存成功'
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch(err => {
+        this.$message.error('保存失败，' + err)
+      })
+    })
   }
   // 获取组织结构树
   getTree () {
@@ -567,6 +555,16 @@ export default class Index extends Vue {
         this.$message.error(data.msg)
       }
     })
+  }
+  goPage (page: string) {
+    let params = {}
+    if (page === '煮豆') {
+      this.$router.push({name: `DataEntry-KojiMaking-BoiledBeans-index`, params})
+    } else if (page === '看曲') {
+      this.$router.push({name: `DataEntry-KojiMaking-Look-index`, params})
+    } else if (page === '出曲') {
+      this.$router.push({name: `DataEntry-KojiMaking-Out-index`, params})
+    }
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
@@ -686,6 +684,9 @@ export default class Index extends Vue {
               font-weight:500;
               color:rgba(0,0,0,0.65);
               line-height:17px;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap;
             }
           }
         }

@@ -9,19 +9,21 @@ export enum DayTypeList {
   NIGHT = '夜班'
 }
 export class Employee {
+  orderId: string
   classType: DayTypeList = DayTypeList.DAY
   deptId: string
-  dinner: number = 60
+  dinner: string
   endDate: string
   startDate: string
-  orderId: string
   productDate: string
   remark: string
   userId: string[]
   userType: EMPTypeList = EMPTypeList.FORMAL
-  // constructor () {
-
-  // }
+  constructor (orderId: string, productDate: string, dinner: string) {
+    this.orderId = orderId
+    this.productDate = productDate
+    this.dinner = dinner
+  }
   // constructor (classType: string, deptId: string, dinner: number, endDate: string, startDate: string,
   //              orderId: string, productDate: string, remark: string, userId: string[], userType: string) {
   //     this.classType = classType
