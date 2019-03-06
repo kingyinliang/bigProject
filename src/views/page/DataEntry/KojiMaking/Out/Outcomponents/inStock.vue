@@ -24,12 +24,12 @@
       </el-table-column>
       <el-table-column width="115" label="入库酱醪量" prop="sauceWeight">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.sauceWeight" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="115" label="入库批次">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="115" label="入罐罐号" prop="houseNo"></el-table-column>
@@ -38,8 +38,8 @@
       <el-table-column width="" label="操作时间" prop="changed" show-overflow-tooltip></el-table-column>
       <el-table-column width="70" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
-          <el-button type="text" :disabled="!isRedact" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+          <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
+          <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,6 +55,7 @@ export default {
     return {
       InStock: [],
       InStockAuditlog: [],
+      InStockstatus: '',
       ThreeNum: {}
     }
   },
@@ -67,7 +68,7 @@ export default {
   methods: {
     GetThreeNum (formHeader) {
       this.$http(`${KJM_API.OUTINNUMLIST_API}`, 'POST', {
-        orderHouseId: formHeader.orderHouseId
+        orderHouseId: formHeader.id
       }).then(({data}) => {
         if (data.code === 0) {
           this.ThreeNum = data.list[0]
@@ -85,6 +86,31 @@ export default {
         if (data.code === 0) {
           this.InStock = data.list
           this.InStockAuditlog = data.vrlist
+          let sub = 0
+          let che = 0
+          let no = 0
+          let sav = 0
+          this.InStock.forEach((item) => {
+            if (item.status === 'noPass') {
+              no = no + 1
+            } else if (item.status === 'submit') {
+              sub = sub + 1
+            } else if (item.status === 'checked') {
+              che = che + 1
+            } else if (item.status === 'saved') {
+              sav = sav + 1
+            }
+          })
+          if (no > 0) {
+            this.InStockstatus = 'noPass'
+          } else if (sub > 0) {
+            this.InStockstatus = 'submit'
+          } else if (sav > 0) {
+            this.InStockstatus = 'saved'
+          } else if (che > 0) {
+            this.InStockstatus = 'checked'
+          }
+          this.$emit('GetInStockStatus', this.InStockstatus)
         } else {
           this.$message.error(data.msg)
         }
@@ -93,7 +119,7 @@ export default {
     // 保存 or 提交
     SaveOrSubmitInStock (str, resolve, reject) {
       this.InStock.forEach((item) => {
-        item.orderHouseId = this.formHeader.orderHouseId
+        item.orderHouseId = this.formHeader.id
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
