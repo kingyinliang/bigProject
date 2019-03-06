@@ -7,7 +7,7 @@
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.156:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.139:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -873,5 +873,9 @@ export const KJM_API = {
   /**
    * @property {string} DELETEORDERDETAILLIST_API 详情批量删除
    */
-  DELETEORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/myDelete '
+  DELETEORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/myDelete',
+  /**
+   * @property {string} KJMAKINGORDERLIST_API 制曲首页查询
+   */
+  KJMAKINGORDERLIST_API: HOST + '/kjm/order/list'
 }
