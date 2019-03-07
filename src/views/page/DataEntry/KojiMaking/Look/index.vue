@@ -10,6 +10,9 @@
             <el-form-item label="曲房号：">
               <p class="input_bommom">12</p>
             </el-form-item>
+            <el-form-item label="工序：">
+              <p class="input_bommom">12</p>
+            </el-form-item>
             <el-form-item label="生产订单：">
               <p class="input_bommom">7056251343251</p>
             </el-form-item>
@@ -52,12 +55,48 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
+    <div class="tableCard">
+      <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
+        <i class="el-icon-caret-bottom"></i>
+      </div>
+      <el-tabs type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
+        <el-tab-pane>
+          <span slot="label" class="spanview">
+            <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+              <el-button>工艺控制</el-button>
+            </el-tooltip>
+          </span>
+          <Craft></Craft>
+        </el-tab-pane>
+        <el-tab-pane>
+          <span slot="label" class="spanview">
+            <el-button>异常记录</el-button>
+          </span>
+          <err-record></err-record>
+        </el-tab-pane>
+        <el-tab-pane>
+          <span slot="label" class="spanview">
+            <el-button>文本记录</el-button>
+          </span>
+          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script>
+import ErrRecord from './common/errRecord'
+import Craft from './common/craft'
 export default {
-  name: 'look'
+  name: 'look',
+  components: {
+    TextRecord: resolve => {
+      require(['@/views/components/textRecord'], resolve)
+    },
+    ErrRecord,
+    Craft
+  }
 }
 </script>
 
@@ -69,5 +108,31 @@ export default {
   white-space: nowrap;
   line-height: 32px;
   border-bottom: solid 1px #D8D8D8;
+}
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  margin-bottom: 8px
+}
+.searchCard {
+  .el-button--primary,.el-button--primary:focus{
+    color: #000000;
+    background-color: #FFFFFF;
+    border-color: #D9D9D9;
+  }
+  .el-button--primary:hover{
+    background-color: #1890FF;
+    color: #FFFFFF
+  }
+  .el-button--primary:first-child{
+    background-color: #1890FF;
+    color: #FFFFFF;
+    border-color: #1890FF;
+  }
+}
+#DaatTtabs{
+  border-radius: 15px;
+  overflow: hidden;
+}
+.htitle {
+  margin: 0 0 10px 0;
 }
 </style>

@@ -877,5 +877,25 @@ export const KJM_API = {
   /**
    * @property {string} KJMAKINGORDERLIST_API 制曲首页查询
    */
-  KJMAKINGORDERLIST_API: HOST + '/kjm/order/list'
+  KJMAKINGORDERLIST_API: HOST + '/kjm/order/list',
+
+  /**
+   * 煮豆
+   */
+  // 原料领用
+  DOUSAVE_API: HOST + '/kjm/bean/pulp/update', // 保存
+  DOUMATERLIST_API: HOST + '/kjm/bean/list', // 列表
+  // 工艺
+  DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 主表
+  DOUGONGYIRUISAVE_API: HOST + '/kjm/bean/boiled/update', // 煮豆润水过程
+  DOUGONGYIZHENGSAVE_API: HOST + '/kjm/bean/cooking/update', // 连续蒸煮
+  DOUGONGYIHUNSAVE_API: HOST + '/kjm/bean/blend/update', // 混合入曲
+  /**
+   * 看曲
+   */
+  DOULOOKLIST_API: HOST + '/kjm/guard/list', // list
+  DOULOOKZHUSAVE_API: HOST + '/kjm/guard/tech/update', // 工艺 主表
+  DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
+  DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update' // 工艺 感官
+
 }
