@@ -1,14 +1,10 @@
 <template>
   <el-dialog
     :title="conid?'修改容器':'新增容器'"
+    @close="closeDialog"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-     <!-- <el-form ref="form" :model="ffff" label-width="80px">
-        <el-form-item label="活动名称">
-          <el-input v-model="ffff.name"></el-input>
-        </el-form-item>
-      </el-form> -->
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
         <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
@@ -32,7 +28,7 @@
           <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="归属工厂：" prop="factory">
-          <el-select  @change="changeFactory" v-model="factoryId" placeholder="请选择" style="width: 100%">
+          <el-select  v-model="dataForm.factory" placeholder="请选择" style="width: 100%">
             <el-option label=""  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
           </el-select>
@@ -46,7 +42,7 @@
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <el-button @click="closeDialog">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit">确定</el-button>
     </span>
   </el-dialog>
@@ -62,6 +58,16 @@ export default {
       visible: false,
       dictList: [],
       dataForm: {
+        holderType: '',
+        holderNo: '',
+        holderName: '',
+        holderHold: 0,
+        holderPatch: '',
+        holderArea: '',
+        factory: '',
+        deptId: ''
+      },
+      dataForm1: {
         holderType: '',
         holderNo: '',
         holderName: '',
@@ -97,7 +103,12 @@ export default {
     // this.Getdeptcode(this.dataForm.factory)
   },
   methods: {
+    closeDialog () {
+      this.visible = false
+      this.$refs['dataForm'].resetFields()
+    },
     init (id) {
+      // this.$refs.dataForm.resetFields()
       if (id) {
         // 修改
         // this.dataForm = {}
@@ -111,22 +122,21 @@ export default {
             this.dataForm.holderHold = data.sysHolder.holderHold
             this.dataForm.holderPatch = data.sysHolder.holderPatch
             this.dataForm.holderArea = data.sysHolder.holderArea
-            // this.dataForm.factory = data.sysHolder.factory
-            this.factoryId = data.sysHolder.factory
+            this.dataForm.factory = data.sysHolder.factory
+            // this.factoryId = data.sysHolder.factory
             this.dataForm.deptId = data.sysHolder.deptId
-            this.Getdeptcode(data.sysHolder.factory, false)
+            this.Getdeptcode(data.sysHolder.factory, data.sysHolder.deptId)
           } else {
             this.$message.error(data.msg)
           }
           this.visible = true
         })
       } else {
+        this.dataForm = Object.assign({}, this.dataForm1)
+        this.factoryId = ''
         this.conid = 0
         this.visible = true
       }
-    },
-    changeFactory (value) {
-      this.dataForm.factory = value
     },
     // 工厂数据
     getFactoryList () {
@@ -141,9 +151,14 @@ export default {
     // 获取归属车间
     Getdeptcode (factoryId, flag) {
       if (factoryId) {
-        if (flag) {
+        if (!flag) {
           // 清除车间选项值
           this.dataForm.deptId = ''
+        } else {
+          let that = this
+          setTimeout(() => {
+            that.dataForm.deptId = flag
+          }, 500)
         }
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}).then(({data}) => {
           if (data.code === 0) {
@@ -219,7 +234,7 @@ export default {
   watch: {
     'dataForm.factory' (n) {
       console.log('****************1*********************')
-      this.Getdeptcode(n, true)
+      this.Getdeptcode(n, false)
     },
     'workshop' (n) {
       console.log('****************2*********************')

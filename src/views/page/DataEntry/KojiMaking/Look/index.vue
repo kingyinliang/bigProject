@@ -5,31 +5,34 @@
         <el-col :span="21">
           <el-form :inline="true" size="small" label-width="85px">
             <el-form-item label="生产车间：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.workshopName}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="曲房号：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.houseNo}}</p>
+              <p class="input_bommom">12</p>
+            </el-form-item>
+            <el-form-item label="工序：">
+              <p class="input_bommom">12</p>
             </el-form-item>
             <el-form-item label="生产订单：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.orderNo}}</p>
+              <p class="input_bommom">7056251343251</p>
             </el-form-item>
             <el-form-item label="生产品项：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.materialCode}} {{this.$route.params.materialName}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.inKjmdate}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="入罐号：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.inPotNo}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="连续蒸煮号：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.cookingNo}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="提交人员：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.changer}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
             <el-form-item label="提交时间：">
-              <p class="input_bommom">&nbsp;{{this.$route.params.changed}}</p>
+              <p class="input_bommom">炒麦车间</p>
             </el-form-item>
           </el-form>
         </el-col>
@@ -38,15 +41,15 @@
             <div style="float:left">
               <span class="point" :style="{'background': '#7ED321'}"></span>订单状态：
             </div>
-            <span>{{this.$route.params.status}}</span>
+            <span>未录入</span>
           </div>
         </el-col>
       </el-row>
       <el-row style="text-align:right;">
         <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry/KojiMaking/index'})">返回</el-button>
         <el-button type="primary" size="small">编辑</el-button>
-        <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-        <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+        <el-button type="primary" size="small" >保存</el-button>
+        <el-button type="primary" size="small" >提交</el-button>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
@@ -60,24 +63,16 @@
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-              <el-button>原料领用</el-button>
-            </el-tooltip>
-          </span>
-          <Material ref="material" :isRedact="isRedact"></Material>
-        </el-tab-pane>
-        <el-tab-pane>
-          <span slot="label" class="spanview">
-            <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
               <el-button>工艺控制</el-button>
             </el-tooltip>
           </span>
-          <Craft ref="craft"></Craft>
+          <Craft></Craft>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <err-record ref="errrecord"></err-record>
+          <err-record></err-record>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
@@ -91,71 +86,16 @@
 </template>
 
 <script>
-import {headanimation} from '@/net/validate'
-import Material from './common/material'
-import Craft from './common/craft'
 import ErrRecord from './common/errRecord'
+import Craft from './common/craft'
 export default {
-  name: 'boileIndex',
-  data () {
-    return {
-      isRedact: false,
-      form: {
-        name: ''
-      },
-      formLabelWidth: '100px'
-    }
-  },
-  methods: {
-    // 保存 or 提交
-    SubmitForm () {
-      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.savedOrSubmitForm('submit')
-      })
-    },
-    savedOrSubmitForm (str) {
-      if (str === 'submit') {
-        if (!this.$refs.craft.craftrul()) {
-          return false
-        }
-      }
-      let that = this
-      let net1 = new Promise((resolve, reject) => {
-        that.$refs.craft.updatezhu(resolve, reject)
-      })
-      let net2 = new Promise((resolve, reject) => {
-        that.$refs.craft.updatelishui(resolve, reject)
-      })
-      let net3 = new Promise((resolve, reject) => {
-        that.$refs.craft.updatezhengzhu(resolve, reject)
-      })
-      let net4 = new Promise((resolve, reject) => {
-        that.$refs.craft.updatehunhe(resolve, reject)
-      })
-      let net11
-      net11 = Promise.all([net1, net2, net3, net4])
-      net11.then(function () {
-        that.$message.success('保存成功')
-      }).catch(() => {
-        that.$message.error('网络请求失败，请刷新重试')
-        that.isRedact = false
-      })
-    }
-  },
-  mounted () {
-    headanimation(this.$)
-  },
+  name: 'look',
   components: {
     TextRecord: resolve => {
       require(['@/views/components/textRecord'], resolve)
     },
-    Material,
-    Craft,
-    ErrRecord
+    ErrRecord,
+    Craft
   }
 }
 </script>

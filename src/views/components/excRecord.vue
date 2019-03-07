@@ -113,18 +113,27 @@ export default {
   },
   methods: {
     // 保存or提交
-    saveOrSubmitExc (id, str, resolve) {
+    saveOrSubmitExc (id, str, resolve, reject) {
       if (this.ExcDate.length > 0) {
         this.ExcDate.forEach((item) => {
-          item.orderId = id
+          if (typeof id === 'string') {
+            item.orderId = id
+          } else if (typeof id === 'object') {
+            item.orderId = id.order_id
+            item.workShop = id.workShop
+            item.blongProc = id.blongProc
+          }
         })
         this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
           if (data.code === 0) {
+            if (resolve) {
+              resolve('resolve')
+            }
           } else {
             this.$message.error('异常记录' + data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
+            if (reject) {
+              reject('异常记录' + data.msg)
+            }
           }
         })
       } else {
@@ -135,7 +144,15 @@ export default {
     },
     // 获取异常数据
     GetExcDate (id) {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}, false, false, false).then(({data}) => {
+      let postdata
+      if (typeof id === 'string') {
+        postdata = {
+          order_id: id
+        }
+      } else if (typeof id === 'object') {
+        postdata = id
+      }
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', postdata, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.ExcDate = data.listForm
         } else {

@@ -405,8 +405,8 @@ export default {
       // }
       // 点击保存之前，不能对列表数据做更改，此处用clone
       this.stockForm = Object.assign({}, row)
-      this.stockForm.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
-      this.stockForm.changer = this.$store.state.user.realName + `(${this.$store.state.user.name})`
+      // this.stockForm.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+      // this.stockForm.changer = this.$store.state.user.realName + `(${this.$store.state.user.name})`
     },
     cacheStockData () {
       this.$refs['stockForm'].validate((valid) => {
