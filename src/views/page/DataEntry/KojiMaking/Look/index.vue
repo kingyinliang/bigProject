@@ -86,8 +86,8 @@
 </template>
 
 <script>
-import ErrRecord from './common/errRecord'
-import Craft from './common/craft'
+//import ErrRecord from './common/errRecord'
+//import Craft from './common/craft'
 export default {
   name: 'look',
   components: {
