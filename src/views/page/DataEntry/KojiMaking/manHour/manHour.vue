@@ -35,19 +35,23 @@
         </div>
       </div>
       <el-card class="box-cards">
-        <el-card style="margin-bottom: 10px">
+        <el-card style="margin-bottom: 10px;position: relative">
           <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">产量（单位：批）</h3>
-          <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
-            <el-form-item label="入曲批数：">
-              <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
-            </el-form-item>
-          </el-form>
+          <el-button type="text" class="readyshiftBtn manHour" name="yield">收起<i class="el-icon-caret-top"></i></el-button>
+          <div class="yieldBox">
+            <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
+              <el-form-item label="入曲批数：">
+                <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-card>
-        <el-card style="margin-bottom: 10px">
+        <el-card style="margin-bottom: 10px;position: relative">
           <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
             <div class="clearfix">
               <h3 style="font-size: 14px;line-height: 32px;font-weight: bold;float: left">准备时间（分钟：min）</h3>
-              <el-form-item label="班次：" style="float: right">
+              <el-button type="text" class="readyshiftBtn manHour" name="manHourReady" style="bottom: 15px">收起<i class="el-icon-caret-top"></i></el-button>
+              <el-form-item label="班次：" style="float: right;margin-right: 60px;margin-bottom: 10px">
                 <el-select v-model="readyTimeDate.classes" placeholder="请选择" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))">
                   <el-option label="白班" value="白班"></el-option>
                   <el-option label="中班" value="中班"></el-option>
@@ -56,6 +60,7 @@
                 </el-select>
               </el-form-item>
             </div>
+            <div class="manHourReadyBox">
             <el-row v-if="readyTimeDate.classes === '白班' || readyTimeDate.classes === '多班' || !readyTimeDate.classes">
               <el-form-item label="交接班（白班）：">
                 <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
@@ -98,6 +103,7 @@
                 <el-input v-model="readyTimeDate.nightChangeAfter" placeholder="手工录入" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))"></el-input>
               </el-form-item>
             </el-row>
+            </div>
           </el-form>
         </el-card>
         <el-card style="margin-bottom: 10px">
@@ -110,7 +116,7 @@
 </template>
 
 <script>
-import { headanimation } from '@/net/validate'
+import { headanimation, Readyanimation } from '@/net/validate'
 import FormHead from './formHead'
 import Worker from '@/views/components/worker'
 export default {
@@ -125,6 +131,7 @@ export default {
   },
   mounted () {
     headanimation(this.$)
+    Readyanimation(this.$)
   },
   methods: {},
   computed: {},
@@ -134,6 +141,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.manHour {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  z-index: 999;
+}
+</style>
 
 <style lang="scss">
 .box-cards{

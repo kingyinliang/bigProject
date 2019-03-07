@@ -192,7 +192,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="plantList.currPage"
-              :page-sizes="[10, 15, 20]"
+              :page-sizes="[2, 3, 4]"
               :page-size="plantList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="plantList.totalCount">
@@ -226,7 +226,7 @@ export default {
         productDate: '',
         status: 'normal',
         currPage: 1,
-        pageSize: 10,
+        pageSize: 2,
         totalCount: 0,
         orderId: ''
       },
@@ -412,7 +412,7 @@ export default {
           if (res.data.code === 0) {
             if (this.plantList.currPage === 1) {
               this.totalList = res.data.infoUser
-              this.datalist = res.data.infoUser.slice(0, 10)
+              this.datalist = res.data.infoUser.slice(0, this.plantList.pageSize)
             }
             // this.datalist = res.data.infoUser
             this.plantList.totalCount = res.data.infoUser.length

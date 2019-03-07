@@ -200,7 +200,7 @@ export default {
     saveOrderMateriel () {
       if (this.materielDataList.length > 0) {
         // 数据验证
-        if (this.validate()) {
+        if (this.validate('apply')) {
           for (let item of this.materielDataList) {
             item.status = 'submit'
             // item.productDate = this.order && this.order.productDate
@@ -272,18 +272,18 @@ export default {
         }
       }
     },
-    validate () {
+    validate (flag) {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
-          if (item.dispatchMan == null || item.dispatchMan.trim() === '') {
+          if (item.dispatchMan === null || item.dispatchMan.trim() === '') {
             this.$message.error('生产调度员不能为空')
             return false
           }
-          if (item.productCode == null || item.productCode.trim() === '') {
+          if (item.productCode === null || item.productCode.trim() === '') {
             this.$message.error('生产物料不能为空')
             return false
           }
-          if (item.issueCode == null || item.issueCode.trim() === '') {
+          if (item.issueCode === null || item.issueCode.trim() === '') {
             this.$message.error('发料料号不能为空')
             return false
           }
@@ -291,7 +291,7 @@ export default {
             this.$message.error('生产数不能为空')
             return false
           }
-          if (item.issueBatch.trim() === '') {
+          if (item.issueBatch === null || item.issueBatch.trim() === '') {
             this.$message.error('发料批次不能为空')
             return false
           }
@@ -303,7 +303,14 @@ export default {
             this.$message.error('入库数不能为空')
             return false
           }
-          if (item.inStorageBatch.trim().length > 10) {
+          if (flag && flag === 'submit') {
+            // 提交的时候验证，申请订单不验证
+            if (item.inStorageBatch === null || item.inStorageBatch.trim() === '') {
+              this.$message.error('入库批次不能为空')
+              return false
+            }
+          }
+          if (item.inStorageBatch && item.inStorageBatch.trim().length > 10) {
             this.$message.error('入库批次长度不能超过10')
             return false
           }
@@ -334,11 +341,11 @@ export default {
       // console.log('为什么拿不到orderId', this.order.orderId)
       this.materielDataList = []
       this.readAudit = []
+      let inState = ''
       this.$http(`${WHT_API.MATERIELLIST_API}`, 'POST', {orderId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.materielDataList = data.wlist
           this.readAudit = data.vrlist
-          let inState = ''
           let no = 0
           let sub = 0
           let che = 0
@@ -363,12 +370,14 @@ export default {
           } else if (che > 0) {
             inState = 'checked'
           }
-          this.$emit('setAppyMaterielState', inState)
+          // this.$emit('setAppyMaterielState', inState)
         } else {
           this.$message.error(data.msg)
         }
       }).catch((error) => {
         console.log('catch data::', error)
+      }).finally(() => {
+        this.$emit('setAppyMaterielState', inState)
       })
     },
     // 新增记录
