@@ -3,7 +3,7 @@
     <el-card>
       <div class="htitle">
         <span class="lh32px">异常停机时间（MIN）</span>
-        <el-button type="primary" size="small" style="float: right"> + 新增</el-button>
+        <el-button type="primary" size="small" style="float: right" @onclick="addrecord"> + 新增</el-button>
       </div>
       <el-table border header-row-class-name="tableHead" :data="errList">
         <el-table-column label="异常情况">
@@ -20,6 +20,7 @@
         </el-table-column>
         <el-table-column label="异常描述"></el-table-column>
         <el-table-column label="异常开始时间"></el-table-column>
+        <el-table-column label="异常结束时间"></el-table-column>
         <el-table-column label="异常时间"></el-table-column>
         <el-table-column label="单位"></el-table-column>
         <el-table-column label="设备">
@@ -35,6 +36,11 @@
         <el-table-column label="物料"></el-table-column>
         <el-table-column label="能源"></el-table-column>
         <el-table-column label="备注"></el-table-column>
+        <el-table-column width="50">
+          <template slot-scope="scope">
+            <el-button type="danger" icon="el-icon-delete" circle size="small" @click="a"></el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div style="line-height:32px; margin:10px 0; overflow:hidden;">
         <span style="width:100px;  float:left;">总停线时间：</span>
@@ -56,10 +62,15 @@ export default {
   name: 'errRecord',
   data () {
     return {
-      'errList': [{id: 1}]
+      'errList': []
     }
   },
   methods: {
+    addrecord () {
+      this.errList.push({
+        id: 1
+      })
+    }
   },
   components: {
   }

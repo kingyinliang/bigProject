@@ -33,7 +33,7 @@ export class Order {
     if (this._orderStatus === '已同步') {
       return '已同步'
     } else if (this._orderStatus === '已拆分') {
-      return '待录入'
+      return '未录入'
     } else if (this._orderStatus === 'toBeAudited') {
       return '待审核'
     }

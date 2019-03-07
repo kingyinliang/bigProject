@@ -51,27 +51,27 @@
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div>{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
+                      <div class="box-item-title-name"><div>{{orderList[index].houseNo}}</div><div>{{orderList[index].inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{orderList[index].orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index].orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index].materialCode + ' ' + orderList[index].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index].inEndTime ? orderList[index].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index])">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index])">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index])">出曲</div>
                   </div>
                 </div>
               </el-col>
@@ -79,27 +79,27 @@
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#5BD171">{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
+                      <div class="box-item-title-name"><div style="background:#5BD171">{{orderList[index + 1].houseNo}}</div><div>{{orderList[index + 1].inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 1].orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index + 1].orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index + 1].materialCode + ' ' + orderList[index + 1].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index + 1].inEndTime ? orderList[index + 1].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index + 1])">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index + 1])">出曲</div>
                   </div>
                 </div>
               </el-col>
@@ -107,27 +107,27 @@
                 <div class="box-item">
                   <div class="box-item-top">
                     <div class="box-item-title">
-                      <div class="box-item-title-name"><div style="background:#2C92F6">{{item.houseNo}}</div><div>{{item.inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{item.orderStatus}}</div>
+                      <div class="box-item-title-name"><div style="background:#2C92F6">{{orderList[index + 2].houseNo}}</div><div>{{orderList[index + 2].inPotNoName}}</div></div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 2].orderStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
                         <div class="box-item-container-img"></div>
                       </div>
                       <div class="box-item-container-right">
-                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{item.orderNo}}</div></div>
-                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{item.materialCode + ' ' + item.materialName}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index + 2].orderNo}}</div></div>
+                        <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index + 2].materialCode + ' ' + orderList[index + 2].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">26 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{item.inEndTime ? item.inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index + 2].inEndTime ? orderList[index + 2].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆')">煮豆</div>
+                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲')">看曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index + 2])">看曲</div>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲')">出曲</div>
+                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index + 2])">出曲</div>
                   </div>
                 </div>
               </el-col>
@@ -556,8 +556,35 @@ export default class Index extends Vue {
       }
     })
   }
-  goPage (page: string) {
-    let params = {}
+  goPage (page, item) {
+    let params = {
+      factoryId: this.params.factoryId,
+      factoryName: this.params.factoryName,
+      workshopId: this.params.workshopId,
+      workshopName: this.params.workshopName,
+      materialCode: item.materialCode,
+      materialName: item.materialName,
+      orderId: item.orderId,
+      orderNo: item.orderNo,
+      // 订单状态
+      status: item.orderStatus,
+      // 曲房
+      houseId: item.houseNoId,
+      houseNo: item.houseNo,
+      houseName: item.houseNoName,
+      // 入罐
+      inPotId: item.inPotNoId,
+      inPotNo: item.inPotNo,
+      inPotName: item.inPotNoName,
+      // 连续蒸煮
+      cookingId: item.cookingNoId,
+      cookingNo: item.cookingNo,
+      cookingName: item.cookingNoName,
+      // 入曲时间
+      inKjmDate: item.inKjmDate,
+      changed: item.changed,
+      changer: item.changer
+    }
     if (page === '煮豆') {
       this.$router.push({name: `DataEntry-KojiMaking-BoiledBeans-index`, params})
     } else if (page === '看曲') {
