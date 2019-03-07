@@ -4,7 +4,35 @@
       <el-card class="searchCard  newCard">
         <el-row type="flex">
           <el-col :span="21">
-            <form-head :formHeader="formHeader"></form-head>
+            <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
+              <el-form-item label="工厂：">
+                <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="车间：">
+                <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 180px">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="制曲日期：">
+                <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy.MM.dd" placeholder="选择" v-model="formHeader.inKjmDate" style="width: 180px"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="生产工序：">
+                <el-select v-model="formHeader.deptId" placeholder="请选择" style="width: 180px">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option :label="item.deptName" v-for="(item, index) in deptId" :key="index" :value="item.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="提交人员：">
+                <p class="el-input" style="width: 180px"></p>
+              </el-form-item>
+              <el-form-item label="提交时间：">
+                <p class="el-input" style="width: 180px"></p>
+              </el-form-item>
+            </el-form>
           </el-col>
           <el-col :span="3" style="font-size: 14px;line-height: 32px">
             <div style="float:left">
@@ -15,7 +43,7 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
+            <el-button type="primary" size="small" @click="GetTimeList">查询</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -34,6 +62,8 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
+      <div v-if="searchCard">sadasdasdasfasfafafef</div>
+      <div v-if="searchCard">
       <el-card class="box-cards">
         <el-card style="margin-bottom: 10px;position: relative">
           <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">产量（单位：批）</h3>
@@ -41,12 +71,12 @@
           <div class="yieldBox">
             <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
               <el-form-item label="入曲批数：">
-                <el-input v-model="readyTimeDate.dayChange" placeholder="手工录入" :disabled="!isRedact"></el-input>
+                <el-input v-model="inKjmBatch" placeholder="手工录入" :disabled="!isRedact"></el-input>
               </el-form-item>
             </el-form>
           </div>
         </el-card>
-        <el-card style="margin-bottom: 10px;position: relative">
+        <el-card style="margin-bottom: 10px;position: relative" class="readyCard">
           <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
             <div class="clearfix">
               <h3 style="font-size: 14px;line-height: 32px;font-weight: bold;float: left">准备时间（分钟：min）</h3>
@@ -111,12 +141,14 @@
           <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
         </el-card>
       </el-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { headanimation, Readyanimation } from '@/net/validate'
+import {BASICDATA_API, KJM_API} from '@/api/api'
+import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import FormHead from './formHead'
 import Worker from '@/views/components/worker'
 export default {
@@ -124,16 +156,98 @@ export default {
   data () {
     return {
       isRedact: false,
+      searchCard: false,
+      factory: [],
+      workshop: [],
       orderStatus: '',
-      formHeader: {},
-      readyTimeDate: {}
+      deptId: '',
+      formHeader: {
+        factory: '',
+        workShop: '',
+        inKjmDate: getNewDate(),
+        deptId: ''
+      },
+      inKjmBatch: '',
+      readyTimeDate: {},
+      headList: {},
+      userList: []
+    }
+  },
+  watch: {
+    'formHeader.factory' (n, o) {
+      this.Getdeptbyid(n)
+    },
+    'formHeader.workShop' (n, o) {
+      if (n) {
+        this.GetParentline(n)
+      }
     }
   },
   mounted () {
     headanimation(this.$)
     Readyanimation(this.$)
+    this.Getdeptcode()
   },
-  methods: {},
+  methods: {
+    // 查询
+    GetTimeList () {
+      for (var key in this.formHeader) {
+        if (this.formHeader[key] === '') {
+          this.$message.error('请填写查询选项')
+          return false
+        }
+      }
+      this.searchCard = true
+      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          this.searchCard = true
+          this.inKjmBatch = data.inKjmBatch
+          this.readyTimeDate = data.readyList[0]
+          this.headList = data.headList[0]
+          this.userList = data.userList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取车间
+    Getdeptbyid (id) {
+      this.formHeader.workShop = ''
+      this.formHeader.deptId = ''
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取产线
+    GetParentline (id) {
+      this.formHeader.deptId = ''
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.deptId = data.childList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    }
+  },
   computed: {},
   components: {
     FormHead,
@@ -155,6 +269,11 @@ export default {
 .box-cards{
   .el-card__body{
     padding: 12px!important;
+  }
+}
+.readyCard{
+  input{
+    width: 147px!important;
   }
 }
 </style>

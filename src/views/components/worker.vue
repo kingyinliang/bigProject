@@ -177,7 +177,7 @@ export default {
         return false
       }
       this.WorkerDate.forEach((item) => {
-        if (item.userType && item.userId.length !== 0) {} else {
+        if (item.userType && item.userId.length !== 0 && item.startDate && item.endDate) {} else {
           ty = false
           this.$message.error('人员必填项未填')
           return false
