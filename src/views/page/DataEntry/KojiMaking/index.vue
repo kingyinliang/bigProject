@@ -566,6 +566,7 @@ export default class Index extends Vue {
       materialName: item.materialName,
       orderId: item.orderId,
       orderNo: item.orderNo,
+      orderHouseId: item.orderHouseId,
       // 订单状态
       status: item.orderStatus,
       // 曲房

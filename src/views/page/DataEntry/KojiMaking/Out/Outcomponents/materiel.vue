@@ -5,31 +5,31 @@
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column label="日期">
         <template slot-scope="scope">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="盐水" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small">
+          <el-select v-model="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
             <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code"></el-option>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column label="盐水罐号" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')"  size="small">
+          <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')"  size="small">
             <el-option :label="item.holderName" v-for="(item, index) in brineTankNo" :key="index" :value="item.holderId"></el-option>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column label="起始值" width="103">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="结束值" width="103">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="数量" width="70" show-overflow-tooltip>
@@ -42,7 +42,7 @@
       <el-table-column label="操作时间" width="120" prop="created" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" @click="delMateriel(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delMateriel(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -164,6 +164,7 @@ export default {
     AddMateriel () {
       this.MaterielDate.push({
         id: '',
+        status: '',
         orderHouseId: '',
         outDate: '',
         materialCode: '',

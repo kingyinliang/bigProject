@@ -103,21 +103,19 @@ export default {
     // 获取表头
     GetOrderList () {
       this.$http(`${KJM_API.FORMHEAD_API}`, 'POST', {
-        workShop: '7E0AA796139E46738A949E88E1272578',
-        productDate: '2019-03-05',
-        id: '05336DCCECBD49D887EB332C712752FC'
+        id: this.$route.params.orderHouseId
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.list[0]
           this.orderStatus = data.list[0].outStatus
           this.$refs.meateriel.GetBrineTankNo(this.formHeader)
           this.$refs.outinstorage.GetThreeNum(this.formHeader)
-          this.$refs.outinstorage.GetOutInStorage(this.formHeader)
           this.$refs.outtech.selectUser(this.formHeader.prolineId)
           this.$refs.excrecord.GetequipmentType(this.formHeader.prolineId)
           if (this.orderStatus !== '已同步') {
             this.$refs.meateriel.GetmaterielDate(this.formHeader)
             this.$refs.outtech.GetTechList(this.formHeader)
+            this.$refs.outinstorage.GetOutInStorage(this.formHeader)
             this.$refs.excrecord.GetExcDate({
               order_id: this.formHeader.id,
               workShop: this.formHeader.workShop,

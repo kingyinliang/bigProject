@@ -2,34 +2,29 @@
   <div>
     <el-table header-row-class-name="tableHead" :data="InStock" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
-      <el-table-column width="115" label="豆粕量（KG）" prop="pulpWeight">
+      <el-table-column width="115" label="豆粕量（KG）">
         <template slot-scope="scope">
           {{scope.row.pulpWeight = ThreeNum.allP}}
         </template>
       </el-table-column>
-      <el-table-column width="115" label="麦粉量（KG）" prop="wheatWeight">
+      <el-table-column width="115" label="麦粉量（KG）">
         <template slot-scope="scope">
-          {{scope.row.pulpWeight = ThreeNum.allM}}
+          {{scope.row.wheatWeight = ThreeNum.allM}}
         </template>
       </el-table-column>
-      <el-table-column width="115" label="盐水量（L）" prop="saltWaterWeight">
+      <el-table-column width="115" label="盐水量（L）">
         <template slot-scope="scope">
-          {{scope.row.pulpWeight = ThreeNum.allS}}
+          {{scope.row.saltWaterWeight = ThreeNum.allS}}
         </template>
       </el-table-column>
-      <el-table-column width="115" label="入库物料">
+      <el-table-column width="115" label="入库酱醪量">
         <template slot-scope="scope">
-          {{scope.row.materialCode + ' ' + scope.row.materialName}}
-        </template>
-      </el-table-column>
-      <el-table-column width="115" label="入库酱醪量" prop="sauceWeight">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="115" label="入库批次">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="115" label="入罐罐号" prop="houseNo"></el-table-column>
@@ -38,8 +33,8 @@
       <el-table-column width="" label="操作时间" prop="changed" show-overflow-tooltip></el-table-column>
       <el-table-column width="70" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
-          <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status == 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+          <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
+          <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,10 +48,37 @@ export default {
   name: 'inStock',
   data () {
     return {
-      InStock: [],
+      InStock: [{
+        batch: '',
+        changed: '',
+        changer: '',
+        created: '',
+        creator: '',
+        delFlag: '0',
+        holderId: '',
+        houseNo: '',
+        id: '',
+        isSplit: '0',
+        materialCode: '',
+        materialName: '',
+        orderHouseId: '',
+        orderNo: '1',
+        pulpWeight: '',
+        remark: '',
+        saltWaterWeight: '',
+        sauceWeight: '',
+        serialNumber: '',
+        status: '',
+        unit: 'L',
+        wheatWeight: ''
+      }],
       InStockAuditlog: [],
       InStockstatus: '',
-      ThreeNum: {}
+      ThreeNum: {
+        allP: '',
+        allM: '',
+        allS: ''
+      }
     }
   },
   props: {
@@ -71,7 +93,9 @@ export default {
         orderHouseId: formHeader.id
       }).then(({data}) => {
         if (data.code === 0) {
-          this.ThreeNum = data.list[0]
+          if (data.list.length !== 0) {
+            this.ThreeNum = data.list[0]
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -139,7 +163,6 @@ export default {
         }
       })
     },
-    // 提交
     // 拆分
     addInStock (row, index) {
       this.InStock.splice(index + 1, 0, {
