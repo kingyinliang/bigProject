@@ -67,11 +67,17 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : 'red'}" @click="goPage('煮豆', orderList[index])">煮豆</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index])">看曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index])">看曲</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index])">出曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index])">出曲</div>
+                    </el-tooltip>
                   </div>
                 </div>
               </el-col>
@@ -95,11 +101,17 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index + 1])">看曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index + 1])">看曲</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index + 1])">出曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index + 1])">出曲</div>
+                    </el-tooltip>
                   </div>
                 </div>
               </el-col>
@@ -123,11 +135,17 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <div class="box-item-bottom-item" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                    <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('看曲', orderList[index + 2])">看曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index + 2])">看曲</div>
+                    </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <div class="box-item-bottom-item" @click="goPage('出曲', orderList[index + 2])">出曲</div>
+                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index + 2])">出曲</div>
+                    </el-tooltip>
                   </div>
                 </div>
               </el-col>

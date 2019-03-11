@@ -40,19 +40,19 @@
                 <el-col>
                   <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="orderList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                     <el-table-column type="index" width="55" label="序号"></el-table-column>
-                    <el-table-column label="订单状态" width="100">
+                    <el-table-column label="订单状态" width="80">
                       <template slot-scope="scope">
                         {{scope.row.orderStatus}}
                       </template>
                     </el-table-column>
-                    <el-table-column label="订单日期" width="110">
+                    <el-table-column label="订单日期" width="100">
                       <template slot-scope="scope">
                         {{scope.row.orderDate}}
                       </template>
                     </el-table-column>
                     <el-table-column
                       label="订单号"
-                      width="140">
+                      width="120">
                       <template slot-scope="scope">
                         {{scope.row.orderNo}}
                       </template>
@@ -62,12 +62,12 @@
                         {{scope.row.materialCode + ' ' + scope.row.materialName}}
                       </template>
                     </el-table-column>
-                    <el-table-column width="80" label="数量">
+                    <el-table-column width="70" label="数量">
                       <template slot-scope="scope">
                         {{scope.row.planOutput}}
                       </template>
                     </el-table-column>
-                    <el-table-column label="单位" width="60">
+                    <el-table-column label="单位" width="50">
                       <template slot-scope="scope">
                         <span>{{scope.row.outputUnit}}</span>
                       </template>
@@ -81,9 +81,9 @@
                       label="操作"
                       fixed="right"
                       align="center"
-                      width="120">
+                      width="80">
                       <template slot-scope="scope">
-                        <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
+                        <span class="operator" v-if="true" @click="orderSplit(scope.row)">拆分</span>
                         <span class="operator" v-if="scope.row.orderStatus === '待审核'" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
@@ -124,14 +124,14 @@
                         {{scope.row.status}}
                       </template>
                     </el-table-column>
-                    <el-table-column label="订单号" width="160">
+                    <el-table-column label="订单号" width="120">
                       <template slot-scope="scope">
                         {{scope.row.orderNo}}
                       </template>
                     </el-table-column>
                     <el-table-column
                       label="入罐号"
-                      width="180">
+                      width="120">
                       <template slot-scope="scope">
                         {{scope.row.inPotName}}
                       </template>
@@ -141,7 +141,7 @@
                         {{scope.row.houseName}}
                       </template>
                     </el-table-column>
-                    <el-table-column width="150" label="连续蒸煮">
+                    <el-table-column width="120" label="连续蒸煮">
                       <template slot-scope="scope">
                         {{scope.row.cookingName}}
                       </template>
@@ -167,7 +167,7 @@
         <div class="orderForm">
           <el-table header-row-class-name="tableHead" :data="splitDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
-            <el-table-column label="订单号" width="140">
+            <el-table-column label="订单号" width="120">
               <template slot-scope="scope">
                 {{scope.row.orderNo}}
               </template>
@@ -179,12 +179,12 @@
             </el-table-column>
             <el-table-column
               label="订单日期"
-              width="110">
+              width="100">
               <template slot-scope="scope">
                 {{scope.row.orderDate}}
               </template>
             </el-table-column>
-            <el-table-column width="80" label="数量">
+            <el-table-column width="70" label="数量">
               <template slot-scope="scope">
                 {{scope.row.planOutput}}
               </template>
@@ -194,7 +194,7 @@
                 {{scope.row.outputUnit}}
               </template>
             </el-table-column>
-            <el-table-column label="备注" width="140">
+            <el-table-column label="备注" width="120">
               <template slot-scope="scope">
                 <span>{{scope.row.remark}}</span>
               </template>
@@ -222,11 +222,12 @@
             <el-table-column label="连续蒸煮号" width="140">
               <template slot-scope="scope">
                 <el-select  v-model="scope.row.cookingNo" filterable placeholder="请选择"  size="small">
+                  <el-option value='' label=''></el-option>
                   <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="制曲日期" width="150">
+            <el-table-column label="制曲日期" width="170">
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
@@ -234,7 +235,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="生产日期" width="150">
+            <el-table-column label="生产日期" width="170">
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
@@ -275,6 +276,7 @@
           </el-form-item>
           <el-form-item label="连续蒸煮" :label-width="formLabelWidth" >
             <el-select  v-model="detailForm.cookingNo"  placeholder="请选择" @change="changeOptions('cooking')">
+              <el-option value='' label=''></el-option>
               <el-option v-for="(item, index) in continueList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
             </el-select>
           </el-form-item>
@@ -471,38 +473,46 @@ export default class Index extends Vue {
   // 拆分订单保存
   splitOrder () {
     let params = []
+    let ketSet: Set<string> = new Set()
     for (let item of this.splitDetailList) {
       if (item.delFlag === '0') {
-        params.push({
-          orderId: item.orderId,
-          orderNo: item.orderNo,
-          status: '',
-          inPotNo: item.inPotNo,
-          houseNo: item.houseNo,
-          cookingNo: item.cookingNo,
-          inKjmDate: item.inKjmDate,
-          productDate: item.productDate,
-          delFlag: item.delFlag
-        })
+        if (!item.inPotNo || item.inPotNo.length === 0) {
+          this.$message.error('入罐号不能为空')
+          return
+        }
+        if (!item.houseNo || item.houseNo.length === 0) {
+          this.$message.error('曲房不能为空')
+          return
+        }
+        if (!item.inKjmDate || item.inKjmDate.length === 0) {
+          this.$message.error('制曲日期不能为空')
+          return
+        }
+        if (!item.productDate || item.productDate.length === 0) {
+          this.$message.error('生产日期不能为空')
+          return
+        }
+        let key = item.houseNo + item.inKjmDate
+        if (ketSet.has(key)) {
+          this.$message.error('相同制曲日期下，曲房重复')
+          return
+        } else {
+          ketSet.add(key)
+        }
       }
     }
-    for (let item of params) {
-      if (!item.inPotNo || item.inPotNo.length === 0) {
-        this.$message.error('入罐号不能为空')
-        return
-      }
-      if (!item.houseNo || item.houseNo.length === 0) {
-        this.$message.error('曲房不能为空')
-        return
-      }
-      if (!item.inKjmDate || item.inKjmDate.length === 0) {
-        this.$message.error('制曲日期不能为空')
-        return
-      }
-      if (!item.productDate || item.productDate.length === 0) {
-        this.$message.error('生产日期不能为空')
-        return
-      }
+    for (let item of this.splitDetailList) {
+       params.push({
+        orderId: item.orderId,
+        orderNo: item.orderNo,
+        status: '',
+        inPotNo: item.inPotNo,
+        houseNo: item.houseNo,
+        cookingNo: item.cookingNo,
+        inKjmDate: item.inKjmDate,
+        productDate: item.productDate,
+        delFlag: item.delFlag
+      })
     }
     Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
       if (res.data.code === 0) {
@@ -583,6 +593,10 @@ export default class Index extends Vue {
   }
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
+    if (row.status && (row.status === '已提交' || row.status === '通过')) {
+      this.$message.error('此条数据不可修改')
+      return
+    }
     this.detailForm = row.clone()
     this.dialogFormVisible2 = true
   }

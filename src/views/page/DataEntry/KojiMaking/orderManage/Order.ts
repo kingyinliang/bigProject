@@ -1,32 +1,12 @@
 export class Order {
   orderId: string
-  // factory: string
-  // workShop: string
-  // productDate: string
-  // productLine: string
   orderNo: string
   materialCode: string
   materialName: string
   planOutput: number
   outputUnit: string
-  // realOutput: number
-  // operator: string
-  // operDate: string
   private _orderStatus: string
-  // countMan: number
-  // countOutput: number
-  // countOutputUnit: string
-  // germs: string
-  // expAllDate: string
-  // img: string
   remark: string
-  // created: string
-  // creator: string
-  // changed: string
-  // changer: string
-  // properties: string
-  // productLineName: string
-  // workShopName: string
   orderDate: string
   delFlag: string = '0'
   get orderStatus (): string {
@@ -36,8 +16,16 @@ export class Order {
       return '未录入'
     } else if (this._orderStatus === 'toBeAudited') {
       return '待审核'
+    } else if (this._orderStatus === 'saved') {
+      return '已保存'
+    } else if (this._orderStatus === 'submit') {
+      return '已提交'
+    } else if (this._orderStatus === 'checked') {
+      return '通过'
+    } else if (this._orderStatus === 'noPass') {
+      return '不通过'
     }
-    return '哈哈哈哈哈'
+    return this._orderStatus
   }
   set orderStatus (status: string) {
     this._orderStatus = status
@@ -59,7 +47,7 @@ export class Order {
 
 export class OrderDetail extends Order {
   id: string
-  status: string
+  _status: string
   inPotNo: string = ''
   inPotName: string = ''
   houseNo: string = ''
@@ -78,7 +66,7 @@ export class OrderDetail extends Order {
       this.id = id
     }
     if (status) {
-      this.status = status
+      this._status = status
     }
     if (inPotNo) {
       this.inPotNo = inPotNo
@@ -108,6 +96,25 @@ export class OrderDetail extends Order {
       this.isFirst = isFirst
     }
   }
+
+  get status (): string {
+    if (this._status === '已同步') {
+      return '未录入'
+    } else if (this._status === 'saved') {
+      return '已保存'
+    } else if (this._status === 'submit') {
+      return '已提交'
+    } else if (this._status === 'checked') {
+      return '通过'
+    } else if (this._status === 'noPass') {
+      return '不通过'
+    }
+    return this._status
+  }
+  set status (status: string) {
+    this._status = status
+  }
+
   public clone (): OrderDetail {
     return JSON.parse(JSON.stringify(this))
   }
