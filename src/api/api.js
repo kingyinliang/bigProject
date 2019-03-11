@@ -7,7 +7,7 @@
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.139:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.67:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -863,9 +863,13 @@ export const KJM_API = {
    */
   OUTTIMELIST_API: HOST + '/kjm/timeSheet/list',
   /**
-   * @property {string} OUTTIMELIST_API 查询录取批数
+   * @property {string} OUTTIMEREADYSAVE_API 工时准备时间保存
    */
-  OUTTIMESELECTBATCH_API: HOST + '/kjm/timeSheet/selectBatch',
+  OUTTIMEREADYSAVE_API: HOST + '/wht/ready/whtReadyUpdate',
+  /**
+   * @property {string} OUTTIMEREADYSAVE_API 工时表头保存
+   */
+  OUTTIMEHEADSAVE_API: HOST + '/kjm/timeSheet/update',
   /**
    * @property {string} ORDERLIST_API 订单列表
    */

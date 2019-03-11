@@ -114,6 +114,9 @@ export default {
   },
   methods: {
     // 人员列表
+    GetTimeUserList (list) {
+      this.WorkerDate = list
+    },
     GetUserList (id) {
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
         order_id: id
@@ -127,6 +130,7 @@ export default {
       })
     },
     // 人员保存
+    TimeUserSave () {},
     UpdateUser (str, resolve) {
       if (this.WorkerDate.length > 0) {
         this.WorkerDate.forEach((item) => {

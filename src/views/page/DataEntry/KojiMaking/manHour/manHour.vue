@@ -27,10 +27,10 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="提交人员：">
-                <p class="el-input" style="width: 180px"></p>
+                <p class="el-input" style="width: 180px">{{formHeader.changer}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="el-input" style="width: 180px"></p>
+                <p class="el-input" style="width: 180px">{{formHeader.changed}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -56,22 +56,21 @@
         </div>
       </el-card>
     </div>
-    <div class="main">
+    <div class="main" style="padding-top: 0">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <div v-if="searchCard">sadasdasdasfasfafafef</div>
       <div v-if="searchCard">
-      <el-card class="box-cards">
+      <el-card class="box-cards NewDaatTtabs">
         <el-card style="margin-bottom: 10px;position: relative">
           <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">产量（单位：批）</h3>
           <el-button type="text" class="readyshiftBtn manHour" name="yield">收起<i class="el-icon-caret-top"></i></el-button>
           <div class="yieldBox">
             <el-form :inline="true" :model="readyTimeDate" ref="timesForm" size="small" label-width="125px">
               <el-form-item label="入曲批数：">
-                <el-input v-model="inKjmBatch" placeholder="手工录入" :disabled="!isRedact"></el-input>
+                <el-input v-model="inKjmBatch" placeholder="手工录入" disabled></el-input>
               </el-form-item>
             </el-form>
           </div>
@@ -138,7 +137,7 @@
         </el-card>
         <el-card style="margin-bottom: 10px">
           <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">人员(小时:H)</h3>
-          <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
+          <worker ref="workerref" :isRedact="isRedact" :order="userOrder"></worker>
         </el-card>
       </el-card>
       </div>
@@ -149,27 +148,46 @@
 <script>
 import {BASICDATA_API, KJM_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
-import FormHead from './formHead'
 import Worker from '@/views/components/worker'
 export default {
   name: 'manHour',
   data () {
     return {
+      uid: '',
       isRedact: false,
       searchCard: false,
       factory: [],
       workshop: [],
       orderStatus: '',
       deptId: '',
+      userOrder: {
+        orderId: ''
+      },
       formHeader: {
         factory: '',
         workShop: '',
         inKjmDate: getNewDate(),
-        deptId: ''
+        deptId: '',
+        inKjmBatch: ''
       },
       inKjmBatch: '',
-      readyTimeDate: {},
-      headList: {},
+      readyTimeDate: {
+        id: '',
+        status: '',
+        classes: '多班',
+        dayChange: '',
+        dayChangeBefore: '',
+        dayChangePre: '',
+        dayChangeAfter: '',
+        midChange: '',
+        midChangeBefore: '',
+        midChangePre: '',
+        midChangeAfter: '',
+        nightChange: '',
+        nightChangeBefore: '',
+        nightChangePre: '',
+        nightChangeAfter: ''
+      },
       userList: []
     }
   },
@@ -191,22 +209,99 @@ export default {
   methods: {
     // 查询
     GetTimeList () {
-      for (var key in this.formHeader) {
-        if (this.formHeader[key] === '') {
-          this.$message.error('请填写查询选项')
-          return false
-        }
+      if (this.formHeader.factory === '' || this.formHeader.workShop === '' || this.formHeader.inKjmDate === '' || this.formHeader.deptId === '') {
+        this.$message.error('请填写查询选项')
+        return false
       }
       this.searchCard = true
       this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
-          this.searchCard = true
-          this.inKjmBatch = data.inKjmBatch
-          this.readyTimeDate = data.readyList[0]
-          this.headList = data.headList[0]
-          this.userList = data.userList
+          if (data.headList.length === 0) {
+            this.uid = this.uuid(32, 62)
+            this.userOrder.orderId = this.uid
+            this.inKjmBatch = data.inKjmBatch
+            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.getTree(this.formHeader.factory)
+          } else {
+            this.readyTimeDate = data.readyList[0]
+            this.formHeader = data.headList[0]
+            this.userOrder.orderId = data.headList[0].id
+            this.inKjmBatch = data.headList[0].inKjmBatch
+            this.$refs.workerref.GetTimeUserList(data.userList)
+            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.getTree(this.formHeader.factory)
+          }
         } else {
           this.$message.error(data.msg)
+        }
+      })
+    },
+    // 保存
+    savedOrSubmitForm (str) {
+      let that = this
+      let headSave = new Promise((resolve, reject) => {
+        that.HeadSave(str, resolve, reject)
+      })
+      let readySave = new Promise((resolve, reject) => {
+        that.ReadyTimeSave(str, resolve, reject)
+      })
+      let userSave = new Promise((resolve, reject) => {
+        that.$refs.workerref.UpdateUser(str, resolve, reject)
+      })
+      let saveNet = Promise.all([headSave, readySave, userSave])
+      saveNet.then(function () {
+        that.GetTimeList()
+        that.$message.success('保存成功')
+      }, err => {
+        that.$message.error(err)
+      })
+    },
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
+    // 表头保存
+    HeadSave (str, resolve, reject) {
+      if (this.uid) {
+        this.formHeader.id = this.uid
+        this.formHeader.addOrupdate = '0'
+      }
+      this.formHeader.status = str
+      this.formHeader.inKjmBatch = this.inKjmBatch + ''
+      this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          this.$message.error(data.msg)
+          if (reject) {
+            reject('表头保存' + data.msg)
+          }
+        }
+      })
+    },
+    // 准备时间保存
+    ReadyTimeSave (str, resolve, reject) {
+      if (this.uid) {
+        this.readyTimeDate.orderId = this.uid
+      }
+      this.readyTimeDate.status = str
+      this.$http(`${KJM_API.OUTTIMEREADYSAVE_API}`, 'POST', this.readyTimeDate).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          this.$message.error(data.msg)
+          if (reject) {
+            reject('准备时间保存' + data.msg)
+          }
         }
       })
     },
@@ -250,7 +345,6 @@ export default {
   },
   computed: {},
   components: {
-    FormHead,
     Worker
   }
 }
