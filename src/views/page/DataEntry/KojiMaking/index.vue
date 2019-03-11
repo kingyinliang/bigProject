@@ -254,7 +254,8 @@ import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
 import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
 import officialWorker from '@/views/components/officialWorker.vue'
-import {Employee, EMPTypeList, DayTypeList} from './Employee.ts'
+import {Employee} from './entity/Employee.ts'
+import {DayType, EMPType} from './entity/Enum.ts'
 
 @Component({
   components: {
@@ -309,11 +310,11 @@ export default class Index extends Vue {
     return num
   }
   get DayTypeList () {
-    return DayTypeList
+    return DayType
   }
 
   get EmployeeTypeList () {
-    return EMPTypeList
+    return EMPType
   }
 
   changeOptions (flag: string) {
@@ -405,10 +406,9 @@ export default class Index extends Vue {
       this.datalist = []
       this.totalList = []
       Vue.prototype.$http(`${WHT_API.CINDEXLISTUSER}`, 'POST', {deptId: this.params.workshopId, productDate: this.params.zqDate}).then(res => {
-        // this.lodingStatus = false
         if (res.data.code === 0) {
           for (let item of res.data.infoUser) {
-            // 请求回来的数据做类型和格式转换，莫名其妙的接口
+            // 请求回来的数据做类型和格式转换
             item.productDate = item.productDate ? item.productDate.substring(0, 10) : item.productDate
             item.dinner = item.dinner + ''
           }
@@ -471,11 +471,11 @@ export default class Index extends Vue {
     let loanedPersonnel: any = this.$refs.loanedPersonnel
     let officialWorker: any = this.$refs.officialWorker
     let temporaryWorker: any = this.$refs.temporaryWorker
-    if (row.userType === EMPTypeList.TRANSFER) {
+    if (row.userType === EMPType.TRANSFER) {
       this.$nextTick(() => {
         loanedPersonnel.init(row.userId)
       })
-    } else if (row.userType === EMPTypeList.FORMAL) {
+    } else if (row.userType === EMPType.FORMAL) {
       if (row.deptId && row.deptId !== '') {
         this.$nextTick(() => {
           officialWorker.init(row.deptId, row.userId)
@@ -483,7 +483,7 @@ export default class Index extends Vue {
       } else {
         this.$message.error('请选择工序')
       }
-    } else if (row.userType === EMPTypeList.TEMP) {
+    } else if (row.userType === EMPType.TEMP) {
       this.$nextTick(() => {
         temporaryWorker.init(row)
       })
@@ -625,7 +625,6 @@ export default class Index extends Vue {
   }
   @Watch('params.workshopId')
   onWorkshopValue (newVal: string, oldVal: string) {
-    console.log('车间变了吗')
     this.getProcess(newVal)
   }
 }

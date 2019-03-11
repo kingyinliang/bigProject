@@ -53,11 +53,3 @@ export class Material {
   changer: string = '周团子'
   changeTime: string = '2019-01-12 10:12:34'
 }
-
-export class AuditLogBean {
-  status: string = 'checked'
-  memo: string = 'good job'
-  verify_man: string = '周团子'
-  verify_date: String = '2019-01-12 10:12:34'
-}
-

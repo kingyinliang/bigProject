@@ -24,12 +24,12 @@
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.5.6",
+    "vue-property-decorator": "^7.2.0",
     "vue-router": "^3.0.1",
     "vue-video-player": "^5.0.2",
     "vuex": "^3.0.1",
     "vuex-persist": "^1.4.3",
-    "xlsx": "^0.14.0",
-    "vue-property-decorator": "^7.2.0"
+    "xlsx": "^0.14.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -94,7 +94,7 @@
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.0",
-    "typescript": "^3.1.4",
+    "typescript": "3.2.1",
     "typescript-eslint-parser": "^22.0.0",
     "ts-loader": "^3.5.0",
     "tslint": "^5.11.0",

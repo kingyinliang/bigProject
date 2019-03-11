@@ -46,36 +46,26 @@ module.exports = {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: vueLoaderConfig
-      },
-      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         enforce: 'pre',
         loader: 'tslint-loader'
       },
-      // {
-      //   test: /\.vue$/,
-      //   loader: 'vue-loader',
-      //   options: Object.assign(vueLoaderConfig, {
-      //     loaders: {
-      //       ts: "ts-loader",
-      //       tsx: "babel-loader!ts-loader"
-      //     }
-      //   })
-      // },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: Object.assign(vueLoaderConfig, {
+          loaders: {
+            ts: "ts-loader",
+            tsx: "babel-loader!ts-loader"
+          }
+        })
+      },
       {
         test: /\.tsx?$/,
+        loader: 'ts-loader',
         exclude: /node_modules/,
-        use: [
-          "babel-loader",
-          {
-            loader: "ts-loader",
-            options: { appendTsSuffixTo: [/\.vue$/] }
-          }
-        ]
+        options: { appendTsSuffixTo: [/\.vue$/] }
       },
       {
         test: /\.js$/,

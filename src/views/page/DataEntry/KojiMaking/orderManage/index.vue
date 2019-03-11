@@ -299,8 +299,10 @@
 <script lang="ts">
 import {BASICDATA_API, KJM_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
-import {Order, OrderDetail} from './Order.ts'
-import { dateFormat } from '@/net/validate'
+import {Order} from '../entity/Order.ts'
+import {OrderDetail} from '../entity/OrderDetail.ts'
+import {Status} from '../entity/Enum.ts'
+import {dateFormat} from '@/net/validate'
 @Component({
   components: {
   }
@@ -502,7 +504,7 @@ export default class Index extends Vue {
       }
     }
     for (let item of this.splitDetailList) {
-       params.push({
+      params.push({
         orderId: item.orderId,
         orderNo: item.orderNo,
         status: '',
@@ -593,8 +595,8 @@ export default class Index extends Vue {
   }
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
-    if (row.status && (row.status === '已提交' || row.status === '通过')) {
-      this.$message.error('此条数据不可修改')
+    if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
+      this.$message.error('数据不可修改')
       return
     }
     this.detailForm = row.clone()

@@ -266,7 +266,7 @@ import {Vue, Component} from 'vue-property-decorator'
 import FormHeader from '@/views/components/formHeader.vue'
 import TextRecord from '@/views/components/textRecord.vue'
 import AuditLog from '@/views/components/AuditLog.vue'
-import {WorkHour, InStock, Material, AuditLogBean} from './WorkHour.ts'
+import {WorkHour, InStock, Material} from '../entity/WorkHour.ts'
 @Component({
   components: {
     FormHeader,
@@ -278,11 +278,11 @@ export default class Index extends Vue {
   orderStatus = ''
   orderNo = ''
   workHourList: WorkHour[] = []
-  workHourAuditList: AuditLogBean[] = []
+  workHourAuditList = []
   inStockList: InStock[] = []
-  inStockAuditList: AuditLogBean[] = []
+  inStockAuditList = []
   applyMaterieList: Material[] = []
-  applyMaterieAuditList: AuditLogBean[] = []
+  applyMaterieAuditList = []
   activeName = '1'
   // 报工工时状态
   readyState = ''
@@ -301,19 +301,16 @@ export default class Index extends Vue {
   getWorkHourList () {
     for (let i = 0; i < 5; i++) {
       this.workHourList.push(new WorkHour())
-      this.workHourAuditList.push(new AuditLogBean())
     }
   }
   getInStockList () {
     for (let i = 0; i < 5; i++) {
       this.inStockList.push(new InStock())
-      this.inStockAuditList.push(new AuditLogBean())
     }
   }
   getMaterialList () {
     for (let i = 0; i < 5; i++) {
       this.applyMaterieList.push(new Material())
-      this.applyMaterieAuditList.push(new AuditLogBean())
     }
   }
   enbaleEdit (row) {
