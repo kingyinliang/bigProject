@@ -83,8 +83,9 @@
                       align="center"
                       width="80">
                       <template slot-scope="scope">
-                        <span class="operator" v-if="true" @click="orderSplit(scope.row)">拆分</span>
+                        <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
                         <span class="operator" v-if="scope.row.orderStatus === '待审核'" @click="orderCheck(scope.row)">核对</span>
+                        <span class="operator" v-if="true" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -408,7 +409,7 @@ export default class Index extends Vue {
     })
   }
   setStore (params) {
-    this.$store.commit('common/updateZQWorkshop', params)
+    // this.$store.commit('common/updateZQDefault', params)
   }
   getOrderList () {
     if (this.params.factoryId === '') {
@@ -475,7 +476,8 @@ export default class Index extends Vue {
   // 拆分订单保存
   splitOrder () {
     let params = []
-    let ketSet: Set<string> = new Set()
+    let houseSet: Set<string> = new Set()
+    let potSet: Set<string> = new Set()
     for (let item of this.splitDetailList) {
       if (item.delFlag === '0') {
         if (!item.inPotNo || item.inPotNo.length === 0) {
@@ -494,12 +496,17 @@ export default class Index extends Vue {
           this.$message.error('生产日期不能为空')
           return
         }
-        let key = item.houseNo + item.inKjmDate
-        if (ketSet.has(key)) {
+        potSet.add(item.inPotNo)
+        if (potSet.size > 1) {
+          this.$message.error('同一订单不能多个入罐号')
+          return
+        }
+        let houseKey = item.houseNo + item.inKjmDate
+        if (houseSet.has(houseKey)) {
           this.$message.error('相同制曲日期下，曲房重复')
           return
         } else {
-          ketSet.add(key)
+          houseSet.add(houseKey)
         }
       }
     }
@@ -639,6 +646,7 @@ export default class Index extends Vue {
     }
   }
   orderCheck (row) {
+    this.$store.commit('common/updateZQParams', {orderId: row.orderId})
     this.$router.push({ name: `DataEntry-KojiMaking-orderAuditing-index` })
   }
   @Watch('params', {deep: true})

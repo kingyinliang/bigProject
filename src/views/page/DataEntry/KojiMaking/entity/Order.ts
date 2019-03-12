@@ -13,19 +13,19 @@ export class Order {
   delFlag: string = '0'
   get orderStatus (): string {
     if (this._orderStatus === '已同步') {
-      return Status.SYNC
+      return Status.SYNC // 已同步
     } else if (this._orderStatus === '已拆分') {
-      return Status.UNDO
+      return Status.UNDO // 未录入
     } else if (this._orderStatus === 'toBeAudited') {
-      return Status.TOBE
+      return Status.TOBE // 待审核
     } else if (this._orderStatus === 'saved') {
-      return Status.SAVED
+      return Status.SAVED // 已保存
     } else if (this._orderStatus === 'submit') {
-      return Status.SUBMIT
+      return Status.SUBMIT // 已提交
     } else if (this._orderStatus === 'checked') {
-      return Status.CHECKED
+      return Status.CHECKED // 通过
     } else if (this._orderStatus === 'noPass') {
-      return Status.NOPASS
+      return Status.NOPASS // 不通过
     }
     return this._orderStatus
   }

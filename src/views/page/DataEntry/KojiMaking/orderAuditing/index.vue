@@ -6,40 +6,40 @@
           <el-col :span="21">
             <el-form :inline="true" size="small" label-width="85px">
               <el-form-item label="生产车间：">
-                <p class="input_bommom"></p>
+                <p class="input_bommom">{{formHeader.workShopName}}</p>
               </el-form-item>
-              <el-form-item label="曲房号：">
-                <p class="input_bommom"></p>
+              <el-form-item label="订单号：">
+                <p class="input_bommom">{{formHeader.orderNo}}</p>
               </el-form-item>
-              <el-form-item label="生产订单：">
-                <p class="input_bommom"></p>
+              <el-form-item label="订单日期：">
+                <p class="input_bommom">{{formHeader.orderDate}}</p>
               </el-form-item>
-              <el-form-item label="生产品项：">
-                <p class="input_bommom"></p>
+              <el-form-item label="品项：">
+                <p class="input_bommom">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
               </el-form-item>
-              <el-form-item label="生产日期：">
-                <p class="input_bommom"></p>
+              <el-form-item label="计划产量：">
+                <p class="input_bommom">{{formHeader.planOutput}}</p>
               </el-form-item>
               <el-form-item label="入罐号：">
-                <p class="input_bommom"></p>
+                <p class="input_bommom">{{formHeader.inPotNoName}}</p>
               </el-form-item>
-              <el-form-item label="连续蒸煮号：">
-                <p class="input_bommom"></p>
+              <el-form-item label="生产日期：">
+                <p class="input_bommom">{{formHeader.productDate}}</p>
               </el-form-item>
               <el-form-item label="提交人员：">
-                <p class="input_bommom"></p>
+                <p class="input_bommom">{{formHeader.changer}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="input_bommom"></p>
+                <p class="input_bommom">{{formHeader.changed}}</p>
               </el-form-item>
             </el-form>
           </el-col>
           <el-col :span="3" >
             <div style="float:right;line-height:31px;font-size:14px">
               <div style="float:left">
-                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
+                <span class="point" :style="{'background': formHeader.orderStatus === 'noPass'? 'red' : formHeader.orderStatus === 'saved'? '#1890f' : formHeader.orderStatus === 'submit' ? '#1890ff' : formHeader.orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
               </div>
-              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未提交' : orderStatus }}</span>
+              <span :style="{'color': formHeader.orderStatus === 'noPass'? 'red' : '' }">{{formHeader.orderStatus === 'noPass'? '审核不通过' : formHeader.orderStatus === 'saved' ? '已保存' : formHeader.orderStatus === 'submit' ? '已提交' : formHeader.orderStatus === 'checked' ? '通过':formHeader.orderStatus === '已同步' ? '已同步' : formHeader.orderStatus === '已拆分' ? '未录入' :  formHeader.orderStatus === 'toBeAudited' ? '待审核' : formHeader.orderStatus}}</span>
             </div>
           </el-col>
         </el-row>
@@ -71,44 +71,44 @@
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="工序" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.process}}
+                    {{scope.row.productLineName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="曲房" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.kojimakingRoom}}
+                    {{scope.row.houseName}}
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="准备工时"
                   width="80">
                   <template slot-scope="scope">
-                    {{scope.row.prepareTime}}
+                    {{scope.row.confActivity1}}
                   </template>
                 </el-table-column>
                 <el-table-column width="60" label="单位">
                   <template slot-scope="scope">
-                    {{scope.row.prepareTimeUnit}}
+                    {{scope.row.confActiUnit1}}
                   </template>
                 </el-table-column>
                 <el-table-column width="140" label="人工工时">
                   <template slot-scope="scope">
-                    <el-input size="small" type="number" v-model.number="scope.row.manualTime"  placeholder="手工录入" :disabled="scope.row.disabled" ></el-input>
+                    <el-input size="small" type="number" v-model.number="scope.row.confActivity3"  placeholder="手工录入" :disabled="scope.row.disabled" ></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.manualTimeUnit}}</span>
+                    <span>{{scope.row.confActiUnit3}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="机器工时" width="140">
                   <template slot-scope="scope">
-                    <el-input size="small" type="number" v-model.number="scope.row.machineTime"  placeholder="手工录入" :disabled="scope.row.disabled"></el-input>
+                    <el-input size="small" type="number" v-model.number="scope.row.confActivity2"  placeholder="手工录入" :disabled="scope.row.disabled"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.machineTimeUnit}}</span>
+                    <span>{{scope.row.confActiUnit2}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="备注" width="140">
@@ -122,7 +122,7 @@
                   width="145">
                   <template slot-scope="scope">
                     <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)">编辑</el-button>
-                    <el-button style='float:right' type="primary" size="small">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -144,39 +144,39 @@
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="曲房" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.kojimakingRoom}}
+                    {{scope.row.houseName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="豆粕量(KG)" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.beanNumber}}
+                    {{scope.row.pulpWeight}}
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="麦粉量(KG)"
                   width="100">
                   <template slot-scope="scope">
-                    {{scope.row.wheatNumber}}
+                    {{scope.row.wheatWeight}}
                   </template>
                 </el-table-column>
                 <el-table-column width="80" label="盐水量">
                   <template slot-scope="scope">
-                    {{scope.row.saltNumber}}
+                    {{scope.row.saltWaterWeight}}
                   </template>
                 </el-table-column>
                 <el-table-column width="120" label="入库物料">
                   <template slot-scope="scope">
-                    {{scope.row.inStockMaterial}}
+                    {{scope.row.materialCode + ' ' + scope.row.materialName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="入库量" width="80">
                   <template slot-scope="scope">
-                    <span>{{scope.row.inStockNumber}}</span>
+                    <span>{{scope.row.sauceWeight}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="入库批次" width="140">
                   <template slot-scope="scope">
-                    <span>{{scope.row.inStockBatch}}</span>
+                    <span>{{scope.row.batch}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
@@ -191,7 +191,7 @@
                 </el-table-column>
                 <el-table-column label="操作时间" width="200">
                   <template slot-scope="scope">
-                    {{scope.row.changeTime}}
+                    {{scope.row.changed}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -199,7 +199,7 @@
                   label="操作"
                   width="100">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -221,34 +221,34 @@
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="曲房" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.kojimakingRoom}}
+                    {{scope.row.houseName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="物料" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.material}}
+                    {{scope.row.materialCode + ' ' + scope.row.materialName}}
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="领用容器"
                   width="100">
                   <template slot-scope="scope">
-                    {{scope.row.container}}
+                    {{scope.row.holderName}}
                   </template>
                 </el-table-column>
                 <el-table-column width="160" label="批次">
                   <template slot-scope="scope">
-                    {{scope.row.materialBatch}}
+                    {{scope.row.batch}}
                   </template>
                 </el-table-column>
                 <el-table-column width="120" label="数量">
                   <template slot-scope="scope">
-                    {{scope.row.materialNumber}}
+                    {{scope.row.entryQnt}}
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.unit}}</span>
+                    <span>{{scope.row.entryUom}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作人" width="100">
@@ -258,7 +258,7 @@
                 </el-table-column>
                 <el-table-column label="操作时间" width="300">
                   <template slot-scope="scope">
-                    <span>{{scope.row.changeTime}}</span>
+                    <span>{{scope.row.changed}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -266,7 +266,7 @@
                   label="操作"
                   width="100">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -291,20 +291,32 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator'
-import FormHeader from '@/views/components/formHeader.vue'
+import {KJM_API} from '@/api/api'
 import TextRecord from '@/views/components/textRecord.vue'
 import AuditLog from '@/views/components/AuditLog.vue'
 import {WorkHour, InStock, Material} from '../entity/WorkHour.ts'
 @Component({
   components: {
-    FormHeader,
     TextRecord,
     AuditLog
   }
 })
 export default class Index extends Vue {
-  orderStatus = ''
-  orderNo = ''
+  formHeader = {
+    orderId: '',
+    workShop: '',
+    productDate: '',
+    orderNo: '',
+    materialCode: '',
+    materialName: '',
+    planOutput: 0,
+    orderStatus: '',
+    workShopName: '',
+    orderDate: '',
+    inPotNo: '',
+    inPotNoId: '',
+    inPotNoName: ''
+  }
   workHourList: WorkHour[] = []
   workHourAuditList = []
   inStockList: InStock[] = []
@@ -319,30 +331,85 @@ export default class Index extends Vue {
   // 物料申请状态
   applyMaterielState = ''
   mounted () {
-    this.getOrderList()
-  }
-  getOrderList () {
+    console.log('切换tab页, 不会执行这个方法, 从其他页面跳转过来也不会执行')
+    this.getFormHeader()
     this.getWorkHourList()
     this.getInStockList()
     this.getMaterialList()
   }
+  getFormHeader () {
+    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', {orderId}).then(res => {
+      if (res.data.code === 0 && res.data.list && res.data.list.length > 0) {
+        let item = res.data.list[0]
+        Object.assign(this.formHeader, item)
+      } else {
+        this.$message.error(res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+  }
   getWorkHourList () {
-    for (let i = 0; i < 5; i++) {
-      this.workHourList.push(new WorkHour())
-    }
+    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    this.workHourList = []
+    this.workHourAuditList = []
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIME_API}`, 'POST', {orderId}).then(res => {
+      if (res.data.code === 0) {
+        for (let item of res.data.list) {
+          let workHour = new WorkHour(item)
+          this.workHourList.push(workHour)
+        }
+        this.workHourAuditList = res.data.vrlist
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
   getInStockList () {
-    for (let i = 0; i < 5; i++) {
-      this.inStockList.push(new InStock())
-    }
+    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    this.inStockList = []
+    this.inStockAuditList = []
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGE_API}`, 'POST', {orderId}).then(res => {
+      if (res.data.code === 0) {
+        for (let item of res.data.list) {
+          let instorage = new InStock(item)
+          this.inStockList.push(instorage)
+        }
+        this.inStockAuditList = res.data.vrlist
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
   getMaterialList () {
-    for (let i = 0; i < 5; i++) {
-      this.applyMaterieList.push(new Material())
-    }
+    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    this.applyMaterieList = []
+    this.applyMaterieAuditList = []
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
+      if (res.data.code === 0) {
+        for (let item of res.data.list) {
+          let m = new Material(item)
+          this.applyMaterieList.push(m)
+        }
+        this.applyMaterieAuditList = res.data.vrlist
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
   enbaleEdit (row) {
     row.disabled = false
+  }
+  goBack (flag, row) {
+    console.log(row)
+    this.$message.info(flag)
   }
   submitForm () {
     this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -368,4 +435,15 @@ export default class Index extends Vue {
 }
 </script>
 <style lang="scss">
+.input_bommom {
+  width: 147px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 32px;
+  border-bottom: solid 1px #D8D8D8;
+}
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  margin-bottom: 8px
+}
 </style>
