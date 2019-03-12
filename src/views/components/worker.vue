@@ -129,6 +129,10 @@ export default {
         }
       })
     },
+    // 返回人员列表
+    GetUser () {
+      return this.WorkerDate
+    },
     // 人员保存
     TimeUserSave () {},
     UpdateUser (str, resolve) {

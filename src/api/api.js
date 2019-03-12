@@ -871,6 +871,10 @@ export const KJM_API = {
    */
   OUTTIMEHEADSAVE_API: HOST + '/kjm/timeSheet/update',
   /**
+   * @property {string} OUTTIMEREADYSAVE_API 工时提交
+   */
+  OUTTIMEHEADSUBMIT_API: HOST + '/kjm/timeSheet/submit',
+  /**
    * @property {string} ORDERLIST_API 订单列表
    */
   ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',

@@ -27,26 +27,26 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="提交人员：">
-                <p class="el-input" style="width: 180px">{{formHeader.changer}}</p>
+                <p class="el-input" style="width: 180px">{{headList.changer}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="el-input" style="width: 180px">{{formHeader.changed}}</p>
+                <p class="el-input" style="width: 180px">{{headList.changed}}</p>
               </el-form-item>
             </el-form>
           </el-col>
           <el-col :span="3" style="font-size: 14px;line-height: 32px">
             <div style="float:left">
-              <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
-              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+              <span class="point" :style="{'background': headList.status === 'noPass'? 'red' : headList.status === 'saved'? '#1890f' : headList.status === 'submit' ? '#1890ff' : headList.status === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
+              <span :style="{'color': headList.status === 'noPass'? 'red' : '' }">{{headList.status === 'noPass'? '审核不通过':headList.status === 'saved'? '已保存':headList.status === 'submit' ? '已提交' : headList.status === 'checked'? '通过':headList.status === '已同步' ? '未录入' : headList.status }}</span>
             </div>
           </el-col>
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="GetTimeList">查询</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
-          <template v-if="isRedact" style="float:right; margin-left: 10px;">
+          <template v-if="isRedact && searchCard" style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
             <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
           </template>
@@ -158,12 +158,13 @@ export default {
       searchCard: false,
       factory: [],
       workshop: [],
-      orderStatus: '',
       deptId: '',
       userOrder: {
         orderId: ''
       },
+      headList: {},
       formHeader: {
+        status: '',
         factory: '',
         workShop: '',
         inKjmDate: getNewDate(),
@@ -172,6 +173,23 @@ export default {
       },
       inKjmBatch: '',
       readyTimeDate: {
+        id: '',
+        status: '',
+        classes: '多班',
+        dayChange: '',
+        dayChangeBefore: '',
+        dayChangePre: '',
+        dayChangeAfter: '',
+        midChange: '',
+        midChangeBefore: '',
+        midChangePre: '',
+        midChangeAfter: '',
+        nightChange: '',
+        nightChangeBefore: '',
+        nightChangePre: '',
+        nightChangeAfter: ''
+      },
+      readyTimeDate1: {
         id: '',
         status: '',
         classes: '多班',
@@ -214,17 +232,25 @@ export default {
         return false
       }
       this.searchCard = true
+      this.isRedact = false
       this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           if (data.headList.length === 0) {
             this.uid = this.uuid(32, 62)
+            this.readyTimeDate = this.readyTimeDate1
             this.userOrder.orderId = this.uid
             this.inKjmBatch = data.inKjmBatch
+            this.headList = this.formHeader
+            this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop)
             this.$refs.workerref.getTree(this.formHeader.factory)
           } else {
-            this.readyTimeDate = data.readyList[0]
-            this.formHeader = data.headList[0]
+            if (data.readyList.length === 0) {
+              this.readyTimeDate = this.readyTimeDate1
+            } else {
+              this.readyTimeDate = data.readyList[0]
+            }
+            this.headList = data.headList[0]
             this.userOrder.orderId = data.headList[0].id
             this.inKjmBatch = data.headList[0].inKjmBatch
             this.$refs.workerref.GetTimeUserList(data.userList)
@@ -238,6 +264,14 @@ export default {
     },
     // 保存
     savedOrSubmitForm (str) {
+      if (str === 'submit') {
+        if (!this.readyTimeRul()) {
+          return false
+        }
+        if (!this.$refs.workerref.userrul()) {
+          return false
+        }
+      }
       let that = this
       let headSave = new Promise((resolve, reject) => {
         that.HeadSave(str, resolve, reject)
@@ -248,13 +282,31 @@ export default {
       let userSave = new Promise((resolve, reject) => {
         that.$refs.workerref.UpdateUser(str, resolve, reject)
       })
-      let saveNet = Promise.all([headSave, readySave, userSave])
-      saveNet.then(function () {
-        that.GetTimeList()
-        that.$message.success('保存成功')
-      }, err => {
-        that.$message.error(err)
-      })
+      if (str === 'submit') {
+        let submit = new Promise((resolve, reject) => {
+          that.manHourSubmit(str, resolve, reject)
+        })
+        let saveNet = Promise.all([headSave, readySave, userSave])
+        saveNet.then(function () {
+          let submitNet = Promise.all([submit])
+          submitNet.then(function () {
+            that.GetTimeList()
+            that.$message.success('提交成功')
+          }, err => {
+            that.$message.error(err)
+          })
+        }, err => {
+          that.$message.error(err)
+        })
+      } else if (str === 'saved') {
+        let saveNet = Promise.all([headSave, readySave, userSave])
+        saveNet.then(function () {
+          that.GetTimeList()
+          that.$message.success('保存成功')
+        }, err => {
+          that.$message.error(err)
+        })
+      }
     },
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -265,15 +317,30 @@ export default {
         this.savedOrSubmitForm('submit')
       })
     },
+    // 提交
+    manHourSubmit (str, resolve, reject) {
+      this.$http(`${KJM_API.OUTTIMEHEADSUBMIT_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          this.$message.error(data.msg)
+          if (reject) {
+            reject('提交' + data.msg)
+          }
+        }
+      })
+    },
     // 表头保存
     HeadSave (str, resolve, reject) {
       if (this.uid) {
-        this.formHeader.id = this.uid
-        this.formHeader.addOrupdate = '0'
+        this.headList.id = this.uid
+        this.headList.addOrupdate = '0'
       }
-      this.formHeader.status = str
-      this.formHeader.inKjmBatch = this.inKjmBatch + ''
-      this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.headList.status = str
+      this.headList.inKjmBatch = this.inKjmBatch + ''
+      this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')
@@ -292,6 +359,18 @@ export default {
         this.readyTimeDate.orderId = this.uid
       }
       this.readyTimeDate.status = str
+      this.readyTimeDate.dayChange = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) ? this.readyTimeDate.dayChange + '' : this.readyTimeDate.dayChange)
+      this.readyTimeDate.dayChangeBefore = ((this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) ? this.readyTimeDate.dayChangeBefore + '' : this.readyTimeDate.dayChangeBefore)
+      this.readyTimeDate.dayChangePre = ((this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) ? this.readyTimeDate.dayChangePre + '' : this.readyTimeDate.dayChangePre)
+      this.readyTimeDate.dayChangeAfter = ((this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0) ? this.readyTimeDate.dayChangeAfter + '' : this.readyTimeDate.dayChangeAfter)
+      this.readyTimeDate.midChange = ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) ? this.readyTimeDate.midChange + '' : this.readyTimeDate.midChange)
+      this.readyTimeDate.midChangeBefore = ((this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) ? this.readyTimeDate.midChangeBefore + '' : this.readyTimeDate.midChangeBefore)
+      this.readyTimeDate.midChangePre = ((this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) ? this.readyTimeDate.midChangePre + '' : this.readyTimeDate.midChangePre)
+      this.readyTimeDate.midChangeAfter = ((this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0) ? this.readyTimeDate.midChangeAfter + '' : this.readyTimeDate.midChangeAfter)
+      this.readyTimeDate.nightChange = ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) ? this.readyTimeDate.nightChange + '' : this.readyTimeDate.nightChange)
+      this.readyTimeDate.nightChangeBefore = ((this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) ? this.readyTimeDate.nightChangeBefore + '' : this.readyTimeDate.nightChangeBefore)
+      this.readyTimeDate.nightChangePre = ((this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) ? this.readyTimeDate.nightChangePre + '' : this.readyTimeDate.nightChangePre)
+      this.readyTimeDate.nightChangeAfter = ((this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0) ? this.readyTimeDate.nightChangeAfter + '' : this.readyTimeDate.nightChangeAfter)
       this.$http(`${KJM_API.OUTTIMEREADYSAVE_API}`, 'POST', this.readyTimeDate).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -304,6 +383,39 @@ export default {
           }
         }
       })
+    },
+    // 校验
+    readyTimeRul () {
+      let ty = true
+      let day = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) && (this.readyTimeDate.dayChangeBefore || this.readyTimeDate.dayChangeBefore === 0) && (this.readyTimeDate.dayChangePre || this.readyTimeDate.dayChangePre === 0) && (this.readyTimeDate.dayChangeAfter || this.readyTimeDate.dayChangeAfter === 0))
+      let mid = ((this.readyTimeDate.midChange || this.readyTimeDate.midChange === 0) && (this.readyTimeDate.midChangeBefore || this.readyTimeDate.midChangeBefore === 0) && (this.readyTimeDate.midChangePre || this.readyTimeDate.midChangePre === 0) && (this.readyTimeDate.midChangeAfter || this.readyTimeDate.midChangeAfter === 0))
+      let night = ((this.readyTimeDate.nightChange || this.readyTimeDate.nightChange === 0) && (this.readyTimeDate.nightChangeBefore || this.readyTimeDate.nightChangeBefore === 0) && (this.readyTimeDate.nightChangePre || this.readyTimeDate.nightChangePre === 0) && (this.readyTimeDate.nightChangeAfter || this.readyTimeDate.nightChangeAfter === 0))
+      if (this.readyTimeDate.classes === '白班') {
+        if (day) {} else {
+          ty = false
+          this.$message.error('准备时间白班必填项未填写完全')
+          return false
+        }
+      } else if (this.readyTimeDate.classes === '中班') {
+        if (mid) {} else {
+          ty = false
+          this.$message.error('准备时间中班必填项未填写完全')
+          return false
+        }
+      } else if (this.readyTimeDate.classes === '夜班') {
+        if (night) {} else {
+          ty = false
+          this.$message.error('准备时间夜班必填项未填写完全')
+          return false
+        }
+      } else if (this.readyTimeDate.classes === '多班') {
+        if (day && night) {} else {
+          ty = false
+          this.$message.error('准备时间多班必填项未填写完全')
+          return false
+        }
+      }
+      return ty
     },
     // 获取工厂
     Getdeptcode () {
