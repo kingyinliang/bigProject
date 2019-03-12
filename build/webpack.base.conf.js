@@ -54,12 +54,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: Object.assign(vueLoaderConfig, {
-          loaders: {
-            ts: "ts-loader",
-            tsx: "babel-loader!ts-loader"
-          }
-        })
+        options: vueLoaderConfig
+        // options: Object.assign(vueLoaderConfig, {
+        //   loaders: {
+        //     ts: "ts-loader",
+        //     tsx: "babel-loader!ts-loader"
+        //   }
+        // })
       },
       {
         test: /\.tsx?$/,

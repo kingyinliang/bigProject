@@ -52,7 +52,13 @@ export default {
       // normal/abnormal 正常生产/无生产
       productStatus: 'normal',
       // 订单管理的计划日期
-      orderDate: '2019-02-24'
+      orderDate: '2019-02-24',
+      // 首页跳转到工序页参数
+      params: {
+        orderNo: '',
+        orderId: '',
+        orderHouseId: ''
+      }
     }
   },
   mutations: {
@@ -142,6 +148,9 @@ export default {
     /** 制曲 start */
     updateZQWorkshop (state, name) {
       state.ZQWorkshop = name
+    },
+    updateZQParams (state, name) {
+      state.ZQWorkshop.params = name
     }
     /** 制曲 end */
   }

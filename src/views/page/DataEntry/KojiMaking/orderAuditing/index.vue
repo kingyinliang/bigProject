@@ -4,7 +4,35 @@
       <el-card class="searchCard newCard" style="margin:0">
         <el-row type="flex">
           <el-col :span="21">
-            <!-- <form-header :formHeader="formHeader" :isRedact="false" @updateProductDateCallback='updateProductDate'></form-header> -->
+            <el-form :inline="true" size="small" label-width="85px">
+              <el-form-item label="生产车间：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="曲房号：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="生产订单：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="生产品项：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="生产日期：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="入罐号：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="连续蒸煮号：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="提交人员：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+              <el-form-item label="提交时间：">
+                <p class="input_bommom"></p>
+              </el-form-item>
+            </el-form>
           </el-col>
           <el-col :span="3" >
             <div style="float:right;line-height:31px;font-size:14px">

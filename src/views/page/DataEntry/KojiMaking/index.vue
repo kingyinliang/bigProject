@@ -52,7 +52,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div>{{orderList[index].houseNo}}</div><div>{{orderList[index].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index].orderStatus}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -67,16 +67,16 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : 'red'}" @click="goPage('煮豆', orderList[index])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].beanStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color':orderList[index].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index])">煮豆</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index])">看曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].guardStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index])">出曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].outStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index])">出曲</div>
                     </el-tooltip>
                   </div>
                 </div>
@@ -86,7 +86,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#5BD171">{{orderList[index + 1].houseNo}}</div><div>{{orderList[index + 1].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 1].orderStatus}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 1].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -101,16 +101,16 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].beanStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index + 1])">看曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].guardStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index + 1])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index + 1])">出曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].outStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index + 1])">出曲</div>
                     </el-tooltip>
                   </div>
                 </div>
@@ -120,7 +120,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#2C92F6">{{orderList[index + 2].houseNo}}</div><div>{{orderList[index + 2].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 2].orderStatus}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 2].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -135,16 +135,16 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                    <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 2].beanStatus" placement="top-start">
+                    <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('看曲', orderList[index + 2])">看曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 2].guardStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index + 2])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" content="工序状态" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].orderStatus === 'noPass'? 'red' : ''}" @click="goPage('出曲', orderList[index + 2])">出曲</div>
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 2].outStatus" placement="top-start">
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index + 2])">出曲</div>
                     </el-tooltip>
                   </div>
                 </div>
@@ -256,6 +256,7 @@ import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
 import officialWorker from '@/views/components/officialWorker.vue'
 import {Employee} from './entity/Employee.ts'
 import {DayType, EMPType} from './entity/Enum.ts'
+import {House} from './entity/House.ts'
 
 @Component({
   components: {
@@ -289,7 +290,7 @@ export default class Index extends Vue {
   pageSize: number = 10
   totalCount: number = 0
   // 首页订单
-  orderList = []
+  orderList:Array<House> = []
 
   mounted () {
     this.getFactory()
@@ -424,9 +425,13 @@ export default class Index extends Vue {
     }
   }
   retrieveOrderList (params) {
+    this.orderList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
-        this.orderList = res.data.list
+        for (let item of res.data.list) {
+          let order = new House(item.orderId, item.orderNo, item.materialCode, item.materialName, item.houseNo, item.inPotNoName, item.inEndTime, item.orderHouseId, item.status, item.beanStatus, item.guardStatus, item.outStatus)
+          this.orderList.push(order)
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -574,42 +579,14 @@ export default class Index extends Vue {
       }
     })
   }
-  goPage (page, item) {
-    let params = {
-      factoryId: this.params.factoryId,
-      factoryName: this.params.factoryName,
-      workshopId: this.params.workshopId,
-      workshopName: this.params.workshopName,
-      materialCode: item.materialCode,
-      materialName: item.materialName,
-      orderId: item.orderId,
-      orderNo: item.orderNo,
-      orderHouseId: item.orderHouseId,
-      // 订单状态
-      status: item.orderStatus,
-      // 曲房
-      houseId: item.houseNoId,
-      houseNo: item.houseNo,
-      houseName: item.houseNoName,
-      // 入罐
-      inPotId: item.inPotNoId,
-      inPotNo: item.inPotNo,
-      inPotName: item.inPotNoName,
-      // 连续蒸煮
-      cookingId: item.cookingNoId,
-      cookingNo: item.cookingNo,
-      cookingName: item.cookingNoName,
-      // 入曲时间
-      inKjmDate: item.inKjmDate,
-      changed: item.changed,
-      changer: item.changer
-    }
+  goPage (page: string, item: House) {
+    this.$store.commit('common/updateZQParams', {orderId: item.orderId, orderNo: item.orderNo, orderHouseId: item.orderHouseId})
     if (page === '煮豆') {
-      this.$router.push({name: `DataEntry-KojiMaking-BoiledBeans-index`, params})
+      this.$router.push({name: `DataEntry-KojiMaking-BoiledBeans-index`})
     } else if (page === '看曲') {
-      this.$router.push({name: `DataEntry-KojiMaking-Look-index`, params})
+      this.$router.push({name: `DataEntry-KojiMaking-Look-index`})
     } else if (page === '出曲') {
-      this.$router.push({name: `DataEntry-KojiMaking-Out-index`, params})
+      this.$router.push({name: `DataEntry-KojiMaking-Out-index`})
     }
   }
   @Watch('params', {deep: true})
