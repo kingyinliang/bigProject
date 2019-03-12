@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
+// et HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.67:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -908,6 +908,18 @@ export const KJM_API = {
   DOULOOKLIST_API: HOST + '/kjm/guard/list', // list
   DOULOOKZHUSAVE_API: HOST + '/kjm/guard/tech/update', // 工艺 主表
   DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
-  DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update' // 工艺 感官
+  DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update', // 工艺 感官
 
+  /**
+   * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
+   */
+  KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
+  /**
+   * @property {string} KJMAKINGCHECKSTORAGE_API 车间审核生产入库列表
+   */
+  KJMAKINGCHECKSTORAGE_API: HOST + '/sys/midInStorage/list',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALE_API 车间审核物料领用列表
+   */
+  KJMAKINGCHECKMATERIALE_API: HOST + '/sys/midMaterial/list'
 }
