@@ -273,7 +273,7 @@ export default class Index extends Vue {
   //   officialWorker: officialWorker
   // }
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
+  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop.defaultVal))
   factoryList = []
   workshopList = []
   processesList = []
@@ -371,7 +371,7 @@ export default class Index extends Vue {
     this.disabled = flag
   }
   setStore (params) {
-    this.$store.commit('common/updateZQWorkshop', params)
+    this.$store.commit('common/updateZQDefault', params)
   }
   getOrderList () {
     if (this.params.factoryId === '') {

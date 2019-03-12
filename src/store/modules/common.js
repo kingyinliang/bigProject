@@ -41,18 +41,21 @@ export default {
       // yyyyMMdd
       productDate: ''
     },
-    // 制曲车间共享数据
+    // 制曲车间
     ZQWorkshop: {
-      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
-      factoryName: '烟台欣和企业食品有限公司工厂',
-      workshopId: '7E0AA796139E46738A949E88E1272578',
-      workshopName: '制曲一车间',
-      // 制曲日期
-      zqDate: '2019-02-24',
-      // normal/abnormal 正常生产/无生产
-      productStatus: 'normal',
-      // 订单管理的计划日期
-      orderDate: '2019-02-24',
+      // 首页选项默认值
+      defaultVal: {
+        factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
+        factoryName: '烟台欣和企业食品有限公司工厂',
+        workshopId: '7E0AA796139E46738A949E88E1272578',
+        workshopName: '制曲一车间',
+        // 制曲日期
+        zqDate: '2019-03-05',
+        // normal/abnormal 正常生产/无生产
+        productStatus: 'normal',
+        // 订单管理的计划日期
+        orderDate: '2019-03-05'
+      },
       // 首页跳转到工序页参数
       params: {
         orderNo: '',
@@ -146,8 +149,8 @@ export default {
     },
     /* pw 小麦 end */
     /** 制曲 start */
-    updateZQWorkshop (state, name) {
-      state.ZQWorkshop = name
+    updateZQDefault (state, name) {
+      state.ZQWorkshop.defaultVal = name
     },
     updateZQParams (state, name) {
       state.ZQWorkshop.params = name
