@@ -608,11 +608,6 @@ export default class Index extends Vue {
       that.$router.push({name})
     }, 100)
   }
-  beforeRouteLeave (to, from, next) {
-    this.$message.info(to.meta)
-    to.meta.keepAlive = false
-    next()
-  }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false

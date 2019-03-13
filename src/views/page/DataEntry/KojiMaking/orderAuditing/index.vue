@@ -62,7 +62,7 @@
         <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius:15px;overflow:hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未提交'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">报工工时</el-button>
               </el-tooltip>
             </span>
@@ -135,7 +135,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未提交'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
@@ -212,7 +212,7 @@
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未提交'" placement="top-start">
+              <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
                 <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
@@ -356,11 +356,35 @@ export default class Index extends Vue {
     this.workHourAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIME_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0) {
+        let no = 0
+        let sub = 0
+        let che = 0
+        let sav = 0
+        let inState = ''
         for (let item of res.data.list) {
           let workHour = new WorkHour(item)
           this.workHourList.push(workHour)
+          if (item.status === 'noPass') {
+            no = no + 1
+          } else if (item.status === 'submit') {
+            sub = sub + 1
+          } else if (item.status === 'checked') {
+            che = che + 1
+          } else if (item.status === 'saved') {
+            sav = sav + 1
+          }
         }
         this.workHourAuditList = res.data.vrlist
+        if (no > 0) {
+          inState = 'noPass'
+        } else if (sub > 0) {
+          inState = 'submit'
+        } else if (sav > 0) {
+          inState = 'saved'
+        } else if (che > 0) {
+          inState = 'checked'
+        }
+        this.readyState = inState
       } else {
         this.$message.error(res.data.msg)
       }
@@ -374,11 +398,35 @@ export default class Index extends Vue {
     this.inStockAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGE_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0) {
+        let no = 0
+        let sub = 0
+        let che = 0
+        let sav = 0
+        let inState = ''
         for (let item of res.data.list) {
           let instorage = new InStock(item)
           this.inStockList.push(instorage)
+          if (item.status === 'noPass') {
+            no = no + 1
+          } else if (item.status === 'submit') {
+            sub = sub + 1
+          } else if (item.status === 'checked') {
+            che = che + 1
+          } else if (item.status === 'saved') {
+            sav = sav + 1
+          }
         }
         this.inStockAuditList = res.data.vrlist
+        if (no > 0) {
+          inState = 'noPass'
+        } else if (sub > 0) {
+          inState = 'submit'
+        } else if (sav > 0) {
+          inState = 'saved'
+        } else if (che > 0) {
+          inState = 'checked'
+        }
+        this.inStorageState = inState
       } else {
         this.$message.error(res.data.msg)
       }
@@ -391,12 +439,36 @@ export default class Index extends Vue {
     this.applyMaterieList = []
     this.applyMaterieAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
+      let no = 0
+      let sub = 0
+      let che = 0
+      let sav = 0
+      let inState = ''
       if (res.data.code === 0) {
         for (let item of res.data.list) {
           let m = new Material(item)
           this.applyMaterieList.push(m)
+          if (item.status === 'noPass') {
+            no = no + 1
+          } else if (item.status === 'submit') {
+            sub = sub + 1
+          } else if (item.status === 'checked') {
+            che = che + 1
+          } else if (item.status === 'saved') {
+            sav = sav + 1
+          }
         }
         this.applyMaterieAuditList = res.data.vrlist
+        if (no > 0) {
+          inState = 'noPass'
+        } else if (sub > 0) {
+          inState = 'submit'
+        } else if (sav > 0) {
+          inState = 'saved'
+        } else if (che > 0) {
+          inState = 'checked'
+        }
+        this.applyMaterielState = inState
       } else {
         this.$message.error(res.data.msg)
       }
@@ -408,7 +480,7 @@ export default class Index extends Vue {
     row.disabled = false
   }
   goBack (flag, row) {
-    console.log('回退', row)
+    row.status = 'noPass'
     if (flag === '报工工时') {
       this.timeGoBack(row)
     } else if (flag === '生产入库') {
@@ -418,7 +490,6 @@ export default class Index extends Vue {
     }
   }
   timeGoBack (row) {
-    row.status = 'noPass'
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
@@ -429,9 +500,7 @@ export default class Index extends Vue {
       console.log('catch data::', err)
     })
   }
-
   storageGoBack (row) {
-    row.status = 'noPass'
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
@@ -442,9 +511,7 @@ export default class Index extends Vue {
       console.log('catch data::', err)
     })
   }
-
   materialGoBack (row) {
-    row.status = 'noPass'
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
@@ -457,22 +524,66 @@ export default class Index extends Vue {
   }
 
   submitForm () {
+    let that = this
     this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
+      let net0 = new Promise((resolve, reject) => {
+        that.timeSubmit(resolve)
+      })
+      let net1 = new Promise((resolve, reject) => {
+        that.storageSubmit(resolve)
+      })
+      let net2 = new Promise((resolve, reject) => {
+        that.materialSubmit(resolve)
+      })
+      let net3 = Promise.all([net0, net1, net2])
+      net3.then(function () {
+        that.$message.success('提交成功')
+      })
     })
   }
 
-  timeSubmit () {
-
+  timeSubmit (resoved) {
+    this.workHourList.forEach(function (item) { item.status = 'submit' })
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
+      if (res.data.code !== 0) {
+        this.$message.error('报工工时提交失败：' + res.data.msg)
+      }
+      if (resoved) {
+        resoved('resoved')
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
-  storageSubmit () {
-
+  storageSubmit (resoved) {
+    this.inStockList.forEach(function (item) { item.status = 'submit' })
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
+      if (res.data.code !== 0) {
+        this.$message.error('生产入库提交失败：' + res.data.msg)
+      }
+      if (resoved) {
+        resoved('resoved')
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
-  materialSubmit () {
-
+  materialSubmit (resoved) {
+    this.applyMaterieList.forEach(function (item) { item.status = 'submit' })
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALESUBMIT_API}`, 'POST', this.applyMaterieList).then(res => {
+      if (res.data.code !== 0) {
+        this.$message.error('物料领用提交失败：' + res.data.msg)
+      }
+      if (resoved) {
+        resoved('resoved')
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
   // 报工工时
   setReadyStatus (status) {

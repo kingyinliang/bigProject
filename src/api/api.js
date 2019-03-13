@@ -923,6 +923,10 @@ export const KJM_API = {
    */
   KJMAKINGCHECKTIMEBACK_API: HOST + '/sys/midTimeSheet/goBack',
   /**
+   * @property {string} KJMAKINGCHECKTIMESUBMIT_API 车间审核工时提交
+   */
+  KJMAKINGCHECKTIMESUBMIT_API: HOST + '/sys/midTimeSheet/submit',
+  /**
    * @property {string} KJMAKINGCHECKSTORAGE_API 车间审核生产入库列表
    */
   KJMAKINGCHECKSTORAGE_API: HOST + '/sys/midInStorage/list',
@@ -931,11 +935,19 @@ export const KJM_API = {
    */
   KJMAKINGCHECKSTORAGEBACK_API: HOST + '/sys/midInStorage/goBack',
   /**
+   * @property {string} KJMAKINGCHECKSTORAGESUBMIT_API 车间审核生产入库提交
+   */
+  KJMAKINGCHECKSTORAGESUBMIT_API: HOST + '/sys/midInStorage/submit',
+  /**
    * @property {string} KJMAKINGCHECKMATERIALE_API 车间审核物料领用列表
    */
   KJMAKINGCHECKMATERIALE_API: HOST + '/sys/midMaterial/list',
   /**
    * @property {string} KJMAKINGCHECKMATERIALEBACK_API 车间审核物料领用回退
    */
-  KJMAKINGCHECKMATERIALEBACK_API: HOST + '/sys/midMaterial/list'
+  KJMAKINGCHECKMATERIALEBACK_API: HOST + '/sys/midMaterial/goBack',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
+   */
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
 }
