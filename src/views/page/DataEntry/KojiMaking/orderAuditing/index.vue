@@ -46,7 +46,7 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right;margin-left:10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-orderManage-index'})">返回</el-button>
-            <el-button type="primary" size="small" @click="submitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+            <el-button type="primary" size="small" @click="submitForm">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -69,19 +69,19 @@
             <el-row>
               <el-table header-row-class-name="tableHead" :data="workHourList"  border tooltip-effect="dark" >
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
-                <el-table-column label="工序" width="100">
+                <el-table-column label="工序" width="140">
                   <template slot-scope="scope">
                     {{scope.row.productLineName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="曲房" width="100">
+                <el-table-column label="曲房" width="120">
                   <template slot-scope="scope">
                     {{scope.row.houseName}}
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="准备工时"
-                  width="80">
+                  width="100">
                   <template slot-scope="scope">
                     {{scope.row.confActivity1}}
                   </template>
@@ -338,7 +338,7 @@ export default class Index extends Vue {
     this.getMaterialList()
   }
   getFormHeader () {
-    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0 && res.data.list && res.data.list.length > 0) {
         let item = res.data.list[0]
@@ -351,7 +351,7 @@ export default class Index extends Vue {
     })
   }
   getWorkHourList () {
-    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.workHourList = []
     this.workHourAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIME_API}`, 'POST', {orderId}).then(res => {
@@ -369,7 +369,7 @@ export default class Index extends Vue {
     })
   }
   getInStockList () {
-    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.inStockList = []
     this.inStockAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGE_API}`, 'POST', {orderId}).then(res => {
@@ -387,7 +387,7 @@ export default class Index extends Vue {
     })
   }
   getMaterialList () {
-    let orderId = this.$store.state.common.ZQWorkshop.params.orderId
+    let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.applyMaterieList = []
     this.applyMaterieAuditList = []
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
@@ -408,17 +408,71 @@ export default class Index extends Vue {
     row.disabled = false
   }
   goBack (flag, row) {
-    console.log(row)
-    this.$message.info(flag)
+    console.log('回退', row)
+    if (flag === '报工工时') {
+      this.timeGoBack(row)
+    } else if (flag === '生产入库') {
+      this.storageGoBack(row)
+    } else if (flag === '物料领用') {
+      this.materialGoBack(row)
+    }
   }
+  timeGoBack (row) {
+    row.status = 'noPass'
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', row).then(res => {
+      if (res.data.code === 0) {
+        this.$message.success('数据回退成功!')
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+  }
+
+  storageGoBack (row) {
+    row.status = 'noPass'
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGEBACK_API}`, 'POST', row).then(res => {
+      if (res.data.code === 0) {
+        this.$message.success('数据回退成功!')
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+  }
+
+  materialGoBack (row) {
+    row.status = 'noPass'
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALEBACK_API}`, 'POST', row).then(res => {
+      if (res.data.code === 0) {
+        this.$message.success('数据回退成功!')
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+  }
+
   submitForm () {
     this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      // TODO
     })
+  }
+
+  timeSubmit () {
+
+  }
+  storageSubmit () {
+
+  }
+  materialSubmit () {
+
   }
   // 报工工时
   setReadyStatus (status) {

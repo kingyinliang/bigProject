@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// et HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.67:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -919,11 +919,23 @@ export const KJM_API = {
    */
   KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
   /**
+   * @property {string} KJMAKINGCHECKTIMEBACK_API 车间审核工时回退
+   */
+  KJMAKINGCHECKTIMEBACK_API: HOST + '/sys/midTimeSheet/goBack',
+  /**
    * @property {string} KJMAKINGCHECKSTORAGE_API 车间审核生产入库列表
    */
   KJMAKINGCHECKSTORAGE_API: HOST + '/sys/midInStorage/list',
   /**
+   * @property {string} KJMAKINGCHECKSTORAGEBACK_API 车间审核生产入库回退
+   */
+  KJMAKINGCHECKSTORAGEBACK_API: HOST + '/sys/midInStorage/goBack',
+  /**
    * @property {string} KJMAKINGCHECKMATERIALE_API 车间审核物料领用列表
    */
-  KJMAKINGCHECKMATERIALE_API: HOST + '/sys/midMaterial/list'
+  KJMAKINGCHECKMATERIALE_API: HOST + '/sys/midMaterial/list',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALEBACK_API 车间审核物料领用回退
+   */
+  KJMAKINGCHECKMATERIALEBACK_API: HOST + '/sys/midMaterial/list'
 }

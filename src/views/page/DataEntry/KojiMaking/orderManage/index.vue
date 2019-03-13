@@ -18,7 +18,7 @@
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="计划日期：" label-width="70px">
+                <el-form-item label="订单日期：" label-width="70px">
                   <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
               </el-form>
@@ -85,7 +85,6 @@
                       <template slot-scope="scope">
                         <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
                         <span class="operator" v-if="scope.row.orderStatus === '待审核'" @click="orderCheck(scope.row)">核对</span>
-                        <span class="operator" v-if="true" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -316,7 +315,7 @@ export default class Index extends Vue {
   //   officialWorker: officialWorker
   // }
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop))
+  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop.defaultVal))
   orderList:Order[] = []
   orderDetailList:OrderDetail[] = []
   selectedDetailList:OrderDetail[] = []
@@ -409,7 +408,7 @@ export default class Index extends Vue {
     })
   }
   setStore (params) {
-    // this.$store.commit('common/updateZQDefault', params)
+    this.$store.commit('common/updateZQDefault', params)
   }
   getOrderList () {
     if (this.params.factoryId === '') {
@@ -421,7 +420,7 @@ export default class Index extends Vue {
       return
     }
     if (this.params.orderDate === null || this.params.orderDate === '') {
-      this.$message.error('请选择计划日期')
+      this.$message.error('请选择订单日期')
       return
     }
     // 保存选项值到common store
@@ -526,6 +525,7 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.dialogFormVisible = false
+        this.getOrderList()
         this.retrieveDetail(this.splitDetailList[0].orderId)
       } else {
         this.$message.error(res.data.msg)
@@ -581,6 +581,13 @@ export default class Index extends Vue {
       this.$message.error('请选择删除项')
       return
     }
+    for (let row of this.selectedDetailList) {
+      // 提交或者通过的数据不能删除
+      if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
+        this.$message.error(`${row.status}的数据不可删除`)
+        return
+      }
+    }
     this.$confirm('是否删除所选项?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -603,7 +610,7 @@ export default class Index extends Vue {
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
     if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
-      this.$message.error('数据不可修改')
+      this.$message.error(`${row.status}的数据不可修改`)
       return
     }
     this.detailForm = row.clone()
@@ -646,8 +653,22 @@ export default class Index extends Vue {
     }
   }
   orderCheck (row) {
-    this.$store.commit('common/updateZQParams', {orderId: row.orderId})
-    this.$router.push({ name: `DataEntry-KojiMaking-orderAuditing-index` })
+    this.$store.commit('common/updateZQCheckParamsOrderNo', row.orderNo)
+    this.$store.commit('common/updateZQCheckParamsOrderId', row.orderId)
+    this.pushPage('DataEntry-KojiMaking-orderAuditing-index')
+  }
+  get mainTabs () {
+    return this.$store.state.common.mainTabs
+  }
+  set mainTabs (val) {
+    this.$store.commit('common/updateMainTabs', val)
+  }
+  pushPage (name) {
+    this.mainTabs = this.mainTabs.filter(item => item.name !== name)
+    let that = this
+    setTimeout(function () {
+      that.$router.push({name})
+    }, 100)
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {

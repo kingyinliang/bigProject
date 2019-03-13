@@ -43,24 +43,34 @@ export default {
     },
     // 制曲车间
     ZQWorkshop: {
-      // 首页选项默认值
+      // 默认值
       defaultVal: {
         factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
         factoryName: '烟台欣和企业食品有限公司工厂',
         workshopId: '7E0AA796139E46738A949E88E1272578',
         workshopName: '制曲一车间',
         // 制曲日期
-        zqDate: '2019-03-05',
+        zqDate: '2019-03-13',
         // normal/abnormal 正常生产/无生产
         productStatus: 'normal',
-        // 订单管理的计划日期
-        orderDate: '2019-03-05'
+        // 订单管理页的订单日期
+        orderDate: '2019-03-03'
       },
       // 首页跳转到工序页参数
       params: {
         orderNo: '',
         orderId: '',
-        orderHouseId: ''
+        // 煮豆
+        beanOrderHouseId: '',
+        // 出曲
+        outOrderHouseId: '',
+        // 看曲
+        lookOrderHouseId: ''
+      },
+      // 订单管理页跳转到车间审核页的参数
+      checkParams: {
+        orderNo: '',
+        orderId: ''
       }
     }
   },
@@ -152,8 +162,26 @@ export default {
     updateZQDefault (state, name) {
       state.ZQWorkshop.defaultVal = name
     },
-    updateZQParams (state, name) {
-      state.ZQWorkshop.params = name
+    updateZQParamsOrderNo (state, name) {
+      state.ZQWorkshop.params.orderNo = name
+    },
+    updateZQParamsOrderId (state, name) {
+      state.ZQWorkshop.params.orderId = name
+    },
+    updateZQParamsBeanHouseId (state, name) {
+      state.ZQWorkshop.params.beanOrderHouseId = name
+    },
+    updateZQParamsOutHouseId (state, name) {
+      state.ZQWorkshop.params.outOrderHouseId = name
+    },
+    updateZQParamsLookHouseId (state, name) {
+      state.ZQWorkshop.params.lookOrderHouseId = name
+    },
+    updateZQCheckParamsOrderNo (state, name) {
+      state.ZQWorkshop.checkParams.orderNo = name
+    },
+    updateZQCheckParamsOrderId (state, name) {
+      state.ZQWorkshop.checkParams.orderId = name
     }
     /** 制曲 end */
   }

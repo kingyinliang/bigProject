@@ -24,7 +24,7 @@
                 <el-form-item label="生产状态：" label-width="70px">
                   <el-select v-model="params.productStatus" class="selectwpx" style="width:140px">
                     <el-option label="正常生产" value="normal"></el-option>
-                    <el-option label="无生产" value="abnormal" v-if="isAuth('wht:user:listUser')"></el-option>
+                    <el-option label="无生产" value="abnormal"></el-option>
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -33,7 +33,7 @@
               <el-row class="rowButton">
                 <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
                 <template v-if="params.productStatus === 'abnormal'">
-                  <el-button v-if="searched && disabled && isAuth('wht:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
+                  <el-button v-if="searched && disabled" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
                   <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float:right">返回</el-button>
                 </template>
                 <template v-if="params.productStatus === 'abnormal' && !disabled">
@@ -219,7 +219,7 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" v-if="isAuth('wht:user:delUser')"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" ></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -293,12 +293,18 @@ export default class Index extends Vue {
   orderList:Array<House> = []
 
   mounted () {
+    console.log('params', this.params)
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getProcess(this.params.workshopId)
     this.getTree()
   }
-
+  get mainTabs () {
+    return this.$store.state.common.mainTabs
+  }
+  set mainTabs (val) {
+    this.$store.commit('common/updateMainTabs', val)
+  }
   get countMan (): number {
     let num: number = 0
     if (this.totalList && this.totalList.length > 0) {
@@ -580,14 +586,32 @@ export default class Index extends Vue {
     })
   }
   goPage (page: string, item: House) {
-    this.$store.commit('common/updateZQParams', {orderId: item.orderId, orderNo: item.orderNo, orderHouseId: item.orderHouseId})
+    this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)
+    this.$store.commit('common/updateZQParamsOrderId', item.orderId)
+    let name = ''
     if (page === '煮豆') {
-      this.$router.push({name: `DataEntry-KojiMaking-BoiledBeans-index`})
+      this.$store.commit('common/updateZQParamsBeanHouseId', item.orderHouseId)
+      name = 'DataEntry-KojiMaking-BoiledBeans-index'
     } else if (page === '看曲') {
-      this.$router.push({name: `DataEntry-KojiMaking-Look-index`})
+      this.$store.commit('common/updateZQParamsLookHouseId', item.orderHouseId)
+      name = 'DataEntry-KojiMaking-Look-index'
     } else if (page === '出曲') {
-      this.$router.push({name: `DataEntry-KojiMaking-Out-index`})
+      this.$store.commit('common/updateZQParamsOutHouseId', item.orderHouseId)
+      name = 'DataEntry-KojiMaking-Out-index'
     }
+    this.pushPage(name)
+  }
+  pushPage (name) {
+    this.mainTabs = this.mainTabs.filter(item => item.name !== name)
+    let that = this
+    setTimeout(function () {
+      that.$router.push({name})
+    }, 100)
+  }
+  beforeRouteLeave (to, from, next) {
+    this.$message.info(to.meta)
+    to.meta.keepAlive = false
+    next()
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
