@@ -10,7 +10,6 @@ import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
 import SentryUtil from '@/net/sentryUtil'
 import '@/assets/scss/index.scss'
-import $ from 'jquery'
 import { version } from '@/version'
 import App from './App.vue'
 // import 'script-loader!file-saver'
@@ -20,6 +19,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
 
+console.log($)
 // 挂载全局
 Vue.prototype.$http = httpProxy // ajax请求方法
 Vue.prototype.isAuth = isAuth// 权限方法

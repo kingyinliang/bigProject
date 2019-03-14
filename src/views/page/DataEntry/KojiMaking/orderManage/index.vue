@@ -84,7 +84,7 @@
                       width="80">
                       <template slot-scope="scope">
                         <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
-                        <span class="operator" v-if="scope.row.orderStatus === '待审核'" @click="orderCheck(scope.row)">核对</span>
+                        <span class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
                   </el-table>

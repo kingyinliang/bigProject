@@ -37,7 +37,7 @@
           <el-col :span="3" >
             <div style="float:right;line-height:31px;font-size:14px">
               <div style="float:left">
-                <span class="point" :style="{'background': formHeader.orderStatus === 'noPass'? 'red' : formHeader.orderStatus === 'saved'? '#1890f' : formHeader.orderStatus === 'submit' ? '#1890ff' : formHeader.orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
+                <span class="point" :style="{'background': formHeader.orderStatus === 'noPass'? 'red' : formHeader.orderStatus === 'saved'? '#1890f' : formHeader.orderStatus === 'submit' ? '#1890ff' : formHeader.orderStatus === '已拆分' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
               </div>
               <span :style="{'color': formHeader.orderStatus === 'noPass'? 'red' : '' }">{{formHeader.orderStatus === 'noPass'? '审核不通过' : formHeader.orderStatus === 'saved' ? '已保存' : formHeader.orderStatus === 'submit' ? '已提交' : formHeader.orderStatus === 'checked' ? '通过':formHeader.orderStatus === '已同步' ? '已同步' : formHeader.orderStatus === '已拆分' ? '未录入' :  formHeader.orderStatus === 'toBeAudited' ? '待审核' : formHeader.orderStatus}}</span>
             </div>
@@ -46,7 +46,7 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right;margin-left:10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-orderManage-index'})">返回</el-button>
-            <el-button type="primary" size="small" @click="submitForm">提交</el-button>
+            <el-button type="primary" size="small" @click="submitForm" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked'">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -62,7 +62,7 @@
         <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius:15px;overflow:hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked' ? '通过': readyState === 'toBeAudited' ? '待审核' : '未录入'" placement="top-start">
                 <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">报工工时</el-button>
               </el-tooltip>
             </span>
@@ -121,8 +121,8 @@
                   label="操作"
                   width="145">
                   <template slot-scope="scope">
-                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)">编辑</el-button>
-                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)">退回</el-button>
+                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">编辑</el-button>
+                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -135,7 +135,7 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':inStorageState === 'toBeAudited'?'待审核':'未录入'" placement="top-start">
                 <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
               </el-tooltip>
             </span>
@@ -199,7 +199,7 @@
                   label="操作"
                   width="100">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -212,7 +212,7 @@
           </el-tab-pane>
           <el-tab-pane name="3">
             <span slot="label" class="spanview">
-              <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':applyMaterielState === 'toBeAudited'? '待审核' : '未录入'" placement="top-start">
                 <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
               </el-tooltip>
             </span>
@@ -266,7 +266,7 @@
                   label="操作"
                   width="100">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -331,7 +331,6 @@ export default class Index extends Vue {
   // 物料申请状态
   applyMaterielState = ''
   mounted () {
-    console.log('切换tab页, 不会执行这个方法, 从其他页面跳转过来也不会执行')
     this.getFormHeader()
     this.getWorkHourList()
     this.getInStockList()
@@ -360,6 +359,7 @@ export default class Index extends Vue {
         let sub = 0
         let che = 0
         let sav = 0
+        let tobe = 0
         let inState = ''
         for (let item of res.data.list) {
           let workHour = new WorkHour(item)
@@ -372,11 +372,15 @@ export default class Index extends Vue {
             che = che + 1
           } else if (item.status === 'saved') {
             sav = sav + 1
+          } else if (item.status === 'toBeAudited') {
+            ++tobe
           }
         }
         this.workHourAuditList = res.data.vrlist
         if (no > 0) {
           inState = 'noPass'
+        } else if (tobe > 0) {
+          inState = 'toBeAudited'
         } else if (sub > 0) {
           inState = 'submit'
         } else if (sav > 0) {
@@ -402,6 +406,7 @@ export default class Index extends Vue {
         let sub = 0
         let che = 0
         let sav = 0
+        let tobe = 0
         let inState = ''
         for (let item of res.data.list) {
           let instorage = new InStock(item)
@@ -414,11 +419,15 @@ export default class Index extends Vue {
             che = che + 1
           } else if (item.status === 'saved') {
             sav = sav + 1
+          } else if (item.status === 'toBeAudited') {
+            ++tobe
           }
         }
         this.inStockAuditList = res.data.vrlist
         if (no > 0) {
           inState = 'noPass'
+        } else if (tobe > 0) {
+          inState = 'toBeAudited'
         } else if (sub > 0) {
           inState = 'submit'
         } else if (sav > 0) {
@@ -443,6 +452,7 @@ export default class Index extends Vue {
       let sub = 0
       let che = 0
       let sav = 0
+      let tobe = 0 // 待审核
       let inState = ''
       if (res.data.code === 0) {
         for (let item of res.data.list) {
@@ -456,11 +466,15 @@ export default class Index extends Vue {
             che = che + 1
           } else if (item.status === 'saved') {
             sav = sav + 1
+          } else if (item.status === 'toBeAudited') {
+            ++tobe
           }
         }
         this.applyMaterieAuditList = res.data.vrlist
         if (no > 0) {
           inState = 'noPass'
+        } else if (tobe > 0) {
+          inState = 'toBeAudited'
         } else if (sub > 0) {
           inState = 'submit'
         } else if (sav > 0) {

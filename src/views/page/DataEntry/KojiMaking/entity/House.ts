@@ -30,6 +30,8 @@ export class House {
   get status (): string {
     if (this._status === '已同步') {
       return Status.UNDO
+    } else if (this._status === 'toBeAudited') {
+      return Status.TOBE // 待审核
     } else if (this._status === 'saved') {
       return Status.SAVED
     } else if (this._status === 'submit') {
@@ -47,6 +49,8 @@ export class House {
   get beanStatus (): string {
     if (this._beanStatus === '已同步') {
       return Status.UNDO
+    } else if (this._beanStatus === 'toBeAudited') {
+      return Status.TOBE // 待审核
     } else if (this._beanStatus === 'saved') {
       return Status.SAVED
     } else if (this._beanStatus === 'submit') {
@@ -64,6 +68,8 @@ export class House {
   get guardStatus (): string {
     if (this._guardStatus === '已同步') {
       return Status.UNDO
+    } else if (this._guardStatus === 'toBeAudited') {
+      return Status.TOBE // 待审核
     } else if (this._guardStatus === 'saved') {
       return Status.SAVED
     } else if (this._guardStatus === 'submit') {
@@ -81,6 +87,8 @@ export class House {
   get outStatus (): string {
     if (this._outStatus === '已同步') {
       return Status.UNDO
+    } else if (this._outStatus === 'toBeAudited') {
+      return Status.TOBE // 待审核
     } else if (this._outStatus === 'saved') {
       return Status.SAVED
     } else if (this._outStatus === 'submit') {

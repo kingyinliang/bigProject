@@ -56,6 +56,8 @@ export class OrderDetail extends Order {
   get status (): string {
     if (this._status === '已同步') {
       return Status.UNDO
+    } else if (this._status === 'toBeAudited') {
+      return Status.TOBE // 待审核
     } else if (this._status === 'saved') {
       return Status.SAVED
     } else if (this._status === 'submit') {
