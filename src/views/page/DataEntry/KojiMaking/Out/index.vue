@@ -4,7 +4,7 @@
       <el-card class="searchCard  newCard">
         <el-row type="flex">
           <el-col>
-            <form-head :formHeader="formHeader"></form-head>
+            <form-head :formHeader="formHeader" :isRedact="isRedact"></form-head>
           </el-col>
           <el-col style="width:180px;font-size: 14px;line-height: 32px">
             <div style="float: right;">
@@ -103,7 +103,7 @@ export default {
     // 获取表头
     GetOrderList () {
       this.$http(`${KJM_API.FORMHEAD_API}`, 'POST', {
-        id: this.$route.params.orderHouseId
+        id: this.ZQWorkshop.params.outOrderHouseId
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.list[0]
@@ -213,7 +213,11 @@ export default {
       this.InStockStatus = status
     }
   },
-  computed: {},
+  computed: {
+    ZQWorkshop: {
+      get () { return this.$store.state.common.ZQWorkshop }
+    }
+  },
   components: {
     FormHead,
     Meateriel,

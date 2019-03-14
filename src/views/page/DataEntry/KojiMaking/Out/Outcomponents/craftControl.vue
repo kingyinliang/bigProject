@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row class="clearfix">
+    <el-row class="clearfix" style="margin-bottom: 10px">
       <el-button type="primary" @click="SavedCraftControl('submit')" size="small" :disabled="!isRedact" style="float: right">提交</el-button>
       <el-button type="primary" @click="SavedCraftControl('saved')" size="small" :disabled="!isRedact" style="float: right;margin-right: 20px">保存</el-button>
     </el-row>
@@ -92,7 +92,16 @@ export default {
     },
     //  工艺保存
     SavedCraftControl (str) {
-      this.CraftControlDate.status = str
+      if (str === 'submit') {
+        if (!this.TechRul()) {
+          return false
+        }
+      }
+      if (this.CraftControlDate.status) {
+        if (this.CraftControlDate.status === 'saved') { this.CraftControlDate.status = str } else if (this.CraftControlDate.status === 'noPass' && str === 'submit') { this.CraftControlDate.status = str }
+      } else {
+        this.CraftControlDate.status = str
+      }
       this.CraftControlDate.orderHouseId = this.formHeader.id
       this.$http(`${KJM_API.OUTTECHSAVE_API}`, 'POST', [this.CraftControlDate]).then(({data}) => {
         if (data.code === 0) {
@@ -106,6 +115,18 @@ export default {
         }
       })
     },
+    TechRul () {
+      let ty = true
+      let windSpeed = this.CraftControlDate.windSpeedOne || this.CraftControlDate.windSpeedTwo || this.CraftControlDate.windSpeedThree || this.CraftControlDate.windSpeedFour || this.CraftControlDate.windSpeedFive
+      let blendTemp = this.CraftControlDate.blendTempOne || this.CraftControlDate.blendTempTwo || this.CraftControlDate.blendTempThree || this.CraftControlDate.blendTempFour || this.CraftControlDate.blendTempFive
+      let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive
+      if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator) {} else {
+        ty = false
+        this.$message.error('工艺控制必填项未填')
+      }
+      return ty
+    },
+    // 操作人下拉
     selectUser (prolineId) {
       this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
         deptId: prolineId,
