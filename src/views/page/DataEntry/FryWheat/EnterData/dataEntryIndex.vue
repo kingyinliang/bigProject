@@ -35,7 +35,7 @@
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
+        <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -136,6 +136,9 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     // 获取表头
     GetOrderList () {
       this.isRedact = false
@@ -289,33 +292,21 @@ export default {
     },
     // 准备时间状态
     SetReadyStatus (status) {
-      // let active = parseInt(this.activeName) + 1
-      // if (active === 4) {
-      //   this.activeName = '1'
-      // } else {
-      //   this.activeName = active + ''
-      // }
       this.readyState = status
+      // 强制刷新tabs
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     // 入库状态
     setInStorageState (status) {
-      // let active = parseInt(this.activeName) + 1
-      // if (active === 4) {
-      //   this.activeName = '1'
-      // } else {
-      //   this.activeName = active + ''
-      // }
       this.inStorageState = status
+      // 强制刷新tabs
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     // 物料状态
     setApplyMaterielState (status) {
-      // let active = parseInt(this.activeName) + 1
-      // if (active === 4) {
-      //   this.activeName = '1'
-      // } else {
-      //   this.activeName = active + ''
-      // }
       this.applyMaterielState = status
+      // 强制刷新tabs
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     // 表头更改生产日期
     updateProductDate: function (dataStr) {

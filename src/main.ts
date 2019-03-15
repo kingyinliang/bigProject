@@ -19,7 +19,6 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
 
-console.log($)
 // 挂载全局
 Vue.prototype.$http = httpProxy // ajax请求方法
 Vue.prototype.isAuth = isAuth// 权限方法

@@ -59,7 +59,7 @@
         <div class="toggleSearchTop" style="background-color:white;margin-bottom:8px;position:relative;border-radius:5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius:15px;overflow:hidden">
+        <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius:15px;overflow:hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
               <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked' ? '通过': readyState === 'toBeAudited' ? '待审核' : '未录入'" placement="top-start">
@@ -331,10 +331,19 @@ export default class Index extends Vue {
   // 物料申请状态
   applyMaterielState = ''
   mounted () {
+    this.getList()
+  }
+  getList () {
     this.getFormHeader()
-    this.getWorkHourList()
-    this.getInStockList()
-    this.getMaterialList()
+    // 全部页签页返回数据之后强制刷新tabs
+    Promise.all([this.getWorkHourList(), this.getInStockList(), this.getMaterialList()]).then((result) => {
+      let tabs: any = this.$refs.tabs
+      tabs.handleTabClick(tabs.panes[parseInt(tabs.currentName) - 1])
+    })
+  }
+  tabClick (val: any) {
+    let tabs: any = this.$refs.tabs
+    tabs.setCurrentName(val.name)
   }
   getFormHeader () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
@@ -349,11 +358,11 @@ export default class Index extends Vue {
       console.log('catch data::', err)
     })
   }
-  getWorkHourList () {
+  async getWorkHourList () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.workHourList = []
     this.workHourAuditList = []
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIME_API}`, 'POST', {orderId}).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIME_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0) {
         let no = 0
         let sub = 0
@@ -395,12 +404,13 @@ export default class Index extends Vue {
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return 'aaaaa'
   }
-  getInStockList () {
+  async getInStockList () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.inStockList = []
     this.inStockAuditList = []
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGE_API}`, 'POST', {orderId}).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGE_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0) {
         let no = 0
         let sub = 0
@@ -442,12 +452,13 @@ export default class Index extends Vue {
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return 'bbbb'
   }
-  getMaterialList () {
+  async getMaterialList () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
     this.applyMaterieList = []
     this.applyMaterieAuditList = []
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
       let no = 0
       let sub = 0
       let che = 0
@@ -489,6 +500,7 @@ export default class Index extends Vue {
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return 'hhhhh'
   }
   enbaleEdit (row) {
     row.disabled = false

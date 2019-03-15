@@ -42,7 +42,7 @@
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs"  :before-leave='beforeLeave' type="border-card">
+        <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs"  :before-leave='beforeLeave' type="border-card">
           <el-tab-pane name="1">
             <span slot="label">
               <el-tooltip class="item" effect="dark" :content="this.appyMaterielState === 'noPass'? '不通过':this.appyMaterielState === 'saved'? '已保存':this.appyMaterielState === 'submit' ? '已提交' : this.appyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -124,6 +124,9 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     beforeLeave (activeName, oldActiveName) {
       if (!this.enableOpt && activeName !== '1') {
         this.$message({type: 'error', message: '请申请订单之后操作', duration: 1000})
@@ -268,10 +271,13 @@ export default {
     },
     setAppyMaterielState: function (state) {
       this.appyMaterielState = state
+      // 强制tabs刷新
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     // 准备时间状态
     SetReadyStatus (status) {
       this.readyState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   watch: {
