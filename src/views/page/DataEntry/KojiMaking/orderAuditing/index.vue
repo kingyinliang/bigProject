@@ -519,6 +519,7 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
+        this.getList()
       } else {
         this.$message.error(res.data.msg)
       }
@@ -530,6 +531,7 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
+        this.getList()
       } else {
         this.$message.error(res.data.msg)
       }
@@ -541,6 +543,7 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
+        this.getList()
       } else {
         this.$message.error(res.data.msg)
       }
@@ -556,60 +559,45 @@ export default class Index extends Vue {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      let net0 = new Promise((resolve, reject) => {
-        that.timeSubmit(resolve)
-      })
-      let net1 = new Promise((resolve, reject) => {
-        that.storageSubmit(resolve)
-      })
-      let net2 = new Promise((resolve, reject) => {
-        that.materialSubmit(resolve)
-      })
-      let net3 = Promise.all([net0, net1, net2])
-      net3.then(function () {
+      Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
         that.$message.success('提交成功')
+        that.getList()
       })
     })
   }
 
-  timeSubmit (resoved) {
+  async timeSubmit () {
     this.workHourList.forEach(function (item) { item.status = 'submit' })
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('报工工时提交失败：' + res.data.msg)
       }
-      if (resoved) {
-        resoved('resoved')
-      }
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return ''
   }
-  storageSubmit (resoved) {
+  async storageSubmit () {
     this.inStockList.forEach(function (item) { item.status = 'submit' })
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('生产入库提交失败：' + res.data.msg)
       }
-      if (resoved) {
-        resoved('resoved')
-      }
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return ''
   }
-  materialSubmit (resoved) {
+  async materialSubmit () {
     this.applyMaterieList.forEach(function (item) { item.status = 'submit' })
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALESUBMIT_API}`, 'POST', this.applyMaterieList).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALESUBMIT_API}`, 'POST', this.applyMaterieList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('物料领用提交失败：' + res.data.msg)
       }
-      if (resoved) {
-        resoved('resoved')
-      }
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return ''
   }
   // 报工工时
   setReadyStatus (status) {
