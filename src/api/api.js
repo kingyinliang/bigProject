@@ -7,7 +7,7 @@
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.67:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.28:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -898,21 +898,29 @@ export const KJM_API = {
   /**
    * 煮豆
    */
-  // 原料领用
-  DOUSAVE_API: HOST + '/kjm/bean/pulp/update', // 保存
-  DOUMATERLIST_API: HOST + '/kjm/bean/list', // 列表
-  // 工艺
-  DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 主表
-  DOUGONGYIRUISAVE_API: HOST + '/kjm/bean/boiled/update', // 煮豆润水过程
-  DOUGONGYIZHENGSAVE_API: HOST + '/kjm/bean/cooking/update', // 连续蒸煮
-  DOUGONGYIHUNSAVE_API: HOST + '/kjm/bean/blend/update', // 混合入曲
+  DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
+  DOUMATERWHEAT_API: HOST + '/kjm/bean/wheat/update', // 原料 小麦
+  DOUMATERPULP_API: HOST + '/kjm/bean/pulp/update', // 原料 豆粕
+  DOUMATERLIST_API: HOST + '/kjm/bean/material/list', // 原料 list
+  DOUMATERSUBMITZHONG_API: HOST + '/kjm/bean/material/submit', // 原料 种曲提交
+  DOUMATERSUBMITWHEAT_API: HOST + '/kjm/bean/wheat/submit', // 原料 小麦提交
+  DOUMATERSUBMITSOY_API: HOST + '/kjm/bean/pulp/submit', // 原料 豆粕提交
+
+  DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
+  DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
+  DOUGONGYIRUISAVE_API: HOST + '/kjm/bean/boiled/update', // 工艺 煮豆润水过程
+  DOUGONGYIZHENGSAVE_API: HOST + '/kjm/bean/cooking/update', // 工艺 连续蒸煮
+  DOUGONGYIHUNSAVE_API: HOST + '/kjm/bean/blend/update', // 工艺 混合入曲
+  DOUGONGYILISTSAVE_API: HOST + '/kjm/bean/technology/list', // 工艺 list
   /**
    * 看曲
    */
-  DOULOOKLIST_API: HOST + '/kjm/guard/list', // list
+  DOUHEAERLIST: HOST + '/kjm/guard/headList', // 表头
+  DOULOOKLIST_API: HOST + '/kjm/guard/list', // 工艺 list
   DOULOOKZHUSAVE_API: HOST + '/kjm/guard/tech/update', // 工艺 主表
   DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
   DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update', // 工艺 感官
+  DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态
 
   /**
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表

@@ -5,51 +5,55 @@
         <el-col :span="21">
           <el-form :inline="true" size="small" label-width="85px">
             <el-form-item label="生产车间：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.workShopName ? formHeader.workShopName : ''}}</p>
             </el-form-item>
             <el-form-item label="曲房号：">
-              <p class="input_bommom">12</p>
+              <p class="input_bommom">&nbsp;{{formHeader.houseNoName ? formHeader.houseNoName : ''}}</p>
             </el-form-item>
             <el-form-item label="工序：">
-              <p class="input_bommom">12</p>
+              <p class="input_bommom">&nbsp;看曲</p>
             </el-form-item>
             <el-form-item label="生产订单：">
-              <p class="input_bommom">7056251343251</p>
+              <p class="input_bommom">&nbsp;{{formHeader.orderNo ? formHeader.orderNo : ''}}</p>
             </el-form-item>
             <el-form-item label="生产品项：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{(formHeader.materialCode ? formHeader.materialCode : '') + ' ' + (formHeader.materialName ? formHeader.materialName : '')}}</p>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.inKjmDate ? formHeader.inKjmDate : ''}}</p>
             </el-form-item>
             <el-form-item label="入罐号：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.inPotNoName ? formHeader.inPotNoName : ''}}</p>
             </el-form-item>
             <el-form-item label="连续蒸煮号：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.cookingNoName ? formHeader.cookingNoName : ''}}</p>
             </el-form-item>
             <el-form-item label="提交人员：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.changer ? formHeader.changer : ''}}</p>
             </el-form-item>
             <el-form-item label="提交时间：">
-              <p class="input_bommom">炒麦车间</p>
+              <p class="input_bommom">&nbsp;{{formHeader.changed? (formHeader.changed.indexOf('.')!==-1?formHeader.changed.substring(0, formHeader.changed.indexOf('.')):formHeader.changed):''}}</p>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="3">
           <div style="float:right; line-height:31px;font-size: 14px">
-            <div style="float:left">
-              <span class="point" :style="{'background': '#7ED321'}"></span>订单状态：
+            <div style="float: right;">
+              <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
             </div>
-            <span>未录入</span>
           </div>
         </el-col>
       </el-row>
-      <el-row style="text-align:right;">
-        <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry/KojiMaking/index'})">返回</el-button>
-        <el-button type="primary" size="small">编辑</el-button>
-        <el-button type="primary" size="small" >保存</el-button>
-        <el-button type="primary" size="small" >提交</el-button>
+      <el-row style="text-align:right">
+        <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+        </template>
+        <template v-if="isRedact" style="float:right; margin-left: 10px;">
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+        </template>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
@@ -62,23 +66,23 @@
       <el-tabs type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
         <el-tab-pane>
           <span slot="label" class="spanview">
-            <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-              <el-button>工艺控制</el-button>
+            <el-tooltip class="item" effect="dark"  :content="applyCraftState === 'noPass'? '不通过':applyCraftState === 'saved'? '已保存':applyCraftState === 'submit' ? '已提交' : applyCraftState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': applyCraftState === 'noPass'? 'red' : ''}">工艺控制</el-button>
             </el-tooltip>
           </span>
-          <Craft></Craft>
+          <Craft ref="craft" :isRedact="isRedact" :formHeader="formHeader" :submitStatus="submitStatus" @setApplyCraftState='setApplyCraftState'></Craft>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <err-record></err-record>
+          <!-- <err-record></err-record> -->
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+          <!-- <text-record ref="textrecord" :isRedact="isRedact"></text-record> -->
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -86,10 +90,84 @@
 </template>
 
 <script>
+import {KJM_API} from '@/api/api'
+import {headanimation} from '@/net/validate'
 import ErrRecord from './common/errRecord'
 import Craft from './common/craft'
 export default {
   name: 'look',
+  data () {
+    return {
+      formHeader: {},
+      orderStatus: '已同步',
+      isRedact: false,
+      submitStatus: 'saved',
+      applyCraftState: '' // 工艺状态
+    }
+  },
+  mounted () {
+    headanimation(this.$)
+    this.GetheadList()
+  },
+  methods: {
+    GetheadList () {
+      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.lookOrderHouseId}, false, false, false).then((res) => {
+        if (res.data.code === 0) {
+          this.formHeader = res.data.headList[0]
+          this.orderStatus = res.data.headList[0].guardStatus
+          if (this.orderStatus !== '已同步') {
+            this.$refs.craft.getList(this.formHeader)
+          }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    // 提交
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
+    // 保存
+    savedOrSubmitForm (str) {
+      // 提交
+      if (str === 'submit') {
+        this.submitStatus = 'submit'
+        if (!this.$refs.craft.Readyrules()) {
+          return false
+        }
+      }
+      let that = this
+      new Promise((resolve, reject) => {
+        that.$refs.craft.savesmain(resolve, reject)
+      }).then(function () {
+        let net1 = new Promise((resolve, reject) => {
+          that.$refs.craft.savestauts(resolve, reject)
+        })
+        let net2 = new Promise((resolve, reject) => {
+          that.$refs.craft.savesecond(resolve, reject)
+        })
+        let net3 = new Promise((resolve, reject) => {
+          that.$refs.craft.savefeel(resolve, reject)
+        })
+        Promise.all([net1, net2, net3]).then(function () {
+          that.$message.success('保存成功')
+          that.GetheadList()
+          that.isRedact = false
+        }).catch(() => {
+          that.$message.error('网络请求失败，请刷新重试')
+        })
+      })
+    },
+    setApplyCraftState (status) {
+      this.applyCraftState = status
+    }
+  },
   components: {
     TextRecord: resolve => {
       require(['@/views/components/textRecord'], resolve)
@@ -100,6 +178,9 @@ export default {
 }
 </script>
 
+<style>
+.rowDel{display: none;}
+</style>
 <style lang="less" scoped>
 .input_bommom {
   width: 147px;
