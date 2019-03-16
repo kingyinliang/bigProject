@@ -23,7 +23,11 @@
               <p class="input_bommom">&nbsp;{{formHeader.inPotNoName ? formHeader.inPotNoName : ''}}</p>
             </el-form-item>
             <el-form-item label="连续蒸煮号：">
-              <p class="input_bommom">&nbsp;{{formHeader.cookingNoName ? formHeader.cookingNoName : ''}}</p>
+              <p>
+                <el-select v-model="cookingNoId" :disabled="!isRedact" style="width:147px">
+                  <el-option v-for="(item, index) in this.holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
+                </el-select>
+              </p>
             </el-form-item>
             <el-form-item label="提交人员：">
               <p class="input_bommom">&nbsp;{{formHeader.changer ? formHeader.changer : ''}}</p>
@@ -95,7 +99,7 @@
 </template>
 
 <script>
-import {KJM_API} from '@/api/api'
+import {KJM_API, BASICDATA_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
 import Material from './common/material'
 import Craft from './common/craft'
@@ -109,18 +113,22 @@ export default {
       isRedact: false,
       formLabelWidth: '100px',
       applyMaterielState: '', // 物料状态
-      applyCraftState: '' // 工艺状态
+      applyCraftState: '', // 工艺状态
+      holderList: [],
+      cookingNoId: '' // 连续蒸煮号
     }
   },
   mounted () {
     headanimation(this.$)
     this.GetheadList()
+    this.GetholderList()
   },
   methods: {
     GetheadList () {
-      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.beanOrderHouseId}, false, false, false).then((res) => {
+      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.beanOrderHouseId, deptName: '煮豆'}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.formHeader = res.data.headList[0]
+          this.cookingNoId = this.formHeader.cookingNoName
           this.orderStatus = res.data.headList[0].beanStatus
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
@@ -128,6 +136,28 @@ export default {
           }
         } else {
           this.$message.error(res.data.msg)
+        }
+      })
+    },
+    // 表头 连续蒸煮号
+    GetholderList () {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '008', pageSize: 100, type: 'holder_type'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.holderList = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 表头更改
+    UpdateHeader (str, resolve) {
+      this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: this.cookingNoId, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
         }
       })
     },
@@ -144,18 +174,20 @@ export default {
     savedOrSubmitForm (str) {
       if (str === 'submit') {
         this.$set(this.formHeader, 'submitStatus', 'submit')
-      } else {
-        this.$set(this.formHeader, 'submitStatus', 'saved')
-      }
-      if (str === 'submit') {
         if (!this.$refs.material.mainrules()) {
           return false
         }
         if (!this.$refs.craft.craftrules()) {
           return false
         }
+      } else {
+        this.$set(this.formHeader, 'submitStatus', 'saved')
       }
       let that = this
+
+      let net100 = new Promise((resolve, reject) => {
+        that.UpdateHeader(str, resolve)
+      })
       let net0 = new Promise((resolve, reject) => {
         that.$refs.material.savemains(resolve, reject)
       })
@@ -169,7 +201,7 @@ export default {
         that.$refs.material.savestauts(resolve, reject)
       })
       let net99
-      net99 = Promise.all([net0, net1, net2, net3])
+      net99 = Promise.all([net100, net0, net1, net2, net3])
       net99.then(function () {
         let net4 = new Promise((resolve, reject) => {
           that.$refs.craft.updatezhu(resolve, reject)

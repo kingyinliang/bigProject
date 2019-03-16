@@ -442,7 +442,11 @@ export default {
   },
   computed: {
     timecha: function () {
-      return (new Date(this.craftfrom.unloadingStartDate) - new Date(this.craftfrom.preheatDate)) / 60000
+      if (this.craftfrom.unloadingStartDate !== null && this.craftfrom.preheatDate !== null) {
+        return (new Date(this.craftfrom.unloadingStartDate) - new Date(this.craftfrom.preheatDate)) / 60000
+      } else {
+        return 0
+      }
     }
   },
   components: {

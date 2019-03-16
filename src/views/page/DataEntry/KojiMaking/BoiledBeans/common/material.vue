@@ -45,7 +45,7 @@
     </el-card>
     <el-card>
       <div class="solecontent">
-        <p class="lh32px">小麦粉用量：</p><p class="input_bommom">123</p>
+        <p class="lh32px">小麦粉用量：</p><p class="input_bommom">{{this.wheatUseNum}}</p>
         <p class="lh32px" style="margin-left:20px">小麦：</p>
         <p>
           <el-select v-model="wheatliang" placeholder="请选择" :disabled="!isRedact" size="small">
@@ -89,7 +89,7 @@
     </el-card>
     <el-card>
       <div class="solecontent">
-        <p class="lh32px">豆粕用量：</p><p class="input_bommom">123</p>
+        <p class="lh32px">豆粕用量：</p><p class="input_bommom">{{soyUseNum}}</p>
         <p class="lh32px" style="margin-left:20px">豆粕：</p>
         <p>
           <el-select v-model="soyliang" placeholder="请选择" :disabled="!isRedact" size="small">
@@ -716,8 +716,12 @@ export default {
           this.materialList = data.materialList
           this.wheatList = data.wheatList
           this.soyList = data.pulpList
-          this.wheatliang = this.wheatList[0].materialCode + ' ' + this.wheatList[0].materialName
-          this.soyliang = this.soyList[0].materialCode + ' ' + this.soyList[0].materialName
+          if (this.wheatList.length !== 0) {
+            this.wheatliang = this.wheatList[0].materialCode + ' ' + this.wheatList[0].materialName
+          }
+          if (this.soyList.length !== 0) {
+            this.soyliang = this.soyList[0].materialCode + ' ' + this.soyList[0].materialName
+          }
           this.materialList.map((item) => {
             this.$set(item, 'materialCode', item.materialCode + ' ' + item.materialName)
             if (item.status === 'noPass') {
@@ -785,6 +789,26 @@ export default {
   computed: {
     lnum: function () {
       return this.wheat.endWeight - this.wheat.startWeight
+    },
+    wheatUseNum: function () {
+      let num = 0
+      if (this.wheatList) {
+        this.wheatList.map((item) => {
+          num += item.userWeight
+        })
+      }
+      return num
+    },
+    soyUseNum: function () {
+      let num = 0
+      if (this.soyList) {
+        this.soyList.map((item) => {
+          if (item.useType === '出罐') {
+            num += item.useWeight
+          }
+        })
+      }
+      return num
     }
   },
   components: {

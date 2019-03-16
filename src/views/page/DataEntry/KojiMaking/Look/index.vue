@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     GetheadList () {
-      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.lookOrderHouseId}, false, false, false).then((res) => {
+      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.lookOrderHouseId, deptName: '看曲'}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.formHeader = res.data.headList[0]
           this.orderStatus = res.data.headList[0].guardStatus
