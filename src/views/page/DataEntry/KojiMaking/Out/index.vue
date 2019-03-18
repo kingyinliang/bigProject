@@ -121,6 +121,11 @@ export default {
               orderHouseId: this.formHeader.id,
               blongProc: this.formHeader.prolineId
             })
+            this.$refs.textrecord.GetText({
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.id,
+              blongProc: this.formHeader.prolineId
+            })
           }
         } else {
           this.$message.error(data.msg)
@@ -158,11 +163,18 @@ export default {
           blongProc: that.formHeader.prolineId
         }, str, resolve, reject)
       })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText({
+          orderId: that.formHeader.orderId,
+          orderHouseId: that.formHeader.id,
+          productLine: that.formHeader.prolineId
+        }, str, resolve, reject)
+      })
       let OrderHeadSaveNet = new Promise((resolve, reject) => {
         that.UpdateOrderHead(str, resolve, reject)
       })
       if (str === 'submit') {
-        let saveNet = Promise.all([OrderHeadSaveNet, excSaveNet])
+        let saveNet = Promise.all([OrderHeadSaveNet, excSaveNet, textSaveNet])
         saveNet.then(function () {
           let meaterielSubmit = new Promise((resolve, reject) => {
             that.$refs.meateriel.SaveOrSubmitMateriel(str, resolve, reject)
@@ -185,7 +197,7 @@ export default {
         let InstockSave = new Promise((resolve, reject) => {
           that.$refs.outinstorage.SaveOrSubmitInStock(str, resolve, reject)
         })
-        let saveNet = Promise.all([OrderHeadSaveNet, meaterielSave, InstockSave, excSaveNet])
+        let saveNet = Promise.all([OrderHeadSaveNet, meaterielSave, InstockSave, excSaveNet, textSaveNet])
         saveNet.then(function () {
           that.GetOrderList()
           that.$message.success('保存成功')
