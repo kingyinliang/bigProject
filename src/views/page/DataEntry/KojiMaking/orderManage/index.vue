@@ -598,7 +598,7 @@ export default class Index extends Vue {
       // })
       Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList, false, false, false).then((res) => {
         if (res.data.code === 0) {
-          this.showDetail(this.selectedDetailList[0].orderId)
+          this.retrieveDetail(this.selectedDetailList[0].orderId)
         } else {
           this.$message.error(res.data.msg)
         }
