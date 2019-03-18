@@ -45,16 +45,16 @@ export default {
     ZQWorkshop: {
       // 默认值
       defaultVal: {
-        factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
-        factoryName: '烟台欣和企业食品有限公司工厂',
-        workshopId: '7E0AA796139E46738A949E88E1272578',
-        workshopName: '制曲一车间',
+        factoryId: '',
+        factoryName: '',
+        workshopId: '',
+        workshopName: '',
         // 制曲日期
-        zqDate: '2019-03-13',
+        zqDate: '',
         // normal/abnormal 正常生产/无生产
         productStatus: 'normal',
         // 订单管理页的订单日期
-        orderDate: '2019-03-03'
+        orderDate: ''
       },
       // 首页跳转到工序页参数
       params: {
