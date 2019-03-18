@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>H</span>
+          <span>MIN</span>
         </template>
       </el-table-column>
       <el-table-column label="*机器工时" width="150">
@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>H</span>
+          <span>MIN</span>
         </template>
       </el-table-column>
       <el-table-column label="*人工工时" width="150">
@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>H</span>
+          <span>MIN</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" width="110">
@@ -91,6 +91,9 @@ export default {
           if (data.code === 0) {
             if (data.listForm && data.listForm.length !== 0) {
               this.pwTimeDate = data.listForm
+              this.pwTimeDate[0].prepareTime = this.pwTimeDate[0].prepareTime * 60
+              this.pwTimeDate[0].machineTime = this.pwTimeDate[0].machineTime * 60
+              this.pwTimeDate[0].humanTime = this.pwTimeDate[0].humanTime * 60
               status = data.listForm[0].status
               this.timeAudit = data.listApproval
             } else {
@@ -128,6 +131,9 @@ export default {
     },
     // pw工时修改
     PwTimeUpdate (str, resolve, reject) {
+      this.pwTimeDate[0].prepareTime = this.pwTimeDate[0].prepareTime / 60
+      this.pwTimeDate[0].machineTime = this.pwTimeDate[0].machineTime / 60
+      this.pwTimeDate[0].humanTime = this.pwTimeDate[0].humanTime / 60
       this.pwTimeDate[0].orderId = this.order.orderId
       this.pwTimeDate[0].status = str
       this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate[0]).then(({data}) => {
