@@ -167,7 +167,7 @@ export default {
         that.$refs.textrecord.UpdateText({
           orderId: that.formHeader.orderId,
           orderHouseId: that.formHeader.id,
-          productLine: that.formHeader.prolineId
+          blongProc: that.formHeader.prolineId
         }, str, resolve, reject)
       })
       let OrderHeadSaveNet = new Promise((resolve, reject) => {

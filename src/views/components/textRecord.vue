@@ -44,15 +44,11 @@ export default {
     UpdateText (formHeader, str, resolve, reject) {
       if (formHeader.orderHouseId) {
         this.textObj.orderHouseId = formHeader.orderHouseId
-        this.textObj.blongProc = formHeader.productLine
+        this.textObj.blongProc = formHeader.blongProc
         this.textObj.orderId = formHeader.orderId
       } else {
         this.textObj.orderId = formHeader.orderId
       }
-      // this.textObj.workShop = (formHeader.workShop ? formHeader.workShop : null)
-      // this.textObj.orderHouseId = (formHeader.orderHouseId ? formHeader.orderHouseId : null)
-      // this.textObj.blongProc = formHeader.productLine
-      // this.textObj.orderId = formHeader.orderId
       this.$http(`${PACKAGING_API.PKGTEXTUPDATE_API}`, 'POST', this.textObj).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {

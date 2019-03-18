@@ -12,10 +12,10 @@
         <el-input v-model="CraftControlDate.outEndTime" :disabled="!(isRedact && CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>
       </el-form-item>
       <el-form-item label="制曲时间：" label-width="125px">
-        <el-input v-model="CraftControlDate.kojoMakingTime" :disabled="!(isRedact && CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>
+        <p style="min-width: 184px">{{CraftControlDate.kojoMakingTime = CraftControlDate.outStartTime - formHeader.inEndTime}}</p>
       </el-form-item>
       <el-form-item label="盐水用量：" label-width="125px">
-        <el-input v-model="CraftControlDate.saltWaterUsed" :disabled="!(isRedact && CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>
+        <p style="min-width: 184px">{{CraftControlDate.saltWaterUsed}}</p>
       </el-form-item>
       <el-form-item label="盐水温度：" label-width="125px">
         <el-input v-model="CraftControlDate.saltWaterTemp" :disabled="!(isRedact && CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>

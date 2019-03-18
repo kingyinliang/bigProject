@@ -46,6 +46,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <p>{{BrineNum}}</p>
     <audit-log :tableData="MaterielAuditlog"></audit-log>
   </div>
 </template>
@@ -109,6 +110,9 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    saveRul () {
+
     },
     // 保存
     SaveOrSubmitMateriel (str, resolve, reject) {
@@ -189,7 +193,15 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    BrineNum: function () {
+      let num = 0
+      this.MaterielDate.forEach((item) => {
+        num = num + (item.delFlag === '0' ? item.amount : 0)
+      })
+      return num
+    }
+  },
   components: {
     AuditLog: resolve => {
       require(['@/views/components/AuditLog'], resolve)
