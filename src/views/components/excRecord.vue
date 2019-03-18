@@ -119,8 +119,8 @@ export default {
           if (typeof id === 'string') {
             item.orderId = id
           } else if (typeof id === 'object') {
-            item.orderId = id.order_id
-            item.workShop = id.workShop
+            item.orderId = id.orderId
+            item.orderHouseId = id.orderHouseId
             item.blongProc = id.blongProc
           }
         })
