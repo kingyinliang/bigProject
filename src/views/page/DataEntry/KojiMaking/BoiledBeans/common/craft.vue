@@ -18,7 +18,7 @@
       </el-form>
     </el-card>
     <el-card>
-      <div class="htitle">煮豆沥水参数设置</div>
+      <div class="htitle">煮豆润水参数设置</div>
       <el-form :inline="true" size="small" label-width="136px" :model="craftfrom">
         <el-form-item label="润水比例:">
           <el-input class="liInputWidth" v-model="craftfrom.rateRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
@@ -282,7 +282,7 @@ export default {
       }
       if (this.craftfrom.rateRunWater === null || this.craftfrom.tempRunWater === null || this.craftfrom.frequenceRunWater === null || this.craftfrom.realRate === null || this.craftfrom.weightRunWater === null || this.craftfrom.speedRunWater === null || this.craftfrom.oncePreheatFrequency === null || this.craftfrom.secondPreheatFrequency === null || this.craftfrom.secondPreheatTemp === null || this.craftfrom.unloadingSpeed === null) {
         ty = false
-        this.$message.error('煮豆沥水参数不能为空')
+        this.$message.error('煮豆润水参数不能为空')
         return false
       }
       if (this.craftfrom.cookingFrequency === null || this.craftfrom.upFrequency === null || this.craftfrom.downFrequency === null) {

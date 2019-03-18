@@ -31,7 +31,12 @@
         </el-table-column>
         <el-table-column label="* 单位" width="80px">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.unit" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+            <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="物料批次">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
@@ -253,7 +258,8 @@ export default {
       rusoy: {},
       rusoyrules: {
         batch: [
-          { required: true, message: '必选', trigger: 'blur' }
+          { required: true, message: '必选', trigger: 'blur' },
+          { min: 10, max: 10, message: '长度为10位', trigger: 'blur' }
         ],
         foodHolderId: [
           { required: true, message: '请选择粮仓', trigger: 'change' }
@@ -775,7 +781,6 @@ export default {
       })
     },
     delrow (row) {
-      console.log(row)
       row.delFlag = '1'
     },
     rowDelFlag ({row, rowIndex}) {

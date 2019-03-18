@@ -63,7 +63,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
+      <el-tabs ref='tabs' type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="applyCraftState === 'noPass'? '不通过':applyCraftState === 'saved'? '已保存':applyCraftState === 'submit' ? '已提交' : applyCraftState === 'checked'? '通过':'未录入'" placement="top-start">
@@ -76,13 +76,13 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <!-- <err-record></err-record> -->
+          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
-          <!-- <text-record ref="textrecord" :isRedact="isRedact"></text-record> -->
+          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -94,6 +94,8 @@ import {KJM_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
 import ErrRecord from './common/errRecord'
 import Craft from './common/craft'
+import ExcRecord from '@/views/components/excRecord'
+import TextRecord from '@/views/components/textRecord'
 export default {
   name: 'look',
   data () {
@@ -117,6 +119,16 @@ export default {
           this.orderStatus = res.data.headList[0].guardStatus
           if (this.orderStatus !== '已同步') {
             this.$refs.craft.getList(this.formHeader)
+            this.$refs.excrecord.GetExcDate({
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.id,
+              blongProc: this.formHeader.processId
+            })
+            this.$refs.textrecord.GetText({
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.orderHouseId,
+              blongProc: this.formHeader.processId
+            })
           }
         } else {
           this.$message.error(res.data.msg)
@@ -141,11 +153,28 @@ export default {
         if (!this.$refs.craft.Readyrules()) {
           return false
         }
+        if (!this.$refs.excrecord.excrul()) {
+          return false
+        }
       }
       let that = this
       new Promise((resolve, reject) => {
         that.$refs.craft.savesmain(resolve, reject)
       }).then(function () {
+        let excSaveNet = new Promise((resolve, reject) => {
+          that.$refs.excrecord.saveOrSubmitExc({
+            orderId: that.formHeader.orderId,
+            orderHouseId: that.formHeader.orderHouseId,
+            blongProc: that.formHeader.processId
+          }, str, resolve, reject)
+        })
+        let textSaveNet = new Promise((resolve, reject) => {
+          that.$refs.textrecord.UpdateText({
+            orderId: that.formHeader.orderId,
+            orderHouseId: that.formHeader.orderHouseId,
+            productLine: that.formHeader.processId
+          }, str, resolve, reject)
+        })
         let net1 = new Promise((resolve, reject) => {
           that.$refs.craft.savestauts(resolve, reject)
         })
@@ -155,7 +184,7 @@ export default {
         let net3 = new Promise((resolve, reject) => {
           that.$refs.craft.savefeel(resolve, reject)
         })
-        Promise.all([net1, net2, net3]).then(function () {
+        Promise.all([net1, net2, net3, excSaveNet, textSaveNet]).then(function () {
           that.$message.success('保存成功')
           that.GetheadList()
           that.isRedact = false
@@ -166,14 +195,17 @@ export default {
     },
     setApplyCraftState (status) {
       this.applyCraftState = status
+      console.log(this.applyCraftState)
+      // setTimeout(() => {
+      //   this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+      // }, 30000)
     }
   },
   components: {
-    TextRecord: resolve => {
-      require(['@/views/components/textRecord'], resolve)
-    },
     ErrRecord,
-    Craft
+    Craft,
+    ExcRecord,
+    TextRecord
   }
 }
 </script>

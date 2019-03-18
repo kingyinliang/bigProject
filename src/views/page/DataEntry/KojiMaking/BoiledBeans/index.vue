@@ -25,7 +25,7 @@
             <el-form-item label="连续蒸煮号：">
               <p>
                 <el-select v-model="cookingNoId" :disabled="!isRedact" style="width:147px">
-                  <el-option v-for="(item, index) in this.holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
+                  <el-option v-for="(item, index) in this.holderList" :key="index" :label="item.holderName" :value="item.holderName"></el-option>
                 </el-select>
               </p>
             </el-form-item>
@@ -85,13 +85,13 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <!-- <err-record ref="errrecord"></err-record> -->
+          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
-          <!-- <text-record ref="textrecord" :isRedact="isRedact"></text-record> -->
+          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -103,7 +103,8 @@ import {KJM_API, BASICDATA_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
 import Material from './common/material'
 import Craft from './common/craft'
-import ErrRecord from './common/errRecord'
+import ExcRecord from '@/views/components/excRecord'
+import TextRecord from '@/views/components/textRecord'
 export default {
   name: 'boileIndex',
   data () {
@@ -133,6 +134,16 @@ export default {
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
             this.$refs.craft.getList(this.formHeader)
+            this.$refs.excrecord.GetExcDate({
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.id,
+              blongProc: this.formHeader.processId
+            })
+            this.$refs.textrecord.GetText({
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.orderHouseId,
+              blongProc: this.formHeader.processId
+            })
           }
         } else {
           this.$message.error(res.data.msg)
@@ -151,7 +162,8 @@ export default {
     },
     // 表头更改
     UpdateHeader (str, resolve) {
-      this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: this.cookingNoId, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+      let holderNamestr = this.holderList.find(item => item.holderName === this.cookingNoId)['holderId']
+      this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: holderNamestr, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error('保存表头' + data.msg)
@@ -180,11 +192,27 @@ export default {
         if (!this.$refs.craft.craftrules()) {
           return false
         }
+        if (!this.$refs.excrecord.excrul()) {
+          return false
+        }
       } else {
         this.$set(this.formHeader, 'submitStatus', 'saved')
       }
       let that = this
-
+      let excSaveNet = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc({
+          orderId: that.formHeader.orderId,
+          orderHouseId: that.formHeader.orderHouseId,
+          blongProc: that.formHeader.processId
+        }, str, resolve, reject)
+      })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText({
+          orderId: that.formHeader.orderId,
+          orderHouseId: that.formHeader.orderHouseId,
+          productLine: that.formHeader.processId
+        }, str, resolve, reject)
+      })
       let net100 = new Promise((resolve, reject) => {
         that.UpdateHeader(str, resolve)
       })
@@ -201,7 +229,7 @@ export default {
         that.$refs.material.savestauts(resolve, reject)
       })
       let net99
-      net99 = Promise.all([net100, net0, net1, net2, net3])
+      net99 = Promise.all([net100, net0, net1, net2, net3, excSaveNet, textSaveNet])
       net99.then(function () {
         let net4 = new Promise((resolve, reject) => {
           that.$refs.craft.updatezhu(resolve, reject)
@@ -232,12 +260,10 @@ export default {
     }
   },
   components: {
-    TextRecord: resolve => {
-      require(['@/views/components/textRecord'], resolve)
-    },
     Material,
     Craft,
-    ErrRecord
+    ExcRecord,
+    TextRecord
   }
 }
 </script>

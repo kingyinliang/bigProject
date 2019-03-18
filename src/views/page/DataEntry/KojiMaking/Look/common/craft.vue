@@ -21,7 +21,7 @@
     <el-card>
       <div class="htitle">看曲记录</div>
       <el-row style="line-height: 32px; margin-bottom:10px">
-        <el-col :span="4">第（）套程序</el-col>
+        <el-col :span="4">第（{{guardProcess}}）套程序</el-col>
         <el-col :span="16">
           <el-radio-group v-model="tech.processType">
             <el-radio label="自动" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')">自动</el-radio>
@@ -200,6 +200,7 @@ export default {
   data () {
     return {
       statuss: 'saved',
+      guardProcess: '',
       userList: [],
       tech: {
         id: this.uuid(32, 62),
