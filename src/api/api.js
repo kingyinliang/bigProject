@@ -896,7 +896,7 @@ export const KJM_API = {
   KJMAKINGORDERLIST_API: HOST + '/kjm/order/list',
 
   /**
-   * 煮豆
+   * 煮豆edit
    */
   DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
   DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
