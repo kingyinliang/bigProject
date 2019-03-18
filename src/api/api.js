@@ -898,8 +898,8 @@ export const KJM_API = {
   /**
    * 煮豆edit
    */
-  DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
   DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
+  DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
   DOUMATERWHEAT_API: HOST + '/kjm/bean/wheat/update', // 原料 小麦
   DOUMATERPULP_API: HOST + '/kjm/bean/pulp/update', // 原料 豆粕
   DOUMATERLIST_API: HOST + '/kjm/bean/material/list', // 原料 list
