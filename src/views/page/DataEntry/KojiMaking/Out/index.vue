@@ -41,7 +41,7 @@
               <el-button :style="{'color': Materielstatus === 'noPass'? 'red' : ''}">原料领用</el-button>
             </el-tooltip>
           </span>
-          <meateriel ref="meateriel" :isRedact="isRedact" :formHeader="formHeader" @GetMaterielStatus="GetMaterielStatus"></meateriel>
+          <meateriel ref="meateriel" :isRedact="isRedact" :formHeader="formHeader" @GetMaterielStatus="GetMaterielStatus" @SetMeaterielNum="SetMeaterielNum"></meateriel>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
@@ -89,6 +89,7 @@ export default {
     return {
       isRedact: false,
       formHeader: {},
+      MeaterielNum: 0,
       orderStatus: '',
       activeName: '1',
       Materielstatus: '',
@@ -151,10 +152,17 @@ export default {
     // 保存
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.$refs.meateriel.saveRul()) {
+          return false
+        }
+        if (!this.$refs.outinstorage.InStockRul()) {
+          return false
+        }
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
       }
+      return false
       let that = this
       let excSaveNet = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc({
@@ -219,10 +227,15 @@ export default {
     // 原料领用状态
     GetMaterielStatus (status) {
       this.Materielstatus = status
+      this.$forceUpdate()
+    },
+    SetMeaterielNum (num) {
+      this.$refs.outtech.GetsaltWaterUsed(num)
     },
     // 生产入库状态
     GetInStockStatus (status) {
       this.InStockStatus = status
+      this.$forceUpdate()
     }
   },
   computed: {

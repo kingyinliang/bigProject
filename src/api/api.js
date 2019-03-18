@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.183:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.2.213:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境

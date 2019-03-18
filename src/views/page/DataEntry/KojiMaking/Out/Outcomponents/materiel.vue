@@ -5,31 +5,46 @@
       <el-table-column type="index" width="50" label="序号"></el-table-column>
       <el-table-column label="日期">
         <template slot-scope="scope">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="盐水" width="110">
+      <el-table-column label="盐水" width="128">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-            <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code"></el-option>
-          </el-select>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-select v-model="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+              <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code"></el-option>
+            </el-select>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="盐水罐号" width="110">
+      <el-table-column label="盐水罐号" width="128">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')"  size="small">
-            <el-option :label="item.holderName" v-for="(item, index) in brineTankNo" :key="index" :value="item.holderId"></el-option>
-          </el-select>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')"  size="small">
+              <el-option :label="item.holderName" v-for="(item, index) in brineTankNo" :key="index" :value="item.holderId"></el-option>
+            </el-select>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="起始值" width="103">
+      <el-table-column label="起始值" width="118">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="结束值" width="103">
+      <el-table-column label="结束值" width="118">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="数量" width="70" show-overflow-tooltip>
@@ -38,15 +53,15 @@
         </template>
       </el-table-column>
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作人" width="140" prop="creator" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作时间" width="120" prop="created" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作人" width="128" prop="creator" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作时间" width="118" prop="created" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delMateriel(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <p>{{BrineNum}}</p>
+    <p style="line-height: 32px">总数量：{{BrineNum}}</p>
     <audit-log :tableData="MaterielAuditlog"></audit-log>
   </div>
 </template>
@@ -112,7 +127,18 @@ export default {
       })
     },
     saveRul () {
-
+      let ty = true
+      this.MaterielDate.forEach((item) => {
+        if (item.delFlag !== '1') {
+          console.log(item.startValue)
+          if (item.outDate && item.materialCode && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
+            ty = false
+            this.$message.error('原料领用必填项未填')
+            return false
+          }
+        }
+      })
+      return ty
     },
     // 保存
     SaveOrSubmitMateriel (str, resolve, reject) {
@@ -139,7 +165,7 @@ export default {
     },
     // 获取盐水
     GetBrine () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_material`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_YANSHUI`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.brine = data.dicList
         } else {
@@ -199,6 +225,7 @@ export default {
       this.MaterielDate.forEach((item) => {
         num = num + (item.delFlag === '0' ? item.amount : 0)
       })
+      this.$emit('SetMeaterielNum', num)
       return num
     }
   },

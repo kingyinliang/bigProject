@@ -17,17 +17,23 @@
           {{scope.row.saltWaterWeight = ThreeNum.allS}}
         </template>
       </el-table-column>
-      <el-table-column width="115" label="入库酱醪量">
+      <el-table-column width="125" label="入库酱醪量">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column width="115" label="入库批次">
+      <el-table-column width="125" label="入库批次">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <div class="required">
+            <i class="reqI">*</i>
+            <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column width="115" label="入罐罐号" prop="houseNo"></el-table-column>
+      <el-table-column width="85" label="入罐罐号" prop="houseNo" show-overflow-tooltip></el-table-column>
       <el-table-column width="50" label="单位" prop="unit"></el-table-column>
       <el-table-column width="" label="操作人" prop="changer" show-overflow-tooltip></el-table-column>
       <el-table-column width="" label="操作时间" prop="changed" show-overflow-tooltip></el-table-column>
@@ -139,6 +145,17 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    InStockRul () {
+      let ty = true
+      this.InStock.forEach((item) => {
+        if (item.sauceWeight && item.batch) {} else {
+          ty = false
+          this.$message.error('生产入库必填项未填')
+          return false
+        }
+      })
+      return ty
     },
     // 保存 or 提交
     SaveOrSubmitInStock (str, resolve, reject) {
