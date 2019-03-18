@@ -7,7 +7,7 @@
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.83:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -898,7 +898,6 @@ export const KJM_API = {
   /**
    * 煮豆
    */
-  DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
   DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
   DOUMATERWHEAT_API: HOST + '/kjm/bean/wheat/update', // 原料 小麦
   DOUMATERPULP_API: HOST + '/kjm/bean/pulp/update', // 原料 豆粕
