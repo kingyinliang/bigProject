@@ -83,7 +83,7 @@
                       align="center"
                       width="80">
                       <template slot-scope="scope">
-                        <span class="operator" v-if="scope.row.orderStatus === '已同步'" @click="orderSplit(scope.row)">拆分</span>
+                        <span class="operator" v-if="scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存'" @click="orderSplit(scope.row)">拆分</span>
                         <span class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">核对</span>
                       </template>
                     </el-table-column>
@@ -194,7 +194,7 @@
                 {{scope.row.outputUnit}}
               </template>
             </el-table-column>
-            <el-table-column label="备注" width="120">
+            <el-table-column label="备注" width="80">
               <template slot-scope="scope">
                 <span>{{scope.row.remark}}</span>
               </template>
@@ -419,10 +419,10 @@ export default class Index extends Vue {
       this.$message.error('请选择车间')
       return
     }
-    if (this.params.orderDate === null || this.params.orderDate === '') {
-      this.$message.error('请选择订单日期')
-      return
-    }
+    // if (this.params.orderDate === null || this.params.orderDate === '') {
+    //   this.$message.error('请选择订单日期')
+    //   return
+    // }
     // 保存选项值到common store
     this.setStore(this.params)
     this.searched = true
@@ -598,7 +598,7 @@ export default class Index extends Vue {
       // })
       Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList, false, false, false).then((res) => {
         if (res.data.code === 0) {
-          this.showDetail(this.selectedDetailList[0].orderId)
+          this.retrieveDetail(this.selectedDetailList[0].orderId)
         } else {
           this.$message.error(res.data.msg)
         }

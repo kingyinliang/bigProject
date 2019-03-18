@@ -117,8 +117,8 @@ export default {
             this.$refs.outtech.GetTechList(this.formHeader)
             this.$refs.outinstorage.GetOutInStorage(this.formHeader)
             this.$refs.excrecord.GetExcDate({
-              order_id: this.formHeader.id,
-              workShop: this.formHeader.workShop,
+              order_id: this.formHeader.orderId,
+              orderHouseId: this.formHeader.id,
               blongProc: this.formHeader.prolineId
             })
           }
@@ -153,8 +153,8 @@ export default {
       let that = this
       let excSaveNet = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc({
-          order_id: that.formHeader.id,
-          workShop: that.formHeader.workShop,
+          orderId: that.formHeader.orderId,
+          orderHouseId: that.formHeader.id,
           blongProc: that.formHeader.prolineId
         }, str, resolve, reject)
       })
