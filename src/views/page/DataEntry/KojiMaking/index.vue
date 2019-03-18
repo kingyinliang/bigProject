@@ -249,7 +249,7 @@
 
 <script lang="ts">
 import {BASICDATA_API, WHT_API, KJM_API} from '@/api/api'
-// import {dateFormat, orderList} from '@/net/validate'
+import {dateFormat} from '@/net/validate'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
 import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
@@ -294,6 +294,7 @@ export default class Index extends Vue {
 
   mounted () {
     console.log('params', this.params)
+    this.params.zqDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getProcess(this.params.workshopId)
