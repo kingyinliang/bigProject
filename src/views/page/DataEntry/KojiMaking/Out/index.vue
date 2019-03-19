@@ -162,7 +162,6 @@ export default {
           return false
         }
       }
-      return false
       let that = this
       let excSaveNet = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc({
