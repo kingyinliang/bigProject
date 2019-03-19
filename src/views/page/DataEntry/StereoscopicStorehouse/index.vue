@@ -10,32 +10,41 @@
     <el-card class="searchCard" style="margin: 0">
       <el-row type="flex">
         <el-col>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetLtkList(true)" @submit.native.prevent>
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" @keyup.enter.native="GetLtkList(true)" @submit.native.prevent>
             <el-form-item label="工厂：">
-              <el-select v-model="plantList.factory" placeholder="请选择">
+              <el-select v-model="plantList.factory" placeholder="请选择" style="width: 160px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="车间：">
-              <el-select v-model="plantList.workshop" placeholder="请选择">
+              <el-select v-model="plantList.workshop" placeholder="请选择" style="width: 160px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="产线：">
-              <el-select v-model="plantList.productline" placeholder="产线">
+              <el-select v-model="plantList.productline" placeholder="产线" style="width: 160px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="订单状态：">
+              <el-select v-model="plantList.status" placeholder="请选择" style="width: 160px">
+                <el-option label="请选择"  value=""></el-option>
+                <el-option label="未审核"  value="submit"></el-option>
+                <el-option label="审核通过"  value="checked"></el-option>
+                <el-option label="审核不通过"  value="noPass"></el-option>
+                <el-option label="接口失败"  value="0"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="订单号：">
-              <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
+              <el-input v-model="plantList.orderNo" placeholder="订单号" style="width: 160px"></el-input>
             </el-form-item>
             <el-form-item label="日期：">
-              <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd" style="width: 160px"></el-date-picker>
             </el-form-item>
-            <el-form-item style="margin-left: 67px;">
+            <el-form-item style="margin-left: 85px;">
               <el-button type="primary" size="small" @click="GetLtkList(true)">查询</el-button>
               <el-button type="primary" size="small" @click="doPrint">导出</el-button>
               <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
@@ -204,6 +213,7 @@ export default {
         workshop: '',
         productline: '',
         productdate: '',
+        status: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
