@@ -34,7 +34,7 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden;min-height: 300px">
+      <el-tabs v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark" :content="Materielstatus === 'noPass'? '不通过':Materielstatus === 'saved'? '已保存':Materielstatus === 'submit' ? '已提交' : Materielstatus === 'checked'? '通过':'未录入'" placement="top-start">
