@@ -83,8 +83,14 @@
                       align="center"
                       width="80">
                       <template slot-scope="scope">
-                        <span class="operator" v-if="scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存'" @click="orderSplit(scope.row)">拆分</span>
-                        <span class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">核对</span>
+                        <div class="operator" v-if="scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存'" @click="orderSplit(scope.row)">
+                          <div class="split"></div>
+                          <div>拆分</div>
+                        </div>
+                        <div class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">
+                          <div class="check"></div>
+                          <div>审核</div>
+                        </div>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -825,29 +831,24 @@ export default class Index extends Vue {
   font-weight:400;
   color:rgba(24,144,255,1);
   line-height:22px;
+  display:flex;
   &:hover{
     cursor:pointer
   }
 }
-.operator:nth-child(1){
-  &:before{
-    content:'';
-    display: inline-block;
-    height:14px;
-    width:14px;
-    margin-top:5px;
-    background: url('~@/assets/img/chaifen.png');
-  }
+.operator .split{
+  height:22px;
+  width:14px;
+  background: url('~@/assets/img/chaifen.png');
+  background-position:center center;
+  background-repeat:no-repeat;
 }
-.operator:nth-child(2){
-  &:before{
-    content:'';
-    display: inline-block;
-    height:14px;
-    width:14px;
-    margin-top:5px;
-    background: url('~@/assets/img/heshi.png');
-  }
+.operator .check{
+  height:22px;
+  width:14px;
+  background:url('~@/assets/img/heshi.png');
+  background-position:center center;
+  background-repeat:no-repeat;
 }
 // .operator:nth-child(2){
 //   &:after{

@@ -62,7 +62,7 @@
                         <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index].orderNo}}</div></div>
                         <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index].materialCode + ' ' + orderList[index].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">{{orderList[index].inEndTimeLength}} 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index].inEndTime ? orderList[index].inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">入曲时间</div><div class="detail">{{orderList[index].inEndTime ? orderList[index].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
@@ -96,7 +96,7 @@
                         <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index + 1].orderNo}}</div></div>
                         <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index + 1].materialCode + ' ' + orderList[index + 1].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">{{orderList[index + 1].inEndTimeLength}} 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index + 1].inEndTime ? orderList[index + 1].inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">入曲时间</div><div class="detail">{{orderList[index + 1].inEndTime ? orderList[index + 1].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>
@@ -130,7 +130,7 @@
                         <div class="box-item-container-item"><div class="name">生产订单</div><div class="detail">{{orderList[index + 2].orderNo}}</div></div>
                         <div class="box-item-container-item"><div class="name">生产品项</div><div class="detail">{{orderList[index + 2].materialCode + ' ' + orderList[index + 2].materialName}}</div></div>
                         <div class="box-item-container-item"><div class="name">入曲时长</div><div class="detail">{{orderList[index + 2].inEndTimeLength}} 小时</div></div>
-                        <div class="box-item-container-item"><div class="name">结束时间</div><div class="detail">{{orderList[index + 2].inEndTime ? orderList[index + 2].inEndTime : ''}}</div></div>
+                        <div class="box-item-container-item"><div class="name">入曲时间</div><div class="detail">{{orderList[index + 2].inEndTime ? orderList[index + 2].inEndTime : ''}}</div></div>
                       </div>
                     </div>
                   </div>

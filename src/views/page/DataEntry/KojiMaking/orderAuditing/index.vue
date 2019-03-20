@@ -456,9 +456,10 @@ export default class Index extends Vue {
   }
   async getMaterialList () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
+    let orderNo = this.$store.state.common.ZQWorkshop.checkParams.orderNo
     this.applyMaterieList = []
     this.applyMaterieAuditList = []
-    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId}).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALE_API}`, 'POST', {orderId, orderNo}).then(res => {
       let no = 0
       let sub = 0
       let che = 0
