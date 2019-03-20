@@ -38,7 +38,7 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width:340px">
+            <el-col style="width:200px">
               <el-row class="rowButton">
                 <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
               </el-row>
