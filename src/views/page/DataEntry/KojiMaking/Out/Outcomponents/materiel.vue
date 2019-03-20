@@ -15,8 +15,8 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-select v-model="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-              <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code"></el-option>
+            <el-select v-model="scope.row.material" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+              <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code + ' ' + item.value"></el-option>
             </el-select>
           </div>
         </template>
@@ -101,6 +101,7 @@ export default {
           let no = 0
           let sav = 0
           this.MaterielDate.forEach((item) => {
+            item.material = item.materialCode + ' ' + item.materialName
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.status === 'submit') {
@@ -130,7 +131,7 @@ export default {
       let ty = true
       this.MaterielDate.forEach((item) => {
         if (item.delFlag !== '1') {
-          if (item.materialCode && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
+          if (item.material && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
             ty = false
             this.$message.error('原料领用必填项未填')
             return false
@@ -143,6 +144,8 @@ export default {
     SaveOrSubmitMateriel (str, resolve, reject) {
       this.MaterielDate.forEach((item) => {
         item.orderHouseId = this.formHeader.id
+        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
