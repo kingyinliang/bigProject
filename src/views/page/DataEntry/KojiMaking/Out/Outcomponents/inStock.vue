@@ -33,14 +33,16 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="85" label="入罐罐号" prop="houseNo" show-overflow-tooltip></el-table-column>
+      <el-table-column width="85" label="入罐罐号" show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.holderName}}</template>
+      </el-table-column>
       <el-table-column width="50" label="单位" prop="unit"></el-table-column>
       <el-table-column width="" label="操作人" prop="changer" show-overflow-tooltip></el-table-column>
       <el-table-column width="" label="操作时间" prop="changed" show-overflow-tooltip></el-table-column>
       <el-table-column width="70" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
-          <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+          <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>新增</el-button>
         </template>
       </el-table-column>
     </el-table>

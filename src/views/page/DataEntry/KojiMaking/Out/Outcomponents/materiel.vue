@@ -3,14 +3,14 @@
     <el-button type="primary" @click="AddMateriel(MaterielDate)" size="small" :disabled="!isRedact" style="float: right">新增</el-button>
     <el-table header-row-class-name="tableHead" :data="MaterielDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
-      <el-table-column label="日期">
-        <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>
-          </div>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="日期">-->
+        <!--<template slot-scope="scope">-->
+          <!--<div class="required">-->
+            <!--<i class="reqI">*</i>-->
+            <!--<el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="盐水" width="128">
         <template slot-scope="scope">
           <div class="required">
@@ -130,8 +130,7 @@ export default {
       let ty = true
       this.MaterielDate.forEach((item) => {
         if (item.delFlag !== '1') {
-          console.log(item.startValue)
-          if (item.outDate && item.materialCode && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
+          if (item.materialCode && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
             ty = false
             this.$message.error('原料领用必填项未填')
             return false

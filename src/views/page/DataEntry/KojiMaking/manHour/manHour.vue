@@ -62,7 +62,7 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <div v-if="searchCard">
+      <div v-show="searchCard">
       <el-card class="box-cards NewDaatTtabs">
         <el-card style="margin-bottom: 10px;position: relative">
           <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">产量（单位：批）</h3>
