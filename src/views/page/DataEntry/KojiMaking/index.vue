@@ -436,7 +436,7 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
         for (let item of res.data.list) {
-          let order = new House(item.orderId, item.orderNo, item.materialCode, item.materialName, item.houseNo, item.inPotNoName, item.inEndTime, item.orderHouseId, item.status, item.beanStatus, item.guardStatus, item.outStatus)
+          let order = new House(item.orderId, item.orderNo, item.materialCode, item.materialName, item.houseNo, item.inPotNoName, item.inEndTime, item.inEndTimeLength, item.orderHouseId, item.status, item.beanStatus, item.guardStatus, item.outStatus)
           this.orderList.push(order)
         }
       } else {

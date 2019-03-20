@@ -7,13 +7,14 @@ export class House {
   houseNo: string
   inPotNoName: string
   inEndTime: string
+  inEndTimeLength: string
   orderHouseId: string
   _status: string
   _beanStatus: string
   _guardStatus: string
   _outStatus: string
   constructor (orderId: string, orderNo: string, materialCode: string, materialName: string, houseNo: string, inPotNoName: string,
-    inEndTime: string, orderHouseId: string, status: string, beanStatus: string, guardStatus: string, outStatus: string) {
+    inEndTime: string, inEndTimeLength: string, orderHouseId: string, status: string, beanStatus: string, guardStatus: string, outStatus: string) {
     this.orderId = orderId
     this.orderNo = orderNo
     this.materialCode = materialCode
@@ -21,6 +22,7 @@ export class House {
     this.houseNo = houseNo
     this.inPotNoName = inPotNoName
     this.inEndTime = inEndTime
+    this.inEndTimeLength = inEndTimeLength
     this.orderHouseId = orderHouseId
     this.status = status
     this.beanStatus = beanStatus
