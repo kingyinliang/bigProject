@@ -131,6 +131,7 @@ export default {
           this.formHeader = res.data.headList[0]
           this.cookingNoId = this.formHeader.cookingNoName
           this.orderStatus = res.data.headList[0].beanStatus
+          this.$refs.material.GetrealTime(this.formHeader)
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
             this.$refs.craft.getList(this.formHeader)

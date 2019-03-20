@@ -92,7 +92,6 @@
 <script>
 import {KJM_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
-import ErrRecord from './common/errRecord'
 import Craft from './common/craft'
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
@@ -202,7 +201,6 @@ export default {
     }
   },
   components: {
-    ErrRecord,
     Craft,
     ExcRecord,
     TextRecord
