@@ -132,6 +132,7 @@ export default {
           this.cookingNoId = this.formHeader.cookingNoName
           this.orderStatus = res.data.headList[0].beanStatus
           this.$refs.material.GetrealTime(this.formHeader)
+          this.$refs.material.GetrealWheatTime(this.formHeader)
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
             this.$refs.craft.getList(this.formHeader)
@@ -185,6 +186,10 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
+      if (!this.cookingNoId || this.cookingNoId === '') {
+        this.$message.error('请选择连续蒸煮号')
+        return false
+      }
       if (str === 'submit') {
         this.$set(this.formHeader, 'submitStatus', 'submit')
         if (!this.$refs.material.mainrules()) {

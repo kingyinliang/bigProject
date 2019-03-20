@@ -11,10 +11,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="入曲开始时间：">
-          <el-date-picker v-model="tech.inStartTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width:171px"></el-date-picker>
+          <el-date-picker v-model="tech.inStartTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
         <el-form-item label="入曲结束时间：">
-          <el-date-picker v-model="tech.inEndTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width:171px"></el-date-picker>
+          <el-date-picker v-model="tech.inEndTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
       </el-form>
     </el-card>
@@ -42,7 +42,7 @@
           <el-table-column label="序号" type="index" width="50px"></el-table-column>
           <el-table-column label="看曲时间" width="200">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width:185px"></el-date-picker>
+              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:185px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="风温实际">

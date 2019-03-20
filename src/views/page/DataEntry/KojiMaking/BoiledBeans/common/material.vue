@@ -9,9 +9,9 @@
         <div class="zhongarBox">
         <el-table border style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
-          <el-table-column label="日期" width="150px">
+          <el-table-column label="日期" width="160px">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:130px"></el-date-picker>
+              <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:140px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="* 种曲" width="180px">
@@ -21,14 +21,14 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="生产批次">
+          <el-table-column label="生产批次" width="130px">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="物料批次">
+          <el-table-column label="物料批次" width="130px">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <el-input maxlength="10" v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="* 数量">
@@ -43,7 +43,7 @@
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160px"></el-table-column>
-          <el-table-column label="操作" width="50">
+          <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
               <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delrow(scope.row)"></el-button>
             </template>
@@ -68,12 +68,14 @@
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
               <el-progress type="circle" :percentage="25" :stroke-width="10" :width="135"></el-progress>
-              <div class="boxText">
-                <div>批次:1234567890<span>2450KG</span></div>
-                <el-progress :percentage="100" :show-text="false" :text-inside="true" :stroke-width="8"></el-progress>
-                <div>批次:1234567890<span>2450KG</span></div>
-                <el-progress :percentage="100" :show-text="false" :text-inside="true" :stroke-width="8"></el-progress>
-              </div>
+                <div class="boxText">
+                  <div v-for="(soles, index) in wheatListPici" :key="index">
+                    <div v-if="piciTrue(sole, soles.holderId)">
+                      <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                      <el-progress :percentage="100" :show-text="false" :text-inside="true" :stroke-width="8"></el-progress>
+                    </div>
+                  </div>
+                </div>
             </div>
             <div style="width:100%; text-align:center">
               <el-button class="boxButton" @click="addwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:88px; float:initial;">立即领用</el-button>
@@ -167,8 +169,8 @@
         </el-form-item>
         <el-form-item label="领用数量" :label-width="formLabelWidth">{{lnum}}</el-form-item>
         <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
-          <el-select v-model="wheat.whtBatch">
-            <el-option label="123" value="123"></el-option>
+          <el-select v-model="wheat.whtBatch" placeholder="请选择">
+            <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
@@ -296,7 +298,9 @@ export default {
       wheatShort: '',
       soyliang: '',
       soyShort: '',
-      pulpListPici: ''
+      pulpListPici: '',
+      wheatListPici: '',
+      wheatPiArray: []
     }
   },
   mounted () {
@@ -328,6 +332,15 @@ export default {
       this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
         if (data.code === 0) {
           this.pulpListPici = data.listInfo
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    GetrealWheatTime (formHeader) {
+      this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
+        if (data.code === 0) {
+          this.wheatListPici = data.listInfo
         } else {
           this.$message.error(data.msg)
         }
@@ -368,7 +381,7 @@ export default {
         return false
       }
       this.materialList.forEach((item) => {
-        if (item.materialCode === '' || !item.amount) {
+        if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '') {
           ty = false
           return false
         }
@@ -444,6 +457,14 @@ export default {
     // 小麦领用
     addwheat (row) {
       this.MTitle = row.holderName
+      // 批次下拉
+      this.wheatPiArray = []
+      this.wheatListPici.map((item) => {
+        if (item.holderId === row.holderId) {
+          this.wheatPiArray.push(item)
+        }
+      })
+      console.log(this.wheatPiArray)
       this.wheat = {
         uid: this.uuid(),
         id: '',
@@ -454,7 +475,7 @@ export default {
         materialName: '',
         holderId: row.holderId,
         holderName: row.holderName,
-        whtBatch: '123',
+        whtBatch: '',
         startWeight: '',
         endWeight: '',
         remark: '',
@@ -879,13 +900,13 @@ export default {
   },
   computed: {
     lnum: function () {
-      return this.wheat.endWeight - this.wheat.startWeight
+      return this.wheat.startWeight - this.wheat.endWeight
     },
     rusoylnum: function () {
       return this.rusoy.endWeight - this.rusoy.startWeight
     },
     chusoylnum: function () {
-      return this.chusoy.endWeight - this.chusoy.startWeight
+      return this.chusoy.startWeight - this.chusoy.endWeight
     },
     wheatUseNum: function () {
       let num = 0

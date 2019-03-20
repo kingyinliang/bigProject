@@ -278,39 +278,37 @@ export default {
   methods: {
     craftrules () {
       let ty = true
-      if (this.craftfrom.preheatDate === '' || this.craftfrom.preheatDate === null) {
+      if (this.craftfrom.preheatDate === '' || !this.craftfrom.preheatDate) {
         ty = false
         this.$message.error('预热开始时间不能为空')
         return false
       }
-      if (this.craftfrom.unloadingStartDate === '' || this.craftfrom.unloadingStartDate === null) {
+      if (this.craftfrom.unloadingStartDate === '' || !this.craftfrom.unloadingStartDate) {
         ty = false
         this.$message.error('下料开始时间不能为空')
         return false
       }
-      if (this.craftfrom.unloadingEndDate === null || this.craftfrom.unloadingEndDate === '') {
+      if (!this.craftfrom.unloadingEndDate || this.craftfrom.unloadingEndDate === '') {
         ty = false
         this.$message.error('下料结束时间不能为空')
         return false
       }
-      if (this.craftfrom.rateRunWater === null || this.craftfrom.tempRunWater === null || this.craftfrom.frequenceRunWater === null || this.craftfrom.realRate === null || this.craftfrom.weightRunWater === null || this.craftfrom.speedRunWater === null || this.craftfrom.oncePreheatFrequency === null || this.craftfrom.secondPreheatFrequency === null || this.craftfrom.secondPreheatTemp === null || this.craftfrom.unloadingSpeed === null) {
+      if (!this.craftfrom.rateRunWater || !this.craftfrom.tempRunWater || !this.craftfrom.frequenceRunWater || !this.craftfrom.realRate || !this.craftfrom.weightRunWater || !this.craftfrom.speedRunWater || !this.craftfrom.oncePreheatFrequency || !this.craftfrom.secondPreheatFrequency || !this.craftfrom.secondPreheatTemp || !this.craftfrom.unloadingSpeed || this.craftfrom.rateRunWater === '' || this.craftfrom.tempRunWater === '' || this.craftfrom.frequenceRunWater === '' || this.craftfrom.realRate === '' || this.craftfrom.weightRunWater === '' || this.craftfrom.speedRunWater === '' || this.craftfrom.oncePreheatFrequency === '' || this.craftfrom.secondPreheatFrequency === '' || this.craftfrom.secondPreheatTemp === '' || this.craftfrom.unloadingSpeed === '') {
         ty = false
         this.$message.error('煮豆润水参数不能为空')
         return false
       }
-      if (this.craftfrom.cookingFrequency === null || this.craftfrom.upFrequency === null || this.craftfrom.downFrequency === null) {
+      if (this.lishuiList.length === 0) {
+        ty = false
+        this.$message.error('煮豆润水过程监控数据记录未填')
+        return false
+      }
+      if (this.craftfrom.cookingFrequency === '' || this.craftfrom.upFrequency === '' || this.craftfrom.downFrequency === '' || !this.craftfrom.cookingFrequency || !this.craftfrom.upFrequency || !this.craftfrom.downFrequency) {
         ty = false
         this.$message.error('连续蒸煮参数不能为空')
         return false
       }
-      this.hunheList.forEach((item) => {
-        if (item.guardDate === undefined || item.guardDate === null || item.mixtureTemp === undefined || item.inoculationTemp === undefined || item.cookingFeel === undefined) {
-          ty = false
-          this.$message.error('混合入曲控制必填项未填')
-          return false
-        }
-      })
-      if (this.lishuiList.length === 0 || this.zhengzhuList.length === 0) {
+      if (this.zhengzhuList.length === 0) {
         ty = false
         this.$message.error('过程监控数据记录未填')
         return false
@@ -318,6 +316,16 @@ export default {
       if (this.hunheList.length) {
         ty = false
         this.$message.error('混合入曲控制未填')
+        return false
+      }
+      this.hunheList.forEach((item) => {
+        if (!item.guardDate || !item.mixtureTemp || !item.inoculationTemp || !item.cookingFeel || item.guardDate === '' || item.mixtureTemp === '' || item.inoculationTemp === '' || item.cookingFeel === '') {
+          ty = false
+          return false
+        }
+      })
+      if (!ty) {
+        this.$message.error('混合入曲控制必填项未填')
         return false
       }
       return ty
@@ -464,10 +472,10 @@ export default {
   },
   computed: {
     timecha: function () {
-      if (this.craftfrom.unloadingStartDate !== null && this.craftfrom.preheatDate !== null) {
-        return (new Date(this.craftfrom.unloadingStartDate) - new Date(this.craftfrom.preheatDate)) / 60000
-      } else {
+      if (!this.craftfrom.unloadingStartDate || !this.craftfrom.preheatDate) {
         return 0
+      } else {
+        return (new Date(this.craftfrom.unloadingStartDate) - new Date(this.craftfrom.preheatDate)) / 60000
       }
     }
   },
