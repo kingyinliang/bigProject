@@ -54,7 +54,9 @@ export default {
         // normal/abnormal 正常生产/无生产
         productStatus: 'normal',
         // 订单管理页的订单日期
-        orderDate: ''
+        orderDate: '',
+        orderNo: '',
+        orderStatus: ''
       },
       // 首页跳转到工序页参数
       params: {

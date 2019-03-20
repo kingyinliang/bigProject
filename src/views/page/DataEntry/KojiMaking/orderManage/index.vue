@@ -7,19 +7,34 @@
             <el-col>
               <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
                 <el-form-item label="工厂：">
-                  <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
+                  <el-select size="small" v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
+                  <el-select size="small" v-model="params.workshopId" class="selectwpx" style="width:140px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="订单日期：" label-width="70px">
-                  <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                  <el-date-picker size="small" type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="订单号：" label-width="70px">
+                  <el-input size="small" type="text" v-model.trim="params.orderNo" placeholder='请输入' style="width:140px"/>
+                </el-form-item>
+                <el-form-item label="订单状态：" label-width="70px">
+                  <el-select size="small" v-model="params.orderStatus" class="selectwpx" style="width:120px">
+                    <el-option label="请选择" value=""></el-option>
+                    <el-option label="已同步" value="已同步"></el-option>
+                    <el-option label="未录入" value="已拆分"></el-option>
+                    <el-option label="待审核" value="toBeAudited"></el-option>
+                    <el-option label="已保存" value="saved"></el-option>
+                    <el-option label="已提交" value="submit"></el-option>
+                    <el-option label="不通过" value="noPass"></el-option>
+                    <el-option label="通过" value="checked"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -38,7 +53,7 @@
               </el-row>
               <el-row>
                 <el-col>
-                  <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="orderList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
+                  <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="currentOrderList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
                     <el-table-column type="index" width="55" label="序号"></el-table-column>
                     <el-table-column label="订单状态" width="80">
                       <template slot-scope="scope">
@@ -95,6 +110,17 @@
                     </el-table-column>
                   </el-table>
                 </el-col>
+              </el-row>
+              <el-row>
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="totalCount">
+                </el-pagination>
               </el-row>
             </el-card>
           </el-col>
@@ -337,6 +363,9 @@ export default class Index extends Vue {
   searched: boolean = false
   showdetails: boolean = true
   formLabelWidth:string = '120px'
+  currPage = 1
+  pageSize = 10
+
   mounted () {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
@@ -437,7 +466,8 @@ export default class Index extends Vue {
     let params = {
       workShop: this.params.workshopId,
       orderDate: this.params.orderDate,
-      orderNo: ''
+      orderNo: this.params.orderNo,
+      orderStatus: this.params.orderStatus
     }
     this.retrieveOrderData(params)
   }
@@ -662,6 +692,19 @@ export default class Index extends Vue {
     this.$store.commit('common/updateZQCheckParamsOrderNo', row.orderNo)
     this.$store.commit('common/updateZQCheckParamsOrderId', row.orderId)
     this.pushPage('DataEntry-KojiMaking-orderAuditing-index')
+  }
+  get totalCount () {
+    return this.orderList.length
+  }
+  get currentOrderList () {
+    return this.orderList.slice((this.currPage - 1) * this.pageSize, this.currPage * this.pageSize)
+  }
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+  }
+  handleCurrentChange (val: number) {
+    this.currPage = val
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs
