@@ -133,6 +133,7 @@ export default {
           this.orderStatus = res.data.headList[0].beanStatus
           this.$refs.material.GetrealTime(this.formHeader)
           this.$refs.material.GetrealWheatTime(this.formHeader)
+          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
             this.$refs.craft.getList(this.formHeader)
