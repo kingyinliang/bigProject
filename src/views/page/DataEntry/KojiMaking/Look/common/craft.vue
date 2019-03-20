@@ -40,9 +40,9 @@
         </el-row>
         <el-table border header-row-class-name="tableHead" :data="lookList" :row-class-name="rowDelFlag" tooltip-effect="dark">
           <el-table-column label="序号" type="index" width="50px"></el-table-column>
-          <el-table-column label="看曲时间" width="200">
+          <el-table-column label="看曲时间" width="190">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:185px"></el-date-picker>
+              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:175px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="风温实际">
@@ -63,29 +63,32 @@
           <el-table-column label="风门/进风" width="100">
             <template slot-scope="scope">
               <el-select v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="风门" value="风门"></el-option>
-                <el-option label="进风" value="进风"></el-option>
+                <el-option label="风门" value="0"></el-option>
+                <el-option label="进风" value="1"></el-option>
               </el-select>
             </template>
           </el-table-column>
           <el-table-column label="强排/反风" width="100">
             <template slot-scope="scope">
               <el-select v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="强排" value="强排"></el-option>
-                <el-option label="反风" value="反风"></el-option>
+                <el-option label="强排" value="1"></el-option>
+                <el-option label="反风" value="0"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="加湿情况">
+          <el-table-column label="加湿情况" width="100">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.jiashiFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <el-select v-model="scope.row.jiashiFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                <el-option label="加湿" value="1"></el-option>
+                <el-option label="未加湿" value="0"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="加热/冷却" width="100">
             <template slot-scope="scope">
               <el-select v-model="scope.row.jiareFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="加热" value="加热"></el-option>
-                <el-option label="冷却" value="冷却"></el-option>
+                <el-option label="加热" value="1"></el-option>
+                <el-option label="冷却" value="0"></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -124,7 +127,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="150px"></el-table-column>
-          <el-table-column width=50>
+          <el-table-column width=50 fixed="right">
             <template slot-scope="scope">
               <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" circle size="small" @click="delrow(scope.row)"></el-button>
             </template>
@@ -337,7 +340,7 @@ export default {
         thermometerOut: '',
         thermometerInner: '',
         remark: '',
-        delFlag: 0,
+        delFlag: '0',
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
       })
     },
