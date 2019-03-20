@@ -163,8 +163,9 @@ export default {
     SaveOrSubmitInStock (str, resolve, reject) {
       this.InStock.forEach((item) => {
         item.materialCode = this.formHeader.materialCode
-        item.materialName =this.formHeader.materialName
+        item.materialName = this.formHeader.materialName
         item.orderHouseId = this.formHeader.id
+        item.holderName = this.formHeader.inPotName
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
