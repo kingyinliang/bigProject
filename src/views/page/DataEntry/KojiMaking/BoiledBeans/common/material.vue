@@ -69,11 +69,11 @@
             <div class="boxContent">
               <el-progress type="circle" :percentage="25" :stroke-width="10" :width="135"></el-progress>
                 <div class="boxText">
-                  <div v-for="(soles, index) in wheatListPici" :key="index">
-                    <div v-if="piciTrue(sole, soles.holderId)">
-                      <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
-                      <el-progress :percentage="100" :show-text="false" :text-inside="true" :stroke-width="8"></el-progress>
-                    </div>
+                  <div v-for="(soles, index) in sole.pici" :key="index">
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
                   </div>
                 </div>
             </div>
@@ -123,11 +123,11 @@
             <div class="boxContent">
               <el-progress type="circle" :percentage="25" :stroke-width="10" :width="135"></el-progress>
               <div class="boxText">
-                <div v-for="(soles, index) in pulpListPici" :key="index">
-                  <div v-if="piciTrue(sole, soles.holderId)">
+                <div v-for="(soles, index) in sole.pici" :key="index">
                     <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
-                    <el-progress :percentage="100" :show-text="false" :text-inside="true" :stroke-width="8"></el-progress>
-                  </div>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
                 </div>
               </div>
             </div>
@@ -161,6 +161,11 @@
     </el-card>
     <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai" width="450px">
       <el-form :model="wheat" size="small" :rules="wheatrules" ref="wheat">
+        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
+          <el-select v-model="wheat.whtBatch" placeholder="请选择">
+            <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
@@ -168,11 +173,6 @@
           <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="领用数量" :label-width="formLabelWidth" prop="wheatuseprop">{{lnum}}</el-form-item>
-        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
-          <el-select v-model="wheat.whtBatch" placeholder="请选择">
-            <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
         <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
       </el-form>
@@ -208,6 +208,12 @@
     </el-dialog>
     <el-dialog :title="DCTitle" :visible.sync="dialogFormVisibleDouChu" width="450px">
       <el-form :model="chusoy" size="small" :rules="chusoyrules" ref="chusoy">
+        <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
+          <!-- <el-input v-model="chusoy.batch" autocomplete="off" maxlength="10"></el-input> -->
+          <el-select v-model="chusoy.batch" placeholder="请选择">
+            <el-option v-for='sole in pulpPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="起始数" :label-width="formLabelWidth">
           <el-input type="number" v-model.number="chusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
@@ -215,12 +221,6 @@
           <el-input type="number" v-model.number="chusoy.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="领用数量" :label-width="formLabelWidth">{{chusoylnum}}</el-form-item>
-        <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
-          <!-- <el-input v-model="chusoy.batch" autocomplete="off" maxlength="10"></el-input> -->
-          <el-select v-model="chusoy.batch" placeholder="请选择">
-            <el-option v-for='sole in pulpPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="操作时间" :label-width="formLabelWidth">{{chusoy.changed}}</el-form-item>
         <el-form-item label="操作人" :label-width="formLabelWidth">{{chusoy.changer}}</el-form-item>
       </el-form>
@@ -256,29 +256,29 @@ export default {
       wheat: {},
       wheatrules: {
         startWeight: [
-          {required: true, message: '必选', trigger: 'blur'},
+          {required: true, message: '必填', trigger: 'blur'},
           {type: 'number', message: '必须为数字'}
         ],
         endWeight: [
-          {required: true, message: '必选', trigger: 'blur'},
+          {required: true, message: '必填', trigger: 'blur'},
           {type: 'number', message: '必须为数字'}
         ],
         whtBatch: [
-          {required: true, message: '必选', trigger: 'change'}
+          {required: true, message: '请选择批次', trigger: 'change'}
         ]
       },
       chusoy: {},
       chusoyrules: {
         batch: [
-          { required: true, message: '必选', trigger: 'blur' },
+          { required: true, message: '请选择批次', trigger: 'blur' },
           { min: 10, max: 10, message: '长度为10位', trigger: 'blur' }
         ],
         endWeight: [
-          { required: true, message: '必选', trigger: 'blur' }
+          { required: true, message: '必填', trigger: 'blur' }
         ]
       },
-      MaiHoldList: '',
-      DouHoldList: '',
+      MaiHoldList: [],
+      DouHoldList: [],
       DCTitle: '', // 豆粕弹框 出罐 title
       DRTitle: '', // 豆粕弹框 入罐 title
       MTitle: '', // 麦弹框 title
@@ -286,14 +286,14 @@ export default {
       rusoy: {},
       rusoyrules: {
         batch: [
-          { required: true, message: '必选', trigger: 'blur' },
+          { required: true, message: '必填', trigger: 'blur' },
           { min: 10, max: 10, message: '长度为10位', trigger: 'blur' }
         ],
         foodHolderId: [
           { required: true, message: '请选择粮仓', trigger: 'change' }
         ],
         endWeight: [
-          { required: true, message: '必选', trigger: 'change' }
+          { required: true, message: '必填', trigger: 'change' }
         ]
       },
       materialShort: '',
@@ -304,7 +304,8 @@ export default {
       pulpListPici: '',
       wheatListPici: '',
       wheatPiArray: [],
-      pulpPiArray: []
+      pulpPiArray: [],
+      holderIdomg: ''
     }
   },
   mounted () {
@@ -329,6 +330,16 @@ export default {
       this.soyList.map((item) => {
         item.materialCode = this.soyliang
       })
+    },
+    'wheat.whtBatch' () {
+      if (this.wheat.whtBatch && this.wheat.whtBatch !== '') {
+        this.wheat.startWeight = this.MaiHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.wheat.whtBatch)['amount']
+      }
+    },
+    'chusoy.batch' () {
+      if (this.chusoy.batch && this.chusoy.batch !== '') {
+        this.chusoy.startWeight = this.DouHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.chusoy.batch)['amount']
+      }
     }
   },
   methods: {
@@ -420,6 +431,25 @@ export default {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 100, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.MaiHoldList = res.data.page.list
+          this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: this.formHeader.workShop}).then(({data}) => {
+            if (data.code === 0) {
+              this.wheatListPici = data.listInfo
+              this.MaiHoldList.map((item, index) => {
+                let pici = []
+                this.wheatListPici.map((items) => {
+                  if (item.holderId === items.holderId) {
+                    if (items.proportion < 0) {
+                      items.proportion = 0
+                    }
+                    pici.push(items)
+                  }
+                })
+                this.$set(this.MaiHoldList[index], 'pici', pici)
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         } else {
           this.$message.error(res.data.msg)
         }
@@ -430,6 +460,26 @@ export default {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '010', pageSize: 100, type: 'holder_type', workShopName: this.formHeader.workShopName}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.DouHoldList = res.data.page.list
+          // this
+          this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: this.formHeader.workShop}).then(({data}) => {
+            if (data.code === 0) {
+              this.pulpListPici = data.listInfo
+              this.DouHoldList.map((item, index) => {
+                let pici = []
+                this.pulpListPici.map((items) => {
+                  if (item.holderId === items.holderId) {
+                    if (items.proportion < 0) {
+                      items.proportion = 0
+                    }
+                    pici.push(items)
+                  }
+                })
+                this.$set(this.DouHoldList[index], 'pici', pici)
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         } else {
           this.$message.error(res.data.msg)
         }
@@ -469,6 +519,7 @@ export default {
     // 小麦领用
     addwheat (row) {
       this.MTitle = row.holderName
+      this.holderIdomg = row.holderId
       // 批次下拉
       this.wheatPiArray = []
       this.wheatListPici.map((item) => {
@@ -631,6 +682,7 @@ export default {
     chusoyM (row) {
       this.dialogFormVisibleDouChu = true
       this.DCTitle = row.holderName + '出罐'
+      this.holderIdomg = row.holderId
       this.pulpPiArray = []
       this.pulpListPici.map((item) => {
         if (row.holderId === item.holderId) {
@@ -670,7 +722,7 @@ export default {
               batch: this.chusoy.batch,
               startWeight: this.chusoy.startWeight,
               endWeight: this.chusoy.endWeight,
-              useWeight: this.chusoy.endWeight - this.chusoy.startWeight,
+              useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
               useType: '出罐',
               unit: 'KG',
               pulpHolderId: this.chusoy.pulpHolderId,
@@ -690,7 +742,7 @@ export default {
               batch: this.chusoy.batch,
               startWeight: this.chusoy.startWeight,
               endWeight: this.chusoy.endWeight,
-              useWeight: this.chusoy.endWeight - this.chusoy.startWeight,
+              useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
               useType: '出罐',
               unit: 'KG',
               remark: '',
@@ -916,11 +968,6 @@ export default {
       } else {
         row.delFlag = '1'
       }
-    },
-    piciTrue (sole, holderid) {
-      if (holderid === sole.holderId) {
-        return true
-      }
     }
   },
   computed: {
@@ -931,7 +978,7 @@ export default {
       return this.rusoy.endWeight - this.rusoy.startWeight
     },
     chusoylnum: function () {
-      return this.chusoy.endWeight - this.chusoy.startWeight
+      return this.chusoy.startWeight - this.chusoy.endWeight
     },
     wheatUseNum: function () {
       let num = 0
