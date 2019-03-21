@@ -38,7 +38,7 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width:100px">
+            <el-col style="width:80px">
               <el-row class="rowButton">
                 <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
               </el-row>
@@ -100,11 +100,11 @@
                       <template slot-scope="scope">
                         <div class="operator" v-if="scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存'" @click="orderSplit(scope.row)">
                           <div class="split"></div>
-                          <div>拆分</div>
+                          <div>&nbsp;拆分</div>
                         </div>
                         <div class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">
                           <div class="check"></div>
-                          <div>审核</div>
+                          <div>&nbsp;审核</div>
                         </div>
                       </template>
                     </el-table-column>
@@ -130,7 +130,7 @@
                 <el-col :span="12" style="font-size:16px;font-weight:500;color:#000">
                   订单明细
                 </el-col>
-                <el-col :span="12" class="rowButton">
+                <el-col :span="12" class="rowButton" style='margin-top:-13px'>
                    <el-button type="primary" size="small"  style="float:right" @click="delDetail">删除</el-button>
                 </el-col>
               </el-row>
@@ -195,7 +195,10 @@
           </el-col>
         </el-row>
       </div>
-      <el-dialog title="订单分配" :visible.sync="dialogFormVisible" width="1200px">
+      <el-dialog :visible.sync="dialogFormVisible" width="1200px" custom-class='dialog__class'>
+        <div slot="title" class='title'>
+          <span>订单分配</span>
+        </div>
         <div class="orderForm">
           <el-table header-row-class-name="tableHead" :data="splitDetailList"  border tooltip-effect="dark" :row-class-name="rowDelFlag">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
@@ -231,24 +234,26 @@
                 <span>{{scope.row.remark}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="入罐号" width="140">
-              <template slot-scope="scope">
-                <div class="required">
+            <el-table-column width="140">
+              <template slot="header">
                   <i class="reqI">*</i>
-                  <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
-                    <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-                  </el-select>
-                </div>
+                  <span>入罐号</span>
+              </template>
+              <template slot-scope="scope">
+                <el-select  v-model="scope.row.inPotNo" filterable placeholder="请选择"  size="small">
+                  <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+                </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="曲房" width="140">
+            <el-table-column width="140">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>曲房</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-select  v-model="scope.row.houseNo" filterable placeholder="请选择"  size="small">
-                    <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-                  </el-select>
-                </div>
+                <el-select  v-model="scope.row.houseNo" filterable placeholder="请选择"  size="small">
+                  <el-option v-for="(item, index) in kjmRoomList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+                </el-select>
               </template>
             </el-table-column>
             <el-table-column label="连续蒸煮号" width="140">
@@ -259,20 +264,22 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="制曲日期" width="170">
+            <el-table-column width="170">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>制曲日期</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-date-picker v-model="scope.row.inKjmDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
-                </div>
+                <el-date-picker v-model="scope.row.inKjmDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small" style="width:135px" ></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column label="生产日期" width="170">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>生产日期</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-date-picker v-model="scope.row.productDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small"  style="width:135px"></el-date-picker>
-                </div>
+                <el-date-picker v-model="scope.row.productDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" size="small"  style="width:135px"></el-date-picker>
               </template>
             </el-table-column>
             <el-table-column
@@ -287,8 +294,8 @@
           </el-table>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="splitOrder()">保存</el-button>
+          <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="splitOrder()">保存</el-button>
         </div>
       </el-dialog>
       <el-dialog title="明细修改" :visible.sync="dialogFormVisible2" width="450px">
@@ -320,8 +327,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible2 = false">取消</el-button>
-          <el-button type="primary" @click="modifyDetial()">保存</el-button>
+          <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible2 = false">取消</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="modifyDetial()">保存</el-button>
         </div>
       </el-dialog>
     </el-col>
@@ -902,21 +909,25 @@ export default class Index extends Vue {
 //     background:rgba(233,233,233,1);
 //   }
 // }
-.orderForm {
-  .required{
-    position: relative;
-    padding-left: 15px;
-    .reqI{
-      color: red;
-      position: absolute;
-      left: 0;
-      line-height: 32px;
+</style>
+<style lang='scss'>
+.dialog__class{
+  border-radius:6px 6px 0px 0px;
+  .el-dialog__header{
+    height:59px;
+    background:rgba(24,144,255,1);
+    border-radius:6px 6px 0px 0px;
+    color: #fff;
+    font-size:20px;
+    .el-dialog__headerbtn .el-dialog__close{
+      color: #fff
     }
   }
-}
-</style>
-<style>
-.rowDel{
-  display: none;
+  .reqI{
+    color: red;
+  }
+  .rowDel{
+    display: none;
+  }
 }
 </style>
