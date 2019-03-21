@@ -898,8 +898,6 @@ export const KJM_API = {
   /**
    * 煮豆edit
    */
-  DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
-  DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
   DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
   DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
   DOUMATERWHEAT_API: HOST + '/kjm/bean/wheat/update', // 原料 小麦
@@ -908,6 +906,8 @@ export const KJM_API = {
   DOUMATERSUBMITZHONG_API: HOST + '/kjm/bean/material/submit', // 原料 种曲提交
   DOUMATERSUBMITWHEAT_API: HOST + '/kjm/bean/wheat/submit', // 原料 小麦提交
   DOUMATERSUBMITSOY_API: HOST + '/kjm/bean/pulp/submit', // 原料 豆粕提交
+  DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
+  DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
 
   DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
   DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
@@ -929,10 +929,6 @@ export const KJM_API = {
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
    */
   KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
-  /**
-   * @property {string} KJMAKINGCHECKTIMESAVE_API 车间审核工时保存
-   */
-  KJMAKINGCHECKTIMESAVE_API: HOST + '/sys/midTimeSheet/update',
   /**
    * @property {string} KJMAKINGCHECKTIMEBACK_API 车间审核工时回退
    */

@@ -107,6 +107,7 @@ export default {
         id: this.ZQWorkshop.params.outOrderHouseId
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
+          this.isRedact = false
           this.formHeader = data.list[0]
           this.orderStatus = data.list[0].outStatus
           this.$refs.meateriel.GetBrineTankNo(this.formHeader)

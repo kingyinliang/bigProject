@@ -11,7 +11,7 @@
         <el-form-item label="下料结束时间：">
           <el-date-picker v-model="craftfrom.unloadingEndDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="(min)预热时间：">
+        <el-form-item label="预热时间(min)：">
           <el-input v-model="timecha" disabled style="width:100px"></el-input>
           <!-- <el-date-picker v-model="craftfrom.preheatTime" type="datetime" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker> -->
         </el-form-item>
@@ -101,7 +101,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
@@ -181,7 +181,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width:100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
@@ -226,7 +226,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
