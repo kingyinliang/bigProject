@@ -91,6 +91,7 @@ export default {
     GetmaterielDate (formHeader) {
       this.$http(`${KJM_API.OUTMATERIELLIST_API}`, 'POST', {
         orderId: formHeader.orderId,
+        orderHouseId: formHeader.id,
         orderNo: formHeader.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
