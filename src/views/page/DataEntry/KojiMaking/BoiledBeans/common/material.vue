@@ -90,7 +90,7 @@
             </template>
           </el-table-column>
           <el-table-column label="麦粉罐" prop="holderName" width="140"></el-table-column>
-          <el-table-column label="批次" prop="whtBatch"></el-table-column>
+          <el-table-column label="批次" prop="whtBatch" width="110"></el-table-column>
           <el-table-column label="起始" prop="startWeight"></el-table-column>
           <el-table-column label="结束" prop="endWeight"></el-table-column>
           <el-table-column label="领用数" prop="userWeight" width="70"></el-table-column>
