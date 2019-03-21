@@ -906,6 +906,8 @@ export const KJM_API = {
   DOUMATERSUBMITZHONG_API: HOST + '/kjm/bean/material/submit', // 原料 种曲提交
   DOUMATERSUBMITWHEAT_API: HOST + '/kjm/bean/wheat/submit', // 原料 小麦提交
   DOUMATERSUBMITSOY_API: HOST + '/kjm/bean/pulp/submit', // 原料 豆粕提交
+  DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
+  DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
 
   DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
   DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
