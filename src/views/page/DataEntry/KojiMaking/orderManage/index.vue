@@ -912,7 +912,7 @@ export default class Index extends Vue {
 </style>
 <style lang='scss'>
 .dialog__class{
-  border-radius:6px 6px 0px 0px;
+  border-radius:6px 6px 0px 0px !important;
   .el-dialog__header{
     height:59px;
     background:rgba(24,144,255,1);
