@@ -101,7 +101,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
@@ -181,7 +181,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width:100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
@@ -226,7 +226,7 @@
         </el-table>
         <div>
           <div class="audit"><span>异常情况记录</span></div>
-          <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:90px"></el-input></div>
+          <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
