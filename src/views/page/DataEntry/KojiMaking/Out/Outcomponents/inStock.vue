@@ -113,6 +113,7 @@ export default {
     GetOutInStorage (formHeader) {
       this.$http(`${KJM_API.OUTINLIST_API}`, 'POST', {
         orderId: formHeader.orderId,
+        orderHouseId: formHeader.id,
         orderNo: formHeader.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
