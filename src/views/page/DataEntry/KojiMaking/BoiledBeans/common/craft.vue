@@ -313,7 +313,7 @@ export default {
         this.$message.error('过程监控数据记录未填')
         return false
       }
-      if (this.hunheList.length) {
+      if (this.hunheList.length === 0) {
         ty = false
         this.$message.error('混合入曲控制未填')
         return false

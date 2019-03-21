@@ -238,24 +238,25 @@ export default {
       let net99
       net99 = Promise.all([net100, net0, net1, net2, net3, excSaveNet, textSaveNet])
       net99.then(function () {
-        let net4 = new Promise((resolve, reject) => {
+        new Promise((resolve, reject) => {
           that.$refs.craft.updatezhu(resolve, reject)
-        })
-        let net5 = new Promise((resolve, reject) => {
-          that.$refs.craft.updatelishui(resolve, reject)
-        })
-        let net6 = new Promise((resolve, reject) => {
-          that.$refs.craft.updatezhengzhu(resolve, reject)
-        })
-        let net7 = new Promise((resolve, reject) => {
-          that.$refs.craft.updatehunhe(resolve, reject)
-        })
-        Promise.all([net4, net5, net6, net7]).then(function () {
-          that.$message.success('保存成功')
-          that.GetheadList()
-          that.isRedact = false
-        }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+        }).then(function () {
+          let net5 = new Promise((resolve, reject) => {
+            that.$refs.craft.updatelishui(resolve, reject)
+          })
+          let net6 = new Promise((resolve, reject) => {
+            that.$refs.craft.updatezhengzhu(resolve, reject)
+          })
+          let net7 = new Promise((resolve, reject) => {
+            that.$refs.craft.updatehunhe(resolve, reject)
+          })
+          Promise.all([net5, net6, net7]).then(function () {
+            that.$message.success('保存成功')
+            that.GetheadList()
+            that.isRedact = false
+          }).catch(() => {
+            that.$message.error('网络请求失败，请刷新重试')
+          })
         })
       })
     },

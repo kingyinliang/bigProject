@@ -21,7 +21,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="生产批次" width="130px">
+          <el-table-column label="* 生产批次" width="130px">
             <template slot-scope="scope">
               <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
@@ -167,7 +167,7 @@
         <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
           <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="领用数量" :label-width="formLabelWidth">{{lnum}}</el-form-item>
+        <el-form-item label="领用数量" :label-width="formLabelWidth" prop="wheatuseprop">{{lnum}}</el-form-item>
         <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
           <el-select v-model="wheat.whtBatch" placeholder="请选择">
             <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
@@ -216,7 +216,10 @@
         </el-form-item>
         <el-form-item label="领用数量" :label-width="formLabelWidth">{{chusoylnum}}</el-form-item>
         <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
-          <el-input v-model="chusoy.batch" autocomplete="off" maxlength="10"></el-input>
+          <!-- <el-input v-model="chusoy.batch" autocomplete="off" maxlength="10"></el-input> -->
+          <el-select v-model="chusoy.batch" placeholder="请选择">
+            <el-option v-for='sole in pulpPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="操作时间" :label-width="formLabelWidth">{{chusoy.changed}}</el-form-item>
         <el-form-item label="操作人" :label-width="formLabelWidth">{{chusoy.changer}}</el-form-item>
@@ -300,7 +303,8 @@ export default {
       soyShort: '',
       pulpListPici: '',
       wheatListPici: '',
-      wheatPiArray: []
+      wheatPiArray: [],
+      pulpPiArray: []
     }
   },
   mounted () {
@@ -381,7 +385,7 @@ export default {
         return false
       }
       this.materialList.forEach((item) => {
-        if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '') {
+        if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '' || !item.productBatch || item.productBatch === '') {
           ty = false
           return false
         }
@@ -390,9 +394,17 @@ export default {
         this.$message.error('种曲必填项未填')
         return false
       }
+      if (!this.wheatliang || this.wheatliang === 0) {
+        this.$message.error('请选择小麦粉批次')
+        return false
+      }
       if (this.wheatList.length === 0) {
         ty = false
         this.$message.error('请填写小麦粉数据')
+        return false
+      }
+      if (!this.soyliang || this.soyliang === 0) {
+        this.$message.error('请选择豆粕批次')
         return false
       }
       if (this.soyList.length === 0) {
@@ -464,7 +476,6 @@ export default {
           this.wheatPiArray.push(item)
         }
       })
-      console.log(this.wheatPiArray)
       this.wheat = {
         uid: this.uuid(),
         id: '',
@@ -496,27 +507,31 @@ export default {
     },
     // 小麦领用保存
     savewheat (formName) {
-      this.$set(this.wheat, 'userWeight', this.lnum)
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dialogFormVisibleMai = false
-          let currentRecord = []
-          if (this.wheat.hasOwnProperty('uid')) {
-            // 新增行
-            currentRecord = this.wheatList.filter(data => data.uid === this.wheat.uid)
+      if (this.lnum < 0) {
+        this.$message.error('领用数不能为负数')
+      } else {
+        this.$set(this.wheat, 'userWeight', this.lnum)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.dialogFormVisibleMai = false
+            let currentRecord = []
+            if (this.wheat.hasOwnProperty('uid')) {
+              // 新增行
+              currentRecord = this.wheatList.filter(data => data.uid === this.wheat.uid)
+            } else {
+              // 原有行
+              currentRecord = this.wheatList.filter(data => data.id === this.wheat.id)
+            }
+            if (currentRecord && currentRecord.length > 0) {
+              Object.assign(currentRecord[0], this.wheat)
+            } else {
+              this.wheatList.push(this.wheat)
+            }
           } else {
-            // 原有行
-            currentRecord = this.wheatList.filter(data => data.id === this.wheat.id)
+            return false
           }
-          if (currentRecord && currentRecord.length > 0) {
-            Object.assign(currentRecord[0], this.wheat)
-          } else {
-            this.wheatList.push(this.wheat)
-          }
-        } else {
-          return false
-        }
-      })
+        })
+      }
     },
     // 豆 入罐
     rusoyM (row) {
@@ -554,54 +569,58 @@ export default {
     soydialogrusave (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dialogFormVisibleDouRu = false
-          var obj = {}
-          obj = this.DouCangList.find((item) => {
-            return item.holderId === this.rusoy.foodHolderId
-          })
-          let currentRecord = []
-          if (this.rusoy.hasOwnProperty('uid')) {
-            // 新增行
-            currentRecord = this.soyList.filter(data => data.uid === this.rusoy.uid)
+          if (this.rusoylnum < 0) {
+            this.$message.error('领用数不能为负数')
           } else {
-            // 原有行
-            currentRecord = this.soyList.filter(data => data.id === this.rusoy.id)
-          }
-          if (currentRecord && currentRecord.length > 0) {
-            Object.assign(currentRecord[0], {
-              foodHolderId: this.rusoy.foodHolderId,
-              foodHolderName: obj.holderName,
-              batch: this.rusoy.batch,
-              startWeight: this.rusoy.startWeight,
-              endWeight: this.rusoy.endWeight,
-              useWeight: this.rusoy.endWeight - this.rusoy.startWeight,
-              useType: '入罐',
-              unit: 'KG',
-              pulpHolderId: this.rusoy.pulpHolderId,
-              pulpHolderName: this.rusoy.pulpHolderName
+            this.dialogFormVisibleDouRu = false
+            var obj = {}
+            obj = this.DouCangList.find((item) => {
+              return item.holderId === this.rusoy.foodHolderId
             })
-          } else {
-            this.soyList.push({
-              foodHolderId: this.rusoy.foodHolderId,
-              foodHolderName: obj.holderName,
-              batch: this.rusoy.batch,
-              startWeight: this.rusoy.startWeight,
-              endWeight: this.rusoy.endWeight,
-              useWeight: this.rusoy.endWeight - this.rusoy.startWeight,
-              useType: '入罐',
-              unit: 'KG',
-              pulpHolderId: this.rusoy.pulpHolderId,
-              pulpHolderName: this.rusoy.pulpHolderName,
-              uid: this.rusoy.uid,
-              id: '',
-              orderHouseId: this.formHeader.orderHouseId,
-              status: this.formHeader.submitStatus,
-              pulpDate: this.formHeader.inKjmDate,
-              remark: '',
-              delFlag: '0',
-              changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-              changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
-            })
+            let currentRecord = []
+            if (this.rusoy.hasOwnProperty('uid')) {
+              // 新增行
+              currentRecord = this.soyList.filter(data => data.uid === this.rusoy.uid)
+            } else {
+              // 原有行
+              currentRecord = this.soyList.filter(data => data.id === this.rusoy.id)
+            }
+            if (currentRecord && currentRecord.length > 0) {
+              Object.assign(currentRecord[0], {
+                foodHolderId: this.rusoy.foodHolderId,
+                foodHolderName: obj.holderName,
+                batch: this.rusoy.batch,
+                startWeight: this.rusoy.startWeight,
+                endWeight: this.rusoy.endWeight,
+                useWeight: this.rusoy.endWeight - this.rusoy.startWeight,
+                useType: '入罐',
+                unit: 'KG',
+                pulpHolderId: this.rusoy.pulpHolderId,
+                pulpHolderName: this.rusoy.pulpHolderName
+              })
+            } else {
+              this.soyList.push({
+                foodHolderId: this.rusoy.foodHolderId,
+                foodHolderName: obj.holderName,
+                batch: this.rusoy.batch,
+                startWeight: this.rusoy.startWeight,
+                endWeight: this.rusoy.endWeight,
+                useWeight: this.rusoy.endWeight - this.rusoy.startWeight,
+                useType: '入罐',
+                unit: 'KG',
+                pulpHolderId: this.rusoy.pulpHolderId,
+                pulpHolderName: this.rusoy.pulpHolderName,
+                uid: this.rusoy.uid,
+                id: '',
+                orderHouseId: this.formHeader.orderHouseId,
+                status: this.formHeader.submitStatus,
+                pulpDate: this.formHeader.inKjmDate,
+                remark: '',
+                delFlag: '0',
+                changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+              })
+            }
           }
         } else {
           return false
@@ -612,6 +631,12 @@ export default {
     chusoyM (row) {
       this.dialogFormVisibleDouChu = true
       this.DCTitle = row.holderName + '出罐'
+      this.pulpPiArray = []
+      this.pulpListPici.map((item) => {
+        if (row.holderId === item.holderId) {
+          this.pulpPiArray.push(item)
+        }
+      })
       this.chusoy = {
         uid: this.uuid(),
         id: '',
@@ -906,7 +931,7 @@ export default {
       return this.rusoy.endWeight - this.rusoy.startWeight
     },
     chusoylnum: function () {
-      return this.chusoy.startWeight - this.chusoy.endWeight
+      return this.chusoy.endWeight - this.chusoy.startWeight
     },
     wheatUseNum: function () {
       let num = 0

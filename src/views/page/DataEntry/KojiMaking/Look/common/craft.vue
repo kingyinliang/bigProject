@@ -303,7 +303,7 @@ export default {
         this.$message.error('看曲记录未填')
         return false
       }
-      if (this.tech.overStartWeight.trim() === '' || this.tech.overEndWeight.trim() === '' || this.tech.outStartWeight.trim() === '' || this.tech.outEndWeight.trim() === '') {
+      if (!this.tech.overStartWeight || !this.tech.overEndWeight || !this.tech.outStartWeight || !this.tech.outEndWeight || this.tech.overStartWeight === '' || this.tech.overEndWeight === '' || this.tech.outStartWeight === '' || this.tech.outEndWeight === '') {
         ty = false
         this.$message.error('加水量记录全必填')
         return false
