@@ -11,7 +11,7 @@
         <el-form-item label="下料结束时间：">
           <el-date-picker v-model="craftfrom.unloadingEndDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="(min)预热时间：">
+        <el-form-item label="预热时间(min)：">
           <el-input v-model="timecha" disabled style="width:100px"></el-input>
           <!-- <el-date-picker v-model="craftfrom.preheatTime" type="datetime" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker> -->
         </el-form-item>
@@ -313,7 +313,7 @@ export default {
         this.$message.error('过程监控数据记录未填')
         return false
       }
-      if (this.hunheList.length) {
+      if (this.hunheList.length === 0) {
         ty = false
         this.$message.error('混合入曲控制未填')
         return false
