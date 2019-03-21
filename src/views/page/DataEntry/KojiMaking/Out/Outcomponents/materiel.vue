@@ -11,7 +11,7 @@
           <!--</div>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column label="盐水" width="128">
+      <el-table-column label="盐水" width="140">
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
@@ -21,7 +21,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="盐水罐号" width="128">
+      <el-table-column label="盐水罐号" width="140">
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
@@ -31,7 +31,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="起始值" width="118">
+      <el-table-column label="起始值" width="140">
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
@@ -39,7 +39,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="结束值" width="118">
+      <el-table-column label="结束值" width="140">
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
@@ -47,14 +47,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="数量" width="70" show-overflow-tooltip>
+      <el-table-column label="数量" width="90" show-overflow-tooltip>
         <template slot-scope="scope">
           {{scope.row.amount = scope.row.startValue*1 - scope.row.endValue*1}}
         </template>
       </el-table-column>
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作人" width="128" prop="creator" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作时间" width="118" prop="created" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作人" prop="creator" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作时间" prop="created" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delMateriel(scope.row)"></el-button>
