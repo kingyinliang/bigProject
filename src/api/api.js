@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.183:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -929,6 +929,10 @@ export const KJM_API = {
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
    */
   KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
+  /**
+   * @property {string} KJMAKINGCHECKTIMESAVE_API 车间审核工时保存
+   */
+  KJMAKINGCHECKTIMESAVE_API: HOST + '/sys/midTimeSheet/update',
   /**
    * @property {string} KJMAKINGCHECKTIMEBACK_API 车间审核工时回退
    */

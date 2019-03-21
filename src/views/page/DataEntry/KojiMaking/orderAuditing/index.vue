@@ -121,7 +121,8 @@
                   label="操作"
                   width="145">
                   <template slot-scope="scope">
-                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">编辑</el-button>
+                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='scope.row.disabled'>编辑</el-button>
+                    <el-button style='float:left' type="primary" size="small" @click="saveWorkHour(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='!scope.row.disabled'>保存</el-button>
                     <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>
                 </el-table-column>
@@ -505,6 +506,19 @@ export default class Index extends Vue {
   }
   enbaleEdit (row) {
     row.disabled = false
+  }
+  saveWorkHour (row) {
+    row.status = 'saved'
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESAVE_API}`, 'POST', row).then(res => {
+      if (res.data.code === 0) {
+        this.$message.success('数据保存成功!')
+        this.getList()
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
   }
   goBack (flag, row) {
     row.status = 'noPass'

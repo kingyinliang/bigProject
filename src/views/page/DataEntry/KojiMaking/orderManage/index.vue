@@ -18,10 +18,10 @@
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="订单日期：" label-width="70px">
+                <el-form-item label="订单日期：" label-width="70px" class="selectwpx">
                   <el-date-picker size="small" type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="订单号：" label-width="70px">
+                <el-form-item label="订单号：" label-width="60px" >
                   <el-input size="small" type="text" v-model.trim="params.orderNo" placeholder='请输入' style="width:140px"/>
                 </el-form-item>
                 <el-form-item label="订单状态：" label-width="70px">
@@ -38,7 +38,7 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width:200px">
+            <el-col style="width:100px">
               <el-row class="rowButton">
                 <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
               </el-row>
