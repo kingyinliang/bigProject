@@ -20,7 +20,7 @@
     </el-card>
     <el-card>
       <div class="htitle">
-        看曲记录<el-button type="text" class="readyshiftBtn" name="lookar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
+        <span class="iconfont">&#xe606;</span> 看曲记录<el-button type="text" class="readyshiftBtn" name="lookar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="lookarBox">
         <el-row style="line-height: 32px; margin-bottom:10px">
@@ -176,7 +176,7 @@
     <el-card>
       <el-form :inline="true" :model="tech" size="small">
         <div class="htitle">
-          加水量记录<el-button type="text" class="readyshiftBtn" name="shuiar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
+          <span class="iconfont">&#xe609;</span> 加水量记录<el-button type="text" class="readyshiftBtn" name="shuiar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
         </div>
         <div class="shuiarBox">
           <div>
@@ -208,7 +208,7 @@
     </el-card>
     <el-card>
       <div class="htitle">
-        感官评价记录<el-button type="text" class="readyshiftBtn" name="feelar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
+        <span class="iconfont">&#xe602;</span> 感官评价记录<el-button type="text" class="readyshiftBtn" name="feelar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="feelarBox">
         <el-table border header-row-class-name="tableHead" :data="assessList">
@@ -249,7 +249,7 @@
     <el-card>
       <el-form :inline="true" :model="tech" size="small">
         <div class="htitle">
-          异常情况记录<el-button type="text" class="readyshiftBtn" name="excar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
+          <span class="iconfont">&#xe607;</span> 异常情况记录<el-button type="text" class="readyshiftBtn" name="excar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
         </div>
         <div class="excarBox"><el-input type="textarea" v-model="tech.guardException" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" class="textarea" style="width: 100%;height:40px"></el-input></div>
       </el-form>

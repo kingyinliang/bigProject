@@ -19,7 +19,7 @@
     </el-card>
     <el-card>
       <div class="htitle">
-        煮豆润水参数设置
+        <span class="iconfont">&#xe60a;</span> 煮豆润水参数设置
         <el-button type="text" class="readyshiftBtn" name="runar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="runarBox">
@@ -56,7 +56,7 @@
           </el-form-item>
         </el-form>
         <div class="htitle">
-          <span class="lh32px">过程监控数据记录</span>
+          <span class="iconfont">&#xe608;</span> <span class="lh32px">过程监控数据记录</span>
           <el-button type="primary" size="small" style="float: right" @click="addlishui" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"> + 新增</el-button>
         </div>
         <el-table border header-row-class-name="tableHead" :data="lishuiList" :row-class-name="rowDelFlag">
@@ -115,14 +115,16 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit">
+            <span class="iconfont">&#xe607;</span> <span>异常情况记录</span>
+          </div>
           <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
     <el-card>
       <div class="htitle">
-        连续蒸煮记录
+        <span class="iconfont">&#xe604;</span> 连续蒸煮记录
         <el-button type="text" class="readyshiftBtn" name="zhengzhuar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="zhengzhuarBox">
@@ -138,7 +140,7 @@
           </el-form-item>
         </el-form>
         <div class="htitle">
-          <span class="lh32px">过程监控数据记录</span>
+          <span class="lh32px"><span class="iconfont">&#xe608;</span> 过程监控数据记录</span>
           <el-button type="primary" @click="addzhengzhu" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" size="small" style="float: right"> + 新增</el-button>
         </div>
         <el-table border header-row-class-name="tableHead" :data="zhengzhuList" :row-class-name="rowDelFlag">
@@ -219,14 +221,14 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit"><span class="iconfont">&#xe607;</span> <span>异常情况记录</span></div>
           <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width:100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
     <el-card>
       <div class="htitle">
-        <span class="lh32px">混合入曲控制</span>
+        <span class="lh32px"><span class="iconfont">&#xe603;</span> 混合入曲控制</span>
         <el-button type="text" class="readyshiftBtn" name="hunhear" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
         <el-button type="primary" size="small" @click="addhunhe" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="float: right"> + 新增</el-button>
       </div>
@@ -276,7 +278,7 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit"><span class="iconfont">&#xe607;</span> <span>异常情况记录</span></div>
           <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
