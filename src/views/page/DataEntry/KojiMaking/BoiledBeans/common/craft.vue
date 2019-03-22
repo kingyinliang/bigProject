@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-card>
-      <el-form :inline="true" :model="craftfrom" size="small" label-width="117px">
-        <el-form-item label="预热开始时间：">
+      <el-form :inline="true" :model="craftfrom" size="small" label-width="130px">
+        <el-form-item label="预热开始时间：" :required="true">
           <el-date-picker v-model="craftfrom.preheatDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="下料开始时间：">
+        <el-form-item label="下料开始时间：" :required="true">
           <el-date-picker v-model="craftfrom.unloadingStartDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="下料结束时间：">
+        <el-form-item label="下料结束时间：" :required="true">
           <el-date-picker v-model="craftfrom.unloadingEndDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="预热时间(min)：">
+        <el-form-item label="预热时间(min)：" :required="true">
           <el-input v-model="timecha" disabled style="width:100px"></el-input>
           <!-- <el-date-picker v-model="craftfrom.preheatTime" type="datetime" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker> -->
         </el-form-item>
@@ -19,71 +19,86 @@
     </el-card>
     <el-card>
       <div class="htitle">
-        煮豆润水参数设置
+        <span class="iconfont">&#xe60a;</span> 煮豆润水参数设置
         <el-button type="text" class="readyshiftBtn" name="runar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="runarBox">
         <el-form :inline="true" size="small" label-width="130px" :model="craftfrom">
-          <el-form-item label="润水比例:">
+          <el-form-item label="润水比例:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.rateRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水温度(°C):">
+          <el-form-item label="润水温度(°C):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.tempRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水变频(HZ):">
+          <el-form-item label="润水变频(HZ):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.frequenceRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="实际比例:">
+          <el-form-item label="实际比例:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.realRate" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水总量(L):">
+          <el-form-item label="润水总量(L):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.weightRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水流速(L/h):">
+          <el-form-item label="润水流速(L/h):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.speedRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="一次预热变频:">
+          <el-form-item label="一次预热变频:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.oncePreheatFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="二次预热变频:">
+          <el-form-item label="二次预热变频:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.secondPreheatFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="二次预热温度:">
+          <el-form-item label="二次预热温度:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.secondPreheatTemp" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="下料速度(KG/H):">
+          <el-form-item label="下料速度(KG/H):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.unloadingSpeed" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
         </el-form>
         <div class="htitle">
-          <span class="lh32px">过程监控数据记录</span>
+          <span class="iconfont">&#xe608;</span> <span class="lh32px">过程监控数据记录</span>
           <el-button type="primary" size="small" style="float: right" @click="addlishui" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"> + 新增</el-button>
         </div>
         <el-table border header-row-class-name="tableHead" :data="lishuiList" :row-class-name="rowDelFlag">
           <el-table-column label="序号" type="index" width="50"></el-table-column>
-          <el-table-column label="观察时间" width="185">
+          <el-table-column label="观察时间" width="205">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="润水/°C">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.runWaterTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.runWaterTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="预热/°C">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.preheatTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.preheatTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="下料量">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unloadingWeight" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.unloadingWeight" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="润水速度L/h" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.runWaterSpeed" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.runWaterSpeed" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="备注">
@@ -100,74 +115,100 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit">
+            <span class="iconfont">&#xe607;</span> <span>异常情况记录</span>
+          </div>
           <div><el-input type="textarea" class="textarea" v-model="craftfrom.cookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
     <el-card>
       <div class="htitle">
-        连续蒸煮记录
+        <span class="iconfont">&#xe604;</span> 连续蒸煮记录
         <el-button type="text" class="readyshiftBtn" name="zhengzhuar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="zhengzhuarBox">
         <el-form :inline="true" size="small" :model="craftfrom">
-          <el-form-item label="蒸煮变频(HZ):">
+          <el-form-item label="蒸煮变频(HZ):" :required="true">
             <el-input v-model="craftfrom.cookingFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="上转阀变频(HZ):">
+          <el-form-item label="上转阀变频(HZ):" :required="true">
             <el-input v-model="craftfrom.upFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="下转阀变频(HZ):">
+          <el-form-item label="下转阀变频(HZ):" :required="true">
             <el-input v-model="craftfrom.downFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
         </el-form>
         <div class="htitle">
-          <span class="lh32px">过程监控数据记录</span>
+          <span class="lh32px"><span class="iconfont">&#xe608;</span> 过程监控数据记录</span>
           <el-button type="primary" @click="addzhengzhu" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" size="small" style="float: right"> + 新增</el-button>
         </div>
         <el-table border header-row-class-name="tableHead" :data="zhengzhuList" :row-class-name="rowDelFlag">
-          <el-table-column label="观察时间" width="185">
+          <el-table-column label="观察时间" width="205">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="压力/Mpa">
             <el-table-column label="蒸煮数显">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.cookingPress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.cookingPress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="蒸煮机械">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.cookingMachinePress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.cookingMachinePress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="分汽包">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.separateDrum" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.separateDrum" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label="温度/°C">
             <el-table-column label="蒸煮数显">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.cookingTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.cookingTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="蒸煮机械">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.cookingMachineTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.cookingMachineTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="上转阀冷却" width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.upCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.upCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="下转阀冷却" width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.downCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.downCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -180,37 +221,49 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit"><span class="iconfont">&#xe607;</span> <span>异常情况记录</span></div>
           <div><el-input type="textarea" v-model="craftfrom.continuousCookingException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width:100%;height:40px"></el-input></div>
         </div>
       </div>
     </el-card>
     <el-card>
       <div class="htitle">
-        <span class="lh32px">混合入曲控制</span>
+        <span class="lh32px"><span class="iconfont">&#xe603;</span> 混合入曲控制</span>
         <el-button type="text" class="readyshiftBtn" name="hunhear" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
         <el-button type="primary" size="small" @click="addhunhe" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="float: right"> + 新增</el-button>
       </div>
       <div class="hunhearBox">
         <el-table border header-row-class-name="tableHead" :data="hunheList" :row-class-name="rowDelFlag">
-          <el-table-column label="* 观察时间" width="185">
+          <el-table-column label="观察时间" width="205">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 混合料/°C">
+          <el-table-column label="混合料/°C">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.mixtureTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.mixtureTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 接种/°C">
+          <el-table-column label="接种/°C">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.inoculationTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.inoculationTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 煮豆感官">
+          <el-table-column label="煮豆感官">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="备注">
@@ -225,7 +278,7 @@
           </el-table-column>
         </el-table>
         <div>
-          <div class="audit"><span>异常情况记录</span></div>
+          <div class="audit"><span class="iconfont">&#xe607;</span> <span>异常情况记录</span></div>
           <div><el-input type="textarea" v-model="craftfrom.blendException" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" class="textarea" style="width: 100%;height:40px"></el-input></div>
         </div>
       </div>
@@ -303,10 +356,28 @@ export default {
         this.$message.error('煮豆润水过程监控数据记录未填')
         return false
       }
+      for (let items of this.lishuiList) {
+        if (items.delFlag === '0') {
+          if (!items.guardDate || items.guardDate === '' || !items.runWaterTemp || items.runWaterTemp === '' || !items.preheatTemp || items.preheatTemp === '' || !items.unloadingWeight || items.unloadingWeight === '' || !items.runWaterSpeed || items.runWaterSpeed === '') {
+            ty = false
+            this.$message.error('煮豆润水过程监控数据必填项不能为空')
+            return false
+          }
+        }
+      }
       if (this.craftfrom.cookingFrequency === '' || this.craftfrom.upFrequency === '' || this.craftfrom.downFrequency === '' || !this.craftfrom.cookingFrequency || !this.craftfrom.upFrequency || !this.craftfrom.downFrequency) {
         ty = false
         this.$message.error('连续蒸煮参数不能为空')
         return false
+      }
+      for (let items of this.zhengzhuList) {
+        if (items.delFlag === '0') {
+          if (!items.guardTime || items.guardTime === '' || !items.cookingPress || items.cookingPress === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingTemp || items.cookingTemp === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.upCooling || items.upCooling === '' || !items.downCooling || items.downCooling === '') {
+            ty = false
+            this.$message.error('连续蒸煮监控数据必填项不能为空')
+            return false
+          }
+        }
       }
       if (this.zhengzhuList.length === 0) {
         ty = false
@@ -319,9 +390,11 @@ export default {
         return false
       }
       this.hunheList.forEach((item) => {
-        if (!item.guardDate || !item.mixtureTemp || !item.inoculationTemp || !item.cookingFeel || item.guardDate === '' || item.mixtureTemp === '' || item.inoculationTemp === '' || item.cookingFeel === '') {
-          ty = false
-          return false
+        if (item.delFlag === '0') {
+          if (!item.guardDate || !item.mixtureTemp || !item.inoculationTemp || !item.cookingFeel || item.guardDate === '' || item.mixtureTemp === '' || item.inoculationTemp === '' || item.cookingFeel === '') {
+            ty = false
+            return false
+          }
         }
       })
       if (!ty) {

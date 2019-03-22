@@ -9,21 +9,30 @@
         <div class="zhongarBox">
         <el-table border style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
-          <el-table-column label="日期" width="160px">
+          <el-table-column label="日期" width="165px">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:135px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 种曲" width="180px">
+          <el-table-column label="种曲" width="180px">
             <template slot-scope="scope">
-              <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                  <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 生产批次" width="130px">
+          <el-table-column label="生产批次" width="130px">
             <template slot-scope="scope">
-              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="物料批次" width="130px">
@@ -31,14 +40,20 @@
               <el-input maxlength="10" v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="* 数量">
+          <el-table-column label="数量">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 单位" width="80px">
+          <el-table-column label="单位" width="95px">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
@@ -67,7 +82,7 @@
           <el-col class="box" v-for="sole in MaiHoldList" :key="sole.holderid">
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
-              <el-progress type="circle" :percentage="25" :stroke-width="10" :width="135"></el-progress>
+              <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
                 <div class="boxText">
                   <div v-for="(soles, index) in sole.pici" :key="index">
                     <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
@@ -94,7 +109,7 @@
           <el-table-column label="起始" prop="startWeight"></el-table-column>
           <el-table-column label="结束" prop="endWeight"></el-table-column>
           <el-table-column label="领用数" prop="userWeight" width="70"></el-table-column>
-          <el-table-column label="单位" prop="unit" width="60"></el-table-column>
+          <el-table-column label="单位" prop="unit" width="50"></el-table-column>
           <el-table-column label="操作人员" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
@@ -121,7 +136,8 @@
           <el-col class="box" v-for="sole in DouHoldList" :key="sole.holderid">
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
-              <el-progress type="circle" :percentage="25" :stroke-width="10" :width="135"></el-progress>
+              <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
+              <!-- <div :id="`J_${sole.holderId}`" class="chart-box"></div> -->
               <div class="boxText">
                 <div v-for="(soles, index) in sole.pici" :key="index">
                     <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
@@ -141,10 +157,10 @@
           <el-table-column label="领用粮仓" prop="foodHolderName" width="100"></el-table-column>
           <el-table-column label="豆粕仓" prop="pulpHolderName" width="130"></el-table-column>
           <el-table-column label="批次" prop="batch" width="110"></el-table-column>
-          <el-table-column label="起始" prop="startWeight" width="60"></el-table-column>
-          <el-table-column label="结束" prop="endWeight" width="60"></el-table-column>
-          <el-table-column label="数量" prop="useWeight" width="60"></el-table-column>
-          <el-table-column label="单位" prop="unit" width="60"></el-table-column>
+          <el-table-column label="起始" prop="startWeight" width="70"></el-table-column>
+          <el-table-column label="结束" prop="endWeight" width="70"></el-table-column>
+          <el-table-column label="数量" prop="useWeight" width="70"></el-table-column>
+          <el-table-column label="单位" prop="unit" width="50"></el-table-column>
           <el-table-column label="入罐/出罐" prop="useType" width="90"></el-table-column>
           <el-table-column label="操作人员" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
@@ -234,10 +250,12 @@
 <script>
 import { dateFormat, Readyanimation } from '@/net/validate'
 import { BASICDATA_API, SYSTEMSETUP_API, KJM_API } from '@/api/api'
+import echarts from 'echarts'
 export default {
   name: 'material',
   data () {
     return {
+      chartLine: null,
       topstatus: '',
       dialogFormVisibleMai: false,
       dialogFormVisibleDouChu: false,
@@ -311,16 +329,26 @@ export default {
   mounted () {
     Readyanimation(this.$)
   },
+  activated () {
+    if (this.chartPie) {
+      this.chartPie.resize()
+    }
+  },
   props: ['isRedact', 'formHeader'],
   watch: {
     'formHeader.workShopName' () {
-      this.getMaiholdList()
-      this.getDouholdList()
       this.getDouCangList()
       this.GetmaterialZhong()
       this.GetwheatZhong()
       this.GetsoyZhong()
     },
+    // 'DouHoldList' () {
+    //   this.$nextTick(function () {
+    //     this.DouHoldList.map((item) => {
+    //       this.drawPie(`J_${item.holderId}`, item.pici)
+    //     })
+    //   })
+    // },
     'wheatliang' () {
       this.wheatList.map((item) => {
         item.materialCode = this.wheatliang
@@ -343,6 +371,79 @@ export default {
     }
   },
   methods: {
+    drawPie (id, piciData) {
+      let pici = []
+      if (piciData !== undefined) {
+        let n = 0
+        piciData.map((item) => {
+          let picisole = {}
+          this.$set(picisole, 'value', item.proportion)
+          this.$set(picisole, 'name', item.batch)
+          pici.push(picisole)
+          n = n + item.proportion
+        })
+        pici.push({value: (100 - n), name: '其他'})
+      }
+      var option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        // legend: {
+        //   orient: 'vertical',
+        //   x: 'left',
+        //   data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+        // },
+        series: [{
+          name: '批次',
+          type: 'pie',
+          radius: ['70%', '85%'],
+          avoidLabelOverlap: false,
+          label: {
+            normal: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                fontSize: '12',
+                fontWeight: 'bold'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          data: pici,
+          itemStyle: {
+            normal: {
+              color: function (params) {
+                var colorList = [
+                  '#20A0FF', '#67E0E3', '#81b6b2', '#eba422', '#5e7e54', '#e44f2f'
+                ]
+                return colorList[params.dataIndex]
+              }
+            }
+          }
+          // data: [
+          //   {value: 335, name: '直接访问'}
+          //   {value: 310, name: '邮件营销'},
+          //   {value: 234, name: '联盟广告'},
+          //   {value: 135, name: '视频广告'},
+          //   {value: 1548, name: '搜索引擎'}
+          // ]
+        }]
+      }
+      // console.log(document.getElementById(id))
+      this.chartPie = echarts.init(document.getElementById(id))
+      this.chartPie.setOption(option)
+      window.addEventListener('resize', () => {
+        this.chartPie.resize()
+      })
+    },
     GetrealTime (formHeader) {
       this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
         if (data.code === 0) {
@@ -396,17 +497,31 @@ export default {
         return false
       }
       this.materialList.forEach((item) => {
-        if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '' || !item.productBatch || item.productBatch === '') {
-          ty = false
-          return false
+        if (item.delFlag === '0') {
+          if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '' || !item.productBatch || item.productBatch === '') {
+            ty = false
+            return false
+          }
         }
       })
       if (!ty) {
         this.$message.error('种曲必填项未填')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0) {
-        this.$message.error('请选择小麦粉批次')
+      this.materialList.forEach((item) => {
+        if (item.delFlag === '0') {
+          if (item.productBatch.length !== 10 || (item.materialBatch.length && item.materialBatch.length !== 10)) {
+            ty = false
+            return false
+          }
+        }
+      })
+      if (!ty) {
+        this.$message.error('种曲批次长度应为10位')
+        return false
+      }
+      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim === '') {
+        this.$message.error('请选择小麦粉物料编码')
         return false
       }
       if (this.wheatList.length === 0) {
@@ -414,8 +529,8 @@ export default {
         this.$message.error('请填写小麦粉数据')
         return false
       }
-      if (!this.soyliang || this.soyliang === 0) {
-        this.$message.error('请选择豆粕批次')
+      if (!this.soyliang || this.soyliang === 0 || this.wheatliang === '') {
+        this.$message.error('请选择豆粕物料编码')
         return false
       }
       if (this.soyList.length === 0) {
@@ -426,25 +541,32 @@ export default {
       return ty
     },
     // 麦粉罐
-    getMaiholdList () {
-      let replacestr = this.formHeader.workShopName.replace(/制曲/g, '炒麦')
+    getMaiholdList (formHeader) {
+      let replacestr = formHeader.workShopName.replace(/制曲/g, '炒麦')
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 100, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.MaiHoldList = res.data.page.list
-          this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: this.formHeader.workShop}).then(({data}) => {
+          this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
             if (data.code === 0) {
               this.wheatListPici = data.listInfo
               this.MaiHoldList.map((item, index) => {
                 let pici = []
+                let percent = 0
+                let total = 0
                 this.wheatListPici.map((items) => {
                   if (item.holderId === items.holderId) {
                     if (items.proportion < 0) {
                       items.proportion = 0
+                    } else {
+                      percent = percent + items.proportion
                     }
                     pici.push(items)
+                    total = total + items.amount
                   }
                 })
                 this.$set(this.MaiHoldList[index], 'pici', pici)
+                this.$set(this.MaiHoldList[index], 'percent', percent)
+                this.$set(this.MaiHoldList[index], 'total', total)
               })
             } else {
               this.$message.error(data.msg)
@@ -466,15 +588,22 @@ export default {
               this.pulpListPici = data.listInfo
               this.DouHoldList.map((item, index) => {
                 let pici = []
+                let percent = 0
+                let total = 0
                 this.pulpListPici.map((items) => {
                   if (item.holderId === items.holderId) {
                     if (items.proportion < 0) {
                       items.proportion = 0
+                    } else {
+                      percent = percent + items.proportion
                     }
                     pici.push(items)
+                    total = total + items.amount
                   }
                 })
                 this.$set(this.DouHoldList[index], 'pici', pici)
+                this.$set(this.DouHoldList[index], 'percent', percent)
+                this.$set(this.DouHoldList[index], 'total', total)
               })
             } else {
               this.$message.error(data.msg)
@@ -558,8 +687,8 @@ export default {
     },
     // 小麦领用保存
     savewheat (formName) {
-      if (this.lnum < 0) {
-        this.$message.error('领用数不能为负数')
+      if (this.lnum <= 0) {
+        this.$message.error('领用数必须大于0')
       } else {
         this.$set(this.wheat, 'userWeight', this.lnum)
         this.$refs[formName].validate((valid) => {
@@ -620,8 +749,8 @@ export default {
     soydialogrusave (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.rusoylnum < 0) {
-            this.$message.error('领用数不能为负数')
+          if (this.rusoylnum <= 0) {
+            this.$message.error('领用数必须大于0')
           } else {
             this.dialogFormVisibleDouRu = false
             var obj = {}
@@ -708,48 +837,52 @@ export default {
     soydialogchusave (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dialogFormVisibleDouChu = false
-          let currentRecord = []
-          if (this.chusoy.hasOwnProperty('uid')) {
-            // 新增行
-            currentRecord = this.soyList.filter(data => data.uid === this.chusoy.uid)
+          if (this.chusoylnum <= 0) {
+            this.$message.error('领用数必须大于0')
           } else {
-            // 原有行
-            currentRecord = this.soyList.filter(data => data.id === this.chusoy.id)
-          }
-          if (currentRecord && currentRecord.length > 0) {
-            Object.assign(currentRecord[0], {
-              batch: this.chusoy.batch,
-              startWeight: this.chusoy.startWeight,
-              endWeight: this.chusoy.endWeight,
-              useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
-              useType: '出罐',
-              unit: 'KG',
-              pulpHolderId: this.chusoy.pulpHolderId,
-              pulpHolderName: this.chusoy.pulpHolderName
-            })
-          } else {
-            this.soyList.push({
-              uid: this.chusoy.id,
-              id: '',
-              orderHouseId: this.formHeader.orderHouseId,
-              status: this.formHeader.submitStatus,
-              pulpDate: this.formHeader.inKjmDate,
-              foodHolderId: '',
-              foodHolderName: '',
-              pulpHolderId: this.chusoy.pulpHolderId,
-              pulpHolderName: this.chusoy.pulpHolderName,
-              batch: this.chusoy.batch,
-              startWeight: this.chusoy.startWeight,
-              endWeight: this.chusoy.endWeight,
-              useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
-              useType: '出罐',
-              unit: 'KG',
-              remark: '',
-              delFlag: '0',
-              changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-              changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
-            })
+            this.dialogFormVisibleDouChu = false
+            let currentRecord = []
+            if (this.chusoy.hasOwnProperty('uid')) {
+              // 新增行
+              currentRecord = this.soyList.filter(data => data.uid === this.chusoy.uid)
+            } else {
+              // 原有行
+              currentRecord = this.soyList.filter(data => data.id === this.chusoy.id)
+            }
+            if (currentRecord && currentRecord.length > 0) {
+              Object.assign(currentRecord[0], {
+                batch: this.chusoy.batch,
+                startWeight: this.chusoy.startWeight,
+                endWeight: this.chusoy.endWeight,
+                useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
+                useType: '出罐',
+                unit: 'KG',
+                pulpHolderId: this.chusoy.pulpHolderId,
+                pulpHolderName: this.chusoy.pulpHolderName
+              })
+            } else {
+              this.soyList.push({
+                uid: this.chusoy.id,
+                id: '',
+                orderHouseId: this.formHeader.orderHouseId,
+                status: this.formHeader.submitStatus,
+                pulpDate: this.formHeader.inKjmDate,
+                foodHolderId: '',
+                foodHolderName: '',
+                pulpHolderId: this.chusoy.pulpHolderId,
+                pulpHolderName: this.chusoy.pulpHolderName,
+                batch: this.chusoy.batch,
+                startWeight: this.chusoy.startWeight,
+                endWeight: this.chusoy.endWeight,
+                useWeight: this.chusoy.startWeight - this.chusoy.endWeight,
+                useType: '出罐',
+                unit: 'KG',
+                remark: '',
+                delFlag: '0',
+                changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+              })
+            }
           }
         } else {
           return false
@@ -1076,5 +1209,8 @@ export default {
     background-color: #a0cfff;
     border-color: #a0cfff;
   }
+}
+.chart-box {
+  min-height: 140px;
 }
 </style>

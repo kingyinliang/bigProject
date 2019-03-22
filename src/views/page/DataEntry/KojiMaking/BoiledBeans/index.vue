@@ -131,8 +131,10 @@ export default {
           this.formHeader = res.data.headList[0]
           this.cookingNoId = this.formHeader.cookingNoName
           this.orderStatus = res.data.headList[0].beanStatus
-          this.$refs.material.GetrealTime(this.formHeader)
-          this.$refs.material.GetrealWheatTime(this.formHeader)
+          // this.$refs.material.GetrealTime(this.formHeader)
+          // this.$refs.material.GetrealWheatTime(this.formHeader)
+          this.$refs.material.getMaiholdList(this.formHeader)
+          this.$refs.material.getDouholdList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)

@@ -79,7 +79,7 @@
               width="160">
               <template slot-scope="scope">
                 <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                <el-input v-model.number="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
+                <el-input v-model.trim="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
