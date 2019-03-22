@@ -130,6 +130,19 @@ export default {
       let windSpeed = this.CraftControlDate.windSpeedOne || this.CraftControlDate.windSpeedTwo || this.CraftControlDate.windSpeedThree || this.CraftControlDate.windSpeedFour || this.CraftControlDate.windSpeedFive
       let blendTemp = this.CraftControlDate.blendTempOne || this.CraftControlDate.blendTempTwo || this.CraftControlDate.blendTempThree || this.CraftControlDate.blendTempFour || this.CraftControlDate.blendTempFive
       let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive
+      if (windSpeed) {
+        ty = false
+        this.$message.error('工艺控制风速必填项未填')
+        return false
+      } else if (blendTemp) {
+        ty = false
+        this.$message.error('工艺控制混合料温度必填项未填')
+        return false
+      } else if (outTemp) {
+        ty = false
+        this.$message.error('工艺控制出曲品温必填项未填')
+        return false
+      }
       if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator && this.CraftControlDate.outStartTime && this.CraftControlDate.outEndTime && this.CraftControlDate.kojoMakingTime !== '0' && this.CraftControlDate.saltWaterTemp && this.CraftControlDate.saltWaterNd) {} else {
         ty = false
         this.$message.error('工艺控制必填项未填')

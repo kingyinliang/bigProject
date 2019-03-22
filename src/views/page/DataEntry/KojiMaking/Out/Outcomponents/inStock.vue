@@ -29,7 +29,7 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+            <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入" maxlength="10"></el-input>
           </div>
         </template>
       </el-table-column>
@@ -155,6 +155,11 @@ export default {
         if (item.sauceWeight && item.batch) {} else {
           ty = false
           this.$message.error('生产入库必填项未填')
+          return false
+        }
+        if (item.batch.length < 10) {
+          ty = false
+          this.$message.error('生产入库批次必须为10位')
           return false
         }
       })
