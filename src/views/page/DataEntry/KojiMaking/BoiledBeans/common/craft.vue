@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-card>
-      <el-form :inline="true" :model="craftfrom" size="small" label-width="117px">
-        <el-form-item label="预热开始时间：">
+      <el-form :inline="true" :model="craftfrom" size="small" label-width="130px">
+        <el-form-item label="预热开始时间：" :required="true">
           <el-date-picker v-model="craftfrom.preheatDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="下料开始时间：">
+        <el-form-item label="下料开始时间：" :required="true">
           <el-date-picker v-model="craftfrom.unloadingStartDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="下料结束时间：">
+        <el-form-item label="下料结束时间：" :required="true">
           <el-date-picker v-model="craftfrom.unloadingEndDate" type="datetime" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="预热时间(min)：">
+        <el-form-item label="预热时间(min)：" :required="true">
           <el-input v-model="timecha" disabled style="width:100px"></el-input>
           <!-- <el-date-picker v-model="craftfrom.preheatTime" type="datetime" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker> -->
         </el-form-item>
@@ -24,34 +24,34 @@
       </div>
       <div class="runarBox">
         <el-form :inline="true" size="small" label-width="130px" :model="craftfrom">
-          <el-form-item label="润水比例:">
+          <el-form-item label="润水比例:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.rateRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水温度(°C):">
+          <el-form-item label="润水温度(°C):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.tempRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水变频(HZ):">
+          <el-form-item label="润水变频(HZ):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.frequenceRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="实际比例:">
+          <el-form-item label="实际比例:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.realRate" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水总量(L):">
+          <el-form-item label="润水总量(L):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.weightRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水流速(L/h):">
+          <el-form-item label="润水流速(L/h):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.speedRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="一次预热变频:">
+          <el-form-item label="一次预热变频:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.oncePreheatFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="二次预热变频:">
+          <el-form-item label="二次预热变频:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.secondPreheatFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="二次预热温度:">
+          <el-form-item label="二次预热温度:" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.secondPreheatTemp" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="下料速度(KG/H):">
+          <el-form-item label="下料速度(KG/H):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.unloadingSpeed" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
         </el-form>
@@ -112,13 +112,13 @@
       </div>
       <div class="zhengzhuarBox">
         <el-form :inline="true" size="small" :model="craftfrom">
-          <el-form-item label="蒸煮变频(HZ):">
+          <el-form-item label="蒸煮变频(HZ):" :required="true">
             <el-input v-model="craftfrom.cookingFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="上转阀变频(HZ):">
+          <el-form-item label="上转阀变频(HZ):" :required="true">
             <el-input v-model="craftfrom.upFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="下转阀变频(HZ):">
+          <el-form-item label="下转阀变频(HZ):" :required="true">
             <el-input v-model="craftfrom.downFrequency" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
         </el-form>
@@ -303,10 +303,24 @@ export default {
         this.$message.error('煮豆润水过程监控数据记录未填')
         return false
       }
+      for (let items of this.lishuiList) {
+        if (!items.guardDate || items.guardDate === '' || !items.runWaterTemp || items.runWaterTemp === '' || !items.preheatTemp || items.preheatTemp === '' || !items.unloadingWeight || items.unloadingWeight === '' || !items.runWaterSpeed || items.runWaterSpeed === '') {
+          ty = false
+          this.$message.error('煮豆润水过程监控数据必填项不能为空')
+          return false
+        }
+      }
       if (this.craftfrom.cookingFrequency === '' || this.craftfrom.upFrequency === '' || this.craftfrom.downFrequency === '' || !this.craftfrom.cookingFrequency || !this.craftfrom.upFrequency || !this.craftfrom.downFrequency) {
         ty = false
         this.$message.error('连续蒸煮参数不能为空')
         return false
+      }
+      for (let items of this.zhengzhuList) {
+        if (!items.guardTime || items.guardTime === '' || !items.cookingPress || items.cookingPress === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingTemp || items.cookingTemp === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.upCooling || items.upCooling === '' || !items.downCooling || items.downCooling === '') {
+          ty = false
+          this.$message.error('连续蒸煮监控数据必填项不能为空')
+          return false
+        }
       }
       if (this.zhengzhuList.length === 0) {
         ty = false

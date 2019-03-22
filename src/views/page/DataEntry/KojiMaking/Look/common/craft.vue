@@ -142,10 +142,10 @@
         <div class="shuiarBox">
           <div>
             <div style="line-height:32px;">翻曲加水</div>
-            <el-form-item label="起始数：">
+            <el-form-item label="起始数：" :required="true">
               <el-input size="small" v-model="tech.overStartWeight" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')"></el-input>
             </el-form-item>
-            <el-form-item label="结束数：">
+            <el-form-item label="结束数：" :required="true">
               <el-input size="small" v-model="tech.overEndWeight" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')"></el-input>
             </el-form-item>
             <el-form-item label="加水量（L）：">
@@ -154,10 +154,10 @@
           </div>
           <div>
             <div style="line-height:32px;">出曲加水</div>
-            <el-form-item label="起始数：">
+            <el-form-item label="起始数：" :required="true">
               <el-input size="small" v-model="tech.outStartWeight" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')"></el-input>
             </el-form-item>
-            <el-form-item label="结束数：">
+            <el-form-item label="结束数：" :required="true">
               <el-input size="small" v-model="tech.outEndWeight" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')"></el-input>
             </el-form-item>
             <el-form-item label="加水量（L）：">
