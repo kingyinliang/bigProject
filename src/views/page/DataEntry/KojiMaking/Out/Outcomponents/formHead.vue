@@ -23,7 +23,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="连续蒸煮号：" label-width="85px">
-      <p class="el-input">{{formHeader.cookName ? formHeader.cookName : ''}}</p>
+      <p class="el-input">{{formHeader.cookingName ? formHeader.cookingName : ''}}</p>
     </el-form-item>
     <el-form-item label="提交人员：">
       <p class="el-input">{{formHeader.changer ? formHeader.changer : ''}}</p>
