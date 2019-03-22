@@ -172,6 +172,7 @@ export default {
         item.materialName = this.formHeader.materialName
         item.orderHouseId = this.formHeader.id
         item.holderName = this.formHeader.inPotName
+        item.holderId = this.formHeader.inPotNo
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
