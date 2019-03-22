@@ -9,21 +9,30 @@
         <div class="zhongarBox">
         <el-table border style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
-          <el-table-column label="日期" width="160px">
+          <el-table-column label="日期" width="165px">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:135px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 种曲" width="180px">
+          <el-table-column label="种曲" width="180px">
             <template slot-scope="scope">
-              <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                  <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 生产批次" width="130px">
+          <el-table-column label="生产批次" width="130px">
             <template slot-scope="scope">
-              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="物料批次" width="130px">
@@ -31,14 +40,20 @@
               <el-input maxlength="10" v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="* 数量">
+          <el-table-column label="数量">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="* 单位" width="80px">
+          <el-table-column label="单位" width="95px">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
@@ -482,9 +497,11 @@ export default {
         return false
       }
       this.materialList.forEach((item) => {
-        if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '' || !item.productBatch || item.productBatch === '') {
-          ty = false
-          return false
+        if (item.delFlag === '0') {
+          if (!item.materialCode || item.materialCode === '' || !item.amount || item.amount === '' || !item.productBatch || item.productBatch === '') {
+            ty = false
+            return false
+          }
         }
       })
       if (!ty) {
@@ -492,16 +509,18 @@ export default {
         return false
       }
       this.materialList.forEach((item) => {
-        if (item.productBatch.length !== 10 || (item.materialBatch.length && item.materialBatch.length !== 10)) {
-          ty = false
-          return false
+        if (item.delFlag === '0') {
+          if (item.productBatch.length !== 10 || (item.materialBatch.length && item.materialBatch.length !== 10)) {
+            ty = false
+            return false
+          }
         }
       })
       if (!ty) {
         this.$message.error('种曲批次长度应为10位')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang === '') {
+      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim === '') {
         this.$message.error('请选择小麦粉物料编码')
         return false
       }

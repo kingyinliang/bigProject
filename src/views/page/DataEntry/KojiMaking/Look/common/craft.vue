@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-card>
-      <el-form :inline="true" :model="tech" size="small" label-width="120px">
-        <el-form-item label="入曲检查：">
+      <el-form :inline="true" :model="tech" size="small" label-width="130px">
+        <el-form-item label="入曲检查：" :required="true">
           <el-input style="width:171px" v-model="tech.inCheck" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')"></el-input>
         </el-form-item>
-        <el-form-item label="检查人：">
+        <el-form-item label="检查人：" :required="true">
           <el-select v-model="tech.inCheckMan" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')">
             <el-option v-for="sole in userList" :key="sole.userId" :value="sole.realName + `(${sole.workNum})`" :label="sole.realName + `（${sole.workNum}）`"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="入曲开始时间：">
+        <el-form-item label="入曲开始时间：" :required="true">
           <el-date-picker v-model="tech.inStartTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="入曲结束时间：">
+        <el-form-item label="入曲结束时间：" :required="true">
           <el-date-picker v-model="tech.inEndTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
       </el-form>
@@ -39,84 +39,123 @@
         </el-row>
         <el-table border header-row-class-name="tableHead" :data="lookList" :row-class-name="rowDelFlag" tooltip-effect="dark">
           <el-table-column label="序号" type="index" width="50px"></el-table-column>
-          <el-table-column label="看曲时间" width="190">
+          <el-table-column label="看曲时间" width="205">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:175px"></el-date-picker>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:175px"></el-date-picker>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="风温实际">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.windTemp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.windTemp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="品温实际">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.productTemp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.productTemp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="风机风速">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.windSpeed" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-input v-model="scope.row.windSpeed" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="风门/进风" width="100">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="风门" value="0"></el-option>
-                <el-option label="进风" value="1"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                  <el-option label="风门" value="0"></el-option>
+                  <el-option label="进风" value="1"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="强排/反风" width="100">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="强排" value="1"></el-option>
-                <el-option label="反风" value="0"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                  <el-option label="强排" value="1"></el-option>
+                  <el-option label="反风" value="0"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="加湿情况" width="100">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.jiashiFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="加湿" value="1"></el-option>
-                <el-option label="未加湿" value="0"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.jiashiFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                  <el-option label="加湿" value="1"></el-option>
+                  <el-option label="未加湿" value="0"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="加热/冷却" width="100">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.jiareFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="加热" value="1"></el-option>
-                <el-option label="冷却" value="0"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.jiareFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                  <el-option label="加热" value="1"></el-option>
+                  <el-option label="冷却" value="0"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="品温探头温度">
             <el-table-column label="上">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.productTempUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.productTempUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="中">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.productTempMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.productTempMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="下">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.productTempDown" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.productTempDown" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label="温度计温度">
             <el-table-column label="外">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.thermometerOut" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.thermometerOut" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="里">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.thermometerInner" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-input v-model="scope.row.thermometerInner" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -176,23 +215,32 @@
           <el-table-column prop="feelName"></el-table-column>
           <el-table-column label="U">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.codeU" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small" >
-                <el-option v-for="item in Ulist" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.codeU" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small" >
+                  <el-option v-for="item in Ulist" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="S">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.codeS" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small">
-                <el-option v-for="item in Slist" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.codeS" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small">
+                  <el-option v-for="item in Slist" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="A">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.codeA" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small">
-                <el-option v-for="item in Alist" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <div class="required">
+                <i class="reqI">*</i>
+                <el-select v-model="scope.row.codeA" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" placeholder="请选择" size="small">
+                  <el-option v-for="item in Alist" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -295,10 +343,39 @@ export default {
     },
     Readyrules () {
       let ty = true
+      if (!this.tech.inCheck || this.tech.inCheck === '') {
+        ty = false
+        this.$message.error('入曲检查必填')
+        return false
+      }
+      if (!this.tech.inCheckMan || this.tech.inCheckMan === '') {
+        ty = false
+        this.$message.error('检查人必填')
+        return false
+      }
+      if (!this.tech.inStartTime || this.tech.inStartTime === '') {
+        ty = false
+        this.$message.error('入曲开始时间为必填')
+        return false
+      }
+      if (!this.tech.inEndTime || this.tech.inEndTime === '') {
+        ty = false
+        this.$message.error('入曲结束时间为必填')
+        return false
+      }
       if (this.lookList.length === 0) {
         ty = false
         this.$message.error('看曲记录未填')
         return false
+      }
+      for (let items of this.lookList) {
+        if (items.delFlag === '0') {
+          if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
+            ty = false
+            this.$message.error('看曲记录必填项未填')
+            return false
+          }
+        }
       }
       if (!this.tech.overStartWeight || !this.tech.overEndWeight || !this.tech.outStartWeight || !this.tech.outEndWeight || this.tech.overStartWeight === '' || this.tech.overEndWeight === '' || this.tech.outStartWeight === '' || this.tech.outEndWeight === '') {
         ty = false
