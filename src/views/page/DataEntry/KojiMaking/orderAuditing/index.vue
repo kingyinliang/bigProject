@@ -316,7 +316,8 @@ export default class Index extends Vue {
     orderDate: '',
     inPotNo: '',
     inPotNoId: '',
-    inPotNoName: ''
+    inPotNoName: '',
+    inKjmDate: ''
   }
   workHourList: WorkHour[] = []
   workHourAuditList = []
@@ -531,7 +532,8 @@ export default class Index extends Vue {
     }
   }
   timeGoBack (row) {
-    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', row).then(res => {
+    let params = Object.assign({}, row, {workShop: this.formHeader.workShop, inKjmDate: this.formHeader.inKjmDate})
+    Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
         this.$message.success('数据回退成功!')
         this.getList()
