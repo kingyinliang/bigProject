@@ -205,6 +205,11 @@
                 </el-table-column>
               </el-table>
             </el-row>
+            <el-row style="margin-top:20px;">
+              <el-col>
+                <div><span>入库数合计：</span>{{totalInstock}} L</div>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="24">
                 <auditLog :tableData="inStockAuditList"></auditLog>
@@ -334,6 +339,13 @@ export default class Index extends Vue {
   applyMaterielState = ''
   mounted () {
     this.getList()
+  }
+  get totalInstock () {
+    let total = 0
+    for (let ele of this.inStockList) {
+      total += parseFloat(ele.sauceWeight)
+    }
+    return total
   }
   getList () {
     this.getFormHeader()
