@@ -61,44 +61,49 @@
         </div>
         <el-table border header-row-class-name="tableHead" :data="lishuiList" :row-class-name="rowDelFlag">
           <el-table-column label="序号" type="index" width="50"></el-table-column>
-          <el-table-column label="观察时间" width="205">
+          <el-table-column width="205">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>观察时间</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
-              </div>
+              <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="润水/°C">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>润水/°C</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.runWaterTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.runWaterTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="预热/°C">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>预热/°C</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.preheatTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.preheatTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="下料量">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>下料量</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.unloadingWeight" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.unloadingWeight" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="润水速度L/h" width="120">
+          <el-table-column width="120">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>润水速度L/h</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.runWaterSpeed" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.runWaterSpeed" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="备注">
@@ -144,71 +149,79 @@
           <el-button type="primary" @click="addzhengzhu" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" size="small" style="float: right"> + 新增</el-button>
         </div>
         <el-table border header-row-class-name="tableHead" :data="zhengzhuList" :row-class-name="rowDelFlag">
-          <el-table-column label="观察时间" width="205">
+          <el-table-column  width="195">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>观察时间</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
-              </div>
+              <el-date-picker v-model="scope.row.guardTime" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="压力/Mpa">
-            <el-table-column label="蒸煮数显">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>蒸煮数显</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.cookingPress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.cookingPress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="蒸煮机械">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>蒸煮机械</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.cookingMachinePress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.cookingMachinePress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="分汽包">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>分汽包</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.separateDrum" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.separateDrum" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label="温度/°C">
-            <el-table-column label="蒸煮数显">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>蒸煮数显</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.cookingTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.cookingTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="蒸煮机械">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>蒸煮机械</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.cookingMachineTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.cookingMachineTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="上转阀冷却" width="100">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>上转阀冷却</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.upCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.upCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="下转阀冷却" width="100">
+            <el-table-column width="110">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>下转阀冷却</span>
+              </template>
               <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.downCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-                </div>
+                <el-input v-model="scope.row.downCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -234,36 +247,40 @@
       </div>
       <div class="hunhearBox">
         <el-table border header-row-class-name="tableHead" :data="hunheList" :row-class-name="rowDelFlag">
-          <el-table-column label="观察时间" width="205">
+          <el-table-column width="205">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>观察时间</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
-              </div>
+              <el-date-picker v-model="scope.row.guardDate" type="datetime" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" placeholder="选择时间" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="混合料/°C">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>混合料/°C</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.mixtureTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.mixtureTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="接种/°C">
+          <el-table-column label="">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>接种/°C</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.inoculationTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.inoculationTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="煮豆感官">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>煮豆感官</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="备注">
@@ -578,5 +595,8 @@ export default {
   span{
     font-size: 16px;
   }
+}
+.reqI{
+  color: red;
 }
 </style>
