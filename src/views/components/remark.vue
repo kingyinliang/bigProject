@@ -3,7 +3,8 @@
     <div class="kt-tooltip-input__hidden" style="position: fixed; left: -19800px">{{ value }}</div>
     <div v-show="flag"
       @click="visibilityChange($event)"
-      style="cursor:pointer;color: blue">
+      style="cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+      :style="{'width':width}">
       {{ value? value : '点击修改备注' }}
     </div>
     <el-tooltip :placement="placement" :effect="effect" :manual="true" ref='toolTip' v-show="!flag">
@@ -16,7 +17,9 @@
           <el-button type="primary" size='small' @click='save'>保存</el-button>
         </div>
       </div>
-      <div>
+      <div
+        style="cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+        :style="{'width':width}">
         {{ content? content : '' }}
       </div>
     </el-tooltip>
@@ -74,7 +77,7 @@ export default {
     },
     width: {
       type: String,
-      default: '100%'
+      default: '100px'
     },
     placement: {
       type: String,
