@@ -41,11 +41,11 @@ export default {
       this.flag = true
     },
     save () {
-      this.flag = true
       this.content = this.value
+      this.flag = true
     },
     changeInput (val) {
-      this.$emit('input', val.trim())
+      this.$emit('input', val ? val.trim() : '')
     }
   },
   watch: {
