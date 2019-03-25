@@ -9,30 +9,31 @@
         <div class="zhongarBox">
         <el-table border style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
-          <el-table-column label="日期" width="165px">
+          <el-table-column width="125px">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>日期</span>
+            </template>
+            <template slot-scope="scope">{{scope.row.materialDate}}</template>
+          </el-table-column>
+          <el-table-column width="180px">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>种曲</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-date-picker v-model="scope.row.materialDate" type="date" :disabled="true" placeholder="选择日期" size="small" format="yyyy-MM-dd" style="width:135px"></el-date-picker>
-              </div>
+              <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+                <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="种曲" width="180px">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-select v-model.trim="scope.row.materialCode" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-                  <el-option :label="item.code +' '+ item.value" v-for="(item, index) in materialShort" :key="index" :value="item.code +' '+ item.value"></el-option>
-                </el-select>
-              </div>
+          <el-table-column width="130px">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>生产批次</span>
             </template>
-          </el-table-column>
-          <el-table-column label="生产批次" width="130px">
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="物料批次" width="130px">
@@ -40,21 +41,21 @@
               <el-input maxlength="10" v-model="scope.row.materialBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="数量">
+          <el-table-column>
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>数量</span>
+            </template>
             <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
-              </div>
+              <el-input v-model="scope.row.amount" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="单位" width="95px">
-            <template slot-scope="scope">
-              <div class="required">
-                <i class="reqI">*</i>
-                <el-input v-model="scope.row.unit" :disabled="true" size="small"></el-input>
-              </div>
+          <el-table-column width="60px">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>单位</span>
             </template>
+            <template slot-scope="scope">{{scope.row.unit}}</template>
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160px"></el-table-column>
@@ -632,7 +633,7 @@ export default {
         materialDate: this.formHeader.inKjmDate,
         materialBatch: '',
         amount: '',
-        unit: 'box',
+        unit: '盒',
         materialCode: '',
         materialName: '',
         productBatch: '',
@@ -995,7 +996,7 @@ export default {
       })
     },
     savestauts (resolve, reject) {
-      this.$http(`${KJM_API.DOUMATERSTATUS_API}`, 'POST', {status: this.formHeader.submitStatus, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+      this.$http(`${KJM_API.DOUMATERSTATUS_API}`, 'POST', {status: this.formHeader.submitStatus, orderHouseId: this.formHeader.orderHouseId, orderId: this.formHeader.orderId}).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error(data.msg)
@@ -1212,5 +1213,8 @@ export default {
 }
 .chart-box {
   min-height: 140px;
+}
+.reqI{
+  color: red;
 }
 </style>
