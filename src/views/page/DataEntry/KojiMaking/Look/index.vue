@@ -103,7 +103,8 @@ export default {
       orderStatus: '已同步',
       isRedact: false,
       submitStatus: 'saved',
-      applyCraftState: '' // 工艺状态
+      applyCraftState: '', // 工艺状态
+      succmessage: '保存成功'
     }
   },
   mounted () {
@@ -157,6 +158,7 @@ export default {
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
+        this.succmessage = '提交成功'
       }
       let that = this
       new Promise((resolve, reject) => {
@@ -186,7 +188,7 @@ export default {
           that.$refs.craft.savefeel(resolve, reject)
         })
         Promise.all([net1, net2, net3, excSaveNet, textSaveNet]).then(function () {
-          that.$message.success('保存成功')
+          that.$message.success(that.succmessage)
           that.GetheadList()
           that.isRedact = false
         }).catch(() => {
