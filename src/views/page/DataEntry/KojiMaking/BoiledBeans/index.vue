@@ -116,7 +116,8 @@ export default {
       applyMaterielState: '', // 物料状态
       applyCraftState: '', // 工艺状态
       holderList: [],
-      cookingNoId: '' // 连续蒸煮号
+      cookingNoId: '', // 连续蒸煮号
+      succmessage: '保存成功'
     }
   },
   mounted () {
@@ -204,6 +205,7 @@ export default {
         if (!this.$refs.excrecord.excrul()) {
           return false
         }
+        this.succmessage = '提交成功'
       } else {
         this.$set(this.formHeader, 'submitStatus', 'saved')
       }
@@ -253,7 +255,7 @@ export default {
             that.$refs.craft.updatehunhe(resolve, reject)
           })
           Promise.all([net5, net6, net7]).then(function () {
-            that.$message.success('保存成功')
+            that.$message.success(that.succmessage)
             that.GetheadList()
             that.isRedact = false
           }).catch(() => {
