@@ -117,8 +117,8 @@ export default {
         if (res.data.code === 0) {
           this.formHeader = res.data.headList[0]
           this.orderStatus = res.data.headList[0].guardStatus
-          console.log(this.formHeader)
-          this.$refs.excrecord.GetequipmentType(this.formHeader.prolineId)
+          // console.log(this.formHeader)
+          this.$refs.excrecord.GetequipmentType(this.formHeader.processId)
           if (this.orderStatus !== '已同步') {
             this.$refs.craft.getList(this.formHeader)
             this.$refs.excrecord.GetExcDate({
