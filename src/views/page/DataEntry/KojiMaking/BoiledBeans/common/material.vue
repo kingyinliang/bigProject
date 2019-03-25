@@ -684,7 +684,8 @@ export default {
         return
       }
       this.dialogFormVisibleMai = true
-      this.wheat = row
+      // this.wheat = row
+      this.wheat = Object.assign({}, row)
     },
     // 小麦领用保存
     savewheat (formName) {
@@ -740,10 +741,12 @@ export default {
       }
       if (row.useType === '入罐') {
         this.dialogFormVisibleDouRu = true
-        this.rusoy = row
+        // this.rusoy = row
+        this.rusoy = Object.assign({}, row)
       } else {
         this.dialogFormVisibleDouChu = true
-        this.chusoy = row
+        // this.chusoy = row
+        this.chusoy = Object.assign({}, row)
       }
     },
     // 豆 入罐 弹框 保存
