@@ -214,7 +214,7 @@
             </el-table-column>
             <el-table-column label="备注" prop="remark" width="150px">
               <template slot-scope="scope">
-                <remark v-model='scope.row.remark'  :disabled="disabled" ></remark>
+                <remark v-model='scope.row.remark' :width="'150px'" :disabled="disabled" ></remark>
                 <!-- <el-input size="small" v-model="scope.row.remark" :disabled="disabled"></el-input> -->
               </template>
             </el-table-column>
