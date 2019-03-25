@@ -214,7 +214,7 @@
             </el-table-column>
             <el-table-column label="备注" prop="remark" width="150px">
               <template slot-scope="scope">
-                <remark v-model='scope.row.remark' :width="'150px'" :disabled="disabled" ></remark>
+                <Remark v-model='scope.row.remark' :width="'150px'" :disabled="disabled" ></Remark>
                 <!-- <el-input size="small" v-model="scope.row.remark" :disabled="disabled"></el-input> -->
               </template>
             </el-table-column>
@@ -255,7 +255,6 @@ import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
 import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
 import officialWorker from '@/views/components/officialWorker.vue'
-import remark from '@/views/components/remark.vue'
 import {Employee} from './entity/Employee.ts'
 import {DayType, EMPType} from './entity/Enum.ts'
 import {House} from './entity/House.ts'
@@ -264,8 +263,7 @@ import {House} from './entity/House.ts'
   components: {
     TemporaryWorker,
     LoanedPersonnel,
-    officialWorker,
-    remark
+    officialWorker
   }
 })
 

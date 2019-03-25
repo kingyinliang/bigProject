@@ -5,6 +5,7 @@ import router from './router'
 import store from '@/store'
 import VueCookie from 'vue-cookie'
 import ElementUI from 'element-ui'
+import install from '@/views/components/install'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
 import { isAuth } from '@/net/validate'
@@ -18,6 +19,8 @@ SentryUtil.init()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
+// 自定义全局组件
+Vue.use(install)
 
 // 挂载全局
 Vue.prototype.$http = httpProxy // ajax请求方法
