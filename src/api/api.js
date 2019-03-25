@@ -934,6 +934,10 @@ export const KJM_API = {
    */
   KJMAKINGCHECKTIMEBACK_API: HOST + '/sys/midTimeSheet/goBack',
   /**
+  * @property {string} KJMAKINGCHECKTIMESAVE_API 车间审核工时保存
+  */
+  KJMAKINGCHECKTIMESAVE_API: HOST + '/sys/midTimeSheet/update',
+  /**
    * @property {string} KJMAKINGCHECKTIMESUBMIT_API 车间审核工时提交
    */
   KJMAKINGCHECKTIMESUBMIT_API: HOST + '/sys/midTimeSheet/submit',

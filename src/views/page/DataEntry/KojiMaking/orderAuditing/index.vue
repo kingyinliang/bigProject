@@ -93,7 +93,7 @@
                 </el-table-column>
                 <el-table-column width="140" label="人工工时">
                   <template slot-scope="scope">
-                    <el-input size="small" type="number" v-model.number="scope.row.confActivity3"  placeholder="手工录入" :disabled="scope.row.disabled" ></el-input>
+                    {{scope.row.confActivity3}}
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
@@ -165,7 +165,7 @@
                     {{scope.row.saltWaterWeight}}
                   </template>
                 </el-table-column>
-                <el-table-column width="120" label="入库物料">
+                <el-table-column width="180" label="入库物料">
                   <template slot-scope="scope">
                     {{scope.row.materialCode + ' ' + scope.row.materialName}}
                   </template>
@@ -175,7 +175,7 @@
                     <span>{{scope.row.sauceWeight}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="入库批次" width="140">
+                <el-table-column label="入库批次" width="120">
                   <template slot-scope="scope">
                     <span>{{scope.row.batch}}</span>
                   </template>
@@ -185,12 +185,12 @@
                     <span>{{scope.row.unit}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作人" width="100">
+                <el-table-column label="操作人" width="150">
                   <template slot-scope="scope">
                     {{scope.row.changer}}
                   </template>
                 </el-table-column>
-                <el-table-column label="操作时间" width="200">
+                <el-table-column label="操作时间" width="160">
                   <template slot-scope="scope">
                     {{scope.row.changed}}
                   </template>
@@ -198,7 +198,7 @@
                 <el-table-column
                   fixed="right"
                   label="操作"
-                  width="100">
+                  width="80">
                   <template slot-scope="scope">
                     <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>
@@ -225,39 +225,39 @@
                     {{scope.row.houseName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="物料" width="100">
+                <el-table-column label="物料" width="180">
                   <template slot-scope="scope">
                     {{scope.row.materialCode + ' ' + scope.row.materialName}}
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="领用容器"
-                  width="100">
+                  width="140">
                   <template slot-scope="scope">
                     {{scope.row.holderName}}
                   </template>
                 </el-table-column>
-                <el-table-column width="160" label="批次">
+                <el-table-column width="120" label="批次">
                   <template slot-scope="scope">
                     {{scope.row.batch}}
                   </template>
                 </el-table-column>
-                <el-table-column width="120" label="数量">
+                <el-table-column width="80" label="数量">
                   <template slot-scope="scope">
                     {{scope.row.entryQnt}}
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
-                    <span>{{scope.row.entryUom}}</span>
+                    <span>{{scope.row.entryUom ? (scope.row.entryUom === 'box' ? '盒' : scope.row.entryUom === 'L' ? '升' : scope.row.entryUom === 'KG' ? '千克' : scope.row.entryUom) : ''}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作人" width="100">
+                <el-table-column label="操作人" width="150">
                   <template slot-scope="scope">
                     <span>{{scope.row.changer}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作时间" width="300">
+                <el-table-column label="操作时间" width="160">
                   <template slot-scope="scope">
                     <span>{{scope.row.changed}}</span>
                   </template>
@@ -265,7 +265,7 @@
                 <el-table-column
                   fixed="right"
                   label="操作"
-                  width="100">
+                  width="80">
                   <template slot-scope="scope">
                     <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
                   </template>

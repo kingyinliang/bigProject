@@ -296,7 +296,6 @@ export default class Index extends Vue {
   orderList:Array<House> = []
 
   mounted () {
-    console.log('params', this.params)
     this.params.zqDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
