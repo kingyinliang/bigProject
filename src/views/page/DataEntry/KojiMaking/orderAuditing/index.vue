@@ -123,7 +123,7 @@
                   <template slot-scope="scope">
                     <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='scope.row.disabled'>编辑</el-button>
                     <el-button style='float:left' type="primary" size="small" @click="saveWorkHour(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='!scope.row.disabled'>保存</el-button>
-                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -200,7 +200,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -272,7 +272,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -588,6 +588,9 @@ export default class Index extends Vue {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
+      if (!this.validateTime()) {
+        return
+      }
       Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
         that.$message.success('提交成功')
         that.getList()
@@ -595,8 +598,20 @@ export default class Index extends Vue {
     })
   }
 
+  validateTime () {
+    if (!this.workHourList || this.workHourList.length === 0) {
+      this.$message.error('报工工时无数据，不可提交')
+      return false
+    }
+    return true
+  }
   async timeSubmit () {
-    this.workHourList.forEach(function (item) { item.status = 'submit' })
+    let total = this.totalInstock
+    this.workHourList.forEach(function (item) {
+      item.status = 'submit'
+      item.countOutput = total
+      item.countOutputUnit = 'L'
+    })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('报工工时提交失败：' + res.data.msg)
@@ -607,7 +622,12 @@ export default class Index extends Vue {
     return ''
   }
   async storageSubmit () {
-    this.inStockList.forEach(function (item) { item.status = 'submit' })
+    let total = this.totalInstock
+    this.inStockList.forEach(function (item) {
+      item.status = 'submit'
+      item.countOutput = total
+      item.countOutputUnit = 'L'
+    })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('生产入库提交失败：' + res.data.msg)
