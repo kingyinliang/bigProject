@@ -80,11 +80,11 @@
       </div>
       <div class="wheatarBox">
         <el-row style="margin-top:10px">
-          <el-col class="box" v-for="sole in MaiHoldList" :key="sole.holderid">
+          <el-col class="box" v-for="(sole, indexss) in MaiHoldList" :key="indexss">
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
               <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
-                <div class="boxText">
+                <div class="boxText" v-popover:popover1>
                   <div v-for="(soles, index) in sole.pici" :key="index">
                     <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
@@ -92,6 +92,18 @@
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
                   </div>
                 </div>
+                <el-popover :ref="`popover${indexss}`" placement="top-start" title="标题" width="200" trigger="hover">
+                  <div class="popover-content">
+                    <div class="boxText" style='font-size:12px'>
+                      <div v-for="(soles, index) in sole.pici" :key="index">
+                        <div>批次:{{soles.batch}}<span style='float:right'>{{soles.amount}}KG</span></div>
+                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
+                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
+                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
+                      </div>
+                    </div>
+                  </div>
+                </el-popover>
             </div>
             <div style="width:100%; text-align:center">
               <el-button class="boxButton" @click="addwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:88px; float:initial;">立即领用</el-button>
@@ -256,6 +268,7 @@ export default {
   name: 'material',
   data () {
     return {
+      html: '<h1>这</h1>是一段内容,这是一段内容,这是一段内容,这是一段内容。',
       chartLine: null,
       topstatus: '',
       dialogFormVisibleMai: false,
