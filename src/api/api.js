@@ -3,8 +3,8 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.5.40:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.156:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.26:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 // let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -804,4 +804,162 @@ export const WHT_API = {
    * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
    */
   APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
+}
+
+/*
+*制曲api
+ */
+export const KJM_API = {
+  // 订单管理
+  /**
+   * @property {string} FORMHEAD_API 表头
+   */
+  FORMHEAD_API: HOST + '/sys/kjmOrderHouse/headList',
+  /**
+   * @property {string} FORMHEADUPDATE_API 表头修改
+   */
+  FORMHEADUPDATE_API: HOST + '/sys/kjmOrderHouse/udpateHead',
+  /**
+   * @property {string} OUTMATERIELLIST_API 出曲原料领用列表
+   */
+  OUTMATERIELLIST_API: HOST + '/sys/kjmOutMaterial/list',
+  /**
+   * @property {string} OUTMATERIELSAVE_API 出曲原料领用保存
+   */
+  OUTMATERIELSAVE_API: HOST + '/sys/kjmOutMaterial/mySaveOrUpdate',
+  /**
+   * @property {string} OUTMATERIELSUBMIT_API 出曲原料领用提交
+   */
+  OUTMATERIELSUBMIT_API: HOST + '/sys/kjmOutMaterial/submit',
+  /**
+   * @property {string} OUTMATERIELLIST_API 出曲生产入库列表
+   */
+  OUTINLIST_API: HOST + '/sys/kjmOutInStorage/list',
+  /**
+   * @property {string} OUTMATERIELLIST_API 出曲得入库数据
+   */
+  OUTINNUMLIST_API: HOST + '/sys/kjmOutInStorage/getThreeNum',
+  /**
+   * @property {string} OUTMATERIELSAVE_API 出曲生产入库保存
+   */
+  OUTINSAVE_API: HOST + '/sys/kjmOutInStorage/mySaveOrUpdate',
+  /**
+   * @property {string} OUTMATERIELSUBMIT_API 出曲生产入库提交
+   */
+  OUTINSUBMIT_API: HOST + '/sys/kjmOutInStorage/submit',
+  /**
+   * @property {string} OUTMATERIELLIST_API 出曲工艺控制列表
+   */
+  OUTTECHLIST_API: HOST + '/sys/kjmOutTech/list',
+  /**
+   * @property {string} OUTMATERIELSAVE_API 出曲工艺控制保存
+   */
+  OUTTECHSAVE_API: HOST + '/sys/kjmOutTech/mySaveOrUpdate',
+  /**
+   * @property {string} OUTTIMELIST_API 工时查询
+   */
+  OUTTIMELIST_API: HOST + '/kjm/timeSheet/list',
+  /**
+   * @property {string} OUTTIMEREADYSAVE_API 工时准备时间保存
+   */
+  OUTTIMEREADYSAVE_API: HOST + '/wht/ready/whtReadyUpdate',
+  /**
+   * @property {string} OUTTIMEREADYSAVE_API 工时表头保存
+   */
+  OUTTIMEHEADSAVE_API: HOST + '/kjm/timeSheet/update',
+  /**
+   * @property {string} OUTTIMEREADYSAVE_API 工时提交
+   */
+  OUTTIMEHEADSUBMIT_API: HOST + '/kjm/timeSheet/submit',
+  /**
+   * @property {string} ORDERLIST_API 订单列表
+   */
+  ORDERLIST_API: HOST + '/sys/kjmOrderHouse/orderlist',
+  /**
+   * @property {string} ORDERDETAILLIST_API 订单详情列表
+   */
+  ORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/list',
+  /**
+   * @property {string} SPLITORDERDETAILLIST_API 订单拆分/订单详情修改
+   */
+  SPLITORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/mySaveOrUpdate',
+  /**
+   * @property {string} DELETEORDERDETAILLIST_API 详情批量删除
+   */
+  DELETEORDERDETAILLIST_API: HOST + '/sys/kjmOrderHouse/myDelete',
+  /**
+   * @property {string} KJMAKINGORDERLIST_API 制曲首页查询
+   */
+  KJMAKINGORDERLIST_API: HOST + '/kjm/order/list',
+
+  /**
+   * 煮豆edit
+   */
+  DOUMATERZHONG_API: HOST + '/kjm/bean/material/update', // 原料 种曲
+  DOUHEADER_API: HOST + '/kjm/bean/head/update', // 表头
+  DOUMATERWHEAT_API: HOST + '/kjm/bean/wheat/update', // 原料 小麦
+  DOUMATERPULP_API: HOST + '/kjm/bean/pulp/update', // 原料 豆粕
+  DOUMATERLIST_API: HOST + '/kjm/bean/material/list', // 原料 list
+  DOUMATERSUBMITZHONG_API: HOST + '/kjm/bean/material/submit', // 原料 种曲提交
+  DOUMATERSUBMITWHEAT_API: HOST + '/kjm/bean/wheat/submit', // 原料 小麦提交
+  DOUMATERSUBMITSOY_API: HOST + '/kjm/bean/pulp/submit', // 原料 豆粕提交
+  DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
+  DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
+
+  DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
+  DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
+  DOUGONGYIRUISAVE_API: HOST + '/kjm/bean/boiled/update', // 工艺 煮豆润水过程
+  DOUGONGYIZHENGSAVE_API: HOST + '/kjm/bean/cooking/update', // 工艺 连续蒸煮
+  DOUGONGYIHUNSAVE_API: HOST + '/kjm/bean/blend/update', // 工艺 混合入曲
+  DOUGONGYILISTSAVE_API: HOST + '/kjm/bean/technology/list', // 工艺 list
+  /**
+   * 看曲
+   */
+  DOUHEAERLIST: HOST + '/kjm/guard/headList', // 表头
+  DOULOOKLIST_API: HOST + '/kjm/guard/list', // 工艺 list
+  DOULOOKZHUSAVE_API: HOST + '/kjm/guard/tech/update', // 工艺 主表
+  DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
+  DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update', // 工艺 感官
+  DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态
+
+  /**
+   * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
+   */
+  KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
+  /**
+   * @property {string} KJMAKINGCHECKTIMEBACK_API 车间审核工时回退
+   */
+  KJMAKINGCHECKTIMEBACK_API: HOST + '/sys/midTimeSheet/goBack',
+  /**
+  * @property {string} KJMAKINGCHECKTIMESAVE_API 车间审核工时保存
+  */
+  KJMAKINGCHECKTIMESAVE_API: HOST + '/sys/midTimeSheet/update',
+  /**
+   * @property {string} KJMAKINGCHECKTIMESUBMIT_API 车间审核工时提交
+   */
+  KJMAKINGCHECKTIMESUBMIT_API: HOST + '/sys/midTimeSheet/submit',
+  /**
+   * @property {string} KJMAKINGCHECKSTORAGE_API 车间审核生产入库列表
+   */
+  KJMAKINGCHECKSTORAGE_API: HOST + '/sys/midInStorage/list',
+  /**
+   * @property {string} KJMAKINGCHECKSTORAGEBACK_API 车间审核生产入库回退
+   */
+  KJMAKINGCHECKSTORAGEBACK_API: HOST + '/sys/midInStorage/goBack',
+  /**
+   * @property {string} KJMAKINGCHECKSTORAGESUBMIT_API 车间审核生产入库提交
+   */
+  KJMAKINGCHECKSTORAGESUBMIT_API: HOST + '/sys/midInStorage/submit',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALE_API 车间审核物料领用列表
+   */
+  KJMAKINGCHECKMATERIALE_API: HOST + '/sys/midMaterial/list',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALEBACK_API 车间审核物料领用回退
+   */
+  KJMAKINGCHECKMATERIALEBACK_API: HOST + '/sys/midMaterial/goBack',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
+   */
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
 }

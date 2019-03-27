@@ -79,7 +79,7 @@
               width="160">
               <template slot-scope="scope">
                 <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                <el-input v-model.number="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
+                <el-input v-model.trim="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
             <el-table-column
@@ -91,6 +91,11 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-row style="margin-top:20px;">
+            <el-col>
+              <div><span>领用数合计：</span>{{totalInstock}} KG</div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -354,6 +359,15 @@ export default {
     // }
   },
   computed: {
+    totalInstock: function () {
+      let total = 0
+      for (let ele of this.materielDataList) {
+        if (ele.delFlag === '0' && typeof ele.wheatWeight === 'number') {
+          total += parseFloat(ele.wheatWeight)
+        }
+      }
+      return total
+    }
   },
   watch: {
   },

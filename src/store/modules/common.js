@@ -41,16 +41,39 @@ export default {
       // yyyyMMdd
       productDate: ''
     },
-    // 制曲车间共享数据
+    // 制曲车间
     ZQWorkshop: {
-      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
-      factoryName: '烟台欣和企业食品有限公司工厂',
-      workshopId: 'DA8DB9D19B4043B8A600B52D9FEF93E3',
-      workshopName: '炒麦一车间',
-      // 制曲日期
-      zqDate: '2019-02-24',
-      // normal/abnormal 正常生产/无生产
-      productStatus: 'normal'
+      // 默认值
+      defaultVal: {
+        factoryId: '',
+        factoryName: '',
+        workshopId: '',
+        workshopName: '',
+        // 制曲日期
+        zqDate: '',
+        // normal/abnormal 正常生产/无生产
+        productStatus: 'normal',
+        // 订单管理页的订单日期
+        orderDate: '',
+        orderNo: '',
+        orderStatus: ''
+      },
+      // 首页跳转到工序页参数
+      params: {
+        orderNo: '',
+        orderId: '',
+        // 煮豆
+        beanOrderHouseId: '',
+        // 出曲
+        outOrderHouseId: '',
+        // 看曲
+        lookOrderHouseId: ''
+      },
+      // 订单管理页跳转到车间审核页的参数
+      checkParams: {
+        orderNo: '',
+        orderId: ''
+      }
     }
   },
   mutations: {
@@ -138,8 +161,29 @@ export default {
     },
     /* pw 小麦 end */
     /** 制曲 start */
-    updateZQWorkshop (state, name) {
-      state.ZQWorkshop = name
+    updateZQDefault (state, name) {
+      state.ZQWorkshop.defaultVal = name
+    },
+    updateZQParamsOrderNo (state, name) {
+      state.ZQWorkshop.params.orderNo = name
+    },
+    updateZQParamsOrderId (state, name) {
+      state.ZQWorkshop.params.orderId = name
+    },
+    updateZQParamsBeanHouseId (state, name) {
+      state.ZQWorkshop.params.beanOrderHouseId = name
+    },
+    updateZQParamsOutHouseId (state, name) {
+      state.ZQWorkshop.params.outOrderHouseId = name
+    },
+    updateZQParamsLookHouseId (state, name) {
+      state.ZQWorkshop.params.lookOrderHouseId = name
+    },
+    updateZQCheckParamsOrderNo (state, name) {
+      state.ZQWorkshop.checkParams.orderNo = name
+    },
+    updateZQCheckParamsOrderId (state, name) {
+      state.ZQWorkshop.checkParams.orderId = name
     }
     /** 制曲 end */
   }

@@ -168,11 +168,8 @@ export default {
     // 全局上下文环境
     // 上下文信息包括 ：user 、 tags 、 level 、fingerprint 、 extra data
     Sentry.configureScope(scope => {
-      // TODO
-      scope.setExtra('basic', {name: 'zhangsan'})
-      // TODO
+      scope.setExtra('basic', {name: 'something in common'})
       scope.setTag('page_local', '正式环境')
-      // TODO
       let id = sessionStorage.getItem('vuex') ? JSON.parse(sessionStorage.getItem('vuex')).user.id : ''
       let name = sessionStorage.getItem('vuex') ? `${JSON.parse(sessionStorage.getItem('vuex')).user.realName}（${JSON.parse(sessionStorage.getItem('vuex')).user.name}）` : ''
       scope.setUser({

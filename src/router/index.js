@@ -10,7 +10,8 @@ const _import = require('./import-' + process.env.NODE_ENV)
 
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
-  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
+  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } },
+  { path: '/echarts', component: _import('common/demo-echarts'), name: 'echarts', meta: { title: 'echarts' } }
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
