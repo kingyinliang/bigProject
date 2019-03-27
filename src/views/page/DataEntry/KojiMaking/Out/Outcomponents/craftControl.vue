@@ -15,7 +15,7 @@
         <p style="min-width: 184px">{{CraftControlDate.kojoMakingTime = kojoMakingTime}} H</p>
       </el-form-item>
       <el-form-item label="盐水用量：" label-width="125px">
-        <p style="min-width: 184px">{{CraftControlDate.saltWaterUsed}}</p>
+        <el-input v-model="CraftControlDate.saltWaterUsed" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>
       </el-form-item>
       <el-form-item label="盐水温度：" label-width="125px">
         <el-input v-model="CraftControlDate.saltWaterTemp" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入"></el-input>
@@ -82,7 +82,8 @@ export default {
   },
   methods: {
     GetsaltWaterUsed (num) {
-      this.CraftControlDate.saltWaterUsed = num
+      let a = num
+      this.CraftControlDate.saltWaterUsed = a
       this.$forceUpdate()
     },
     // 获取工艺数据
@@ -147,7 +148,7 @@ export default {
         ty = false
         this.$message.error('工艺控制必填项未填')
       }
-      if (this.CraftControlDate.kojoMakingTime > 40) {} else {
+      if (this.CraftControlDate.kojoMakingTime > 30) {} else {
         ty = false
         this.$message.error('制曲时间不得小于40H')
       }

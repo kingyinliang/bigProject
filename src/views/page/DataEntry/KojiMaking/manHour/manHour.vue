@@ -239,7 +239,6 @@ export default {
             this.uid = this.uuid(32, 62)
             this.readyTimeDate = this.readyTimeDate1
             this.userOrder.orderId = this.uid
-            this.inKjmBatch = data.inKjmBatch
             this.headList = this.formHeader
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop)
@@ -252,11 +251,11 @@ export default {
             }
             this.headList = data.headList[0]
             this.userOrder.orderId = data.headList[0].id
-            this.inKjmBatch = data.headList[0].inKjmBatch
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop)
             this.$refs.workerref.getTree(this.formHeader.factory)
           }
+          this.inKjmBatch = data.inKjmBatch
         } else {
           this.$message.error(data.msg)
         }
