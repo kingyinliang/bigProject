@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column width="241" label="开始时间">
         <template slot-scope="scope">
-          <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" :disabled="!isRedact"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.startDate" size="small" :disabled="!isRedact"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="用餐时间" width="100">
@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column width="241" label="结束时间">
         <template slot-scope="scope">
-          <el-date-picker type="datetime" value-format="yyyy.MM.dd HH:mm" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" :disabled="!isRedact"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" :disabled="!isRedact"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="备注" width="100">
@@ -114,6 +114,9 @@ export default {
   },
   methods: {
     // 人员列表
+    GetTimeUserList (list) {
+      this.WorkerDate = list
+    },
     GetUserList (id) {
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
         order_id: id
@@ -126,7 +129,12 @@ export default {
         }
       })
     },
+    // 返回人员列表
+    GetUser () {
+      return this.WorkerDate
+    },
     // 人员保存
+    TimeUserSave () {},
     UpdateUser (str, resolve) {
       if (this.WorkerDate.length > 0) {
         this.WorkerDate.forEach((item) => {
@@ -177,7 +185,7 @@ export default {
         return false
       }
       this.WorkerDate.forEach((item) => {
-        if (item.userType && item.userId.length !== 0) {} else {
+        if (item.userType && item.userId.length !== 0 && item.startDate && item.endDate) {} else {
           ty = false
           this.$message.error('人员必填项未填')
           return false

@@ -31,7 +31,7 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small"></el-date-picker>
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
           </div>
         </template>
       </el-table-column>
@@ -39,7 +39,7 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small"></el-date-picker>
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
           </div>
         </template>
       </el-table-column>
@@ -113,18 +113,27 @@ export default {
   },
   methods: {
     // 保存or提交
-    saveOrSubmitExc (id, str, resolve) {
+    saveOrSubmitExc (id, str, resolve, reject) {
       if (this.ExcDate.length > 0) {
         this.ExcDate.forEach((item) => {
-          item.orderId = id
+          if (typeof id === 'string') {
+            item.orderId = id
+          } else if (typeof id === 'object') {
+            item.orderId = id.orderId
+            item.orderHouseId = id.orderHouseId
+            item.blongProc = id.blongProc
+          }
         })
         this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
           if (data.code === 0) {
+            if (resolve) {
+              resolve('resolve')
+            }
           } else {
             this.$message.error('异常记录' + data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
+            if (reject) {
+              reject('异常记录' + data.msg)
+            }
           }
         })
       } else {
@@ -135,7 +144,15 @@ export default {
     },
     // 获取异常数据
     GetExcDate (id) {
-      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', {order_id: id}, false, false, false).then(({data}) => {
+      let postdata
+      if (typeof id === 'string') {
+        postdata = {
+          order_id: id
+        }
+      } else if (typeof id === 'object') {
+        postdata = id
+      }
+      this.$http(`${PACKAGING_API.PKGEXCLIST_API}`, 'POST', postdata, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.ExcDate = data.listForm
         } else {

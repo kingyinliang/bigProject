@@ -97,7 +97,7 @@
     <el-table-column label="产出数" width="120">
       <template slot-scope="scope">
         <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-        <span v-else>111{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+        <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -112,7 +112,7 @@
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -191,7 +191,7 @@
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row, delFlagnum.innum)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -334,7 +334,28 @@ export default {
       }
     },
     // 入库提交
-    submitIn (resolve) {
+    submitIn (id, str, resolve) {
+      let types = ''
+      if (this.order.properties === '二合一&礼盒产线') {
+        types = 'twoAndOne'
+      } else if (this.order.workShopName === '包装三车间') {
+        types = 'isPkgThree'
+      }
+      this.InDate.forEach((item) => {
+        item.orderId = id
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+        item.isPkgThree = types
+        if (this.order.properties === '二合一&礼盒产线') {
+          this.ratio.productUnit ? item.manSolidUnit = this.ratio.productUnit : item.manSolidUnit = this.ratio.basicUnit
+          item.badUnit = this.ratio.basicUnit
+          item.sampleUnit = this.ratio.basicUnit
+          item.outputUnit = this.ratio.basicUnit
+        }
+      })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
         } else {

@@ -287,21 +287,23 @@ export default {
         type: 'holder_type',
         pageSize: val,
         currPage: '1',
-        holderType: this.form.holderType,
-        holderNo: this.form.holderNo,
-        holderHold: this.form.holderHold,
-        deptId: this.form.deptId
+        holder_type: this.form.holderType,
+        holder_no: this.form.holderNo,
+        holder_hold: this.form.holderHold,
+        factory: this.form.factoryId,
+        dept_id: this.form.deptId
       })
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.GetContainerList({
         type: 'holder_type',
-        holderType: this.form.holderType,
-        holderNo: this.form.holderNo,
-        holderHold: this.form.holderHold,
-        deptId: this.form.deptId,
+        holder_type: this.form.holderType,
+        holder_no: this.form.holderNo,
+        holder_hold: this.form.holderHold,
+        dept_id: this.form.deptId,
         pageSize: this.pageSize,
+        factory: this.form.factoryId,
         currPage: val
       })
     }

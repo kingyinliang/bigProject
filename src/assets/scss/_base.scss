@@ -405,7 +405,10 @@ img {
 }
 /* pkg or fry
 ------------------------------ */
-#DaatTtabs,#pkg{
+#DaatTtabs,#pkg,.NewDaatTtabs{
+  border-radius: 10px!important;
+  overflow: hidden!important;
+  min-height: 300px!important;
   .required{
     position: relative;
     padding-left: 15px;
