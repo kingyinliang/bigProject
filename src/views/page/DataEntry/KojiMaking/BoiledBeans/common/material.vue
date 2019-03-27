@@ -84,18 +84,16 @@
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
               <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
-                <el-popover  placement="top-start" title="标题" width="200" trigger="hover">
-                  <div class="popover-content">
-                    <div class="boxText" style='font-size:12px'>
-                      <div v-for="(soles, index) in sole.pici" :key="index">
-                        <div>批次:{{soles.batch}}<span style='float:right'>{{soles.amount}}KG</span></div>
-                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
-                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
-                        <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
-                      </div>
+                <el-popover  placement="top" title="标题" width="200" trigger="hover">
+                  <div class="boxText">
+                    <div v-for="(soles, index) in sole.pici" :key="index">
+                      <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
+                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
+                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
                     </div>
                   </div>
-                  <div class="boxText" slot="reference">
+                  <div class="boxText" style="height:90px" slot="reference">
                     <div v-for="(soles, index) in sole.pici" :key="index">
                       <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
                       <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
@@ -151,14 +149,24 @@
             <div class="boxContent">
               <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
               <!-- <div :id="`J_${sole.holderId}`" class="chart-box"></div> -->
-              <div class="boxText">
-                <div v-for="(soles, index) in sole.pici" :key="index">
+              <el-popover  placement="top" title="" width="200" trigger="hover" v-if="sole.pici !== ''">
+                <div class="boxText">
+                  <div v-for="(soles, index) in sole.pici" :key="index">
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
+                  </div>
+                </div>
+                <div class="boxText" slot="reference" style="height:90px">
+                  <div v-for="(soles, index) in sole.pici" :key="index">
                     <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
+                  </div>
                 </div>
-              </div>
+              </el-popover>
             </div>
             <div style="text-align:center; width:140px; margin:5px auto; overflow:hidden;">
               <el-button type="button" class="boxButton" @click="rusoyM(sole)" :disabled="!isRedact">入罐</el-button><el-button class="boxButton" @click="chusoyM(sole)" :disabled="!isRedact">出罐</el-button>
@@ -578,6 +586,9 @@ export default {
                     total = total + items.amount
                   }
                 })
+                if (percent > 100) {
+                  percent = 100
+                }
                 this.$set(this.MaiHoldList[index], 'pici', pici)
                 this.$set(this.MaiHoldList[index], 'percent', percent)
                 this.$set(this.MaiHoldList[index], 'total', total)
@@ -615,6 +626,9 @@ export default {
                     total = total + items.amount
                   }
                 })
+                if (percent > 100) {
+                  percent = 100
+                }
                 this.$set(this.DouHoldList[index], 'pici', pici)
                 this.$set(this.DouHoldList[index], 'percent', percent)
                 this.$set(this.DouHoldList[index], 'total', total)
@@ -1159,6 +1173,25 @@ export default {
 }
 </script>
 
+<style>
+.boxContent{
+  font-size: 12px;
+  text-align: center;
+  padding: 12px 10px 0 10px;
+}
+.boxText{
+  font-size: 12px;
+  margin-top: 9px;
+  text-align: left;
+  padding-left: 2px;
+  color: rgb(32, 16, 16);
+  line-height: 22px;
+  overflow: hidden;
+}
+.boxText span{
+  float: right;
+}
+</style>
 <style lang="less" scoped>
 .input_bommom {
   width: 147px;
@@ -1184,26 +1217,6 @@ export default {
     background: #E9E9E9;
     padding-left: 10px;
     font-weight: bold;
-  }
-  .boxContent{
-    font-size: 12px;
-    text-align: center;
-    padding: 12px 10px 0 10px;
-    .boxText{
-      margin-top: 9px;
-      text-align: left;
-      padding-left: 2px;
-      color: rgb(32, 16, 16);
-      line-height: 22px;
-      height: 90px;
-      overflow: hidden;
-      span{
-        float: right;
-      }
-      .el-progress-bar__innerText {
-        display: none;
-      }
-    }
   }
   .boxButton {
     margin: 10px;
