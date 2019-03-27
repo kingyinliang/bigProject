@@ -83,25 +83,26 @@
           <el-col class="box" v-for="(sole, indexss) in MaiHoldList" :key="indexss">
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
-              <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
-                <el-popover  placement="top" title="标题" width="200" trigger="hover">
-                  <div class="boxText">
-                    <div v-for="(soles, index) in sole.pici" :key="index">
-                      <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
-                    </div>
+              <div :id="`JM_${sole.holderId}`" class="chart-box"></div>
+              <!-- <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress> -->
+              <el-popover  placement="top" title="标题" width="200" trigger="hover">
+                <div class="boxText">
+                  <div v-for="(soles, index) in sole.pici" :key="index">
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
                   </div>
-                  <div class="boxText" style="height:90px" slot="reference">
-                    <div v-for="(soles, index) in sole.pici" :key="index">
-                      <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
-                      <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
-                    </div>
+                </div>
+                <div class="boxText" style="height:90px" slot="reference">
+                  <div v-for="(soles, index) in sole.pici" :key="index">
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="index===0"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="index===1"></el-progress>
+                    <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="index===2"></el-progress>
                   </div>
-                </el-popover>
+                </div>
+              </el-popover>
             </div>
             <div style="width:100%; text-align:center">
               <el-button class="boxButton" @click="addwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:88px; float:initial;">立即领用</el-button>
@@ -147,12 +148,12 @@
           <el-col class="box" v-for="sole in DouHoldList" :key="sole.holderid">
             <div class="boxTitle">{{sole.holderName}}</div>
             <div class="boxContent">
-              <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress>
-              <!-- <div :id="`J_${sole.holderId}`" class="chart-box"></div> -->
+              <!-- <el-progress type="circle" :percentage="sole.percent" :stroke-width="10" :width="135" status="text">{{sole.total}}KG</el-progress> -->
+              <div :id="`J_${sole.holderId}`" class="chart-box"></div>
               <el-popover  placement="top" title="" width="200" trigger="hover" v-if="sole.pici !== ''">
                 <div class="boxText">
                   <div v-for="(soles, index) in sole.pici" :key="index">
-                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG({{soles.proportion}})</span></div>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
@@ -276,7 +277,6 @@ export default {
   name: 'material',
   data () {
     return {
-      html: '<h1>这</h1>是一段内容,这是一段内容,这是一段内容,这是一段内容。',
       chartLine: null,
       topstatus: '',
       dialogFormVisibleMai: false,
@@ -364,13 +364,20 @@ export default {
       this.GetwheatZhong()
       this.GetsoyZhong()
     },
-    // 'DouHoldList' () {
-    //   this.$nextTick(function () {
-    //     this.DouHoldList.map((item) => {
-    //       this.drawPie(`J_${item.holderId}`, item.pici)
-    //     })
-    //   })
-    // },
+    'MaiHoldList' () {
+      this.$nextTick(function () {
+        this.MaiHoldList.map((item) => {
+          this.drawPie(`JM_${item.holderId}`, item.pici, item.total + 'KG')
+        })
+      })
+    },
+    'DouHoldList' () {
+      this.$nextTick(function () {
+        this.DouHoldList.map((item) => {
+          this.drawPie(`J_${item.holderId}`, item.pici, item.total + 'KG')
+        })
+      })
+    },
     'wheatliang' () {
       this.wheatList.map((item) => {
         item.materialCode = this.wheatliang
@@ -393,33 +400,55 @@ export default {
     }
   },
   methods: {
-    drawPie (id, piciData) {
+    drawPie (id, piciData, totalkg) {
       let pici = []
       if (piciData !== undefined) {
         let n = 0
+        let index = 0
         piciData.map((item) => {
           let picisole = {}
           this.$set(picisole, 'value', item.proportion)
           this.$set(picisole, 'name', item.batch)
+          if (index % 3 === 0) {
+            this.$set(picisole, 'itemStyle', {normal: {color: '#1890FF'}, emphasis: {color: '#6FAFEA'}})
+          } else if ((index - 1) % 3 === 0) {
+            this.$set(picisole, 'itemStyle', {normal: {color: '#5BD171'}, emphasis: {color: '#46ED64'}})
+          } else if ((index - 2) % 3 === 0) {
+            this.$set(picisole, 'itemStyle', {normal: {color: '#F5A623'}, emphasis: {color: '#FAB748'}})
+          }
           pici.push(picisole)
           n = n + item.proportion
+          index = index + 1
         })
-        pici.push({value: (100 - n), name: '其他'})
+        pici.push({value: (100 - n), name: '其他', itemStyle: {normal: {color: '#E5E9F2'}, emphasis: {color: '#E5E9F2'}}})
       }
       var option = {
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{b}({d}%)' // formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-        // legend: {
-        //   orient: 'vertical',
-        //   x: 'left',
-        //   data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-        // },
+        legend: {
+          show: false,
+          orient: 'vertical',
+          x: 'left',
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+        },
+        graphic: {
+          type: 'text', // [ default: image ]用 setOption 首次设定图形元素时必须指定。image, text, circle, sector, ring, polygon, polyline, rect, line, bezierCurve, arc, group,
+          top: 'center', // 描述怎么根据父元素进行定位。top 和 bottom 只有一个可以生效。如果指定 top 或 bottom，则 shape 里的 y、cy 等定位属性不再生效。『父元素』是指：如果是顶层元素，父元素是 echarts 图表容器。如果是 group 的子元素，父元素就是 group 元素。
+          left: 'center', // 同上
+          style: {
+            text: totalkg, // 文本块文字。可以使用 \n 来换行。[ default: '' ]
+            fill: '#000', // 填充色。
+            fontSize: 18, // 字体大小
+            fontWeight: 'normal' // 文字字体的粗细，可选'normal'，'bold'，'bolder'，'lighter'
+          }
+        },
         series: [{
           name: '批次',
           type: 'pie',
-          radius: ['70%', '85%'],
+          radius: ['83%', '99%'],
+          hoverAnimation: false,
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -427,7 +456,7 @@ export default {
               position: 'center'
             },
             emphasis: {
-              show: true,
+              show: false,
               textStyle: {
                 fontSize: '12',
                 fontWeight: 'bold'
@@ -437,19 +466,22 @@ export default {
           labelLine: {
             normal: {
               show: false
+            },
+            emphasis: {
+              show: false
             }
           },
-          data: pici,
-          itemStyle: {
-            normal: {
-              color: function (params) {
-                var colorList = [
-                  '#20A0FF', '#67E0E3', '#81b6b2', '#eba422', '#5e7e54', '#e44f2f'
-                ]
-                return colorList[params.dataIndex]
-              }
-            }
-          }
+          data: pici
+          // itemStyle: {
+          //   normal: {
+          //     color: function (params) {
+          //       var colorList = [
+          //         '#1890FF', '#5BD171', '#F5A623'
+          //       ]
+          //       return colorList[params.dataIndex]
+          //     }
+          //   }
+          // }
           // data: [
           //   {value: 335, name: '直接访问'}
           //   {value: 310, name: '邮件营销'},
