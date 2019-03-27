@@ -172,7 +172,7 @@ export default {
   computed: {
     kojoMakingTime: function () {
       let time = 0
-      if (this.formHeader.inEndTime && this.formHeader.inEndTime) {
+      if (this.CraftControlDate.outStartTime && this.formHeader.inEndTime) {
         time = ((toDate(this.CraftControlDate.outStartTime).getTime() - toDate(this.formHeader.inEndTime).getTime()) / 3600000).toFixed(2)
       } else {
         time = '0'
