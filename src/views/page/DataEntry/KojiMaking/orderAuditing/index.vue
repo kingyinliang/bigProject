@@ -123,7 +123,7 @@
                   <template slot-scope="scope">
                     <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='scope.row.disabled'>编辑</el-button>
                     <el-button style='float:left' type="primary" size="small" @click="saveWorkHour(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='!scope.row.disabled'>保存</el-button>
-                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -200,7 +200,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -272,7 +272,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || scope.row.status === 'noPass'">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
