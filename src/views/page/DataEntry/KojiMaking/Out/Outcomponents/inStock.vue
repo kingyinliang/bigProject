@@ -174,7 +174,11 @@ export default {
         item.holderName = this.formHeader.inPotName
         item.holderId = this.formHeader.inPotNo
         if (item.status) {
-          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+          if (item.status === 'saved') {
+            item.status = str
+          } else if (item.status === 'noPass' && str === 'submit') {
+            item.status = str
+          }
         } else {
           item.status = str
         }

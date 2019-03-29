@@ -4,7 +4,7 @@
       <el-card class="searchCard  newCard">
         <el-row type="flex">
           <el-col>
-            <form-head :formHeader="formHeader" :isRedact="isRedact"></form-head>
+            <form-head :formHeader="formHeader" :isRedact="formHeaderIsReact"></form-head>
           </el-col>
           <el-col style="width:180px;font-size: 14px;line-height: 32px">
             <div style="float: right;">
@@ -34,7 +34,7 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark" :content="Materielstatus === 'noPass'? '不通过':Materielstatus === 'saved'? '已保存':Materielstatus === 'submit' ? '已提交' : Materielstatus === 'checked'? '通过':'未录入'" placement="top-start">
@@ -53,9 +53,11 @@
         </el-tab-pane>
         <el-tab-pane name="3">
           <span slot="label" class="spanview">
-            <el-button>工艺控制</el-button>
+            <el-tooltip class="item" effect="dark" :content="CraftControlStatus === 'noPass'? '不通过':CraftControlStatus === 'saved'? '已保存':CraftControlStatus === 'submit' ? '已提交' : CraftControlStatus === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': CraftControlStatus === 'noPass'? 'red' : ''}">工艺控制</el-button>
+            </el-tooltip>
           </span>
-          <craft-control ref="outtech" :isRedact="isRedact" :formHeader="formHeader"></craft-control>
+          <craft-control ref="outtech" :isRedact="isRedact" :formHeader="formHeader" @GetCraftControlStatus="GetCraftControlStatus"></craft-control>
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
@@ -93,7 +95,9 @@ export default {
       orderStatus: '',
       activeName: '1',
       Materielstatus: '',
-      InStockStatus: ''
+      InStockStatus: '',
+      // 工艺控制的页签状态
+      CraftControlStatus: ''
     }
   },
   mounted () {
@@ -101,6 +105,9 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     // 获取表头
     GetOrderList () {
       this.$http(`${KJM_API.FORMHEAD_API}`, 'POST', {
@@ -227,7 +234,8 @@ export default {
     // 原料领用状态
     GetMaterielStatus (status) {
       this.Materielstatus = status
-      this.$forceUpdate()
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     SetMeaterielNum (num) {
       this.$refs.outtech.GetsaltWaterUsed(num)
@@ -235,12 +243,23 @@ export default {
     // 生产入库状态
     GetInStockStatus (status) {
       this.InStockStatus = status
-      this.$forceUpdate()
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    // 工艺控制状态
+    GetCraftControlStatus (status) {
+      this.CraftControlStatus = status
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   computed: {
     ZQWorkshop: {
       get () { return this.$store.state.common.ZQWorkshop }
+    },
+    // 表头是否可编辑的标识，只要工艺控制提交了，入罐号就不可以更改
+    formHeaderIsReact () {
+      return this.isRedact && this.CraftControlStatus !== 'submit'
     }
   },
   components: {

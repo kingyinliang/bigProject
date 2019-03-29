@@ -21,7 +21,7 @@
                 <el-form-item label="制曲日期：" label-width="70px">
                   <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="生产状态：" label-width="70px">
+                <el-form-item label="生产状态：" label-width="70px" style='display:none;'>
                   <el-select v-model="params.productStatus" class="selectwpx" style="width:140px">
                     <el-option label="正常生产" value="normal"></el-option>
                     <el-option label="无生产" value="abnormal"></el-option>
@@ -31,12 +31,12 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isMyAuth">查询</el-button>
+                <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
                 <template v-if="params.productStatus === 'abnormal'">
-                  <el-button v-if="searched && disabled && isAuth('kjm:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
+                  <el-button v-if="searched && disabled" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
                   <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float:right">返回</el-button>
                 </template>
-                <template v-if="params.productStatus === 'abnormal' && !disabled  && isAuth('kjm:user:updateUser')">
+                <template v-if="params.productStatus === 'abnormal' && !disabled">
                   <el-button type="primary" size="small" @click="addPeople" style="float:right">新增</el-button>
                   <el-button type="primary" size="small" @click="save" style="float:right">保存</el-button>
                 </template>
@@ -52,7 +52,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div>{{orderList[index].houseNo}}</div><div>{{orderList[index].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index].status}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index].beanStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -68,16 +68,16 @@
                   </div>
                   <div class="box-item-bottom">
                     <el-tooltip class="item" effect="dark" :content="orderList[index].beanStatus" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color':orderList[index].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index])">煮豆</div>
+                      <div class="box-item-bottom-item" :style="{'color':orderList[index].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index])">数据录入</div>
                     </el-tooltip>
-                    <div class="box-item-bottom-split"></div>
+                    <!-- <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index].guardStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index].outStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index])">出曲</div>
-                    </el-tooltip>
+                    </el-tooltip> -->
                   </div>
                 </div>
               </el-col>
@@ -86,7 +86,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#5BD171">{{orderList[index + 1].houseNo}}</div><div>{{orderList[index + 1].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 1].status}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 1].beanStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -102,16 +102,16 @@
                   </div>
                   <div class="box-item-bottom">
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 1].beanStatus" placement="top-start">
-                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
+                      <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">数据录入</div>
                     </el-tooltip>
-                    <div class="box-item-bottom-split"></div>
+                    <!-- <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 1].guardStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index + 1])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 1].outStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index + 1])">出曲</div>
-                    </el-tooltip>
+                    </el-tooltip> -->
                   </div>
                 </div>
               </el-col>
@@ -120,7 +120,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#2C92F6">{{orderList[index + 2].houseNo}}</div><div>{{orderList[index + 2].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 2].status}}</div>
+                      <div class="box-item-title-state">状态：{{orderList[index + 2].beanStatus}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -136,16 +136,16 @@
                   </div>
                   <div class="box-item-bottom">
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 2].beanStatus" placement="top-start">
-                    <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 2])">煮豆</div>
+                    <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 2])">数据录入</div>
                     </el-tooltip>
-                    <div class="box-item-bottom-split"></div>
+                    <!-- <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 2].guardStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index + 2])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
                     <el-tooltip class="item" effect="dark" :content="orderList[index + 2].outStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 2].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index + 2])">出曲</div>
-                    </el-tooltip>
+                    </el-tooltip> -->
                   </div>
                 </div>
               </el-col>
@@ -220,7 +220,7 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" v-if="isAuth('kjm:user:delUser')"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" ></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -255,9 +255,9 @@ import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
 import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
 import officialWorker from '@/views/components/officialWorker.vue'
-import {Employee} from './entity/Employee.ts'
-import {DayType, EMPType} from './entity/Enum.ts'
-import {House} from './entity/House.ts'
+import {Employee} from '../entity/Employee.ts'
+import {DayType, EMPType} from '../entity/Enum.ts'
+import {House} from '../entity/House.ts'
 
 @Component({
   components: {
@@ -297,21 +297,8 @@ export default class Index extends Vue {
     this.params.zqDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getProcess(this.params.workshopId)
-    this.getTree()
-  }
-  isAuth (key) {
-    return Vue.prototype.isAuth(key)
-  }
-  get isMyAuth () {
-    if (this.params.productStatus === 'abnormal') {
-      // 无生产的查询权限
-      return this.isAuth('kjm:user:listUser')
-    } else if (this.params.productStatus === 'normal') {
-      // 正常生产的查询权限
-      return this.isAuth('kjm:order:list')
-    }
-    return false
+    // this.getProcess(this.params.workshopId)
+    // this.getTree()
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs
@@ -452,12 +439,48 @@ export default class Index extends Vue {
           let order = new House(item.orderId, item.orderNo, item.materialCode, item.materialName, item.houseNo, item.inPotNoName, item.inEndTime, item.inEndTimeLength, item.orderHouseId, item.status, item.beanStatus, item.guardStatus, item.outStatus)
           this.orderList.push(order)
         }
+        this.sortOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
     }).catch(err => {
       console.log('catch data::', err)
     })
+  }
+  sortOrderList () {
+    if (this.orderList) {
+      this.orderList.sort(this.compare())
+    }
+  }
+  // 不通过>>未录入>>已保存>>已提交>>审核通过
+  compare () {
+    let that = this
+    return function (a, b) {
+      let status1 = that.compareVal(a.beanStatus)
+      let status2 = that.compareVal(b.beanStatus)
+      let flag1 = status2 > status1 ? 1 : status2 === status1 ? 0 : -1
+      let inPotVal = a.inPotNoName.localeCompare(b.inPotNoName)
+      let flag2 = inPotVal > 0 ? 1 : inPotVal === 0 ? 0 : -1
+      let houseVal = a.houseNo.localeCompare(b.houseNo)
+      let flag3 = houseVal > 0 ? 1 : houseVal === 0 ? 0 : -1
+      return flag1 * 100 + flag2 * 10 + flag3
+    }
+  }
+  compareVal (val) {
+    switch (val) {
+      case '不通过':
+        return 5
+      case '未录入':
+        return 4
+      case '已保存':
+        return 3
+      case '已提交':
+        return 2
+      case '通过':
+        return 1
+      default :
+        return 0
+    }
   }
   // 新增人员
   addPeople () {
@@ -600,18 +623,6 @@ export default class Index extends Vue {
     })
   }
   goPage (page: string, item: House) {
-    let flag = false
-    if (page === '煮豆') {
-      flag = this.isAuth('kjm:bean:material:list')
-    } else if (page === '看曲') {
-      flag = this.isAuth('kjm:bean:material:list')
-    } else if (page === '出曲') {
-      flag = this.isAuth('sys:kjmOutMaterial:list')
-    }
-    if (!flag) {
-      this.$message.error('无权限查看' + page)
-      return
-    }
     this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)
     this.$store.commit('common/updateZQParamsOrderId', item.orderId)
     let name = ''

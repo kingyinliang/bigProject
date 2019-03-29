@@ -40,7 +40,7 @@
             </el-col>
             <el-col style="width:80px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
+                <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isAuth('sys:order:orderlist')">查询</el-button>
               </el-row>
             </el-col>
           </el-row>
@@ -98,11 +98,11 @@
                       align="center"
                       width="80">
                       <template slot-scope="scope">
-                        <div class="operator" v-if="scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存'" @click="orderSplit(scope.row)">
+                        <div class="operator" v-if="(scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存') && isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)">
                           <div class="split"></div>
                           <div>&nbsp;拆分</div>
                         </div>
-                        <div class="operator" v-if="scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过'" @click="orderCheck(scope.row)">
+                        <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')" @click="orderCheck(scope.row)">
                           <div class="check"></div>
                           <div>&nbsp;审核</div>
                         </div>
@@ -380,6 +380,9 @@ export default class Index extends Vue {
     this.getHolderList('曲房')
     this.getHolderList('连续蒸煮')
   }
+  isAuth (key) {
+    return Vue.prototype.isAuth(key)
+  }
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
@@ -620,6 +623,10 @@ export default class Index extends Vue {
   }
   // 删除订单详情
   delDetail () {
+    if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
+      this.$message.error('无权限进行删除操作')
+      return
+    }
     if (!this.selectedDetailList || this.selectedDetailList.length === 0) {
       this.$message.error('请选择删除项')
       return
@@ -652,6 +659,10 @@ export default class Index extends Vue {
   }
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
+    if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
+      this.$message.error('无权限进行修改操作')
+      return
+    }
     if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
       this.$message.error(`${row.status}的数据不可修改`)
       return

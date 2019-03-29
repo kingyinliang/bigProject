@@ -93,6 +93,9 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.CraftControlDate = data.list[0] ? data.list[0] : {}
+          let CraftControlStatus = this.CraftControlDate.status ? this.CraftControlDate.status : ''
+          console.log(CraftControlStatus)
+          this.$emit('GetCraftControlStatus', CraftControlStatus)
         } else {
           this.$message.error(data.msg)
         }

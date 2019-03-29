@@ -46,7 +46,7 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right;margin-left:10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-orderManage-index'})">返回</el-button>
-            <el-button type="primary" size="small" @click="submitForm" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked'">提交</el-button>
+            <el-button type="primary" size="small" @click="submitForm" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked' && isAuth('sys:midTimeSheet:udpate')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -121,9 +121,9 @@
                   label="操作"
                   width="145">
                   <template slot-scope="scope">
-                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='scope.row.disabled'>编辑</el-button>
-                    <el-button style='float:left' type="primary" size="small" @click="saveWorkHour(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if='!scope.row.disabled'>保存</el-button>
-                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
+                    <el-button style='float:left' type="primary" size="small" @click="enbaleEdit(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if="scope.row.disabled && isAuth('sys:midTimeSheet:udpate')">编辑</el-button>
+                    <el-button style='float:left' type="primary" size="small" @click="saveWorkHour(scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit'" v-if="!scope.row.disabled && isAuth('sys:midTimeSheet:udpate')">保存</el-button>
+                    <el-button style='float:right' type="primary" size="small"  @click="goBack('报工工时', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')" v-if="isAuth('sys:midTimeSheet:udpate')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -200,7 +200,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('生产入库', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')" v-if="isAuth('sys:midTimeSheet:udpate')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -272,7 +272,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')">退回</el-button>
+                    <el-button style='float:right' type="primary" size="small" @click="goBack('物料领用', scope.row)" :disabled="scope.row.status === 'checked' || scope.row.status === 'submit' || (scope.row.status === 'noPass' && scope.row.isVerBack === '1')" v-if="isAuth('sys:midTimeSheet:udpate')">退回</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -346,6 +346,9 @@ export default class Index extends Vue {
       total += parseFloat(ele.sauceWeight)
     }
     return total
+  }
+  isAuth (key) {
+    return Vue.prototype.isAuth(key)
   }
   getList () {
     this.getFormHeader()
