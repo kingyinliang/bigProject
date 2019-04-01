@@ -4,7 +4,7 @@
       <el-card class="searchCard  newCard">
         <el-row type="flex">
           <el-col>
-            <form-head :formHeader="formHeader" :isRedact="formHeaderIsReact"></form-head>
+            <form-head :formHeader="formHeader" :isRedact="isRedact" :CraftControlStatus="CraftControlStatus"></form-head>
           </el-col>
           <el-col style="width:180px;font-size: 14px;line-height: 32px">
             <div style="float: right;">
@@ -120,10 +120,10 @@ export default {
           this.$refs.meateriel.GetBrineTankNo(this.formHeader)
           this.$refs.outinstorage.GetThreeNum(this.formHeader)
           this.$refs.outtech.selectUser(this.formHeader.prolineId)
+          this.$refs.outtech.GetTechList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.prolineId)
           if (this.orderStatus !== '已同步') {
             this.$refs.meateriel.GetmaterielDate(this.formHeader)
-            this.$refs.outtech.GetTechList(this.formHeader)
             this.$refs.outinstorage.GetOutInStorage(this.formHeader)
             this.$refs.excrecord.GetExcDate({
               order_id: this.formHeader.orderId,
@@ -256,10 +256,6 @@ export default {
   computed: {
     ZQWorkshop: {
       get () { return this.$store.state.common.ZQWorkshop }
-    },
-    // 表头是否可编辑的标识，只要工艺控制提交了，入罐号就不可以更改
-    formHeaderIsReact () {
-      return this.isRedact && this.CraftControlStatus !== 'submit'
     }
   },
   components: {
