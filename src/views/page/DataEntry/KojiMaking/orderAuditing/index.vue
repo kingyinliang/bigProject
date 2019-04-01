@@ -364,7 +364,7 @@ export default class Index extends Vue {
   }
   getFormHeader () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
-    Vue.prototype.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', {orderId}).then(res => {
+    Vue.prototype.$http(`${KJM_API.KJMAKINGHEAD_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0 && res.data.list && res.data.list.length > 0) {
         let item = res.data.list[0]
         Object.assign(this.formHeader, item)

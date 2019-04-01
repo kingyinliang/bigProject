@@ -926,6 +926,11 @@ export const KJM_API = {
   DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态
 
   /**
+   * @property {string} KJMAKINGHEAD_API 车间审核表头
+   */
+  KJMAKINGHEAD_API: HOST + '/kjm/order/midHeadList',
+
+  /**
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
    */
   KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
