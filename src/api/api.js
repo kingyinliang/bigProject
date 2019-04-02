@@ -703,9 +703,10 @@ export const REP_API = {
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
   REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours',
   /**
-   *  炒麦 - 出粉率
+   *  炒麦 - 出粉率、导出
    */
-  REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList'
+  REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList',
+  REPOUTPUTFLOURYIELDEXPORT_API: HOST + '/report/kjmORwht/expectFlourYield'
 }
 /*
 *炒麦api
