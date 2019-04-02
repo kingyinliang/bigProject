@@ -3,21 +3,33 @@
     <el-card>
       <el-row class="searchCard">
         <el-col :span="20">
-          <el-form :model="plantList" :inline="true" size="small">
+          <el-form :model="plantList" :inline="true" label-width="85px" size="small">
             <el-form-item label="生产工厂：">
-              <el-select v-model="plantList.factory" style="width:170px;">
+              <el-select v-model="plantList.factory">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产车间：">
-              <el-select v-model="plantList.workShop" style="width:170px;">
+              <el-select v-model="plantList.workShop">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="生产日期：">
-              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
+            <el-form-item label="曲房：">
+              <el-select v-model="plantList.workShop" filterable >
+                <el-option label="请选择"  value=""></el-option>
+                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="制曲日期：">
+              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="发酵罐：">
+              <el-select v-model="plantList.workShop" filterable>
+                <el-option label="请选择"  value=""></el-option>
+                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              </el-select>
             </el-form-item>
           </el-form>
         </el-col>
@@ -29,13 +41,34 @@
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
         <el-table-column label="工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="车间" prop="workShopName"></el-table-column>
-        <el-table-column label="小麦领用量" prop="wheat"></el-table-column>
-        <el-table-column label="麦粉" prop="flour"></el-table-column>
-        <el-table-column label="出粉率" prop="flourYield"></el-table-column>
-        <el-table-column label="损耗率" prop="lossYield"></el-table-column>
+        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
+        <el-table-column label="曲房" prop=""></el-table-column>
+        <el-table-column label="发酵罐" prop=""></el-table-column>
+        <el-table-column label="连续蒸煮号" prop=""></el-table-column>
+        <el-table-column label="制曲日期" prop=""></el-table-column>
+        <el-table-column label="预热时间" prop=""></el-table-column>
+        <el-table-column label="下料开始时间" prop=""></el-table-column>
+        <el-table-column label="下料结束时间" prop=""></el-table-column>
+        <el-table-column label="润水比例" prop=""></el-table-column>
+        <el-table-column label="实际比例" prop=""></el-table-column>
+        <el-table-column label="润水温度" prop=""></el-table-column>
+        <el-table-column label="润水变频" prop=""></el-table-column>
+        <el-table-column label="一次预热变频" prop=""></el-table-column>
+        <el-table-column label="二次预热变频" prop=""></el-table-column>
+        <el-table-column label="下料速度" prop=""></el-table-column>
+        <el-table-column label="蒸煮变频" prop=""></el-table-column>
+        <el-table-column label="上转阀变频" prop=""></el-table-column>
+        <el-table-column label="下转阀变频" prop=""></el-table-column>
+        <el-table-column label="蒸煮数显压力" prop=""></el-table-column>
+        <el-table-column label="蒸煮机械压力" prop=""></el-table-column>
+        <el-table-column label="分气包压力" prop=""></el-table-column>
+        <el-table-column label="蒸煮数显温度" prop=""></el-table-column>
+        <el-table-column label="上转阀冷却" prop=""></el-table-column>
+        <el-table-column label="下转阀冷却" prop=""></el-table-column>
+        <el-table-column label="混合料温度" prop=""></el-table-column>
+        <el-table-column label="接种温度" prop=""></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -93,9 +126,9 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.plantList.workShop = ''
+      this.plantList.workshop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '炒麦'}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -133,7 +166,7 @@ export default {
     // 导出
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPOUTPUTFLOURYIELDEXPORT_API}`, '出粉率', that)
+      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
     }
   }
 }
