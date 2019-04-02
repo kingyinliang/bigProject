@@ -606,6 +606,16 @@ export default class Index extends Vue {
       this.$message.error('报工工时无数据，不可提交')
       return false
     }
+    let sum = 0
+    for (let item of this.workHourList) {
+      if (!isNaN(item.confActivity2)) {
+        sum += item.confActivity2
+      }
+    }
+    if (sum <= 0) {
+      this.$message.error('机器工时之和不能小于0')
+      return false
+    }
     return true
   }
   async timeSubmit () {

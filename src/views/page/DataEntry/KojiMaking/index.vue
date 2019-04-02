@@ -52,7 +52,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div>{{orderList[index].houseNo}}</div><div>{{orderList[index].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index].status}}</div>
+                      <div :class="orderList[index].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -86,7 +86,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#5BD171">{{orderList[index + 1].houseNo}}</div><div>{{orderList[index + 1].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 1].status}}</div>
+                      <div :class="orderList[index + 1].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index + 1].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -120,7 +120,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#2C92F6">{{orderList[index + 2].houseNo}}</div><div>{{orderList[index + 2].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 2].status}}</div>
+                      <div :class="orderList[index + 2].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index + 2].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -710,6 +710,24 @@ export default class Index extends Vue {
             margin-right:10px;
             margin-bottom:2px;
             background:rgba(126,211,33,1)
+          }
+        }
+        .box-item-title-state-nopass{
+          flex:1;
+          font-size:14px;
+          font-weight:500;
+          color:red;
+          line-height:20px;
+          text-align:right;
+          margin-top:4px;
+          &:before{
+            content:'';
+            display: inline-block;
+            height:6px;
+            width:6px;
+            margin-right:10px;
+            margin-bottom:2px;
+            background:red
           }
         }
       }
