@@ -365,18 +365,22 @@ export default {
       this.GetsoyZhong()
     },
     'MaiHoldList' () {
-      this.$nextTick(function () {
-        this.MaiHoldList.map((item) => {
-          this.drawPie(`JM_${item.holderId}`, item.pici, item.total + 'KG')
+      if (this.MaiHoldList.length > 0) {
+        this.$nextTick(function () {
+          this.MaiHoldList.map((item) => {
+            this.drawPie(`JM_${item.holderId}`, item.pici, item.total + 'KG')
+          })
         })
-      })
+      }
     },
     'DouHoldList' () {
-      this.$nextTick(function () {
-        this.DouHoldList.map((item) => {
-          this.drawPie(`J_${item.holderId}`, item.pici, item.total + 'KG')
+      if (this.DouHoldList.length > 0) {
+        this.$nextTick(function () {
+          this.DouHoldList.map((item) => {
+            this.drawPie(`J_${item.holderId}`, item.pici, item.total + 'KG')
+          })
         })
-      })
+      }
     },
     'wheatliang' () {
       this.wheatList.map((item) => {
@@ -574,7 +578,7 @@ export default {
         this.$message.error('种曲批次长度应为10位')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim === '') {
+      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
         this.$message.error('请选择小麦粉物料编码')
         return false
       }
@@ -583,7 +587,7 @@ export default {
         this.$message.error('请填写小麦粉数据')
         return false
       }
-      if (!this.soyliang || this.soyliang === 0 || this.wheatliang === '') {
+      if (!this.soyliang || this.soyliang === 0 || this.soyliang.trim() === '') {
         this.$message.error('请选择豆粕物料编码')
         return false
       }
