@@ -139,8 +139,8 @@ export default class Index extends Vue {
   workshopList = []
   dataList = []
   searched: boolean = false
-  currPage: number = 2
-  pageSize: number = 10
+  currPage: number = 1
+  pageSize: number = 1
   totalCount: number = 0
   plantList = {}
   mounted () {
@@ -234,7 +234,6 @@ export default class Index extends Vue {
   }
   retrieveDataList (params) {
     this.dataList = []
-    this.totalCount = 0
     Vue.prototype.$http(`https://apimarket-dev.shinho.net.cn/xhqy-fc/report/formh/kjmProductList`, 'POST', params).then(res => {
       if (res.data.code === 0) {
         this.dataList = res.data.page.list
