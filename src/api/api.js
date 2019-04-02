@@ -701,7 +701,11 @@ export const REP_API = {
    *  包装车间 - 产量总工时、导出
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
-  REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours'
+  REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours',
+  /**
+   *  炒麦 - 出粉率
+   */
+  REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList'
 }
 /*
 *炒麦api
