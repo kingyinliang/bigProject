@@ -43,32 +43,33 @@
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
         <el-table-column label="工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="车间" prop="workShopName"></el-table-column>
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
-        <el-table-column label="曲房" prop=""></el-table-column>
-        <el-table-column label="发酵罐" prop=""></el-table-column>
-        <el-table-column label="连续蒸煮号" prop=""></el-table-column>
-        <el-table-column label="制曲日期" prop=""></el-table-column>
-        <el-table-column label="预热时间" prop=""></el-table-column>
-        <el-table-column label="下料开始时间" prop=""></el-table-column>
-        <el-table-column label="下料结束时间" prop=""></el-table-column>
-        <el-table-column label="润水比例" prop=""></el-table-column>
-        <el-table-column label="实际比例" prop=""></el-table-column>
-        <el-table-column label="润水温度" prop=""></el-table-column>
-        <el-table-column label="润水变频" prop=""></el-table-column>
-        <el-table-column label="一次预热变频" prop=""></el-table-column>
-        <el-table-column label="二次预热变频" prop=""></el-table-column>
-        <el-table-column label="下料速度" prop=""></el-table-column>
-        <el-table-column label="蒸煮变频" prop=""></el-table-column>
-        <el-table-column label="上转阀变频" prop=""></el-table-column>
-        <el-table-column label="下转阀变频" prop=""></el-table-column>
-        <el-table-column label="蒸煮数显压力" prop=""></el-table-column>
-        <el-table-column label="蒸煮机械压力" prop=""></el-table-column>
-        <el-table-column label="分气包压力" prop=""></el-table-column>
-        <el-table-column label="蒸煮数显温度" prop=""></el-table-column>
-        <el-table-column label="上转阀冷却" prop=""></el-table-column>
-        <el-table-column label="下转阀冷却" prop=""></el-table-column>
-        <el-table-column label="混合料温度" prop=""></el-table-column>
-        <el-table-column label="接种温度" prop=""></el-table-column>
+        <el-table-column label="曲房" prop="houseNoName"></el-table-column>
+        <el-table-column label="发酵罐" prop="inPotNoName"></el-table-column>
+        <el-table-column label="连续蒸煮号" prop="cookingNoName"></el-table-column>
+        <el-table-column label="制曲日期" prop="inKjmDate"></el-table-column>
+        <el-table-column label="预热时间" prop="preheatTime"></el-table-column>
+        <el-table-column label="下料开始时间" prop="unloadingStartDate"></el-table-column>
+        <el-table-column label="下料结束时间" prop="unloadingEndDate"></el-table-column>
+        <el-table-column label="润水比例" prop="rateRunWater"></el-table-column>
+        <el-table-column label="实际比例" prop="realRate"></el-table-column>
+        <el-table-column label="润水温度" prop="tempRunWater"></el-table-column>
+        <el-table-column label="润水变频" prop="frequenceRunWater"></el-table-column>
+        <el-table-column label="一次预热变频" prop="oncePreheatFrequency"></el-table-column>
+        <el-table-column label="二次预热变频" prop="secondPreheatFrequency"></el-table-column>
+        <el-table-column label="二次预热温度" prop="secondPreheatTemp"></el-table-column>
+        <el-table-column label="下料速度" prop="unloadingSpeed"></el-table-column>
+        <el-table-column label="蒸煮变频" prop="cookingFrequency"></el-table-column>
+        <el-table-column label="上转阀变频" prop="upFrequency"></el-table-column>
+        <el-table-column label="下转阀变频" prop="downFrequency"></el-table-column>
+        <el-table-column label="蒸煮数显压力" prop="cookingPress"></el-table-column>
+        <el-table-column label="蒸煮机械压力" prop="cookingMachinePress"></el-table-column>
+        <el-table-column label="分气包压力" prop="separateDrum"></el-table-column>
+        <el-table-column label="蒸煮数显温度" prop="cookingTemp"></el-table-column>
+        <el-table-column label="蒸煮机械温度" prop="cookingMachineTemp"></el-table-column>
+        <el-table-column label="上转阀冷却" prop="upCooling"></el-table-column>
+        <el-table-column label="下转阀冷却" prop="downCooling"></el-table-column>
+        <el-table-column label="混合料温度" prop="mixtureTemp"></el-table-column>
+        <el-table-column label="接种温度" prop="inoculationTemp"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination

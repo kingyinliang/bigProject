@@ -3,7 +3,7 @@
     <el-card>
       <el-row class="searchCard">
         <el-col :span="20">
-          <el-form :model="plantList" :inline="true" size="small">
+          <el-form :model="plantList" :inline="true" size="small" label-width="85px">
             <el-form-item label="工厂：">
               <el-select v-model="plantList.factory">
                 <el-option label="请选择"  value=""></el-option>
@@ -16,8 +16,20 @@
                 <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="生产日期：">
-              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
+            <el-form-item label="曲房：">
+              <el-select v-model="plantList.workShop">
+                <el-option label="请选择"  value=""></el-option>
+                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="制曲日期：">
+              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="发酵罐：">
+              <el-select v-model="plantList.workShop">
+                <el-option label="请选择"  value=""></el-option>
+                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              </el-select>
             </el-form-item>
           </el-form>
         </el-col>
@@ -29,13 +41,16 @@
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
-        <el-table-column label="工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="车间" prop="workShopName"></el-table-column>
-        <el-table-column label="小麦领用量" prop="wheat"></el-table-column>
-        <el-table-column label="麦粉" prop="flour"></el-table-column>
-        <el-table-column label="出粉率" prop="flourYield"></el-table-column>
-        <el-table-column label="损耗率" prop="lossYield"></el-table-column>
+        <el-table-column label="生产工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="生产车间" prop="workShopName"></el-table-column>
+        <el-table-column label="曲房" width="120" prop="productDate"></el-table-column>
+        <el-table-column label="发酵罐" prop="wheat"></el-table-column>
+        <el-table-column label="制曲日期" prop="flour"></el-table-column>
+        <el-table-column label="煮豆异常" prop=""></el-table-column>
+        <el-table-column label="连续蒸煮异常" prop=""></el-table-column>
+        <el-table-column label="混合入曲异常" prop=""></el-table-column>
+        <el-table-column label="看曲异常" prop=""></el-table-column>
+        <el-table-column label="出曲异常" prop="flourYield"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -142,7 +157,6 @@ export default {
 <style lang="less">
 .el-date-editor .el-range-input {width:100px;}
 .el-range-editor--small .el-range-separator {padding-right:20px}
-.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {margin-bottom: 0}
 .searchCard {
   .el-button--primary,.el-button--primary:focus{
     color: #000000;
