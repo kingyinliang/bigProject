@@ -89,7 +89,7 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.plantList.workshop = ''
+      this.plantList.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {

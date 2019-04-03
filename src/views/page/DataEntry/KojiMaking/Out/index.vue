@@ -239,6 +239,7 @@ export default {
     },
     SetMeaterielNum (num) {
       this.$refs.outtech.GetsaltWaterUsed(num)
+      this.$refs.outinstorage.setBrineNum(num)
     },
     // 生产入库状态
     GetInStockStatus (status) {

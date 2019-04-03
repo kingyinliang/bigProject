@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.18:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.22:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -711,7 +711,17 @@ export const REP_API = {
    *  炒麦 - pw小麦
    */
   REPPWFRY_API: HOST + '/report/formh/pwList',
-  REPPWFRYOUT_API: HOST + '/report/formh/exportpwList'
+  REPPWFRYOUT_API: HOST + '/report/formh/exportpwList',
+  /**
+   *  出曲工艺
+   */
+  REPOUTCRAFT_API: HOST + '/report/formh/kjmOutTechList',
+  REPOUTCRAFTOUT_API: HOST + '/report/formh/exportkjmOutTechList',
+  /**
+   *  生酱醪统计表
+   */
+  REPRAW_API: HOST + '/report/formh/kjmSauceList',
+  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList'
 }
 /*
 *炒麦api
