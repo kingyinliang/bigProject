@@ -205,22 +205,22 @@ export default class Index extends Vue {
     // })
   }
   getDataList () {
-    if (this.params.factoryId === '') {
-      this.$message.error('请选择生产工厂')
-      return
-    }
-    if (this.params.workshopId === '') {
-      this.$message.error('请选择生产车间')
-      return
-    }
-    if (this.params.startDate === null || this.params.startDate === '') {
-      this.$message.error('请选择生产开始时间')
-      return
-    }
-    if (this.params.endDate === null || this.params.endDate === '') {
-      this.$message.error('请选择生产结束时间')
-      return
-    }
+    // if (this.params.factoryId === '') {
+    //   this.$message.error('请选择生产工厂')
+    //   return
+    // }
+    // if (this.params.workshopId === '') {
+    //   this.$message.error('请选择生产车间')
+    //   return
+    // }
+    // if (this.params.startDate === null || this.params.startDate === '') {
+    //   this.$message.error('请选择生产开始时间')
+    //   return
+    // }
+    // if (this.params.endDate === null || this.params.endDate === '') {
+    //   this.$message.error('请选择生产结束时间')
+    //   return
+    // }
     this.searched = true
     let params = {
       factory: this.params.factoryId,
