@@ -231,15 +231,22 @@ export default {
         this.$message.error('请填写查询选项')
         return false
       }
+      this.searchCard = false
       this.searchCard = true
       this.isRedact = false
-      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
+        deptId: this.formHeader.deptId,
+        factory: this.formHeader.factory,
+        inKjmDate: this.formHeader.inKjmDate,
+        workShop: this.formHeader.workShop
+      }).then(({data}) => {
         if (data.code === 0) {
           if (data.headList.length === 0) {
             this.uid = this.uuid(32, 62)
-            this.readyTimeDate = this.readyTimeDate1
+            this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
             this.userOrder.orderId = this.uid
             this.headList = this.formHeader
+            this.headList.status = ''
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop)
             this.$refs.workerref.getTree(this.formHeader.factory)
