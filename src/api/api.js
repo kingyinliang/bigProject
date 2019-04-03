@@ -707,7 +707,6 @@ export const REP_API = {
    */
   REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList',
   REPOUTPUTFLOURYIELDEXPORT_API: HOST + '/report/kjmORwht/expectFlourYield',
-  REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList',
   /**
    *  炒麦 - pw小麦
    */
