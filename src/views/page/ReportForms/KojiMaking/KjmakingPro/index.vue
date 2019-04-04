@@ -140,7 +140,7 @@ export default class Index extends Vue {
   dataList = []
   searched: boolean = false
   currPage: number = 1
-  pageSize: number = 1
+  pageSize: number = 10
   totalCount: number = 0
   plantList = {}
   mounted () {
