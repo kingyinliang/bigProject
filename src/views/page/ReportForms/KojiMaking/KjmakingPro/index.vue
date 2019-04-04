@@ -224,7 +224,7 @@ export default class Index extends Vue {
     this.searched = true
     let params = {
       factory: this.params.factoryId,
-      workShop: this.params.workshopId,
+      workshop: this.params.workshopId,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
       currPage: this.currPage + '',
