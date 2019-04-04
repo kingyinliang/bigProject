@@ -718,6 +718,11 @@ export const REP_API = {
   REPOUTLOOKCRAFT_API: HOST + '/report/kjmORwht/guardTechList',
   REPOUTLOOKCRAFTEXPORT_API: HOST + '/report/kjmORwht/expectGuardTech',
   /**
+   *  炒麦 - 工艺异常
+   */
+  REPOUTCRARTERROR_API: HOST + '/report/kjmORwht/techExceptionList',
+  REPOUTCRARTERROREXPORT_API: HOST + '/report/kjmORwht/expectTechException',
+  /**
    *  炒麦 - pw小麦
    */
   REPPWFRY_API: HOST + '/report/formh/pwList',

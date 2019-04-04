@@ -41,16 +41,16 @@
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="生产工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="生产车间" prop="workShopName"></el-table-column>
-        <el-table-column label="曲房" width="120" prop="productDate"></el-table-column>
-        <el-table-column label="发酵罐" prop="wheat"></el-table-column>
-        <el-table-column label="制曲日期" prop="flour"></el-table-column>
-        <el-table-column label="煮豆异常" prop=""></el-table-column>
-        <el-table-column label="连续蒸煮异常" prop=""></el-table-column>
-        <el-table-column label="混合入曲异常" prop=""></el-table-column>
-        <el-table-column label="看曲异常" prop=""></el-table-column>
-        <el-table-column label="出曲异常" prop="flourYield"></el-table-column>
+        <el-table-column label="生产工厂" width="150" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="生产车间" width="110" prop="workShopName"></el-table-column>
+        <el-table-column label="曲房" width="110" prop="houseNoName"></el-table-column>
+        <el-table-column label="发酵罐" width="110" prop="inPotNoName"></el-table-column>
+        <el-table-column label="制曲日期" width="110" prop="inKjmDate"></el-table-column>
+        <el-table-column label="煮豆异常" width="100" prop="cookingException" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="连续蒸煮异常" width="120" prop="continuousCookingException" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="混合入曲异常" width="120" prop="blendException" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="看曲异常" width="100" prop="guardException" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲异常" width="100" prop="outException" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -161,7 +161,7 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
-      this.$http(`${REP_API.REPOUTPUTFLOURYIELD_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPOUTCRARTERROR_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -186,7 +186,7 @@ export default {
     // 导出
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '工艺异常报表', that)
+      exportFile(`${REP_API.REPOUTCRARTERROREXPORT_API}`, '工艺异常报表', that)
     }
   }
 }
