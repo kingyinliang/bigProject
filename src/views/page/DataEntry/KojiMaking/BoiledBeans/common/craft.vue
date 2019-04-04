@@ -423,6 +423,7 @@ export default {
     updatezhu (resolve, reject) {
       this.$set(this.craftfrom, 'orderHouseId', this.formHeader.orderHouseId)
       this.$set(this.craftfrom, 'status', this.formHeader.submitStatus)
+      this.$set(this.craftfrom, 'preheatTime', this.timecha)
       this.$http(`${KJM_API.DOUGONGYIZHUSAVE_API}`, 'POST', this.craftfrom).then(({data}) => {
         if (data.code === 0) {
         } else {
