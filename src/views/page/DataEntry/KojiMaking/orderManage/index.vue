@@ -379,9 +379,11 @@ export default class Index extends Vue {
     this.retrieveHolders(this.params.workshopId, this.params.workshopName)
   }
   retrieveHolders (workshopId, workshopName) {
-    this.getHolderList(workshopId, workshopName, '入罐')
-    this.getHolderList(workshopId, workshopName, '曲房')
-    this.getHolderList(workshopId, workshopName, '连续蒸煮')
+    if (workshopId) {
+      this.getHolderList(workshopId, workshopName, '入罐')
+      this.getHolderList(workshopId, workshopName, '曲房')
+      this.getHolderList(workshopId, workshopName, '连续蒸煮')
+    }
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
