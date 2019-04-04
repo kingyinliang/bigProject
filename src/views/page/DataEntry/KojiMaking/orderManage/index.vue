@@ -374,12 +374,14 @@ export default class Index extends Vue {
   pageSize = 10
 
   mounted () {
-    console.log('ewwkj')
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getHolderList(this.params.workshopId, this.params.workshopName, '入罐')
-    this.getHolderList(this.params.workshopId, this.params.workshopName, '曲房')
-    this.getHolderList(this.params.workshopId, this.params.workshopName, '连续蒸煮')
+    this.retrieveHolders(this.params.workshopId, this.params.workshopName)
+  }
+  retrieveHolders (workshopId, workshopName) {
+    this.getHolderList(workshopId, workshopName, '入罐')
+    this.getHolderList(workshopId, workshopName, '曲房')
+    this.getHolderList(workshopId, workshopName, '连续蒸煮')
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -388,12 +390,13 @@ export default class Index extends Vue {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
       this.params.factoryName = item ? item.deptName : ''
+      this.params.workshopId = ''
+      this.params.workshopName = ''
+      this.getWorkshop(this.params.factoryId)
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
-      this.getHolderList(this.params.workshopId, this.params.workshopName, '入罐')
-      this.getHolderList(this.params.workshopId, this.params.workshopName, '曲房')
-      this.getHolderList(this.params.workshopId, this.params.workshopName, '连续蒸煮')
+      this.retrieveHolders(this.params.workshopId, this.params.workshopName)
     } else if (flag === 'inPot') {
       let item = this.potList.find(ele => ele.holderId === this.detailForm.inPotNo)
       this.detailForm.inPotName = item ? item.holderName : ''
@@ -747,12 +750,12 @@ export default class Index extends Vue {
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
   }
-  @Watch('params.factoryId')
-  onFactoryValue (newVal: string, oldVal: string) {
-    this.params.workshopId = ''
-    this.params.workshopName = ''
-    this.getWorkshop(newVal)
-  }
+  // @Watch('params.factoryId')
+  // onFactoryValue (newVal: string, oldVal: string) {
+  //   this.params.workshopId = ''
+  //   this.params.workshopName = ''
+  //   this.getWorkshop(newVal)
+  // }
 }
 </script>
 <style lang="scss" scoped>
