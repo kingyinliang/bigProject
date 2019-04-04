@@ -6,29 +6,29 @@
           <el-form :model="plantList" :inline="true" size="small" label-width="85px">
             <el-form-item label="工厂：">
               <el-select v-model="plantList.factory">
-                <el-option label="请选择"  value=""></el-option>
+                <el-option label="请选择" value=""></el-option>
                 <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="车间：">
               <el-select v-model="plantList.workShop">
-                <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="sole in workShop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="曲房：">
-              <el-select v-model="plantList.workShop">
-                <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              <el-select v-model="plantList.houseNoID" filterable>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="sole in houseList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="制曲日期：">
-              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
+              <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
             </el-form-item>
             <el-form-item label="发酵罐：">
-              <el-select v-model="plantList.workShop">
-                <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+              <el-select v-model="plantList.inPotNoID" filterable>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="sole in inPotList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -76,20 +76,32 @@ export default {
       plantList: {
         factory: '',
         workShop: '',
-        commitDateOne: '',
-        commitDateTwo: '',
+        houseNoID: '',
+        inPotNoID: '',
+        inKjmDate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
       },
       factory: '',
-      workshop: '',
+      workShop: '',
+      houseList: '',
+      inPotList: '',
       dataList: []
     }
   },
   watch: {
     'plantList.factory' (n, o) {
+      this.plantList.workShop = ''
+      this.plantList.houseNoID = ''
+      this.plantList.inPotNoID = ''
       this.Getdeptbyid(n)
+    },
+    'plantList.workShop' (n, o) {
+      this.plantList.houseNoID = ''
+      this.plantList.inPotNoID = ''
+      this.GetinPotList(n)
+      this.GethouseList(n)
     }
   },
   mounted () {
@@ -112,7 +124,33 @@ export default {
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
-            this.workshop = data.typeList
+            this.workShop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取发酵罐
+    GetinPotList (id) {
+      if (id) {
+        let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '001', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.inPotList = data.page.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取曲房
+    GethouseList (id) {
+      if (id) {
+        let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '005', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.houseList = data.page.list
           } else {
             this.$message.error(data.msg)
           }
@@ -148,7 +186,7 @@ export default {
     // 导出
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
+      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '工艺异常报表', that)
     }
   }
 }
