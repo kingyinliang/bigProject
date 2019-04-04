@@ -17,11 +17,11 @@
         <el-form-item label="炒麦机：">
           <el-select v-model="plantList.inPotNo" style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
-            <el-option v-for="sole in Pot" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
+            <el-option v-for="sole in Machine" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="生产订单：">
-          <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
+        <el-form-item label="订单日期：">
+          <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="生产日期：">
           <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
@@ -32,21 +32,17 @@
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
         <el-table-column label="工厂" width="170" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="车间" prop="workShopName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="生产订单" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="品项" prop="material" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="发酵罐" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="发酵罐容量" prop="holderHold" width="95"></el-table-column>
-        <el-table-column label="计划产量" prop="planOutput"></el-table-column>
-        <el-table-column label="实际产量" prop="realOutput"></el-table-column>
-        <el-table-column label="投罐日期" prop="canningDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="满罐日期" prop="canfulDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="180天成熟期" prop="oheDate" width="110"></el-table-column>
-        <el-table-column label="130天成熟期" prop="ohtDate" width="110"></el-table-column>
-        <el-table-column label="日期" prop="nowDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="发酵天数" prop="fDate"></el-table-column>
+        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
+        <el-table-column label="炒麦机" prop="material" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="检测时间" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="焦糊率" prop="holderHold" width="95"></el-table-column>
+        <el-table-column label="膨胀率" prop="planOutput"></el-table-column>
+        <el-table-column label="粉碎度" prop="realOutput"></el-table-column>
+        <el-table-column label="检测人员" prop="canningDate" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="备注" prop="canfulDate" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -83,8 +79,7 @@ export default {
       dataList: [],
       factory: '',
       workshop: '',
-      room: [],
-      Pot: []
+      Machine: []
     }
   },
   mounted () {
@@ -95,7 +90,7 @@ export default {
       this.Getdeptbyid(n)
     },
     'plantList.workShop' (n, o) {
-      this.GetPot(n)
+      this.GetMachine(n)
     }
   },
   methods: {
@@ -122,23 +117,20 @@ export default {
         })
       }
     },
-    GetPot (id) {
-      if (id) {
-        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {
-          currPage: 1,
-          holder_type: '001',
-          pageSize: 100,
-          type: 'holder_type',
-          dept_id: id
-        }, false, false, false).then(({data}) => {
-          if (data.code === 0) {
-            this.Pot = data.page.list
-            console.log(this.Pot)
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      }
+    // 炒麦机
+    GetMachine (productLine) {
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: '炒麦机',
+        deptId: productLine,
+        currPage: '1',
+        pageSize: '50'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.Machine = data.list.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     GetList (st) {
       if (st) {

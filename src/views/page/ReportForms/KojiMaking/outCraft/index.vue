@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="生产车间：">
-          <el-select v-model="plantList.workShop" style="width: 150px">
+          <el-select v-model="plantList.workshop" style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
           </el-select>
@@ -84,7 +84,7 @@ export default {
     return {
       plantList: {
         factory: '',
-        workShop: '',
+        workshop: '',
         houseID: '',
         inPotNo: '',
         inKjmDate: '',
@@ -106,7 +106,7 @@ export default {
     'plantList.factory' (n, o) {
       this.Getdeptbyid(n)
     },
-    'plantList.workShop' (n, o) {
+    'plantList.workshop' (n, o) {
       this.Getroom(n)
       this.GetPot(n)
     }
@@ -124,7 +124,7 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.plantList.workShop = ''
+      this.plantList.workshop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
@@ -156,11 +156,18 @@ export default {
     },
     GetPot (id) {
       if (id) {
+        let workShopName = ''
+        this.workshop.forEach((item, index) => {
+          if (id === item.deptId) {
+            workShopName = item.deptName
+          }
+        })
         this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {
           currPage: 1,
           holder_type: '001',
           pageSize: 100,
           type: 'holder_type',
+          workShopName: workShopName,
           dept_id: id
         }, false, false, false).then(({data}) => {
           if (data.code === 0) {

@@ -289,11 +289,11 @@ export default {
         that.$refs.workerref.UpdateUser(str, resolve, reject)
       })
       if (str === 'submit') {
-        let submit = new Promise((resolve, reject) => {
-          that.manHourSubmit(str, resolve, reject)
-        })
         let saveNet = Promise.all([headSave, readySave, userSave])
         saveNet.then(function () {
+          let submit = new Promise((resolve, reject) => {
+            that.manHourSubmit(str, resolve, reject)
+          })
           let submitNet = Promise.all([submit])
           submitNet.then(function () {
             that.GetTimeList()
@@ -346,6 +346,7 @@ export default {
       }
       this.headList.status = str
       this.headList.inKjmBatch = this.inKjmBatch + ''
+      console.log(this.headList)
       this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
