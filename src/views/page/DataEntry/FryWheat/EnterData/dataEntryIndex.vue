@@ -167,7 +167,9 @@ export default {
     UpdateformHeader (str, resolve) {
       let countOutput = 0
       this.$refs.instock.wheatDataList.forEach((item) => {
-        countOutput += parseInt(item.inPortWeight)
+        if (item.delFlag === '0') {
+          countOutput += parseInt(item.inPortWeight)
+        }
       })
       this.formHeader.orderStatus = str
       this.formHeader.realOutput = countOutput + ''
