@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.14:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -213,7 +213,12 @@ export const BASICDATA_API = {
   /**
    * @property {string} SPECDEL_API 规格删除
    */
-  SPECDEL_API: HOST + '/sys/spec/delSpec'
+  SPECDEL_API: HOST + '/sys/spec/delSpec',
+
+  /**
+   * @property {string} MATERIAL_API 成品品项
+   */
+  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams'
 }
 /*
 *系统设置api
@@ -736,7 +741,17 @@ export const REP_API = {
    *  生酱醪统计表
    */
   REPRAW_API: HOST + '/report/formh/kjmSauceList',
-  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList'
+  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList',
+  /**
+   *  制曲生产
+   */
+  KJMAKINGPRO_LIST_API: HOST + '/report/formh/kjmProductList',
+  KJMAKINGPRO_EXCEL_API: HOST + '/report/formh/exportKjmProductList',
+  /**
+   * OEE
+   */
+  OEE_LIST_API: HOST + '/report/formh/productEfficiencyList',
+  OEE_EXCEL_API: HOST + '/report/formh/exportKjmProductList'
 }
 /*
 *炒麦api

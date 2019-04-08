@@ -13,14 +13,32 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="生产车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px"  @change="changeOptions('workshop')">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="生产产线：">
+                  <el-select v-model="params.productlineId" class="selectwpx" style="width:140px" @change="changeOptions('productline')">
+                    <el-option label="请选择" value=""></el-option>
+                    <el-option v-for="sole in productlineList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="生产品项：">
+                  <el-select v-model="params.materialCode" class="selectwpx" style="width:140px" @change="changeOptions('material')">
+                    <el-option label="请选择" value=""></el-option>
+                    <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="生产日期：">
                   <el-date-picker type="date" v-model="params.startDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                   - <el-date-picker type="date" v-model="params.endDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                </el-form-item>
+                <el-form-item >
+                  <template>
+                    <el-radio v-model="params.radio" label="OEE" style='margin-right:10px;'>OEE</el-radio>
+                    <el-radio v-model="params.radio" label="OPE">OPE</el-radio>
+                  </template>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -35,64 +53,114 @@
         <el-row v-show="searched" style="margin-top:20px;">
           <div style="min-height:320px">
             <el-table border  header-row-class-name="tableHead" :data="dataList">
-              <el-table-column label="制曲日期"  width="100">
-                <template slot-scope="scope">
-                  {{scope.row.inKjmDate}}
-                </template>
-              </el-table-column>
-              <el-table-column label="工厂"  :show-overflow-tooltip="true" width="150">
+              <el-table-column label="工厂"  width="130" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.factoryName}}
                 </template>
               </el-table-column>
-              <el-table-column label="车间"  :show-overflow-tooltip="true" width="110">
+              <el-table-column label="车间"  :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.workShopName}}
                 </template>
               </el-table-column>
-              <el-table-column label="豆粕量(KG)"  width="100">
+              <el-table-column label="产线"  :show-overflow-tooltip="true" width="60">
                 <template slot-scope="scope">
-                  {{scope.row.allPlup}}
+                  {{scope.row.productLineName}}
                 </template>
               </el-table-column>
-              <el-table-column label="麦粉量(KG)"  width="100">
+              <el-table-column label="品项"  width="150"  :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  {{scope.row.allWheat}}
+                  {{scope.row.materialName}}
                 </template>
               </el-table-column>
-              <el-table-column label="盐水量(方)"  width="100">
+              <el-table-column label="日期"  width="100">
                 <template slot-scope="scope">
-                  {{scope.row.allSalt}}
+                  {{scope.row.productDate}}
                 </template>
               </el-table-column>
-              <el-table-column label="菌种量(盒)"  width="100">
+              <el-table-column label="可用率"  width="80">
                 <template slot-scope="scope">
-                  {{scope.row.allMat}}
+                  {{scope.row.avbRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="投料批数" width="100">
+              <el-table-column label="时间稼动率"  width="100">
                 <template slot-scope="scope">
-                  {{scope.row.allTPatch}}
+                  {{scope.row.timeCropRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="投料量(方)"  width="100">
+              <el-table-column label="性能稼动率" width="100">
                 <template slot-scope="scope">
-                  {{scope.row.allOutMat}}
+                  {{scope.row.performCropRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="出曲批数"  width="100">
+              <el-table-column label="良品率"  width="80">
                 <template slot-scope="scope">
-                  {{scope.row.allOutPatch}}
+                  {{scope.row.googRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="出曲量"  width="100">
+              <el-table-column label="综合效率(OEE)"  width="90">
                 <template slot-scope="scope">
-                  {{scope.row.allOut}}
+                  {{scope.row.theOEERatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="曲房号" :show-overflow-tooltip="true" width="100">
+              <el-table-column label="生产效率(无可用率)"  width="95">
                 <template slot-scope="scope">
-                  {{scope.row.houseStr}}
+                  {{scope.row.proDuctRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column label="总时间(min)"  width="80">
+                <template slot-scope="scope">
+                  {{scope.row.allTolTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="计划停机时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.planStop}}
+                </template>
+              </el-table-column>
+              <el-table-column label="实际投入时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.alltime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="除外时间(min)" :show-overflow-tooltip="true" width="90">
+                <template slot-scope="scope">
+                  {{scope.row.removeTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="异常损失时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.excptTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="净作业时间(min)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.netOprTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="产出数(pcs)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.output}}
+                </template>
+              </el-table-column>
+              <el-table-column label="不良品数(pcs)" :show-overflow-tooltip="true" width="120">
+                <template slot-scope="scope">
+                  {{scope.row.allBad}}
+                </template>
+              </el-table-column>
+              <el-table-column label="标准产能(pcs/h)" :show-overflow-tooltip="true" width="130">
+                <template slot-scope="scope">
+                  {{scope.row.basicCapacity}}
+                </template>
+              </el-table-column>
+              <el-table-column label="产出时间(h)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.outPutTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="净作业时间(h)" :show-overflow-tooltip="true" width="120">
+                <template slot-scope="scope">
+                  {{scope.row.netOprTimeHour}}
                 </template>
               </el-table-column>
             </el-table>
@@ -118,7 +186,7 @@
 
 <script lang="ts">
 import {BASICDATA_API, REP_API} from '@/api/api'
-import {dateFormat, exportFile} from '@/net/validate'
+import {exportFile} from '@/net/validate'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 
 @Component({
@@ -132,11 +200,18 @@ export default class Index extends Vue {
     factoryName: '',
     workshopId: '',
     workshopName: '',
-    startDate: dateFormat(new Date(), 'yyyy-MM-dd'),
-    endDate: dateFormat(new Date(), 'yyyy-MM-dd')
+    productlineId: '',
+    productlineName: '',
+    materialCode: '',
+    materialName: '',
+    startDate: '',
+    endDate: '',
+    radio: 'OEE'
   }
   factoryList = []
   workshopList = []
+  productlineList = []
+  materialList = []
   dataList = []
   searched: boolean = false
   currPage: number = 1
@@ -146,6 +221,8 @@ export default class Index extends Vue {
   mounted () {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
+    this.getProductLine(this.params.workshopId)
+    this.getMaterialList()
   }
   // button 权限
   isAuth (key) {
@@ -159,6 +236,12 @@ export default class Index extends Vue {
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
+    } else if (flag === 'productline') {
+      let item = this.productlineList.find(ele => ele.deptId === this.params.productlineId)
+      this.params.productlineName = item ? item.deptName : ''
+    } else if (flag === 'material') {
+      let item = this.materialList.find(ele => ele.materialCode === this.params.materialCode)
+      this.params.materialName = item ? item.materialName : ''
     }
   }
   // 获取工厂
@@ -185,24 +268,42 @@ export default class Index extends Vue {
       })
     }
   }
+  // 产线
+  getProductLine (wid: string) {
+    this.productlineList = []
+    if (wid) {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.productlineList = data.childList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    }
+  }
+  getMaterialList () {
+    this.materialList = []
+    Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
+      if (data.code === 0) {
+        this.materialList = data.list
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
+  }
   exportExcel () {
     this.plantList = {
       factory: this.params.factoryId,
-      workShop: this.params.workshopId,
+      workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate
     }
     let that = this
-    exportFile(`${REP_API.KJMAKINGPRO_EXCEL_API}`, '制曲生产报表', that)
-    // Vue.prototype.$http(`http://10.10.1.18:8080/xhqy-fc/report/formh/exportKjmProductList`, 'POST', params).then(res => {
-    //   if (res.data.code === 0) {
-    //     this.$message.error('导出成功')
-    //   } else {
-    //     this.$message.error(res.data.msg)
-    //   }
-    // }).catch(err => {
-    //   console.log('catch data::', err)
-    // })
+    if (this.params.radio === 'OEE') {
+      exportFile(`${REP_API.OEE_EXCEL_API}`, 'OEE报表', that)
+    }
   }
   getDataList () {
     // if (this.params.factoryId === '') {
@@ -225,16 +326,20 @@ export default class Index extends Vue {
     let params = {
       factory: this.params.factoryId,
       workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
       currPage: this.currPage + '',
       pageSize: this.pageSize + ''
     }
-    this.retrieveDataList(params)
+    if (this.params.radio === 'OEE') {
+      this.retrieveOEEDataList(params)
+    }
   }
-  retrieveDataList (params) {
+  retrieveOEEDataList (params) {
     this.dataList = []
-    Vue.prototype.$http(`${REP_API.KJMAKINGPRO_LIST_API}`, 'POST', params).then(res => {
+    Vue.prototype.$http(`${REP_API.OEE_LIST_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
         this.dataList = res.data.page.list
         this.totalCount = res.data.page.totalCount
@@ -258,12 +363,21 @@ export default class Index extends Vue {
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
+    this.currPage = 1
+    this.pageSize = 10
+    this.totalCount = 0
   }
   @Watch('params.factoryId')
-  onFactoryValue (newVal: string, oldVal: string) {
+  onChangeFactory (newVal: string, oldVal: string) {
     this.params.workshopId = ''
     this.params.workshopName = ''
     this.getWorkshop(newVal)
+  }
+  @Watch('params.workshopId')
+  onChangeWorkshop (newVal: string, oldVal: string) {
+    this.params.productlineId = ''
+    this.params.productlineName = ''
+    this.getProductLine(newVal)
   }
 }
 </script>
