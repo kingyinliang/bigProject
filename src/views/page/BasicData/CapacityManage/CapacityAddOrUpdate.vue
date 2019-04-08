@@ -31,6 +31,9 @@
             <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="标配人力：" prop="standardOfMan">
+          <el-input v-model="dataForm.standardOfMan" placeholder="手动输入"></el-input>
+        </el-form-item>
         <el-form-item label="维护人：" v-if="CapacityId">
           <el-input v-model="dataForm.changer" placeholder="手动输入" disabled></el-input>
         </el-form-item>
@@ -58,6 +61,7 @@ export default {
       visible: false,
       dataForm: {
         material: '',
+        standardOfMan: '',
         basicCapacity: 0,
         basicCapacityUnit: '',
         changer: '',
@@ -69,6 +73,9 @@ export default {
         ],
         basicCapacity: [
           { required: true, message: '产能不能为空', trigger: 'blur' }
+        ],
+        standardOfMan: [
+          { required: true, message: '标配人力不能为空', trigger: 'blur' }
         ],
         basicCapacityUnit: [
           { required: true, message: '单位不能为空', trigger: 'blur' }

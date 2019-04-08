@@ -206,13 +206,20 @@ export default {
     // 获取车间下工序
     GetTeam (id) {
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id}).then(({data}) => {
           if (data.code === 0) {
-            this.Team = data.childList
+            this.Team = data.teamList
           } else {
             this.$message.error(data.msg)
           }
         })
+        // this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        //   if (data.code === 0) {
+        //     this.Team = data.childList
+        //   } else {
+        //     this.$message.error(data.msg)
+        //   }
+        // })
       } else {
         this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
           if (data.code === 0) {

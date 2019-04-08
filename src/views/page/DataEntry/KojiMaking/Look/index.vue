@@ -48,11 +48,11 @@
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('kjm:guard:tech:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('kjm:guard:tech:update')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('kjm:guard:tech:update')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
@@ -63,8 +63,8 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs ref='tabs' type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
-        <el-tab-pane>
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
+        <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="applyCraftState === 'noPass'? '不通过':applyCraftState === 'saved'? '已保存':applyCraftState === 'submit' ? '已提交' : applyCraftState === 'checked'? '通过':'未录入'" placement="top-start">
               <el-button :style="{'color': applyCraftState === 'noPass'? 'red' : ''}">工艺控制</el-button>
@@ -72,13 +72,13 @@
           </span>
           <Craft ref="craft" :isRedact="isRedact" :formHeader="formHeader" :submitStatus="submitStatus" @setApplyCraftState='setApplyCraftState'></Craft>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="2">
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
           <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="3">
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
@@ -99,6 +99,7 @@ export default {
   name: 'look',
   data () {
     return {
+      activeName: '1',
       formHeader: {},
       orderStatus: '已同步',
       isRedact: false,
@@ -112,6 +113,9 @@ export default {
     this.GetheadList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     GetheadList () {
       this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.lookOrderHouseId, deptName: '看曲'}, false, false, false).then((res) => {
         if (res.data.code === 0) {
@@ -198,10 +202,7 @@ export default {
     },
     setApplyCraftState (status) {
       this.applyCraftState = status
-      // console.log(this.applyCraftState)
-      // setTimeout(() => {
-      //   this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
-      // }, 30000)
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   components: {

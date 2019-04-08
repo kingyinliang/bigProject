@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column width="115" label="盐水量（L）">
         <template slot-scope="scope">
-          {{scope.row.saltWaterWeight = ThreeNum.allS}}
+          {{scope.row.saltWaterWeight = BrineNum}}
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库酱醪量">
@@ -82,6 +82,7 @@ export default {
       }],
       InStockAuditlog: [],
       InStockstatus: '',
+      BrineNum: 0,
       ThreeNum: {
         allP: '',
         allM: '',
@@ -96,6 +97,9 @@ export default {
   mounted () {
   },
   methods: {
+    setBrineNum (num) {
+      this.BrineNum = num
+    },
     GetThreeNum (formHeader) {
       this.$http(`${KJM_API.OUTINNUMLIST_API}`, 'POST', {
         orderHouseId: formHeader.id
@@ -174,7 +178,11 @@ export default {
         item.holderName = this.formHeader.inPotName
         item.holderId = this.formHeader.inPotNo
         if (item.status) {
-          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+          if (item.status === 'saved') {
+            item.status = str
+          } else if (item.status === 'noPass' && str === 'submit') {
+            item.status = str
+          }
         } else {
           item.status = str
         }

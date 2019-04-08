@@ -71,6 +71,12 @@
                   :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column
+                  prop="standardOfMan"
+                  label="标配人力"
+                  width="80"
+                  :show-overflow-tooltip="true">
+                </el-table-column>
+                <el-table-column
                   prop="changer"
                   label="操作人"
                   width="87"

@@ -18,7 +18,7 @@
       <p class="el-input">{{formHeader.productDate ? formHeader.productDate : ''}}</p>
     </el-form-item>
     <el-form-item label="入罐号：">
-      <el-select v-model="formHeader.inPotNo" placeholder="请选择" filterable size="small" style="width: 145px" :disabled="!isRedact">
+      <el-select v-model="formHeader.inPotNo" placeholder="请选择" filterable size="small" style="width: 145px" :disabled="!(CraftControlStatus !== 'submit')">
         <el-option :label="iteam.holderName" :value="iteam.holderId" v-for="iteam in InPot" :key="iteam.holderName"></el-option>
       </el-select>
     </el-form-item>
@@ -45,6 +45,7 @@ export default {
   },
   props: {
     formHeader: {},
+    CraftControlStatus: {},
     isRedact: {}
   },
   mounted () {

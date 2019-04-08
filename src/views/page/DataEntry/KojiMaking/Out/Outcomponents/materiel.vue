@@ -132,7 +132,7 @@ export default {
       let ty = true
       this.MaterielDate.forEach((item) => {
         if (item.delFlag !== '1') {
-          if (item.material && item.saltWaterHolderId && item.startValue && item.startValue !== '0' && item.endValue && item.endValue !== '0') {} else {
+          if (item.material && item.saltWaterHolderId && (item.startValue || item.startValue === 0) && (item.endValue || item.endValue === 0)) {} else {
             ty = false
             this.$message.error('原料领用必填项未填')
             return false
