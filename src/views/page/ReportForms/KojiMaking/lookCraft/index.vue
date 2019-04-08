@@ -13,29 +13,26 @@
             <el-form-item label="生产车间：">
               <el-select v-model="plantList.workShop">
                 <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                <el-option v-for="sole in workShop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="曲房：">
-              <el-select v-model="plantList.workShop">
+              <el-select v-model="plantList.houseNoID" filterable>
                 <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                <el-option v-for="sole in houseList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="发酵罐：">
-              <el-select v-model="plantList.workShop">
+              <el-select v-model="plantList.inPotNoID" filterable>
                 <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                <el-option v-for="sole in inPotList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产订单：">
-              <el-input size="small" class="width199px"></el-input>
+              <el-input v-model="plantList.orderNo" size="small" class="width199px"></el-input>
             </el-form-item>
             <el-form-item label="制曲日期：">
-              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="看曲日期：">
-              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
+              <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -47,24 +44,30 @@
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="车间" prop="workShopName"></el-table-column>
-        <el-table-column label="制曲日期" prop=""></el-table-column>
-        <el-table-column label="曲房" prop=""></el-table-column>
-        <el-table-column label="发酵罐" prop=""></el-table-column>
-        <el-table-column label="入曲开始时间" prop=""></el-table-column>
-        <el-table-column label="入曲结束时间" prop=""></el-table-column>
-        <el-table-column label="二翻加水量" prop=""></el-table-column>
-        <el-table-column label="出曲加水量" prop=""></el-table-column>
-        <el-table-column label="一翻感官U" prop=""></el-table-column>
-        <el-table-column label="二翻感官U" prop="wheat"></el-table-column>
-        <el-table-column label="出曲感官U" prop="flour"></el-table-column>
-        <el-table-column label="一翻感官S" prop="flourYield"></el-table-column>
-        <el-table-column label="二翻感官S" prop="lossYield"></el-table-column>
-        <el-table-column label="出曲感官S" prop="lossYield"></el-table-column>
-        <el-table-column label="一翻感官A" prop="flourYield"></el-table-column>
-        <el-table-column label="二翻感官A" prop="lossYield"></el-table-column>
-        <el-table-column label="出曲感官A" prop="lossYield"></el-table-column>
+        <el-table-column label="工厂" width="120" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="车间" prop="workShopName" width="100"></el-table-column>
+        <el-table-column label="制曲日期" prop="inKjmDate" width="100"></el-table-column>
+        <el-table-column label="曲房" prop="houseNoName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="发酵罐" prop="inPotNoName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="入曲开始时间" prop="inStartTime" width="165"></el-table-column>
+        <el-table-column label="入曲结束时间" prop="inEndTime" width="165"></el-table-column>
+        <el-table-column label="二翻加水量" prop="overWeight" width="95"></el-table-column>
+        <el-table-column label="出曲加水量" prop="outWeight" width="95"></el-table-column>
+        <el-table-column label="U">
+          <el-table-column label="一翻感官" prop="oneCodeU"></el-table-column>
+          <el-table-column label="二翻感官" prop="twoCodeU"></el-table-column>
+          <el-table-column label="出曲感官" prop="outCodeU"></el-table-column>
+        </el-table-column>
+        <el-table-column label="S">
+          <el-table-column label="一翻感官" prop="oneCodeS"></el-table-column>
+          <el-table-column label="二翻感官" prop="twoCodeS"></el-table-column>
+          <el-table-column label="出曲感官" prop="outCodeS"></el-table-column>
+        </el-table-column>
+        <el-table-column label="A">
+          <el-table-column label="一翻感官" prop="oneCodeA"></el-table-column>
+          <el-table-column label="二翻感官" prop="twoCodeA"></el-table-column>
+          <el-table-column label="出曲感官" prop="outCodeA"></el-table-column>
+        </el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -90,20 +93,32 @@ export default {
       plantList: {
         factory: '',
         workShop: '',
-        commitDateOne: '',
-        commitDateTwo: '',
+        houseNoID: '',
+        inPotNoID: '',
+        inKjmDate: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
       },
       factory: '',
-      workshop: '',
+      workShop: '',
+      houseList: '',
+      inPotList: '',
       dataList: []
     }
   },
   watch: {
     'plantList.factory' (n, o) {
+      this.plantList.workShop = ''
+      this.plantList.houseNoID = ''
+      this.plantList.inPotNoID = ''
       this.Getdeptbyid(n)
+    },
+    'plantList.workShop' (n, o) {
+      this.plantList.houseNoID = ''
+      this.plantList.inPotNoID = ''
+      this.GetinPotList(n)
+      this.GethouseList(n)
     }
   },
   mounted () {
@@ -122,11 +137,37 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.plantList.workshop = ''
+      this.plantList.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
-            this.workshop = data.typeList
+            this.workShop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取发酵罐
+    GetinPotList (id) {
+      if (id) {
+        let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '001', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.inPotList = data.page.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取曲房
+    GethouseList (id) {
+      if (id) {
+        let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '005', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.houseList = data.page.list
           } else {
             this.$message.error(data.msg)
           }
@@ -137,7 +178,7 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
-      this.$http(`${REP_API.REPOUTPUTFLOURYIELD_API}`, 'POST', this.plantList).then(({data}) => {
+      this.$http(`${REP_API.REPOUTLOOKCRAFT_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -162,13 +203,14 @@ export default {
     // 导出
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPATTMOUTPUT_API}`, '计时考勤报表', that)
+      exportFile(`${REP_API.REPOUTLOOKCRAFTEXPORT_API}`, '看曲工艺报表', that)
     }
   }
 }
 </script>
 
 <style lang="less">
+.el-table th>.cell {text-align: center}
 .width199px {width:199px;}
 .el-date-editor .el-range-input {width:100px;}
 .el-range-editor--small .el-range-separator {padding-right:20px}

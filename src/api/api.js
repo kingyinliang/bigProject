@@ -708,6 +708,21 @@ export const REP_API = {
   REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList',
   REPOUTPUTFLOURYIELDEXPORT_API: HOST + '/report/kjmORwht/expectFlourYield',
   /**
+   *  炒麦 - 煮豆工艺
+   */
+  REPOUTBEANCRAFT_API: HOST + '/report/kjmORwht/beanTechList',
+  REPOUTBEANCRAFTEXPORT_API: HOST + '/report/kjmORwht/expectBeanTech',
+  /**
+   *  炒麦 - 看曲工艺
+   */
+  REPOUTLOOKCRAFT_API: HOST + '/report/kjmORwht/guardTechList',
+  REPOUTLOOKCRAFTEXPORT_API: HOST + '/report/kjmORwht/expectGuardTech',
+  /**
+   *  炒麦 - 工艺异常
+   */
+  REPOUTCRARTERROR_API: HOST + '/report/kjmORwht/techExceptionList',
+  REPOUTCRARTERROREXPORT_API: HOST + '/report/kjmORwht/expectTechException',
+  /**
    *  炒麦 - pw小麦
    */
   REPPWFRY_API: HOST + '/report/formh/pwList',

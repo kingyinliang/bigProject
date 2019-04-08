@@ -13,7 +13,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select size="small" v-model="params.workshopId" class="selectwpx" style="width:140px">
+                  <el-select size="small" v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
@@ -376,9 +376,14 @@ export default class Index extends Vue {
   mounted () {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getHolderList('入罐')
-    this.getHolderList('曲房')
-    this.getHolderList('连续蒸煮')
+    this.retrieveHolders(this.params.workshopId, this.params.workshopName)
+  }
+  retrieveHolders (workshopId, workshopName) {
+    if (workshopId) {
+      this.getHolderList(workshopId, workshopName, '入罐')
+      this.getHolderList(workshopId, workshopName, '曲房')
+      this.getHolderList(workshopId, workshopName, '连续蒸煮')
+    }
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -387,9 +392,13 @@ export default class Index extends Vue {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
       this.params.factoryName = item ? item.deptName : ''
+      this.params.workshopId = ''
+      this.params.workshopName = ''
+      this.getWorkshop(this.params.factoryId)
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
+      this.retrieveHolders(this.params.workshopId, this.params.workshopName)
     } else if (flag === 'inPot') {
       let item = this.potList.find(ele => ele.holderId === this.detailForm.inPotNo)
       this.detailForm.inPotName = item ? item.holderName : ''
@@ -426,8 +435,10 @@ export default class Index extends Vue {
     }
   }
   // 入罐/曲房/蒸煮
-  getHolderList (type) {
+  getHolderList (workshopId, workshopName, type) {
     let params = {
+      dept_id: workshopId,
+      workShopName: workshopName,
       type: 'holder_type',
       holder_type: type === '入罐' ? '001' : type === '曲房' ? '005' : type === '连续蒸煮' ? '008' : '',
       pageSize: 100,
@@ -741,12 +752,12 @@ export default class Index extends Vue {
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
   }
-  @Watch('params.factoryId')
-  onFactoryValue (newVal: string, oldVal: string) {
-    this.params.workshopId = ''
-    this.params.workshopName = ''
-    this.getWorkshop(newVal)
-  }
+  // @Watch('params.factoryId')
+  // onFactoryValue (newVal: string, oldVal: string) {
+  //   this.params.workshopId = ''
+  //   this.params.workshopName = ''
+  //   this.getWorkshop(newVal)
+  // }
 }
 </script>
 <style lang="scss" scoped>

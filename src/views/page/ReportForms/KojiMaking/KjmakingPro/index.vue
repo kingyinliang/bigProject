@@ -140,7 +140,7 @@ export default class Index extends Vue {
   dataList = []
   searched: boolean = false
   currPage: number = 1
-  pageSize: number = 1
+  pageSize: number = 10
   totalCount: number = 0
   plantList = {}
   mounted () {
@@ -224,7 +224,7 @@ export default class Index extends Vue {
     this.searched = true
     let params = {
       factory: this.params.factoryId,
-      workShop: this.params.workshopId,
+      workshop: this.params.workshopId,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
       currPage: this.currPage + '',
