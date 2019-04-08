@@ -26,13 +26,15 @@
         <el-form-item label="生产日期：">
           <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
         </el-form-item>
-        <el-button size="small" @click="GetList(true)">查询</el-button>
-        <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        <span style="float: right">
+          <el-button size="small" @click="GetList(true)">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        </span>
       </el-form>
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="工厂" width="170" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="工厂" width="150" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="车间" prop="workShopName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="生产订单" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>

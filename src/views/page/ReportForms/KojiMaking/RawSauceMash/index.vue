@@ -26,26 +26,28 @@
         <el-form-item label="生产日期：">
           <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
         </el-form-item>
-        <el-button size="small" @click="GetList(true)">查询</el-button>
-        <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        <span style="float: right">
+          <el-button size="small" @click="GetList(true)">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        </span>
       </el-form>
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
+        <el-table-column label="生产日期" width="100" prop="productDate" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="工厂" width="170" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="车间" prop="workShopName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="生产订单" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="品项" prop="material" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="发酵罐" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="发酵罐容量" prop="holderHold" width="95"></el-table-column>
-        <el-table-column label="计划产量" prop="planOutput"></el-table-column>
-        <el-table-column label="实际产量" prop="realOutput"></el-table-column>
-        <el-table-column label="投罐日期" prop="canningDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="满罐日期" prop="canfulDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="180天成熟期" prop="oheDate" width="110"></el-table-column>
-        <el-table-column label="130天成熟期" prop="ohtDate" width="110"></el-table-column>
-        <el-table-column label="日期" prop="nowDate" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="生产订单" prop="orderNo" width="120" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="品项" prop="material" width="150" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="发酵罐" prop="holderName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="发酵罐容量" prop="holderHold" width="95" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="计划产量" prop="planOutput" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="实际产量" prop="realOutput" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="投罐日期" prop="canningDate" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="满罐日期" prop="canfulDate" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="180天成熟期" prop="oheDate" width="110" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="130天成熟期" prop="ohtDate" width="110" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="日期" prop="nowDate" width="100" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="发酵天数" prop="fDate"></el-table-column>
       </el-table>
       <el-row >

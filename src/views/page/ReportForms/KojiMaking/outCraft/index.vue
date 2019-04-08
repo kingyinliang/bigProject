@@ -29,36 +29,38 @@
             <el-option v-for="sole in Pot" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
           </el-select>
         </el-form-item>
-        <el-button size="small" @click="GetList(true)">查询</el-button>
-        <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        <span style="float: right">
+          <el-button size="small" @click="GetList(true)">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+        </span>
       </el-form>
     </el-card>
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
         <el-table-column label="工厂" width="170" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="车间" prop="workShopName"></el-table-column>
-        <el-table-column label="曲房" prop="houseName"></el-table-column>
-        <el-table-column label="发酵罐" prop="inPotName"></el-table-column>
-        <el-table-column label="制曲日期" prop="inKjmDate"></el-table-column>
+        <el-table-column label="车间" prop="workShopName" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="曲房" prop="houseName" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="发酵罐" prop="inPotName" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="制曲日期" prop="inKjmDate" width="100" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="出曲开始时间" prop="outStartTime" width="120" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="出曲结束时间" prop="outEndTime" width="120" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="盐水温度" prop="saltWaterTemp"></el-table-column>
-        <el-table-column label="盐水浓度" prop="saltWaterNd"></el-table-column>
-        <el-table-column label="出曲温度1" prop="outTempOne"></el-table-column>
-        <el-table-column label="出曲混合料温度1" prop="blendTempOne"></el-table-column>
-        <el-table-column label="出曲风速1" prop="windSpeedOne"></el-table-column>
-        <el-table-column label="出曲温度2" prop="outTempTwo"></el-table-column>
-        <el-table-column label="出曲混合料温度2" prop="blendTempTwo"></el-table-column>
-        <el-table-column label="出曲风速2" prop="windSpeedTwo"></el-table-column>
-        <el-table-column label="出曲温度3" prop="outTempThree"></el-table-column>
-        <el-table-column label="出曲混合料温度3" prop="blendTempThree"></el-table-column>
-        <el-table-column label="出曲风速3" prop="windSpeedThree"></el-table-column>
-        <el-table-column label="出曲温度4" prop="outTempFour"></el-table-column>
-        <el-table-column label="出曲混合料温度4" prop="blendTempFour"></el-table-column>
-        <el-table-column label="出曲风速4" prop="windSpeedFour"></el-table-column>
-        <el-table-column label="出曲温度5" prop="outTempFive"></el-table-column>
-        <el-table-column label="出曲混合料温度5" prop="blendTempFive"></el-table-column>
-        <el-table-column label="出曲风速5" prop="windSpeedFive"></el-table-column>
+        <el-table-column label="盐水温度" prop="saltWaterTemp" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="盐水浓度" prop="saltWaterNd" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲温度1" prop="outTempOne" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲混合料温度1" prop="blendTempOne" width="128" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲风速1" prop="windSpeedOne" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲温度2" prop="outTempTwo" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲混合料温度2" prop="blendTempTwo" width="128" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲风速2" prop="windSpeedTwo" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲温度3" prop="outTempThree" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲混合料温度3" prop="blendTempThree" width="128" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲风速3" prop="windSpeedThree" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲温度4" prop="outTempFour" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲混合料温度4" prop="blendTempFour" width="128" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲风速4" prop="windSpeedFour" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲温度5" prop="outTempFive" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲混合料温度5" prop="blendTempFive" width="128" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="出曲风速5" prop="windSpeedFive" width="90" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
