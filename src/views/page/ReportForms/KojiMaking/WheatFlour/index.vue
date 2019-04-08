@@ -17,7 +17,7 @@
         <el-form-item label="炒麦机：">
           <el-select v-model="plantList.inPotNo" style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
-            <el-option v-for="sole in Machine" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
+            <el-option v-for="sole in Machine" :key="sole.deviceId" :label="sole.deviceName" :value="sole.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="订单日期：">
