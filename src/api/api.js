@@ -6,7 +6,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.14:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -727,6 +727,11 @@ export const REP_API = {
    */
   REPOUTCRARTERROR_API: HOST + '/report/kjmORwht/techExceptionList',
   REPOUTCRARTERROREXPORT_API: HOST + '/report/kjmORwht/expectTechException',
+  /**
+   *  炒麦 - 物料领用
+   */
+  REPOUTMATERIALREQU_API: HOST + '/report/kjmORwht/kjmMaterialList',
+  REPOUTMATERIALREQUEXPORT_API: HOST + '/report/kjmORwht/expectKjmMaterialList',
   /**
    *  炒麦 - pw小麦
    */
