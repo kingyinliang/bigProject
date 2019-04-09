@@ -93,6 +93,9 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.CraftControlDate = data.list[0] ? data.list[0] : {}
+          let CraftControlStatus = this.CraftControlDate.status ? this.CraftControlDate.status : ''
+          console.log(CraftControlStatus)
+          this.$emit('GetCraftControlStatus', CraftControlStatus)
         } else {
           this.$message.error(data.msg)
         }
@@ -131,15 +134,15 @@ export default {
       let windSpeed = this.CraftControlDate.windSpeedOne || this.CraftControlDate.windSpeedTwo || this.CraftControlDate.windSpeedThree || this.CraftControlDate.windSpeedFour || this.CraftControlDate.windSpeedFive
       let blendTemp = this.CraftControlDate.blendTempOne || this.CraftControlDate.blendTempTwo || this.CraftControlDate.blendTempThree || this.CraftControlDate.blendTempFour || this.CraftControlDate.blendTempFive
       let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive
-      if (windSpeed) {
+      if (!windSpeed) {
         ty = false
         this.$message.error('工艺控制风速必填项未填')
         return false
-      } else if (blendTemp) {
+      } else if (!blendTemp) {
         ty = false
         this.$message.error('工艺控制混合料温度必填项未填')
         return false
-      } else if (outTemp) {
+      } else if (!outTemp) {
         ty = false
         this.$message.error('工艺控制出曲品温必填项未填')
         return false
@@ -150,7 +153,7 @@ export default {
       }
       if (this.CraftControlDate.kojoMakingTime > 30) {} else {
         ty = false
-        this.$message.error('制曲时间不得小于40H')
+        this.$message.error('制曲时间不得小于30H')
       }
       return ty
     },

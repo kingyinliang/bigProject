@@ -4,7 +4,7 @@
       <el-card class="searchCard  newCard">
         <el-row type="flex">
           <el-col>
-            <form-head :formHeader="formHeader" :isRedact="isRedact"></form-head>
+            <form-head :formHeader="formHeader" :isRedact="isRedact" :CraftControlStatus="CraftControlStatus"></form-head>
           </el-col>
           <el-col style="width:180px;font-size: 14px;line-height: 32px">
             <div style="float: right;">
@@ -16,11 +16,11 @@
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -34,7 +34,7 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark" :content="Materielstatus === 'noPass'? '不通过':Materielstatus === 'saved'? '已保存':Materielstatus === 'submit' ? '已提交' : Materielstatus === 'checked'? '通过':'未录入'" placement="top-start">
@@ -53,9 +53,11 @@
         </el-tab-pane>
         <el-tab-pane name="3">
           <span slot="label" class="spanview">
-            <el-button>工艺控制</el-button>
+            <el-tooltip class="item" effect="dark" :content="CraftControlStatus === 'noPass'? '不通过':CraftControlStatus === 'saved'? '已保存':CraftControlStatus === 'submit' ? '已提交' : CraftControlStatus === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': CraftControlStatus === 'noPass'? 'red' : ''}">工艺控制</el-button>
+            </el-tooltip>
           </span>
-          <craft-control ref="outtech" :isRedact="isRedact" :formHeader="formHeader"></craft-control>
+          <craft-control ref="outtech" :isRedact="isRedact" :formHeader="formHeader" @GetCraftControlStatus="GetCraftControlStatus"></craft-control>
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
@@ -93,7 +95,9 @@ export default {
       orderStatus: '',
       activeName: '1',
       Materielstatus: '',
-      InStockStatus: ''
+      InStockStatus: '',
+      // 工艺控制的页签状态
+      CraftControlStatus: ''
     }
   },
   mounted () {
@@ -101,6 +105,9 @@ export default {
     this.GetOrderList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     // 获取表头
     GetOrderList () {
       this.$http(`${KJM_API.FORMHEAD_API}`, 'POST', {
@@ -113,10 +120,10 @@ export default {
           this.$refs.meateriel.GetBrineTankNo(this.formHeader)
           this.$refs.outinstorage.GetThreeNum(this.formHeader)
           this.$refs.outtech.selectUser(this.formHeader.prolineId)
+          this.$refs.outtech.GetTechList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.prolineId)
           if (this.orderStatus !== '已同步') {
             this.$refs.meateriel.GetmaterielDate(this.formHeader)
-            this.$refs.outtech.GetTechList(this.formHeader)
             this.$refs.outinstorage.GetOutInStorage(this.formHeader)
             this.$refs.excrecord.GetExcDate({
               order_id: this.formHeader.orderId,
@@ -227,15 +234,24 @@ export default {
     // 原料领用状态
     GetMaterielStatus (status) {
       this.Materielstatus = status
-      this.$forceUpdate()
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     SetMeaterielNum (num) {
       this.$refs.outtech.GetsaltWaterUsed(num)
+      this.$refs.outinstorage.setBrineNum(num)
     },
     // 生产入库状态
     GetInStockStatus (status) {
       this.InStockStatus = status
-      this.$forceUpdate()
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    // 工艺控制状态
+    GetCraftControlStatus (status) {
+      this.CraftControlStatus = status
+      // this.$forceUpdate()
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   computed: {

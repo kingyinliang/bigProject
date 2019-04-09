@@ -31,12 +31,12 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float:right">查询</el-button>
+                <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isMyAuth">查询</el-button>
                 <template v-if="params.productStatus === 'abnormal'">
-                  <el-button v-if="searched && disabled" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
+                  <el-button v-if="searched && disabled && isAuth('kjm:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
                   <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float:right">返回</el-button>
                 </template>
-                <template v-if="params.productStatus === 'abnormal' && !disabled">
+                <template v-if="params.productStatus === 'abnormal' && !disabled  && isAuth('kjm:user:updateUser')">
                   <el-button type="primary" size="small" @click="addPeople" style="float:right">新增</el-button>
                   <el-button type="primary" size="small" @click="save" style="float:right">保存</el-button>
                 </template>
@@ -52,7 +52,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div>{{orderList[index].houseNo}}</div><div>{{orderList[index].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index].status}}</div>
+                      <div :class="orderList[index].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -86,7 +86,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#5BD171">{{orderList[index + 1].houseNo}}</div><div>{{orderList[index + 1].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 1].status}}</div>
+                      <div :class="orderList[index + 1].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index + 1].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -120,7 +120,7 @@
                   <div class="box-item-top">
                     <div class="box-item-title">
                       <div class="box-item-title-name"><div style="background:#2C92F6">{{orderList[index + 2].houseNo}}</div><div>{{orderList[index + 2].inPotNoName}}</div></div>
-                      <div class="box-item-title-state">状态：{{orderList[index + 2].status}}</div>
+                      <div :class="orderList[index + 2].status==='不通过' ? 'box-item-title-state-nopass':'box-item-title-state'"><label style='color:rgba(0,0,0,0.65)'>状态：</label>{{orderList[index + 2].status}}</div>
                     </div>
                     <div class="box-item-container">
                       <div class="box-item-container-left">
@@ -220,7 +220,7 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" ></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle size="small" @click="delUser(scope.row)" :disabled="disabled" v-if="isAuth('kjm:user:delUser')"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -299,6 +299,19 @@ export default class Index extends Vue {
     this.getWorkshop(this.params.factoryId)
     this.getProcess(this.params.workshopId)
     this.getTree()
+  }
+  isAuth (key) {
+    return Vue.prototype.isAuth(key)
+  }
+  get isMyAuth () {
+    if (this.params.productStatus === 'abnormal') {
+      // 无生产的查询权限
+      return this.isAuth('kjm:user:listUser')
+    } else if (this.params.productStatus === 'normal') {
+      // 正常生产的查询权限
+      return this.isAuth('kjm:order:list')
+    }
+    return false
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs
@@ -587,6 +600,18 @@ export default class Index extends Vue {
     })
   }
   goPage (page: string, item: House) {
+    let flag = false
+    if (page === '煮豆') {
+      flag = this.isAuth('kjm:bean:material:list')
+    } else if (page === '看曲') {
+      flag = this.isAuth('kjm:bean:material:list')
+    } else if (page === '出曲') {
+      flag = this.isAuth('sys:kjmOutMaterial:list')
+    }
+    if (!flag) {
+      this.$message.error('无权限查看' + page)
+      return
+    }
     this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)
     this.$store.commit('common/updateZQParamsOrderId', item.orderId)
     let name = ''
@@ -685,6 +710,24 @@ export default class Index extends Vue {
             margin-right:10px;
             margin-bottom:2px;
             background:rgba(126,211,33,1)
+          }
+        }
+        .box-item-title-state-nopass{
+          flex:1;
+          font-size:14px;
+          font-weight:500;
+          color:red;
+          line-height:20px;
+          text-align:right;
+          margin-top:4px;
+          &:before{
+            content:'';
+            display: inline-block;
+            height:6px;
+            width:6px;
+            margin-right:10px;
+            margin-bottom:2px;
+            background:red
           }
         }
       }

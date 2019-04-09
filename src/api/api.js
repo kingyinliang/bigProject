@@ -3,7 +3,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.26:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 // let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -210,7 +210,12 @@ export const BASICDATA_API = {
   /**
    * @property {string} SPECDEL_API 规格删除
    */
-  SPECDEL_API: HOST + '/sys/spec/delSpec'
+  SPECDEL_API: HOST + '/sys/spec/delSpec',
+
+  /**
+   * @property {string} MATERIAL_API 成品品项
+   */
+  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams'
 }
 /*
 *系统设置api
@@ -698,7 +703,57 @@ export const REP_API = {
    *  包装车间 - 产量总工时、导出
    */
   REPOUTPUTMANHOUR_API: HOST + '/report/formh/totalHoursList',
-  REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours'
+  REPOUTPUTMANHOUREXPORT_API: HOST + '/report/formh/exportTotalHours',
+  /**
+   *  炒麦 - 出粉率、导出
+   */
+  REPOUTPUTFLOURYIELD_API: HOST + '/report/kjmORwht/flourYieldList',
+  REPOUTPUTFLOURYIELDEXPORT_API: HOST + '/report/kjmORwht/expectFlourYield',
+  /**
+   *  炒麦 - 煮豆工艺
+   */
+  REPOUTBEANCRAFT_API: HOST + '/report/kjmORwht/beanTechList',
+  REPOUTBEANCRAFTEXPORT_API: HOST + '/report/kjmORwht/expectBeanTech',
+  /**
+   *  炒麦 - 看曲工艺
+   */
+  REPOUTLOOKCRAFT_API: HOST + '/report/kjmORwht/guardTechList',
+  REPOUTLOOKCRAFTEXPORT_API: HOST + '/report/kjmORwht/expectGuardTech',
+  /**
+   *  炒麦 - 工艺异常
+   */
+  REPOUTCRARTERROR_API: HOST + '/report/kjmORwht/techExceptionList',
+  REPOUTCRARTERROREXPORT_API: HOST + '/report/kjmORwht/expectTechException',
+  /**
+   *  炒麦 - 物料领用
+   */
+  REPOUTMATERIALREQU_API: HOST + '/report/kjmORwht/kjmMaterialList',
+  REPOUTMATERIALREQUEXPORT_API: HOST + '/report/kjmORwht/expectKjmMaterialList',
+  /**
+   *  炒麦 - pw小麦
+   */
+  REPPWFRY_API: HOST + '/report/formh/pwList',
+  REPPWFRYOUT_API: HOST + '/report/formh/exportpwList',
+  /**
+   *  出曲工艺
+   */
+  REPOUTCRAFT_API: HOST + '/report/formh/kjmOutTechList',
+  REPOUTCRAFTOUT_API: HOST + '/report/formh/exportkjmOutTechList',
+  /**
+   *  生酱醪统计表
+   */
+  REPRAW_API: HOST + '/report/formh/kjmSauceList',
+  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList',
+  /**
+   *  制曲生产
+   */
+  KJMAKINGPRO_LIST_API: HOST + '/report/formh/kjmProductList',
+  KJMAKINGPRO_EXCEL_API: HOST + '/report/formh/exportKjmProductList',
+  /**
+   * OEE
+   */
+  OEE_LIST_API: HOST + '/report/formh/productEfficiencyList',
+  OEE_EXCEL_API: HOST + '/report/formh/exportKjmProductList'
 }
 /*
 *炒麦api
@@ -921,6 +976,11 @@ export const KJM_API = {
   DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
   DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update', // 工艺 感官
   DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态
+
+  /**
+   * @property {string} KJMAKINGHEAD_API 车间审核表头
+   */
+  KJMAKINGHEAD_API: HOST + '/kjm/order/midHeadList',
 
   /**
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表

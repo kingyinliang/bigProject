@@ -49,11 +49,11 @@
       <el-row style="text-align:right;">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('kjm:bean:material:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('kjm:bean:material:update')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('kjm:bean:material:update')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
@@ -64,8 +64,8 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
-        <el-tab-pane>
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
+        <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
               <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">原料领用</el-button>
@@ -73,7 +73,7 @@
           </span>
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader" @setApplyMaterielState='setApplyMaterielState'></Material>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="2">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="applyCraftState === 'noPass'? '不通过':applyCraftState === 'saved'? '已保存':applyCraftState === 'submit' ? '已提交' : applyCraftState === 'checked'? '通过':'未录入'" placement="top-start">
               <el-button :style="{'color': applyCraftState === 'noPass'? 'red' : ''}">工艺控制</el-button>
@@ -81,13 +81,13 @@
           </span>
           <Craft ref="craft" :isRedact="isRedact" :formHeader="formHeader" @setApplyCraftState='setApplyCraftState'></Craft>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="3">
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
           <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="4">
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
@@ -109,6 +109,7 @@ export default {
   name: 'boileIndex',
   data () {
     return {
+      activeName: '1',
       formHeader: {},
       orderStatus: '',
       isRedact: false,
@@ -120,12 +121,20 @@ export default {
       succmessage: '保存成功'
     }
   },
+  watch: {
+    'applyCraftState' () {
+      console.log('status:' + this.applyCraftState)
+    }
+  },
   mounted () {
     headanimation(this.$)
     this.GetheadList()
     this.GetholderList()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     GetheadList () {
       this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.beanOrderHouseId, deptName: '煮豆'}, false, false, false).then((res) => {
         if (res.data.code === 0) {
@@ -266,9 +275,11 @@ export default {
     },
     setApplyMaterielState (status) {
       this.applyMaterielState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     setApplyCraftState (status) {
       this.applyCraftState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   components: {

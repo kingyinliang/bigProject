@@ -43,12 +43,12 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="GetTimeList">查询</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" @click="GetTimeList" v-if="isAuth('kjm:timeSheet:list')">查询</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('kjm:timeSheet:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact && searchCard" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('kjm:timeSheet:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('kjm:timeSheet:update')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -231,15 +231,22 @@ export default {
         this.$message.error('请填写查询选项')
         return false
       }
+      this.searchCard = false
       this.searchCard = true
       this.isRedact = false
-      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
+        deptId: this.formHeader.deptId,
+        factory: this.formHeader.factory,
+        inKjmDate: this.formHeader.inKjmDate,
+        workShop: this.formHeader.workShop
+      }).then(({data}) => {
         if (data.code === 0) {
           if (data.headList.length === 0) {
             this.uid = this.uuid(32, 62)
-            this.readyTimeDate = this.readyTimeDate1
+            this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
             this.userOrder.orderId = this.uid
             this.headList = this.formHeader
+            this.headList.status = ''
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop)
             this.$refs.workerref.getTree(this.formHeader.factory)
@@ -282,11 +289,11 @@ export default {
         that.$refs.workerref.UpdateUser(str, resolve, reject)
       })
       if (str === 'submit') {
-        let submit = new Promise((resolve, reject) => {
-          that.manHourSubmit(str, resolve, reject)
-        })
         let saveNet = Promise.all([headSave, readySave, userSave])
         saveNet.then(function () {
+          let submit = new Promise((resolve, reject) => {
+            that.manHourSubmit(str, resolve, reject)
+          })
           let submitNet = Promise.all([submit])
           submitNet.then(function () {
             that.GetTimeList()
@@ -339,6 +346,7 @@ export default {
       }
       this.headList.status = str
       this.headList.inKjmBatch = this.inKjmBatch + ''
+      console.log(this.headList)
       this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
