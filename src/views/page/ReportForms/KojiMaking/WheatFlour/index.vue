@@ -15,13 +15,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="炒麦机：">
-          <el-select v-model="plantList.inPotNo" style="width: 150px">
+          <el-select v-model="plantList.deviceId" style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="sole in Machine" :key="sole.deviceId" :label="sole.deviceName" :value="sole.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="订单日期：">
-          <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker>
+        <el-form-item label="订单号：">
+          <el-input v-model="plantList.orderNo" placeholder="订单号" style="width: 150px"></el-input>
         </el-form-item>
         <el-form-item label="生产日期：">
           <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
@@ -35,16 +35,16 @@
     <el-card style="margin-top:10px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
         <el-table-column label="工厂" width="150" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="车间" prop="workShopName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="生产订单" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
-        <el-table-column label="炒麦机" prop="material" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="检测时间" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="焦糊率" prop="holderHold" width="95"></el-table-column>
-        <el-table-column label="膨胀率" prop="planOutput"></el-table-column>
-        <el-table-column label="粉碎度" prop="realOutput"></el-table-column>
-        <el-table-column label="检测人员" prop="canningDate" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="备注" prop="canfulDate" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="生产订单" prop="orderNo" width="120" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="生产日期" width="110" prop="productDate"></el-table-column>
+        <el-table-column label="炒麦机" prop="deviceName" width="90" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="检测时间" prop="checkTime" width="120" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="焦糊率" prop="cokingRate" width="65" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="膨胀率" prop="expandRate" width="65" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="粉碎度" prop="piecesRate" width="65" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="检测人员" prop="changer" width="140" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination
@@ -71,7 +71,8 @@ export default {
       plantList: {
         factory: '',
         workShop: '',
-        inPotNo: '',
+        deviceId: '',
+        orderNo: '',
         commitDateOne: '',
         commitDateTwo: '',
         currPage: 1,
@@ -138,11 +139,7 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
-      let obj = JSON.parse(JSON.stringify(this.plantList))
-      obj.currPage = obj.currPage + ''
-      obj.pageSize = obj.pageSize + ''
-      obj.totalCount = obj.totalCount + ''
-      this.$http(`${REP_API.REPRAW_API}`, 'POST', obj).then(({data}) => {
+      this.$http(`${REP_API.REPCHECKRECORDLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
@@ -151,7 +148,6 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.lodingS = false
       })
     },
     // 改变每页条数
@@ -167,7 +163,7 @@ export default {
     // 导出
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPRAWOUT_API}`, '生酱醪统计报表', that)
+      exportFile(`${REP_API.REPEXPECTCHECKRECORD_API}`, '麦粉检测报表', that)
     }
   },
   computed: {},
