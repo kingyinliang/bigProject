@@ -210,7 +210,12 @@ export const BASICDATA_API = {
   /**
    * @property {string} SPECDEL_API 规格删除
    */
-  SPECDEL_API: HOST + '/sys/spec/delSpec'
+  SPECDEL_API: HOST + '/sys/spec/delSpec',
+
+  /**
+   * @property {string} MATERIAL_API 成品品项
+   */
+  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams'
 }
 /*
 *系统设置api
@@ -720,6 +725,11 @@ export const REP_API = {
   REPOUTCRARTERROR_API: HOST + '/report/kjmORwht/techExceptionList',
   REPOUTCRARTERROREXPORT_API: HOST + '/report/kjmORwht/expectTechException',
   /**
+   *  炒麦 - 物料领用
+   */
+  REPOUTMATERIALREQU_API: HOST + '/report/kjmORwht/kjmMaterialList',
+  REPOUTMATERIALREQUEXPORT_API: HOST + '/report/kjmORwht/expectKjmMaterialList',
+  /**
    *  炒麦 - pw小麦
    */
   REPPWFRY_API: HOST + '/report/formh/pwList',
@@ -733,7 +743,17 @@ export const REP_API = {
    *  生酱醪统计表
    */
   REPRAW_API: HOST + '/report/formh/kjmSauceList',
-  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList'
+  REPRAWOUT_API: HOST + '/report/formh/exportKjmSauceList',
+  /**
+   *  制曲生产
+   */
+  KJMAKINGPRO_LIST_API: HOST + '/report/formh/kjmProductList',
+  KJMAKINGPRO_EXCEL_API: HOST + '/report/formh/exportKjmProductList',
+  /**
+   * OEE
+   */
+  OEE_LIST_API: HOST + '/report/formh/productEfficiencyList',
+  OEE_EXCEL_API: HOST + '/report/formh/exportKjmProductList'
 }
 /*
 *炒麦api
