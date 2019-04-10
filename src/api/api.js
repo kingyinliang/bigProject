@@ -759,6 +759,12 @@ export const REP_API = {
   OEE_EXCEL_API: HOST + '/report/formh/exportProductEfficiencyList',
   OEE_SUM_API: HOST + '/report/formh/productEfficiencySumList',
   /**
+   * OPE
+   */
+  OPE_LIST_API: HOST + '/report/formh/productEfficOPEList',
+  OPE_EXCEL_API: HOST + '/report/formh/exportProductEfficOPEList',
+  OPE_SUM_API: HOST + '/report/formh/productEfficOPESumList',
+  /**
    * 麦粉检测
    */
   REPCHECKRECORDLIST_API: HOST + '/report/kjmORwht/checkRecordList',
