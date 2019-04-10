@@ -45,14 +45,14 @@
             <el-col style="width:340px">
               <el-row class="rowButton">
                 <el-button type="primary" size="small" @click="exportExcel()" style="float:right" >导出</el-button>
-                <el-button type="primary" size="small" @click="getDataList()" style="float:right" >查询</el-button>
+                <el-button type="primary" size="small" @click="getCompleteData()" style="float:right" >查询</el-button>
               </el-row>
             </el-col>
           </el-row>
         </el-card>
         <el-row v-show="searched" style="margin-top:20px;">
           <div style="min-height:320px">
-            <el-table border  header-row-class-name="tableHead" :data="dataList">
+            <el-table border  header-row-class-name="tableHead" :data="dataList" >
               <el-table-column label="工厂"  width="130" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.factoryName}}
@@ -108,7 +108,7 @@
                   {{scope.row.proDuctRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="总时间(min)"  width="80">
+              <el-table-column label="总时间(min)"  width="110">
                 <template slot-scope="scope">
                   {{scope.row.allTolTime}}
                 </template>
@@ -213,6 +213,7 @@ export default class Index extends Vue {
   productlineList = []
   materialList = []
   dataList = []
+  sumBean = null
   searched: boolean = false
   currPage: number = 1
   pageSize: number = 10
@@ -305,23 +306,7 @@ export default class Index extends Vue {
       exportFile(`${REP_API.OEE_EXCEL_API}`, 'OEE报表', that)
     }
   }
-  getDataList () {
-    // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择生产工厂')
-    //   return
-    // }
-    // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择生产车间')
-    //   return
-    // }
-    // if (this.params.startDate === null || this.params.startDate === '') {
-    //   this.$message.error('请选择生产开始时间')
-    //   return
-    // }
-    // if (this.params.endDate === null || this.params.endDate === '') {
-    //   this.$message.error('请选择生产结束时间')
-    //   return
-    // }
+  getCompleteData () {
     this.searched = true
     let params = {
       factory: this.params.factoryId,
@@ -333,11 +318,50 @@ export default class Index extends Vue {
       currPage: this.currPage + '',
       pageSize: this.pageSize + ''
     }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    let net1 = new Promise((resolve, reject) => {
+      that.getSumBean(params, resolve, reject)
+    })
+    Promise.all([net0, net1]).then((ret) => {
+      if (that.dataList && that.sumBean) {
+        Object.assign(that.sumBean, {productDate: '合计'})
+        that.dataList.push(that.sumBean)
+      }
+    })
+  }
+  getDataList (params, resolve?, reject?) {
     if (this.params.radio === 'OEE') {
-      this.retrieveOEEDataList(params)
+      this.retrieveOEEDataList(params, resolve, reject)
+    } else {
+      // TODO
     }
   }
-  retrieveOEEDataList (params) {
+  getSumBean (params, resolve?, reject?) {
+    if (this.params.radio === 'OEE') {
+      this.sumBean = null
+      Vue.prototype.$http(`${REP_API.OEE_SUM_API}`, 'POST', params).then(res => {
+        if (res.data.code === 0) {
+          this.sumBean = res.data.sumBean
+        } else {
+          this.$message.error(res.data.msg)
+        }
+        if (resolve) {
+          resolve()
+        }
+      }).catch(err => {
+        console.log('catch data::', err)
+        if (reject) {
+          reject()
+        }
+      })
+    } else {
+      // TODO
+    }
+  }
+  retrieveOEEDataList (params, resolve?, reject?) {
     this.dataList = []
     Vue.prototype.$http(`${REP_API.OEE_LIST_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
@@ -346,19 +370,87 @@ export default class Index extends Vue {
       } else {
         this.$message.error(res.data.msg)
       }
+      if (resolve) {
+        resolve()
+      }
     }).catch(err => {
       console.log('catch data::', err)
+      if (reject) {
+        reject()
+      }
     })
+  }
+  getSummaries (param) {
+    let sums = []
+    sums[0] = ''
+    sums[1] = ''
+    sums[2] = ''
+    sums[3] = ''
+    sums[4] = '总价'
+    sums[5] = this.sumBean.avbRatio
+    sums[6] = this.sumBean.timeCropRatio
+    sums[7] = this.sumBean.performCropRatio
+    sums[8] = this.sumBean.googRatio
+    sums[9] = this.sumBean.theOEERatio
+    sums[10] = this.sumBean.proDuctRatio
+    sums[11] = this.sumBean.allTolTime
+    sums[12] = this.sumBean.planStopTime
+    sums[13] = this.sumBean.alltime
+    sums[14] = this.sumBean.removeTime
+    sums[15] = this.sumBean.excptTime
+    sums[16] = this.sumBean.netOprTime
+    sums[17] = this.sumBean.output
+    sums[18] = this.sumBean.allBad
+    sums[19] = this.sumBean.basicCapacity
+    sums[20] = this.sumBean.outPutTime
+    sums[21] = this.sumBean.netOprTimeHour
+    return sums
   }
   // 改变每页条数
   handleSizeChange (val: number) {
     this.pageSize = val
-    this.getDataList()
+    let params = {
+      factory: this.params.factoryId,
+      workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
+      commitDateOne: this.params.startDate,
+      commitDateTwo: this.params.endDate,
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
+    }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    net0.then((ret) => {
+      if (that.dataList && that.sumBean) {
+        that.dataList.push(that.sumBean)
+      }
+    })
   }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
-    this.getDataList()
+    let params = {
+      factory: this.params.factoryId,
+      workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
+      commitDateOne: this.params.startDate,
+      commitDateTwo: this.params.endDate,
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
+    }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    net0.then((ret) => {
+      if (that.dataList && that.sumBean) {
+        that.dataList.push(that.sumBean)
+      }
+    })
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
