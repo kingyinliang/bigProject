@@ -30,8 +30,8 @@
           </el-select>
         </el-form-item>
         <span style="float: right">
-          <el-button size="small" @click="GetList(true)">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+          <el-button size="small" @click="GetList(true)" v-if="isAuth('report:formh:kjmOutTechList')">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportkjmOutTechList')">导出</el-button>
         </span>
       </el-form>
     </el-card>
@@ -198,7 +198,6 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-        this.lodingS = false
       })
     },
     // 改变每页条数

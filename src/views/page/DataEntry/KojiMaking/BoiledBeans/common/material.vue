@@ -639,12 +639,12 @@ export default {
       })
     },
     // 豆粕罐
-    getDouholdList () {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '010', pageSize: 100, type: 'holder_type', workShopName: this.formHeader.workShopName}, false, false, false).then((res) => {
+    getDouholdList (formHeader) {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '010', pageSize: 100, type: 'holder_type', workShopName: formHeader.workShopName}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.DouHoldList = res.data.page.list
           // this
-          this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: this.formHeader.workShop}).then(({data}) => {
+          this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
             if (data.code === 0) {
               this.pulpListPici = data.listInfo
               this.DouHoldList.map((item, index) => {
