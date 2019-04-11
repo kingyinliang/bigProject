@@ -26,8 +26,8 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" >导出</el-button>
-                <el-button type="primary" size="small" @click="getDataList()" style="float:right" >查询</el-button>
+                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" v-if="isAuth('report:formh:exportKjmProductList')">导出</el-button>
+                <el-button type="primary" size="small" @click="getDataList()" style="float:right" v-if="isAuth('report:formh:kjmProductList')">查询</el-button>
               </el-row>
             </el-col>
           </el-row>
