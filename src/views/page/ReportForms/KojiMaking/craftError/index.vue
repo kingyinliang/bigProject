@@ -34,8 +34,8 @@
           </el-form>
         </el-col>
         <el-col :span="4" style="float:right; width:128px">
-          <el-button type="primary" size="small" @click="GetList">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('report:kjmORwht:techExceptionList')">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:kjmORwht:expectTechException')">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
