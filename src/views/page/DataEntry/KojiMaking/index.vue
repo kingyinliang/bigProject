@@ -377,10 +377,34 @@ export default class Index extends Vue {
   // 根据车间获取工序
   getProcess (wsid: string) {
     this.processesList = []
+    // if (wsid) {
+    //   Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wsid}, false, false, false).then(({data}) => {
+    //     if (data.code === 0) {
+    //       this.processesList = data.childList
+    //     } else {
+    //       this.$message.error(data.msg)
+    //     }
+    //   })
+    // }
     if (wsid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wsid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: wsid}, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.processesList = data.childList
+          this.processesList = data.teamList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+      // this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+      //   if (data.code === 0) {
+      //     this.Team = data.childList
+      //   } else {
+      //     this.$message.error(data.msg)
+      //   }
+      // })
+    } else {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.processesList = data.teamList
         } else {
           this.$message.error(data.msg)
         }

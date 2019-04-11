@@ -44,61 +44,61 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" >导出</el-button>
-                <el-button type="primary" size="small" @click="getDataList()" style="float:right" >查询</el-button>
+                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" v-if='isExcelAuth()'>导出</el-button>
+                <el-button type="primary" size="small" @click="getCompleteData()" style="float:right" v-if='isQueryAuth()'>查询</el-button>
               </el-row>
             </el-col>
           </el-row>
         </el-card>
         <el-row v-show="searched" style="margin-top:20px;">
           <div style="min-height:320px">
-            <el-table border  header-row-class-name="tableHead" :data="dataList">
-              <el-table-column label="工厂"  width="130" :show-overflow-tooltip="true">
+            <el-table border  header-row-class-name="tableHead" :data="dataList" v-if="params.radio === 'OEE'">
+              <el-table-column fixed label="工厂"  width="130" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.factoryName}}
                 </template>
               </el-table-column>
-              <el-table-column label="车间"  :show-overflow-tooltip="true" width="100">
+              <el-table-column fixed label="车间"  :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.workShopName}}
                 </template>
               </el-table-column>
-              <el-table-column label="产线"  :show-overflow-tooltip="true" width="60">
+              <el-table-column fixed label="产线"  :show-overflow-tooltip="true" width="60">
                 <template slot-scope="scope">
                   {{scope.row.productLineName}}
                 </template>
               </el-table-column>
-              <el-table-column label="品项"  width="150"  :show-overflow-tooltip="true">
+              <el-table-column fixed label="品项"  width="150"  :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.materialName}}
                 </template>
               </el-table-column>
-              <el-table-column label="日期"  width="100">
+              <el-table-column fixed label="日期"  width="100">
                 <template slot-scope="scope">
                   {{scope.row.productDate}}
                 </template>
               </el-table-column>
-              <el-table-column label="可用率"  width="80">
+              <el-table-column fixed label="可用率"  width="80">
                 <template slot-scope="scope">
                   {{scope.row.avbRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="时间稼动率"  width="100">
+              <el-table-column fixed label="时间稼动率"  width="100">
                 <template slot-scope="scope">
                   {{scope.row.timeCropRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="性能稼动率" width="100">
+              <el-table-column fixed label="性能稼动率" width="100">
                 <template slot-scope="scope">
                   {{scope.row.performCropRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="良品率"  width="80">
+              <el-table-column fixed label="良品率"  width="80">
                 <template slot-scope="scope">
                   {{scope.row.googRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="综合效率(OEE)"  width="90">
+              <el-table-column fixed label="综合效率(OEE)"  width="90">
                 <template slot-scope="scope">
                   {{scope.row.theOEERatio}}
                 </template>
@@ -108,7 +108,7 @@
                   {{scope.row.proDuctRatio}}
                 </template>
               </el-table-column>
-              <el-table-column label="总时间(min)"  width="80">
+              <el-table-column label="总时间(min)"  width="110">
                 <template slot-scope="scope">
                   {{scope.row.allTolTime}}
                 </template>
@@ -164,6 +164,129 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-table border  header-row-class-name="tableHead" :data="opeDataList" v-if="params.radio === 'OPE'">
+              <el-table-column fixed label="工厂"  width="130" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  {{scope.row.factoryName}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="车间"  :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.workShopName}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="产线"  :show-overflow-tooltip="true" width="60">
+                <template slot-scope="scope">
+                  {{scope.row.productLineName}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="品项"  width="150"  :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  {{scope.row.materialName}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="日期"  width="100">
+                <template slot-scope="scope">
+                  {{scope.row.productDate}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="可用率"  width="80">
+                <template slot-scope="scope">
+                  {{scope.row.avbRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="时间稼动率"  width="100">
+                <template slot-scope="scope">
+                  {{scope.row.timeCropRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="性能稼动率" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.performCropRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="良品率"  width="80">
+                <template slot-scope="scope">
+                  {{scope.row.googRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed label="综合效率(OPE)"  width="90">
+                <template slot-scope="scope">
+                  {{scope.row.theOEERatio}}
+                </template>
+              </el-table-column>
+              <el-table-column label="生产效率(无可用率)"  width="95">
+                <template slot-scope="scope">
+                  {{scope.row.proDuctRatio}}
+                </template>
+              </el-table-column>
+              <el-table-column label="总时间(min)"  width="110">
+                <template slot-scope="scope">
+                  {{scope.row.allTolTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="计划停机时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.planStop}}
+                </template>
+              </el-table-column>
+              <el-table-column label="实际投入时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.alltime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="除外时间(min)" :show-overflow-tooltip="true" width="90">
+                <template slot-scope="scope">
+                  {{scope.row.removeTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="异常损失时间(min)" :show-overflow-tooltip="true" width="110">
+                <template slot-scope="scope">
+                  {{scope.row.excptTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="净作业时间(min)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.netOprTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="产出数(pcs)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.output}}
+                </template>
+              </el-table-column>
+              <el-table-column label="不良品数(pcs)" :show-overflow-tooltip="true" width="120">
+                <template slot-scope="scope">
+                  {{scope.row.allBad}}
+                </template>
+              </el-table-column>
+              <el-table-column label="标准产能(pcs/h)" :show-overflow-tooltip="true" width="130">
+                <template slot-scope="scope">
+                  {{scope.row.basicCapacity}}
+                </template>
+              </el-table-column>
+              <el-table-column label="标配人力数量(人/线)" :show-overflow-tooltip="true" width="130">
+                <template slot-scope="scope">
+                  {{scope.row.standardOfMan}}
+                </template>
+              </el-table-column>
+              <el-table-column label="实际人力数量(人/线)" :show-overflow-tooltip="true" width="130">
+                <template slot-scope="scope">
+                  {{scope.row.acManNum}}
+                </template>
+              </el-table-column>
+              <el-table-column label="产出时间(h)" :show-overflow-tooltip="true" width="100">
+                <template slot-scope="scope">
+                  {{scope.row.outPutTime}}
+                </template>
+              </el-table-column>
+              <el-table-column label="净作业时间(h)" :show-overflow-tooltip="true" width="120">
+                <template slot-scope="scope">
+                  {{scope.row.netOprTimeHour}}
+                </template>
+              </el-table-column>
+            </el-table>
+
             <el-row style="font-size:14px;line-height:30px;margin-top:10px">
             </el-row>
           </div>
@@ -213,6 +336,9 @@ export default class Index extends Vue {
   productlineList = []
   materialList = []
   dataList = []
+  sumBean = null
+  opeDataList = []
+  opeSumBean = null
   searched: boolean = false
   currPage: number = 1
   pageSize: number = 10
@@ -225,8 +351,19 @@ export default class Index extends Vue {
     this.getMaterialList()
   }
   // button 权限
-  isAuth (key) {
-    return Vue.prototype.isAuth(key)
+  isQueryAuth () {
+    if (this.params.radio === 'OEE') {
+      return Vue.prototype.isAuth('report:formh:productEfficiencyList')
+    } else {
+      return Vue.prototype.isAuth('report:formh:productEfficOPEList')
+    }
+  }
+  isExcelAuth () {
+    if (this.params.radio === 'OEE') {
+      return Vue.prototype.isAuth('report:formh:exportProductEfficiencyList')
+    } else {
+      return Vue.prototype.isAuth('report:formh:exportProductEfficOPEList')
+    }
   }
   // 切换表头选项
   changeOptions (flag: string) {
@@ -303,25 +440,11 @@ export default class Index extends Vue {
     let that = this
     if (this.params.radio === 'OEE') {
       exportFile(`${REP_API.OEE_EXCEL_API}`, 'OEE报表', that)
+    } else {
+      exportFile(`${REP_API.OPE_EXCEL_API}`, 'OPE报表', that)
     }
   }
-  getDataList () {
-    // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择生产工厂')
-    //   return
-    // }
-    // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择生产车间')
-    //   return
-    // }
-    // if (this.params.startDate === null || this.params.startDate === '') {
-    //   this.$message.error('请选择生产开始时间')
-    //   return
-    // }
-    // if (this.params.endDate === null || this.params.endDate === '') {
-    //   this.$message.error('请选择生产结束时间')
-    //   return
-    // }
+  getCompleteData () {
     this.searched = true
     let params = {
       factory: this.params.factoryId,
@@ -333,11 +456,72 @@ export default class Index extends Vue {
       currPage: this.currPage + '',
       pageSize: this.pageSize + ''
     }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    let net1 = new Promise((resolve, reject) => {
+      that.getSumBean(params, resolve, reject)
+    })
+    Promise.all([net0, net1]).then((ret) => {
+      if (this.params.radio === 'OEE') {
+        if (that.dataList && that.sumBean) {
+          Object.assign(that.sumBean, {productDate: '合计'})
+          that.dataList.push(that.sumBean)
+        }
+      } else {
+        if (that.opeDataList && that.opeSumBean) {
+          Object.assign(that.opeSumBean, {productDate: '合计'})
+          that.opeDataList.push(that.opeSumBean)
+        }
+      }
+    })
+  }
+  getDataList (params, resolve?, reject?) {
     if (this.params.radio === 'OEE') {
-      this.retrieveOEEDataList(params)
+      this.retrieveOEEDataList(params, resolve, reject)
+    } else {
+      this.retrieveOPEDataList(params, resolve, reject)
     }
   }
-  retrieveOEEDataList (params) {
+  getSumBean (params, resolve?, reject?) {
+    if (this.params.radio === 'OEE') {
+      this.sumBean = null
+      Vue.prototype.$http(`${REP_API.OEE_SUM_API}`, 'POST', params).then(res => {
+        if (res.data.code === 0) {
+          this.sumBean = res.data.sumBean
+        } else {
+          this.$message.error(res.data.msg)
+        }
+        if (resolve) {
+          resolve()
+        }
+      }).catch(err => {
+        console.log('catch data::', err)
+        if (reject) {
+          reject()
+        }
+      })
+    } else {
+      this.opeSumBean = null
+      Vue.prototype.$http(`${REP_API.OPE_SUM_API}`, 'POST', params).then(res => {
+        if (res.data.code === 0) {
+          this.opeSumBean = res.data.sumBean
+        } else {
+          this.$message.error(res.data.msg)
+        }
+        if (resolve) {
+          resolve()
+        }
+      }).catch(err => {
+        console.log('catch data::', err)
+        if (reject) {
+          reject()
+        }
+      })
+    }
+  }
+  retrieveOEEDataList (params, resolve?, reject?) {
     this.dataList = []
     Vue.prototype.$http(`${REP_API.OEE_LIST_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
@@ -346,19 +530,122 @@ export default class Index extends Vue {
       } else {
         this.$message.error(res.data.msg)
       }
+      if (resolve) {
+        resolve()
+      }
     }).catch(err => {
       console.log('catch data::', err)
+      if (reject) {
+        reject()
+      }
     })
   }
+  retrieveOPEDataList (params, resolve?, reject?) {
+    this.opeDataList = []
+    Vue.prototype.$http(`${REP_API.OPE_LIST_API}`, 'POST', params).then(res => {
+      if (res.data.code === 0) {
+        this.opeDataList = res.data.page.list
+        this.totalCount = res.data.page.totalCount
+      } else {
+        this.$message.error(res.data.msg)
+      }
+      if (resolve) {
+        resolve()
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+      if (reject) {
+        reject()
+      }
+    })
+  }
+  // getSummaries (param) {
+  //   let sums = []
+  //   sums[0] = ''
+  //   sums[1] = ''
+  //   sums[2] = ''
+  //   sums[3] = ''
+  //   sums[4] = '总价'
+  //   sums[5] = this.sumBean.avbRatio
+  //   sums[6] = this.sumBean.timeCropRatio
+  //   sums[7] = this.sumBean.performCropRatio
+  //   sums[8] = this.sumBean.googRatio
+  //   sums[9] = this.sumBean.theOEERatio
+  //   sums[10] = this.sumBean.proDuctRatio
+  //   sums[11] = this.sumBean.allTolTime
+  //   sums[12] = this.sumBean.planStopTime
+  //   sums[13] = this.sumBean.alltime
+  //   sums[14] = this.sumBean.removeTime
+  //   sums[15] = this.sumBean.excptTime
+  //   sums[16] = this.sumBean.netOprTime
+  //   sums[17] = this.sumBean.output
+  //   sums[18] = this.sumBean.allBad
+  //   sums[19] = this.sumBean.basicCapacity
+  //   sums[20] = this.sumBean.outPutTime
+  //   sums[21] = this.sumBean.netOprTimeHour
+  //   return sums
+  // }
   // 改变每页条数
   handleSizeChange (val: number) {
     this.pageSize = val
-    this.getDataList()
+    let params = {
+      factory: this.params.factoryId,
+      workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
+      commitDateOne: this.params.startDate,
+      commitDateTwo: this.params.endDate,
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
+    }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    net0.then((ret) => {
+      if (this.params.radio === 'OEE') {
+        if (that.dataList && that.sumBean) {
+          Object.assign(that.sumBean, {productDate: '合计'})
+          that.dataList.push(that.sumBean)
+        }
+      } else {
+        if (that.opeDataList && that.opeSumBean) {
+          Object.assign(that.opeSumBean, {productDate: '合计'})
+          that.opeDataList.push(that.opeSumBean)
+        }
+      }
+    })
   }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
-    this.getDataList()
+    let params = {
+      factory: this.params.factoryId,
+      workshop: this.params.workshopId,
+      productLine: this.params.productlineId,
+      materialCode: this.params.materialCode,
+      commitDateOne: this.params.startDate,
+      commitDateTwo: this.params.endDate,
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
+    }
+    let that = this
+    let net0 = new Promise((resolve, reject) => {
+      that.getDataList(params, resolve, reject)
+    })
+    net0.then((ret) => {
+      if (this.params.radio === 'OEE') {
+        if (that.dataList && that.sumBean) {
+          Object.assign(that.sumBean, {productDate: '合计'})
+          that.dataList.push(that.sumBean)
+        }
+      } else {
+        if (that.opeDataList && that.opeSumBean) {
+          Object.assign(that.opeSumBean, {productDate: '合计'})
+          that.opeDataList.push(that.opeSumBean)
+        }
+      }
+    })
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {

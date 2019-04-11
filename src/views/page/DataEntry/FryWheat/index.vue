@@ -123,7 +123,7 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="工序"  width="120">
+            <el-table-column label="班组/工序"  width="120">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.deptId" placeholder="请选择" size="small" @change="changeProcType(scope.row)" :disabled="isdisabled">
                   <el-option v-for="sole in processesList" :key="sole.deptId" :value="sole.deptId" :label="sole.deptName"></el-option>
@@ -333,16 +333,33 @@ export default {
     // 根据车间获取工序
     GetProcess (id) {
       this.processesList = []
+      // if (id) {
+      //   this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
+      //     if (data.code === 0) {
+      //       this.processesList = data.childList
+      //     } else {
+      //       this.$message.error(data.msg)
+      //     }
+      //   })
+      // } else {
+      //   this.processesList = []
+      // }
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id}).then(({data}) => {
           if (data.code === 0) {
-            this.processesList = data.childList
+            this.processesList = data.teamList
           } else {
             this.$message.error(data.msg)
           }
         })
       } else {
-        this.processesList = []
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+          if (data.code === 0) {
+            this.processesList = data.teamList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     },
     // 获取组织结构树
