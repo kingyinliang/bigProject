@@ -44,8 +44,8 @@
             </el-col>
             <el-col style="width:340px">
               <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" >导出</el-button>
-                <el-button type="primary" size="small" @click="getCompleteData()" style="float:right" >查询</el-button>
+                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" v-if='isExcelAuth()'>导出</el-button>
+                <el-button type="primary" size="small" @click="getCompleteData()" style="float:right" v-if='isQueryAuth()'>查询</el-button>
               </el-row>
             </el-col>
           </el-row>
@@ -351,8 +351,19 @@ export default class Index extends Vue {
     this.getMaterialList()
   }
   // button 权限
-  isAuth (key) {
-    return Vue.prototype.isAuth(key)
+  isQueryAuth () {
+    if (this.params.radio === 'OEE') {
+      return Vue.prototype.isAuth('report:formh:productEfficiencyList')
+    } else {
+      return Vue.prototype.isAuth('report:formh:productEfficOPEList')
+    }
+  }
+  isExcelAuth () {
+    if (this.params.radio === 'OEE') {
+      return Vue.prototype.isAuth('report:formh:exportProductEfficiencyList')
+    } else {
+      return Vue.prototype.isAuth('report:formh:exportProductEfficOPEList')
+    }
   }
   // 切换表头选项
   changeOptions (flag: string) {
