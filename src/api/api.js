@@ -1,4 +1,3 @@
-// let HOST = 'http://localhost:8080'
 // let HOST = 'http://10.10.1.23:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
