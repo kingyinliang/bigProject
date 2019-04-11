@@ -2,9 +2,9 @@
 // let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
-let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
+// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
-// let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
+let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
 /*
 *MAINapi
