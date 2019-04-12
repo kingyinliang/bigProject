@@ -628,7 +628,7 @@ export default class Index extends Vue {
     if (page === '煮豆') {
       flag = this.isAuth('kjm:bean:material:list')
     } else if (page === '看曲') {
-      flag = this.isAuth('kjm:bean:material:list')
+      flag = this.isAuth('kjm:guard:list')
     } else if (page === '出曲') {
       flag = this.isAuth('sys:kjmOutMaterial:list')
     }
