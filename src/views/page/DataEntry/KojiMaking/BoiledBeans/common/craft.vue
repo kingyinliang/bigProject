@@ -159,11 +159,7 @@
             </template>
           </el-table-column>
           <el-table-column label="压力/Mpa">
-            <el-table-column width="110">
-              <template slot="header">
-                <i class="reqI">*</i>
-                <span>蒸煮数显</span>
-              </template>
+            <el-table-column width="110" label="蒸煮数显">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.cookingPress" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
@@ -206,11 +202,7 @@
                 <el-input v-model="scope.row.cookingMachineTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column width="110">
-              <template slot="header">
-                <i class="reqI">*</i>
-                <span>上转阀冷却</span>
-              </template>
+            <el-table-column width="110" label="上转阀冷却">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.upCooling" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
@@ -389,7 +381,7 @@ export default {
       }
       for (let items of this.zhengzhuList) {
         if (items.delFlag === '0') {
-          if (!items.guardTime || items.guardTime === '' || !items.cookingPress || items.cookingPress === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingTemp || items.cookingTemp === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.upCooling || items.upCooling === '' || !items.downCooling || items.downCooling === '') {
+          if (!items.guardTime || items.guardTime === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingTemp || items.cookingTemp === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.downCooling || items.downCooling === '') {
             ty = false
             this.$message.error('连续蒸煮监控数据必填项不能为空')
             return false
