@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     GetInPot () {
-      this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         currPage: 1,
         holder_type: '001',
         pageSize: 100,
