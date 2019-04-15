@@ -253,7 +253,7 @@ export default {
         expInfo: '',
         expStartDate: null,
         expEndDate: null,
-        expContinue: '',
+        expContinue: 0,
         expContinueUnit: '',
         deviceId: '',
         materialShort: '',
@@ -283,7 +283,7 @@ export default {
             this.$message.error('异常结束时间早于异常开始时间，请重新录入')
             return 'NaN'
           } else {
-            return ((toDate(end) - toDate(start)) / 60000).toFixed(2)
+            return ((toDate(end) - toDate(start)) / 60000).toFixed(2) * 1
           }
         }
       }
