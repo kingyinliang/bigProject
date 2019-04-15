@@ -312,7 +312,7 @@ export default {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         type: 'holder_type',
         holder_type: '007',
-        pageSize: 100,
+        pageSize: 9999,
         workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {
@@ -326,7 +326,7 @@ export default {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         type: 'holder_type',
         holder_type: '006',
-        pageSize: 100,
+        pageSize: 9999,
         workShopName: this.order.workShopName,
         currPage: 1
       }).then(({data}) => {

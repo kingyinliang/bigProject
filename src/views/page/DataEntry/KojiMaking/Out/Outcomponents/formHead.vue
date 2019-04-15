@@ -56,7 +56,7 @@ export default {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         currPage: 1,
         holder_type: '001',
-        pageSize: 100,
+        pageSize: 9999,
         type: 'holder_type'
       }).then(({data}) => {
         if (data.code === 0) {
