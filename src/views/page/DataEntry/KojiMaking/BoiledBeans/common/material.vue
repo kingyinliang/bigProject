@@ -601,7 +601,7 @@ export default {
     // 麦粉罐
     getMaiholdList (formHeader) {
       let replacestr = formHeader.workShopName.replace(/制曲/g, '炒麦')
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 100, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 9999, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.MaiHoldList = res.data.page.list
           this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {

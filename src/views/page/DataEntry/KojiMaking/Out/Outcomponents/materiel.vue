@@ -184,7 +184,7 @@ export default {
         type: 'holder_type',
         holder_type: '011',
         currPage: 1,
-        pageSize: 100
+        pageSize: 9999
       }).then(({data}) => {
         if (data.code === 0) {
           this.brineTankNo = data.page.list

@@ -143,7 +143,7 @@ export default {
         this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {
           currPage: 1,
           holder_type: '005',
-          pageSize: 100,
+          pageSize: 9999,
           type: 'holder_type',
           dept_id: id
         }, false, false, false).then(({data}) => {
@@ -167,7 +167,7 @@ export default {
         this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {
           currPage: 1,
           holder_type: '001',
-          pageSize: 100,
+          pageSize: 9999,
           type: 'holder_type',
           workShopName: workShopName,
           dept_id: id

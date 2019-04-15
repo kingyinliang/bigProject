@@ -167,7 +167,7 @@ export default {
     },
     // 表头 连续蒸煮号
     GetholderList () {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '008', pageSize: 100, type: 'holder_type'}, false, false, false).then(({data}) => {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '008', pageSize: 9999, type: 'holder_type'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.holderList = data.page.list
         } else {

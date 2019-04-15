@@ -229,7 +229,7 @@ export default {
         type: 'holder_type',
         holder_type: '002',
         // holder_no: '001',
-        pageSize: 100,
+        pageSize: 9999,
         workShopName: this.order.workShopName,
         currPage: 1
       }
