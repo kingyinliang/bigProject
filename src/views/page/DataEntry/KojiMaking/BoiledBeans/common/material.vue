@@ -568,7 +568,7 @@ export default {
       }
       this.materialList.forEach((item) => {
         if (item.delFlag === '0') {
-          if (item.productBatch.length !== 10 || (item.materialBatch.length && item.materialBatch.length !== 10)) {
+          if (item.materialBatch.length && item.materialBatch.length !== 10) {
             ty = false
             return false
           }

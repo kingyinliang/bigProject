@@ -178,7 +178,7 @@ export default {
     },
     // 获取盐水罐号
     GetBrineTankNo (deptId) {
-      this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         factory: deptId.factory,
         deptId: deptId.workShop,
         type: 'holder_type',
