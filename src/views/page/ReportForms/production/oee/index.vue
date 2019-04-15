@@ -200,7 +200,7 @@
                   {{scope.row.timeCropRatio}}
                 </template>
               </el-table-column>
-              <el-table-column fixed label="性能稼动率" width="100">
+              <el-table-column fixed label="操作效率" width="100">
                 <template slot-scope="scope">
                   {{scope.row.performCropRatio}}
                 </template>
@@ -396,7 +396,7 @@ export default class Index extends Vue {
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '包装'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '包装 组装'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
