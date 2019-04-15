@@ -15,7 +15,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="生产曲房：">
-          <el-select v-model="plantList.houseID" style="width: 150px">
+          <el-select v-model="plantList.houseId" style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="sole in room" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
           </el-select>
@@ -24,7 +24,7 @@
           <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="发酵罐：">
-          <el-select v-model="plantList.inPotNo" style="width: 150px">
+          <el-select v-model="plantList.inPotNo" filterable style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="sole in Pot" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
           </el-select>
@@ -87,7 +87,7 @@ export default {
       plantList: {
         factory: '',
         workshop: '',
-        houseID: '',
+        houseId: '',
         inPotNo: '',
         inKjmDate: '',
         currPage: 1,
@@ -128,7 +128,7 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
