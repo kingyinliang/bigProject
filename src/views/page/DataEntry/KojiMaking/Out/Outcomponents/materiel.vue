@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="数量" width="90" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{scope.row.amount = scope.row.startValue*1 - scope.row.endValue*1}}
+          {{scope.row.amount = scope.row.endValue*1 - scope.row.startValue*1}}
         </template>
       </el-table-column>
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
@@ -184,7 +184,7 @@ export default {
         type: 'holder_type',
         holder_type: '011',
         currPage: 1,
-        pageSize: 100
+        pageSize: 9999
       }).then(({data}) => {
         if (data.code === 0) {
           this.brineTankNo = data.page.list

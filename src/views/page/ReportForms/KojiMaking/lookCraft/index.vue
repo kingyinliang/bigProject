@@ -152,7 +152,7 @@ export default {
     GetinPotList (id) {
       if (id) {
         let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
-        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '001', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '001', pageSize: 9999, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.inPotList = data.page.list
           } else {
@@ -165,7 +165,7 @@ export default {
     GethouseList (id) {
       if (id) {
         let workShopName = this.workShop.find(item => item.deptId === id)['deptName']
-        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '005', pageSize: 100, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, dept_id: id, holder_type: '005', pageSize: 9999, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.houseList = data.page.list
           } else {
