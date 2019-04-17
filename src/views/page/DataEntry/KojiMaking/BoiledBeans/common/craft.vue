@@ -24,12 +24,12 @@
       </div>
       <div class="runarBox">
         <el-form :inline="true" size="small" label-width="130px" :model="craftfrom">
-          <el-form-item label="润水比例:" :required="true">
+          <el-form-item label="润水比例:">
             <el-input class="liInputWidth" v-model="craftfrom.rateRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
-          <el-form-item label="润水温度(°C):" :required="true">
+          <!-- <el-form-item label="润水温度(°C):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.tempRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="润水变频(HZ):" :required="true">
             <el-input class="liInputWidth" v-model="craftfrom.frequenceRunWater" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"></el-input>
           </el-form-item>
@@ -184,11 +184,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column label="温度/°C">
-            <el-table-column width="110">
-              <template slot="header">
-                <i class="reqI">*</i>
-                <span>蒸煮数显</span>
-              </template>
+            <el-table-column width="110" label="蒸煮数显">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.cookingTemp" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
               </template>
@@ -272,7 +268,10 @@
               <span>煮豆感官</span>
             </template>
             <template slot-scope="scope">
-              <el-input v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
+              <el-select v-model="scope.row.cookingFeel" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small">
+                <el-option value="良好" label="良好"></el-option>
+                <el-option value="异常" label="异常"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="备注">
@@ -355,7 +354,7 @@ export default {
         this.$message.error('下料结束时间不能为空')
         return false
       }
-      if (!this.craftfrom.rateRunWater || !this.craftfrom.tempRunWater || !this.craftfrom.frequenceRunWater || !this.craftfrom.realRate || !this.craftfrom.weightRunWater || !this.craftfrom.speedRunWater || !this.craftfrom.oncePreheatFrequency || !this.craftfrom.secondPreheatFrequency || !this.craftfrom.secondPreheatTemp || !this.craftfrom.unloadingSpeed || this.craftfrom.rateRunWater === '' || this.craftfrom.tempRunWater === '' || this.craftfrom.frequenceRunWater === '' || this.craftfrom.realRate === '' || this.craftfrom.weightRunWater === '' || this.craftfrom.speedRunWater === '' || this.craftfrom.oncePreheatFrequency === '' || this.craftfrom.secondPreheatFrequency === '' || this.craftfrom.secondPreheatTemp === '' || this.craftfrom.unloadingSpeed === '') {
+      if (!this.craftfrom.frequenceRunWater || !this.craftfrom.realRate || !this.craftfrom.weightRunWater || !this.craftfrom.speedRunWater || !this.craftfrom.oncePreheatFrequency || !this.craftfrom.secondPreheatFrequency || !this.craftfrom.secondPreheatTemp || !this.craftfrom.unloadingSpeed || this.craftfrom.frequenceRunWater === '' || this.craftfrom.realRate === '' || this.craftfrom.weightRunWater === '' || this.craftfrom.speedRunWater === '' || this.craftfrom.oncePreheatFrequency === '' || this.craftfrom.secondPreheatFrequency === '' || this.craftfrom.secondPreheatTemp === '' || this.craftfrom.unloadingSpeed === '') {
         ty = false
         this.$message.error('煮豆润水参数不能为空')
         return false
@@ -381,7 +380,7 @@ export default {
       }
       for (let items of this.zhengzhuList) {
         if (items.delFlag === '0') {
-          if (!items.guardTime || items.guardTime === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingTemp || items.cookingTemp === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.downCooling || items.downCooling === '') {
+          if (!items.guardTime || items.guardTime === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.downCooling || items.downCooling === '') {
             ty = false
             this.$message.error('连续蒸煮监控数据必填项不能为空')
             return false

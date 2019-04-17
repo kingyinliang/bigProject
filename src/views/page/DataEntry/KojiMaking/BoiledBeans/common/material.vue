@@ -153,7 +153,7 @@
               <el-popover  placement="top" title="" width="200" trigger="hover" v-if="sole.pici !== ''">
                 <div class="boxText">
                   <div v-for="(soles, index) in sole.pici" :key="index">
-                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG({{soles.proportion}})</span></div>
+                    <div>批次:{{soles.batch}}<span>{{soles.amount}}KG</span></div>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#1890FF" v-if="(index%3) === 0"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#5BD171" v-else-if="(index-1)%3 === 0"></el-progress>
                     <el-progress :percentage="soles.proportion" :show-text="false" :text-inside="true" :stroke-width="8" color="#F5A623" v-else-if="(index-2)%3 === 0"></el-progress>
@@ -601,7 +601,7 @@ export default {
     // 麦粉罐
     getMaiholdList (formHeader) {
       let replacestr = formHeader.workShopName.replace(/制曲/g, '炒麦')
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 9999, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, `POST`, {currPage: 1, holder_type: '009', pageSize: 100, type: 'holder_type', workShopName: replacestr}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.MaiHoldList = res.data.page.list
           this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
