@@ -21,7 +21,8 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+            <p v-if="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{scope.row.sauceWeight? scope.row.sauceWeight : scope.row.sauceWeight = ((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3}}</p>
+            <el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
           </div>
         </template>
       </el-table-column>
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import {KJM_API} from '@/api/api'
+import {KJM_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'inStock',
   data () {
@@ -87,6 +88,11 @@ export default {
         allP: '',
         allM: '',
         allS: ''
+      },
+      params: {
+        params1: '',
+        params2: '',
+        params3: ''
       }
     }
   },
@@ -95,6 +101,7 @@ export default {
     formHeader: {}
   },
   mounted () {
+    this.GetParams()
   },
   methods: {
     setBrineNum (num) {
@@ -108,6 +115,25 @@ export default {
           if (data.list.length !== 0) {
             this.ThreeNum = data.list[0]
           }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    GetParams () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_jianglao_canshu`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          data.dicList.forEach((item, index) => {
+            if (item.code === 'CANSHU1') {
+              this.params.params1 = (item.value * 1)
+            }
+            if (item.code === 'CANSHU2') {
+              this.params.params2 = (item.value * 1)
+            }
+            if (item.code === 'CANSHU3') {
+              this.params.params3 = (item.value * 1)
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }

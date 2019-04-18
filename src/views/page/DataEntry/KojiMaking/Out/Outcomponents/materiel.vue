@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="数量" width="90" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{scope.row.amount = scope.row.endValue*1 - scope.row.startValue*1}}
+          {{scope.row.amount = (scope.row.endValue*1 - scope.row.startValue*1) * 1000}}
         </template>
       </el-table-column>
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>

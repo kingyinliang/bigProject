@@ -64,6 +64,11 @@
           <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" :disabled="!isRedact"></el-date-picker>
         </template>
       </el-table-column>
+      <el-table-column label="工作时长" width="100">
+        <template slot-scope="scope">
+          <p>{{workTime(scope.row.endDate, scope.row.startDate, scope.row)}}H</p>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" width="100">
         <template slot-scope="scope">
           <el-input v-model="scope.row.remark" size="small" :disabled="!isRedact"></el-input>
@@ -85,6 +90,7 @@
 
 <script>
 import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
+import { toDate } from '@/net/validate'
 import OfficialWorker from './officialWorker'
 import LoanedPersonnel from './loanedPersonnel'
 import TemporaryWorker from './temporaryWorker'
@@ -325,6 +331,13 @@ export default {
           num += item.userId.length
         })
         return num
+      }
+    },
+    workTime: function () {
+      return function (end, start, row) {
+        if (end && start && row.delFlag !== '1') {
+          return ((toDate(end) - toDate(start)) / 3600000).toFixed(2) * 1
+        }
       }
     }
   },
