@@ -10,13 +10,14 @@
       <el-table-column type="index" width="55" label="序号">
       </el-table-column>
       <el-table-column label="异常情况" width="150">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>异常情况</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small">
-              <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
-            </el-select>
-          </div>
+          <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small">
+            <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column
@@ -28,19 +29,21 @@
         </template>
       </el-table-column>
       <el-table-column width="241" label="异常开始时间">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>异常开始时间</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
-          </div>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expStartDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column width="241" label="异常结束时间">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>异常结束时间</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
-          </div>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.expEndDate" :disabled="!isRedact" size="small" style="width:195px"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="异常时间" width="80">

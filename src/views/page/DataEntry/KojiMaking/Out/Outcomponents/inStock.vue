@@ -18,20 +18,22 @@
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库酱醪量">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>入库酱醪量</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <p v-if="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{scope.row.sauceWeight? scope.row.sauceWeight : scope.row.sauceWeight = ((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3}}</p>
-            <el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
-          </div>
+          <p v-if="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{scope.row.sauceWeight? scope.row.sauceWeight : scope.row.sauceWeight = ((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3}}</p>
+          <el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库批次">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>入库批次</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入" maxlength="10"></el-input>
-          </div>
+          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入" maxlength="10"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="85" label="入罐罐号" show-overflow-tooltip>
@@ -269,5 +271,8 @@ export default {
   height:14px;
   width:14px;
   margin-right: 5px;
+}
+.reqI{
+  color: red;
 }
 </style>

@@ -3,48 +3,44 @@
     <el-button type="primary" @click="AddMateriel(MaterielDate)" size="small" :disabled="!isRedact" style="float: right">新增</el-button>
     <el-table header-row-class-name="tableHead" :data="MaterielDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column type="index" width="50" label="序号"></el-table-column>
-      <!--<el-table-column label="日期">-->
-        <!--<template slot-scope="scope">-->
-          <!--<div class="required">-->
-            <!--<i class="reqI">*</i>-->
-            <!--<el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.outDate" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-date-picker>-->
-          <!--</div>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column label="盐水" width="140">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>盐水</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-select v-model="scope.row.material" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
-              <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code + ' ' + item.value"></el-option>
-            </el-select>
-          </div>
+          <el-select v-model="scope.row.material" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small">
+            <el-option :label="item.value" v-for="(item, index) in brine" :key="index" :value="item.code + ' ' + item.value"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="盐水罐号" width="140">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>盐水罐号</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')"  size="small">
-              <el-option :label="item.holderName" v-for="(item, index) in brineTankNo" :key="index" :value="item.holderId"></el-option>
-            </el-select>
-          </div>
+          <el-select v-model="scope.row.saltWaterHolderId" placeholder="请选择" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')"  size="small">
+            <el-option :label="item.holderName" v-for="(item, index) in brineTankNo" :key="index" :value="item.holderId"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="起始值" width="140">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>起始值</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
-          </div>
+          <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="结束值" width="140">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>结束值</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
-          </div>
+          <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="数量" width="90" show-overflow-tooltip>

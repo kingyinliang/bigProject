@@ -20,21 +20,25 @@
         </template>
       </el-table-column>
       <el-table-column label="人员属性" width="130">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>人员属性</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-select v-model="scope.row.userType" placeholder="请选择" size="small" :disabled="!isRedact" @change="userTypesele(scope.row)">
-              <el-option label="正式" value="正式"></el-option>
-              <el-option label="借调" value="借调"></el-option>
-              <el-option label="临时工" value="临时工"></el-option>
-            </el-select>
-          </div>
+          <el-select v-model="scope.row.userType" placeholder="请选择" size="small" :disabled="!isRedact" @change="userTypesele(scope.row)">
+            <el-option label="正式" value="正式"></el-option>
+            <el-option label="借调" value="借调"></el-option>
+            <el-option label="临时工" value="临时工"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="人员选择" :show-overflow-tooltip="true" width="300">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>人员选择</span>
+        </template>
         <template slot-scope="scope">
           <div class="required" style="min-height: 32px">
-            <i class="reqI">*</i>
             <span v-if="!isRedact" style="cursor: pointer">
               <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
             </span>
