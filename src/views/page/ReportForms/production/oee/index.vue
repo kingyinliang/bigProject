@@ -422,7 +422,7 @@ export default class Index extends Vue {
     this.materialList = []
     Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
       if (data.code === 0) {
-        this.materialList = data.list
+        this.materialList = data.allList
       } else {
         this.$message.error(data.msg)
       }
