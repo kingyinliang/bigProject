@@ -7,7 +7,7 @@
         <el-button type="primary" size="small" @click="addmaterial" :disabled="!isRedact" style="float: right"> + 新增</el-button>
       </div>
         <div class="zhongarBox">
-        <el-table border style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
+        <el-table ref="materialTable" border max-height="267" style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
           <el-table-column width="125px">
             <template slot="header">
@@ -109,7 +109,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-table border header-row-class-name="tableHead" :data="wheatList" style="margin-top:10px" @row-dblclick="editwheat" :row-class-name="rowDelFlag">
+        <el-table ref="wheatTable" max-height="276" border header-row-class-name="tableHead" :data="wheatList" style="margin-top:10px" @row-dblclick="editwheat" :row-class-name="rowDelFlag">
           <el-table-column label="日期" prop="useDate" width="100"></el-table-column>
           <el-table-column label="物料" prop="materialCode" width="160">
             <template slot-scope="scope">
@@ -126,7 +126,7 @@
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delsoyRow(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delwheatRow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -174,7 +174,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-table border header-row-class-name="tableHead" :data="soyList" @row-dblclick="editsoy" :row-class-name="rowDelFlag" style="margin-top:10px">
+        <el-table border ref="pulpTable" max-height="275" header-row-class-name="tableHead" :data="soyList" @row-dblclick="editsoy" :row-class-name="rowDelFlag" style="margin-top:10px">
           <el-table-column label="日期" prop="pulpDate" width="110"></el-table-column>
           <el-table-column label="领用粮仓" prop="foodHolderName" width="100"></el-table-column>
           <el-table-column label="豆粕仓" prop="pulpHolderName" width="130"></el-table-column>
@@ -188,7 +188,7 @@
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delwheatRow(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delsoyRow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -705,6 +705,9 @@ export default {
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       })
+      this.$nextTick(function () {
+        this.$refs.materialTable.bodyWrapper.scrollTop = this.$refs.materialTable.bodyWrapper.scrollHeight
+      })
     },
     delmaterial (row) {
       this.materialList.splice(this.materialList.indexOf(row), 1)
@@ -771,6 +774,9 @@ export default {
               Object.assign(currentRecord[0], this.wheat)
             } else {
               this.wheatList.push(this.wheat)
+              this.$nextTick(function () {
+                this.$refs.wheatTable.bodyWrapper.scrollTop = this.$refs.wheatTable.bodyWrapper.scrollHeight
+              })
             }
           } else {
             return false
@@ -867,6 +873,9 @@ export default {
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                 changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
               })
+              this.$nextTick(function () {
+                this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
+              })
             }
           }
         } else {
@@ -948,6 +957,9 @@ export default {
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                 changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+              })
+              this.$nextTick(function () {
+                this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
               })
             }
           }
@@ -1163,6 +1175,7 @@ export default {
       }
     },
     delsoyRow (row) {
+      console.log(row)
       if (row.id === '') {
         this.soyList.splice(this.soyList.indexOf(row), 1)
       } else {
