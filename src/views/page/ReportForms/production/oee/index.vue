@@ -52,7 +52,7 @@
         </el-card>
         <el-row v-show="searched" style="margin-top:20px;">
           <div style="min-height:320px">
-            <el-table border  header-row-class-name="tableHead" :data="dataList" v-if="params.radio === 'OEE'">
+            <el-table border  header-row-class-name="tableHead" :data="dataList" v-show="params.radio === 'OEE'">
               <el-table-column fixed label="工厂"  width="130" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.factoryName}}
@@ -164,7 +164,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-table border  header-row-class-name="tableHead" :data="opeDataList" v-if="params.radio === 'OPE'">
+            <el-table border  header-row-class-name="tableHead" :data="opeDataList" v-show="params.radio === 'OPE'">
               <el-table-column fixed label="工厂"  width="130" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.factoryName}}
@@ -422,7 +422,7 @@ export default class Index extends Vue {
     this.materialList = []
     Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
       if (data.code === 0) {
-        this.materialList = data.list
+        this.materialList = data.allList
       } else {
         this.$message.error(data.msg)
       }
