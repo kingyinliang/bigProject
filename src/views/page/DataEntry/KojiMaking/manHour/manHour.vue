@@ -429,6 +429,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -442,6 +443,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            this.formHeader.workShop = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -455,6 +457,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.deptId = data.childList
+            this.formHeader.deptId = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }

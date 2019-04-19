@@ -42,7 +42,7 @@
       </el-form-item>
       </el-row>
       <el-row>
-      <el-form-item label="风速（R/min）：" label-width="125px" class="techitem">
+      <el-form-item label="风速：" label-width="125px" class="techitem">
         <el-input v-model="CraftControlDate.windSpeedOne" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.windSpeedTwo" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.windSpeedThree" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
@@ -52,7 +52,7 @@
       </el-row>
       <el-row>
         <el-form-item label="风速单位：" label-width="120px">
-          <el-select v-model="CraftControlDate.windSpeedUnit" placeholder="请选择" :disabled="!(CraftControlDate.status !== 'submit')"  size="small">
+          <el-select v-model="CraftControlDate.windSpeedUnit" placeholder="请选择" :disabled="!(CraftControlDate.status !== 'submit')" style="width: 149px"  size="small">
             <el-option label="R/min" value="R/min"></el-option>
             <el-option label="HZ" value="HZ"></el-option>
           </el-select>
