@@ -16,6 +16,7 @@
         <el-form-item label="入曲结束时间：" :required="true">
           <el-date-picker v-model="tech.inEndTime" type="datetime" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" placeholder="选择日期" size="small" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:171px"></el-date-picker>
         </el-form-item>
+        <el-form-item label="入曲时长：">{{timecha}}</el-form-item>
       </el-form>
     </el-card>
     <el-card>
@@ -24,8 +25,8 @@
       </div>
       <div class="lookarBox">
         <el-row style="line-height: 32px; margin-bottom:10px">
-          <el-col :span="4">第（{{guardProcess}}）套程序</el-col>
-          <el-col :span="16">
+          <el-col :span="5">第（<el-input size="small" v-model="tech.guardProcess" style="width:80px; padding:0;" class="guard-form-input">{{tech.guardProcess}}</el-input>）套程序</el-col>
+          <el-col :span="15">
             <el-radio-group v-model="tech.processType">
               <el-radio label="自动" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')">自动</el-radio>
               <el-radio label="半自动" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')">半自动</el-radio>
@@ -37,7 +38,7 @@
             <el-button type="primary" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" @click="addline" size="small" style="float: right; margin-right:10px"> + 新增</el-button>
           </el-col>
         </el-row>
-        <el-table border header-row-class-name="tableHead" :data="lookList" :row-class-name="rowDelFlag" tooltip-effect="dark">
+        <el-table border ref="recordTable" max-height="315" header-row-class-name="tableHead" :data="lookList" :row-class-name="rowDelFlag" tooltip-effect="dark">
           <el-table-column label="序号" type="index" width="50px"></el-table-column>
           <el-table-column label="" width="205">
             <template slot="header">
@@ -75,16 +76,25 @@
               <el-input v-model="scope.row.windSpeed" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
+          <el-table-column width="120" label="单位">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.unit" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+                <el-option label="R/MIN" value="R/MIN"></el-option>
+                <el-option label="HZ" value="HZ"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
           <el-table-column width="100">
             <template slot="header">
               <i class="reqI">*</i>
               <span>风门/进风</span>
             </template>
             <template slot-scope="scope">
-              <el-select v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+              <el-input type="number" v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <!-- <el-select v-model="scope.row.windInFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
                 <el-option label="风门" value="0"></el-option>
                 <el-option label="进风" value="1"></el-option>
-              </el-select>
+              </el-select> -->
             </template>
           </el-table-column>
           <el-table-column label="" width="100">
@@ -93,10 +103,11 @@
               <span>强排/反风</span>
             </template>
             <template slot-scope="scope">
-              <el-select v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
+              <el-input type="number" v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              <!-- <el-select v-model="scope.row.forceOutFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
                 <el-option label="强排" value="1"></el-option>
                 <el-option label="反风" value="0"></el-option>
-              </el-select>
+              </el-select> -->
             </template>
           </el-table-column>
           <el-table-column label="" width="100">
@@ -106,8 +117,13 @@
             </template>
             <template slot-scope="scope">
               <el-select v-model="scope.row.jiashiFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="加湿" value="1"></el-option>
-                <el-option label="未加湿" value="0"></el-option>
+                <el-option label="0" value="0"></el-option>
+                <el-option label="1" value="1"></el-option>
+                <el-option label="2" value="2"></el-option>
+                <el-option label="3" value="3"></el-option>
+                <el-option label="4" value="4"></el-option>
+                <el-option label="5" value="5"></el-option>
+                <el-option label="6" value="6"></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -118,8 +134,9 @@
             </template>
             <template slot-scope="scope">
               <el-select v-model="scope.row.jiareFlag" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
-                <el-option label="加热" value="1"></el-option>
-                <el-option label="冷却" value="0"></el-option>
+                <el-option label="0" value="2"></el-option>
+                <el-option label="∆" value="1"></el-option>
+                <el-option label="※" value="0"></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -281,7 +298,6 @@ export default {
   data () {
     return {
       statuss: 'saved',
-      guardProcess: '',
       userList: [],
       tech: {
         id: this.uuid(32, 62),
@@ -431,7 +447,11 @@ export default {
         thermometerInner: '',
         remark: '',
         delFlag: '0',
-        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+        unit: 'R/MIN'
+      })
+      this.$nextTick(function () {
+        this.$refs.recordTable.bodyWrapper.scrollTop = this.$refs.recordTable.bodyWrapper.scrollHeight
       })
     },
     delrow (row) {
@@ -542,6 +562,13 @@ export default {
     }
   },
   computed: {
+    timecha: function () {
+      if (!this.tech.inEndTime || !this.tech.inStartTime) {
+        return 0
+      } else {
+        return (new Date(this.tech.inEndTime) - new Date(this.tech.inStartTime)) / 60000
+      }
+    },
     overcha: function () {
       return this.tech.overEndWeight - this.tech.overStartWeight
     },
@@ -557,6 +584,21 @@ export default {
 }
 </script>
 
+<style>
+.guard-form-input .el-input__inner {
+  border: 0 none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0px;
+  text-align: center
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+</style>
 <style lang="less" scoped>
 .rowDel{
   display: none;

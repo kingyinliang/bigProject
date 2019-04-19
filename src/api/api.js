@@ -81,6 +81,11 @@ export const BASICDATA_API = {
    */
   FINDORGBYPARENTID_API: HOST + '/sys/dept/findListByParent',
   /**
+   * @property {string} ADDORG_API 组织结构 按部门id查询子类 按权限
+   */
+  FINDORGBYPARENTID1_API: HOST + '/sys/dept/findListByPermissions',
+
+  /**
    * @property {string} FINDTEAM_API 组织结构 获取班组
    */
   FINDTEAM_API: HOST + '/sys/dept/findProductTeam',

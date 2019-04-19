@@ -42,7 +42,7 @@
       </el-form-item>
       </el-row>
       <el-row>
-      <el-form-item label="风速（R/min）：" label-width="125px" class="techitem">
+      <el-form-item label="风速：" label-width="125px" class="techitem">
         <el-input v-model="CraftControlDate.windSpeedOne" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.windSpeedTwo" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.windSpeedThree" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
@@ -51,13 +51,30 @@
       </el-form-item>
       </el-row>
       <el-row>
-      <el-form-item label="操作人：" label-width="120px">
-        <el-select v-model="CraftControlDate.operator" filterable placeholder="请选择" :disabled="!(CraftControlDate.status !== 'submit')"  size="small">
-          <el-option :label="item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'" v-for="(item, index) in userlist" :key="index" :value="item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'"></el-option>
-        </el-select>
-      </el-form-item>
+        <el-form-item label="风速单位：" label-width="120px">
+          <el-select v-model="CraftControlDate.windSpeedUnit" placeholder="请选择" :disabled="!(CraftControlDate.status !== 'submit')" style="width: 149px"  size="small">
+            <el-option label="R/min" value="R/min"></el-option>
+            <el-option label="HZ" value="HZ"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="操作人：" label-width="120px">
+          <el-select v-model="CraftControlDate.operator" filterable placeholder="请选择" :disabled="!(CraftControlDate.status !== 'submit')"  size="small">
+            <el-option :label="item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'" v-for="(item, index) in userlist" :key="index" :value="item.realName + '（' + ((item.workNum !== null && item.workNum !== '') ? item.workNum : item.workNumTemp) + '）'"></el-option>
+          </el-select>
+        </el-form-item>
       </el-row>
     </el-form>
+    <el-dialog
+      title="异常说明"
+      :close-on-click-modal="false"
+      :visible.sync="visible">
+      <p style="line-height: 42px">制曲时间小于36小时，请填写异常说明</p>
+      <el-input type="textarea" v-model="CraftControlDate.exceptionDescription" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">取消</el-button>
+          <el-button type="primary" @click="SavedCraftControl('submit')">确定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -68,8 +85,10 @@ export default {
   name: 'craftControl',
   data () {
     return {
+      visible: false,
       CraftControlDate: {
-        saltWaterUsed: 0
+        saltWaterUsed: 0,
+        windSpeedUnit: 'R/min'
       },
       userlist: []
     }
@@ -147,13 +166,18 @@ export default {
         this.$message.error('工艺控制出曲品温必填项未填')
         return false
       }
-      if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator && this.CraftControlDate.outStartTime && this.CraftControlDate.outEndTime && this.CraftControlDate.kojoMakingTime !== '0' && this.CraftControlDate.saltWaterTemp && this.CraftControlDate.saltWaterNd) {} else {
+      if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator && this.CraftControlDate.outStartTime && this.CraftControlDate.outEndTime && this.CraftControlDate.saltWaterTemp && this.CraftControlDate.saltWaterNd) {} else {
         ty = false
         this.$message.error('工艺控制必填项未填')
       }
-      if (this.CraftControlDate.kojoMakingTime > 30) {} else {
+      // if (this.CraftControlDate.kojoMakingTime > 36) {} else {
+      //   ty = false
+      //   this.$message.error('制曲时间不得小于36H')
+      //   this.visible = true
+      // }
+      if (this.CraftControlDate.kojoMakingTime < 36 && !this.CraftControlDate.exceptionDescription) {
         ty = false
-        this.$message.error('制曲时间不得小于30H')
+        this.visible = true
       }
       return ty
     },

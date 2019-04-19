@@ -19,18 +19,18 @@
       </el-table-column>
       <el-table-column width="125" label="入库酱醪量">
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-input v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
-          </div>
+          <p>{{scope.row.sauceWeight = (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2)}}</p>
+          <!--<p v-show="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{(scope.row.websign === scope.row.saltWaterWeight? scope.row.sauceWeight = scope.row.sauceWeight : scope.row.sauceWeight =  (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2))}}</p>-->
+          <!--<el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>-->
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库批次">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>入库批次</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入" maxlength="10"></el-input>
-          </div>
+          <el-input v-model="scope.row.batch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入" maxlength="10"></el-input>
         </template>
       </el-table-column>
       <el-table-column width="85" label="入罐罐号" show-overflow-tooltip>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {KJM_API} from '@/api/api'
+import {KJM_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'inStock',
   data () {
@@ -87,6 +87,11 @@ export default {
         allP: '',
         allM: '',
         allS: ''
+      },
+      params: {
+        params1: '',
+        params2: '',
+        params3: ''
       }
     }
   },
@@ -95,6 +100,12 @@ export default {
     formHeader: {}
   },
   mounted () {
+    this.GetParams()
+  },
+  watch: {
+    'BrineNum' (n, o) {
+      console.log(n)
+    }
   },
   methods: {
     setBrineNum (num) {
@@ -108,6 +119,25 @@ export default {
           if (data.list.length !== 0) {
             this.ThreeNum = data.list[0]
           }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    GetParams () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_jianglao_canshu`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          data.dicList.forEach((item, index) => {
+            if (item.code === 'CANSHU1') {
+              this.params.params1 = (item.value * 1)
+            }
+            if (item.code === 'CANSHU2') {
+              this.params.params2 = (item.value * 1)
+            }
+            if (item.code === 'CANSHU3') {
+              this.params.params3 = (item.value * 1)
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }
@@ -128,6 +158,7 @@ export default {
           let no = 0
           let sav = 0
           this.InStock.forEach((item) => {
+            // item.websign = item.saltWaterWeight
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.status === 'submit') {
@@ -243,5 +274,8 @@ export default {
   height:14px;
   width:14px;
   margin-right: 5px;
+}
+.reqI{
+  color: red;
 }
 </style>

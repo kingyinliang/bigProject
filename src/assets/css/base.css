@@ -81,6 +81,9 @@ td{
 .is-opened .el-submenu__title{
   background-color: #000c17!important;
 }
+.reqI{
+  color: red;
+}
 
 .el-table td, .el-table th { padding: 6px 0 !important; }
 .el-tag--small { height: 22px !important; line-height: 20px !important; }
