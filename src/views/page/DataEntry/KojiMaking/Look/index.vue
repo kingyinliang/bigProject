@@ -141,6 +141,17 @@ export default {
         }
       })
     },
+    UpdateHeaderCreator (str, resolve) {
+      this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
     // 提交
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -182,6 +193,9 @@ export default {
             productLine: that.formHeader.processId
           }, str, resolve, reject)
         })
+        let net101 = new Promise((resolve, reject) => {
+          that.UpdateHeaderCreator(str, resolve)
+        })
         let net1 = new Promise((resolve, reject) => {
           that.$refs.craft.savestauts(resolve, reject)
         })
@@ -191,7 +205,7 @@ export default {
         let net3 = new Promise((resolve, reject) => {
           that.$refs.craft.savefeel(resolve, reject)
         })
-        Promise.all([net1, net2, net3, excSaveNet, textSaveNet]).then(function () {
+        Promise.all([net1, net2, net3, excSaveNet, textSaveNet, net101]).then(function () {
           that.$message.success(that.succmessage)
           that.GetheadList()
           that.isRedact = false

@@ -188,6 +188,17 @@ export default {
         }
       })
     },
+    UpdateHeaderCreator (str, resolve) {
+      this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('保存表头' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
+    },
     // 保存 or 提交
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -236,6 +247,9 @@ export default {
       let net100 = new Promise((resolve, reject) => {
         that.UpdateHeader(str, resolve)
       })
+      let net101 = new Promise((resolve, reject) => {
+        that.UpdateHeaderCreator(str, resolve)
+      })
       let net0 = new Promise((resolve, reject) => {
         that.$refs.material.savemains(resolve, reject)
       })
@@ -249,7 +263,7 @@ export default {
         that.$refs.material.savestauts(resolve, reject)
       })
       let net99
-      net99 = Promise.all([net100, net0, net1, net2, net3, excSaveNet, textSaveNet])
+      net99 = Promise.all([net100, net101, net0, net1, net2, net3, excSaveNet, textSaveNet])
       net99.then(function () {
         new Promise((resolve, reject) => {
           that.$refs.craft.updatezhu(resolve, reject)
