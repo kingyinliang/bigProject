@@ -81,6 +81,11 @@ export const BASICDATA_API = {
    */
   FINDORGBYPARENTID_API: HOST + '/sys/dept/findListByParent',
   /**
+   * @property {string} ADDORG_API 组织结构 按部门id查询子类 按权限
+   */
+  FINDORGBYPARENTID1_API: HOST + '/sys/dept/findListByPermissions',
+
+  /**
    * @property {string} FINDTEAM_API 组织结构 获取班组
    */
   FINDTEAM_API: HOST + '/sys/dept/findProductTeam',
@@ -968,6 +973,7 @@ export const KJM_API = {
   DOUMATERSUBMITSOY_API: HOST + '/kjm/bean/pulp/submit', // 原料 豆粕提交
   DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
   DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
+  DOUMATERHEADCREATOR_API: HOST + '/kjm/guard/headUpdate',
 
   DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
   DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表

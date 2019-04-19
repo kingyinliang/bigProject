@@ -20,21 +20,25 @@
         </template>
       </el-table-column>
       <el-table-column label="人员属性" width="130">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>人员属性</span>
+        </template>
         <template slot-scope="scope">
-          <div class="required">
-            <i class="reqI">*</i>
-            <el-select v-model="scope.row.userType" placeholder="请选择" size="small" :disabled="!isRedact" @change="userTypesele(scope.row)">
-              <el-option label="正式" value="正式"></el-option>
-              <el-option label="借调" value="借调"></el-option>
-              <el-option label="临时工" value="临时工"></el-option>
-            </el-select>
-          </div>
+          <el-select v-model="scope.row.userType" placeholder="请选择" size="small" :disabled="!isRedact" @change="userTypesele(scope.row)">
+            <el-option label="正式" value="正式"></el-option>
+            <el-option label="借调" value="借调"></el-option>
+            <el-option label="临时工" value="临时工"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="人员选择" :show-overflow-tooltip="true" width="300">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>人员选择</span>
+        </template>
         <template slot-scope="scope">
           <div class="required" style="min-height: 32px">
-            <i class="reqI">*</i>
             <span v-if="!isRedact" style="cursor: pointer">
               <i v-for="(item,index) in scope.row.userId" :key="index">{{item}}，</i>
             </span>
@@ -64,6 +68,11 @@
           <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.endDate" size="small" :disabled="!isRedact"></el-date-picker>
         </template>
       </el-table-column>
+      <el-table-column label="工作时长" width="100">
+        <template slot-scope="scope">
+          <p>{{workTime(scope.row.endDate, scope.row.startDate, scope.row)}}H</p>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" width="100">
         <template slot-scope="scope">
           <el-input v-model="scope.row.remark" size="small" :disabled="!isRedact"></el-input>
@@ -85,6 +94,7 @@
 
 <script>
 import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
+import { toDate } from '@/net/validate'
 import OfficialWorker from './officialWorker'
 import LoanedPersonnel from './loanedPersonnel'
 import TemporaryWorker from './temporaryWorker'
@@ -325,6 +335,13 @@ export default {
           num += item.userId.length
         })
         return num
+      }
+    },
+    workTime: function () {
+      return function (end, start, row) {
+        if (end && start && row.delFlag !== '1') {
+          return ((toDate(end) - toDate(start)) / 3600000).toFixed(2) * 1
+        }
       }
     }
   },

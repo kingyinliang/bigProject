@@ -322,6 +322,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
+            if (!this.plantList.factoryid) {
+              this.plantList.workshopid = res.data.typeList[0].deptId
+            }
           } else {
             this.$message.error(res.data.msg)
           }
