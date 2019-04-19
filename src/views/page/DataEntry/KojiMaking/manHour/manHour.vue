@@ -452,7 +452,7 @@ export default {
     GetParentline (id) {
       this.formHeader.deptId = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.deptId = data.childList
           } else {

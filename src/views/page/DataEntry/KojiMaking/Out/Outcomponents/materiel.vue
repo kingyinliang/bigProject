@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column label="数量" width="90" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{scope.row.amount = (scope.row.endValue*1 - scope.row.startValue*1) * 1000}}
+          {{scope.row.amount = ((scope.row.endValue*1 - scope.row.startValue*1) * 1000).toFixed(2)}}
         </template>
       </el-table-column>
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
@@ -176,7 +176,7 @@ export default {
     GetBrineTankNo (deptId) {
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
         factory: deptId.factory,
-        deptId: deptId.workShop,
+        dept_id: deptId.workShop,
         type: 'holder_type',
         holder_type: '011',
         currPage: 1,
@@ -222,7 +222,7 @@ export default {
     BrineNum: function () {
       let num = 0
       this.MaterielDate.forEach((item) => {
-        num = num + (item.delFlag === '0' ? item.amount : 0)
+        num = num + (item.delFlag === '0' ? item.amount * 1 : 0)
       })
       this.$emit('SetMeaterielNum', num)
       return num

@@ -18,13 +18,10 @@
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库酱醪量">
-        <template slot="header">
-          <i class="reqI">*</i>
-          <span>入库酱醪量</span>
-        </template>
         <template slot-scope="scope">
-          <p v-if="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{scope.row.sauceWeight? scope.row.sauceWeight : scope.row.sauceWeight = ((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3}}</p>
-          <el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <p>{{scope.row.sauceWeight = (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2)}}</p>
+          <!--<p v-show="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{(scope.row.websign === scope.row.saltWaterWeight? scope.row.sauceWeight = scope.row.sauceWeight : scope.row.sauceWeight =  (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2))}}</p>-->
+          <!--<el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>-->
         </template>
       </el-table-column>
       <el-table-column width="125" label="入库批次">
@@ -105,6 +102,11 @@ export default {
   mounted () {
     this.GetParams()
   },
+  watch: {
+    'BrineNum' (n, o) {
+      console.log(n)
+    }
+  },
   methods: {
     setBrineNum (num) {
       this.BrineNum = num
@@ -156,6 +158,7 @@ export default {
           let no = 0
           let sav = 0
           this.InStock.forEach((item) => {
+            // item.websign = item.saltWaterWeight
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.status === 'submit') {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <index :name="name"></index>
+    <index></index>
   </div>
 </template>
 

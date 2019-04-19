@@ -67,15 +67,15 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <el-tooltip class="item" effect="dark" :content="orderList[index].beanStatus" placement="top-start" v-if="name === 'Boiled'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].beanStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color':orderList[index].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index])">煮豆</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" :content="orderList[index].guardStatus" placement="top-start" v-if="name === 'Look'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].guardStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" :content="orderList[index].outStatus" placement="top-start" v-if="name === 'Out'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index].outStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index])">出曲</div>
                     </el-tooltip>
                   </div>
@@ -101,15 +101,15 @@
                     </div>
                   </div>
                   <div class="box-item-bottom">
-                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].beanStatus" placement="top-start" v-if="name === 'Boiled'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].beanStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].beanStatus === '不通过'? 'red' : ''}" @click="goPage('煮豆', orderList[index + 1])">煮豆</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].guardStatus" placement="top-start" v-if="name === 'Look'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].guardStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].guardStatus === '不通过'? 'red' : ''}" @click="goPage('看曲', orderList[index + 1])">看曲</div>
                     </el-tooltip>
                     <div class="box-item-bottom-split"></div>
-                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].outStatus" placement="top-start" v-if="name === 'Out'">
+                    <el-tooltip class="item" effect="dark" :content="orderList[index + 1].outStatus" placement="top-start">
                       <div class="box-item-bottom-item" :style="{'color': orderList[index + 1].outStatus === '不通过'? 'red' : ''}" @click="goPage('出曲', orderList[index + 1])">出曲</div>
                     </el-tooltip>
                   </div>
@@ -251,7 +251,7 @@
 <script lang="ts">
 import {BASICDATA_API, WHT_API, KJM_API} from '@/api/api'
 import {dateFormat} from '@/net/validate'
-import {Vue, Component, Watch, Prop} from 'vue-property-decorator'
+import {Vue, Component, Watch} from 'vue-property-decorator'
 import TemporaryWorker from '@/views/components/temporaryWorker.vue'
 import LoanedPersonnel from '@/views/components/loanedPersonnel.vue'
 import officialWorker from '@/views/components/officialWorker.vue'
@@ -268,7 +268,6 @@ import {House} from './entity/House.ts'
 })
 
 export default class Index extends Vue {
-  @Prop(String) name!:string
   // $refs: {
   //   temporaryWorker: TemporaryWorker,
   //   loanedPersonnel: LoanedPersonnel,
@@ -300,7 +299,6 @@ export default class Index extends Vue {
     this.getWorkshop(this.params.factoryId)
     this.getProcess(this.params.workshopId)
     this.getTree()
-    console.log(this.name)
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)

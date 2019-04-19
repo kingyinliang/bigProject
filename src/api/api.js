@@ -3,7 +3,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.13:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.23:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -84,6 +84,11 @@ export const BASICDATA_API = {
    * @property {string} ADDORG_API 组织结构 按部门id查询子类
    */
   FINDORGBYPARENTID_API: HOST + '/sys/dept/findListByParent',
+  /**
+   * @property {string} ADDORG_API 组织结构 按部门id查询子类 按权限
+   */
+  FINDORGBYPARENTID1_API: HOST + '/sys/dept/findListByPermissions',
+
   /**
    * @property {string} FINDTEAM_API 组织结构 获取班组
    */
