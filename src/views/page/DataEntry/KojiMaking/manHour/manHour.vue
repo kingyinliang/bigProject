@@ -457,7 +457,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.deptId = data.childList
-            this.formHeader.deptId = data.typeList[0].deptId
+            this.formHeader.deptId = data.childList[0].deptId
           } else {
             this.$message.error(data.msg)
           }

@@ -125,7 +125,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            if (this.PkgworkShop === '' && this.workshop.length === 1) {
+            if (this.PkgworkShop === '' && this.plantList.workShop === '') {
               this.plantList.workShop = this.workshop[0].deptId
             } else {
               this.plantList.workShop = this.PkgworkShop
