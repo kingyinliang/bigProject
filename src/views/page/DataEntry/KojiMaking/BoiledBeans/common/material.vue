@@ -654,10 +654,10 @@ export default {
         this.$message.error('种曲批次长度应为10位')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
-        this.$message.error('请选择小麦粉物料编码')
-        return false
-      }
+      // if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
+      //   this.$message.error('请选择小麦粉物料编码')
+      //   return false
+      // }
       if (this.wheatList.length === 0) {
         ty = false
         this.$message.error('请填写小麦粉数据')
