@@ -139,6 +139,18 @@ export default {
       return newArr
     },
     goPage (page, item) {
+      let flag = false
+      if (page === '煮豆') {
+        flag = this.isAuth('kjm:bean:material:list')
+      } else if (page === '看曲') {
+        flag = this.isAuth('kjm:guard:list')
+      } else if (page === '出曲') {
+        flag = this.isAuth('sys:kjmOutMaterial:list')
+      }
+      if (!flag) {
+        this.$message.error('无权限查看' + page)
+        return
+      }
       this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)
       this.$store.commit('common/updateZQParamsOrderId', item.orderId)
       let name = ''
