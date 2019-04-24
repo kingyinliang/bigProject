@@ -13,7 +13,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
+                  <el-select v-model="params.workShop" class="selectwpx" style="width:140px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
@@ -64,7 +64,7 @@ export default {
     return {
       params: {
         factoryId: '',
-        workshopId: ''
+        workShop: ''
       },
       factoryList: [],
       workshopList: [],
@@ -85,7 +85,7 @@ export default {
         this.$message.error('请选择工厂')
         return
       }
-      if (this.params.workshopId === '') {
+      if (this.params.workShop === '') {
         this.$message.error('请选择车间')
         return
       }
@@ -149,13 +149,13 @@ export default {
     // 根据工厂获车间
     getWorkshop (id) {
       this.workshopList = []
-      this.params.workshopId = ''
+      this.params.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshopList = res.data.typeList
-            if (!this.params.workshopId) {
-              this.params.workshopId = res.data.typeList[0].deptId
+            if (!this.params.workShop) {
+              this.params.workShop = res.data.typeList[0].deptId
             }
           } else {
             this.$message.error(res.data.msg)
