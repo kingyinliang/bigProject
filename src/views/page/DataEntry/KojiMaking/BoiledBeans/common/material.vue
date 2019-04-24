@@ -793,7 +793,7 @@ export default {
       let msg = false
       this.wheatList.forEach((item, index) => {
         if (item.holderName === row.holderName) { // 是否有未结束的
-          if (item.endWeight === '' || !item.endWeight) {
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
             msg = true
             return false
           }
@@ -838,14 +838,13 @@ export default {
       let msg = true
       this.wheatList.forEach((item, index) => {
         if (item.holderName === row.holderName) { // 是否有未结束的
-          if (item.endWeight === '' || !item.endWeight) {
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
             msg = false
             wheatprop = item
             return false
           }
         }
       })
-      console.log(wheatprop)
       if (msg === false) {
         this.MTitle = row.holderName
         this.holderIdomg = row.holderId
@@ -891,7 +890,7 @@ export default {
     },
     // 小麦领用保存
     savewheat (formName) {
-      if (!this.wheat.startWeight || !this.wheat.endWeight) {
+      if (!this.wheat.startWeight || (!this.wheat.endWeight && this.wheat.endWeight !== 0)) {
         this.$set(this.wheat, 'userWeight', 0)
       } else {
         this.$set(this.wheat, 'userWeight', this.wheat.startWeight - this.wheat.endWeight)
