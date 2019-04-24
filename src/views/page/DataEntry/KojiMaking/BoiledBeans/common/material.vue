@@ -1072,6 +1072,9 @@ export default {
               // 原有行
               currentRecord = this.soyList.filter(data => data.id === this.chusoy.id)
             }
+            let materstrchai = []
+            materstrchai = this.chusoy.soyMaterialstr.split(' ')
+            let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
             if (currentRecord && currentRecord.length > 0) {
               Object.assign(currentRecord[0], {
                 batch: this.chusoy.batch,
@@ -1081,7 +1084,9 @@ export default {
                 useType: '出罐',
                 unit: 'KG',
                 pulpHolderId: this.chusoy.pulpHolderId,
-                pulpHolderName: this.chusoy.pulpHolderName
+                pulpHolderName: this.chusoy.pulpHolderName,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
             } else {
               this.soyList.push({
@@ -1103,7 +1108,9 @@ export default {
                 remark: '',
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
               this.$nextTick(function () {
                 this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
