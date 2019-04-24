@@ -33,7 +33,7 @@
               <span>生产批次</span>
             </template>
             <template slot-scope="scope">
-              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <el-input maxlength="12" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="物料批次" width="130px">
