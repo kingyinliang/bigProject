@@ -654,10 +654,10 @@ export default {
         this.$message.error('种曲批次长度应为10位')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
-        this.$message.error('请选择小麦粉物料编码')
-        return false
-      }
+      // if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
+      //   this.$message.error('请选择小麦粉物料编码')
+      //   return false
+      // }
       if (this.wheatList.length === 0) {
         ty = false
         this.$message.error('请填写小麦粉数据')
@@ -793,7 +793,7 @@ export default {
       let msg = false
       this.wheatList.forEach((item, index) => {
         if (item.holderName === row.holderName) { // 是否有未结束的
-          if (item.endWeight === '' || !item.endWeight) {
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
             msg = true
             return false
           }
@@ -838,14 +838,13 @@ export default {
       let msg = true
       this.wheatList.forEach((item, index) => {
         if (item.holderName === row.holderName) { // 是否有未结束的
-          if (item.endWeight === '' || !item.endWeight) {
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
             msg = false
             wheatprop = item
             return false
           }
         }
       })
-      console.log(wheatprop)
       if (msg === false) {
         this.MTitle = row.holderName
         this.holderIdomg = row.holderId
@@ -891,7 +890,7 @@ export default {
     },
     // 小麦领用保存
     savewheat (formName) {
-      if (!this.wheat.startWeight || !this.wheat.endWeight) {
+      if (!this.wheat.startWeight || (!this.wheat.endWeight && this.wheat.endWeight !== 0)) {
         this.$set(this.wheat, 'userWeight', 0)
       } else {
         this.$set(this.wheat, 'userWeight', this.wheat.startWeight - this.wheat.endWeight)
@@ -1073,6 +1072,9 @@ export default {
               // 原有行
               currentRecord = this.soyList.filter(data => data.id === this.chusoy.id)
             }
+            let materstrchai = []
+            materstrchai = this.chusoy.soyMaterialstr.split(' ')
+            let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
             if (currentRecord && currentRecord.length > 0) {
               Object.assign(currentRecord[0], {
                 batch: this.chusoy.batch,
@@ -1082,7 +1084,9 @@ export default {
                 useType: '出罐',
                 unit: 'KG',
                 pulpHolderId: this.chusoy.pulpHolderId,
-                pulpHolderName: this.chusoy.pulpHolderName
+                pulpHolderName: this.chusoy.pulpHolderName,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
             } else {
               this.soyList.push({
@@ -1104,7 +1108,9 @@ export default {
                 remark: '',
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
               this.$nextTick(function () {
                 this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
