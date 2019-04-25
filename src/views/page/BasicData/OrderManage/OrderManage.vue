@@ -202,7 +202,7 @@ export default {
     // 同步
     sapOrderUpdate () {
       this.loading = true
-      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
+      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET').then(({data}) => {
         if (data.code === 0) {
           this.orderTime = setInterval(() => {
             this.GetOrderUpdateStatus()

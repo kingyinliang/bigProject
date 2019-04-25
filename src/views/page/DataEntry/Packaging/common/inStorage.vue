@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="clearfix">
-    <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ===''))" style="float: right">新增</el-button>
+    <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact)" style="float: right">新增</el-button>
   </div>
   <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
