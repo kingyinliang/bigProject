@@ -116,16 +116,16 @@ export default {
             newArr.push(item)
           }
         } else if (this.params.type === '入罐') {
-          if (item.outStatus === 'submit' || item.outStatus === 'saved' || item.outStatus === '已同步') {
+          if (item.kgtStatus === 'submit' || item.kgtStatus === 'saved' || item.kgtStatus === '已同步') {
             newArr.push(item)
           }
         }
       })
       if (this.params.type === '入罐') {
         newArr.sort(function (a, b) {
-          var order = ['saved', '已同步']
+          var order = ['saved', '已同步', 'submit']
           if (b.inEndTimeLength - a.inEndTimeLength === 0) {
-            return order.indexOf(a.outStatus) - order.indexOf(b.outStatus)
+            return order.indexOf(a.kgtStatus) - order.indexOf(b.kgtStatus)
           } else {
             return b.inEndTimeLength - a.inEndTimeLength
           }
