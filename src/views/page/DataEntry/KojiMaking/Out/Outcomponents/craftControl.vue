@@ -107,26 +107,34 @@ export default {
   mounted () {
   },
   methods: {
-    GetsaltWaterUsed (num) {
-      let a = {}
-      a.a = num
-      console.log('------------------------------')
-      console.log(num)
-      this.CraftControlDate.saltWaterUsed = a.a + ''
-      this.$forceUpdate()
-    },
+    // GetsaltWaterUsed (num) {
+    //   let a = {}
+    //   a.a = num
+    //   console.log('------------------------------')
+    //   console.log(num)
+    //   this.CraftControlDate.saltWaterUsed = a.a + ''
+    //   this.$forceUpdate()
+    // },
     // 获取工艺数据
     GetTechList (formHeader) {
       this.$http(`${KJM_API.OUTTECHLIST_API}`, 'POST', {
         orderHouseId: formHeader.id
       }).then(({data}) => {
         if (data.code === 0) {
+          // let obj = data.list[0]
+          // if (data.list[0]) {
+          //   for (let item in obj) {
+          //     this.CraftControlDate[item] = obj[item]
+          //   }
+          // } else {
+          //   this.CraftControlDate.saltWaterUsed = '0'
+          //   this.CraftControlDate.windSpeedUnit = 'R/min'
+          // }
           this.CraftControlDate = data.list[0] ? data.list[0] : {
             saltWaterUsed: '0',
             windSpeedUnit: 'R/min'
           }
           let CraftControlStatus = this.CraftControlDate.status ? this.CraftControlDate.status : ''
-          console.log(CraftControlStatus)
           this.$emit('GetCraftControlStatus', CraftControlStatus)
         } else {
           this.$message.error(data.msg)
@@ -148,7 +156,6 @@ export default {
       this.CraftControlDate.orderHouseId = this.formHeader.id
       this.$http(`${KJM_API.OUTTECHSAVE_API}`, 'POST', [this.CraftControlDate]).then(({data}) => {
         if (data.code === 0) {
-          this.isRedact = false
           if (str === 'saved') {
             this.GetTechList(this.formHeader)
             this.$message.success('保存成功')
