@@ -5,7 +5,7 @@
       <el-card class="searchCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
-            <form-header :formHeader="formHeader" :isRedact="isRedact"></form-header>
+            <form-header :formHeader="formHeader" :isRedact="isRedact" :pro="true" ref="formheader"></form-header>
           </el-col>
           <el-col style="width: 210px">
             <el-row style="float:right;margin-bottom: 13px">
@@ -14,7 +14,7 @@
             </el-row>
             <el-row v-if="isRedact" style="float:right;">
               <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-              <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+              <el-button type="primary" size="small" @click="Submitdialog">提交</el-button>
             </el-row>
             <el-row style="position: absolute;right: 0;top: 100px;">
               <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
@@ -85,6 +85,19 @@
         </el-tabs>
       </el-card>
     </div>
+    <el-dialog
+      width="400px"
+      title="分批提交"
+      :close-on-click-modal="false"
+      :visible.sync="visible">
+      <p style="margin-bottom: 20px;font-size: 18px">本次提交是否提交全部数据</p>
+      <el-radio v-model="submitRadio" label="1" style="font-size: 18px">紧急提交</el-radio>
+      <el-radio v-model="submitRadio" label="2">正常提交</el-radio>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">取消</el-button>
+        <el-button type="primary" @click="SubmitForm()">确定</el-button>
+      </span>
+    </el-dialog>
   </el-col>
 </template>
 
@@ -122,7 +135,9 @@ export default {
         basicUnitName: '',
         ratio: undefined
       },
-      activeName: '1'
+      activeName: '1',
+      visible: false,
+      submitRadio: '2'
     }
   },
   mounted () {
@@ -162,6 +177,7 @@ export default {
         this.orderStatus = data.list[0].orderStatus
         this.GetRatio()
         this.$refs.listbom.GetPot()
+        this.$refs.formheader.getLin(this.formHeader.workShop)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.workerref.GetTeam()
         this.$refs.workerref.getTree(this.formHeader.factory)
@@ -206,14 +222,35 @@ export default {
       })
     },
     // 保存 or 提交
+    Submitdialog () {
+      this.visible = true
+    },
     SubmitForm () {
-      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      if (!this.$refs.instorage.inrul()) {
+        return false
+      }
+      if (this.submitRadio === '2') {
         this.savedOrSubmitForm('submit')
-      })
+      } else if (this.submitRadio === '1') {
+        let that = this
+        let net0 = new Promise((resolve, reject) => {
+          that.UpdateformHeader('saved', resolve)
+        })
+        let net1 = new Promise((resolve, reject) => {
+          that.$refs.instorage.submitIn(that.formHeader.orderId, 'saved', resolve)
+        })
+        let SubmitNet = Promise.all([net0, net1])
+        SubmitNet.then(() => {
+          that.isRedact = false
+          that.visible = false
+          that.GetOrderList()
+          that.$message.success('提交成功')
+        }).catch(() => {
+          that.$message.error('网络请求失败，请刷新重试')
+          that.isRedact = false
+          that.visible = false
+        })
+      }
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
@@ -279,15 +316,18 @@ export default {
           let net12 = Promise.all([net8, net9, net10])
           net12.then(() => {
             that.isRedact = false
+            that.visible = false
             that.GetOrderList()
             that.$message.success('提交成功')
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
             that.isRedact = false
+            that.visible = false
           })
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')
           that.isRedact = false
+          that.visible = false
         })
       } else {
         let net11
@@ -303,9 +343,11 @@ export default {
           that.isRedact = false
           that.GetOrderList()
           that.$message.success('保存成功')
+          that.visible = false
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')
           that.isRedact = false
+          that.visible = false
         })
       }
     },

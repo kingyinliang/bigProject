@@ -59,7 +59,7 @@
           <span class="iconfont">&#xe608;</span> <span class="lh32px">过程监控数据记录</span>
           <el-button type="primary" size="small" style="float: right" @click="addlishui" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')"> + 新增</el-button>
         </div>
-        <el-table border header-row-class-name="tableHead" :data="lishuiList" :row-class-name="rowDelFlag">
+        <el-table ref="runshuiTable" max-height="267" border header-row-class-name="tableHead" :data="lishuiList" :row-class-name="rowDelFlag">
           <el-table-column label="序号" type="index" width="50"></el-table-column>
           <el-table-column width="205">
             <template slot="header">
@@ -148,7 +148,7 @@
           <span class="lh32px"><span class="iconfont">&#xe608;</span> 过程监控数据记录</span>
           <el-button type="primary" @click="addzhengzhu" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" size="small" style="float: right"> + 新增</el-button>
         </div>
-        <el-table border header-row-class-name="tableHead" :data="zhengzhuList" :row-class-name="rowDelFlag">
+        <el-table ref="zhengzhuTable" max-height="267" border header-row-class-name="tableHead" :data="zhengzhuList" :row-class-name="rowDelFlag">
           <el-table-column  width="195">
             <template slot="header">
               <i class="reqI">*</i>
@@ -234,7 +234,7 @@
         <el-button type="primary" size="small" @click="addhunhe" :disabled="!(isRedact && this.craftfrom.status !== 'submit' && this.craftfrom.status !== 'checked')" style="float: right"> + 新增</el-button>
       </div>
       <div class="hunhearBox">
-        <el-table border header-row-class-name="tableHead" :data="hunheList" :row-class-name="rowDelFlag">
+        <el-table ref="hunheTable" max-height="267" border header-row-class-name="tableHead" :data="hunheList" :row-class-name="rowDelFlag">
           <el-table-column width="205">
             <template slot="header">
               <i class="reqI">*</i>
@@ -490,6 +490,9 @@ export default {
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       })
+      this.$nextTick(function () {
+        this.$refs.runshuiTable.bodyWrapper.scrollTop = this.$refs.runshuiTable.bodyWrapper.scrollHeight
+      })
     },
     addzhengzhu () {
       this.zhengzhuList.push({
@@ -508,6 +511,9 @@ export default {
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       })
+      this.$nextTick(function () {
+        this.$refs.zhengzhuTable.bodyWrapper.scrollTop = this.$refs.zhengzhuTable.bodyWrapper.scrollHeight
+      })
     },
     addhunhe () {
       this.hunheList.push({
@@ -521,6 +527,9 @@ export default {
         delFlag: '0',
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+      })
+      this.$nextTick(function () {
+        this.$refs.hunheTable.bodyWrapper.scrollTop = this.$refs.hunheTable.bodyWrapper.scrollHeight
       })
     },
     getList (formHeader) {
