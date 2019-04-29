@@ -43,6 +43,8 @@
         <el-input v-model="CraftControlDate.blendTempSix" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.blendTempSeven" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
         <el-input v-model="CraftControlDate.blendTempEight" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
+        <el-input v-model="CraftControlDate.blendTempNine" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
+        <el-input v-model="CraftControlDate.blendTempTen" :disabled="!(CraftControlDate.status !== 'submit')" size="small" placeholder="手工录入" style="width: 149px;margin-right: 17px"></el-input>
       </el-form-item>
       </el-row>
       <el-row>
@@ -92,7 +94,7 @@ export default {
     return {
       visible: false,
       CraftControlDate: {
-        saltWaterUsed: 0,
+        saltWaterUsed: '0',
         windSpeedUnit: 'R/min'
       },
       userlist: []
@@ -105,20 +107,34 @@ export default {
   mounted () {
   },
   methods: {
-    GetsaltWaterUsed (num) {
-      let a = num
-      this.CraftControlDate.saltWaterUsed = a
-      this.$forceUpdate()
-    },
+    // GetsaltWaterUsed (num) {
+    //   let a = {}
+    //   a.a = num
+    //   console.log('------------------------------')
+    //   console.log(num)
+    //   this.CraftControlDate.saltWaterUsed = a.a + ''
+    //   this.$forceUpdate()
+    // },
     // 获取工艺数据
     GetTechList (formHeader) {
       this.$http(`${KJM_API.OUTTECHLIST_API}`, 'POST', {
         orderHouseId: formHeader.id
       }).then(({data}) => {
         if (data.code === 0) {
-          this.CraftControlDate = data.list[0] ? data.list[0] : {}
+          // let obj = data.list[0]
+          // if (data.list[0]) {
+          //   for (let item in obj) {
+          //     this.CraftControlDate[item] = obj[item]
+          //   }
+          // } else {
+          //   this.CraftControlDate.saltWaterUsed = '0'
+          //   this.CraftControlDate.windSpeedUnit = 'R/min'
+          // }
+          this.CraftControlDate = data.list[0] ? data.list[0] : {
+            saltWaterUsed: '0',
+            windSpeedUnit: 'R/min'
+          }
           let CraftControlStatus = this.CraftControlDate.status ? this.CraftControlDate.status : ''
-          console.log(CraftControlStatus)
           this.$emit('GetCraftControlStatus', CraftControlStatus)
         } else {
           this.$message.error(data.msg)
@@ -140,7 +156,6 @@ export default {
       this.CraftControlDate.orderHouseId = this.formHeader.id
       this.$http(`${KJM_API.OUTTECHSAVE_API}`, 'POST', [this.CraftControlDate]).then(({data}) => {
         if (data.code === 0) {
-          this.isRedact = false
           if (str === 'saved') {
             this.GetTechList(this.formHeader)
             this.$message.success('保存成功')
@@ -157,7 +172,7 @@ export default {
       let ty = true
       let windSpeed = this.CraftControlDate.windSpeedOne || this.CraftControlDate.windSpeedTwo || this.CraftControlDate.windSpeedThree || this.CraftControlDate.windSpeedFour || this.CraftControlDate.windSpeedFive
       let blendTemp = this.CraftControlDate.blendTempOne || this.CraftControlDate.blendTempTwo || this.CraftControlDate.blendTempThree || this.CraftControlDate.blendTempFour || this.CraftControlDate.blendTempFive
-      let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive || this.CraftControlDate.outTempSix || this.CraftControlDate.outTempSeven || this.CraftControlDate.outTempEight
+      let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive || this.CraftControlDate.outTempSix || this.CraftControlDate.outTempSeven || this.CraftControlDate.outTempEight || this.CraftControlDate.outTempNine || this.CraftControlDate.outTempTen
       if (!windSpeed) {
         ty = false
         this.$message.error('工艺控制风速必填项未填')

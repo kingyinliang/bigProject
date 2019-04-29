@@ -104,7 +104,6 @@ export default {
   },
   watch: {
     'BrineNum' (n, o) {
-      console.log(n)
     }
   },
   methods: {
