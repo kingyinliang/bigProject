@@ -139,7 +139,7 @@ import {BASICDATA_API, KJM_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
 export default {
-  name: 'manHour',
+  name: 'index',
   data () {
     return {
       uid: '',
