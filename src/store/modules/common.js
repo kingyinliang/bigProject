@@ -74,6 +74,17 @@ export default {
         orderNo: '',
         orderId: ''
       }
+    },
+    SqueezeWorkshop: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      // 布浆线
+      clothLineId: '',
+      clothLineName: '',
+      // 领用日期
+      applyDate: ''
     }
   },
   mutations: {
@@ -184,7 +195,11 @@ export default {
     },
     updateZQCheckParamsOrderId (state, name) {
       state.ZQWorkshop.checkParams.orderId = name
-    }
+    },
     /** 制曲 end */
+    /** 压榨 start */
+    updateSqueezeWorkshop (state, name) {
+      state.SqueezeWorkshop = name
+    }
   }
 }
