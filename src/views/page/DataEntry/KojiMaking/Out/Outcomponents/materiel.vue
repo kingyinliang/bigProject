@@ -141,8 +141,10 @@ export default {
     SaveOrSubmitMateriel (str, resolve, reject) {
       this.MaterielDate.forEach((item) => {
         item.orderHouseId = this.formHeader.id
-        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
-        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+        if (item.material) {
+          item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+          item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+        }
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
         } else {
@@ -196,7 +198,9 @@ export default {
         status: '',
         orderHouseId: '',
         outDate: '',
+        material: '',
         materialCode: '',
+        materialName: '',
         saltWaterHolderId: '',
         startValue: '',
         endValue: '',
@@ -224,6 +228,8 @@ export default {
       this.MaterielDate.forEach((item) => {
         num = num + (item.delFlag === '0' ? item.amount * 1 : 0)
       })
+      console.log('原料领用')
+      console.log(num)
       this.$emit('SetMeaterielNum', num)
       return num
     }

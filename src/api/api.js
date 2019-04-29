@@ -1037,3 +1037,10 @@ export const KJM_API = {
    */
   KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
 }
+
+/**
+ * 压榨API
+ */
+export const SQU_API = {
+
+}

@@ -33,7 +33,7 @@
               <span>生产批次</span>
             </template>
             <template slot-scope="scope">
-              <el-input maxlength="10" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
+              <el-input maxlength="12" v-model="scope.row.productBatch" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="物料批次" width="130px">
@@ -70,12 +70,12 @@
     <el-card>
       <div class="solecontent">
         <p class="lh32px">小麦粉用量：</p><p class="input_bommom">{{this.wheatUseNum}}</p>
-        <p class="lh32px" style="margin-left:20px">小麦：</p>
+        <!-- <p class="lh32px" style="margin-left:20px">小麦：</p>
         <p>
           <el-select v-model="wheatliang" placeholder="请选择" :disabled="!isRedact" size="small">
             <el-option :label="item.code +' '+ item.value" v-for="(item, index) in wheatShort" :key="index" :value="item.code +' '+ item.value"></el-option>
           </el-select>
-        </p>
+        </p> -->
         <el-button type="text" class="readyshiftBtn" name="wheatar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="wheatarBox">
@@ -105,7 +105,8 @@
               </el-popover>
             </div>
             <div style="width:100%; text-align:center">
-              <el-button class="boxButton" @click="addwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:88px; float:initial;">立即领用</el-button>
+              <el-button class="boxButton" @click="startwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:75px; float:initial; line-height:30px; height:30px;">开始领用</el-button>
+              <el-button class="boxButton" @click="endwheat(sole)" :disabled="!isRedact" style="margin:15px auto; width:75px; float:initial; line-height:30px; height:30px;">结束领用</el-button>
             </div>
           </el-col>
         </el-row>
@@ -135,12 +136,12 @@
     <el-card>
       <div class="solecontent">
         <p class="lh32px">豆粕用量：</p><p class="input_bommom">{{soyUseNum}}</p>
-        <p class="lh32px" style="margin-left:20px">豆粕：</p>
+        <!-- <p class="lh32px" style="margin-left:20px">豆粕：</p>
         <p>
           <el-select v-model="soyliang" placeholder="请选择" :disabled="!isRedact" size="small">
             <el-option :label="item.code +' '+ item.value" v-for="(item, index) in soyShort" :key="index" :value="item.code +' '+ item.value"></el-option>
           </el-select>
-        </p>
+        </p> -->
         <el-button type="text" class="readyshiftBtn" name="soyar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="soyarBox">
@@ -176,6 +177,11 @@
         </el-row>
         <el-table border ref="pulpTable" max-height="275" header-row-class-name="tableHead" :data="soyList" @row-dblclick="editsoy" :row-class-name="rowDelFlag" style="margin-top:10px">
           <el-table-column label="日期" prop="pulpDate" width="110"></el-table-column>
+          <el-table-column label="物料" width="190">
+            <template slot-scope="scope">
+              {{scope.row.materialCode}} {{scope.row.materialName}}
+            </template>
+          </el-table-column>
           <el-table-column label="领用粮仓" prop="foodHolderName" width="100"></el-table-column>
           <el-table-column label="豆粕仓" prop="pulpHolderName" width="130"></el-table-column>
           <el-table-column label="批次" prop="batch" width="110"></el-table-column>
@@ -198,12 +204,47 @@
       <audit-log></audit-log>
     </el-card>
     <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai" width="450px">
+      <el-form :model="wheat" size="small" :rules="wheatrulestar" ref="wheatstar">
+        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
+          <el-select v-model="wheat.whtBatch" placeholder="请选择">
+            <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
+        <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
+          <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
+        <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleMai = false">取 消</el-button>
+        <el-button type="primary" @click="savewheat('wheatstar')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai2" width="450px">
+      <el-form :model="wheat" size="small" :rules="wheatrulend" ref="wheatend">
+        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">{{wheat.whtBatch}}</el-form-item>
+        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
+        <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
+          <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
+        <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleMai2 = false">取 消</el-button>
+        <el-button type="primary" @click="savewheat('wheatend')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai3" width="450px">
       <el-form :model="wheat" size="small" :rules="wheatrules" ref="wheat">
         <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
           <el-select v-model="wheat.whtBatch" placeholder="请选择">
             <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
         <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
@@ -215,12 +256,17 @@
         <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisibleMai = false">取 消</el-button>
+        <el-button @click="dialogFormVisibleMai3 = false">取 消</el-button>
         <el-button type="primary" @click="savewheat('wheat')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="DRTitle" :visible.sync="dialogFormVisibleDouRu" width="450px">
       <el-form :model="rusoy" size="small" :rules="rusoyrules" ref="rusoy">
+        <el-form-item label="领用物料" :label-width="formLabelWidth" prop="soyMaterialstr">
+          <el-select v-model="rusoy.soyMaterialstr" placeholder="请选择" size="small">
+            <el-option :label="item.code +' '+ item.value" v-for="(item, index) in soyShort" :key="index" :value="item.code +' '+ item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="领用粮仓" :label-width="formLabelWidth" prop="foodHolderId">
           <el-select v-model="rusoy.foodHolderId">
             <el-option v-for='sole in DouCangList' :key="sole.holderId" :value="sole.holderId" :label="sole.holderName"></el-option>
@@ -252,6 +298,9 @@
             <el-option v-for='sole in pulpPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="物料批次" :label-width="formLabelWidth">
+          <el-input v-model="chusoy.soyMaterialstr" disabled></el-input>
+        </el-form-item>
         <el-form-item label="起始数" :label-width="formLabelWidth">
           <el-input type="number" v-model.number="chusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
@@ -280,6 +329,8 @@ export default {
       chartLine: null,
       topstatus: '',
       dialogFormVisibleMai: false,
+      dialogFormVisibleMai2: false,
+      dialogFormVisibleMai3: false,
       dialogFormVisibleDouChu: false,
       dialogFormVisibleDouRu: false,
       formLabelWidth: '100px',
@@ -294,6 +345,21 @@ export default {
         name: ''
       },
       wheat: {},
+      wheatrulestar: {
+        whtBatch: [
+          {required: true, message: '请选择批次', trigger: 'change'}
+        ],
+        startWeight: [
+          {required: true, message: '必填', trigger: 'blur'},
+          {type: 'number', message: '必须为数字'}
+        ]
+      },
+      wheatrulend: {
+        endWeight: [
+          {required: true, message: '必填', trigger: 'blur'},
+          {type: 'number', message: '必须为数字'}
+        ]
+      },
       wheatrules: {
         startWeight: [
           {required: true, message: '必填', trigger: 'blur'},
@@ -325,6 +391,9 @@ export default {
       DouCangList: '', // 豆粕粮仓list
       rusoy: {},
       rusoyrules: {
+        soyMaterialstr: [
+          { required: true, message: '请选择物料', trigger: 'change' }
+        ],
         batch: [
           { required: true, message: '必填', trigger: 'blur' },
           { min: 10, max: 10, message: '长度为10位', trigger: 'blur' }
@@ -339,7 +408,7 @@ export default {
       materialShort: '',
       wheatliang: '',
       wheatShort: '',
-      soyliang: '',
+      // soyliang: '',
       soyShort: '',
       pulpListPici: '',
       wheatListPici: '',
@@ -387,19 +456,26 @@ export default {
         item.materialCode = this.wheatliang
       })
     },
-    'soyliang' () {
-      this.soyList.map((item) => {
-        item.materialCode = this.soyliang
-      })
-    },
+    // 'soyliang' () {
+    //   this.soyList.map((item) => {
+    //     item.materialCode = this.soyliang
+    //   })
+    // },
     'wheat.whtBatch' () {
       if (this.wheat.whtBatch && this.wheat.whtBatch !== '') {
         this.wheat.startWeight = this.MaiHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.wheat.whtBatch)['amount']
+        let part = this.MaiHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.wheat.whtBatch)
+        this.wheat.materialCode = part['materialCode']
+        this.wheat.materialName = part['materialName']
       }
     },
     'chusoy.batch' () {
       if (this.chusoy.batch && this.chusoy.batch !== '') {
         this.chusoy.startWeight = this.DouHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.chusoy.batch)['amount']
+        let part = this.DouHoldList.find(item => item.holderId === this.holderIdomg).pici.find(item => item.batch === this.chusoy.batch)
+        this.chusoy.materialCode = part['materialCode']
+        this.chusoy.materialName = part['materialName']
+        this.chusoy.soyMaterialstr = part['materialCode'] + ' ' + part['materialName']
       }
     }
   },
@@ -502,24 +578,24 @@ export default {
         this.chartPie.resize()
       })
     },
-    GetrealTime (formHeader) {
-      this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
-        if (data.code === 0) {
-          this.pulpListPici = data.listInfo
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    GetrealWheatTime (formHeader) {
-      this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
-        if (data.code === 0) {
-          this.wheatListPici = data.listInfo
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
+    // GetrealTime (formHeader) {
+    //   this.$http(`${KJM_API.DOUMATERREALTIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
+    //     if (data.code === 0) {
+    //       this.pulpListPici = data.listInfo
+    //     } else {
+    //       this.$message.error(data.msg)
+    //     }
+    //   })
+    // },
+    // GetrealWheatTime (formHeader) {
+    //   this.$http(`${KJM_API.DOUMATERREALWHEATIME_API}`, 'POST', {workShop: formHeader.workShop}).then(({data}) => {
+    //     if (data.code === 0) {
+    //       this.wheatListPici = data.listInfo
+    //     } else {
+    //       this.$message.error(data.msg)
+    //     }
+    //   })
+    // },
     GetmaterialZhong () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_QULIAO`, 'POST').then(({data}) => {
         if (data.code === 0) {
@@ -578,19 +654,19 @@ export default {
         this.$message.error('种曲批次长度应为10位')
         return false
       }
-      if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
-        this.$message.error('请选择小麦粉物料编码')
-        return false
-      }
+      // if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
+      //   this.$message.error('请选择小麦粉物料编码')
+      //   return false
+      // }
       if (this.wheatList.length === 0) {
         ty = false
         this.$message.error('请填写小麦粉数据')
         return false
       }
-      if (!this.soyliang || this.soyliang === 0 || this.soyliang.trim() === '') {
-        this.$message.error('请选择豆粕物料编码')
-        return false
-      }
+      // if (!this.soyliang || this.soyliang === 0 || this.soyliang.trim() === '') {
+      //   this.$message.error('请选择豆粕物料编码')
+      //   return false
+      // }
       if (this.soyList.length === 0) {
         ty = false
         this.$message.error('请填写豆粕数据')
@@ -713,76 +789,137 @@ export default {
       this.materialList.splice(this.materialList.indexOf(row), 1)
     },
     // 小麦领用
-    addwheat (row) {
-      this.MTitle = row.holderName
-      this.holderIdomg = row.holderId
-      // 批次下拉
-      this.wheatPiArray = []
-      this.wheatListPici.map((item) => {
-        if (item.holderId === row.holderId) {
-          this.wheatPiArray.push(item)
+    startwheat (row) {
+      let msg = false
+      this.wheatList.forEach((item, index) => {
+        if (item.holderName === row.holderName) { // 是否有未结束的
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
+            msg = true
+            return false
+          }
         }
       })
-      this.wheat = {
-        uid: this.uuid(),
-        id: '',
-        orderHouseId: this.formHeader.orderHouseId,
-        status: this.formHeader.submitStatus,
-        useDate: this.formHeader.inKjmDate,
-        materialCode: this.wheatliang,
-        materialName: '',
-        holderId: row.holderId,
-        holderName: row.holderName,
-        whtBatch: '',
-        startWeight: '',
-        endWeight: '',
-        remark: '',
-        delFlag: '0',
-        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
-        unit: 'KG'
+      if (msg === false) {
+        this.MTitle = row.holderName
+        this.holderIdomg = row.holderId
+        // 批次下拉
+        this.wheatPiArray = []
+        this.wheatListPici.map((item) => {
+          if (item.holderId === row.holderId) {
+            this.wheatPiArray.push(item)
+          }
+        })
+        this.wheat = {
+          uid: this.uuid(),
+          id: '',
+          orderHouseId: this.formHeader.orderHouseId,
+          status: this.formHeader.submitStatus,
+          useDate: this.formHeader.inKjmDate,
+          materialCode: row.materialCode,
+          materialName: row.materialName,
+          holderId: row.holderId,
+          holderName: row.holderName,
+          whtBatch: '',
+          startWeight: '',
+          endWeight: '',
+          remark: '',
+          delFlag: '0',
+          changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+          changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+          unit: 'KG'
+        }
+        this.dialogFormVisibleMai = true
+      } else {
+        this.$message.error('请结束后开始')
       }
-      this.dialogFormVisibleMai = true
+    },
+    endwheat (row) {
+      let wheatprop
+      let msg = true
+      this.wheatList.forEach((item, index) => {
+        if (item.holderName === row.holderName) { // 是否有未结束的
+          if (item.endWeight === '' || (!item.endWeight && item.endWeight !== 0)) {
+            msg = false
+            wheatprop = item
+            return false
+          }
+        }
+      })
+      if (msg === false) {
+        this.MTitle = row.holderName
+        this.holderIdomg = row.holderId
+        // 批次下拉
+        this.wheatPiArray = []
+        this.wheatListPici.map((item) => {
+          if (item.holderId === row.holderId) {
+            this.wheatPiArray.push(item)
+          }
+        })
+        this.wheat = {
+          uid: wheatprop.uid,
+          id: wheatprop.id,
+          orderHouseId: this.formHeader.orderHouseId,
+          status: this.formHeader.submitStatus,
+          useDate: this.formHeader.inKjmDate,
+          materialCode: wheatprop.materialCode,
+          materialName: wheatprop.materialName,
+          holderId: row.holderId,
+          holderName: row.holderName,
+          whtBatch: wheatprop.whtBatch,
+          startWeight: wheatprop.startWeight,
+          endWeight: '',
+          remark: '',
+          delFlag: '0',
+          changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+          changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+          unit: 'KG'
+        }
+        this.dialogFormVisibleMai2 = true
+      } else {
+        this.$message.error('请先领用')
+      }
     },
     // 小麦领用修改
     editwheat (row) {
       if (!this.isRedact || row.status === 'submit' || row.status === 'checked') {
         return
       }
-      this.dialogFormVisibleMai = true
+      this.dialogFormVisibleMai3 = true
       // this.wheat = row
       this.wheat = Object.assign({}, row)
     },
     // 小麦领用保存
     savewheat (formName) {
-      if (this.lnum <= 0) {
-        this.$message.error('领用数必须大于0')
+      if (!this.wheat.startWeight || (!this.wheat.endWeight && this.wheat.endWeight !== 0)) {
+        this.$set(this.wheat, 'userWeight', 0)
       } else {
-        this.$set(this.wheat, 'userWeight', this.lnum)
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.dialogFormVisibleMai = false
-            let currentRecord = []
-            if (this.wheat.hasOwnProperty('uid')) {
-              // 新增行
-              currentRecord = this.wheatList.filter(data => data.uid === this.wheat.uid)
-            } else {
-              // 原有行
-              currentRecord = this.wheatList.filter(data => data.id === this.wheat.id)
-            }
-            if (currentRecord && currentRecord.length > 0) {
-              Object.assign(currentRecord[0], this.wheat)
-            } else {
-              this.wheatList.push(this.wheat)
-              this.$nextTick(function () {
-                this.$refs.wheatTable.bodyWrapper.scrollTop = this.$refs.wheatTable.bodyWrapper.scrollHeight
-              })
-            }
-          } else {
-            return false
-          }
-        })
+        this.$set(this.wheat, 'userWeight', this.wheat.startWeight - this.wheat.endWeight)
       }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.dialogFormVisibleMai = false
+          this.dialogFormVisibleMai2 = false
+          this.dialogFormVisibleMai3 = false
+          let currentRecord = []
+          if (this.wheat.hasOwnProperty('uid')) {
+            // 新增行
+            currentRecord = this.wheatList.filter(data => data.uid === this.wheat.uid)
+          } else {
+            // 原有行
+            currentRecord = this.wheatList.filter(data => data.id === this.wheat.id)
+          }
+          if (currentRecord && currentRecord.length > 0) {
+            Object.assign(currentRecord[0], this.wheat)
+          } else {
+            this.wheatList.push(this.wheat)
+            this.$nextTick(function () {
+              this.$refs.wheatTable.bodyWrapper.scrollTop = this.$refs.wheatTable.bodyWrapper.scrollHeight
+            })
+          }
+        } else {
+          return false
+        }
+      })
     },
     // 豆 入罐
     rusoyM (row) {
@@ -838,6 +975,10 @@ export default {
               // 原有行
               currentRecord = this.soyList.filter(data => data.id === this.rusoy.id)
             }
+            // 物料拆分 soyMaterialstr
+            let materstrchai = []
+            materstrchai = this.rusoy.soyMaterialstr.split(' ')
+            let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
             if (currentRecord && currentRecord.length > 0) {
               Object.assign(currentRecord[0], {
                 foodHolderId: this.rusoy.foodHolderId,
@@ -849,7 +990,10 @@ export default {
                 useType: '入罐',
                 unit: 'KG',
                 pulpHolderId: this.rusoy.pulpHolderId,
-                pulpHolderName: this.rusoy.pulpHolderName
+                pulpHolderName: this.rusoy.pulpHolderName,
+                soyMaterialstr: this.rusoy.soyMaterialstr,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
             } else {
               this.soyList.push({
@@ -871,7 +1015,10 @@ export default {
                 remark: '',
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+                soyMaterialstr: this.rusoy.soyMaterialstr,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
               this.$nextTick(function () {
                 this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
@@ -925,6 +1072,9 @@ export default {
               // 原有行
               currentRecord = this.soyList.filter(data => data.id === this.chusoy.id)
             }
+            let materstrchai = []
+            materstrchai = this.chusoy.soyMaterialstr.split(' ')
+            let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
             if (currentRecord && currentRecord.length > 0) {
               Object.assign(currentRecord[0], {
                 batch: this.chusoy.batch,
@@ -934,7 +1084,9 @@ export default {
                 useType: '出罐',
                 unit: 'KG',
                 pulpHolderId: this.chusoy.pulpHolderId,
-                pulpHolderName: this.chusoy.pulpHolderName
+                pulpHolderName: this.chusoy.pulpHolderName,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
             } else {
               this.soyList.push({
@@ -956,7 +1108,9 @@ export default {
                 remark: '',
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+                changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+                materialCode: materstrchai[0],
+                materialName: materstrName
               })
               this.$nextTick(function () {
                 this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
@@ -1005,13 +1159,6 @@ export default {
     },
     savewheats (resolve, reject) {
       this.wheatList.map((item) => {
-        if (item.materialCode !== undefined) {
-          let materstrchai = []
-          materstrchai = this.wheatliang.split(' ')
-          let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
-          this.$set(item, 'materialCode', materstrchai[0])
-          this.$set(item, 'materialName', materstrName)
-        }
         if (item.status === '' || item.status === undefined || item.status === 'saved' || item.status === 'noPass') {
           this.$set(item, 'status', this.formHeader.submitStatus)
         }
@@ -1040,13 +1187,13 @@ export default {
     },
     savepulps (resolve, reject) {
       this.soyList.map((item) => {
-        if (this.soyliang !== undefined) {
-          let materstrchai = []
-          materstrchai = this.soyliang.split(' ')
-          let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
-          this.$set(item, 'materialCode', materstrchai[0])
-          this.$set(item, 'materialName', materstrName)
-        }
+        // if (this.soyliang !== undefined) {
+        //   let materstrchai = []
+        //   materstrchai = this.soyliang.split(' ')
+        //   let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
+        //   this.$set(item, 'materialCode', materstrchai[0])
+        //   this.$set(item, 'materialName', materstrName)
+        // }
         if (item.status === '' || item.status === undefined || item.status === 'saved' || item.status === 'noPass') {
           this.$set(item, 'status', this.formHeader.submitStatus)
         }
@@ -1099,12 +1246,12 @@ export default {
           this.materialList = data.materialList
           this.wheatList = data.wheatList
           this.soyList = data.pulpList
-          if (this.wheatList.length !== 0) {
-            this.wheatliang = this.wheatList[0].materialCode + ' ' + this.wheatList[0].materialName
-          }
-          if (this.soyList.length !== 0) {
-            this.soyliang = this.soyList[0].materialCode + ' ' + this.soyList[0].materialName
-          }
+          // if (this.wheatList.length !== 0) {
+          //   this.wheatliang = this.wheatList[0].materialCode + ' ' + this.wheatList[0].materialName
+          // }
+          // if (this.soyList.length !== 0) {
+          //   this.soyliang = this.soyList[0].materialCode + ' ' + this.soyList[0].materialName
+          // }
           this.materialList.map((item) => {
             this.$set(item, 'materialCode', item.materialCode + ' ' + item.materialName)
             if (item.status === 'noPass') {
@@ -1129,6 +1276,7 @@ export default {
             }
           })
           this.soyList.forEach((item) => {
+            this.$set(item, 'soyMaterialstr', item.materialCode + ' ' + item.materialName)
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.status === 'submit') {
@@ -1175,7 +1323,6 @@ export default {
       }
     },
     delsoyRow (row) {
-      console.log(row)
       if (row.id === '') {
         this.soyList.splice(this.soyList.indexOf(row), 1)
       } else {

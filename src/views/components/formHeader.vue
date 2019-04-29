@@ -4,7 +4,13 @@
       <p class="el-input">{{formHeader.workShopName || ''}}</p>
     </el-form-item>
     <el-form-item label="产线：">
-      <p class="el-input">{{formHeader.productLineName || ''}}</p>
+      <p class="el-input" v-if="!pro">{{formHeader.productLineName || ''}}</p>
+      <p class="el-input" v-else>
+        <span v-if="formHeader.factory !== 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">{{formHeader.productLineName || ''}}</span>
+        <el-select v-model="formHeader.productLine" :disabled="!isRedact" v-else>
+          <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
+        </el-select>
+      </p>
     </el-form-item>
     <el-form-item label="订单号：">
       <p class="el-input">{{formHeader.orderNo || ''}}</p>
@@ -33,13 +39,17 @@
 </template>
 
 <script>
+import {BASICDATA_API} from '@/api/api'
 export default {
   name: 'formHeader',
   data () {
-    return {}
+    return {
+      Team: []
+    }
   },
   props: {
     formHeader: {},
+    pro: Boolean,
     isRedact: Boolean,
     updateProductDateCallback: Function
   },
@@ -48,6 +58,15 @@ export default {
   methods: {
     updateProductDate: function (val) {
       this.$emit('updateProductDateCallback', val)
+    },
+    getLin (id) {
+      this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
+        if (data.code === 0) {
+          this.Team = data.childList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     }
   },
   computed: {},
