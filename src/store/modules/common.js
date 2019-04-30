@@ -81,8 +81,8 @@ export default {
       workshopId: '',
       workshopName: '',
       // 布浆线
-      clothLineId: '',
-      clothLineName: '',
+      productLineId: '',
+      productLineName: '',
       // 领用日期
       applyDate: ''
     }
