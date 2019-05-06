@@ -3,10 +3,10 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.86:8080/xhqy-fc' // zl
+let HOST = 'http://10.10.1.35:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
-let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
+// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
 // let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
@@ -1046,5 +1046,10 @@ export const KJM_API = {
  * 压榨API
  */
 export const SQU_API = {
+
+  /**
+   * 物料领用 LIST
+   */
+  MATERIAL_LIST_API: HOST + '/prs/material/list'
 
 }
