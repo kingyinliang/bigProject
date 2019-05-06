@@ -111,8 +111,12 @@ export default {
       }
     }
   },
+  watch: {
+    'plantList.factory' (n, o) {
+      this.GetTeam(n)
+    }
+  },
   mounted () {
-    this.GetTeam()
     this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}, false, false, false).then(({data}) => {
       if (data.code === 0) {
         this.SerchSapList = data.list
@@ -126,7 +130,7 @@ export default {
   methods: {
     // 获取班组
     GetTeam () {
-      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {factory: this.plantList.factory}).then(({data}) => {
         if (data.code === 0) {
           this.Team = data.teamList
         } else {

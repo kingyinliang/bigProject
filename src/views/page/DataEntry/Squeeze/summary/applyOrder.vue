@@ -4,12 +4,19 @@
       <h3 style="color: rgba(0, 0, 0, 0.65);font-size: 14px;float: left">原汁信息</h3>
       <el-button type="primary" style="float: right" size="small" :disabled="!isRedact">申请订单</el-button>
     </el-row>
-    <el-table ref="table1" header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+    <el-table ref="table1" :data="OrderDate" header-row-class-name="tableHead" @selection-change="handleSelectionChange" border tooltip-effect="dark">
       <el-table-column type="selection" :selectable='checkboxApply' width="34"></el-table-column>
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>原汁罐号</span></template>
       </el-table-column>
-      <el-table-column label="是否混合罐" width="100"></el-table-column>
+      <el-table-column label="是否混合罐" width="110">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.material" placeholder="请选择" :disabled="isRedact" size="small">
+            <el-option label="是" value="是"></el-option>
+            <el-option label="否" value="否"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <el-table-column label="物料" width="220"></el-table-column>
       <el-table-column label="入罐数量" width="120"></el-table-column>
       <el-table-column label="满罐数量" width="140"></el-table-column>
@@ -27,7 +34,8 @@ export default {
   name: 'applyOrder',
   data () {
     return {
-      multipleSelection: []
+      multipleSelection: [],
+      OrderDate: [{}]
     }
   },
   props: {
