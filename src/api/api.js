@@ -1046,18 +1046,33 @@ export const KJM_API = {
  * 压榨API
  */
 export const SQU_API = {
-
   /**
    * 物料领用 LIST
    */
-  MATERIAL_LIST_API: HOST + '/prs/material/list',
+  MATERIAL_APPLY_LIST_API: HOST + '/prs/material/list',
   /**
    * 发酵罐列表
    */
-  POT_LIST_API: HOST + '/prs/storagePot/getPotNo',
+  MATERIAL_APPLY_POT_LIST_API: HOST + '/prs/storagePot/getPotNo',
   /**
    * 发酵剩余量
    */
-  REMAIN_AMOUNT_API: HOST + '/prs/storagePot/getRemainAmount'
+  MATERIAL_APPLY_REMAIN_AMOUNT_API: HOST + '/prs/storagePot/getRemainAmount',
+  /**
+   * 物料领用保存/提交
+   */
+  MATERIAL_APPLY_UPDATE_API: HOST + '/prs/material/mySaveOrUpdate',
+  /**
+   * 物料入库 LIST
+   */
+  MATERIAL_IN_LIST_API: HOST + '/prs/inStorage/list',
+  /**
+   * 物料入库 保存
+   */
+  MATERIAL_IN_SAVE_API: HOST + '/prs/inStorage/mySaveOrUpdate',
+  /**
+   * 物料入库 提交
+   */
+  MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder'
 
 }
