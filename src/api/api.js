@@ -1043,4 +1043,17 @@ export const KJM_API = {
  */
 export const SQU_API = {
 
+  /**
+   * 物料领用 LIST
+   */
+  MATERIAL_LIST_API: HOST + '/prs/material/list',
+  /**
+   * 发酵罐列表
+   */
+  POT_LIST_API: HOST + '/prs/storagePot/getPotNo',
+  /**
+   * 发酵剩余量
+   */
+  REMAIN_AMOUNT_API: HOST + '/prs/storagePot/getRemainAmount'
+
 }

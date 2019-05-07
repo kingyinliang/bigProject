@@ -136,7 +136,7 @@ export default {
     },
     // 获取班组
     getTeam () {
-      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workshop}, false, false, false).then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workshop, factory: this.plantList.factory}, false, false, false).then(({data}) => {
         this.Team = data.teamList
       })
     }

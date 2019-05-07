@@ -151,7 +151,7 @@ export default {
         this.orderStatus = data.list[0].orderStatus
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        this.$refs.workerref.GetTeam(this.formHeader.workShop)
+        this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
         this.$refs.workerref.getTree(this.formHeader.factory)
         this.$refs.instock.getWheatDataList(this.formHeader.orderId)
         this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)

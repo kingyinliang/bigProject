@@ -139,7 +139,7 @@ import {BASICDATA_API, KJM_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
 export default {
-  name: 'manHour',
+  name: 'index',
   data () {
     return {
       uid: '',
@@ -237,7 +237,7 @@ export default {
             this.headList = this.formHeader
             this.headList.status = ''
             this.$refs.workerref.GetTimeUserList(data.userList)
-            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
           } else {
             if (data.readyList.length === 0) {
@@ -248,7 +248,7 @@ export default {
             this.headList = data.headList[0]
             this.userOrder.orderId = data.headList[0].id
             this.$refs.workerref.GetTimeUserList(data.userList)
-            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
           }
           this.inKjmBatch = data.inKjmBatch

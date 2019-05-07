@@ -13,7 +13,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
@@ -393,7 +393,7 @@ export default class Index extends Vue {
     //   })
     // }
     if (wsid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: wsid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: wsid, factory: this.params.factoryId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.processesList = data.teamList
         } else {
@@ -408,7 +408,7 @@ export default class Index extends Vue {
       //   }
       // })
     } else {
-      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {factory: this.params.factoryId}).then(({data}) => {
         if (data.code === 0) {
           this.processesList = data.teamList
         } else {

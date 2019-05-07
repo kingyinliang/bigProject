@@ -770,7 +770,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: this.plantList.workShop}).then(({data}) => {
           if (data.code === 0) {
             let productlineList = data.childList
-            this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workShop}).then(({data}) => {
+            this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: this.plantList.workShop, factory: this.plantList.factory}).then(({data}) => {
               if (data.code === 0) {
                 let Listobj = {}
                 if (this.datalist.length === 0) {
@@ -1077,7 +1077,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: row.workShop}).then(({data}) => {
           if (data.code === 0) {
             let productlineList = data.childList
-            this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: row.workShop}).then(({data}) => {
+            this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: row.workShop, factory: row.factory}).then(({data}) => {
               if (data.code === 0) {
                 row.productlineList = productlineList
                 row.Team = data.teamList
