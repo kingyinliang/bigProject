@@ -174,6 +174,8 @@ export default {
           return false
         }
         this.succmessage = '提交成功'
+      } else {
+        this.submitStatus = 'saved'
       }
       let that = this
       new Promise((resolve, reject) => {
