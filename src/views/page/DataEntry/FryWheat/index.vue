@@ -348,7 +348,7 @@ export default {
       //   this.processesList = []
       // }
       if (id) {
-        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id, factory: this.plantList.factoryid}).then(({data}) => {
           if (data.code === 0) {
             this.processesList = data.teamList
           } else {
@@ -356,7 +356,7 @@ export default {
           }
         })
       } else {
-        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {factory: this.plantList.factoryid}).then(({data}) => {
           if (data.code === 0) {
             this.processesList = data.teamList
           } else {

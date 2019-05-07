@@ -3,7 +3,7 @@
   <div class="clearfix">
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact)" style="float: right">新增</el-button>
   </div>
-  <div v-if="order.factory !== 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">
+  <div class="a" v-if="order.factory !== 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">
   <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
@@ -198,8 +198,8 @@
   </el-table>
   </div>
   </div>
-  <div v-if="order.factory === 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">
-    <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties === '二合一&礼盒产线'">
+  <div class="b" v-if="order.factory === 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">
+    <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
       <el-table-column type="index" width="55" label="序号"></el-table-column>
       <el-table-column label="白/中/夜班" width="120">
         <template slot-scope="scope">
@@ -275,73 +275,74 @@
     </el-table>
   </div>
   <div><p style="line-height: 52px;font-size: 14px">产出数合计：{{countOutputNum}}</p></div>
-  <div class="clearfix" v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'">
-    <span style="font-size: 14px;font-weight: 700;line-height: 40px;">机维组数量确认</span>
-    <el-button type="primary" size="small" @click="GetMaintain()" style="float: right">刷新</el-button>
+  <div v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间' && order.factory !== 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">
+    <div class="clearfix">
+      <span style="font-size: 14px;font-weight: 700;line-height: 40px;">机维组数量确认</span>
+      <el-button type="primary" size="small" @click="GetMaintain()" style="float: right">刷新</el-button>
+    </div>
+    <el-table
+      ref="table1"
+      header-row-class-name="tableHead"
+      :data="InVlist"
+      border
+      tooltip-effect="dark"
+      style="width: 100%;margin-bottom: 20px">
+      <el-table-column
+        type="index"
+        width="55"
+        label="序号">
+      </el-table-column>
+      <el-table-column
+        prop="orderNo"
+        label="生产订单号"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="batch"
+        label="生产批次"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="aiShelves"
+        label="自动上架数-立体库"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="aiShelvesUnitName"
+        label="单位"
+        width="60">
+      </el-table-column>
+      <el-table-column
+        prop="jwzAcount"
+        label="机维组确认数"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="differentUnitName"
+        label="单位"
+        width="60">
+      </el-table-column>
+      <el-table-column
+        prop="orgnDifferent"
+        label="原差异数量"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="differentUnitName"
+        label="单位"
+        width="60">
+      </el-table-column>
+      <el-table-column
+        prop="differentInfo"
+        label="差异说明"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="jwzMan"
+        label="机维组确认人">
+      </el-table-column>
+    </el-table>
   </div>
-  <el-table
-    v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间'"
-    ref="table1"
-    header-row-class-name="tableHead"
-    :data="InVlist"
-    border
-    tooltip-effect="dark"
-    style="width: 100%;margin-bottom: 20px">
-    <el-table-column
-      type="index"
-      width="55"
-      label="序号">
-    </el-table-column>
-    <el-table-column
-      prop="orderNo"
-      label="生产订单号"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="batch"
-      label="生产批次"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="aiShelves"
-      label="自动上架数-立体库"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="aiShelvesUnitName"
-      label="单位"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="jwzAcount"
-      label="机维组确认数"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="differentUnitName"
-      label="单位"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="orgnDifferent"
-      label="原差异数量"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="differentUnitName"
-      label="单位"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="differentInfo"
-      label="差异说明"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="jwzMan"
-      label="机维组确认人">
-    </el-table-column>
-  </el-table>
   <auditLog :tableData="InAudit"></auditLog>
 </div>
 </template>

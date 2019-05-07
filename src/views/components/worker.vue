@@ -164,26 +164,32 @@ export default {
           }
         })
       } else {
-        this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', [{
-          status: '',
-          orderId: this.order.orderId,
-          classType: '',
-          deptId: '',
-          userType: '',
-          userId: [],
-          startDate: '',
-          dinner: '60',
-          endDate: '',
-          remark: ''
-        }]).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error('修改人员' + data.msg)
-          }
+        if (this.order.orderId) {
+          this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', [{
+            status: '',
+            orderId: this.order.orderId,
+            classType: '',
+            deptId: '',
+            userType: '',
+            userId: [],
+            startDate: '',
+            dinner: '60',
+            endDate: '',
+            remark: ''
+          }]).then(({data}) => {
+            if (data.code === 0) {
+            } else {
+              this.$message.error('修改人员' + data.msg)
+            }
+            if (resolve) {
+              resolve('resolve')
+            }
+          })
+        } else {
           if (resolve) {
             resolve('resolve')
           }
-        })
+        }
       }
     },
     // 校验
@@ -214,9 +220,9 @@ export default {
       })
     },
     // 获取车间下工序
-    GetTeam (id) {
+    GetTeam (id, faid) {
       if (id) {
-        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: id, factory: faid}).then(({data}) => {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {
@@ -231,7 +237,7 @@ export default {
         //   }
         // })
       } else {
-        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {factory: faid}).then(({data}) => {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {

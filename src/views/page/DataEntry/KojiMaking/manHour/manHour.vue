@@ -234,6 +234,7 @@ export default {
       this.searchCard = false
       this.searchCard = true
       this.isRedact = false
+      this.uid = ''
       this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
@@ -248,18 +249,18 @@ export default {
             this.headList = this.formHeader
             this.headList.status = ''
             this.$refs.workerref.GetTimeUserList(data.userList)
-            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
           } else {
             if (data.readyList.length === 0) {
-              this.readyTimeDate = this.readyTimeDate1
+              this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
             } else {
               this.readyTimeDate = data.readyList[0]
             }
             this.headList = data.headList[0]
             this.userOrder.orderId = data.headList[0].id
             this.$refs.workerref.GetTimeUserList(data.userList)
-            this.$refs.workerref.GetTeam(this.formHeader.workShop)
+            this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
           }
           this.inKjmBatch = data.inKjmBatch

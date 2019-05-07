@@ -307,9 +307,10 @@ export default {
       return ty
     },
     // 获取罐
-    GetPot () {
+    GetPot (id) {
       // 成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        factory: id,
         type: 'holder_type',
         holder_type: '007',
         pageSize: 9999,
@@ -324,6 +325,7 @@ export default {
       })
       // 半成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
+        factory: id,
         type: 'holder_type',
         holder_type: '006',
         pageSize: 9999,
