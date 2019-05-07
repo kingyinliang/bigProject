@@ -365,6 +365,8 @@ export default {
     ReadyTimeSave (str, resolve, reject) {
       if (this.uid) {
         this.readyTimeDate.orderId = this.uid
+      } else {
+        this.readyTimeDate.orderId = this.headList.id
       }
       this.readyTimeDate.status = str
       this.readyTimeDate.dayChange = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) ? this.readyTimeDate.dayChange + '' : this.readyTimeDate.dayChange)
