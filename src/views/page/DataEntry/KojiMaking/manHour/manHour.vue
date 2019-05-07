@@ -234,6 +234,7 @@ export default {
       this.searchCard = false
       this.searchCard = true
       this.isRedact = false
+      this.uid = ''
       this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
@@ -252,7 +253,7 @@ export default {
             this.$refs.workerref.getTree(this.formHeader.factory)
           } else {
             if (data.readyList.length === 0) {
-              this.readyTimeDate = this.readyTimeDate1
+              this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
             } else {
               this.readyTimeDate = data.readyList[0]
             }
