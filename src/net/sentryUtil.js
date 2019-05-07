@@ -121,7 +121,7 @@ export default {
         return [new Sentry.Integrations.Vue({ Vue }), ...integrations]
       },
       // A release identifier.
-      release: `factory-wap@${process.env.RELEASE_VERSION}`,
+      release: `factory-wap@prd${process.env.RELEASE_VERSION}`,
       // An environment identifier.
       environment: 'prd',
       // Custom event transport that will be used to send things to Sentry
