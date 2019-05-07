@@ -128,6 +128,9 @@
             <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">人员(小时:H)</h3>
             <worker ref="workerref" :isRedact="isRedact" :order="userOrder"></worker>
           </el-card>
+          <el-card>
+            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          </el-card>
         </el-card>
       </div>
     </div>
@@ -138,6 +141,7 @@
 import {BASICDATA_API, KJM_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
+import ExcRecord from '@/views/components/excRecord'
 export default {
   name: 'index',
   data () {
@@ -223,6 +227,7 @@ export default {
       this.searchCard = false
       this.searchCard = true
       this.isRedact = false
+      this.uid = ''
       this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
@@ -353,6 +358,8 @@ export default {
     ReadyTimeSave (str, resolve, reject) {
       if (this.uid) {
         this.readyTimeDate.orderId = this.uid
+      } else {
+        this.readyTimeDate.orderId = this.headList.id
       }
       this.readyTimeDate.status = str
       this.readyTimeDate.dayChange = ((this.readyTimeDate.dayChange || this.readyTimeDate.dayChange === 0) ? this.readyTimeDate.dayChange + '' : this.readyTimeDate.dayChange)
@@ -456,7 +463,8 @@ export default {
   },
   computed: {},
   components: {
-    Worker
+    Worker,
+    ExcRecord
   }
 }
 </script>
