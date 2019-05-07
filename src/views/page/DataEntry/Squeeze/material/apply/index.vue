@@ -260,6 +260,7 @@ export default class Index extends Vue {
   // 暂存罐
   sdList = []
   availableMap = new Map<string, string>()
+  matchedMap = new Map<string, string>()
   // 发酵罐
   fermentPotList = []
   searched: boolean = false
@@ -368,10 +369,13 @@ export default class Index extends Vue {
   }
   saveStart () {
     if (this.startValidate()) {
+      let uuid = Vue.prototype.uuid()
       this.availableMap.set(this.startForm.deviceId, '1')
+      this.matchedMap.set(this.startForm.deviceId, uuid)
       let resultData = {
         // "id": "1",
         // "status": "saved",
+        recordId: uuid,
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
         productLine: this.params.productLineId,
@@ -403,8 +407,8 @@ export default class Index extends Vue {
     }
   }
   inPotEnd (deviceId: string, deviceName: string) {
-    this.dialogFormVisible2 = true
-    let startData = this.dataList.find(item => item.storagePotNo === deviceId)
+    let recordId = this.matchedMap.get(deviceId)
+    let startData = this.dataList.find(item => item.recordId === recordId)
     if (startData) {
       this.endForm = {
         deviceId,
@@ -422,6 +426,7 @@ export default class Index extends Vue {
         changer: startData.changer
       }
     }
+    this.dialogFormVisible2 = true
   }
   saveEnd () {
     if (this.endForm.endAmount.toString() === '') {
@@ -429,7 +434,9 @@ export default class Index extends Vue {
       return false
     }
     this.availableMap.set(this.endForm.deviceId, '2')
-    let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
+    let recordId = this.matchedMap.get(this.endForm.deviceId)
+    let startData = this.dataList.find(item => item.recordId === recordId)
+    // let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
     if (startData) {
       Object.assign(startData, {endAmount: this.endForm.endAmount, amount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark})
     }
@@ -584,6 +591,7 @@ export default class Index extends Vue {
     this.dataList = []
     this.sdList = []
     this.availableMap.clear()
+    this.matchedMap.clear()
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.list
