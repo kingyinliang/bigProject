@@ -27,50 +27,50 @@
                 <el-form-item label="领用日期：" >
                   <el-date-picker type="date" v-model="params.applyDate" value-format="yyyy-MM-dd" style="width:150px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="提交人员："  >
-                  <div style="border-bottom: 1px solid #D8D8D8;width:150px;height:32px;">{{changer}}</div>
-                </el-form-item>
-                <el-form-item label="提交日期：" >
-                  <div style="border-bottom: 1px solid #D8D8D8;width:150px;height:32px">{{changed}}</div>
-                </el-form-item>
               </el-form>
             </el-col>
-            <el-col style='width:180px'>
+            <!-- <el-col style='width:180px'>
               <div style="float:right; line-height:31px;font-size: 14px">
                 <div style="float:left">
                   <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
                 </div>
                 <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
           <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth">查询</el-button>
             <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isMyAuth && searched">{{disabled?'编辑':'返回'}}</el-button>
-            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth && !disabled">保存</el-button>
+            <el-button type="primary" size="small"  @click="save()"  v-if="isMyAuth && !disabled">保存</el-button>
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth && !disabled">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff">
           <el-col :span="24">
             <el-row type="flex" justify="center" style="margin-top:20px">
-              <div  class="pot-box">
+              <div  class="pot-box"  v-for="(item, index) in sdList" :key="index" >
                 <div class="pot-box-header">
-                  <span class="pot-box-title" style="margin-left:5px;">1#暂存罐</span>
-                  <span class="pot-box-title" style="float:right;margin-right:5px;">领用中</span>
+                  <span class="pot-box-title" style="margin-left:5px;">{{item.deviceName}}</span>
+                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{item.status === '0'?'领用中':'可领用'}}</span>
                 </div>
                 <div class='pot-box-container img'>
                 </div>
                 <div class="pot-box-footer" >
-                  <div class="pot-box-button" @click="inPotStart()">
-                    <span class="pot-box-button-title" >入罐开始</span>
+                  <div class="pot-box-button"  v-if='!disabled' @click="inPotStart(item.deviceId, item.deviceName)">
+                    <span class="pot-box-button-title">入罐开始</span>
                   </div>
-                  <div class="pot-box-button" @click="inPotEnd()">
+                  <div class="pot-box-button-disabled"  v-else>
+                    <span class="pot-box-button-title-disabled">入罐开始</span>
+                  </div>
+                  <div class="pot-box-button"  v-if='!disabled' @click="inPotEnd(item.deviceId, item.deviceName)">
                     <span class="pot-box-button-title" >入罐结束</span>
+                  </div>
+                  <div class="pot-box-button-disabled"  v-else>
+                    <span class="pot-box-button-title-disabled" >入罐结束</span>
                   </div>
                 </div>
               </div>
-              <div  class="pot-box">
+              <!-- <div  class="pot-box">
                 <div class="pot-box-header">
                   <span class="pot-box-title" style="margin-left:5px;">2#暂存罐</span>
                   <span class="pot-box-title" style="float:right;margin-right:5px;">领用中</span>
@@ -85,27 +85,27 @@
                     <span class="pot-box-button-title"  >入罐结束</span>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </el-row>
             <el-row>
               <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
                 <el-table-column type="index" label="序号" width="55"></el-table-column>
                 <el-table-column label="布浆线" :show-overflow-tooltip="true" >
-                  <template slot-scope="scope">
+                  <template slot-scope="scope" width="120">
                     {{scope.row.productLineName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="暂存罐" :show-overflow-tooltip="true">
+                <el-table-column label="暂存罐" :show-overflow-tooltip="true" width="120">
                   <template slot-scope="scope">
                     {{scope.row.storagePotName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="发酵罐号" :show-overflow-tooltip="true">
+                <el-table-column label="发酵罐号" :show-overflow-tooltip="true" width="120">
                   <template slot-scope="scope">
                     {{scope.row.fermentPotName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="批次"  >
+                <el-table-column label="批次" :show-overflow-tooltip="true" width="120" >
                   <template slot-scope="scope">
                     {{scope.row.batch}}
                   </template>
@@ -162,12 +162,14 @@
       </div>
       <el-dialog :visible.sync="dialogFormVisible" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
-          <span>1#入罐开始</span>
+          <span>{{startForm.deviceName}}开始</span>
         </div>
         <div >
           <el-form :model="startForm"  :label-width="formLabelWidth" size="small" ref="startForm">
             <el-form-item label="领用发酵罐：" prop="fermentPotNo">
-              <el-input  v-model.trim="startForm.fermentPotNo" style='width:220px'/>
+              <el-select @change="changeOptions('fermentPotStart')"  v-model="startForm.fermentPotNo" value-key="holderId" placeholder="请选择" filterable style="width:220px" >
+                <el-option v-for="(item, index) in fermentPotList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="批次：" prop="batch">
               <el-input v-model.trim="startForm.batch" style='width:220px'/>
@@ -182,56 +184,61 @@
               <el-input  type='number' v-model.number="startForm.storageAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="对应布浆线：">
-              <label>{{startForm.productLine || '1#'}}</label>
+              <label>{{startForm.productLineName}}</label>
             </el-form-item>
             <el-form-item label="操作时间：">
-              <label>{{startForm.changed || '2010-04-28 10:20:44'}}</label>
+              <label>{{startForm.changed}}</label>
             </el-form-item>
             <el-form-item label="操作人：">
-              <label>{{startForm.changer || '张三'}}</label>
+              <label>{{startForm.changer}}</label>
             </el-form-item>
           </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveStart('1')">保存</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveStart()">保存</el-button>
         </div>
       </el-dialog>
       <el-dialog :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
-          <span>1#入罐结束</span>
+          <span>{{endForm.deviceName}}结束</span>
         </div>
         <div>
           <el-form :model="endForm"  :label-width="formLabelWidth" size="small" ref="endForm">
             <el-form-item label="领用发酵罐：" prop="fermentPotNo">
-              <el-input  v-model="endForm.fermentPotNo" style='width:220px'/>
+              <!-- <el-select @change="changeOptions('fermentPotEnd')"  v-model="endForm.fermentPotNo" value-key="wheatDeviceId" placeholder="请选择" style="width:220px" >
+                <el-option v-for="(item, index) in fermentPotList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+              </el-select> -->
+              {{endForm.fermentPotName}}
             </el-form-item>
             <el-form-item label="批次：" prop="batch">
-              <el-input v-model="endForm.batch" style='width:220px'/>
+              <!-- <el-input v-model="endForm.batch" style='width:220px'/> -->
+              {{endForm.batch}}
             </el-form-item>
             <el-form-item label="发酵罐剩余量：">
-              <el-input type='number' v-model.number="endForm.remainAmount" style='width:220px'/>
+              {{endForm.remainAmount}}
+              <!-- <el-input type='number' v-model.number="endForm.remainAmount" style='width:220px'/> -->
             </el-form-item>
             <el-form-item label="打料结束数(L)：" prop="endAmount">
               <el-input  type='number' v-model.number="endForm.endAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="对应布浆线：">
-              <label>{{endForm.productLine || '1#'}}</label>
+              <label>{{endForm.productLineName}}</label>
             </el-form-item>
             <el-form-item label="备注：" >
-              <el-input v-model="endForm.remark" style='width:220px'/>
+              <el-input v-model.trim="endForm.remark" style='width:220px'/>
             </el-form-item>
             <el-form-item label="操作时间：" >
-              <label>{{endForm.changed || '2019-10:11 15:00:12'}}</label>
+              <label>{{endForm.changed}}</label>
             </el-form-item>
             <el-form-item label="操作人：" >
-              <label>{{endForm.changer || '张三'}}</label>
+              <label>{{endForm.changer}}</label>
             </el-form-item>
           </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible2 = false">取消</el-button>
-          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="dialogFormVisible2 = false">保存</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveEnd()">保存</el-button>
         </div>
       </el-dialog>
     </el-col>
@@ -255,16 +262,24 @@ export default class Index extends Vue {
   workshopList = []
   productlineList = []
   dataList = []
+  // 暂存罐
+  sdList = []
+  // 发酵罐
+  fermentPotList = []
   searched: boolean = false
   disabled: boolean = true
   dialogFormVisible:boolean = false
   dialogFormVisible2:boolean = false
   formLabelWidth: string = '130px'
   startForm = {
+    deviceId: '',
+    deviceName: '',
     fermentPotNo: '',
     fermentPotName: '',
+    orderId: '',
     batch: '',
     remainAmount: 0,
+    remainAmountUnit: 'L',
     startAmount: 0,
     storageAmount: 0,
     productLine: '',
@@ -273,8 +288,11 @@ export default class Index extends Vue {
     changer: ''
   }
   endForm = {
+    deviceId: '',
+    deviceName: '',
     fermentPotNo: '',
     fermentPotName: '',
+    orderId: '',
     batch: '',
     remainAmount: 0,
     endAmount: 0,
@@ -313,6 +331,7 @@ export default class Index extends Vue {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getProductLine(this.params.workshopId)
+    this.getFermentPot(this.params.factoryId)
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -326,63 +345,95 @@ export default class Index extends Vue {
   set mainTabs (val) {
     this.$store.commit('common/updateMainTabs', val)
   }
-  get orderStatus () {
-    if (this.dataList && this.dataList.length > 0) {
-      return this.dataList[0].status
-    }
-    return ''
-  }
-  get changer () {
-    if (this.dataList && this.dataList.length > 0) {
-      return this.dataList[0].changer
-    }
-    return ''
-  }
-  get changed () {
-    if (this.dataList && this.dataList.length > 0) {
-      return this.dataList[0].changed
-    }
-    return ''
-  }
-
-  inPotStart () {
+  // get orderStatus () {
+  //   if (this.dataList && this.dataList.length > 0) {
+  //     return this.dataList[0].status
+  //   }
+  //   return ''
+  // }
+  inPotStart (deviceId: string, deviceName: string) {
     this.startForm = {
+      deviceId,
+      deviceName,
       fermentPotNo: '',
       fermentPotName: '',
+      orderId: '',
       batch: '',
       remainAmount: 0,
+      remainAmountUnit: 'L',
       startAmount: 0,
       storageAmount: 0,
-      productLine: this.params.productLineName,
+      productLine: this.params.productLineId,
       productLineName: this.params.productLineName,
-      changed: this.changed,
-      changer: this.changer
+      changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
     }
     this.dialogFormVisible = true
   }
-  saveStart (potNo: string) {
+  saveStart () {
     if (this.startValidate()) {
-      this.dataList.push(this.startForm)
+      let resultData = {
+        // "id": "1",
+        // "status": "saved",
+        factory: this.params.factoryId,
+        workShop: this.params.workshopId,
+        productLine: this.params.productLineId,
+        storagePotNo: this.startForm.deviceId,
+        fermentPotNo: this.startForm.fermentPotNo,
+        // 额外信息
+        orderId: this.startForm.orderId,
+        batch: this.startForm.batch,
+        remainAmount: this.startForm.remainAmount,
+        // 额外信息
+        remainAmountUnit: this.startForm.remainAmountUnit,
+        startAmount: this.startForm.startAmount,
+        endAmount: null,
+        amount: null,
+        storageAmount: this.startForm.storageAmount,
+        unit: null,
+        // operated: null,
+        // operator: null,
+        remark: null,
+        delFlag: 0,
+        changed: this.startForm.changed,
+        changer: this.startForm.changer,
+        productLineName: this.params.productLineName,
+        storagePotName: this.startForm.deviceName,
+        fermentPotName: this.startForm.fermentPotName
+      }
+      this.dataList.push(resultData)
       this.dialogFormVisible = false
     }
   }
-  inPotEnd () {
+  inPotEnd (deviceId: string, deviceName: string) {
     this.dialogFormVisible2 = true
+    let startData = this.dataList[this.dataList.length - 1]
     this.endForm = {
-      fermentPotNo: '',
-      fermentPotName: '',
-      batch: '',
-      remainAmount: 0,
+      deviceId,
+      deviceName,
+      fermentPotNo: startData.fermentPotNo,
+      fermentPotName: startData.fermentPotName,
+      orderId: startData.orderId,
+      batch: startData.batch,
+      remainAmount: startData.remainAmount,
       endAmount: 0,
-      productLine: this.params.productLineId,
-      productLineName: this.params.productLineName,
+      productLine: startData.productLine,
+      productLineName: startData.productLineName,
       remark: '',
-      changed: this.changed,
-      changer: this.changer
+      changed: startData.changed,
+      changer: startData.changer
     }
   }
-  saveEnd (potNo) {
-    Object.assign(this.dataList[this.dataList.length - 1], this.endForm)
+  saveEnd () {
+    if (this.endForm.endAmount.toString() === '') {
+      this.$message.error('结束数不能为空')
+      return false
+    }
+    let startData = this.dataList.pop()
+    Object.assign(startData, {endAmount: this.endForm.endAmount, amount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark})
+    console.log(startData)
+    this.dataList.push(startData)
+    this.dialogFormVisible2 = false
   }
   startValidate () {
     if (this.startForm.fermentPotNo === '') {
@@ -405,8 +456,12 @@ export default class Index extends Vue {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
     } else if (flag === 'productline') {
-      let item = this.productlineList.find(ele => ele.deptId === this.params.productlineId)
-      this.params.productlineName = item ? item.deptName : ''
+      let item = this.productlineList.find(ele => ele.deptId === this.params.productLineId)
+      this.params.productLineName = item ? item.deptName : ''
+    } else if (flag === 'fermentPotStart') {
+      let item = this.fermentPotList.find(ele => ele.holderId === this.startForm.fermentPotNo)
+      this.startForm.fermentPotName = item ? item.holderName : ''
+      this.startForm.orderId = item ? item.orderId : ''
     }
   }
   // 获取工厂
@@ -415,9 +470,10 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
-        if (!this.params.factoryId) {
-          this.params.factoryId = res.data.typeList[0].deptId
-        }
+        // if (!this.params.factoryId && res.data.typeList.length > 0) {
+        //   this.params.factoryId = res.data.typeList[0].deptId
+        //   this.params.factoryName = res.data.typeList[0].deptName
+        // }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -430,9 +486,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
-          if (!this.params.factoryId) {
-            this.params.workshopId = res.data.typeList[0].deptId
-          }
+          // if (!this.params.workshopId && res.data.typeList.length > 0) {
+          //   this.params.workshopId = res.data.typeList[0].deptId
+          //   this.params.workshopName = res.data.typeList[0].deptName
+          // }
         } else {
           this.$message.error(res.data.msg)
         }
@@ -452,6 +509,37 @@ export default class Index extends Vue {
       })
     }
   }
+  // 发酵罐
+  getFermentPot (fid: string) {
+    this.fermentPotList = []
+    if (fid) {
+      Vue.prototype.$http(`${SQU_API.POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+        if (res.data.code === 0) {
+          this.fermentPotList = res.data.num
+          // if (!this.params.factoryId && res.data.num.length > 0) {
+          //   this.params.workshopId = res.data.num[0].holderId
+          // }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+
+  getRemanAmount (wId: string, fId: string, orderId: string) {
+    Vue.prototype.$http(`${SQU_API.REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
+      if (res.data.code === 0) {
+        this.startForm.remainAmount = res.data.psp ? res.data.psp.remainAmount : 0
+        this.startForm.remainAmountUnit = res.data.psp ? res.data.psp.remainAmountUnit : 'L'
+        // if (!this.params.factoryId && res.data.num.length > 0) {
+        //   this.params.workshopId = res.data.num[0].holderId
+        // }
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+
   setDisabled (flag: boolean) {
     this.disabled = flag
   }
@@ -478,32 +566,33 @@ export default class Index extends Vue {
     // 保存选项值到common store
     this.setStore(this.params)
     this.searched = true
-    // let params = {
-    //   factory: this.params.factoryId,
-    //   workShop: this.params.workshopId,
-    //   productLine: this.params.productLineId,
-    //   created: this.params.applyDate,
-    //   changer: '',
-    //   changed: ''
-    // }
     let params = {
-      factory: '1',
-      workShop: '',
-      productLine: '',
-      created: '',
-      changer: '',
-      changed: ''
+      factory: this.params.factoryId,
+      workShop: this.params.workshopId,
+      productLine: this.params.productLineId,
+      created: this.params.applyDate
     }
+    // let params = {
+    //   factory: '1',
+    //   workShop: '',
+    //   productLine: '3ECBE91F774B45F28707697937CBB6E7',
+    //   created: ''
+    // }
     this.retrieveOrderList(params)
   }
   retrieveOrderList (params) {
     Vue.prototype.$http(`${SQU_API.MATERIAL_LIST_API}`, `POST`, params, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.list
+        this.sdList = res.data.sdList
       } else {
         this.$message.error(res.data.msg)
       }
     })
+  }
+
+  save () {
+    console.log(this.dataList)
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
@@ -515,12 +604,19 @@ export default class Index extends Vue {
     this.params.workshopId = ''
     this.params.workshopName = ''
     this.getWorkshop(newVal)
+    this.getFermentPot(newVal)
   }
   @Watch('params.workshopId')
   onChangeWorkshop (newVal: string, oldVal: string) {
-    this.params.productlineId = ''
-    this.params.productlineName = ''
+    this.params.productLineId = ''
+    this.params.productLineName = ''
     this.getProductLine(newVal)
+  }
+  @Watch('startForm.fermentPotNo')
+  onChangeFerment (newVal: string, oldVal: string) {
+    this.startForm.remainAmount = 0
+    this.startForm.remainAmountUnit = 'L'
+    this.getRemanAmount(this.params.workshopId, newVal, this.startForm.orderId)
   }
 }
 </script>
@@ -587,9 +683,6 @@ export default class Index extends Vue {
         background:rgba(24,144,255,1);
       }
     }
-    .pot-box-button-sel {
-      background:rgba(24,144,255,1);
-    }
     .pot-box-button-title {
       line-height:24px;
       font-size:14px;
@@ -600,8 +693,27 @@ export default class Index extends Vue {
         color:#fff;
       }
     }
-    .pot-box-button-title-sel {
-      color:#fff;
+    .pot-box-button-disabled{
+      width:72px;
+      height:24px;
+      border-radius:4px;
+      border:1px solid rgba(0,0,0,0.25);
+      text-align:center;
+      cursor:pointer;
+      margin-left: 4px;
+      margin-right: 4px;
+      color:rgba(0, 0, 0, 0.6);
+      background:#F7F9FA;
+      &:hover{
+        cursor:not-allowed
+      }
+    }
+    .pot-box-button-title-disabled {
+      line-height:24px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(0,0,0,0.6);
     }
   }
 }
