@@ -37,6 +37,7 @@
       </el-row>
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" size="small" >查询</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">

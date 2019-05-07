@@ -393,7 +393,7 @@ export default class Index extends Vue {
     //   })
     // }
     if (wsid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: wsid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {id: wsid, factory: this.params.factoryId}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.processesList = data.teamList
         } else {
@@ -408,7 +408,7 @@ export default class Index extends Vue {
       //   }
       // })
     } else {
-      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST').then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDTEAM_API}`, 'POST', {factory: this.params.factoryId}).then(({data}) => {
         if (data.code === 0) {
           this.processesList = data.teamList
         } else {

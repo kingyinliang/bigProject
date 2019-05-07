@@ -176,10 +176,10 @@ export default {
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.GetRatio()
-        this.$refs.listbom.GetPot()
+        this.$refs.listbom.GetPot(this.formHeader.factory)
         this.$refs.formheader.getLin(this.formHeader.workShop)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-        this.$refs.workerref.GetTeam()
+        this.$refs.workerref.GetTeam(false, this.formHeader.factory)
         this.$refs.workerref.getTree(this.formHeader.factory)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
@@ -237,7 +237,7 @@ export default {
           that.UpdateformHeader('saved', resolve)
         })
         let net1 = new Promise((resolve, reject) => {
-          that.$refs.instorage.submitIn(that.formHeader.orderId, 'saved', resolve)
+          that.$refs.instorage.submitIn(that.formHeader.orderId, 'submit', resolve)
         })
         let SubmitNet = Promise.all([net0, net1])
         SubmitNet.then(() => {
