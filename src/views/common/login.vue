@@ -146,9 +146,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$http(`${MAIN_API.LOGIN_API}`, 'POST', {
+          // this.$http(`http://localhost:3000/mds/login`, 'POST', {
             username: this.ruleForm2.user,
             password: this.ruleForm2.pass
           }).then(res => {
+            console.log(res)
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.Authorization)
               this.mainTabs = []

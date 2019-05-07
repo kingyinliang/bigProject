@@ -42,7 +42,7 @@
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth">查询</el-button>
             <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isMyAuth && searched">{{disabled?'编辑':'返回'}}</el-button>
             <el-button type="primary" size="small"  @click="save()"  v-if="isMyAuth && !disabled">保存</el-button>
-            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth && !disabled">提交</el-button>
+            <el-button type="primary" size="small"  @click="submit()"  v-if="isMyAuth && !disabled">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff">
@@ -51,18 +51,18 @@
               <div  class="pot-box"  v-for="(item, index) in sdList" :key="index" >
                 <div class="pot-box-header">
                   <span class="pot-box-title" style="margin-left:5px;">{{item.deviceName}}</span>
-                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{item.status === '0'?'领用中':'可领用'}}</span>
+                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{availableMap.get(item.deviceId)==='0'?'待领用':availableMap.get(item.deviceId)==='1'?'领用中':'不可用'}}</span>
                 </div>
                 <div class='pot-box-container img'>
                 </div>
                 <div class="pot-box-footer" >
-                  <div class="pot-box-button"  v-if='!disabled' @click="inPotStart(item.deviceId, item.deviceName)">
+                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='0'" @click="inPotStart(item.deviceId, item.deviceName)">
                     <span class="pot-box-button-title">入罐开始</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
                     <span class="pot-box-button-title-disabled">入罐开始</span>
                   </div>
-                  <div class="pot-box-button"  v-if='!disabled' @click="inPotEnd(item.deviceId, item.deviceName)">
+                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='1'" @click="inPotEnd(item.deviceId, item.deviceName)">
                     <span class="pot-box-button-title" >入罐结束</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
@@ -166,18 +166,18 @@
         </div>
         <div >
           <el-form :model="startForm"  :label-width="formLabelWidth" size="small" ref="startForm">
-            <el-form-item label="领用发酵罐：" prop="fermentPotNo">
+            <el-form-item label="领用发酵罐：" required>
               <el-select @change="changeOptions('fermentPotStart')"  v-model="startForm.fermentPotNo" value-key="holderId" placeholder="请选择" filterable style="width:220px" >
                 <el-option v-for="(item, index) in fermentPotList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="批次：" prop="batch">
+            <el-form-item label="批次：" required>
               <el-input v-model.trim="startForm.batch" style='width:220px'/>
             </el-form-item>
             <el-form-item label="发酵罐剩余量：">
               <el-input type='number' v-model.number="startForm.remainAmount" style='width:220px'/>
             </el-form-item>
-            <el-form-item label="起始数(方)：" prop="startAmount">
+            <el-form-item label="起始数(方)：" required>
               <el-input  type='number' v-model.number="startForm.startAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="暂存量(L)：" >
@@ -205,21 +205,16 @@
         </div>
         <div>
           <el-form :model="endForm"  :label-width="formLabelWidth" size="small" ref="endForm">
-            <el-form-item label="领用发酵罐：" prop="fermentPotNo">
-              <!-- <el-select @change="changeOptions('fermentPotEnd')"  v-model="endForm.fermentPotNo" value-key="wheatDeviceId" placeholder="请选择" style="width:220px" >
-                <el-option v-for="(item, index) in fermentPotList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-              </el-select> -->
+            <el-form-item label="领用发酵罐：" required>
               {{endForm.fermentPotName}}
             </el-form-item>
-            <el-form-item label="批次：" prop="batch">
-              <!-- <el-input v-model="endForm.batch" style='width:220px'/> -->
+            <el-form-item label="批次：" required>
               {{endForm.batch}}
             </el-form-item>
             <el-form-item label="发酵罐剩余量：">
               {{endForm.remainAmount}}
-              <!-- <el-input type='number' v-model.number="endForm.remainAmount" style='width:220px'/> -->
             </el-form-item>
-            <el-form-item label="打料结束数(L)：" prop="endAmount">
+            <el-form-item label="打料结束数(L)：" required>
               <el-input  type='number' v-model.number="endForm.endAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="对应布浆线：">
@@ -264,6 +259,8 @@ export default class Index extends Vue {
   dataList = []
   // 暂存罐
   sdList = []
+  availableMap = new Map<string, string>()
+  matchedMap = new Map<string, string>()
   // 发酵罐
   fermentPotList = []
   searched: boolean = false
@@ -372,9 +369,13 @@ export default class Index extends Vue {
   }
   saveStart () {
     if (this.startValidate()) {
+      let uuid = Vue.prototype.uuid()
+      this.availableMap.set(this.startForm.deviceId, '1')
+      this.matchedMap.set(this.startForm.deviceId, uuid)
       let resultData = {
         // "id": "1",
         // "status": "saved",
+        recordId: uuid,
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
         productLine: this.params.productLineId,
@@ -406,33 +407,39 @@ export default class Index extends Vue {
     }
   }
   inPotEnd (deviceId: string, deviceName: string) {
-    this.dialogFormVisible2 = true
-    let startData = this.dataList[this.dataList.length - 1]
-    this.endForm = {
-      deviceId,
-      deviceName,
-      fermentPotNo: startData.fermentPotNo,
-      fermentPotName: startData.fermentPotName,
-      orderId: startData.orderId,
-      batch: startData.batch,
-      remainAmount: startData.remainAmount,
-      endAmount: 0,
-      productLine: startData.productLine,
-      productLineName: startData.productLineName,
-      remark: '',
-      changed: startData.changed,
-      changer: startData.changer
+    let recordId = this.matchedMap.get(deviceId)
+    let startData = this.dataList.find(item => item.recordId === recordId)
+    if (startData) {
+      this.endForm = {
+        deviceId,
+        deviceName,
+        fermentPotNo: startData.fermentPotNo,
+        fermentPotName: startData.fermentPotName,
+        orderId: startData.orderId,
+        batch: startData.batch,
+        remainAmount: startData.remainAmount,
+        endAmount: 0,
+        productLine: startData.productLine,
+        productLineName: startData.productLineName,
+        remark: '',
+        changed: startData.changed,
+        changer: startData.changer
+      }
     }
+    this.dialogFormVisible2 = true
   }
   saveEnd () {
     if (this.endForm.endAmount.toString() === '') {
       this.$message.error('结束数不能为空')
       return false
     }
-    let startData = this.dataList.pop()
-    Object.assign(startData, {endAmount: this.endForm.endAmount, amount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark})
-    console.log(startData)
-    this.dataList.push(startData)
+    this.availableMap.set(this.endForm.deviceId, '2')
+    let recordId = this.matchedMap.get(this.endForm.deviceId)
+    let startData = this.dataList.find(item => item.recordId === recordId)
+    // let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
+    if (startData) {
+      Object.assign(startData, {endAmount: this.endForm.endAmount, amount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark})
+    }
     this.dialogFormVisible2 = false
   }
   startValidate () {
@@ -513,7 +520,7 @@ export default class Index extends Vue {
   getFermentPot (fid: string) {
     this.fermentPotList = []
     if (fid) {
-      Vue.prototype.$http(`${SQU_API.POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+      Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.fermentPotList = res.data.num
           // if (!this.params.factoryId && res.data.num.length > 0) {
@@ -527,7 +534,7 @@ export default class Index extends Vue {
   }
 
   getRemanAmount (wId: string, fId: string, orderId: string) {
-    Vue.prototype.$http(`${SQU_API.REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
+    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
       if (res.data.code === 0) {
         this.startForm.remainAmount = res.data.psp ? res.data.psp.remainAmount : 0
         this.startForm.remainAmountUnit = res.data.psp ? res.data.psp.remainAmountUnit : 'L'
@@ -581,18 +588,40 @@ export default class Index extends Vue {
     this.retrieveOrderList(params)
   }
   retrieveOrderList (params) {
-    Vue.prototype.$http(`${SQU_API.MATERIAL_LIST_API}`, `POST`, params, false, false, false).then((res) => {
+    this.dataList = []
+    this.sdList = []
+    this.availableMap.clear()
+    this.matchedMap.clear()
+    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.list
         this.sdList = res.data.sdList
+        // let that = this
+        this.sdList.forEach(item => this.availableMap.set(item.deviceId, '0'))
       } else {
         this.$message.error(res.data.msg)
       }
     })
   }
-
   save () {
-    console.log(this.dataList)
+    this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
+    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
+      if (res.data.code === 0) {
+        this.getOrderList()
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  submit () {
+    this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
+    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
+      if (res.data.code === 0) {
+        this.getOrderList()
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
