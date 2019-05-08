@@ -18,10 +18,10 @@
     <el-table-column prop="planOutput" label="实际生产数量" width="105"></el-table-column>
     <el-table-column prop="planOutput" label="单位" width="105"></el-table-column>
     <el-table-column prop="planOutput" label="物料批次" width="105"></el-table-column>
-    <el-table-column prop="planOutput" label="是否混合罐" width="105"></el-table-column>
-    <el-table-column prop="planOutput" label="原汁罐号" width="105"></el-table-column>
-    <el-table-column prop="planOutput" label="满罐数量" width="105"></el-table-column>
-    <el-table-column prop="planOutput" label="满罐日期" width="105"></el-table-column>
+    <el-table-column prop="mixType" label="是否混合罐" width="105"></el-table-column>
+    <el-table-column prop="potNo" label="原汁罐号" width="105"></el-table-column>
+    <el-table-column prop="fullPotAmount" label="满罐数量" width="105"></el-table-column>
+    <el-table-column prop="fullPotDate" label="满罐日期" width="105"></el-table-column>
     <el-table-column prop="planOutput" label="移动类型" width="105"></el-table-column>
     <el-table-column prop="planOutput" label="库存类型" width="105"></el-table-column>
     <el-table-column prop="planOutput" label="交货已完成标识" width="105"></el-table-column>
