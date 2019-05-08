@@ -607,20 +607,26 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('保存成功')
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('保存失败: ' + err)
     })
   }
   submit () {
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('提交成功')
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('提交失败: ' + err)
     })
   }
   @Watch('params', {deep: true})
