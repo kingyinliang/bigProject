@@ -119,6 +119,7 @@ export default {
       lodingS: false,
       isRedact: false,
       orderStatus: '',
+      factory: '',
       orderNo: '',
       productDate: '',
       workShop: '',
@@ -142,6 +143,7 @@ export default {
   },
   mounted () {
     headanimation(this.$)
+    this.factory = this.Pkgfactoryid
     this.orderNo = this.PkgorderNo
     this.productDate = this.PkgproductDate
     this.workShop = this.PkgworkShop
@@ -169,6 +171,7 @@ export default {
     // 获取表头
     GetOrderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        factory: this.factory,
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
@@ -186,13 +189,13 @@ export default {
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
           this.$refs.instorage.Getpkgin(this.formHeader)
-          this.$refs.listbom.GetpkgSap(this.formHeader.orderId)
+          this.$refs.listbom.GetpkgSap(this.formHeader)
           if (this.formHeader.properties !== '二合一&礼盒产线') {
             this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
           }
           this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
-          this.$refs.listbom.GetpkgSap(this.formHeader.orderId, data)
+          this.$refs.listbom.GetpkgSap(this.formHeader, data)
         }
       })
     },
@@ -404,6 +407,10 @@ export default {
     PkgorderNo: {
       get () { return this.$store.state.common.PkgorderNo },
       set (val) { this.$store.commit('common/updateOrderNo', val) }
+    },
+    Pkgfactoryid: {
+      get () { return this.$store.state.common.Pkgfactoryid },
+      set (val) { this.$store.commit('common/updateFactoryid', val) }
     }
   },
   components: {
