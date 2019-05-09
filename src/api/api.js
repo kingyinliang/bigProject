@@ -5,7 +5,7 @@
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.1.56:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
-// let HOST = 'http://10.10.1.180:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.68:8080/xhqy-fc'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -1086,6 +1086,12 @@ export const SQU_API = {
   WATERLIST_API: HOST + '/prs/drench/drenchList',
   WATERSAVE_API: HOST + '/prs/drench/drenchUpdate',
   WATERSUBMIT_API: HOST + '/prs/drench/drenchSubmit',
+  // 布浆
+  PRESSLIST_API: HOST + '/prs/prepress/pressList',
+  PRESSUPDATE_API: HOST + '/prs/prepress/prePressUpdate', // 预压保存
+  ENDPRESSUPDATE_API: HOST + '/prs/endpress/endPressUpdate', // 終压保存
+  PRESSSUBMIT_API: HOST + '/prs/prepress/prePressSubmit', // 预压提交
+  ENDPRESSSUBMIT_API: HOST + '/prs/endpress/endPressSubmit', // 終压提交
   /**
    * 车间汇总物料列表
    */
@@ -1098,5 +1104,4 @@ export const SQU_API = {
    * 车间汇总原汁列表
    */
   SUM_FUMET_LIST_API: HOST + '/mid/prsOrder/orderList'
-
 }

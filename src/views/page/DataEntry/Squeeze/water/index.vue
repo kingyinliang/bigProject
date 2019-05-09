@@ -53,7 +53,8 @@
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-card style="margin-top:10px">
-        <el-table :data="waterList" border header-row-class-name="tableHead">
+        <el-table :data="waterList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
+          <el-table-column type="selection" width="35"></el-table-column>
           <el-table-column label="工序" width="50px">自淋</el-table-column>
           <el-table-column label="气垫车号" prop="gx">
             <template slot="header"><i class="reqI">*</i><span>气垫车号</span></template>
@@ -129,7 +130,8 @@ export default {
       userlist: [],
       filterMethod (query, item) {
         return item.screncon.indexOf(query) > -1
-      }
+      },
+      multipleSelection: []
     }
   },
   mounted () {
@@ -250,7 +252,7 @@ export default {
           this.$message.error('没有数据')
           return false
         }
-        for (let items of this.waterList) {
+        for (let items of this.multipleSelection) {
           if (!items.moveOperator || items.moveOperator === '') {
             this.$message.error('请选择挪笼操作人')
             return false
@@ -258,19 +260,31 @@ export default {
         }
         configurl = SQU_API.WATERSUBMIT_API
         this.succmessage = '提交成功'
+        this.$http(`${configurl}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            this.SearchList()
+            this.$message.success(this.succmessage)
+            this.isRedact = false
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       } else {
         configurl = SQU_API.WATERSAVE_API
         this.succmessage = '保存成功'
+        this.$http(`${configurl}`, 'POST', this.waterList).then(({data}) => {
+          if (data.code === 0) {
+            this.SearchList()
+            this.$message.success(this.succmessage)
+            this.isRedact = false
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
-      this.$http(`${configurl}`, 'POST', this.waterList).then(({data}) => {
-        if (data.code === 0) {
-          this.SearchList()
-          this.$message.success(this.succmessage)
-          this.isRedact = false
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     }
   }
 }
