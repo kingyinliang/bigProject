@@ -150,7 +150,7 @@ export default {
   methods: {
     // 获取比例
     GetRatio () {
-      this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.formHeader.materialCode}).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.formHeader.materialCode, factory: this.formHeader.factory}).then(({data}) => {
         if (data.code === 0) {
           if (data.sme) {
             this.ratio.ratio = data.sme.ratio

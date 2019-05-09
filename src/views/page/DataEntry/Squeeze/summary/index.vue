@@ -18,7 +18,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.pstngDate"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>
             </el-form-item>
             <el-form-item label="提交人员：">
               <p class="el-input" style="width: 180px">{{formHeader.changer}}</p>
@@ -37,7 +37,7 @@
       </el-row>
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" >查询</el-button>
+          <el-button type="primary" size="small" @click="GetList">查询</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -61,13 +61,13 @@
         <span slot="label" class="spanview">
           申请订单
         </span>
-        <apply-order :isRedact="isRedact"></apply-order>
+        <apply-order :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
           物料领用
         </span>
-        <materiel :isRedact="isRedact"></materiel>
+        <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapList"></materiel>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {SYSTEMSETUP_API, BASICDATA_API, SQU_API} from '@/api/api'
 import ApplyOrder from './applyOrder'
 import Materiel from './material'
 import ManHour from './manHour'
@@ -94,7 +94,14 @@ export default {
       orderStatus: '',
       factory: [],
       workshop: [],
-      formHeader: {}
+      formHeader: {
+        factory: '',
+        workShop: '',
+        productDate: ''
+      },
+      SerchSapList: [],
+      orderFumet: [],
+      fumet: []
     }
   },
   watch: {
@@ -104,8 +111,61 @@ export default {
   },
   mounted () {
     this.Getdeptcode()
+    this.getMaterial()
   },
   methods: {
+    GetList () {
+      if (!this.formHeader.factory) {
+        this.$message.error('请选择工厂')
+        return
+      }
+      if (!this.formHeader.workShop) {
+        this.$message.error('请选择车间')
+        return
+      }
+      if (!this.formHeader.productDate) {
+        this.$message.error('请选择生产日期')
+        return
+      }
+      this.$refs.materielref.getPot(this.formHeader)
+      // 获取原汁信息
+      this.$http(`${SQU_API.SUM_FUMET_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          data.orderList.forEach((item, index) => {
+            item.material = item.materialCode + '' + item.materialName
+          })
+          this.orderFumet = data.orderList
+          this.fumet = data.orderList
+          this.$refs.materielref.getMaterialList(this.formHeader)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 保存or提交
+    savedOrSubmitForm (str) {
+      this.$refs.materielref.updateMaterial(str)
+    },
+    // 提交
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
+    // 获取物料下拉
+    getMaterial () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=YA_M_MATERIAL`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.SerchSapList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取工厂
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
@@ -121,7 +181,7 @@ export default {
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             this.formHeader.workShop = data.typeList[0].deptId

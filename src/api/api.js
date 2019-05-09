@@ -3,7 +3,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.33:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.56:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
@@ -1073,6 +1073,18 @@ export const SQU_API = {
   /**
    * 物料入库 提交
    */
-  MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder'
+  MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder',
+  /**
+   * 车间汇总物料列表
+   */
+  SUM_MATERIAL_LIST_API: HOST + '/mid/prsMaterial/materialList',
+  /**
+   * 车间汇总物料列表
+   */
+  SUM_MATERIAL_UPDATE_API: HOST + '/mid/prsMaterial/updateMaterial',
+  /**
+   * 车间汇总原汁列表
+   */
+  SUM_FUMET_LIST_API: HOST + '/mid/prsOrder/orderList'
 
 }
