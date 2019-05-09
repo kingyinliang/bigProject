@@ -92,9 +92,14 @@
             <el-option :label="item.deviceName" v-for="(item, index) in pulpMachineList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫车" :label-width="formLabelWidth" prop="hovercraftNo">
-          <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px">
+        <el-form-item label="气垫车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
+          <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="气垫车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
+          <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
+            <el-option :label="item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="布浆张数" :label-width="formLabelWidth" prop="pulpNum">
@@ -153,6 +158,7 @@ export default {
       formLabelWidth: '100px',
       pulpMachineList: [],
       hovercraftList: [],
+      hovercraftAll: [],
       dialogFormVisibleMai: false,
       visible: false,
       materialList: [],
@@ -173,7 +179,7 @@ export default {
         return item.screncon.indexOf(query) > -1
       },
       multipleSelection: [],
-      carList: []
+      isSelect: true
     }
   },
   props: ['isRedact', 'formHeader'],
@@ -213,9 +219,22 @@ export default {
           this.$message.error(data.msg)
         }
       })
+      this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
+        param: '气垫车',
+        deptId: workshop,
+        currPage: '1',
+        pageSize: '50'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.hovercraftAll = data.list.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     addmaterial () {
       this.dialogFormVisibleMai = true
+      this.isSelect = true
       this.sauce = {
         id: '',
         uid: this.uuid(),
@@ -237,6 +256,7 @@ export default {
     editmaterial (row) {
       if (this.isRedact) {
         this.dialogFormVisibleMai = true
+        this.isSelect = false
         this.sauce = Object.assign({}, row)
       }
     },
@@ -252,7 +272,7 @@ export default {
             currentRecord = this.materialList.filter(data => data.id === this.sauce.id)
           }
           let pulpName = this.pulpMachineList.find(item => item.deviceId === this.sauce.pulpMachine).deviceName
-          let hovercraName = this.hovercraftList.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
+          let hovercraName = this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
           this.sauce = {
             id: this.sauce.id,
             uid: this.sauce.uid,
