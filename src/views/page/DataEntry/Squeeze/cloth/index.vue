@@ -151,7 +151,7 @@ export default {
     GetParentline (id) {
       this.formHeader.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
@@ -206,14 +206,6 @@ export default {
           that.$message.error('网络请求失败，请刷新重试')
         })
       })
-      // let net1 = new Promise((resolve, reject) => {
-      //   that.$refs.material.savesmain(resolve)
-      // })
-      // let net10 = Promise.all([net1])
-      // net10.then(function () {
-      //   that.SearchList()
-      //   that.$message.success('保存成功')
-      // })
     },
     tabClick (val) {
       this.$refs.tabs.setCurrentName(val.name)

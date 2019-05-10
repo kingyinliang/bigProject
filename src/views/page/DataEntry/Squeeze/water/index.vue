@@ -177,7 +177,7 @@ export default {
     GetParentline (id) {
       this.formHeader.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
