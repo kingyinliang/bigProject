@@ -346,12 +346,12 @@ export default {
     },
     Readyrules () {
       let ty = true
-      if (this.materialList.length === 0) {
+      if (this.multipleSelection.length === 0) {
         ty = false
-        this.$message.error('请填写物料')
+        this.$message.error('请勾选提交数据')
         return false
       }
-      for (let items of this.materialList) {
+      for (let items of this.multipleSelection) {
         if (!items.pulpMachineName || items.pulpMachineName === '' || !items.hovercraftName || items.hovercraftName === '' || !items.pulpStartDate || items.pulpStartDate === '' || !items.pulpEndDate || items.pulpEndDate === '' || !items.pulpAmount || items.pulpAmount === '' || !items.selfDrenchTime || items.selfDrenchTime === '' || !items.potOne || items.potOne === '') {
           ty = false
           this.$message.error('物料必填项不能为空')
@@ -370,10 +370,12 @@ export default {
           return false
         }
       }
-      if (this.multipleSelection.length === 0) {
-        ty = false
-        this.$message.error('请勾选提交数据')
-        return false
+      for (let item of this.multipleSelection) {
+        if (item.id === '') {
+          ty = false
+          this.$message.error('请先保存再提交')
+          return false
+        }
       }
       return ty
     },

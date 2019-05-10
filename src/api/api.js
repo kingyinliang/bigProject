@@ -3,7 +3,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.56:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.26:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // let HOST = 'http://10.10.1.68:8080/xhqy-fc'
 // HOST

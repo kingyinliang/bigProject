@@ -39,10 +39,10 @@
             </el-col> -->
           </el-row>
           <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
-            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth">查询</el-button>
-            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isMyAuth && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
-            <el-button type="primary" size="small"  @click="save()"  v-if="isMyAuth && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
-            <el-button type="primary" size="small"  @click="submit()"  v-if="isMyAuth && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
+            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:material:list')">查询</el-button>
+            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
+            <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
+            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff">
@@ -399,9 +399,6 @@ export default class Index extends Vue {
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
-  get isMyAuth () {
-    return true
-  }
   get mainTabs () {
     return this.$store.state.common.mainTabs
   }
@@ -651,7 +648,7 @@ export default class Index extends Vue {
   getProductLine (wid: string) {
     this.productlineList = []
     if (wid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
         } else {
