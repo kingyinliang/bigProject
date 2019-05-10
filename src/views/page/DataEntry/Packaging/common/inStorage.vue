@@ -11,7 +11,7 @@
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
-          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
           </el-select>
         </div>
@@ -21,13 +21,13 @@
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
-          <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" maxlength="10"></el-input>
+          <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" maxlength="10"></el-input>
         </div>
       </template>
     </el-table-column>
     <el-table-column label="人工码垛-包材库" width="140">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -37,7 +37,7 @@
     </el-table-column>
     <el-table-column label="自动码垛-包材库" width="140" v-if="order.workShopName === '包装三车间'">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
@@ -47,7 +47,7 @@
     </el-table-column>
     <el-table-column label="人工码垛-立体库" width="140">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -57,7 +57,7 @@
     </el-table-column>
     <el-table-column label="自动码垛-立体库" width="120" v-if="order.workShopName === '包装三车间'">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
@@ -67,7 +67,7 @@
     </el-table-column>
     <el-table-column label="自动上架-立体库" width="140" v-if="order.workShopName !== '包装三车间'">
       <template slot-scope="scope">
-        <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName !== '包装三车间'">
@@ -77,7 +77,7 @@
     </el-table-column>
     <el-table-column label="不良品" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -87,7 +87,7 @@
     </el-table-column>
     <el-table-column label="样品" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="60">
@@ -108,12 +108,12 @@
     </el-table-column>
     <el-table-column label="备注" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -125,7 +125,7 @@
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
-          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
           </el-select>
         </div>
@@ -133,13 +133,13 @@
     </el-table-column>
     <el-table-column label="生产批次" width="150">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+        <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
         <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
       </template>
     </el-table-column>
     <el-table-column label="人工码垛-立体库" width="130">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="50">
@@ -149,7 +149,7 @@
     </el-table-column>
     <el-table-column label="不良品" width="90">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="50">
@@ -159,7 +159,7 @@
     </el-table-column>
     <el-table-column label="样品" width="90">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="单位" width="50">
@@ -177,22 +177,22 @@
     </el-table-column>
     <el-table-column label="主产品批次" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="赠品批次" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column label="备注" width="120">
       <template slot-scope="scope">
-        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="60">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -205,7 +205,7 @@
         <template slot-scope="scope">
           <div class="required">
             <i class="reqI">*</i>
-            <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+            <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
               <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
             </el-select>
           </div>
@@ -213,13 +213,13 @@
       </el-table-column>
       <el-table-column label="生产批次" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+          <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
           <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
         </template>
       </el-table-column>
       <el-table-column label="散装-立体库" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -229,7 +229,7 @@
       </el-table-column>
       <el-table-column label="人工码垛-立体库" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -239,7 +239,7 @@
       </el-table-column>
       <el-table-column label="不良品" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -249,7 +249,7 @@
       </el-table-column>
       <el-table-column label="样品" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -269,7 +269,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (Instatus ==='noPass' || Instatus ==='saved' || Instatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -537,36 +537,40 @@ export default {
               this.Instatus = 'saved'
             }
           }
-          let sub = 0
-          let che = 0
-          let no = 0
-          let sav = 0
-          this.InDate.forEach((item) => {
-            if (item.status === 'noPass') {
-              no = no + 1
-            } else if (item.status === 'submit') {
-              sub = sub + 1
-            } else if (item.status === 'checked') {
-              che = che + 1
-            } else if (item.status === 'saved') {
-              sav = sav + 1
-            }
-          })
-          if (no > 0) {
-            this.Instatus = 'noPass'
-          } else if (sub > 0) {
-            this.Instatus = 'submit'
-          } else if (sav > 0) {
-            this.Instatus = 'saved'
-          } else if (che > 0) {
-            this.Instatus = 'checked'
-          }
-          console.log(this.Instatus)
+          this.InDateStatus()
           this.$emit('GetinstorageState', this.Instatus)
         } else {
           this.$message.error(data.msg)
         }
       })
+    },
+    InDateStatus () {
+      let sub = 0
+      let che = 0
+      let no = 0
+      let sav = 0
+      this.InDate.forEach((item) => {
+        if (item.status === 'noPass') {
+          no = no + 1
+        } else if (item.status === 'submit') {
+          sub = sub + 1
+        } else if (item.status === 'checked') {
+          che = che + 1
+        } else if (item.status === 'saved') {
+          sav = sav + 1
+        } else if (item.status === '') {
+          sav = sav + 1
+        }
+      })
+      if (no > 0) {
+        this.Instatus = 'noPass'
+      } else if (sub > 0) {
+        this.Instatus = 'submit'
+      } else if (sav > 0) {
+        this.Instatus = 'saved'
+      } else if (che > 0) {
+        this.Instatus = 'checked'
+      }
     },
     // 机维组刷新
     GetMaintain () {
@@ -619,7 +623,7 @@ export default {
         delFlag: '0'
       })
     },
-    // 删除半成品
+    // 删除
     dellistbomS (row) {
       row.delFlag = '1'
     },
