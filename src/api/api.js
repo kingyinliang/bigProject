@@ -1103,5 +1103,17 @@ export const SQU_API = {
   /**
    * 车间汇总原汁列表
    */
-  SUM_FUMET_LIST_API: HOST + '/mid/prsOrder/orderList'
+  SUM_FUMET_LIST_API: HOST + '/mid/prsOrder/orderList',
+  /**
+   * 车间汇总申请订单
+   */
+  SUM_APPLYORDER_API: HOST + '/mid/prsOrder/updateOrder',
+  /**
+   * 车间汇总工时列表
+   */
+  SUM_TIME_LIST_API: HOST + '/mid/prsTime/timeList',
+  /**
+   * 车间汇总获取工时
+   */
+  SUM_TIME_API: HOST + '/mid/prsTime/timeSave'
 }

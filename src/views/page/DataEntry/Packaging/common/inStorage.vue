@@ -413,7 +413,7 @@ export default {
       }
     },
     // 入库提交
-    submitIn (id, str, resolve) {
+    submitIn (id, str, resolve, reject) {
       let types = ''
       if (this.order.properties === '二合一&礼盒产线') {
         types = 'twoAndOne'
@@ -437,11 +437,14 @@ export default {
       })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
+          if (reject) {
+            reject('提交失败')
+          }
           this.$message.error(data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
         }
       })
     },

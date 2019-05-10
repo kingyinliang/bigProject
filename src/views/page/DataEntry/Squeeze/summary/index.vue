@@ -61,7 +61,7 @@
         <span slot="label" class="spanview">
           申请订单
         </span>
-        <apply-order :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList"></apply-order>
+        <apply-order :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -73,7 +73,7 @@
         <span slot="label" class="spanview">
           工时计算
         </span>
-        <man-hour :isRedact="isRedact"></man-hour>
+        <man-hour ref="manhour" :isRedact="isRedact" :formHeader="formHeader"></man-hour>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -128,15 +128,19 @@ export default {
         return
       }
       this.$refs.materielref.getPot(this.formHeader)
-      // 获取原汁信息
+      this.GetFunet()
+    },
+    // 获取原汁信息
+    GetFunet () {
       this.$http(`${SQU_API.SUM_FUMET_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           data.orderList.forEach((item, index) => {
-            item.material = item.materialCode + '' + item.materialName
+            item.material = item.materialCode + ' ' + item.materialName
           })
           this.orderFumet = data.orderList
           this.fumet = data.orderList
           this.$refs.materielref.getMaterialList(this.formHeader)
+          this.$refs.manhour.GetTimeList(this.formHeader)
         } else {
           this.$message.error(data.msg)
         }

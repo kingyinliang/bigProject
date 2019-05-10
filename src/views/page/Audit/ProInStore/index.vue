@@ -185,6 +185,10 @@
                 <span v-if="!scope.row.redact">{{ scope.row.expirydate }}</span>
               </template>
             </el-table-column>
+            <el-table-column prop="mixType" label="是否混合罐" width="105"></el-table-column>
+            <el-table-column prop="potNo" label="原汁罐号" width="105"></el-table-column>
+            <el-table-column prop="fullPotAmount" label="满罐数量" width="105"></el-table-column>
+            <el-table-column prop="fullPotDate" label="满罐日期" width="105"></el-table-column>
             <el-table-column
               prop="interfaceReturn"
               label="接口回写"

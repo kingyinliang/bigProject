@@ -2,7 +2,7 @@
   <div>
     <el-row class="clearfix">
       <h3 style="color: rgba(0, 0, 0, 0.65);font-size: 14px;float: left">原汁信息</h3>
-      <el-button type="primary" style="float: right" size="small" :disabled="!isRedact">申请订单</el-button>
+      <el-button type="primary" style="float: right" size="small" :disabled="!isRedact" @click="ApplyOrder">申请订单</el-button>
     </el-row>
     <el-table ref="table1" :data="fumet" header-row-class-name="tableHead" @selection-change="handleSelectionChange" border tooltip-effect="dark">
       <el-table-column type="selection" :selectable='checkboxApply' width="34"></el-table-column>
@@ -12,7 +12,7 @@
       </el-table-column>
       <el-table-column label="是否混合罐" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="isRedact" size="small">
+          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!isRedact" size="small">
             <el-option label="正常" value="正常"></el-option>
             <el-option label="共用混合" value="共用混合"></el-option>
             <el-option label="单用混合" value="单用混合"></el-option>
@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="isRedact" size="small">
+          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!isRedact" size="small">
             <el-option
               v-for="item in SerchSapList"
               :key="item.code+' '+item.value"
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import {SQU_API} from '@/api/api'
 export default {
   name: 'applyOrder',
   data () {
@@ -65,6 +66,20 @@ export default {
   mounted () {
   },
   methods: {
+    // 申请订单
+    ApplyOrder () {
+      this.multipleSelection.forEach((item, index) => {
+        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+      })
+      this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', this.multipleSelection).then(({data}) => {
+        if (data.code === 0) {
+          this.$emit('GetFunet')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 表格选中
     handleSelectionChange (val) {
       this.multipleSelection = []
@@ -74,7 +89,7 @@ export default {
     },
     // 审核通过禁用
     checkboxApply (row) {
-      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
+      if (row.orderNo) {
         return 0
       } else {
         return 1

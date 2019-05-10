@@ -200,7 +200,7 @@ export default {
       })
     },
     // 修改表头
-    UpdateformHeader (str, resolve) {
+    UpdateformHeader (str, resolve, reject) {
       this.formHeader.orderStatus = str
       this.formHeader.realOutput = this.$refs.instorage.countOutputNum / this.ratio.ratio
       this.formHeader.countOutputUnit = this.formHeader.properties === '二合一&礼盒产线' ? this.ratio.basicUnit : 'BOT'// 生产入库单位
@@ -216,11 +216,14 @@ export default {
         if (data.code === 0) {
           this.PkgproductDate = this.formHeader.productDate.replace(/-/g, '')
           this.productDate = this.formHeader.productDate.replace(/-/g, '')
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
+          if (reject) {
+            reject('保存表头' + data.msg)
+          }
           this.$message.error('保存表头' + data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
         }
       })
     },
@@ -237,10 +240,10 @@ export default {
       } else if (this.submitRadio === '1') {
         let that = this
         let net0 = new Promise((resolve, reject) => {
-          that.UpdateformHeader('saved', resolve)
+          that.UpdateformHeader('saved', resolve, reject)
         })
         let net1 = new Promise((resolve, reject) => {
-          that.$refs.instorage.submitIn(that.formHeader.orderId, 'submit', resolve)
+          that.$refs.instorage.submitIn(that.formHeader.orderId, 'submit', resolve, reject)
         })
         let SubmitNet = Promise.all([net0, net1])
         SubmitNet.then(() => {
@@ -276,7 +279,7 @@ export default {
       this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {
-        this.UpdateformHeader(str, resolve)
+        this.UpdateformHeader(str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
         that.$refs.readytimes.UpdateReady(that.formHeader.orderId, str, resolve, reject)
@@ -311,7 +314,7 @@ export default {
             that.ProHours(resolve, reject)
           })
           let net9 = new Promise((resolve, reject) => {
-            that.$refs.instorage.submitIn(that.formHeader.orderId, str, resolve)
+            that.$refs.instorage.submitIn(that.formHeader.orderId, str, resolve, reject)
           })
           let net10 = new Promise((resolve, reject) => {
             that.$refs.listbom.subSap(resolve, reject)
