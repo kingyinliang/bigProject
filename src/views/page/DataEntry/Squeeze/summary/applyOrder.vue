@@ -37,7 +37,11 @@
       <el-table-column label="满罐日期" width="140" prop="fullPotDate"></el-table-column>
       <el-table-column label="原汁批次" width="140" prop="batch"></el-table-column>
       <el-table-column label="生产订单" width="140" prop="orderNo"></el-table-column>
-      <el-table-column label="操作" width="50" fixed="right"></el-table-column>
+      <el-table-column label="操作" width="50" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" :disabled="!isRedact">退回</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>

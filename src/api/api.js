@@ -1113,7 +1113,27 @@ export const SQU_API = {
    */
   SUM_TIME_LIST_API: HOST + '/mid/prsTime/timeList',
   /**
+   * 车间汇总工时修改
+   */
+  SUM_TIME_UPDATE_API: HOST + '/mid/prsTime/saveTime',
+  /**
+   * 车间汇总订单退回
+   */
+  SUM_TIME_BACK_API: HOST + '/mid/prsTime/backTime',
+  /**
    * 车间汇总获取工时
    */
-  SUM_TIME_API: HOST + '/mid/prsTime/timeSave'
+  SUM_TIME_API: HOST + '/mid/prsTime/applyTime',
+  /**
+   * 车间汇总提交
+   */
+  SUM_SUBMIT_API: HOST + '/mid/prsTime/submitInStr',
+  /**
+   * 工时与异常查询接口
+   */
+  PRS_TIME_LIST_API: HOST + '/prs/timeSheet/list',
+  /**
+   * 工时与异常更新接口
+   */
+  PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
 }

@@ -102,7 +102,7 @@ export default {
       })
     },
     // 修改酱
-    updateMaterial (str) {
+    updateMaterial (str, resolve) {
       let tmp = []
       this.SumDate.forEach((item, index) => {
         item.material.childStatus = str
@@ -112,6 +112,9 @@ export default {
       })
       this.$http(`${SQU_API.SUM_MATERIAL_UPDATE_API}`, 'POST', tmp).then(({data}) => {
         if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
           this.$message.error(data.msg)
         }

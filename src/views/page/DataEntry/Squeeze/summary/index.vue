@@ -148,7 +148,26 @@ export default {
     },
     // 保存or提交
     savedOrSubmitForm (str) {
-      this.$refs.materielref.updateMaterial(str)
+      let that = this
+      let updateMaterial = new Promise((resolve, reject) => {
+        that.$refs.materielref.updateMaterial(str, resolve, reject)
+      })
+      let UpdateTime = new Promise((resolve, reject) => {
+        that.$refs.manhour.UpdateTime(str, resolve, reject)
+      })
+      if (str === 'submit') {
+        let saveNet = Promise.all([updateMaterial, UpdateTime])
+        saveNet.then(function () {
+          that.Submit(str)
+        })
+      } else {
+        let saveNet = Promise.all([updateMaterial, UpdateTime])
+        saveNet.then(function () {
+          that.$message.success('保存成功')
+        }, err => {
+          that.$message.error(err)
+        })
+      }
     },
     // 提交
     SubmitForm () {
@@ -158,6 +177,18 @@ export default {
         type: 'warning'
       }).then(() => {
         this.savedOrSubmitForm('submit')
+      })
+    },
+    Submit (str) {
+      this.$refs.manhour.timeDate.forEach((item, index) => {
+        item.status = str
+      })
+      this.$http(`${SQU_API.SUM_SUBMIT_API}`, 'POST', this.$refs.manhour.timeDate).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('提交成功')
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     // 获取物料下拉
