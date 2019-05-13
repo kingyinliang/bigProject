@@ -51,7 +51,7 @@
               <div  class="pot-box">
                 <div class="pot-box-header">
                   <span class="pot-box-title" style="margin-left:5px;">原汁罐</span>
-                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{isAvailable==='0'? '待领用': '领用中'}}</span>
+                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{isAvailable==='0'? '待入库': '入库中'}}</span>
                 </div>
                 <div class='pot-box-container img'>
                 </div>
