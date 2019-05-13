@@ -548,7 +548,7 @@ export default class Index extends Vue {
       this.$message.error('结束数不能为空')
       return false
     }
-    this.availableMap.set(this.endForm.deviceId, '2')
+    this.availableMap.set(this.endForm.deviceId, '0')
     let recordId = this.matchedMap.get(this.endForm.deviceId)
     let startData = this.dataList.find(item => item.recordId === recordId)
     // let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
