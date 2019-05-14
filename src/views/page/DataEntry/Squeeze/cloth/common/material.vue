@@ -6,8 +6,7 @@
       </div>
       <div style="margin-top:10px" >
         <el-table :data="materialList" @selection-change="handleSelectionChange" @row-dblclick="editmaterial" border header-row-class-name="tableHead" :row-class-name="rowDelFlag">
-          <el-table-column type="selection" width="35">
-          </el-table-column>
+          <el-table-column type="selection" width="35" :disabled="!isRedact"></el-table-column>
           <el-table-column type="index" label="序号" width="50px"></el-table-column>
           <el-table-column width="100px">
             <template slot="header"><i class="reqI">*</i><span>布浆机</span></template>
@@ -69,12 +68,12 @@
             <template slot="header"><i class="reqI">*</i><span>人员</span></template>
             <template slot-scope="scope">
               <el-col v-if="!scope.row.man">
-                <span style="cursor:pointer" @click="selectUser(scope.row)">
+                <span :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">
                   <i>{{scope.row.man}}</i>
                   <i>点击选择人员</i>
                 </span>
               </el-col>
-              <span v-else @click="selectUser(scope.row)">{{scope.row.man}}</span>
+              <span v-else :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">{{scope.row.man}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -118,13 +117,16 @@
           <el-input v-model="sauce.selfDrenchTime"></el-input>
         </el-form-item>
         <el-form-item label="发酵罐号" :label-width="formLabelWidth" prop="potOne">
-          <el-input v-model="sauce.potOne"></el-input>
+          <el-input v-model="sauce.potOne" style="width:259px; float:left"></el-input><el-button @click="addGuan()" style="float:left; margin-left:10px">+</el-button>
+        </el-form-item>
+        <el-form-item label="发酵罐号2" :label-width="formLabelWidth" prop="potTwo" :style="{'display': guanTwoDisplayNo ? 'none' : ''}">
+          <el-input v-model="sauce.potTwo" style="width:259px; float:left"></el-input><el-button type="danger" icon="el-icon-delete" circle size="small" @click="delGuan()" style="float:left; margin-left:10px"></el-button>
         </el-form-item>
         <el-form-item label="操作时间" :label-width="formLabelWidth">{{sauce.changed}}</el-form-item>
         <el-form-item label="操作人" :label-width="formLabelWidth">{{sauce.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisibleMai = false">取 消</el-button>
+        <el-button @click="cancelsave()">取 消</el-button>
         <el-button type="primary" @click="addsave('saucesbu')">确 定</el-button>
       </div>
     </el-dialog>
@@ -179,7 +181,8 @@ export default {
         return item.screncon.indexOf(query) > -1
       },
       multipleSelection: [],
-      isSelect: true
+      isSelect: true,
+      guanTwoDisplayNo: true
     }
   },
   props: ['isRedact', 'formHeader'],
@@ -189,6 +192,17 @@ export default {
   watch: {
   },
   methods: {
+    addGuan () {
+      this.guanTwoDisplayNo = false
+    },
+    delGuan () {
+      this.sauce.potTwo = ''
+      this.guanTwoDisplayNo = true
+    },
+    cancelsave () {
+      this.dialogFormVisibleMai = false
+      this.delGuan()
+    },
     // 布浆机
     GetpulpMachine (productLine) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
@@ -235,6 +249,7 @@ export default {
     addmaterial () {
       this.dialogFormVisibleMai = true
       this.isSelect = true
+      this.guanTwoDisplayNo = true
       this.sauce = {
         id: '',
         uid: this.uuid(),
@@ -258,6 +273,9 @@ export default {
         this.dialogFormVisibleMai = true
         this.isSelect = false
         this.sauce = Object.assign({}, row)
+        if (this.sauce.potTwo) {
+          this.guanTwoDisplayNo = false
+        }
       }
     },
     addsave (formName) {
@@ -516,5 +534,19 @@ export default {
 }
 .rowDel {
   display: none
+}
+.dialog-footer .el-button--primary:focus{
+  color: #000000;
+  background-color: #FFFFFF;
+  border-color: #D9D9D9;
+}
+.dialog-footer .el-button--primary:hover{
+  background-color: #1890FF;
+  color: #FFFFFF
+}
+.dialog-footer .el-button--primary{
+  background-color: #1890FF;
+  color: #FFFFFF;
+  border-color: #1890FF;
 }
 </style>

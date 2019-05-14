@@ -38,12 +38,12 @@
         <el-table-column label="调压人员" width="150px" :show-overflow-tooltip="true" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
           <template slot-scope="scope">
             <el-col v-if="!scope.row.suitOperator">
-              <span style="cursor:pointer" @click="selectUser(scope.row)">
+              <span :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">
                 <i>{{scope.row.suitOperator}}</i>
                 <i>点击选择人员</i>
               </span>
             </el-col>
-            <span v-else @click="selectUser(scope.row)">{{scope.row.suitOperator}}</span>
+            <span v-else :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">{{scope.row.suitOperator}}</span>
           </template>
         </el-table-column>
         <el-table-column label="挪笼人员" prop="moveOperator" :show-overflow-tooltip="true" width="150"></el-table-column>
@@ -84,12 +84,12 @@
         <el-table-column label="调压人员" width="150px" :show-overflow-tooltip="true" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
           <template slot-scope="scope">
             <el-col v-if="!scope.row.suitOperator">
-              <span style="cursor:pointer" @click="selectUser(scope.row)">
+              <span :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">
                 <i>{{scope.row.suitOperator}}</i>
                 <i>点击选择人员</i>
               </span>
             </el-col>
-            <span v-else @click="selectUser(scope.row)">{{scope.row.suitOperator}}</span>
+            <span v-else :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">{{scope.row.suitOperator}}</span>
           </template>
         </el-table-column>
         <el-table-column label="挪笼人员" prop="moveOperator" :show-overflow-tooltip="true" width="150" :key="Math.random()"></el-table-column>

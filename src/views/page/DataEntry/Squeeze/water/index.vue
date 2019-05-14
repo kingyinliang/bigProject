@@ -36,12 +36,12 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('prs:drench:drenchList')">查询</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('prs:dernchUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('prs:dernchUpdate')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('prs:dernchUpdate')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
@@ -69,12 +69,12 @@
             <template slot="header"><i class="reqI">*</i><span>挪笼操作员</span></template>
             <template slot-scope="scope">
               <el-col v-if="!scope.row.moveOperator">
-                <span style="cursor:pointer" @click="selectUser(scope.row)">
+                <span :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">
                   <i>{{scope.row.moveOperator}}</i>
                   <i>点击选择人员</i>
                 </span>
               </el-col>
-              <span v-else @click="selectUser(scope.row)">{{scope.row.moveOperator}}</span>
+              <span v-else :style="{'cursor':isRedact?'pointer':''}" @click="selectUser(scope.row)">{{scope.row.moveOperator}}</span>
             </template>
           </el-table-column>
           <el-table-column label="布浆操作员" prop="drenchOperator"></el-table-column>
@@ -248,8 +248,8 @@ export default {
     savedOrSubmitForm (str) {
       let configurl
       if (str === 'submit') {
-        if (this.waterList.length === 0) {
-          this.$message.error('没有数据')
+        if (this.multipleSelection.length === 0) {
+          this.$message.error('没有勾选提交数据')
           return false
         }
         for (let items of this.multipleSelection) {
