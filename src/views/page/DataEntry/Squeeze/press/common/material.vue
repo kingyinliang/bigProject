@@ -100,6 +100,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-form :inline="true" :model="formInline" style="margin-top:10px" v-if="this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D' && this.formHeader.pressure === 2">
+        <el-form-item>
+          <span slot="label">压榨一东碎布数（张）<i class="reqI">*</i>:</span>
+          <el-input v-model="formInline.destoryNumEast" :disabled="!isRedact" size="small"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">压榨一西碎布数（张）<i class="reqI">*</i>:</span>
+          <el-input v-model="formInline.destoryNumWest" :disabled="!isRedact" size="small"></el-input>
+        </el-form-item>
+      </el-form>
     </el-card>
     <el-dialog title="人员分配" :close-on-click-modal="false" :visible.sync="visible">
       <el-row>
@@ -137,7 +147,11 @@ export default {
       filterMethod (query, item) {
         return item.screncon.indexOf(query) > -1
       },
-      multipleSelection: []
+      multipleSelection: [],
+      formInline: {
+        'destoryNumEast': '',
+        'destoryNumWest': ''
+      }
     }
   },
   props: ['isRedact', 'formHeader'],
@@ -197,6 +211,8 @@ export default {
       this.$http(`${SQU_API.PRESSLIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, pressure: formHeader.pressure, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
         if (data.code === 0) {
           this.materialList = data.pressInfo
+          this.formInline.destoryNumEast = this.materialList[0].destoryNumEast
+          this.formInline.destoryNumWest = this.materialList[0].destoryNumWest
         } else {
           this.$message.error(data.msg)
         }
@@ -269,6 +285,17 @@ export default {
               return false
             }
           }
+          if (this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D') {
+            if (this.formInline.destoryNumEast === '' || !this.formInline.destoryNumEast || this.formInline.destoryNumWest === '' || !this.formInline.destoryNumWest) {
+              this.$message.error('请填写必填项')
+              return false
+            } else {
+              this.multipleSelection.map((item) => {
+                this.$set(item, 'destoryNumEast', this.formInline.destoryNumEast)
+                this.$set(item, 'destoryNumWest', this.formInline.destoryNumWest)
+              })
+            }
+          }
         }
       }
       let configurl
@@ -297,6 +324,20 @@ export default {
         configurl = SQU_API.PRESSUPDATE_API
       } else {
         configurl = SQU_API.ENDPRESSUPDATE_API
+      }
+      if (this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D') {
+        this.materialList.map((item) => {
+          let destoryNumEast = 0
+          let destoryNumWest = 0
+          if (this.formInline.destoryNumEast && this.formInline.destoryNumEast !== '') {
+            destoryNumEast = this.formInline.destoryNumEast
+          }
+          if (this.formInline.destoryNumWest && this.formInline.destoryNumWest !== '') {
+            destoryNumWest = this.formInline.destoryNumWest
+          }
+          this.$set(item, 'destoryNumEast', destoryNumEast)
+          this.$set(item, 'destoryNumWest', destoryNumWest)
+        })
       }
       this.$http(`${configurl}`, 'POST', this.materialList).then(({data}) => {
         if (data.code === 0) {
