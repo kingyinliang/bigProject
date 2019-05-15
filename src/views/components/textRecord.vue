@@ -46,6 +46,11 @@ export default {
         this.textObj.orderHouseId = formHeader.orderHouseId
         this.textObj.blongProc = formHeader.blongProc
         this.textObj.orderId = formHeader.orderId
+      } else if (str === 'Squeeze') {
+        this.textObj.factory = formHeader.factory
+        this.textObj.workShop = formHeader.workShop
+        this.textObj.productLine = formHeader.productLine
+        this.textObj.productDate = formHeader.productDate
       } else {
         this.textObj.orderId = formHeader.orderId
       }

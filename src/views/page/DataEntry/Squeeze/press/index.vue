@@ -176,6 +176,12 @@ export default {
     // 保存
     savedOrSubmitForm (str) {
       let that = this
+      let excSaveNet = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(that.formHeader, 'Squeeze', resolve, reject)
+      })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(that.formHeader, 'Squeeze', resolve, reject)
+      })
       let net3
       if (str === 'submit') {
         that.succmessage = '提交成功'
@@ -188,7 +194,7 @@ export default {
           that.$refs.material.updateMaterial(resolve, reject)
         })
       }
-      Promise.all([net3]).then(function () {
+      Promise.all([net3, excSaveNet, textSaveNet]).then(function () {
         that.$message.success(that.succmessage)
         that.SearchList()
         that.isRedact = false

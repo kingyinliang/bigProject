@@ -167,6 +167,19 @@ export default {
     SearchList () {
       this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
+      this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+      this.$refs.excrecord.GetExcDate({
+        factory: this.formHeader.factory,
+        workShop: this.formHeader.workShop,
+        productLine: this.formHeader.productLine,
+        productDate: this.formHeader.productDate
+      })
+      this.$refs.textrecord.GetText({
+        factory: this.formHeader.factory,
+        workShop: this.formHeader.workShop,
+        productLine: this.formHeader.productLine,
+        productDate: this.formHeader.productDate
+      })
     },
     // 提交
     SubmitForm () {
@@ -191,6 +204,12 @@ export default {
         this.$set(this.formHeader, 'clickstatus', 'saved')
       }
       let that = this
+      let excSaveNet = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(that.formHeader, 'Squeeze', resolve, reject)
+      })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(that.formHeader, 'Squeeze', resolve, reject)
+      })
       new Promise((resolve, reject) => {
         that.$refs.material.savemain(resolve, reject)
       }).then(function () {
@@ -200,7 +219,7 @@ export default {
         let net2 = new Promise((resolve, reject) => {
           that.$refs.material.savepeople(resolve, reject)
         })
-        Promise.all([net1, net2]).then(function () {
+        Promise.all([net1, net2, excSaveNet, textSaveNet]).then(function () {
           that.$message.success(that.succmessage)
           that.SearchList()
           that.isRedact = false
