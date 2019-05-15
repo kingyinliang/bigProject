@@ -211,8 +211,10 @@ export default {
       this.$http(`${SQU_API.PRESSLIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, pressure: formHeader.pressure, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
         if (data.code === 0) {
           this.materialList = data.pressInfo
-          this.formInline.destoryNumEast = this.materialList[0].destoryNumEast
-          this.formInline.destoryNumWest = this.materialList[0].destoryNumWest
+          if (this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D' && this.formHeader.pressure === 2) {
+            this.formInline.destoryNumEast = this.materialList[0].destoryNumEast
+            this.formInline.destoryNumWest = this.materialList[0].destoryNumWest
+          }
         } else {
           this.$message.error(data.msg)
         }

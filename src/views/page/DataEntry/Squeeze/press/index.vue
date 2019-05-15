@@ -162,6 +162,19 @@ export default {
     SearchList () {
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.material.GetpulpMachine(this.formHeader)
+      this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+      this.$refs.excrecord.GetExcDate({
+        factory: this.formHeader.factory,
+        workShop: this.formHeader.workShop,
+        productLine: this.formHeader.productLine,
+        productDate: this.formHeader.productDate
+      })
+      this.$refs.textrecord.GetText({
+        factory: this.formHeader.factory,
+        workShop: this.formHeader.workShop,
+        productLine: this.formHeader.productLine,
+        productDate: this.formHeader.productDate
+      })
     },
     // 提交
     SubmitForm () {
