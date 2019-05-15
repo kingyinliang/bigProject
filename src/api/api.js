@@ -1097,7 +1097,7 @@ export const SQU_API = {
    */
   SUM_MATERIAL_LIST_API: HOST + '/mid/prsMaterial/materialList',
   /**
-   * 车间汇总物料列表
+   * 车间汇总物料修改
    */
   SUM_MATERIAL_UPDATE_API: HOST + '/mid/prsMaterial/updateMaterial',
   /**
@@ -1107,7 +1107,15 @@ export const SQU_API = {
   /**
    * 车间汇总申请订单
    */
-  SUM_APPLYORDER_API: HOST + '/mid/prsOrder/updateOrder',
+  SUM_APPLYORDER_API: HOST + '/mid/prsOrder/applyOrder',
+  /**
+   * 车间汇总修改订单
+   */
+  SUM_ORDERUPDATE_API: HOST + '/mid/prsOrder/updateOrder',
+  /**
+   * 车间汇总退回订单
+   */
+  SUM_ORDER_BACK_API: HOST + '/mid/prsOrder/bactInSto',
   /**
    * 车间汇总工时列表
    */
@@ -1117,7 +1125,7 @@ export const SQU_API = {
    */
   SUM_TIME_UPDATE_API: HOST + '/mid/prsTime/saveTime',
   /**
-   * 车间汇总订单退回
+   * 车间汇总工时退回
    */
   SUM_TIME_BACK_API: HOST + '/mid/prsTime/backTime',
   /**
@@ -1125,9 +1133,17 @@ export const SQU_API = {
    */
   SUM_TIME_API: HOST + '/mid/prsTime/applyTime',
   /**
-   * 车间汇总提交
+   * 车间汇总工时提交
    */
-  SUM_SUBMIT_API: HOST + '/mid/prsTime/submitInStr',
+  SUM_TIME_SUBMIT_API: HOST + '/mid/prsTime/submitInTime',
+  /**
+   * 车间汇总物料提交
+   */
+  SUM_MATERIAL_SUBMIT_API: HOST + '/mid/prsMaterial/submitMat',
+  /**
+   * 车间汇总订单提交
+   */
+  SUM_ORDER_SUBMIT_API: HOST + '/mid/prsOrder/submitInSto',
   /**
    * 工时与异常查询接口
    */

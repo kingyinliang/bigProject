@@ -38,7 +38,7 @@
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="GetList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">保存</el-button>
@@ -50,7 +50,7 @@
       </div>
     </el-card>
   </div>
-  <div class="main" style="padding-top: 0px">
+  <div class="main" style="padding-top: 0px" v-show="isSerch">
     <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
@@ -61,7 +61,7 @@
         <span slot="label" class="spanview">
           申请订单
         </span>
-        <apply-order :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
+        <apply-order ref="applyorder" :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -85,13 +85,16 @@ import {SYSTEMSETUP_API, BASICDATA_API, SQU_API} from '@/api/api'
 import ApplyOrder from './applyOrder'
 import Materiel from './material'
 import ManHour from './manHour'
+import {GetStatus} from '@/net/validate'
 export default {
   name: 'index',
   data () {
     return {
       isRedact: false,
+      isSerch: false,
       activeName: '1',
       orderStatus: '',
+      orderS: '',
       factory: [],
       workshop: [],
       formHeader: {
@@ -134,21 +137,48 @@ export default {
     GetFunet () {
       this.$http(`${SQU_API.SUM_FUMET_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
+          this.isSerch = true
           data.orderList.forEach((item, index) => {
             item.material = item.materialCode + ' ' + item.materialName
           })
+          this.orderS = GetStatus(data.orderList)
           this.orderFumet = data.orderList
           this.fumet = data.orderList
-          this.$refs.materielref.getMaterialList(this.formHeader)
-          this.$refs.manhour.GetTimeList(this.formHeader)
+          this.formHeader.changed = data.orderList[0].changed
+          this.formHeader.changer = data.orderList[0].changer
+          let list1 = new Promise((resolve, reject) => {
+            this.$refs.materielref.getMaterialList(this.formHeader, resolve, reject)
+          })
+          let list2 = new Promise((resolve, reject) => {
+            this.$refs.manhour.GetTimeList(this.formHeader, resolve, reject)
+          })
+          Promise.all([list1, list2]).then(() => {
+            this.GetOrderStatus()
+          })
         } else {
           this.$message.error(data.msg)
         }
       })
     },
+    // 订单状态
+    GetOrderStatus () {
+      let arr = [{}, {}, {}]
+      arr[0].status = this.orderS
+      arr[1].status = this.$refs.materielref.materialS
+      arr[2].status = this.$refs.manhour.timeS
+      this.orderStatus = GetStatus(arr)
+    },
     // 保存or提交
     savedOrSubmitForm (str) {
+      if (str === 'submit') {
+        if (!this.$refs.materielref.materialRul()) {
+          return
+        }
+      }
       let that = this
+      let updateApplyorder = new Promise((resolve, reject) => {
+        that.$refs.applyorder.UpdateOrder(str, resolve, reject)
+      })
       let updateMaterial = new Promise((resolve, reject) => {
         that.$refs.materielref.updateMaterial(str, resolve, reject)
       })
@@ -156,14 +186,32 @@ export default {
         that.$refs.manhour.UpdateTime(str, resolve, reject)
       })
       if (str === 'submit') {
-        let saveNet = Promise.all([updateMaterial, UpdateTime])
+        let saveNet = Promise.all([updateApplyorder, updateMaterial, UpdateTime])
         saveNet.then(function () {
-          that.Submit(str)
+          let SubmitApplyorder = new Promise((resolve, reject) => {
+            that.$refs.applyorder.UpdateOrder(str, resolve, reject, true)
+          })
+          let SubmitMaterial = new Promise((resolve, reject) => {
+            that.$refs.materielref.updateMaterial(str, resolve, reject, true)
+          })
+          let SubmitTime = new Promise((resolve, reject) => {
+            that.$refs.manhour.UpdateTime(str, resolve, reject, true)
+          })
+          let SubmitNet = Promise.all([SubmitApplyorder, SubmitMaterial, SubmitTime])
+          SubmitNet.then(function () {
+            that.isRedact = false
+            that.$message.success('提交成功')
+            that.GetList()
+          }, err => {
+            that.$message.error(err)
+          })
         })
       } else {
-        let saveNet = Promise.all([updateMaterial, UpdateTime])
+        let saveNet = Promise.all([updateApplyorder, updateMaterial, UpdateTime])
         saveNet.then(function () {
+          that.isRedact = false
           that.$message.success('保存成功')
+          that.GetList()
         }, err => {
           that.$message.error(err)
         })
@@ -177,18 +225,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.savedOrSubmitForm('submit')
-      })
-    },
-    Submit (str) {
-      this.$refs.manhour.timeDate.forEach((item, index) => {
-        item.status = str
-      })
-      this.$http(`${SQU_API.SUM_SUBMIT_API}`, 'POST', this.$refs.manhour.timeDate).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('提交成功')
-        } else {
-          this.$message.error(data.msg)
-        }
       })
     },
     // 获取物料下拉

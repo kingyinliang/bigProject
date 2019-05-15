@@ -12,7 +12,7 @@
       </el-table-column>
       <el-table-column label="是否混合罐" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!isRedact" size="small">
+          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
             <el-option label="正常" value="正常"></el-option>
             <el-option label="共用混合" value="共用混合"></el-option>
             <el-option label="单用混合" value="单用混合"></el-option>
@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!isRedact" size="small">
+          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
             <el-option
               v-for="item in SerchSapList"
               :key="item.code+' '+item.value"
@@ -39,7 +39,7 @@
       <el-table-column label="生产订单" width="140" prop="orderNo"></el-table-column>
       <el-table-column label="操作" width="50" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" :disabled="!isRedact">退回</el-button>
+          <el-button type="text" :disabled="!isRedact" @click="backIn(scope.row)">退回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,6 +72,10 @@ export default {
   methods: {
     // 申请订单
     ApplyOrder () {
+      if (!this.multipleSelection) {
+        this.$message.error('请选择订单')
+        return
+      }
       this.multipleSelection.forEach((item, index) => {
         item.materialCode = item.material.substring(0, item.material.indexOf(' '))
         item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
@@ -80,6 +84,39 @@ export default {
         if (data.code === 0) {
           this.$emit('GetFunet')
         } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 退回
+    backIn (row) {
+      this.$http(`${SQU_API.SUM_ORDER_BACK_API}`, 'POST', row).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 修改订单
+    UpdateOrder (str, resolve, reject, st = false) {
+      this.fumet.forEach((item, index) => {
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+      })
+      this.$http(`${st === false ? SQU_API.SUM_ORDERUPDATE_API : SQU_API.SUM_ORDER_SUBMIT_API}`, 'POST', this.fumet).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject(data.msg)
+          }
           this.$message.error(data.msg)
         }
       })

@@ -182,6 +182,40 @@ export function getNewDate () {
 }
 
 /**
+ * 获取状态
+ * @param {*} null
+ */
+export function GetStatus (arr) {
+  let sub = 0
+  let che = 0
+  let no = 0
+  let sav = 0
+  let status = ''
+  arr.forEach((item) => {
+    if (item.status === 'noPass') {
+      no = no + 1
+    } else if (item.status === 'submit') {
+      sub = sub + 1
+    } else if (item.status === 'checked') {
+      che = che + 1
+    } else if (item.status === 'saved') {
+      sav = sav + 1
+    } else if (item.status === '') {
+      sav = sav + 1
+    }
+  })
+  if (no > 0) {
+    status = 'noPass'
+  } else if (sub > 0) {
+    status = 'submit'
+  } else if (sav > 0) {
+    status = 'saved'
+  } else if (che > 0) {
+    status = 'checked'
+  }
+  return status
+}
+/**
  * 准备时间动画
  */
 export function Readyanimation ($) {

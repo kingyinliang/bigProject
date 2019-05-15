@@ -349,6 +349,7 @@
 
 <script>
 import {PACKAGING_API, SYSTEMSETUP_API} from '@/api/api'
+import {GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
   data () {
@@ -537,40 +538,12 @@ export default {
               this.Instatus = 'saved'
             }
           }
-          this.InDateStatus()
+          this.Instatus = GetStatus(this.InDate)
           this.$emit('GetinstorageState', this.Instatus)
         } else {
           this.$message.error(data.msg)
         }
       })
-    },
-    InDateStatus () {
-      let sub = 0
-      let che = 0
-      let no = 0
-      let sav = 0
-      this.InDate.forEach((item) => {
-        if (item.status === 'noPass') {
-          no = no + 1
-        } else if (item.status === 'submit') {
-          sub = sub + 1
-        } else if (item.status === 'checked') {
-          che = che + 1
-        } else if (item.status === 'saved') {
-          sav = sav + 1
-        } else if (item.status === '') {
-          sav = sav + 1
-        }
-      })
-      if (no > 0) {
-        this.Instatus = 'noPass'
-      } else if (sub > 0) {
-        this.Instatus = 'submit'
-      } else if (sav > 0) {
-        this.Instatus = 'saved'
-      } else if (che > 0) {
-        this.Instatus = 'checked'
-      }
     },
     // 机维组刷新
     GetMaintain () {

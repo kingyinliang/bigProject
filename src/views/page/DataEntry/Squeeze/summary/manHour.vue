@@ -3,17 +3,17 @@
   <el-row class="clearfix">
     <el-button type="primary" style="float: right" size="small" :disabled="!isRedact" @click="GetTime">获取工时</el-button>
   </el-row>
-  <el-table ref="table1" header-row-class-name="tableHead" :data="timeDate">
+  <el-table ref="table1" header-row-class-name="tableHead" :data="timeDate" tooltip-effect="dark">
     <el-table-column label="生产订单" width="120" prop="orderNo"></el-table-column>
     <el-table-column label="工序" width="120" prop="processIdName"></el-table-column>
-    <el-table-column label="生产品项" width="120" prop="ssssss">
+    <el-table-column label="生产品项" prop="ssssss" :show-overflow-tooltip="true">
       <template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template>
     </el-table-column>
     <el-table-column label="入库量" width="120" prop="inPotAmount"></el-table-column>
     <el-table-column label="准备工时" width="120" prop="confActivity1"></el-table-column>
     <el-table-column label="人工工时" width="120" prop="confActivity3"></el-table-column>
     <el-table-column label="机器工时" width="120" prop="confActivity2">
-      <template slot-scope="scope"><el-input v-model="scope.row.confActivity2" size="small" placeholder="手工录入" :disabled="!isRedact"></el-input></template>
+      <template slot-scope="scope"><el-input v-model="scope.row.confActivity2" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input></template>
     </el-table-column>
     <el-table-column label="单位" width="50" prop="confActiUnit1"></el-table-column>
     <el-table-column label="操作" width="50" fixed="right">
@@ -27,11 +27,13 @@
 
 <script>
 import {SQU_API} from '@/api/api'
+import {GetStatus} from '@/net/validate'
 export default {
   name: 'manHour',
   data () {
     return {
-      timeDate: []
+      timeDate: [],
+      timeS: ''
     }
   },
   props: {
@@ -42,11 +44,18 @@ export default {
   },
   methods: {
     // 获取工时列表
-    GetTimeList (formHeader) {
+    GetTimeList (formHeader, resolve, reject) {
       this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', formHeader).then(({data}) => {
         if (data.code === 0) {
           this.timeDate = data.timeList
+          this.timeS = GetStatus(data.timeList)
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
+          if (reject) {
+            reject(data.msg)
+          }
           this.$message.error(data.msg)
         }
       })
@@ -62,16 +71,23 @@ export default {
       })
     },
     // 修改工时
-    UpdateTime (str, resolve) {
+    UpdateTime (str, resolve, reject, st = false) {
       this.timeDate.forEach((item, index) => {
-        item.status = str
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
       })
-      this.$http(`${SQU_API.SUM_TIME_UPDATE_API}`, 'POST', this.timeDate).then(({data}) => {
+      this.$http(`${st === false ? SQU_API.SUM_TIME_UPDATE_API : SQU_API.SUM_TIME_SUBMIT_API}`, 'POST', this.timeDate).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')
           }
         } else {
+          if (reject) {
+            reject(data.msg)
+          }
           this.$message.error(data.msg)
         }
       })
