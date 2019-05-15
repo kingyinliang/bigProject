@@ -42,7 +42,7 @@
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:inStorage:list')">查询</el-button>
             <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="(isAuth('prs:inStorage:mySaveOrUpdate') || isAuth('prs:inStorage:submitToOrde')) && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
             <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:inStorage:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
-            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:inStorage:submitToOrde') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
+            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:inStorage:submitToOrder') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff;padding-bottom:10px;">
