@@ -60,7 +60,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" :style="{display:contentshow ? '' : 'none'}">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':'未录入'" placement="top-start">
@@ -105,7 +105,8 @@ export default {
         clickstatus: 'saved'
       },
       activeName: '1',
-      succmessage: '保存成功'
+      succmessage: '保存成功',
+      contentshow: false
     }
   },
   mounted () {
@@ -164,6 +165,7 @@ export default {
     },
     // 查询
     SearchList () {
+      this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
     },
     // 提交

@@ -548,7 +548,7 @@ export default class Index extends Vue {
       this.$message.error('结束数不能为空')
       return false
     }
-    this.availableMap.set(this.endForm.deviceId, '2')
+    this.availableMap.set(this.endForm.deviceId, '0')
     let recordId = this.matchedMap.get(this.endForm.deviceId)
     let startData = this.dataList.find(item => item.recordId === recordId)
     // let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
@@ -609,6 +609,9 @@ export default class Index extends Vue {
       let item = this.fermentPotList.find(ele => ele.holderId === this.modifyForm.fermentPotNo)
       this.modifyForm.fermentPotName = item ? item.holderName : ''
       this.modifyForm.orderId = item ? item.orderId : ''
+      this.modifyForm.remainAmount = 0
+      this.modifyForm.remainAmountUnit = 'L'
+      this.modifyForm.batch = ''
       this.getRemanAmountModify(this.params.workshopId, this.modifyForm.fermentPotNo, this.modifyForm.orderId)
     }
   }
@@ -676,8 +679,9 @@ export default class Index extends Vue {
   getRemanAmountStart (wId: string, fId: string, orderId: string) {
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
       if (res.data.code === 0) {
-        this.startForm.remainAmount = res.data.psp ? res.data.psp.remainAmount : 0
-        this.startForm.remainAmountUnit = res.data.psp ? res.data.psp.remainAmountUnit : 'L'
+        this.startForm.remainAmount = (res.data.psp && res.data.psp.remainAmount) ? res.data.psp.remainAmount : 0
+        this.startForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
+        this.startForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
       } else {
         this.$message.error(res.data.msg)
       }
@@ -686,8 +690,9 @@ export default class Index extends Vue {
   getRemanAmountModify (wId: string, fId: string, orderId: string) {
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
       if (res.data.code === 0) {
-        this.modifyForm.remainAmount = res.data.psp ? res.data.psp.remainAmount : 0
-        this.modifyForm.remainAmountUnit = res.data.psp ? res.data.psp.remainAmountUnit : 'L'
+        this.modifyForm.remainAmount = (res.data.psp && res.data.psp.remainAmount) ? res.data.psp.remainAmount : 0
+        this.modifyForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
+        this.modifyForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
       } else {
         this.$message.error(res.data.msg)
       }
@@ -800,6 +805,7 @@ export default class Index extends Vue {
   onChangeFerment (newVal: string, oldVal: string) {
     this.startForm.remainAmount = 0
     this.startForm.remainAmountUnit = 'L'
+    this.startForm.batch = ''
     this.getRemanAmountStart(this.params.workshopId, newVal, this.startForm.orderId)
   }
   // @Watch('modifyForm.fermentPotNo', {immediate: false})
