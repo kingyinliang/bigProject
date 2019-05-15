@@ -343,6 +343,10 @@ export default {
         this.$message.error('请选择布浆线')
         return false
       }
+      if (!formHeader.productDate || formHeader.productDate === '') {
+        this.$message.error('请选择生产日期')
+        return false
+      }
       this.GetpulpMachine(formHeader.productLine) // 布浆机
       this.GethovercraftNo(formHeader.workShop) // 气垫车
       this.$http(`${SQU_API.CLOTHMATERIALIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
