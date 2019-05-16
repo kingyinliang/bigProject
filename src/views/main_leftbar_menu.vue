@@ -1,6 +1,6 @@
 <template>
   <el-submenu
-    v-if="menu.list && menu.list.length >= 1"
+    v-if="!getChildren"
     :index="menu.menuId + ''"
     :popper-class="'site-sidebar--' + sidebarLayoutSkin + '-popper'">
     <template slot="title">
@@ -53,6 +53,18 @@ export default {
   computed: {
     sidebarLayoutSkin: {
       get () { return this.$store.state.common.sidebarLayoutSkin }
+    },
+    getChildren: function () {
+      let st = true
+      if (this.menu.list && this.menu.list.length >= 1) {
+        st = true
+        this.menu.list.forEach((item) => {
+          if (item.type !== '3' && item.type !== '2') {
+            st = false
+          }
+        })
+      }
+      return st
     }
   },
   components: {

@@ -2,7 +2,7 @@
 <div>
   <el-row class="clearfix">
     <p style="float: left;font-size: 14px">布浆总量：</p>
-    <el-button type="primary" style="float: right" size="small" :disabled="!isRedact">酱醪领用</el-button>
+    <el-button type="primary" style="float: right" size="small" :disabled="true">酱醪领用</el-button>
   </el-row>
   <el-table ref="table1" header-row-class-name="tableHead" :data="SumDate" :row-class-name="RowDelFlag">
     <el-table-column label="原汁信息">
@@ -64,7 +64,7 @@
     </el-table-column>
     <el-table-column label="操作" fixed="right" width="50">
       <template slot-scope="scope">
-        <el-button type="danger"  icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="dellist(scope.row)"></el-button>
+        <el-button type="danger"  icon="el-icon-delete" circle size="small" v-if="dangerIf(scope.row)" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="dellist(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -275,7 +275,23 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    dangerIf: function () {
+      return function (row) {
+        let s = 0
+        this.SumDate.forEach((item) => {
+          if (item.delFlag !== '1' && row.fumet.id === item.fumet.id) {
+            s++
+          }
+        })
+        if (s > 1) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+  },
   components: {}
 }
 </script>
