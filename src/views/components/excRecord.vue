@@ -122,9 +122,16 @@ export default {
           if (typeof id === 'string') {
             item.orderId = id
           } else if (typeof id === 'object') {
-            item.orderId = id.orderId
-            item.orderHouseId = id.orderHouseId
-            item.blongProc = id.blongProc
+            if (str === 'Squeeze') {
+              item.factory = id.factory
+              item.workShop = id.workShop
+              item.productLine = id.productLine
+              item.productDate = id.productDate
+            } else {
+              item.orderId = id.orderId
+              item.orderHouseId = id.orderHouseId
+              item.blongProc = id.blongProc
+            }
           }
         })
         this.$http(`${PACKAGING_API.PKGEXCUPDATE_API}`, 'POST', this.ExcDate).then(({data}) => {
