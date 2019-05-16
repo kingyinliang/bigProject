@@ -30,6 +30,14 @@
             <template slot="header"><i class="reqI">*</i><span>布浆量</span></template>
             <template slot-scope="scope">{{scope.row.pulpAmount}}</template>
           </el-table-column>
+          <el-table-column show-overflow-tooltip width="100px">
+            <template slot="header">布号</template>
+            <template slot-scope="scope">{{scope.row.clothNo}}</template>
+          </el-table-column>
+          <el-table-column show-overflow-tooltip width="200px">
+            <template slot="header"><i class="reqI">*</i><span>酱醪分类</span></template>
+            <template slot-scope="scope">{{scope.row.sauceClass}}</template>
+          </el-table-column>
           <el-table-column prop="unit" label="单位"></el-table-column>
           <el-table-column width="160px">
             <template slot="header"><i class="reqI">*</i><span>布浆自淋时间(MIN)</span></template>
@@ -116,6 +124,14 @@
         <el-form-item label="自重自淋时间" :label-width="formLabelWidth" prop="selfDrenchTime">
           <el-input v-model="sauce.selfDrenchTime"></el-input>
         </el-form-item>
+        <el-form-item label="布号" :label-width="formLabelWidth" prop="clothNo">
+          <el-input v-model="sauce.clothNo"></el-input>
+        </el-form-item>
+        <el-form-item label="酱醪分类" :label-width="formLabelWidth" prop="sauceClass">
+          <el-select v-model="sauce.sauceClass" filterable placeholder="请选择" style="width:310px">
+            <el-option :label="item.code + ' ' + item.name" v-for="(item, index) in sauceClassList" :key="index" :value="item.code + ' ' + item.name"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="发酵罐号" :label-width="formLabelWidth" prop="potOne">
           <el-input v-model="sauce.potOne" style="width:259px; float:left"></el-input><el-button @click="addGuan()" style="float:left; margin-left:10px">+</el-button>
         </el-form-item>
@@ -182,16 +198,28 @@ export default {
       },
       multipleSelection: [],
       isSelect: true,
-      guanTwoDisplayNo: true
+      guanTwoDisplayNo: true,
+      sauceClassList: []
     }
   },
   props: ['isRedact', 'formHeader'],
   mounted () {
     Readyanimation(this.$)
+    this.GetsauceClass()
   },
   watch: {
   },
   methods: {
+    // 酱醪列表
+    GetsauceClass () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=YA_M_MATERIAL`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.sauceClassList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     addGuan () {
       this.guanTwoDisplayNo = false
     },
@@ -265,7 +293,9 @@ export default {
         potTwo: '',
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
-        delFlag: '0'
+        delFlag: '0',
+        clothNo: '',
+        sauceClass: ''
       }
     },
     editmaterial (row) {
@@ -308,7 +338,9 @@ export default {
             potTwo: this.sauce.potTwo,
             changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
             changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
-            delFlag: this.sauce.delFlag
+            delFlag: this.sauce.delFlag,
+            clothNo: this.sauce.clothNo,
+            sauceClass: this.sauce.sauceClass
           }
           let chaTime
           if (!this.sauce.pulpEndDate || !this.sauce.pulpStartDate) {
@@ -374,7 +406,7 @@ export default {
         return false
       }
       for (let items of this.multipleSelection) {
-        if (!items.pulpMachineName || items.pulpMachineName === '' || !items.hovercraftName || items.hovercraftName === '' || !items.pulpStartDate || items.pulpStartDate === '' || !items.pulpEndDate || items.pulpEndDate === '' || !items.pulpAmount || items.pulpAmount === '' || !items.selfDrenchTime || items.selfDrenchTime === '' || !items.potOne || items.potOne === '') {
+        if (!items.pulpMachineName || items.pulpMachineName === '' || !items.hovercraftName || items.hovercraftName === '' || !items.pulpStartDate || items.pulpStartDate === '' || !items.pulpEndDate || items.pulpEndDate === '' || !items.pulpAmount || items.pulpAmount === '' || !items.selfDrenchTime || items.selfDrenchTime === '' || !items.potOne || items.potOne === '' || !items.sauceClass || items.sauceClass === '') {
           ty = false
           this.$message.error('物料必填项不能为空')
           return false
