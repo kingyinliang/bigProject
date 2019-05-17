@@ -72,7 +72,7 @@ export default {
   methods: {
     // 申请订单
     ApplyOrder () {
-      if (!this.multipleSelection) {
+      if (this.multipleSelection.length === 0) {
         this.$message.error('请选择订单')
         return
       }

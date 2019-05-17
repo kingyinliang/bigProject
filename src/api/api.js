@@ -1115,7 +1115,7 @@ export const SQU_API = {
   /**
    * 车间汇总退回订单
    */
-  SUM_ORDER_BACK_API: HOST + '/mid/prsOrder/bactInSto',
+  SUM_ORDER_BACK_API: HOST + '/mid/prsOrder/backInSto',
   /**
    * 车间汇总工时列表
    */
