@@ -771,7 +771,17 @@ export const REP_API = {
    * 麦粉检测
    */
   REPCHECKRECORDLIST_API: HOST + '/report/kjmORwht/checkRecordList',
-  REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord'
+  REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord',
+  /**
+   * 生产品项统计表
+   */
+  PROSTA_LIST_API: HOST + '/report/res/proSta',
+  PROSTA_EXPECT_API: HOST + '/report/res/expectProSta',
+  /**
+   * 物料领用报表
+   */
+  PRSMATERIAL_LIST_API: HOST + '/report/res/prsMaterial',
+  PRSMATERIAL_EXPECT_API: HOST + '/report/res/expectPrsMaterial'
 }
 /*
 *炒麦api

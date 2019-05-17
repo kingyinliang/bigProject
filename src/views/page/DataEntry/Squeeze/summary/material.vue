@@ -156,7 +156,6 @@ export default {
         }
         tmp.push(item.material)
       })
-      this.materialRul(tmp)
       this.$http(`${st === false ? SQU_API.SUM_MATERIAL_UPDATE_API : SQU_API.SUM_MATERIAL_SUBMIT_API}`, 'POST', tmp).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -271,6 +270,27 @@ export default {
           item.childMaterial = item.childMaterialCode + ' ' + item.childMaterialName
           let tmp = this.fumet.find(items => items.id === item.midPrsOrderId)
           this.SumDate.push({fumet: tmp, material: item, delFlag: '0'})
+        })
+        this.fumet.forEach((item) => {
+          if (this.materialDate.find(items => items.midPrsOrderId === item.id) === undefined) {
+            let tmp = {
+              childId: '',
+              midPrsOrderId: item.id,
+              childMaterial: '',
+              childMaterialCode: '',
+              childMaterialName: '',
+              childPotNo: '',
+              childUsedAmount: '',
+              childUnit: '',
+              childBatch: '',
+              childFullPotAmount: '',
+              childRecordMan: '',
+              childRemark: '',
+              childStatus: '',
+              childDelFlag: '0'
+            }
+            this.SumDate.push({fumet: item, material:tmp, delFlag: '0'})
+          }
         })
       }
     }
