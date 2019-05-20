@@ -15,7 +15,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="原汁罐：">
-          <el-select v-model="plantList.PotNo" filterable style="width: 150px">
+          <el-select v-model="plantList.potNo" filterable style="width: 150px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="sole in Pot" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
           </el-select>
@@ -31,8 +31,8 @@
           <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <span style="float: right">
-          <el-button size="small" @click="GetList(true)" v-if="isAuth('report:formh:kjmOutTechList')">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportkjmOutTechList')">导出</el-button>
+          <el-button size="small" @click="GetList(true)" v-if="isAuth('report:res:prsMaterial')">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:res:expectPrsMaterial')">导出</el-button>
         </span>
       </el-form>
     </el-card>
@@ -77,7 +77,7 @@ export default {
       plantList: {
         factory: '',
         workShop: '',
-        PotNo: '',
+        potNo: '',
         materialCode: '',
         commitDateOne: '',
         commitDateTwo: '',
