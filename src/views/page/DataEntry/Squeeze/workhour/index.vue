@@ -128,9 +128,6 @@
             <h3 style="font-size: 14px;line-height: 32px;font-weight: bold">人员(小时:H)</h3>
             <worker ref="workerref" :isRedact="isRedact" :order="userOrder"></worker>
           </el-card>
-          <el-card>
-            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
-          </el-card>
         </el-card>
       </div>
     </div>
@@ -138,10 +135,9 @@
 </template>
 
 <script>
-import {BASICDATA_API, KJM_API} from '@/api/api'
+import {BASICDATA_API, KJM_API, SQU_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
-import ExcRecord from '@/views/components/excRecord'
 export default {
   name: 'index',
   data () {
@@ -228,7 +224,7 @@ export default {
       this.searchCard = true
       this.isRedact = false
       this.uid = ''
-      this.$http(`${KJM_API.OUTTIMELIST_API}`, 'POST', {
+      this.$http(`${SQU_API.PRS_TIME_LIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
         inKjmDate: this.formHeader.inKjmDate,
@@ -341,7 +337,7 @@ export default {
       this.headList.status = str
       this.headList.inKjmBatch = this.inKjmBatch + ''
       console.log(this.headList)
-      this.$http(`${KJM_API.OUTTIMEHEADSAVE_API}`, 'POST', this.headList).then(({data}) => {
+      this.$http(`${SQU_API.PRS_TIMESHEET_UPDATE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')
@@ -436,7 +432,7 @@ export default {
       this.formHeader.workShop = ''
       this.formHeader.deptId = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             this.formHeader.workShop = data.typeList[0].deptId
@@ -450,7 +446,7 @@ export default {
     GetParentline (id) {
       this.formHeader.deptId = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'process'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.deptId = data.childList
             this.formHeader.deptId = data.childList[0].deptId
@@ -463,8 +459,7 @@ export default {
   },
   computed: {},
   components: {
-    Worker,
-    ExcRecord
+    Worker
   }
 }
 </script>

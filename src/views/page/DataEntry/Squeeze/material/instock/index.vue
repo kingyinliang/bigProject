@@ -39,10 +39,10 @@
             </el-col> -->
           </el-row>
           <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
-            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth">查询</el-button>
-            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isMyAuth && searched">{{disabled?'编辑':'返回'}}</el-button>
-            <el-button type="primary" size="small"  @click="save()"  v-if="isMyAuth && !disabled">保存</el-button>
-            <el-button type="primary" size="small"  @click="submit()"  v-if="isMyAuth && !disabled">提交</el-button>
+            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:inStorage:list')">查询</el-button>
+            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="(isAuth('prs:inStorage:mySaveOrUpdate') || isAuth('prs:inStorage:submitToOrde')) && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
+            <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:inStorage:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
+            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:inStorage:submitToOrder') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff;padding-bottom:10px;">
@@ -51,18 +51,18 @@
               <div  class="pot-box">
                 <div class="pot-box-header">
                   <span class="pot-box-title" style="margin-left:5px;">原汁罐</span>
-                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{isAvailable==='0'? '待领用': '领用中'}}</span>
+                  <span class="pot-box-title" style="float:right;margin-right:5px;">{{isAvailable==='0'? '待入库': '入库中'}}</span>
                 </div>
                 <div class='pot-box-container img'>
                 </div>
                 <div class="pot-box-footer" >
-                  <div class="pot-box-button"  v-if="!disabled && isAvailable === '0'" @click="inPotStart()">
+                  <div class="pot-box-button"  v-if="!disabled && isAvailable === '0' && orderStatus !== 'submit' &&  orderStatus !== 'checked'" @click="inPotStart()">
                     <span class="pot-box-button-title">入罐开始</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
                     <span class="pot-box-button-title-disabled">入罐开始</span>
                   </div>
-                  <div class="pot-box-button"  v-if="!disabled && isAvailable === '1'" @click="inPotEnd()">
+                  <div class="pot-box-button"  v-if="!disabled && isAvailable === '1' && orderStatus !== 'submit' &&  orderStatus !== 'checked'" @click="inPotEnd()">
                     <span class="pot-box-button-title" >入罐结束</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
@@ -74,7 +74,7 @@
           </el-col>
           <el-col :span="19">
             <el-row  style="margin-top:20px">
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
                 <el-table-column label="日期" width='100'>
                   <template slot-scope="scope">
                      {{scope.row.inDate}}
@@ -85,7 +85,7 @@
                     {{scope.row.potName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="原汁批次" width='100' >
+                <el-table-column label="原汁批次" width='120' >
                   <template slot-scope="scope">
                     {{scope.row.batch}}
                   </template>
@@ -184,7 +184,7 @@
       </el-dialog>
       <el-dialog :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
-          <span>1#入罐结束</span>
+          <span>入罐结束</span>
         </div>
         <div>
           <el-form :model="endForm"  :label-width="formLabelWidth" size="small" ref="endForm">
@@ -225,6 +225,61 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveEnd()">保存</el-button>
         </div>
       </el-dialog>
+      <el-dialog :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
+        <div slot="title" class='title'>
+          <span>入罐修改</span>
+        </div>
+        <div >
+          <el-form :model="modifyForm"  :label-width="formLabelWidth" size="small" ref="modifyForm">
+            <el-form-item label="原汁罐号：" required>
+              <el-select @change="changeOptions('potModify')"  v-model="modifyForm.potNo" value-key="holderId" placeholder="请选择" filterable style="width:220px" >
+                <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="批次：" required>
+              <el-input v-model.trim="modifyForm.batch" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="起始数：" required>
+              <el-input  type='number' v-model.number="modifyForm.startAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="结束数：" required>
+              <el-input  type='number' v-model.number="modifyForm.endAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="混合罐类型：" required>
+              <el-select v-model="modifyForm.mixType" placeholder="请选择" filterable style="width:220px" >
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="单用混合" value="单用混合"></el-option>
+                <el-option label="共用混合" value="共用混合"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="是否满罐：">
+              <el-select v-model="modifyForm.fullPot" placeholder="请选择" filterable style="width:220px" >
+                <el-option label="是" value="1"></el-option>
+                <el-option label="否" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="满罐数量：">
+              <el-input  type='number' v-model.number="modifyForm.fullPotAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="满罐日期：">
+              <el-date-picker type="date" v-model="modifyForm.fulPotDate" value-format="yyyy-MM-dd" style="width:220px"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="备注：" >
+              <el-input v-model.trim="modifyForm.remark" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="操作时间：">
+              <label>{{modifyForm.changed}}</label>
+            </el-form-item>
+            <el-form-item label="操作人：">
+              <label>{{modifyForm.changer}}</label>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible3 = false">取消</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveModify()">保存</el-button>
+        </div>
+      </el-dialog>
     </el-col>
   </el-row>
 </template>
@@ -252,6 +307,7 @@ export default class Index extends Vue {
   disabled: boolean = true
   dialogFormVisible:boolean = false
   dialogFormVisible2:boolean = false
+  dialogFormVisible3:boolean = false
   formLabelWidth: string = '130px'
   startForm = {
     inDate: '',
@@ -275,29 +331,22 @@ export default class Index extends Vue {
     changed: '',
     changer: ''
   }
-  dataRule = {
-    fermentPotNo: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ],
-    batch: [
-      {required: true, message: '必填', trigger: 'blur'},
-      {max: 10, message: '长度不能超过10', trigger: 'blur'}
-    ],
-    startAmount: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ]
-  }
-  dataRule2 = {
-    fermentPotNo: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ],
-    batch: [
-      {required: true, message: '必填', trigger: 'blur'},
-      {max: 10, message: '长度不能超过10', trigger: 'blur'}
-    ],
-    endAmount: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ]
+  modifyForm = {
+    id: '',
+    recordId: '',
+    inDate: '',
+    potNo: '',
+    potName: '',
+    batch: '',
+    startAmount: 0,
+    endAmount: 0,
+    mixType: '',
+    fullPot: '',
+    fullPotAmount: 0,
+    fulPotDate: '',
+    remark: '',
+    changed: '',
+    changer: ''
   }
   mounted () {
     this.params.applyDate = dateFormat(new Date(), 'yyyy-MM-dd')
@@ -309,21 +358,99 @@ export default class Index extends Vue {
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
-  get isMyAuth () {
-    return true
-  }
   get mainTabs () {
     return this.$store.state.common.mainTabs
   }
   set mainTabs (val) {
     this.$store.commit('common/updateMainTabs', val)
   }
-  // get orderStatus () {
-  //   if (this.dataList && this.dataList.length > 0) {
-  //     return this.dataList[0].status
-  //   }
-  //   return ''
-  // }
+  get orderStatus () {
+    let status = ''
+    let no = 0
+    let sub = 0
+    let che = 0
+    let sav = 0
+    this.dataList.forEach((item) => {
+      if (item.status === 'noPass') {
+        no = no + 1
+      } else if (item.status === 'saved') {
+        sav = sav + 1
+      } else if (item.status === 'submit') {
+        sub = sub + 1
+      } else if (item.status === 'checked') {
+        che = che + 1
+      }
+    })
+    if (no > 0) {
+      // 有一条数据不通过，则总状态为不通过
+      status = 'noPass'
+    } else if (sav > 0) {
+      status = 'saved'
+    } else if (sub > 0) {
+      status = 'submit'
+    } else if (che > 0) {
+      status = 'checked'
+    }
+    console.log('status      ' + status)
+    return status
+  }
+  modifyRecord (row) {
+    if (this.disabled || row.status === 'submit' || row.status === 'checked') {
+      return
+    }
+    this.modifyForm = {
+      id: row.id ? row.id : 'id',
+      recordId: row.recordId ? row.recordId : 'record',
+      inDate: row.inDate ? row.inDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      potNo: row.potNo ? row.potNo : '',
+      potName: row.potName ? row.potName : '',
+      batch: row.batch ? row.batch : '',
+      startAmount: row.startAmount ? row.startAmount : 0,
+      endAmount: row.endAmount ? row.endAmount : 0,
+      mixType: row.mixType ? row.mixType : '正常',
+      fullPot: row.fullPot ? row.fullPot : '0',
+      fullPotAmount: row.fullPotAmount ? row.fullPotAmount : 0,
+      fulPotDate: row.fulPotDate ? row.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      remark: row.remark ? row.remark : '',
+      changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+    }
+    this.dialogFormVisible3 = true
+  }
+  saveModify () {
+    if (this.modifyValidate()) {
+      let matchedIndex = -1
+      this.dataList.forEach((item, index) => { if (item.id === this.modifyForm.id) { matchedIndex = index } })
+      if (matchedIndex < 0) {
+        // 新增
+        this.dataList.forEach((item, index) => { if (item.recordId === this.modifyForm.recordId) { matchedIndex = index } })
+      }
+      console.log('index--------------, ', this.dataList)
+      console.log('index--------------, ', this.modifyForm)
+      console.log('index--------------, ', matchedIndex)
+      if (matchedIndex >= 0) {
+        let record = this.dataList[matchedIndex]
+        Object.assign(record, {
+          batch: this.modifyForm.batch,
+          inDate: this.modifyForm.inDate,
+          potNo: this.modifyForm.potNo,
+          potName: this.modifyForm.potName,
+          startAmount: this.modifyForm.startAmount,
+          mixType: this.modifyForm.mixType,
+          endAmount: this.modifyForm.endAmount,
+          inAmount: this.modifyForm.endAmount - this.modifyForm.startAmount,
+          remark: this.modifyForm.remark,
+          fullPot: this.modifyForm.fullPot,
+          fullPotAmount: this.modifyForm.fullPotAmount,
+          fulPotDate: this.modifyForm.fulPotDate,
+          changed: this.modifyForm.changed,
+          changer: this.modifyForm.changer
+        })
+        this.dataList.splice(matchedIndex, 1, record)
+      }
+      this.dialogFormVisible3 = false
+    }
+  }
   inPotStart () {
     this.startForm = {
       inDate: dateFormat(new Date(), 'yyyy-MM-dd'),
@@ -339,7 +466,9 @@ export default class Index extends Vue {
   }
   saveStart () {
     if (this.startValidate()) {
+      let recordId = Vue.prototype.uuid()
       let result = {
+        recordId,
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
         productLine: this.params.productLineId,
@@ -359,29 +488,37 @@ export default class Index extends Vue {
     }
   }
   inPotEnd () {
+    let startData = this.dataList.find((item, index) => index === this.dataList.length - 1)
     this.endForm = {
-      potNo: this.startForm.potNo,
-      potName: this.startForm.potName,
-      batch: this.startForm.batch,
-      endAmount: 0,
-      fullPot: '0',
-      fullPotAmount: 0,
-      fulPotDate: dateFormat(new Date(), 'yyyy-MM-dd'),
-      remark: '',
-      changed: this.startForm.changed,
-      changer: this.startForm.changer
+      potNo: startData.potNo,
+      potName: startData.potName,
+      batch: startData.batch,
+      endAmount: startData.endAmount ? startData.endAmount : 0,
+      fullPot: startData.fullPot ? startData.fullPot : '0',
+      fullPotAmount: startData.fullPotAmount ? startData.fullPotAmount : 0,
+      fulPotDate: startData.fulPotDate ? startData.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      remark: startData.remark ? startData.remark : '',
+      changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
     }
     this.dialogFormVisible2 = true
   }
   saveEnd () {
-    console.log('aaaa', this.dataList)
     if (this.endValidate()) {
       this.isAvailable = '0'
       let startData = this.dataList.pop()
       if (startData) {
-        Object.assign(startData, {endAmount: this.endForm.endAmount, inAmount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark, fullPot: this.endForm.fullPot, fullPotAmount: this.endForm.fullPotAmount, fulPotDate: this.endForm.fulPotDate})
+        Object.assign(startData, {
+          endAmount: this.endForm.endAmount,
+          inAmount: this.endForm.endAmount - startData.startAmount,
+          remark: this.endForm.remark,
+          fullPot: this.endForm.fullPot,
+          fullPotAmount: this.endForm.fullPotAmount,
+          fulPotDate: this.endForm.fulPotDate,
+          changed: this.endForm.changed,
+          changer: this.endForm.changer})
+        this.dataList.push(startData)
       }
-      this.dataList.push(startData)
       this.dialogFormVisible2 = false
     }
   }
@@ -411,6 +548,28 @@ export default class Index extends Vue {
     }
     return true
   }
+  modifyValidate () {
+    if (this.modifyForm.potNo === '') {
+      this.$message.error('原汁罐号不能为空')
+      return false
+    } else if (this.modifyForm.batch === '') {
+      this.$message.error('批次不能为空')
+      return false
+    } else if (this.modifyForm.startAmount.toString() === '') {
+      this.$message.error('起始数不能为空')
+      return false
+    } else if (this.modifyForm.endAmount.toString() === '') {
+      this.$message.error('结束数不能为空')
+      return false
+    } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fullPotAmount.toString() === '') {
+      this.$message.error('满罐数量不能为空')
+      return false
+    } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fulPotDate === '') {
+      this.$message.error('满罐日期不能为空')
+      return false
+    }
+    return true
+  }
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
@@ -424,6 +583,9 @@ export default class Index extends Vue {
     } else if (flag === 'pot') {
       let item = this.potList.find(ele => ele.holderId === this.startForm.potNo)
       this.startForm.potName = item ? item.holderName : ''
+    } else if (flag === 'potModify') {
+      let item = this.potList.find(ele => ele.holderId === this.modifyForm.potNo)
+      this.modifyForm.potName = item ? item.holderName : ''
     }
   }
   // 获取工厂
@@ -454,7 +616,7 @@ export default class Index extends Vue {
   getProductLine (wid: string) {
     this.productlineList = []
     if (wid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
         } else {
@@ -530,20 +692,26 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SAVE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('保存成功')
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('保存失败：' + err)
     })
   }
   submit () {
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SUBMIT_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('提交成功')
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('提交失败：' + err)
     })
   }
   @Watch('params', {deep: true})

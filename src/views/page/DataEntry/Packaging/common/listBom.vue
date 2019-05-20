@@ -152,7 +152,7 @@ export default {
   },
   methods: {
     // 获取包装车间物料领用列表
-    GetpkgSap (id, data) {
+    GetpkgSap (order, data) {
       if (data) {
         this.listbomP = data.listbomP
         this.listbomS = data.listbomS
@@ -168,7 +168,8 @@ export default {
         })
       } else {
         this.$http(`${PACKAGING_API.PKGSPALIST_API}`, 'POST', {
-          order_id: id
+          order_id: order.orderId,
+          factory: order.factory
         }).then(({data}) => {
           if (data.code === 0) {
             this.listbomP = data.listFormP

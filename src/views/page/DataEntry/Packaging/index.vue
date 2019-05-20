@@ -141,6 +141,7 @@ export default {
     GetOrderList () {
       if (this.plantList.workShop) {
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          factory: this.plantList.factoryid,
           workShop: this.plantList.workShop,
           productDate: this.plantList.productDate,
           orderNo: ''
@@ -165,6 +166,7 @@ export default {
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+          factory: this.factoryid,
           workShop: this.workShop,
           productDate: this.productDate,
           orderNo: row.orderNo

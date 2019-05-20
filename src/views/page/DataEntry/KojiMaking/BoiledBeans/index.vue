@@ -241,7 +241,7 @@ export default {
         that.$refs.textrecord.UpdateText({
           orderId: that.formHeader.orderId,
           orderHouseId: that.formHeader.orderHouseId,
-          productLine: that.formHeader.processId
+          blongProc: that.formHeader.processId
         }, str, resolve, reject)
       })
       let net100 = new Promise((resolve, reject) => {

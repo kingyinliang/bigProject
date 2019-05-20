@@ -39,10 +39,10 @@
             </el-col> -->
           </el-row>
           <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
-            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isMyAuth">查询</el-button>
-            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isMyAuth && searched">{{disabled?'编辑':'返回'}}</el-button>
-            <el-button type="primary" size="small"  @click="save()"  v-if="isMyAuth && !disabled">保存</el-button>
-            <el-button type="primary" size="small"  @click="submit()"  v-if="isMyAuth && !disabled">提交</el-button>
+            <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:material:list')">查询</el-button>
+            <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
+            <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
+            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff">
@@ -56,13 +56,13 @@
                 <div class='pot-box-container img'>
                 </div>
                 <div class="pot-box-footer" >
-                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='0'" @click="inPotStart(item.deviceId, item.deviceName)">
+                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='0' && orderStatus !== 'submit' && orderStatus !== 'checked'" @click="inPotStart(item.deviceId, item.deviceName)">
                     <span class="pot-box-button-title">入罐开始</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
                     <span class="pot-box-button-title-disabled">入罐开始</span>
                   </div>
-                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='1'" @click="inPotEnd(item.deviceId, item.deviceName)">
+                  <div class="pot-box-button"  v-if="!disabled && availableMap.get(item.deviceId)==='1' && orderStatus !== 'submit' && orderStatus !== 'checked'" @click="inPotEnd(item.deviceId, item.deviceName)">
                     <span class="pot-box-button-title" >入罐结束</span>
                   </div>
                   <div class="pot-box-button-disabled"  v-else>
@@ -88,7 +88,7 @@
               </div> -->
             </el-row>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord">
                 <el-table-column type="index" label="序号" width="55"></el-table-column>
                 <el-table-column label="布浆线" :show-overflow-tooltip="true" >
                   <template slot-scope="scope" width="120">
@@ -236,6 +236,51 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveEnd()">保存</el-button>
         </div>
       </el-dialog>
+      <el-dialog :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
+        <div slot="title" class='title'>
+          <span>入罐修改</span>
+        </div>
+        <div>
+          <el-form :model="modifyForm"  :label-width="formLabelWidth" size="small" ref="modifyForm">
+            <el-form-item label="领用发酵罐：" required>
+              <el-select @change="changeOptions('fermentPotModify')"  v-model="modifyForm.fermentPotNo" value-key="holderId" placeholder="请选择" filterable style="width:220px" >
+                <el-option v-for="(item, index) in fermentPotList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="批次：" required>
+              <el-input v-model.trim="modifyForm.batch" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="发酵罐剩余量：">
+              <el-input type='number' v-model.number="modifyForm.remainAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="起始数(方)：" required>
+              <el-input  type='number' v-model.number="modifyForm.startAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="打料结束数(L)：" required>
+              <el-input  type='number' v-model.number="modifyForm.endAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="暂存量(L)：" >
+              <el-input  type='number' v-model.number="modifyForm.storageAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="备注：" >
+              <el-input v-model.trim="modifyForm.remark" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="对应布浆线：">
+              <label>{{modifyForm.productLineName}}</label>
+            </el-form-item>
+            <el-form-item label="操作时间：">
+              <label>{{modifyForm.changed}}</label>
+            </el-form-item>
+            <el-form-item label="操作人：">
+              <label>{{modifyForm.changer}}</label>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible3 = false">取消</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveModify()">保存</el-button>
+        </div>
+      </el-dialog>
     </el-col>
   </el-row>
 </template>
@@ -267,6 +312,7 @@ export default class Index extends Vue {
   disabled: boolean = true
   dialogFormVisible:boolean = false
   dialogFormVisible2:boolean = false
+  dialogFormVisible3:boolean = false
   formLabelWidth: string = '130px'
   startForm = {
     deviceId: '',
@@ -299,30 +345,50 @@ export default class Index extends Vue {
     changed: '',
     changer: ''
   }
-  dataRule = {
-    fermentPotNo: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ],
-    batch: [
-      {required: true, message: '必填', trigger: 'blur'},
-      {max: 10, message: '长度不能超过10', trigger: 'blur'}
-    ],
-    startAmount: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ]
+  modifyForm = {
+    id: '',
+    recordId: '',
+    deviceId: '',
+    deviceName: '',
+    fermentPotNo: '',
+    fermentPotName: '',
+    orderId: '',
+    batch: '',
+    remainAmount: 0,
+    remainAmountUnit: 'L',
+    startAmount: 0,
+    storageAmount: 0,
+    endAmount: 0,
+    remark: '',
+    productLine: '',
+    productLineName: '',
+    changed: '',
+    changer: ''
   }
-  dataRule2 = {
-    fermentPotNo: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ],
-    batch: [
-      {required: true, message: '必填', trigger: 'blur'},
-      {max: 10, message: '长度不能超过10', trigger: 'blur'}
-    ],
-    endAmount: [
-      {required: true, message: '必填', trigger: 'blur'}
-    ]
-  }
+  // dataRule = {
+  //   fermentPotNo: [
+  //     {required: true, message: '必填', trigger: 'blur'}
+  //   ],
+  //   batch: [
+  //     {required: true, message: '必填', trigger: 'blur'},
+  //     {max: 10, message: '长度不能超过10', trigger: 'blur'}
+  //   ],
+  //   startAmount: [
+  //     {required: true, message: '必填', trigger: 'blur'}
+  //   ]
+  // }
+  // dataRule2 = {
+  //   fermentPotNo: [
+  //     {required: true, message: '必填', trigger: 'blur'}
+  //   ],
+  //   batch: [
+  //     {required: true, message: '必填', trigger: 'blur'},
+  //     {max: 10, message: '长度不能超过10', trigger: 'blur'}
+  //   ],
+  //   endAmount: [
+  //     {required: true, message: '必填', trigger: 'blur'}
+  //   ]
+  // }
   mounted () {
     this.params.applyDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.getFactory()
@@ -333,21 +399,70 @@ export default class Index extends Vue {
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
-  get isMyAuth () {
-    return true
-  }
   get mainTabs () {
     return this.$store.state.common.mainTabs
   }
   set mainTabs (val) {
     this.$store.commit('common/updateMainTabs', val)
   }
-  // get orderStatus () {
-  //   if (this.dataList && this.dataList.length > 0) {
-  //     return this.dataList[0].status
-  //   }
-  //   return ''
-  // }
+  get orderStatus () {
+    if (this.dataList && this.dataList.length > 0) {
+      return this.dataList[0].status
+    }
+    return ''
+  }
+  modifyRecord (row) {
+    if (this.disabled || row.status === 'submit' || row.status === 'checked') {
+      return
+    }
+    this.modifyForm = {
+      id: row.id ? row.id : 'id',
+      recordId: row.recordId ? row.recordId : 'record',
+      deviceId: row.storagePotNo,
+      deviceName: row.storagePotName,
+      fermentPotNo: row.fermentPotNo ? row.fermentPotNo : '',
+      fermentPotName: row.fermentPotName ? row.fermentPotName : '',
+      orderId: row.orderId ? row.orderId : '',
+      batch: row.batch ? row.batch : '',
+      remainAmount: row.remainAmount ? row.remainAmount : 0,
+      remainAmountUnit: row.remainAmountUnit ? row.remainAmountUnit : 'L',
+      startAmount: row.startAmount ? row.startAmount : 0,
+      storageAmount: row.storageAmount ? row.storageAmount : 0,
+      endAmount: row.endAmount ? row.endAmount : 0,
+      remark: row.remark ? row.remark : '',
+      productLine: row.productLine,
+      productLineName: row.productLineName,
+      changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+    }
+    this.dialogFormVisible3 = true
+  }
+  saveModify () {
+    if (this.modifyValidate()) {
+      let record = this.dataList.find(item => item.id === this.modifyForm.id)
+      if (!record) {
+        record = this.dataList.find(item => item.recordId === this.modifyForm.recordId)
+      }
+      if (record) {
+        Object.assign(record, {
+          fermentPotNo: this.modifyForm.fermentPotNo,
+          fermentPotName: this.modifyForm.fermentPotName,
+          orderId: this.modifyForm.orderId,
+          batch: this.modifyForm.batch,
+          remainAmount: this.modifyForm.remainAmount,
+          remainAmountUnit: this.modifyForm.remainAmountUnit,
+          startAmount: this.modifyForm.startAmount,
+          storageAmount: this.modifyForm.storageAmount,
+          endAmount: this.modifyForm.endAmount,
+          amount: this.modifyForm.endAmount - this.modifyForm.startAmount,
+          remark: this.modifyForm.remark,
+          changed: this.modifyForm.changed,
+          changer: this.modifyForm.changer
+        })
+      }
+      this.dialogFormVisible3 = false
+    }
+  }
   inPotStart (deviceId: string, deviceName: string) {
     this.startForm = {
       deviceId,
@@ -418,12 +533,12 @@ export default class Index extends Vue {
         orderId: startData.orderId,
         batch: startData.batch,
         remainAmount: startData.remainAmount,
-        endAmount: 0,
+        endAmount: startData.endAmount ? startData.endAmount : 0,
         productLine: startData.productLine,
         productLineName: startData.productLineName,
-        remark: '',
-        changed: startData.changed,
-        changer: startData.changer
+        remark: startData.remark ? startData.remark : '',
+        changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
       }
     }
     this.dialogFormVisible2 = true
@@ -433,12 +548,17 @@ export default class Index extends Vue {
       this.$message.error('结束数不能为空')
       return false
     }
-    this.availableMap.set(this.endForm.deviceId, '2')
+    this.availableMap.set(this.endForm.deviceId, '0')
     let recordId = this.matchedMap.get(this.endForm.deviceId)
     let startData = this.dataList.find(item => item.recordId === recordId)
     // let startData = this.dataList.find(item => item.storagePotNo === this.endForm.deviceId)
     if (startData) {
-      Object.assign(startData, {endAmount: this.endForm.endAmount, amount: this.endForm.endAmount - startData.startAmount, remark: this.endForm.remark})
+      Object.assign(startData, {
+        endAmount: this.endForm.endAmount,
+        amount: this.endForm.endAmount - startData.startAmount,
+        remark: this.endForm.remark,
+        changed: this.endForm.changed,
+        changer: this.endForm.changer})
     }
     this.dialogFormVisible2 = false
   }
@@ -451,6 +571,22 @@ export default class Index extends Vue {
       return false
     } else if (this.startForm.startAmount.toString() === '') {
       this.$message.error('起始数不能为空')
+      return false
+    }
+    return true
+  }
+  modifyValidate () {
+    if (this.modifyForm.fermentPotNo === '') {
+      this.$message.error('领用发酵罐不能为空')
+      return false
+    } else if (this.modifyForm.batch === '') {
+      this.$message.error('批次不能为空')
+      return false
+    } else if (this.modifyForm.startAmount.toString() === '') {
+      this.$message.error('起始数不能为空')
+      return false
+    } else if (this.modifyForm.endAmount.toString() === '') {
+      this.$message.error('结束数不能为空')
       return false
     }
     return true
@@ -469,6 +605,14 @@ export default class Index extends Vue {
       let item = this.fermentPotList.find(ele => ele.holderId === this.startForm.fermentPotNo)
       this.startForm.fermentPotName = item ? item.holderName : ''
       this.startForm.orderId = item ? item.orderId : ''
+    } else if (flag === 'fermentPotModify') {
+      let item = this.fermentPotList.find(ele => ele.holderId === this.modifyForm.fermentPotNo)
+      this.modifyForm.fermentPotName = item ? item.holderName : ''
+      this.modifyForm.orderId = item ? item.orderId : ''
+      this.modifyForm.remainAmount = 0
+      this.modifyForm.remainAmountUnit = 'L'
+      this.modifyForm.batch = ''
+      this.getRemanAmountModify(this.params.workshopId, this.modifyForm.fermentPotNo, this.modifyForm.orderId)
     }
   }
   // 获取工厂
@@ -507,7 +651,7 @@ export default class Index extends Vue {
   getProductLine (wid: string) {
     this.productlineList = []
     if (wid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
         } else {
@@ -532,15 +676,23 @@ export default class Index extends Vue {
       })
     }
   }
-
-  getRemanAmount (wId: string, fId: string, orderId: string) {
+  getRemanAmountStart (wId: string, fId: string, orderId: string) {
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
       if (res.data.code === 0) {
-        this.startForm.remainAmount = res.data.psp ? res.data.psp.remainAmount : 0
-        this.startForm.remainAmountUnit = res.data.psp ? res.data.psp.remainAmountUnit : 'L'
-        // if (!this.params.factoryId && res.data.num.length > 0) {
-        //   this.params.workshopId = res.data.num[0].holderId
-        // }
+        this.startForm.remainAmount = (res.data.psp && res.data.psp.remainAmount) ? res.data.psp.remainAmount : 0
+        this.startForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
+        this.startForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  getRemanAmountModify (wId: string, fId: string, orderId: string) {
+    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_REMAIN_AMOUNT_API}`, 'POST', {workShop: wId, potNo: fId, orderId}, false, false, false).then(res => {
+      if (res.data.code === 0) {
+        this.modifyForm.remainAmount = (res.data.psp && res.data.psp.remainAmount) ? res.data.psp.remainAmount : 0
+        this.modifyForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
+        this.modifyForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
       } else {
         this.$message.error(res.data.msg)
       }
@@ -607,20 +759,28 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('保存成功')
+        this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('保存失败: ' + err)
     })
   }
   submit () {
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
+        this.$message.success('提交成功')
+        this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
+    }).catch(err => {
+      this.$message.error('提交失败: ' + err)
     })
   }
   @Watch('params', {deep: true})
@@ -645,8 +805,16 @@ export default class Index extends Vue {
   onChangeFerment (newVal: string, oldVal: string) {
     this.startForm.remainAmount = 0
     this.startForm.remainAmountUnit = 'L'
-    this.getRemanAmount(this.params.workshopId, newVal, this.startForm.orderId)
+    this.startForm.batch = ''
+    this.getRemanAmountStart(this.params.workshopId, newVal, this.startForm.orderId)
   }
+  // @Watch('modifyForm.fermentPotNo', {immediate: false})
+  // onChangeFerment2 (newVal: string, oldVal: string) {
+  //   console.log('--------------------------------------------------')
+  //   this.modifyForm.remainAmount = 0
+  //   this.modifyForm.remainAmountUnit = 'L'
+  //   this.getRemanAmountModify(this.params.workshopId, newVal, this.modifyForm.orderId)
+  // }
 }
 </script>
 <style lang="scss" >
