@@ -3,7 +3,7 @@
 // let HOST = 'http://10.10.1.156:8080/xhqy-fc'
 // let HOST = 'http://10.10.5.40:8080/xhqy-fc'
 // let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.26:8080/xhqy-fc' // zl
+// let HOST = 'http://10.10.1.23:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
 // let HOST = 'http://10.10.1.68:8080/xhqy-fc'
 // HOST
@@ -781,7 +781,17 @@ export const REP_API = {
    * 物料领用报表
    */
   PRSMATERIAL_LIST_API: HOST + '/report/res/prsMaterial',
-  PRSMATERIAL_EXPECT_API: HOST + '/report/res/expectPrsMaterial'
+  PRSMATERIAL_EXPECT_API: HOST + '/report/res/expectPrsMaterial',
+  /**
+   * 压榨领用报表
+   */
+  APPLY_MATERIAL_LIST_API: HOST + '/report/formh/prsMaterialList',
+  APPLY_MATERIAL_EXPECT_API: HOST + '/report/formh/exportPrsMaterialList',
+  /**
+   * 压榨入库报表
+   */
+  INSTOCK_MATERIAL_LIST_API: HOST + '/report/formh/prsInstorageList',
+  INSTOCK_MATERIAL_EXPECT_API: HOST + '/report/formh/exportPrsInstorageList'
 }
 /*
 *炒麦api
