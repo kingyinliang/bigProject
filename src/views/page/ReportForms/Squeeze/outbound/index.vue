@@ -243,7 +243,7 @@ export default class Index extends Vue {
       commitDateTwo: this.params.endDate
     }
     let that = this
-    exportFile(`${REP_API.APPLY_MATERIAL_EXPECT_API}`, '压榨入库报表', that)
+    exportFile(`${REP_API.APPLY_MATERIAL_EXPECT_API}`, '压榨领用报表', that)
   }
   getCompleteData () {
     this.searched = true
