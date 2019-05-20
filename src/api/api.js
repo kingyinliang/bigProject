@@ -5,9 +5,9 @@
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.1.23:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
-// let HOST = 'http://10.10.1.68:8080/xhqy-fc'
+let HOST = 'http://10.10.1.62:8080/xhqy-fc'
 // HOST
-let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
+// let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
 // let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
 // let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
@@ -773,6 +773,7 @@ export const REP_API = {
   REPCHECKRECORDLIST_API: HOST + '/report/kjmORwht/checkRecordList',
   REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord',
   /**
+<<<<<<< Updated upstream
    * 生产品项统计表
    */
   PROSTA_LIST_API: HOST + '/report/res/proSta',
@@ -791,7 +792,17 @@ export const REP_API = {
    * 压榨入库报表
    */
   INSTOCK_MATERIAL_LIST_API: HOST + '/report/formh/prsInstorageList',
-  INSTOCK_MATERIAL_EXPECT_API: HOST + '/report/formh/exportPrsInstorageList'
+  INSTOCK_MATERIAL_EXPECT_API: HOST + '/report/formh/exportPrsInstorageList',
+  /**
+   * 压榨
+   */
+  SQUEEZEPRESSLIST_API: HOST + '/report/formPress/pressList',
+  REPSQUEEZEPRESS_API: HOST + '/report/formPress/exportPress',
+  /**
+   * 出油率
+   */
+  SQUEEZEOILERLIST_API: HOST + '/report/formPress/oilYieldList',
+  REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield'
 }
 /*
 *炒麦api
