@@ -119,6 +119,7 @@ export default {
       lodingS: false,
       isRedact: false,
       orderStatus: '',
+      factory: '',
       orderNo: '',
       productDate: '',
       workShop: '',
@@ -142,6 +143,7 @@ export default {
   },
   mounted () {
     headanimation(this.$)
+    this.factory = this.Pkgfactoryid
     this.orderNo = this.PkgorderNo
     this.productDate = this.PkgproductDate
     this.workShop = this.PkgworkShop
@@ -150,7 +152,7 @@ export default {
   methods: {
     // 获取比例
     GetRatio () {
-      this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.formHeader.materialCode}).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGBILI_API}`, 'POST', {materialCode: this.formHeader.materialCode, factory: this.formHeader.factory}).then(({data}) => {
         if (data.code === 0) {
           if (data.sme) {
             this.ratio.ratio = data.sme.ratio
@@ -169,6 +171,7 @@ export default {
     // 获取表头
     GetOrderList () {
       this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
+        factory: this.factory,
         workShop: this.workShop,
         productDate: this.productDate,
         orderNo: this.orderNo
@@ -186,18 +189,18 @@ export default {
           this.$refs.workerref.GetUserList(this.formHeader.orderId)
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
           this.$refs.instorage.Getpkgin(this.formHeader)
-          this.$refs.listbom.GetpkgSap(this.formHeader.orderId)
+          this.$refs.listbom.GetpkgSap(this.formHeader)
           if (this.formHeader.properties !== '二合一&礼盒产线') {
             this.$refs.germs.GetpkgGerms(this.formHeader.orderId)
           }
           this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
-          this.$refs.listbom.GetpkgSap(this.formHeader.orderId, data)
+          this.$refs.listbom.GetpkgSap(this.formHeader, data)
         }
       })
     },
     // 修改表头
-    UpdateformHeader (str, resolve) {
+    UpdateformHeader (str, resolve, reject) {
       this.formHeader.orderStatus = str
       this.formHeader.realOutput = this.$refs.instorage.countOutputNum / this.ratio.ratio
       this.formHeader.countOutputUnit = this.formHeader.properties === '二合一&礼盒产线' ? this.ratio.basicUnit : 'BOT'// 生产入库单位
@@ -213,11 +216,14 @@ export default {
         if (data.code === 0) {
           this.PkgproductDate = this.formHeader.productDate.replace(/-/g, '')
           this.productDate = this.formHeader.productDate.replace(/-/g, '')
+          if (resolve) {
+            resolve('resolve')
+          }
         } else {
+          if (reject) {
+            reject('保存表头' + data.msg)
+          }
           this.$message.error('保存表头' + data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
         }
       })
     },
@@ -234,10 +240,10 @@ export default {
       } else if (this.submitRadio === '1') {
         let that = this
         let net0 = new Promise((resolve, reject) => {
-          that.UpdateformHeader('saved', resolve)
+          that.UpdateformHeader('saved', resolve, reject)
         })
         let net1 = new Promise((resolve, reject) => {
-          that.$refs.instorage.submitIn(that.formHeader.orderId, 'submit', resolve)
+          that.$refs.instorage.submitIn(that.formHeader.orderId, 'submit', resolve, reject)
         })
         let SubmitNet = Promise.all([net0, net1])
         SubmitNet.then(() => {
@@ -273,7 +279,7 @@ export default {
       this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {
-        this.UpdateformHeader(str, resolve)
+        this.UpdateformHeader(str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
         that.$refs.readytimes.UpdateReady(that.formHeader.orderId, str, resolve, reject)
@@ -308,7 +314,7 @@ export default {
             that.ProHours(resolve, reject)
           })
           let net9 = new Promise((resolve, reject) => {
-            that.$refs.instorage.submitIn(that.formHeader.orderId, str, resolve)
+            that.$refs.instorage.submitIn(that.formHeader.orderId, str, resolve, reject)
           })
           let net10 = new Promise((resolve, reject) => {
             that.$refs.listbom.subSap(resolve, reject)
@@ -404,6 +410,10 @@ export default {
     PkgorderNo: {
       get () { return this.$store.state.common.PkgorderNo },
       set (val) { this.$store.commit('common/updateOrderNo', val) }
+    },
+    Pkgfactoryid: {
+      get () { return this.$store.state.common.Pkgfactoryid },
+      set (val) { this.$store.commit('common/updateFactoryid', val) }
     }
   },
   components: {

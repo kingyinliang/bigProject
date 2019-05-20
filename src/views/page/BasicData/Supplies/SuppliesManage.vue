@@ -38,6 +38,7 @@
                   <el-button style="padding: 0px;" type="text" @click="showdetail(scope.row.materialId)">{{scope.row.materialCode}} {{scope.row.materialName}}</el-button>
                 </template>
               </el-table-column>
+              <el-table-column :show-overflow-tooltip="true" label="工厂" width="180" prop="factoryName"></el-table-column>
               <el-table-column
                 :show-overflow-tooltip="true"
                 label="物料类型"

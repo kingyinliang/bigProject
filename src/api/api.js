@@ -1,6 +1,7 @@
 // let HOST = 'http://localhost:8080'
 // let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
+// let HOST = 'http://10.10.1.68:8080/xhqy-fc'
 // HOST
 // let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -766,7 +767,17 @@ export const REP_API = {
    * 麦粉检测
    */
   REPCHECKRECORDLIST_API: HOST + '/report/kjmORwht/checkRecordList',
-  REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord'
+  REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord',
+  /**
+   * 生产品项统计表
+   */
+  PROSTA_LIST_API: HOST + '/report/res/proSta',
+  PROSTA_EXPECT_API: HOST + '/report/res/expectProSta',
+  /**
+   * 物料领用报表
+   */
+  PRSMATERIAL_LIST_API: HOST + '/report/res/prsMaterial',
+  PRSMATERIAL_EXPECT_API: HOST + '/report/res/expectPrsMaterial'
 }
 /*
 *炒麦api
@@ -1069,6 +1080,82 @@ export const SQU_API = {
   /**
    * 物料入库 提交
    */
-  MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder'
-
+  MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder',
+  REMAIN_AMOUNT_API: HOST + '/prs/storagePot/getRemainAmount',
+  // 布浆
+  CLOTHMATERIALIST_API: HOST + '/prs/pro/materialList', // 物料领用列表
+  CLOTHFORMHEADER_API: HOST + '/prs/pro/updatePro', // 物料保存表头
+  CLOTHMATERIALSAVE_API: HOST + '/prs/pulp/updatePulp', // 物料保存
+  CLOTHMATERIALMAN_API: HOST + '/prs/pulpMan/updatePulp',
+  CLOTHMATERIALSUBMIT_API: HOST + '/prs/pulp/submitPulp',
+  // 自淋
+  WATERLIST_API: HOST + '/prs/drench/drenchList',
+  WATERSAVE_API: HOST + '/prs/drench/drenchUpdate',
+  WATERSUBMIT_API: HOST + '/prs/drench/drenchSubmit',
+  // 布浆
+  PRESSLIST_API: HOST + '/prs/prepress/pressList',
+  PRESSUPDATE_API: HOST + '/prs/prepress/prePressUpdate', // 预压保存
+  ENDPRESSUPDATE_API: HOST + '/prs/endpress/endPressUpdate', // 終压保存
+  PRESSSUBMIT_API: HOST + '/prs/prepress/prePressSubmit', // 预压提交
+  ENDPRESSSUBMIT_API: HOST + '/prs/endpress/endPressSubmit', // 終压提交
+  /**
+   * 车间汇总物料列表
+   */
+  SUM_MATERIAL_LIST_API: HOST + '/mid/prsMaterial/materialList',
+  /**
+   * 车间汇总物料修改
+   */
+  SUM_MATERIAL_UPDATE_API: HOST + '/mid/prsMaterial/updateMaterial',
+  /**
+   * 车间汇总原汁列表
+   */
+  SUM_FUMET_LIST_API: HOST + '/mid/prsOrder/orderList',
+  /**
+   * 车间汇总申请订单
+   */
+  SUM_APPLYORDER_API: HOST + '/mid/prsOrder/applyOrder',
+  /**
+   * 车间汇总修改订单
+   */
+  SUM_ORDERUPDATE_API: HOST + '/mid/prsOrder/updateOrder',
+  /**
+   * 车间汇总退回订单
+   */
+  SUM_ORDER_BACK_API: HOST + '/mid/prsOrder/backInSto',
+  /**
+   * 车间汇总工时列表
+   */
+  SUM_TIME_LIST_API: HOST + '/mid/prsTime/timeList',
+  /**
+   * 车间汇总工时修改
+   */
+  SUM_TIME_UPDATE_API: HOST + '/mid/prsTime/saveTime',
+  /**
+   * 车间汇总工时退回
+   */
+  SUM_TIME_BACK_API: HOST + '/mid/prsTime/backTime',
+  /**
+   * 车间汇总获取工时
+   */
+  SUM_TIME_API: HOST + '/mid/prsTime/applyTime',
+  /**
+   * 车间汇总工时提交
+   */
+  SUM_TIME_SUBMIT_API: HOST + '/mid/prsTime/submitInTime',
+  /**
+   * 车间汇总物料提交
+   */
+  SUM_MATERIAL_SUBMIT_API: HOST + '/mid/prsMaterial/submitMat',
+  /**
+   * 车间汇总订单提交
+   */
+  SUM_ORDER_SUBMIT_API: HOST + '/mid/prsOrder/submitInSto',
+  /**
+   * 工时与异常查询接口
+   */
+  PRS_TIME_LIST_API: HOST + '/prs/timeSheet/list',
+  /**
+   * 工时与异常更新接口
+   */
+  PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
 }
