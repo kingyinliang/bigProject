@@ -2,33 +2,33 @@
   <div class="main">
     <el-card class="newCard searchCard">
       <el-row>
-        <el-col :span="21">
-          <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
+        <el-col>
+          <el-form :model="formHeader" :inline="true" size="small" label-width="75px">
             <el-form-item label="生产工厂：">
-              <el-select v-model="formHeader.factory" placeholder="请选择">
+              <el-select v-model="formHeader.factory" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产车间：">
-              <el-select v-model="formHeader.workShop" placeholder="请选择">
+              <el-select v-model="formHeader.workShop" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="布浆线：">
-              <el-select v-model="formHeader.productLine" placeholder="请选择">
+              <el-select v-model="formHeader.productLine" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="工序：">
-              <el-select v-model="formHeader.pressure" placeholder="请选择">
+              <el-select v-model="formHeader.pressure" placeholder="请选择" class="width180px">
                 <el-option :label="item.label" v-for="(item, index) in pressureList" :key="index" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:199px"></el-date-picker>
+              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"  class="width180px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -47,12 +47,12 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard">
+    <div class="tableCard" v-show="contentshow">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
-      <el-tab-pane name="1">
+        <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':'未录入'" placement="top-start">
               <el-button :style="{'color': orderStatus === 'noPass'? 'red' : ''}">物料领用</el-button>
@@ -81,6 +81,7 @@ export default {
   name: 'press',
   data () {
     return {
+      contentshow: false,
       isRedact: false,
       succmessage: '',
       orderStatus: '',
@@ -112,9 +113,21 @@ export default {
   watch: {
     'formHeader.factory' (n, o) {
       this.Getdeptbyid(n)
+      this.contentshow = false
+      this.isRedact = false
     },
     'formHeader.workShop' (n, o) {
       this.GetParentline(n)
+      this.contentshow = false
+      this.isRedact = false
+    },
+    'formHeader.pressure' (n, o) {
+      this.contentshow = false
+      this.isRedact = false
+    },
+    'formHeader.productDate' (n, o) {
+      this.contentshow = false
+      this.isRedact = false
     }
   },
   methods: {
@@ -160,6 +173,27 @@ export default {
       }
     },
     SearchList () {
+      if (!this.formHeader.factory || this.formHeader.factory === '') {
+        this.$message.error('请选择生产工厂')
+        return false
+      }
+      if (!this.formHeader.workShop || this.formHeader.workShop === '') {
+        this.$message.error('请选择生产车间')
+        return false
+      }
+      if (!this.formHeader.productLine || this.formHeader.productLine === '') {
+        this.$message.error('请选择布浆线')
+        return false
+      }
+      if (!this.formHeader.pressure || this.formHeader.pressure === '') {
+        this.$message.error('请选择工序')
+        return false
+      }
+      if (!this.formHeader.productDate || this.formHeader.productDate === '') {
+        this.$message.error('请选择生产日期')
+        return false
+      }
+      this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.material.GetpulpMachine(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
@@ -228,13 +262,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.input_bommom{
-  width: 199px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 32px;
-  border-bottom: solid 1px #D8D8D8;
+.width180px {
+  width: 180px;
 }
 .searchCard {
   .el-button--primary,.el-button--primary:focus{

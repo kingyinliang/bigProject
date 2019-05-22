@@ -5,7 +5,7 @@
 // let HOST = 'http://10.10.1.167:8080'
 // let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
 // let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
-// let HOST = 'http://10.10.1.62:8080/xhqy-fc'
+// let HOST = 'http://10.10.1.44:8080/xhqy-fc'
 // HOST
 let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' // 开发环境
 // let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
@@ -773,7 +773,6 @@ export const REP_API = {
   REPCHECKRECORDLIST_API: HOST + '/report/kjmORwht/checkRecordList',
   REPEXPECTCHECKRECORD_API: HOST + '/report/kjmORwht/expectCheckRecord',
   /**
-<<<<<<< Updated upstream
    * 生产品项统计表
    */
   PROSTA_LIST_API: HOST + '/report/res/proSta',
