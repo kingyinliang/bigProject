@@ -4,7 +4,7 @@
       <el-table :data="materialList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead" v-if="this.formHeader.pressure === 1">
         <el-table-column type="selection" width="35"></el-table-column>
         <el-table-column label="工序" width="50px">预压</el-table-column>
-        <el-table-column width="100px" prop="deviceName" :key="Math.random()">
+        <el-table-column width="120px" prop="deviceName" :key="Math.random()">
           <template slot="header"><i class="reqI">*</i><span>气垫车号</span></template>
         </el-table-column>
         <el-table-column label="布浆线" prop="deptName" width="80px" :key="Math.random()"></el-table-column>
@@ -192,22 +192,6 @@ export default {
     },
     // 列表拉取
     GetMateriaList (formHeader) {
-      if (!formHeader.factory || formHeader.factory === '') {
-        this.$message.error('请选择生产工厂')
-        return false
-      }
-      if (!formHeader.workShop || formHeader.workShop === '') {
-        this.$message.error('请选择生产车间')
-        return false
-      }
-      if (!formHeader.productLine || formHeader.productLine === '') {
-        this.$message.error('请选择布浆线')
-        return false
-      }
-      if (!formHeader.pressure || formHeader.pressure === '') {
-        this.$message.error('请选择工序')
-        return false
-      }
       this.$http(`${SQU_API.PRESSLIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, pressure: formHeader.pressure, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
         if (data.code === 0) {
           this.materialList = data.pressInfo
