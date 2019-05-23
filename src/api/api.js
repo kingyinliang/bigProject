@@ -1,4 +1,4 @@
-let HOST = require('./host.js').HOST
+const HOST = require('./host-' + process.env.NODE_ENV).HOST
 /*
 *MAINapi
  */

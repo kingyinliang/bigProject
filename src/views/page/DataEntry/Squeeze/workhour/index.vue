@@ -281,16 +281,16 @@ export default {
       if (str === 'submit') {
         let saveNet = Promise.all([headSave, readySave, userSave])
         saveNet.then(function () {
-          let submit = new Promise((resolve, reject) => {
-            that.manHourSubmit(str, resolve, reject)
-          })
-          let submitNet = Promise.all([submit])
-          submitNet.then(function () {
-            that.GetTimeList()
-            that.$message.success('提交成功')
-          }, err => {
-            that.$message.error(err)
-          })
+          // let submit = new Promise((resolve, reject) => {
+          //   that.manHourSubmit(str, resolve, reject)
+          // })
+          // let submitNet = Promise.all([submit])
+          // submitNet.then(function () {
+          that.GetTimeList()
+          that.$message.success('提交成功')
+          // }, err => {
+          //   that.$message.error(err)
+          // })
         }, err => {
           that.$message.error(err)
         })
