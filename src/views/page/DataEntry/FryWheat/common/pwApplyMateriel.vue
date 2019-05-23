@@ -318,9 +318,10 @@ export default {
       }
       return true
     },
-    getDictList () {
+    getDictList (order) {
       // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
       this.dictListObj = {}
+      // let params = {types: ['PW_FEVOR', 'CM_material_prd', 'CM_material'], factory: order.factory}
       let params = ['PW_FEVOR', 'CM_material_prd', 'CM_material']
       this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {

@@ -7,7 +7,6 @@
             <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" @keyup.enter.native="GetList(true)" @submit.native.prevent>
               <el-form-item label="工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
-                  <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
@@ -622,7 +621,6 @@ export default {
     this.Getdeptcode()
     this.GetProductShift()
     this.GetARtype()
-    this.GetList()
     this.getTree()
     headanimation(this.$)
   },
@@ -863,6 +861,9 @@ export default {
       this.clearStatus = true
       if (st) {
         this.plantList.currPage = 1
+      }
+      if (!this.plantList.factory) {
+        this.$message.error('请选择工厂')
       }
       this.lodingS = true
       this.$http(`${AR_API.ARLIST_API}`, 'POST', this.plantList).then(({data}) => {
