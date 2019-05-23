@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <div class="main">
     <el-card class="newCard searchCard">
       <el-row>
         <el-col>
@@ -42,13 +42,13 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard" v-show="contentshow">
+    <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
+      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" v-if="contentshow">
         <el-tab-pane name="1" label="物料领用">
-          <Material ref="material" :isRedact="isRedact" :formHeader="formHeader" @setApplyMaterielState='setApplyMaterielState'></Material>
+          <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
         <el-tab-pane name="2" label="异常记录">
           <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
@@ -63,7 +63,7 @@
 
 <script>
 import { BASICDATA_API } from '@/api/api'
-import {headanimation} from '@/net/validate'
+import {headanimation, dateFormat} from '@/net/validate'
 import Material from './common/material'
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
@@ -71,7 +71,6 @@ export default {
   name: 'cloth',
   data () {
     return {
-      lodingStatus: false,
       isRedact: false,
       orderStatus: '',
       factory: [],
@@ -81,7 +80,7 @@ export default {
         factory: '',
         workShop: '',
         productLine: '',
-        productDate: '',
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd'),
         upMan: '',
         upDate: '',
         clickstatus: 'saved'
@@ -113,6 +112,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -128,6 +128,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            this.formHeader.workShop = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -145,6 +146,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
+            this.formHeader.productLine = data.childList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -233,13 +235,6 @@ export default {
           that.$message.error('网络请求失败，请刷新重试')
         })
       })
-    },
-    tabClick (val) {
-      this.$refs.tabs.setCurrentName(val.name)
-    },
-    setApplyMaterielState (status) {
-      this.orderStatus = status
-      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   components: {
