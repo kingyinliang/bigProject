@@ -1,16 +1,20 @@
-// let HOST = 'http://localhost:3000/xhqy-fc'
-// let HOST = 'http://10.8.4.153:50080/api'
-// let HOST = 'http://10.10.1.156:8080/xhqy-fc'
-// let HOST = 'http://10.10.5.40:8080/xhqy-fc'
-// let HOST = 'http://10.10.1.167:8080'
-// let HOST = 'http://10.10.1.21:8080/xhqy-fc' // zl
-// let HOST = 'http://10.10.1.151:8080/xhqy-fc' // yc
-// let HOST = 'http://10.10.1.44:8080/xhqy-fc'
-// HOST
-let HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc' //
-// let HOST = 'http://alb001-ecs-1995142321.cn-north-1.elb.amazonaws.com.cn/xhqy-fc' // 开发环境alb
-// let HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'// 测试环境dev
-// let HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'// 正式环境master
+
+let HOST
+switch (process.env.srcconfig) {
+  case 'dev':
+    HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc'
+    break
+  case 'test':
+    HOST = 'https://apimarket-test.shinho.net.cn/xhqy-fc'
+    break
+  case 'pro':
+    HOST = 'https://apimarket.shinho.net.cn/xhqy-fc'
+    break
+  default:
+    HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc'
+    // HOST = 'http://10.10.1.62:8080/xhqy-fc'
+    break
+}
 /*
 *MAINapi
  */
