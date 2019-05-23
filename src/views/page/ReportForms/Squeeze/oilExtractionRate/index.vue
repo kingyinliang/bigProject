@@ -29,8 +29,8 @@
             </el-form>
           </el-col>
           <el-col :span="3" style="text-align:right;">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formPress:oilYieldList')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formPress:exportoilYield')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -49,7 +49,7 @@
           <el-table-column label="生产日期" prop="productDate" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="出品率" prop="yield" :show-overflow-tooltip="true" ></el-table-column>
           <el-table-column label="发酵罐" prop="holderName" :show-overflow-tooltip="true" ></el-table-column>
-          <el-table-column label="领用酱醪量" props="childUsedAmount" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="领用酱醪量" prop="childUsedAmount" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="原汁产量" prop="inPotAmount" :show-overflow-tooltip="true"></el-table-column>
         </el-table>
         <el-pagination
