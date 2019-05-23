@@ -49,7 +49,7 @@
           <el-table-column label="生产日期" prop="productDate" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="出品率" prop="yield" :show-overflow-tooltip="true" ></el-table-column>
           <el-table-column label="发酵罐" prop="holderName" :show-overflow-tooltip="true" ></el-table-column>
-          <el-table-column label="领用酱醪量" props="childUsedAmount" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="领用酱醪量" prop="childUsedAmount" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="原汁产量" prop="inPotAmount" :show-overflow-tooltip="true"></el-table-column>
         </el-table>
         <el-pagination
