@@ -13,16 +13,16 @@ var buildObj = {
 
 switch (buidType) {
   case 'pro':
-    process.env.srcconfig = 'pro'
-    buildObj.srcconfig = 'pro'
+    process.env.srcconfig = '"pro"'
+    buildObj.srcconfig = '"pro"'
     break
   case 'test':
-    process.env.srcconfig = 'test'
-    buildObj.srcconfig = 'test'
+    process.env.srcconfig = '"test"'
+    buildObj.srcconfig = '"test"'
     break
   case 'dev':
-    process.env.srcconfig = 'dev'
-    buildObj.srcconfig = 'dev'
+    process.env.srcconfig = '"dev"'
+    buildObj.srcconfig = '"dev"'
     break
 }
 
