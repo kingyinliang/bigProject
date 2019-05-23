@@ -178,6 +178,32 @@ export default {
             this.InStockstatus = 'checked'
           }
           this.$emit('GetInStockStatus', this.InStockstatus)
+          if (data.list.length === 0) {
+            this.InStock = [{
+              batch: '',
+              changed: '',
+              changer: '',
+              created: '',
+              creator: '',
+              delFlag: '0',
+              holderId: '',
+              houseNo: '',
+              id: '',
+              isSplit: '0',
+              materialCode: '',
+              materialName: '',
+              orderHouseId: '',
+              orderNo: '1',
+              pulpWeight: '',
+              remark: '',
+              saltWaterWeight: '',
+              sauceWeight: '',
+              serialNumber: '',
+              status: '',
+              unit: 'L',
+              wheatWeight: ''
+            }]
+          }
         } else {
           this.$message.error(data.msg)
         }

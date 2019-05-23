@@ -2,34 +2,25 @@
   <div class="main">
     <el-card class="newCard searchCard">
       <el-row>
-        <el-col :span="21">
-          <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
+        <el-col>
+          <el-form :model="formHeader" :inline="true" size="small" label-width="75px">
             <el-form-item label="生产工厂：">
-              <el-select v-model="formHeader.factory" placeholder="请选择">
+              <el-select v-model="formHeader.factory" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产车间：">
-              <el-select v-model="formHeader.workShop" placeholder="请选择">
+              <el-select v-model="formHeader.workShop" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="布浆线：">
-              <el-select v-model="formHeader.productLine" placeholder="请选择">
+              <el-select v-model="formHeader.productLine" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
                 <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item label="生产日期：">
-              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:199px"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="提交人员：">
-              <p class="input_bommom">&nbsp;</p>
-            </el-form-item>
-            <el-form-item label="提交时间：">
-              <p class="input_bommom">&nbsp;</p>
             </el-form-item>
           </el-form>
         </el-col>
@@ -48,7 +39,7 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard">
+    <div class="tableCard" v-show="contentshow">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
@@ -110,6 +101,7 @@ export default {
   data () {
     return {
       isRedact: false,
+      contentshow: false,
       succmessage: '',
       orderStatus: '',
       factory: [],
@@ -189,18 +181,19 @@ export default {
       }
     },
     SearchList () {
-      if (!this.formHeader.factory || this.formHeader.factory === '') {
-        this.$message.error('请选择生产工厂')
-        return false
-      }
-      if (!this.formHeader.workShop || this.formHeader.workShop === '') {
-        this.$message.error('请选择生产车间')
-        return false
-      }
-      if (!this.formHeader.productLine || this.formHeader.productLine === '') {
-        this.$message.error('请选择布浆线')
-        return false
-      }
+      // if (!this.formHeader.factory || this.formHeader.factory === '') {
+      //   this.$message.error('请选择生产工厂')
+      //   return false
+      // }
+      // if (!this.formHeader.workShop || this.formHeader.workShop === '') {
+      //   this.$message.error('请选择生产车间')
+      //   return false
+      // }
+      // if (!this.formHeader.productLine || this.formHeader.productLine === '') {
+      //   this.$message.error('请选择布浆线')
+      //   return false
+      // }
+      this.contentshow = true
       this.$http(`${SQU_API.WATERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop, productLine: this.formHeader.productLine, productDate: this.formHeader.productDate}).then(({data}) => {
         if (data.code === 0) {
           this.waterList = data.drechinfo
@@ -291,13 +284,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.input_bommom{
-  width: 199px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 32px;
-  border-bottom: solid 1px #D8D8D8;
+.width180px {
+  width: 180px;
 }
 .searchCard {
   .el-button--primary,.el-button--primary:focus{

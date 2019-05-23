@@ -289,7 +289,7 @@ export default {
               childStatus: '',
               childDelFlag: '0'
             }
-            this.SumDate.push({fumet: item, material:tmp, delFlag: '0'})
+            this.SumDate.push({fumet: item, material: tmp, delFlag: '0'})
           }
         })
       }

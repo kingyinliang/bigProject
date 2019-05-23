@@ -12,8 +12,8 @@
             <template slot="header"><i class="reqI">*</i><span>布浆机</span></template>
             <template slot-scope="scope">{{scope.row.pulpMachineName}}</template>
           </el-table-column>
-          <el-table-column width="100px">
-            <template slot="header"><i class="reqI">*</i><span>气垫车号</span></template>
+          <el-table-column width="120px">
+            <template slot="header"><i class="reqI">*</i><span>气垫小车号</span></template>
             <template slot-scope="scope">{{scope.row.hovercraftName}}</template>
           </el-table-column>
           <el-table-column prop="pulpNum" label="布浆张数"></el-table-column>
@@ -99,12 +99,12 @@
             <el-option :label="item.deviceName" v-for="(item, index) in pulpMachineList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
+        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
+        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
           </el-select>
@@ -363,22 +363,6 @@ export default {
     // 物料查询列表
     GetMateriaList (formHeader) {
       let inState = '未录入'
-      if (!formHeader.factory || formHeader.factory === '') {
-        this.$message.error('请选择生产工厂')
-        return false
-      }
-      if (!formHeader.workShop || formHeader.workShop === '') {
-        this.$message.error('请选择生产车间')
-        return false
-      }
-      if (!formHeader.productLine || formHeader.productLine === '') {
-        this.$message.error('请选择布浆线')
-        return false
-      }
-      if (!formHeader.productDate || formHeader.productDate === '') {
-        this.$message.error('请选择生产日期')
-        return false
-      }
       this.GetpulpMachine(formHeader.productLine) // 布浆机
       this.GethovercraftNo(formHeader.workShop) // 气垫车
       this.$http(`${SQU_API.CLOTHMATERIALIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
@@ -390,9 +374,6 @@ export default {
           this.peopleList = data.propulpMan
         } else {
           this.$message.error(data.msg)
-        }
-        if (this.materialList.length !== 0) {
-          inState = this.materialList[0].status
         }
       }).finally(() => {
         this.$emit('setApplyMaterielState', inState)

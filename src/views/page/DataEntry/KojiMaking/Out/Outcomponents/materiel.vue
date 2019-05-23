@@ -31,7 +31,7 @@
           <span>起始值</span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input type="number" v-model="scope.row.startValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="结束值" width="140">
@@ -40,7 +40,7 @@
           <span>结束值</span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
+          <el-input type="number" v-model="scope.row.endValue" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="数量" width="90" show-overflow-tooltip>
