@@ -29,8 +29,8 @@
             </el-form>
           </el-col>
           <el-col :span="3" style="text-align:right;">
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)">导出</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formPress:oilYieldList')">查询</el-button>
+            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formPress:exportoilYield')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">

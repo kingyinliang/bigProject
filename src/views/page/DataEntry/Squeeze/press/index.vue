@@ -52,12 +52,12 @@
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">
+        <el-tab-pane name="1" label="物料领用">
+          <!-- <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':'未录入'" placement="top-start">
               <el-button :style="{'color': orderStatus === 'noPass'? 'red' : ''}">物料领用</el-button>
             </el-tooltip>
-          </span>
+          </span> -->
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
         <el-tab-pane name="2" label="异常记录">
