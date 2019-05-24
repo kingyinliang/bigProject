@@ -30,12 +30,12 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('prs:pro:materialList')">查询</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('prs:pro:updatePro')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('prs:pro:updatePro')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('prs:pro:updatePro')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
