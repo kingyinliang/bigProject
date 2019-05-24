@@ -31,7 +31,7 @@
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
@@ -46,7 +46,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" v-if="contentshow">
+      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" :style="{'display':contentshow?'block':'none'}">
         <el-tab-pane name="1" label="物料领用">
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
@@ -72,7 +72,6 @@ export default {
   data () {
     return {
       isRedact: false,
-      orderStatus: '',
       factory: [],
       workshop: [],
       productline: [],
@@ -100,6 +99,12 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.GetParentline(n)
+      this.contentshow = false
+      this.isRedact = false
+    },
+    'formHeader.productLine' (n, o) {
+      this.contentshow = false
+      this.isRedact = false
     },
     'formHeader.productDate' (n, o) {
       this.contentshow = false
@@ -122,8 +127,6 @@ export default {
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
       this.formHeader.productLine = ''
-      this.contentshow = false
-      this.isRedact = false
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
@@ -140,8 +143,6 @@ export default {
     // 获取产线
     GetParentline (id) {
       this.formHeader.productLine = ''
-      this.contentshow = false
-      this.isRedact = false
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
@@ -176,18 +177,8 @@ export default {
       this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-      this.$refs.excrecord.GetExcDate({
-        factory: this.formHeader.factory,
-        workShop: this.formHeader.workShop,
-        productLine: this.formHeader.productLine,
-        productDate: this.formHeader.productDate
-      })
-      this.$refs.textrecord.GetText({
-        factory: this.formHeader.factory,
-        workShop: this.formHeader.workShop,
-        productLine: this.formHeader.productLine,
-        productDate: this.formHeader.productDate
-      })
+      this.$refs.excrecord.GetExcDate(this.formHeader)
+      this.$refs.textrecord.GetText(this.formHeader)
     },
     // 提交
     SubmitForm () {

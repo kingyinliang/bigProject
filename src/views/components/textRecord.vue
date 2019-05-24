@@ -30,7 +30,7 @@ export default {
       } else if (typeof id === 'object') {
         postdata = id
       }
-      this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', postdata, false, false, false).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGTEXTLIST_API}`, 'POST', postdata).then(({data}) => {
         if (data.code === 0) {
           this.textObj = (data.listForm[0] ? data.listForm[0] : {
             id: '',
