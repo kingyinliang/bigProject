@@ -28,7 +28,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"  class="width180px"></el-date-picker>
+              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:180px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
