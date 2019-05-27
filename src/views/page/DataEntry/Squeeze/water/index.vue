@@ -39,11 +39,11 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard" v-show="contentshow">
+    <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-card style="margin-top:10px">
+      <el-card style="margin-top:10px" v-show="contentshow">
         <el-table :data="waterList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
           <el-table-column type="selection" width="35"></el-table-column>
           <el-table-column label="工序" width="50px">自淋</el-table-column>
@@ -144,6 +144,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -157,6 +158,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            this.formHeader.workShop = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -172,6 +174,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
+            this.formHeader.productLine = data.childList[0].deptId
           } else {
             this.$message.error(data.msg)
           }

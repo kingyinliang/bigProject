@@ -362,7 +362,6 @@ export default {
     },
     // 物料查询列表
     GetMateriaList (formHeader) {
-      let inState = '未录入'
       this.GetpulpMachine(formHeader.productLine) // 布浆机
       this.GethovercraftNo(formHeader.workShop) // 气垫车
       this.$http(`${SQU_API.CLOTHMATERIALIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
@@ -375,8 +374,6 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-      }).finally(() => {
-        this.$emit('setApplyMaterielState', inState)
       })
     },
     Readyrules () {
