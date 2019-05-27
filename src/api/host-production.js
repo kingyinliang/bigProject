@@ -3,7 +3,7 @@ let HOST
 let type = process.env.srcconfig
 console.log(process.env.srcconfig)
 if (type === undefined) {
-  HOST = 'http://10.10.1.151:8080/xhqy-fc'
+  HOST = 'https://apimarket-dev.shinho.net.cn/xhqy-fc'
 } else {
   switch (type) {
     case 'dev':
