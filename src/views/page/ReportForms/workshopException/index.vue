@@ -217,7 +217,7 @@ export default {
     },
     // 获取物料分类简称
     GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'MATERIAL_SHORT'}).then(({data}) => {
         if (data.code === 0) {
           this.dataList.forEach((item, index) => {
             data.dicList.forEach((items, index) => {
@@ -234,8 +234,8 @@ export default {
       })
     },
     // 获取能源下拉
-    Getenery () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
+    Getenery (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ENERGY'}).then(({data}) => {
         if (data.code === 0) {
           this.dataList.forEach((item, index) => {
             data.dicList.forEach((items, index) => {

@@ -175,7 +175,7 @@ export default {
       this.adds.type = row.type
       this.adds.factory = row.factory
       this.adds.deptName = row.deptName
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.type}`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: row.factory, type: row.type}).then(({data}) => {
         if (data.code === 0) {
           this.parameter = data.dicList
         } else {

@@ -171,8 +171,8 @@ export default {
       }
     },
     // 容器参数下拉
-    getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holder_type`, 'POST').then(({data}) => {
+    getDictList (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'holder_type'}).then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
@@ -235,6 +235,7 @@ export default {
     'dataForm.factory' (n) {
       console.log('****************1*********************')
       this.Getdeptcode(n, false)
+      this.getDictList(n)
     },
     'workshop' (n) {
       console.log('****************2*********************')

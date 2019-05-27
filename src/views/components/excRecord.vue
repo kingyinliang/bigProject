@@ -107,12 +107,20 @@ export default {
     }
   },
   mounted () {
-    this.GetstoppageType()
-    this.GetmaterialShort()
-    this.Getenery()
+    // this.GetstoppageType()
+    // this.GetmaterialShort()
+    // this.Getenery()
+  },
+  watch: {
+    'order.factory' (n, o) {
+      this.GetstoppageType(n)
+      this.GetmaterialShort(n)
+      this.Getenery(n)
+    }
   },
   props: {
-    isRedact: {}
+    isRedact: {},
+    order: {}
   },
   methods: {
     // 保存or提交
@@ -209,9 +217,15 @@ export default {
       })
       return ty
     },
+    // getDataList(){}
+    getDataList (n) {
+      this.GetstoppageType(n)
+      this.GetmaterialShort(n)
+      this.Getenery(n)
+    },
     // 获取异常情况
-    GetstoppageType () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=stoppage_type`, 'POST').then(({data}) => {
+    GetstoppageType (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'stoppage_type'}).then(({data}) => {
         if (data.code === 0) {
           this.stoppageType = data.dicList
         } else {
@@ -235,8 +249,8 @@ export default {
       })
     },
     // 获取物料分类简称
-    GetmaterialShort () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=MATERIAL_SHORT`, 'POST').then(({data}) => {
+    GetmaterialShort (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'MATERIAL_SHORT'}).then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
@@ -245,8 +259,8 @@ export default {
       })
     },
     // 获取能源下拉
-    Getenery () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ENERGY`, 'POST').then(({data}) => {
+    Getenery (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ENERGY'}).then(({data}) => {
         if (data.code === 0) {
           this.enery = data.dicList
         } else {

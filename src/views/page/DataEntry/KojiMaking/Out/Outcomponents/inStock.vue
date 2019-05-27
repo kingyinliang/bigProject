@@ -100,7 +100,7 @@ export default {
     formHeader: {}
   },
   mounted () {
-    this.GetParams()
+    // this.GetParams()
   },
   watch: {
     'BrineNum' (n, o) {
@@ -123,8 +123,8 @@ export default {
         }
       })
     },
-    GetParams () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_jianglao_canshu`, 'POST').then(({data}) => {
+    GetParams (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ZQ_jianglao_canshu'}).then(({data}) => {
         if (data.code === 0) {
           data.dicList.forEach((item, index) => {
             if (item.code === 'CANSHU1') {

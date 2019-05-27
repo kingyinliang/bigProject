@@ -367,7 +367,7 @@ export default {
     ratio: {}
   },
   mounted () {
-    this.GetProductShift()
+    // this.GetProductShift()
     let that = this
     setTimeout(() => {
       console.log(that.InDate)
@@ -507,8 +507,8 @@ export default {
       return ty
     },
     // 获取生产班次
-    GetProductShift () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {

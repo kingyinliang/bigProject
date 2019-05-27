@@ -195,6 +195,7 @@ export default {
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.material.GetpulpMachine(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+      this.$refs.excrecord.getDataList(this.formHeader.factory)
       this.$refs.excrecord.GetExcDate({
         factory: this.formHeader.factory,
         workShop: this.formHeader.workShop,

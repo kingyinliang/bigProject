@@ -12,6 +12,16 @@
           <el-row type="flex">
             <el-col>
               <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()" @submit.native.prevent>
+                <el-form-item label="归属工厂：" >
+                  <el-select v-model="form.factoryId" placeholder="请选择">
+                    <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="归属车间：">
+                  <el-select v-model="form.deptId" placeholder="请选择">
+                    <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="容器类型：">
                   <el-select v-model="form.holderType" placeholder="请选择">
                     <el-option label=""  value=""></el-option>
@@ -23,16 +33,6 @@
                 </el-form-item>
                 <el-form-item label="容器量：">
                   <el-input v-model="form.holderHold" placeholder="手动输入"></el-input>
-                </el-form-item>
-                <el-form-item label="归属工厂：" >
-                  <el-select v-model="form.factoryId" placeholder="请选择">
-                    <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="归属车间：">
-                  <el-select v-model="form.deptId" placeholder="请选择">
-                    <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
-                  </el-select>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -190,8 +190,8 @@ export default {
       })
     },
     // 容器参数下拉
-    getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=holder_type`, 'POST').then(({data}) => {
+    getDictList (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'holder_type'}).then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
@@ -311,6 +311,7 @@ export default {
   watch: {
     'form.factoryId' (n) {
       this.Getdeptcode(n)
+      this.getDictList(n)
     }
   },
   computed: {},

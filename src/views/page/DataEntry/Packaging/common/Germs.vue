@@ -75,7 +75,7 @@ export default {
     isRedact: {}
   },
   mounted () {
-    this.GetProductShift()
+    // this.GetProductShift()
   },
   methods: {
     // 修改待杀菌数量
@@ -112,8 +112,8 @@ export default {
       })
     },
     // 获取生产班次
-    GetProductShift () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {

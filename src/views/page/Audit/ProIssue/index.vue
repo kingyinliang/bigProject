@@ -317,8 +317,13 @@ export default {
       if (st) {
         this.plantList.currPage = 1
       }
+      if (!this.plantList.factory) {
+        this.$message.error('请选择工厂')
+        return
+      }
       this.plantList.headerTxt = ''
       this.dataListLoading = true
+      this.GetMoveReas(this.plantList.factory)
       this.$http(`${AUDIT_API.AUDITISSUELIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.AuditList = data.page.list
@@ -332,8 +337,8 @@ export default {
       })
     },
     // 获取移动原因
-    GetMoveReas () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=move_reas`, 'POST').then(({data}) => {
+    GetMoveReas (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'move_reas'}).then(({data}) => {
         if (data.code === 0) {
           this.MoveReas = data.dicList
         } else {
