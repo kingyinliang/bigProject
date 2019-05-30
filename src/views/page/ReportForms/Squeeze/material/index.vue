@@ -91,6 +91,7 @@ export default {
   watch: {
     'plantList.factory' (n, o) {
       Getdeptbyid(this, n, '压榨')
+      this.getMaterial(n)
     },
     'plantList.workShop' (n, o) {
       this.GetPot(n)
@@ -122,8 +123,8 @@ export default {
       exportFile(`${REP_API.PRSMATERIAL_EXPECT_API}`, '物料领用报表', that)
     },
     // 获取物料下拉
-    getMaterial () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=YA_M_MATERIAL`, 'POST', {}, false, false, false).then(({data}) => {
+    getMaterial (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.SerchSapList = data.dicList
         } else {

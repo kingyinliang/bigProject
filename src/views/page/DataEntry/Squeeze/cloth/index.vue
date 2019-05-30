@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <div class="main">
     <el-card class="newCard searchCard">
       <el-row>
         <el-col>
@@ -30,25 +30,25 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('prs:pro:materialList')">查询</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('prs:pro:updatePro')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('prs:pro:updatePro')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('prs:pro:updatePro')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard" v-show="contentshow">
+    <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
+      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" :style="{'display':contentshow?'block':'none'}">
         <el-tab-pane name="1" label="物料领用">
-          <Material ref="material" :isRedact="isRedact" :formHeader="formHeader" @setApplyMaterielState='setApplyMaterielState'></Material>
+          <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
         <el-tab-pane name="2" label="异常记录">
           <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
@@ -63,7 +63,7 @@
 
 <script>
 import { BASICDATA_API } from '@/api/api'
-import {headanimation} from '@/net/validate'
+import {headanimation, dateFormat} from '@/net/validate'
 import Material from './common/material'
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
@@ -71,9 +71,7 @@ export default {
   name: 'cloth',
   data () {
     return {
-      lodingStatus: false,
       isRedact: false,
-      orderStatus: '',
       factory: [],
       workshop: [],
       productline: [],
@@ -81,7 +79,7 @@ export default {
         factory: '',
         workShop: '',
         productLine: '',
-        productDate: '',
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd'),
         upMan: '',
         upDate: '',
         clickstatus: 'saved'
@@ -101,6 +99,12 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.GetParentline(n)
+      this.contentshow = false
+      this.isRedact = false
+    },
+    'formHeader.productLine' (n, o) {
+      this.contentshow = false
+      this.isRedact = false
     },
     'formHeader.productDate' (n, o) {
       this.contentshow = false
@@ -113,6 +117,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -122,12 +127,11 @@ export default {
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
       this.formHeader.productLine = ''
-      this.contentshow = false
-      this.isRedact = false
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            this.formHeader.workShop = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -139,12 +143,11 @@ export default {
     // 获取产线
     GetParentline (id) {
       this.formHeader.productLine = ''
-      this.contentshow = false
-      this.isRedact = false
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
+            this.formHeader.productLine = data.childList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -174,18 +177,9 @@ export default {
       this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
-      this.$refs.excrecord.GetExcDate({
-        factory: this.formHeader.factory,
-        workShop: this.formHeader.workShop,
-        productLine: this.formHeader.productLine,
-        productDate: this.formHeader.productDate
-      })
-      this.$refs.textrecord.GetText({
-        factory: this.formHeader.factory,
-        workShop: this.formHeader.workShop,
-        productLine: this.formHeader.productLine,
-        productDate: this.formHeader.productDate
-      })
+      this.$refs.excrecord.getDataList(this.formHeader.factory)
+      this.$refs.excrecord.GetExcDate(this.formHeader)
+      this.$refs.textrecord.GetText(this.formHeader)
     },
     // 提交
     SubmitForm () {
@@ -233,13 +227,6 @@ export default {
           that.$message.error('网络请求失败，请刷新重试')
         })
       })
-    },
-    tabClick (val) {
-      this.$refs.tabs.setCurrentName(val.name)
-    },
-    setApplyMaterielState (status) {
-      this.orderStatus = status
-      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     }
   },
   components: {

@@ -118,10 +118,13 @@ export default {
           this.formHeader = data.list[0]
           this.orderStatus = data.list[0].outStatus
           this.$refs.meateriel.GetBrineTankNo(this.formHeader)
+          this.$refs.meateriel.GetBrine(this.formHeader.factory)
           this.$refs.outinstorage.GetThreeNum(this.formHeader)
+          this.$refs.outinstorage.GetParams(this.formHeader.factory)
           this.$refs.outtech.selectUser(this.formHeader.prolineId)
           this.$refs.outtech.GetTechList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.prolineId)
+          this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.orderStatus !== '已同步') {
             this.$refs.meateriel.GetmaterielDate(this.formHeader)
             this.$refs.outinstorage.GetOutInStorage(this.formHeader)

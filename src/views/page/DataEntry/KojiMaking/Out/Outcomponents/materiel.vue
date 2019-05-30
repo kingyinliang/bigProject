@@ -80,7 +80,7 @@ export default {
     formHeader: {}
   },
   mounted () {
-    this.GetBrine()
+    // this.GetBrine()
   },
   methods: {
     // 获取原料领用列表
@@ -165,8 +165,8 @@ export default {
       })
     },
     // 获取盐水
-    GetBrine () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_YANSHUI`, 'POST').then(({data}) => {
+    GetBrine (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ZQ_MATERIAL_YANSHUI'}).then(({data}) => {
         if (data.code === 0) {
           this.brine = data.dicList
         } else {

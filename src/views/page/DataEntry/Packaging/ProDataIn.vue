@@ -182,8 +182,12 @@ export default {
         this.$refs.listbom.GetPot(this.formHeader.factory)
         this.$refs.formheader.getLin(this.formHeader.workShop)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+        this.$refs.excrecord.getDataList(this.formHeader.factory)
         this.$refs.workerref.GetTeam(false, this.formHeader.factory)
         this.$refs.workerref.getTree(this.formHeader.factory)
+        this.$refs.workerref.GetProductShift(this.formHeader.factory)
+        this.$refs.instorage.GetProductShift(this.formHeader.factory)
+        this.$refs.germs.GetProductShift(this.formHeader.factory)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)

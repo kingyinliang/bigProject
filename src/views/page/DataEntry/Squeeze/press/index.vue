@@ -28,7 +28,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"  class="width180px"></el-date-picker>
+              <el-date-picker v-model="formHeader.productDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:180px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -47,17 +47,12 @@
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="tableCard" v-show="contentshow">
+    <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px">
+      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" v-show="contentshow">
         <el-tab-pane name="1" label="物料领用">
-          <!-- <span slot="label" class="spanview">
-            <el-tooltip class="item" effect="dark"  :content="orderStatus === 'noPass'? '不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':'未录入'" placement="top-start">
-              <el-button :style="{'color': orderStatus === 'noPass'? 'red' : ''}">物料领用</el-button>
-            </el-tooltip>
-          </span> -->
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
         <el-tab-pane name="2" label="异常记录">
@@ -73,7 +68,7 @@
 
 <script>
 import { BASICDATA_API } from '@/api/api'
-import { headanimation } from '@/net/validate'
+import { headanimation, dateFormat } from '@/net/validate'
 import Material from './common/material'
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
@@ -101,7 +96,7 @@ export default {
         workShop: '',
         productLine: '',
         pressure: 1,
-        productDate: ''
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd')
       },
       proxy: []
     }
@@ -136,6 +131,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -149,6 +145,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            this.formHeader.workShop = data.typeList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -164,6 +161,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'proLine'}).then(({data}) => {
           if (data.code === 0) {
             this.productline = data.childList
+            this.formHeader.productLine = data.childList[0].deptId
           } else {
             this.$message.error(data.msg)
           }
@@ -197,6 +195,7 @@ export default {
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.material.GetpulpMachine(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+      this.$refs.excrecord.getDataList(this.formHeader.factory)
       this.$refs.excrecord.GetExcDate({
         factory: this.formHeader.factory,
         workShop: this.formHeader.workShop,

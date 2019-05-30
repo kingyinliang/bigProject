@@ -612,6 +612,8 @@ export default {
   watch: {
     'plantList.factory' (n, o) {
       this.Getdeptbyid(n)
+      this.GetProductShift(n)
+      this.GetARtype(n)
     },
     'plantList.workShop' (n, o) {
       this.GetParentline(n)
@@ -626,8 +628,8 @@ export default {
   },
   methods: {
     // 获取生产班次
-    GetProductShift () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
@@ -637,7 +639,7 @@ export default {
     },
     // 获取考勤属性
     GetARpro (row, callback) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.kqdl}`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.plantList.factory, type: row.kqdl}).then(({data}) => {
         if (data.code === 0) {
           row.ARpro = data.dicList
           if (row.kqdl === 'normal_time') {
@@ -657,8 +659,8 @@ export default {
       })
     },
     // 获取考勤类型
-    GetARtype () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=KQ_type`, 'POST').then(({data}) => {
+    GetARtype (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'KQ_type'}).then(({data}) => {
         if (data.code === 0) {
           this.ARtype = data.dicList
         } else {
@@ -1070,7 +1072,7 @@ export default {
       } else {
         row.redactStatus = true
         this.Setcode(row)
-        this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=${row.kqdl}`, 'POST').then(({data}) => {
+        this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.plantList.factory, type: row.kqdl}).then(({data}) => {
           if (data.code === 0) {
             row.ARpro = data.dicList
           }

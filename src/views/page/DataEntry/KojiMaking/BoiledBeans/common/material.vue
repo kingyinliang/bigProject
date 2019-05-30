@@ -597,7 +597,7 @@ export default {
     //   })
     // },
     GetmaterialZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_QULIAO`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_QULIAO'}).then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
@@ -606,7 +606,7 @@ export default {
       })
     },
     GetwheatZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_MAIFEN`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_MAIFEN'}).then(({data}) => {
         if (data.code === 0) {
           this.wheatShort = data.dicList
         } else {
@@ -615,7 +615,7 @@ export default {
       })
     },
     GetsoyZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_DOULEI`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_DOULEI'}).then(({data}) => {
         if (data.code === 0) {
           this.soyShort = data.dicList
         } else {

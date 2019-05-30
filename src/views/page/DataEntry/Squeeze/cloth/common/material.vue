@@ -205,14 +205,16 @@ export default {
   props: ['isRedact', 'formHeader'],
   mounted () {
     Readyanimation(this.$)
-    this.GetsauceClass()
   },
   watch: {
+    'formHeader.factory' (n, o) {
+      this.GetsauceClass(n)
+    }
   },
   methods: {
     // 酱醪列表
-    GetsauceClass () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=YA_M_MATERIAL`, 'POST').then(({data}) => {
+    GetsauceClass (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}).then(({data}) => {
         if (data.code === 0) {
           this.sauceClassList = data.dicList
         } else {
@@ -362,7 +364,6 @@ export default {
     },
     // 物料查询列表
     GetMateriaList (formHeader) {
-      let inState = '未录入'
       this.GetpulpMachine(formHeader.productLine) // 布浆机
       this.GethovercraftNo(formHeader.workShop) // 气垫车
       this.$http(`${SQU_API.CLOTHMATERIALIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop, productLine: formHeader.productLine, productDate: formHeader.productDate}).then(({data}) => {
@@ -375,8 +376,6 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
-      }).finally(() => {
-        this.$emit('setApplyMaterielState', inState)
       })
     },
     Readyrules () {

@@ -3,7 +3,7 @@
   <div class="clearfix">
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact)" style="float: right">新增</el-button>
   </div>
-  <div class="a" v-if="order.orderType !== '6010'">
+  <div class="a" v-if="order.factory !== '682910591AD54B4F8122C62C6D6C6975'">
   <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
   <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
     <el-table-column type="index" width="55" label="序号"></el-table-column>
@@ -198,7 +198,7 @@
   </el-table>
   </div>
   </div>
-  <div class="b" v-if="order.orderType === '6010'">
+  <div class="b" v-if="order.factory === '682910591AD54B4F8122C62C6D6C6975'">
     <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
       <el-table-column type="index" width="55" label="序号"></el-table-column>
       <el-table-column label="白/中/夜班" width="120">
@@ -275,7 +275,7 @@
     </el-table>
   </div>
   <div><p style="line-height: 52px;font-size: 14px">产出数合计：{{countOutputNum}}</p></div>
-  <div v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间' && order.orderType !== '6010'">
+  <div v-if="order.properties !== '二合一&礼盒产线' && order.workShopName !== '包装三车间' && order.factory !== '682910591AD54B4F8122C62C6D6C6975'">
     <div class="clearfix">
       <span style="font-size: 14px;font-weight: 700;line-height: 40px;">机维组数量确认</span>
       <el-button type="primary" size="small" @click="GetMaintain()" style="float: right">刷新</el-button>
@@ -367,7 +367,7 @@ export default {
     ratio: {}
   },
   mounted () {
-    this.GetProductShift()
+    // this.GetProductShift()
     let that = this
     setTimeout(() => {
       console.log(that.InDate)
@@ -507,8 +507,8 @@ export default {
       return ty
     },
     // 获取生产班次
-    GetProductShift () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=product_shift`, 'POST').then(({data}) => {
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
