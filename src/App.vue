@@ -9,13 +9,10 @@ export default {
   name: 'App',
   mounted () {
     // if (this.$route.meta.title) document.title = this.$route.meta.title
-    var HOST = require('./api/location-' + process.env.NODE_ENV).HOST
-    var top = window.location.href
-    top = top.split('//')[1].split('/')[0]
-    if (top === HOST) {
+    if (self === top) {
       document.documentElement.style.visibility = 'visible'
     } else {
-      window.location.href = `https://${HOST}`
+      alert('在iframe中,请检查链接')
     }
   }
 }
