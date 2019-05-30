@@ -96,7 +96,7 @@ export default {
         pass: ''
       },
       curr: 0,
-      videoList: ['http://10.8.4.153:50080/profile/video.mp4'],
+      videoList: [],
       rules2: {
         user: [
           { validator: validatePass1, trigger: 'blur' }
