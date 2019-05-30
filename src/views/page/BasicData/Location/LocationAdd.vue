@@ -98,6 +98,7 @@ export default {
   watch: {
     'formatDate.factory' (n, o) {
       this.Getdeptbyid(n)
+      this.spa(n)
     }
   },
   props: {
@@ -132,14 +133,16 @@ export default {
     },
     init () {
       this.Getdeptbyid()
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_type`, 'POST').then(({data}) => {
+      this.visible = true
+    },
+    spa (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'material_type'}).then(({data}) => {
         if (data.code === 0) {
           this.sapList = data.dicList
         } else {
           this.$message.error(data.msg)
         }
       })
-      this.visible = true
     },
     // 新增
     dataFormSubmit () {

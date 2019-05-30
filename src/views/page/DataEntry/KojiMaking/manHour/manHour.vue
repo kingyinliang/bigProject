@@ -160,7 +160,8 @@ export default {
       workshop: [],
       deptId: '',
       userOrder: {
-        orderId: ''
+        orderId: '',
+        factory: ''
       },
       headList: {},
       formHeader: {
@@ -242,6 +243,7 @@ export default {
         workShop: this.formHeader.workShop
       }).then(({data}) => {
         if (data.code === 0) {
+          this.userOrder.factory = this.formHeader.factory
           if (data.headList.length === 0) {
             this.uid = this.uuid(32, 62)
             this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
@@ -251,6 +253,7 @@ export default {
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
+            this.$refs.workerref.GetProductShift(this.formHeader.factory)
           } else {
             if (data.readyList.length === 0) {
               this.readyTimeDate = JSON.parse(JSON.stringify(this.readyTimeDate1))
@@ -262,6 +265,7 @@ export default {
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
+            this.$refs.workerref.GetProductShift(this.formHeader.factory)
           }
           this.inKjmBatch = data.inKjmBatch
         } else {

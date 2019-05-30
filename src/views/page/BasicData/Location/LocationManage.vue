@@ -165,7 +165,7 @@ export default {
         this.$message.error(data.msg)
       }
     })
-    this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=material_type`, 'POST').then(({data}) => {
+    this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'material_type'}).then(({data}) => {
       if (data.code === 0) {
         this.sapList = data.dicList
       } else {

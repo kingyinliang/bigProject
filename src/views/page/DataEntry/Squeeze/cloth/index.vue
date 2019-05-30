@@ -177,6 +177,7 @@ export default {
       this.contentshow = true
       this.$refs.material.GetMateriaList(this.formHeader)
       this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+      this.$refs.excrecord.getDataList(this.formHeader.factory)
       this.$refs.excrecord.GetExcDate(this.formHeader)
       this.$refs.textrecord.GetText(this.formHeader)
     },
