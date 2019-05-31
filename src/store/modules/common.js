@@ -85,6 +85,15 @@ export default {
       productLineName: '',
       // 领用日期
       applyDate: ''
+    },
+    /**
+     * 粮仓小麦罐
+     */
+    GranaryWheatPot: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: ''
     }
   },
   mutations: {
@@ -197,9 +206,13 @@ export default {
       state.ZQWorkshop.checkParams.orderId = name
     },
     /** 制曲 end */
-    /** 压榨 start */
+    /** 压榨 */
     updateSqueezeWorkshop (state, name) {
       state.SqueezeWorkshop = name
+    },
+    /** 粮仓小麦罐 */
+    updateGranaryWheatPot (state, params) {
+      state.GranaryWheatPot = params
     }
   }
 }
