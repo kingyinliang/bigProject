@@ -6,7 +6,10 @@
           <el-row type="flex" class="header">
             <el-col class="header-pot">
               <div class='header-pot__label'>小麦仓罐号：4#罐</div>
-              <div class="header-pot__image"></div>
+              <div class="header-pot__image">
+                <div class="header-pot__image_content">
+                </div>
+              </div>
             </el-col>
             <el-col class="header-form">
               <el-form :inline="true" size="small" label-width="100px" class="topform">
@@ -297,7 +300,7 @@ export default class Index extends Vue {
 .header {
   height: 200px;
   .header-pot {
-    width: 300px;
+    width: 250px;
     .header-pot__label {
       font-size: 18px;
       font-weight: 400;
@@ -310,15 +313,25 @@ export default class Index extends Vue {
       white-space: nowrap;
     };
     .header-pot__image {
+      position: relative;
       margin-top:10px;
       height:160px;
-      width:230px;
+      width:250px;
       background: url('~@/assets/img/pot.png') no-repeat top right;
       background-size:contain;
+      .header-pot__image_content {
+        height: 65px;
+        width: 46px;
+        position: absolute;
+        right: 40px;
+        bottom: 61px;
+        background: linear-gradient(#35C3FF,#1890FF);
+      }
     }
   }
   .header-form {
     width: 600px;
+    margin-left: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
