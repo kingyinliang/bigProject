@@ -385,6 +385,10 @@ export default {
             item.cangtotal = 0
             item.wheatData.map((items) => {
               item.cangtotal = item.cangtotal + items.currentQuantity
+              this.materielDataListArray.push({
+                batch: items.batch,
+                quantotal: 0
+              })
             })
           })
         } else {
