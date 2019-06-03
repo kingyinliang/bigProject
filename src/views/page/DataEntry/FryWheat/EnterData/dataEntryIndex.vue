@@ -158,6 +158,7 @@ export default {
         this.$refs.workerref.GetProductShift(this.formHeader.factory)
         this.$refs.instock.getWheatDataList(this.formHeader.orderId)
         this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)
+        this.$refs.applymateriel.GetWheatCang(this.formHeader)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytime.GetReadyList(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)

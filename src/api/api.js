@@ -205,11 +205,14 @@ export const BASICDATA_API = {
    * @property {string} SPECDEL_API 规格删除
    */
   SPECDEL_API: HOST + '/sys/spec/delSpec',
-
   /**
    * @property {string} MATERIAL_API 成品品项
    */
-  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams'
+  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams',
+  /**
+   * 原料入库记录
+   */
+  MATERIALRAWLIST_API: HOST + '/sys/sapGranaryMaterial/list'
 }
 /*
 *系统设置api
@@ -894,7 +897,11 @@ export const WHT_API = {
   /**
    * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
    */
-  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
+  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM',
+  /**
+   * 炒麦 物料领用 仓
+   */
+  WHEATCANGLIST_API: HOST + '/wht/material/wheatList'
 }
 
 /*
@@ -997,6 +1004,7 @@ export const KJM_API = {
   DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
   DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
   DOUMATERHEADCREATOR_API: HOST + '/kjm/guard/headUpdate',
+  DOUMATERPULPLIST_API: HOST + '/kjm/bean/pulpList',
 
   DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
   DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
