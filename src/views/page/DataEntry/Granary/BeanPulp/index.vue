@@ -26,7 +26,7 @@
       </el-card>
     </div>
     <div class="main" style="padding-top: 8px">
-      <el-card class="newCard">
+      <el-card class="newCard" style="min-height: 436px">
         <el-row :gutter="10">
           <el-col :span="12">
             <el-card class="Card_item">
@@ -186,7 +186,8 @@ export default {
     }
   }
   &_text{
-    flex: 1;
+    width: 220px;
+    margin: 0 15px;
     .el-card__header{
       font-size: 14px;
       padding: 10px 12px;
