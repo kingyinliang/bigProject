@@ -129,7 +129,7 @@
         </el-form-item>
         <el-form-item label="酱醪分类" :label-width="formLabelWidth" prop="sauceClass">
           <el-select v-model="sauce.sauceClass" filterable placeholder="请选择" style="width:310px">
-            <el-option :label="item.code + ' ' + item.name" v-for="(item, index) in sauceClassList" :key="index" :value="item.code + ' ' + item.name"></el-option>
+            <el-option :label="item.code + ' ' + item.value" v-for="(item, index) in sauceClassList" :key="index" :value="item.code + ' ' + item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="发酵罐号" :label-width="formLabelWidth" prop="potOne">
