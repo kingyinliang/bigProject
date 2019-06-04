@@ -28,19 +28,19 @@
     <div class="main" style="padding-top: 8px">
       <el-card class="newCard" style="min-height: 436px">
         <el-row :gutter="10">
-          <el-col :span="12">
+          <el-col :span="12" v-for="(item, index) in DataList" :key="index">
             <el-card class="Card_item">
-              <div slot="header">层豆粕罐号：4#罐 <span class="Card_item_detail">详情>></span></div>
+              <div slot="header">层豆粕罐号：{{item.holderName}} <span class="Card_item_detail" @click="goBeanPulpDetail(item)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / 300}%`}"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：170t</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{sumBatch(item.stocks)}}t</span></div>
                     <div style="position: relative">
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
                         <el-col :span="17">批次</el-col>
@@ -48,9 +48,9 @@
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
-                        <el-row class="Card_item_text_item" v-for="item in 10" :key="item">
-                          <el-col :span="17">1905130201</el-col>
-                          <el-col :span="7">20.25t</el-col>
+                        <el-row class="Card_item_text_item" v-for="(items, index) in item.stocks" :key="index">
+                          <el-col :span="17">{{items.batch}}</el-col>
+                          <el-col :span="7">{{(items.currentQuantity*1)/1000}}t</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { BASICDATA_API } from '@/api/api'
+import { BASICDATA_API, GRA_API } from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -77,7 +77,8 @@ export default {
       plantList: {
         factory: '',
         workshop: ''
-      }
+      },
+      DataList: []
     }
   },
   watch: {
@@ -90,7 +91,37 @@ export default {
   },
   methods: {
     // 获取列表
-    GetOrderList () {},
+    GetOrderList () {
+      if (!this.plantList.factory) {
+        this.$message.error('请选择工厂')
+        return
+      } else if (!this.plantList.workshop) {
+        this.$message.error('请选择车间')
+        return
+      }
+      this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}/${this.plantList.workshop}/012`, 'POST', {}).then(({data}) => {
+        if (data.code === 0) {
+          if (!data.data) {
+            return
+          }
+          this.DataList = data.data.holders
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 去详请
+    goBeanPulpDetail (item) {
+      this.BeanPulp = {
+        holderId: item.holderId,
+        factory: this.plantList.factory,
+        deptId: this.plantList.workshop
+      }
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Granary-BeanPulp-dataEntryIndex')
+      setTimeout(() => {
+        this.$router.push({ name: `DataEntry-Granary-BeanPulp-dataEntryIndex` })
+      }, 100)
+    },
     // 获取工厂
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
@@ -106,7 +137,7 @@ export default {
     Getdeptbyid (id) {
       this.plantList.workshop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: ''}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
@@ -119,7 +150,33 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    sumBatch: function () {
+      return function (items) {
+        let sum = 0
+        items.forEach((item) => {
+          sum += (item.currentQuantity * 1) / 1000
+        })
+        return sum.toFixed(2)
+      }
+    },
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    },
+    BeanPulp: {
+      get () {
+        return this.$store.state.common.BeanPulp
+      },
+      set (val) {
+        this.$store.commit('common/updateBeanPulp', val)
+      }
+    }
+  },
   components: {}
 }
 </script>
@@ -158,11 +215,6 @@ export default {
         position: relative;
         background: linear-gradient(#35C3FF,#1890FF);
         overflow: hidden;
-        &:hover{
-          &::before,&::after{
-            animation: roateOne 10s linear infinite;
-          }
-        }
         &::before,&::after{
           content: "";
           position: absolute;
@@ -182,6 +234,9 @@ export default {
           opacity: 0.5;
           border-radius: 47%;
         }
+      }
+      &:hover &_bg::before,&:hover &_bg::after{
+        animation: roateOne 10s linear infinite;
       }
     }
   }

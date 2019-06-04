@@ -145,6 +145,7 @@ export default {
           // this.$refs.material.GetrealWheatTime(this.formHeader)
           this.$refs.material.getMaiholdList(this.formHeader)
           this.$refs.material.getDouholdList(this.formHeader)
+          this.$refs.material.GetPuplList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.processId)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.orderStatus !== '已同步') {

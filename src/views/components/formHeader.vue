@@ -6,7 +6,7 @@
     <el-form-item label="产线：">
       <p class="el-input" v-if="!pro">{{formHeader.productLineName || ''}}</p>
       <p class="el-input" v-else>
-        <span v-if="formHeader.factory !== 'D48773D6F5CC4C8DB70E62CC2FAC4E25'">{{formHeader.productLineName || ''}}</span>
+        <span v-if="formHeader.factoryCode !== '6010'">{{formHeader.productLineName || ''}}</span>
         <el-select v-model="formHeader.productLine" :disabled="!isRedact" v-else>
           <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
         </el-select>
