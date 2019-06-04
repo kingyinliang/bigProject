@@ -211,30 +211,30 @@
           <span>盘点调整</span>
         </div>
         <div>
-          <el-form label-width="100px" size="small" ref="modifyForm">
-            <el-form-item label="物料：" >
-              <p>M89030200 小麦</p>
+          <el-form :model="adjustForm" label-width="100px" size="small" ref="modifyForm">
+            <el-form-item label="物料：">
+              <p>{{adjustForm.MATERIAL_CODE + ' ' + adjustForm.MATERIAL_NAME}}</p>
             </el-form-item>
             <el-form-item label="批次：" >
-              <p>7439483040</p>
+              <p>{{adjustForm.BATCH}}</p>
             </el-form-item>
-            <el-form-item label="调整类型：">
-              <el-select  placeholder="请选择"  style="width:220px" >
-                <el-option label="盘亏" value="0" ></el-option>
-                <el-option label="盘赢" value="1" ></el-option>
+            <el-form-item label="调整类型：" required>
+              <el-select  placeholder="请选择"  v-model="adjustForm.ADJUST_TYPE" style="width:220px" >
+                <el-option label="盘亏" value="1" ></el-option>
+                <el-option label="盘赢" value="0" ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="调整量：">
-              <el-input  type='number'  value="0" style='width:220px'/>
+            <el-form-item label="调整量：" required>
+              <el-input  type='number'  v-model.number="adjustForm.QUANTITY"  style='width:220px'/>
             </el-form-item>
             <el-form-item label="说明：">
-              <el-input  type='text'  style='width:220px'/>
+              <el-input  type='text'  v-model.trim="adjustForm.REMARK" style='width:220px'/>
             </el-form-item>
           </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible2 = false">取消</el-button>
-          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="dialogFormVisible2 = false">确定</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveAdjust()">确定</el-button>
         </div>
       </el-dialog>
     </el-col>
@@ -243,7 +243,7 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator'
-import {GRA_API} from '@/api/api'
+import {GRA_API, GRANARY_API} from '@/api/api'
 @Component({
   components: {
   }
@@ -278,6 +278,23 @@ export default class Index extends Vue {
   }
   dialogFormVisible : boolean = false
   dialogFormVisible2 : boolean = false
+  adjustForm = {
+    MATERIAL_CODE: '',
+    MATERIAL_NAME: '',
+    BATCH: '',
+    MATERIAL_TYPE_NAME: '',
+    LOCATION: '',
+    MOVE_TYPE: '',
+    MATERIAL_TYPE_CODE: '',
+    POSTING_DATE: '',
+    CURRENT_QUANTITY: 0,
+    FACTORY: '',
+    HOLDER_ID: '',
+    ADJUST_TYPE: '0',
+    QUANTITY: 0,
+    UNIT: 'KG',
+    REMARK: ''
+  }
   mounted () {
     this.GetBatch()
     this.adjust()
@@ -348,8 +365,42 @@ export default class Index extends Vue {
       }
     })
   }
-  makeAdjust () {
+  makeAdjust (row) {
+    this.adjustForm = {
+      MATERIAL_CODE: row.materialCode,
+      MATERIAL_NAME: row.materialName,
+      BATCH: row.batch,
+      MATERIAL_TYPE_NAME: row.materialTypeName,
+      LOCATION: row.location,
+      MOVE_TYPE: row.moveType,
+      MATERIAL_TYPE_CODE: row.materialTypeCode,
+      POSTING_DATE: row.postingDate,
+      CURRENT_QUANTITY: row.currentQuantity,
+      FACTORY: row.factory,
+      HOLDER_ID: row.holderId,
+      ADJUST_TYPE: '0',
+      QUANTITY: 0,
+      UNIT: 'KG',
+      REMARK: ''
+    }
     this.dialogFormVisible2 = true
+    this.dialogFormVisible2 = true
+  }
+  saveAdjust () {
+    if (this.adjustForm.QUANTITY.toString() === '') {
+      this.$message.error('调整数量不能为空')
+      return false
+    }
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
+      if (res.data.code === 0) {
+        this.$message.success('保存成功')
+        this.GetBatch()
+        this.adjust()
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+    this.dialogFormVisible2 = false
   }
   // 改变每页条数
   handleSizeChangeBatch (val: number) {
