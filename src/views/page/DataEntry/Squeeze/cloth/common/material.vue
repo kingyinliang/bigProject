@@ -12,7 +12,7 @@
             <template slot="header"><i class="reqI">*</i><span>布浆机</span></template>
             <template slot-scope="scope">{{scope.row.pulpMachineName}}</template>
           </el-table-column>
-          <el-table-column width="120px">
+          <el-table-column width="180px">
             <template slot="header"><i class="reqI">*</i><span>气垫小车号</span></template>
             <template slot-scope="scope">{{scope.row.hovercraftName}}</template>
           </el-table-column>
@@ -101,12 +101,12 @@
         </el-form-item>
         <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
-            <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
+            <el-option :label="item.deviceNo + item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
-            <el-option :label="item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
+            <el-option :label="item.deviceNo + item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="布浆张数" :label-width="formLabelWidth" prop="pulpNum">
@@ -251,7 +251,7 @@ export default {
     // 气垫车
     GethovercraftNo (workshop) {
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '气垫车',
+        param: '气垫小车',
         deptId: workshop,
         currPage: '1',
         pageSize: '50',
@@ -264,7 +264,7 @@ export default {
         }
       })
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
-        param: '气垫车',
+        param: '气垫小车',
         deptId: workshop,
         currPage: '1',
         pageSize: '50'
@@ -322,7 +322,7 @@ export default {
             currentRecord = this.materialList.filter(data => data.id === this.sauce.id)
           }
           let pulpName = this.pulpMachineList.find(item => item.deviceId === this.sauce.pulpMachine).deviceName
-          let hovercraName = this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
+          let hovercraName = this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceNo + this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
           this.sauce = {
             id: this.sauce.id,
             uid: this.sauce.uid,
