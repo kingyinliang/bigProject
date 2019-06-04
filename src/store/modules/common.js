@@ -94,6 +94,14 @@ export default {
       factoryName: '',
       workshopId: '',
       workshopName: ''
+    },
+    /**
+     * 粮仓豆粕罐
+     */
+    BeanPulp: {
+      holderId: '',
+      factory: '',
+      deptId: ''
     }
   },
   mutations: {
@@ -213,6 +221,10 @@ export default {
     /** 粮仓小麦罐 */
     updateGranaryWheatPot (state, params) {
       state.GranaryWheatPot = params
+    },
+    /** 粮仓豆粕罐 */
+    updateBeanPulp (state, params) {
+      state.BeanPulp = params
     }
   }
 }

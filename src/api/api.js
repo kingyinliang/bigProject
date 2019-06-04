@@ -1171,3 +1171,29 @@ export const SQU_API = {
    */
   PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
 }
+
+/**
+ * 粮仓API
+ */
+export const GRA_API = {
+  /**
+   * 豆粕罐列表API
+   */
+  BEANPULP_LIST_API: HOST + '/sys/deptInfos/queryInfo',
+  /**
+   * 豆粕基础信息API
+   */
+  BASIC_API: HOST + '/sys/deptInfos/queryDetail',
+  /**
+   * 豆粕当前库存信息列表API
+   */
+  BATCH_API: HOST + '/gra/material/list',
+  /**
+   * 豆粕调整信息列表API
+   */
+  BATCHADJUST_API: HOST + '/gra/adjust/adjustList',
+  /**
+   * 豆粕领用明细列表API
+   */
+  BATCHCOLLARUSE_API: HOST + '/gra/collarUse/collarUseList'
+}
