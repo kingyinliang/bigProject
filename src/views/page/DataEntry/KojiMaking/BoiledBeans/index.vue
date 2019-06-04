@@ -146,6 +146,7 @@ export default {
           this.$refs.material.getMaiholdList(this.formHeader)
           this.$refs.material.getDouholdList(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.processId)
+          this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.orderStatus !== '已同步') {
             this.$refs.material.getList(this.formHeader)
             this.$refs.craft.getList(this.formHeader)
@@ -306,41 +307,41 @@ export default {
 </script>
 
 <style>
-.rowDel{display: none;}
+  .rowDel{display: none;}
 </style>
 <style lang="less" scoped>
-.input_bommom {
-  width: 147px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 32px;
-  border-bottom: solid 1px #D8D8D8;
-}
-.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-  margin-bottom: 8px
-}
-.searchCard {
-  .el-button--primary,.el-button--primary:focus{
-    color: #000000;
-    background-color: #FFFFFF;
-    border-color: #D9D9D9;
+  .input_bommom {
+    width: 147px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 32px;
+    border-bottom: solid 1px #D8D8D8;
   }
-  .el-button--primary:hover{
-    background-color: #1890FF;
-    color: #FFFFFF
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 8px
   }
-  .el-button--primary:first-child{
-    background-color: #1890FF;
-    color: #FFFFFF;
-    border-color: #1890FF;
+  .searchCard {
+    .el-button--primary,.el-button--primary:focus{
+      color: #000000;
+      background-color: #FFFFFF;
+      border-color: #D9D9D9;
+    }
+    .el-button--primary:hover{
+      background-color: #1890FF;
+      color: #FFFFFF
+    }
+    .el-button--primary:first-child{
+      background-color: #1890FF;
+      color: #FFFFFF;
+      border-color: #1890FF;
+    }
   }
-}
-#DaatTtabs{
-  border-radius: 15px;
-  overflow: hidden;
-}
-.htitle {
-  margin: 0 0 10px 0;
-}
+  #DaatTtabs{
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .htitle {
+    margin: 0 0 10px 0;
+  }
 </style>

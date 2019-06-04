@@ -246,7 +246,7 @@ export default {
     // 物料选项
     getMaterialDictList () {
       this.materialDictList = []
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=CM_material`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.$store.state.common.FWfactoryid, type: 'CM_material'}).then(({data}) => {
         if (data.code === 0) {
           this.materialDictList = data.dicList
         } else {

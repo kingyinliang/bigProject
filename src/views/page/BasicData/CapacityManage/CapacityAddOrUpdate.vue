@@ -92,7 +92,7 @@ export default {
   methods: {
     // 获取单位下拉
     GetUnit () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=UNIT`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'UNIT'}).then(({data}) => {
         if (data.code === 0) {
           this.Unit = data.dicList
         } else {

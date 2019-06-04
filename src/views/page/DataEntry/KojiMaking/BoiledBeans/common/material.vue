@@ -6,7 +6,7 @@
         <el-button type="text" class="readyshiftBtn" name="zhongar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
         <el-button type="primary" size="small" @click="addmaterial" :disabled="!isRedact" style="float: right"> + 新增</el-button>
       </div>
-        <div class="zhongarBox">
+      <div class="zhongarBox">
         <el-table ref="materialTable" border max-height="267" style="margin-top:10px" header-row-class-name="tableHead" :data="materialList" :row-class-name="rowDelFlag">
           <el-input type="index"></el-input>
           <el-table-column width="125px">
@@ -597,7 +597,7 @@ export default {
     //   })
     // },
     GetmaterialZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_QULIAO`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_QULIAO'}).then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
@@ -606,7 +606,7 @@ export default {
       })
     },
     GetwheatZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_MAIFEN`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_MAIFEN'}).then(({data}) => {
         if (data.code === 0) {
           this.wheatShort = data.dicList
         } else {
@@ -615,7 +615,7 @@ export default {
       })
     },
     GetsoyZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_DOULEI`, 'POST').then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_DOULEI'}).then(({data}) => {
         if (data.code === 0) {
           this.soyShort = data.dicList
         } else {
@@ -1370,76 +1370,76 @@ export default {
 </script>
 
 <style>
-.boxContent{
-  font-size: 12px;
-  text-align: center;
-  padding: 12px 10px 0 10px;
-}
-.boxText{
-  font-size: 12px;
-  margin-top: 9px;
-  text-align: left;
-  padding-left: 2px;
-  color: rgb(32, 16, 16);
-  line-height: 22px;
-  overflow: hidden;
-}
-.boxText span{
-  float: right;
-}
+  .boxContent{
+    font-size: 12px;
+    text-align: center;
+    padding: 12px 10px 0 10px;
+  }
+  .boxText{
+    font-size: 12px;
+    margin-top: 9px;
+    text-align: left;
+    padding-left: 2px;
+    color: rgb(32, 16, 16);
+    line-height: 22px;
+    overflow: hidden;
+  }
+  .boxText span{
+    float: right;
+  }
 </style>
 <style lang="less" scoped>
-.input_bommom {
-  width: 147px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 32px;
-  border-bottom: solid 1px #D8D8D8;
-}
-.lh32px{
-  line-height: 32px;
-}
-.solecontent {
-  overflow: hidden;
-  p{ float: left;}
-}
-.box{
-  border:1px solid #E8E8E8;
-  width: 207px;
-  margin: 0px 4px 10px 4px;
-  .boxTitle{
+  .input_bommom {
+    width: 147px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     line-height: 32px;
-    background: #E9E9E9;
-    padding-left: 10px;
-    font-weight: bold;
+    border-bottom: solid 1px #D8D8D8;
   }
-  .boxButton {
-    margin: 10px;
-    margin-top: 11px;
-    height: 26px;
-    width: 50px;
-    font-size: 14px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 4px;
-    font-weight:400;
-    float: left;
-    background: #1890FF;
-    color: #fff;
-    cursor: pointer;
-    padding: 0
+  .lh32px{
+    line-height: 32px;
   }
-  .boxButton.is-disabled, .boxButton.is-disabled:focus, .boxButton.is-disabled:hover{
-    cursor: not-allowed;
-    background-color: #a0cfff;
-    border-color: #a0cfff;
+  .solecontent {
+    overflow: hidden;
+    p{ float: left;}
   }
-}
-.chart-box {
-  min-height: 140px;
-}
-.reqI{
-  color: red;
-}
+  .box{
+    border:1px solid #E8E8E8;
+    width: 207px;
+    margin: 0px 4px 10px 4px;
+    .boxTitle{
+      line-height: 32px;
+      background: #E9E9E9;
+      padding-left: 10px;
+      font-weight: bold;
+    }
+    .boxButton {
+      margin: 10px;
+      margin-top: 11px;
+      height: 26px;
+      width: 50px;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 4px;
+      font-weight:400;
+      float: left;
+      background: #1890FF;
+      color: #fff;
+      cursor: pointer;
+      padding: 0
+    }
+    .boxButton.is-disabled, .boxButton.is-disabled:focus, .boxButton.is-disabled:hover{
+      cursor: not-allowed;
+      background-color: #a0cfff;
+      border-color: #a0cfff;
+    }
+  }
+  .chart-box {
+    min-height: 140px;
+  }
+  .reqI{
+    color: red;
+  }
 </style>

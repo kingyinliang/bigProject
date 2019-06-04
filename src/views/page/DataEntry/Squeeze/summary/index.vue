@@ -114,7 +114,6 @@ export default {
   },
   mounted () {
     this.Getdeptcode()
-    this.getMaterial()
   },
   methods: {
     GetList () {
@@ -131,6 +130,7 @@ export default {
         return
       }
       this.$refs.materielref.getPot(this.formHeader)
+      this.getMaterial(this.formHeader.factory)
       this.GetFunet()
     },
     // 获取原汁信息
@@ -228,8 +228,8 @@ export default {
       })
     },
     // 获取物料下拉
-    getMaterial () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=YA_M_MATERIAL`, 'POST', {}, false, false, false).then(({data}) => {
+    getMaterial (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.SerchSapList = data.dicList
         } else {
