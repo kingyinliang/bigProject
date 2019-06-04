@@ -5,31 +5,33 @@
         <el-card class="searchCard newCard" style="margin: 0">
           <el-row type="flex" class="header">
             <el-col class="header-pot">
-              <div class='header-pot__label'>层豆粕罐号：4#罐</div>
+              <div class='header-pot__label'>层豆粕罐号：{{formData.holderName ? formData.holderName : ''}}</div>
               <div class="header-pot__image">
-                <div class="header-pot__image_content">
+                <div class="header-pot__image_box">
+                  <div class="header-pot__image_content" :style="{height: `${(formData.current*1)/(formData.capacity)}%`}">
+                </div>
                 </div>
               </div>
             </el-col>
             <el-col class="header-form">
               <el-form :inline="true" size="small" label-width="100px" class="topform">
                 <el-form-item label="生产工厂：">
-                  <p class="header-form_input">烟台欣和企业食品有限公司</p>
+                  <p class="header-form_input">{{formData.factoryName ? formData.factoryName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="物理区域：">
-                  <p class="header-form_input">物理一区</p>
+                  <p class="header-form_input">{{formData.area ? formData.area : ''}}</p>
                 </el-form-item>
                 <el-form-item label="容器号：">
-                  <p class="header-form_input">004 4#罐</p>
+                  <p class="header-form_input">{{formData.holderName ? formData.holderName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="罐体容量：">
-                  <p class="header-form_input">10000KG</p>
+                  <p class="header-form_input">{{formData.capacity ? formData.capacity : ''}}KG</p>
                 </el-form-item>
                 <el-form-item label="物料编码：">
-                  <p class="header-form_input">M011111200301 小麦</p>
+                  <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">778KG</p>
+                  <p class="header-form_input">{{formData.current ? formData.current : ''}}KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -249,6 +251,7 @@ import {GRA_API} from '@/api/api'
 export default class Index extends Vue {
   holderId = this.$store.state.common.BeanPulp.holderId
   activeName = '1'
+  formData = {}
   // 批次数据
   dataList = []
   dataParms = {
@@ -282,7 +285,9 @@ export default class Index extends Vue {
   }
   GetBasic () {
     Vue.prototype.$http(`${GRA_API.BASIC_API}/${this.$store.state.common.BeanPulp.factory}/${this.$store.state.common.BeanPulp.deptId}/${this.$store.state.common.BeanPulp.holderId}`, `POST`, {}).then(({data}) => {
-      if (data.code === 0) {} else {
+      if (data.code === 0) {
+        this.formData = data.data
+      } else {
         this.$message.error(data.msg)
       }
     })
@@ -423,12 +428,18 @@ export default class Index extends Vue {
         width:250px;
         background: url('~@/assets/img/pot.png') no-repeat top right;
         background-size:contain;
+        .header-pot__image_box{
+          position: absolute;
+          bottom: 61px;
+          right: 40px;
+          height: 82px;
+          width: 46px;
+        }
         .header-pot__image_content {
           height: 65px;
           width: 46px;
           position: absolute;
-          right: 40px;
-          bottom: 61px;
+          bottom: 0px;
           background: linear-gradient(#35C3FF,#1890FF);
         }
       }
