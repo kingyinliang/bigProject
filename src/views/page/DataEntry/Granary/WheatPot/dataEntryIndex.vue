@@ -80,7 +80,7 @@
                   </el-table-column>
                   <el-table-column label="当前数量" width="160">
                     <template slot-scope="scope">
-                      {{scope.row.currentQuantity + scope.row.unit}}
+                      {{(scope.row.currentQuantity ? scope.row.currentQuantity : '') + scope.row.unit}}
                     </template>
                   </el-table-column>
                   <el-table-column label="操作" >
@@ -104,7 +104,7 @@
                       {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
                     <template slot-scope="scope">
                       {{scope.row.batch}}
                     </template>
