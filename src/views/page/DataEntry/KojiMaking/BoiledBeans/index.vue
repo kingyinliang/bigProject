@@ -99,250 +99,248 @@
 </template>
 
 <script>
-import {KJM_API, BASICDATA_API} from '@/api/api'
-import {headanimation} from '@/net/validate'
-import Material from './common/material'
-import Craft from './common/craft'
-import ExcRecord from '@/views/components/excRecord'
-import TextRecord from '@/views/components/textRecord'
-export default {
-  name: 'boileIndex',
-  data () {
-    return {
-      activeName: '1',
-      formHeader: {},
-      orderStatus: '',
-      isRedact: false,
-      formLabelWidth: '100px',
-      applyMaterielState: '', // 物料状态
-      applyCraftState: '', // 工艺状态
-      holderList: [],
-      cookingNoId: '', // 连续蒸煮号
-      succmessage: '保存成功'
-    }
-  },
-  watch: {
-    'applyCraftState' () {
-      console.log('status:' + this.applyCraftState)
-    }
-  },
-  mounted () {
-    headanimation(this.$)
-    this.GetheadList()
-    this.GetholderList()
-  },
-  methods: {
-    tabClick (val) {
-      this.$refs.tabs.setCurrentName(val.name)
+  import {KJM_API, BASICDATA_API} from '@/api/api'
+  import {headanimation} from '@/net/validate'
+  import Material from './common/material'
+  import Craft from './common/craft'
+  import ExcRecord from '@/views/components/excRecord'
+  import TextRecord from '@/views/components/textRecord'
+  export default {
+    name: 'boileIndex',
+    data () {
+      return {
+        activeName: '1',
+        formHeader: {},
+        orderStatus: '',
+        isRedact: false,
+        formLabelWidth: '100px',
+        applyMaterielState: '', // 物料状态
+        applyCraftState: '', // 工艺状态
+        holderList: [],
+        cookingNoId: '', // 连续蒸煮号
+        succmessage: '保存成功'
+      }
     },
-    GetheadList () {
-      this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.beanOrderHouseId, deptName: '煮豆'}, false, false, false).then((res) => {
-        if (res.data.code === 0) {
-          this.formHeader = res.data.headList[0]
-          this.cookingNoId = this.formHeader.cookingNoName
-          this.orderStatus = res.data.headList[0].beanStatus
-          // this.$refs.material.GetrealTime(this.formHeader)
-          // this.$refs.material.GetrealWheatTime(this.formHeader)
-          this.$refs.material.getMaiholdList(this.formHeader)
-          this.$refs.material.getDouholdList(this.formHeader)
-          this.$refs.material.GetPuplList(this.formHeader)
-          this.$refs.excrecord.GetequipmentType(this.formHeader.processId)
-          this.$refs.excrecord.getDataList(this.formHeader.factory)
-          if (this.orderStatus !== '已同步') {
-            this.$refs.material.getList(this.formHeader)
-            this.$refs.craft.getList(this.formHeader)
-            this.$refs.excrecord.GetExcDate({
-              order_id: this.formHeader.orderId,
-              orderHouseId: this.formHeader.id,
-              blongProc: this.formHeader.processId
-            })
-            this.$refs.textrecord.GetText({
-              order_id: this.formHeader.orderId,
-              orderHouseId: this.formHeader.orderHouseId,
-              blongProc: this.formHeader.processId
-            })
+    watch: {
+      'applyCraftState' () {
+        console.log('status:' + this.applyCraftState)
+      }
+    },
+    mounted () {
+      headanimation(this.$)
+      this.GetheadList()
+      this.GetholderList()
+    },
+    methods: {
+      tabClick (val) {
+        this.$refs.tabs.setCurrentName(val.name)
+      },
+      GetheadList () {
+        this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.beanOrderHouseId, deptName: '煮豆'}, false, false, false).then((res) => {
+          if (res.data.code === 0) {
+            this.formHeader = res.data.headList[0]
+            this.cookingNoId = this.formHeader.cookingNoName
+            this.orderStatus = res.data.headList[0].beanStatus
+            // this.$refs.material.GetrealTime(this.formHeader)
+            // this.$refs.material.GetrealWheatTime(this.formHeader)
+            this.$refs.material.getMaiholdList(this.formHeader)
+            this.$refs.material.getDouholdList(this.formHeader)
+            this.$refs.excrecord.GetequipmentType(this.formHeader.processId)
+            if (this.orderStatus !== '已同步') {
+              this.$refs.material.getList(this.formHeader)
+              this.$refs.craft.getList(this.formHeader)
+              this.$refs.excrecord.GetExcDate({
+                order_id: this.formHeader.orderId,
+                orderHouseId: this.formHeader.id,
+                blongProc: this.formHeader.processId
+              })
+              this.$refs.textrecord.GetText({
+                order_id: this.formHeader.orderId,
+                orderHouseId: this.formHeader.orderHouseId,
+                blongProc: this.formHeader.processId
+              })
+            }
+          } else {
+            this.$message.error(res.data.msg)
           }
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
-    },
-    // 表头 连续蒸煮号
-    GetholderList () {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '008', pageSize: 9999, type: 'holder_type'}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.holderList = data.page.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 表头更改
-    UpdateHeader (str, resolve) {
-      let holderNamestr = this.holderList.find(item => item.holderName === this.cookingNoId)['holderId']
-      this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: holderNamestr, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error('保存表头' + data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
-        }
-      })
-    },
-    UpdateHeaderCreator (str, resolve) {
-      this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
-        if (data.code === 0) {
-        } else {
-          this.$message.error('保存表头' + data.msg)
-        }
-        if (resolve) {
-          resolve('resolve')
-        }
-      })
-    },
-    // 保存 or 提交
-    SubmitForm () {
-      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.savedOrSubmitForm('submit')
-      })
-    },
-    savedOrSubmitForm (str) {
-      if (!this.cookingNoId || this.cookingNoId === '') {
-        this.$message.error('请选择连续蒸煮号')
-        return false
-      }
-      if (str === 'submit') {
-        this.$set(this.formHeader, 'submitStatus', 'submit')
-        if (!this.$refs.material.mainrules()) {
+        })
+      },
+      // 表头 连续蒸煮号
+      GetholderList () {
+        this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '008', pageSize: 9999, type: 'holder_type'}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.holderList = data.page.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      },
+      // 表头更改
+      UpdateHeader (str, resolve) {
+        let holderNamestr = this.holderList.find(item => item.holderName === this.cookingNoId)['holderId']
+        this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: holderNamestr, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('保存表头' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      },
+      UpdateHeaderCreator (str, resolve) {
+        this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('保存表头' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      },
+      // 保存 or 提交
+      SubmitForm () {
+        this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.savedOrSubmitForm('submit')
+        })
+      },
+      savedOrSubmitForm (str) {
+        if (!this.cookingNoId || this.cookingNoId === '') {
+          this.$message.error('请选择连续蒸煮号')
           return false
         }
-        if (!this.$refs.craft.craftrules()) {
-          return false
+        if (str === 'submit') {
+          this.$set(this.formHeader, 'submitStatus', 'submit')
+          if (!this.$refs.material.mainrules()) {
+            return false
+          }
+          if (!this.$refs.craft.craftrules()) {
+            return false
+          }
+          if (!this.$refs.excrecord.excrul()) {
+            return false
+          }
+          this.succmessage = '提交成功'
+        } else {
+          this.$set(this.formHeader, 'submitStatus', 'saved')
         }
-        if (!this.$refs.excrecord.excrul()) {
-          return false
-        }
-        this.succmessage = '提交成功'
-      } else {
-        this.$set(this.formHeader, 'submitStatus', 'saved')
-      }
-      let that = this
-      let excSaveNet = new Promise((resolve, reject) => {
-        that.$refs.excrecord.saveOrSubmitExc({
-          orderId: that.formHeader.orderId,
-          orderHouseId: that.formHeader.orderHouseId,
-          blongProc: that.formHeader.processId
-        }, str, resolve, reject)
-      })
-      let textSaveNet = new Promise((resolve, reject) => {
-        that.$refs.textrecord.UpdateText({
-          orderId: that.formHeader.orderId,
-          orderHouseId: that.formHeader.orderHouseId,
-          blongProc: that.formHeader.processId
-        }, str, resolve, reject)
-      })
-      let net100 = new Promise((resolve, reject) => {
-        that.UpdateHeader(str, resolve)
-      })
-      let net101 = new Promise((resolve, reject) => {
-        that.UpdateHeaderCreator(str, resolve)
-      })
-      let net0 = new Promise((resolve, reject) => {
-        that.$refs.material.savemains(resolve, reject)
-      })
-      let net1 = new Promise((resolve, reject) => {
-        that.$refs.material.savewheats(resolve, reject)
-      })
-      let net2 = new Promise((resolve, reject) => {
-        that.$refs.material.savepulps(resolve, reject)
-      })
-      let net3 = new Promise((resolve, reject) => {
-        that.$refs.material.savestauts(resolve, reject)
-      })
-      let net99
-      net99 = Promise.all([net100, net101, net0, net1, net2, net3, excSaveNet, textSaveNet])
-      net99.then(function () {
-        new Promise((resolve, reject) => {
-          that.$refs.craft.updatezhu(resolve, reject)
-        }).then(function () {
-          let net5 = new Promise((resolve, reject) => {
-            that.$refs.craft.updatelishui(resolve, reject)
-          })
-          let net6 = new Promise((resolve, reject) => {
-            that.$refs.craft.updatezhengzhu(resolve, reject)
-          })
-          let net7 = new Promise((resolve, reject) => {
-            that.$refs.craft.updatehunhe(resolve, reject)
-          })
-          Promise.all([net5, net6, net7]).then(function () {
-            that.$message.success(that.succmessage)
-            that.GetheadList()
-            that.isRedact = false
-          }).catch(() => {
-            that.$message.error('网络请求失败，请刷新重试')
+        let that = this
+        let excSaveNet = new Promise((resolve, reject) => {
+          that.$refs.excrecord.saveOrSubmitExc({
+            orderId: that.formHeader.orderId,
+            orderHouseId: that.formHeader.orderHouseId,
+            blongProc: that.formHeader.processId
+          }, str, resolve, reject)
+        })
+        let textSaveNet = new Promise((resolve, reject) => {
+          that.$refs.textrecord.UpdateText({
+            orderId: that.formHeader.orderId,
+            orderHouseId: that.formHeader.orderHouseId,
+            blongProc: that.formHeader.processId
+          }, str, resolve, reject)
+        })
+        let net100 = new Promise((resolve, reject) => {
+          that.UpdateHeader(str, resolve)
+        })
+        let net101 = new Promise((resolve, reject) => {
+          that.UpdateHeaderCreator(str, resolve)
+        })
+        let net0 = new Promise((resolve, reject) => {
+          that.$refs.material.savemains(resolve, reject)
+        })
+        let net1 = new Promise((resolve, reject) => {
+          that.$refs.material.savewheats(resolve, reject)
+        })
+        let net2 = new Promise((resolve, reject) => {
+          that.$refs.material.savepulps(resolve, reject)
+        })
+        let net3 = new Promise((resolve, reject) => {
+          that.$refs.material.savestauts(resolve, reject)
+        })
+        let net99
+        net99 = Promise.all([net100, net101, net0, net1, net2, net3, excSaveNet, textSaveNet])
+        net99.then(function () {
+          new Promise((resolve, reject) => {
+            that.$refs.craft.updatezhu(resolve, reject)
+          }).then(function () {
+            let net5 = new Promise((resolve, reject) => {
+              that.$refs.craft.updatelishui(resolve, reject)
+            })
+            let net6 = new Promise((resolve, reject) => {
+              that.$refs.craft.updatezhengzhu(resolve, reject)
+            })
+            let net7 = new Promise((resolve, reject) => {
+              that.$refs.craft.updatehunhe(resolve, reject)
+            })
+            Promise.all([net5, net6, net7]).then(function () {
+              that.$message.success(that.succmessage)
+              that.GetheadList()
+              that.isRedact = false
+            }).catch(() => {
+              that.$message.error('网络请求失败，请刷新重试')
+            })
           })
         })
-      })
+      },
+      setApplyMaterielState (status) {
+        this.applyMaterielState = status
+        this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+      },
+      setApplyCraftState (status) {
+        this.applyCraftState = status
+        this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+      }
     },
-    setApplyMaterielState (status) {
-      this.applyMaterielState = status
-      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
-    },
-    setApplyCraftState (status) {
-      this.applyCraftState = status
-      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    components: {
+      Material,
+      Craft,
+      ExcRecord,
+      TextRecord
     }
-  },
-  components: {
-    Material,
-    Craft,
-    ExcRecord,
-    TextRecord
   }
-}
 </script>
 
 <style>
-.rowDel{display: none;}
+  .rowDel{display: none;}
 </style>
 <style lang="less" scoped>
-.input_bommom {
-  width: 147px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 32px;
-  border-bottom: solid 1px #D8D8D8;
-}
-.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-  margin-bottom: 8px
-}
-.searchCard {
-  .el-button--primary,.el-button--primary:focus{
-    color: #000000;
-    background-color: #FFFFFF;
-    border-color: #D9D9D9;
+  .input_bommom {
+    width: 147px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 32px;
+    border-bottom: solid 1px #D8D8D8;
   }
-  .el-button--primary:hover{
-    background-color: #1890FF;
-    color: #FFFFFF
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 8px
   }
-  .el-button--primary:first-child{
-    background-color: #1890FF;
-    color: #FFFFFF;
-    border-color: #1890FF;
+  .searchCard {
+    .el-button--primary,.el-button--primary:focus{
+      color: #000000;
+      background-color: #FFFFFF;
+      border-color: #D9D9D9;
+    }
+    .el-button--primary:hover{
+      background-color: #1890FF;
+      color: #FFFFFF
+    }
+    .el-button--primary:first-child{
+      background-color: #1890FF;
+      color: #FFFFFF;
+      border-color: #1890FF;
+    }
   }
-}
-#DaatTtabs{
-  border-radius: 15px;
-  overflow: hidden;
-}
-.htitle {
-  margin: 0 0 10px 0;
-}
+  #DaatTtabs{
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .htitle {
+    margin: 0 0 10px 0;
+  }
 </style>
