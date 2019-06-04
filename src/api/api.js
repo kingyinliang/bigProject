@@ -1179,3 +1179,29 @@ export const SQU_API = {
    */
   PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
 }
+
+/**
+ * 粮仓API
+ */
+export const GRANARY_API = {
+  /**
+   * 小麦仓库存 LIST
+   */
+  WHEAT_POT_LIST: HOST + '/gra/material/list',
+  /**
+   * 小麦仓调整 LIST
+   */
+  WHEAT_ADJSUT_LIST: HOST + '/gra/adjust/adjustList',
+  /**
+   * 小麦仓领用记录
+   */
+  WHEAT_APPLY_LIST: HOST + '/gra/collarUse/collarUseList',
+  /**
+   * 调整
+   */
+  WHEAT_ADJUST: HOST + '/gra/adjust/adjustUpdate',
+  /**
+   * 小麦仓详情
+   */
+  WHEAT_POT_DETAIL: HOST + '/sys/deptInfos/queryDetail'
+}

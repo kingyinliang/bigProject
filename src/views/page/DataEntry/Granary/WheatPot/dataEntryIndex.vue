@@ -5,7 +5,7 @@
         <el-card class="searchCard newCard" style="margin: 0">
           <el-row type="flex" class="header">
             <el-col class="header-pot">
-              <div class='header-pot__label'>小麦仓罐号：4#罐</div>
+              <div class='header-pot__label'>小麦仓罐号：{{formData.holderName ? formData.holderName : ''}}</div>
               <div class="header-pot__image">
                 <div class="header-pot__image_content">
                 </div>
@@ -14,22 +14,22 @@
             <el-col class="header-form">
               <el-form :inline="true" size="small" label-width="100px" class="topform">
                 <el-form-item label="生产工厂：">
-                  <p class="header-form_input">烟台欣和企业食品有限公司</p>
+                  <p class="header-form_input">{{formData.factoryName ? formData.factoryName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="物理区域：">
-                  <p class="header-form_input">物理一区</p>
+                  <p class="header-form_input">{{formData.area ? formData.area : ''}}</p>
                 </el-form-item>
                 <el-form-item label="容器号：">
-                  <p class="header-form_input">004 4#罐</p>
+                  <p class="header-form_input">{{formData.holderName ? formData.holderName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="罐体容量：">
-                  <p class="header-form_input">10000KG</p>
+                  <p class="header-form_input">{{formData.capacity ? formData.capacity : ''}}KG</p>
                 </el-form-item>
                 <el-form-item label="物料编码：">
-                  <p class="header-form_input">M011111200301 小麦</p>
+                  <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">778KG</p>
+                  <p class="header-form_input">{{formData.current ? formData.current : ''}}KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -41,52 +41,52 @@
           <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
             <i class="el-icon-caret-bottom"></i>
           </div>
-          <el-tabs ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
+          <el-tabs ref='tabs'  v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
             <el-tab-pane name="1">
               <span slot="label" class="spanview">
                 <el-button>当前库存信息</el-button>
               </span>
-              <el-row style="margin-bottom:10px;">
+              <!-- <el-row style="margin-bottom:10px;">
                 <el-col>
                   <el-button type="primary" size="small" style="float:right;">数据处理</el-button>
                 </el-col>
-              </el-row>
+              </el-row> -->
               <el-row>
                 <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
-                  <el-table-column
+                  <!-- <el-table-column
                     type="selection"
                     width="55">
-                  </el-table-column>
+                  </el-table-column> -->
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
                   <el-table-column label="物料" :show-overflow-tooltip="true"  width="200">
                     <template slot-scope="scope" width="120">
-                      M397232090 小麦
+                      {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
                   <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
                     <template slot-scope="scope">
-                      830030009030203
+                      {{scope.row.batch}}
                     </template>
                   </el-table-column>
                   <el-table-column label="入库日期" :show-overflow-tooltip="true" width="170">
                     <template slot-scope="scope">
-                      2018-09-12
+                      {{scope.row.postingDate}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="入库数量(t)" :show-overflow-tooltip="true" width="170" >
+                  <el-table-column label="入库数量" :show-overflow-tooltip="true" width="160" >
                     <template slot-scope="scope">
-                      2000
+                      {{scope.row.quantity + scope.row.unit}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="当前数量(t)" width="170">
+                  <el-table-column label="当前数量" width="160">
                     <template slot-scope="scope">
-                      100KG
+                      {{scope.row.currentQuantity + scope.row.unit}}
                     </template>
                   </el-table-column>
                   <el-table-column label="操作" >
                     <template slot-scope="scope">
-                      <el-button type="primary" size="small" @click="showLog">查看</el-button>
-                      <el-button type="primary" size="small" @click="makeAdjust">调整</el-button>
+                      <el-button type="primary" size="small" @click="showLog(scope.row.batch)">查看</el-button>
+                      <el-button type="primary" size="small" @click="makeAdjust(scope.row)">调整</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -101,37 +101,37 @@
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
                   <el-table-column label="物料" :show-overflow-tooltip="true"  width="200">
                     <template slot-scope="scope">
-                      M397232090 小麦
+                      {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
                   <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
                     <template slot-scope="scope">
-                      830030009030203
+                      {{scope.row.batch}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整类型" :show-overflow-tooltip="true" width="100">
                     <template slot-scope="scope">
-                      盘赢
+                      {{scope.row.adjustType === '0' ? '盘盈' : '盘亏'}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="数量(t)" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="数量" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      2000
+                      {{scope.row.quantity + ' ' + scope.row.unit}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
                     <template slot-scope="scope">
-                      手机打开数据丢失看
+                      {{scope.row.remark}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整时间" >
                     <template slot-scope="scope">
-                      2019-09-01 21:00:00
+                      {{scope.row.adjustTime}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整人" >
                     <template slot-scope="scope">
-                      张三(198290010)
+                      {{scope.row.adjuster}}
                     </template>
                   </el-table-column>
                 </el-table>
@@ -147,29 +147,29 @@
         <div>
           <el-table header-row-class-name="tableHead" :data="applyList" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55"></el-table-column>
-            <el-table-column label="物料" :show-overflow-tooltip="true"  width="180">
+            <el-table-column label="物料" :show-overflow-tooltip="true"  width="160">
               <template slot-scope="scope">
-                M397232090 小麦
+                {{scope.row.materialCode + ' ' + scope.row.materialName}}
               </template>
             </el-table-column>
-            <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
+            <el-table-column label="批次" :show-overflow-tooltip="true" width="140">
               <template slot-scope="scope">
-                830030009030203
+                {{scope.row.batch}}
               </template>
             </el-table-column>
-            <el-table-column label="领用量(KG)" :show-overflow-tooltip="true" width="100">
+            <el-table-column label="领用量" :show-overflow-tooltip="true" width="100">
               <template slot-scope="scope">
-                900
+                {{scope.row.wheatWeight + scope.row.weightUnit}}
               </template>
             </el-table-column>
-            <el-table-column label="领用订单" :show-overflow-tooltip="true" width="120" >
+            <el-table-column label="领用订单" :show-overflow-tooltip="true" width="150" >
               <template slot-scope="scope">
-                4793402402
+                {{scope.row.orderNo}}
               </template>
             </el-table-column>
             <el-table-column label="领用时间">
               <template slot-scope="scope">
-                2019-08-10 20:09:11
+                {{scope.row.changed}}
               </template>
             </el-table-column>
           </el-table>
@@ -195,30 +195,30 @@
           <span>盘点调整</span>
         </div>
         <div>
-           <el-form label-width="100px" size="small" ref="modifyForm">
-            <el-form-item label="物料：" >
-              <p>M89030200 小麦</p>
+           <el-form :model="adjustForm" label-width="100px" size="small" ref="modifyForm">
+            <el-form-item label="物料：">
+              <p>{{adjustForm.MATERIAL_CODE + ' ' + adjustForm.MATERIAL_NAME}}</p>
             </el-form-item>
             <el-form-item label="批次：" >
-              <p>7439483040</p>
+              <p>{{adjustForm.BATCH}}</p>
             </el-form-item>
-            <el-form-item label="调整类型：">
-              <el-select  placeholder="请选择"  style="width:220px" >
-                <el-option label="盘亏" value="0" ></el-option>
-                <el-option label="盘赢" value="1" ></el-option>
+            <el-form-item label="调整类型：" required>
+              <el-select  placeholder="请选择"  v-model="adjustForm.ADJUST_TYPE" style="width:220px" >
+                <el-option label="盘亏" value="1" ></el-option>
+                <el-option label="盘赢" value="0" ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="调整量：">
-              <el-input  type='number'  value="0" style='width:220px'/>
+            <el-form-item label="调整量：" required>
+              <el-input  type='number'  v-model.number="adjustForm.QUANTITY"  style='width:220px'/>
             </el-form-item>
             <el-form-item label="说明：">
-              <el-input  type='text'  style='width:220px'/>
+              <el-input  type='text'  v-model.trim="adjustForm.REMARK" style='width:220px'/>
             </el-form-item>
           </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" size="small" style="color: #000000;background-color: #FFFFFF;border-color: #D9D9D9;" @click="dialogFormVisible2 = false">取消</el-button>
-          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="dialogFormVisible2 = false">确定</el-button>
+          <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveAdjust()">确定</el-button>
         </div>
       </el-dialog>
     </el-col>
@@ -227,12 +227,17 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator'
+import {GRANARY_API} from '@/api/api'
 @Component({
   components: {
   }
 })
 export default class Index extends Vue {
+  factoryId = '2812A6620E204D0FBAFB40ECA8AD58FF'
+  deptId = 'D79ECC0CBB1F483EB4136A3720B68B3D'
+  holderId = '3CCDE91402DF454E9DF43D1C001927E2'
   activeName = '1'
+  formData = {}
   // 批次数据
   dataList = []
   // 调整数据
@@ -246,19 +251,50 @@ export default class Index extends Vue {
   currPage: number = 1
   pageSize: number = 10
   totalCount: number = 0
-  mounted () {
-    for (let i = 0; i < 11; i++) {
-      this.dataList.push({})
-      this.adjustList.push({})
-      this.totalList.push({})
-    }
-    this.totalCount = this.totalList.length
-    this.applyList = this.totalList.slice(0, this.pageSize)
+  adjustForm = {
+    MATERIAL_CODE: '',
+    MATERIAL_NAME: '',
+    BATCH: '',
+    MATERIAL_TYPE_NAME: '',
+    LOCATION: '',
+    MOVE_TYPE: '',
+    MATERIAL_TYPE_CODE: '',
+    POSTING_DATE: '',
+    CURRENT_QUANTITY: 0,
+    FACTORY: '',
+    HOLDER_ID: '',
+    ADJUST_TYPE: '0',
+    QUANTITY: 0,
+    UNIT: 'KG',
+    REMARK: ''
   }
-  showLog () {
+  mounted () {
+    this.retrieveDetail()
+    this.retrieveDataList()
+    this.retrieveAdjustList()
+  }
+  showLog (batch) {
+    this.retrieveLogList(batch)
     this.dialogFormVisible = true
   }
-  makeAdjust () {
+  makeAdjust (row) {
+    this.adjustForm = {
+      MATERIAL_CODE: row.materialCode,
+      MATERIAL_NAME: row.materialName,
+      BATCH: row.batch,
+      MATERIAL_TYPE_NAME: row.materialTypeName,
+      LOCATION: row.location,
+      MOVE_TYPE: row.moveType,
+      MATERIAL_TYPE_CODE: row.materialTypeCode,
+      POSTING_DATE: row.postingDate,
+      CURRENT_QUANTITY: row.currentQuantity,
+      FACTORY: row.factory,
+      HOLDER_ID: row.holderId,
+      ADJUST_TYPE: '0',
+      QUANTITY: 0,
+      UNIT: 'KG',
+      REMARK: ''
+    }
     this.dialogFormVisible2 = true
   }
   // 改变每页条数
@@ -271,6 +307,68 @@ export default class Index extends Vue {
   handleCurrentChange (val: number) {
     this.currPage = val
     this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
+  }
+  retrieveDetail () {
+    this.formData = {}
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_DETAIL}/${this.factoryId}/${this.deptId}/${this.holderId}`, `GET`).then((res) => {
+      if (res.data.code === 0) {
+        this.formData = res.data.data
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 当前库存量
+  retrieveDataList () {
+    this.dataList = []
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
+      if (res.data.code === 0) {
+        this.dataList = res.data.page.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 调整信息
+  retrieveAdjustList () {
+    this.adjustList = []
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJSUT_LIST}`, `POST`, {factory: this.factoryId, holderId: this.holderId}).then((res) => {
+      if (res.data.code === 0) {
+        this.adjustList = res.data.adjustInfo.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 领用记录
+  retrieveLogList (batch) {
+    this.totalList = []
+    this.applyList = []
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Wheat', batch}).then((res) => {
+      if (res.data.code === 0) {
+        this.totalList = res.data.collarUseInfo.list
+        this.totalCount = this.totalList.length
+        this.applyList = this.totalList.slice(0, this.pageSize)
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  saveAdjust () {
+    if (this.adjustForm.QUANTITY.toString() === '') {
+      this.$message.error('调整数量不能为空')
+      return false
+    }
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
+      if (res.data.code === 0) {
+        this.$message.success('保存成功')
+        this.retrieveDataList()
+        this.retrieveAdjustList()
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+    this.dialogFormVisible2 = false
   }
 }
 </script>
