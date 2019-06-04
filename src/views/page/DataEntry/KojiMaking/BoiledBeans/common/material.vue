@@ -262,20 +262,19 @@
     </el-dialog>
     <el-dialog :title="DRTitle" :visible.sync="dialogFormVisibleDouRu" width="450px">
       <el-form :model="rusoy" size="small" :rules="rusoyrules" ref="rusoy">
-        <el-form-item label="领用物料" :label-width="formLabelWidth" prop="soyMaterialstr">
-          <el-select v-model="rusoy.soyMaterialstr" placeholder="请选择" size="small">
-            <el-option :label="item.code +' '+ item.value" v-for="(item, index) in soyShort" :key="index" :value="item.code +' '+ item.value"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="领用粮仓" :label-width="formLabelWidth" prop="foodHolderId">
-          <el-select v-model="rusoy.foodHolderId">
-            <el-option v-for='sole in DouCangList' :key="sole.holderId" :value="sole.holderId" :label="sole.holderName"></el-option>
+          <el-select v-model="rusoy.foodHolderId" @change="changCang()">
+            <el-option v-for='sole in PulpCangList' :key="sole.holderId" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
-          <el-input v-model="rusoy.batch" autocomplete="off" maxlength='10'></el-input>
+          <el-select v-model="rusoy.batch">
+            <el-option v-for="(sole, index) in PulpCangBatchList" :key="index" :value="sole.batch" :label="sole.batch"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="起始数" :label-width="formLabelWidth">
+        <el-form-item label="领用物料" :label-width="formLabelWidth">{{rusoy.materialCode}} {{rusoy.materialName}}</el-form-item>
+        <el-form-item label="剩余数" :label-width="formLabelWidth">{{rusoy.currentQuantity}}</el-form-item>
+        <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="rusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
@@ -391,18 +390,19 @@ export default {
       DouCangList: '', // 豆粕粮仓list
       rusoy: {},
       rusoyrules: {
-        soyMaterialstr: [
-          { required: true, message: '请选择物料', trigger: 'change' }
-        ],
-        batch: [
-          { required: true, message: '必填', trigger: 'blur' },
-          { min: 10, max: 10, message: '长度为10位', trigger: 'blur' }
-        ],
         foodHolderId: [
           { required: true, message: '请选择粮仓', trigger: 'change' }
         ],
+        batch: [
+          { required: true, message: '请选择批次', trigger: 'change' }
+        ],
+        startWeight: [
+          { required: true, message: '必填', trigger: 'blur' },
+          {type: 'number', message: '必须为数字'}
+        ],
         endWeight: [
-          { required: true, message: '必填', trigger: 'change' }
+          { required: true, message: '必填', trigger: 'blur' },
+          {type: 'number', message: '必须为数字'}
         ]
       },
       materialShort: '',
@@ -414,7 +414,9 @@ export default {
       wheatListPici: '',
       wheatPiArray: [],
       pulpPiArray: [],
-      holderIdomg: ''
+      holderIdomg: '',
+      PulpCangList: [],
+      PulpCangBatchList: []
     }
   },
   mounted () {
@@ -476,6 +478,21 @@ export default {
         this.chusoy.materialCode = part['materialCode']
         this.chusoy.materialName = part['materialName']
         this.chusoy.soyMaterialstr = part['materialCode'] + ' ' + part['materialName']
+      }
+    },
+    'rusoy.foodHolderId' () {
+      if (this.rusoy.foodHolderId && this.rusoy.foodHolderId !== '') {
+        this.PulpCangBatchList = this.PulpCangList.find(item => item.holderId === this.rusoy.foodHolderId).pulpData
+      } else {
+        this.PulpCangBatchList = []
+      }
+    },
+    'rusoy.batch' () {
+      if (this.rusoy.batch && this.rusoy.batch !== '') {
+        let solebig = this.PulpCangBatchList.find(item => item.batch === this.rusoy.batch)
+        this.rusoy.materialCode = solebig.materialCode
+        this.rusoy.materialName = solebig.materialName
+        this.rusoy.currentQuantity = solebig.currentQuantity
       }
     }
   },
@@ -597,7 +614,7 @@ export default {
     //   })
     // },
     GetmaterialZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_QULIAO'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_QULIAO`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
@@ -606,7 +623,7 @@ export default {
       })
     },
     GetwheatZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_MAIFEN'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_MAIFEN`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.wheatShort = data.dicList
         } else {
@@ -615,7 +632,7 @@ export default {
       })
     },
     GetsoyZhong () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.formHeader.factory, type: 'ZQ_MATERIAL_DOULEI'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}?type=ZQ_MATERIAL_DOULEI`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.soyShort = data.dicList
         } else {
@@ -947,11 +964,16 @@ export default {
       }
       if (row.useType === '入罐') {
         this.dialogFormVisibleDouRu = true
-        // this.rusoy = row
+        this.PulpCangBatchList = this.PulpCangList.find(item => item.holderId === row.foodHolderId).pulpData
+        let solebig = this.PulpCangBatchList.find(item => item.batch === row.batch)
+        if (solebig === undefined) {
+          row.currentQuantity = 0
+        } else {
+          row.currentQuantity = solebig.currentQuantity
+        }
         this.rusoy = Object.assign({}, row)
       } else {
         this.dialogFormVisibleDouChu = true
-        // this.chusoy = row
         this.chusoy = Object.assign({}, row)
       }
     },
@@ -962,7 +984,7 @@ export default {
           if (this.rusoylnum <= 0) {
             this.$message.error('领用数必须大于0')
           } else {
-            this.dialogFormVisibleDouRu = false
+            let soyUsedTotal = 0
             var obj = {}
             obj = this.DouCangList.find((item) => {
               return item.holderId === this.rusoy.foodHolderId
@@ -975,10 +997,18 @@ export default {
               // 原有行
               currentRecord = this.soyList.filter(data => data.id === this.rusoy.id)
             }
-            // 物料拆分 soyMaterialstr
-            let materstrchai = []
-            materstrchai = this.rusoy.soyMaterialstr.split(' ')
-            let materstrName = materstrchai[1] === undefined ? '' : materstrchai[1]
+            if (this.rusoy.id === '') {
+              this.soyList.map((item) => {
+                if (item.id === '' && (item.uid !== this.rusoy.uid)) {
+                  soyUsedTotal += item.useWeight
+                }
+              })
+              if (soyUsedTotal + (this.rusoy.endWeight - this.rusoy.startWeight) > this.PulpCangBatchList.find(item => item.batch === this.rusoy.batch).currentQuantity) {
+                this.$message.error('领用数不能大于剩余量')
+                return false
+              }
+            }
+            this.dialogFormVisibleDouRu = false
             if (currentRecord && currentRecord.length > 0) {
               Object.assign(currentRecord[0], {
                 foodHolderId: this.rusoy.foodHolderId,
@@ -991,9 +1021,8 @@ export default {
                 unit: 'KG',
                 pulpHolderId: this.rusoy.pulpHolderId,
                 pulpHolderName: this.rusoy.pulpHolderName,
-                soyMaterialstr: this.rusoy.soyMaterialstr,
-                materialCode: materstrchai[0],
-                materialName: materstrName
+                materialCode: this.rusoy.materialCode,
+                materialName: this.rusoy.materialName
               })
             } else {
               this.soyList.push({
@@ -1016,9 +1045,8 @@ export default {
                 delFlag: '0',
                 changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                 changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
-                soyMaterialstr: this.rusoy.soyMaterialstr,
-                materialCode: materstrchai[0],
-                materialName: materstrName
+                materialCode: this.rusoy.materialCode,
+                materialName: this.rusoy.materialName
               })
               this.$nextTick(function () {
                 this.$refs.pulpTable.bodyWrapper.scrollTop = this.$refs.pulpTable.bodyWrapper.scrollHeight
@@ -1328,6 +1356,26 @@ export default {
       } else {
         row.delFlag = '1'
       }
+    },
+    GetPuplList (formHeader) {
+      this.$http(`${KJM_API.DOUMATERPULPLIST_API}`, 'POST', {factory: formHeader.factory, workShop: formHeader.workShop}).then(({data}) => {
+        if (data.code === 0) {
+          this.PulpCangList = data.holder
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    proving1 () {
+      // this.rusoy.startWeight = this.rusoy.startWeight.replace(/[^\.\d]/g, '')
+      // this.rusoy.startWeight = this.rusoy.startWeight.replace('.', '')
+      this.rusoy.startWeight = this.rusoy.startWeight.replace('-', '')
+    },
+    changCang () {
+      this.rusoy.batch = ''
+      this.rusoy.materialCode = ''
+      this.rusoy.materialName = ''
+      this.rusoy.currentQuantity = ''
     }
   },
   computed: {

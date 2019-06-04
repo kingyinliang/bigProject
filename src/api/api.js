@@ -205,11 +205,14 @@ export const BASICDATA_API = {
    * @property {string} SPECDEL_API 规格删除
    */
   SPECDEL_API: HOST + '/sys/spec/delSpec',
-
   /**
    * @property {string} MATERIAL_API 成品品项
    */
-  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams'
+  MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams',
+  /**
+   * 原料入库记录
+   */
+  MATERIALRAWLIST_API: HOST + '/sys/sapGranaryMaterial/list'
 }
 /*
 *系统设置api
@@ -894,7 +897,11 @@ export const WHT_API = {
   /**
    * @property {string} APPLYMATERIELSUBMIT_API 物料申请提交
    */
-  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM'
+  APPLYMATERIELSUBMIT_API: HOST + '/wht/material/submitM',
+  /**
+   * 炒麦 物料领用 仓
+   */
+  WHEATCANGLIST_API: HOST + '/wht/material/wheatList'
 }
 
 /*
@@ -997,6 +1004,7 @@ export const KJM_API = {
   DOUMATERREALTIME_API: HOST + '/realTime/pulp/list',
   DOUMATERREALWHEATIME_API: HOST + '/realTime/wheat/list',
   DOUMATERHEADCREATOR_API: HOST + '/kjm/guard/headUpdate',
+  DOUMATERPULPLIST_API: HOST + '/kjm/bean/pulpList',
 
   DOUMATERSTATUS_API: HOST + '/kjm/bean/technology/updateStatus', // 原料 状态
   DOUGONGYIZHUSAVE_API: HOST + '/kjm/bean/technology/update', // 工艺 主表
@@ -1170,4 +1178,56 @@ export const SQU_API = {
    * 工时与异常更新接口
    */
   PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
+}
+
+/**
+ * 粮仓API
+ */
+export const GRA_API = {
+  /**
+   * 豆粕罐列表API
+   */
+  BEANPULP_LIST_API: HOST + '/sys/deptInfos/queryInfo',
+  /**
+   * 豆粕基础信息API
+   */
+  BASIC_API: HOST + '/sys/deptInfos/queryDetail',
+  /**
+   * 豆粕当前库存信息列表API
+   */
+  BATCH_API: HOST + '/gra/material/list',
+  /**
+   * 豆粕调整信息列表API
+   */
+  BATCHADJUST_API: HOST + '/gra/adjust/adjustList',
+  /**
+   * 豆粕领用明细列表API
+   */
+  BATCHCOLLARUSE_API: HOST + '/gra/collarUse/collarUseList'
+}
+
+/**
+ * 粮仓API
+ */
+export const GRANARY_API = {
+  /**
+   * 小麦仓库存 LIST
+   */
+  WHEAT_POT_LIST: HOST + '/gra/material/list',
+  /**
+   * 小麦仓调整 LIST
+   */
+  WHEAT_ADJSUT_LIST: HOST + '/gra/adjust/adjustList',
+  /**
+   * 小麦仓领用记录
+   */
+  WHEAT_APPLY_LIST: HOST + '/gra/collarUse/collarUseList',
+  /**
+   * 调整
+   */
+  WHEAT_ADJUST: HOST + '/gra/adjust/adjustUpdate',
+  /**
+   * 小麦仓详情
+   */
+  WHEAT_POT_DETAIL: HOST + '/sys/deptInfos/queryDetail'
 }
