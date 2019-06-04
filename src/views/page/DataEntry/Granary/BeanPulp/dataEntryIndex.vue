@@ -301,7 +301,7 @@ export default class Index extends Vue {
     this.GetBasic()
   }
   GetBasic () {
-    Vue.prototype.$http(`${GRA_API.BASIC_API}/${this.$store.state.common.BeanPulp.factory}/${this.$store.state.common.BeanPulp.deptId}/${this.$store.state.common.BeanPulp.holderId}`, `POST`, {}).then(({data}) => {
+    Vue.prototype.$http(`${GRA_API.BASIC_API}/${this.$store.state.common.BeanPulp.factory}/${this.$store.state.common.BeanPulp.holderId}`, `POST`, {}).then(({data}) => {
       if (data.code === 0) {
         this.formData = data.data
       } else {

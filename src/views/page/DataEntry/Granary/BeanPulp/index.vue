@@ -99,7 +99,7 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}/${this.plantList.workshop}/012`, 'POST', {}).then(({data}) => {
+      this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}?deptId=${this.plantList.workshop}&flag=012`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
           if (!data.data) {
             return
