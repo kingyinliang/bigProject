@@ -227,8 +227,8 @@ export default {
         factory: '',
         workshop: '',
         productline: '',
-        currPage: 1,
-        pageSize: 10,
+        currPage: '1',
+        pageSize: '10',
         totalCount: 0
       }
     }
@@ -247,7 +247,7 @@ export default {
     GetList (st) {
       this.lodingS = true
       if (st) {
-        this.plantList.currPage = 1
+        this.plantList.currPage = '1'
       }
       if (this.plantList.material !== '') {
         this.plantList.materialCode = this.plantList.material.substring(0, this.plantList.material.indexOf(' '))
@@ -259,8 +259,8 @@ export default {
       this.$http(`${REP_API.REPOUTPUTLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.page.list
-          this.plantList.currPage = data.page.currPage
-          this.plantList.pageSize = data.page.pageSize
+          this.plantList.currPage = JSON.stringify(data.page.currPage)
+          this.plantList.pageSize = JSON.stringify(data.page.pageSize)
           this.plantList.totalCount = data.page.totalCount
         } else {
           this.$message.error(data.msg)
@@ -274,12 +274,12 @@ export default {
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.plantList.pageSize = val
+      this.plantList.pageSize = JSON.stringify(val)
       this.GetList()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.plantList.currPage = val
+      this.plantList.currPage = JSON.stringify(val)
       this.GetList()
     }
   },
