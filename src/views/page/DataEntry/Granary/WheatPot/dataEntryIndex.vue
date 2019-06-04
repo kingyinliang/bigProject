@@ -233,11 +233,10 @@ import {GRANARY_API} from '@/api/api'
   }
 })
 export default class Index extends Vue {
-  factoryId = '2812A6620E204D0FBAFB40ECA8AD58FF'
-  deptId = 'D79ECC0CBB1F483EB4136A3720B68B3D'
-  holderId = '3CCDE91402DF454E9DF43D1C001927E2'
+  factoryId = ''
+  deptId = ''
+  holderId = ''
   activeName = '1'
-  formData = {}
   // 批次数据
   dataList = []
   // 调整数据
@@ -251,6 +250,7 @@ export default class Index extends Vue {
   currPage: number = 1
   pageSize: number = 10
   totalCount: number = 0
+  formData = {}
   adjustForm = {
     MATERIAL_CODE: '',
     MATERIAL_NAME: '',
@@ -269,6 +269,10 @@ export default class Index extends Vue {
     REMARK: ''
   }
   mounted () {
+    this.factoryId = this.$route.params.factoryId
+    this.deptId = this.$route.params.workshopId
+    this.holderId = this.$route.params.holderId
+    console.log(this.factoryId)
     this.retrieveDetail()
     this.retrieveDataList()
     this.retrieveAdjustList()
@@ -321,7 +325,7 @@ export default class Index extends Vue {
   // 当前库存量
   retrieveDataList () {
     this.dataList = []
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_BATCH_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.page.list
       } else {

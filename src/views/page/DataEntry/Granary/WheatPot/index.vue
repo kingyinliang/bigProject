@@ -20,17 +20,17 @@
             </el-form>
           </el-col>
           <el-col style="width: 80px">
-            <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
+            <el-button type="primary" size="small" @click="getOrderList()" style="float: right">查询</el-button>
           </el-col>
         </el-row>
       </el-card>
     </div>
     <div class="main" style="padding-top: 8px">
-      <el-card class="newCard">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-card class="Card_item">
-              <div slot="header">层豆粕罐号：4#罐 <span class="Card_item_detail" @click="goDetail()">详情>></span></div>
+      <el-card class="newCard" v-if="searched">
+        <el-row :gutter="10" v-for="(item, index) in dataList" :key="index" v-if="index%2===0" style="margin-top:10px;">
+          <el-col :span="12" v-if="index < dataList.length">
+            <el-card class="Card_item" >
+              <div slot="header">小麦罐号：{{dataList[index].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index].holderId)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
@@ -40,17 +40,49 @@
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：170t</span></div>
-                    <div style="position: relative">
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index].total + dataList[index].unit}}</span></div>
+                    <div style="position: relative" >
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
                         <el-col :span="17">批次</el-col>
                         <el-col :span="7">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
-                        <el-row class="Card_item_text_item" v-for="item in 10" :key="item">
-                          <el-col :span="17">1905130201</el-col>
-                          <el-col :span="7">20.25t</el-col>
+                        <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index].stocks" :key="index1">
+                          <el-col :span="17">{{item1.batch}}</el-col>
+                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
+                        </el-row>
+                      </div>
+                      <div class="Card_item_text_box_bg2"></div>
+                    </div>
+                  </el-card>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="12" v-if="index + 1 < dataList.length">
+            <el-card class="Card_item" >
+              <div slot="header">小麦罐号：{{dataList[index + 1].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index + 1].holderId)">详情>></span></div>
+              <div style="display: flex">
+                <div class="Card_item_img">
+                  <div class="Card_item_img_box">
+                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                  </div>
+                  <img src="@/assets/img/granary.png" alt="">
+                </div>
+                <div class="Card_item_text">
+                  <el-card style="margin-top: 25px">
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index + 1].total + dataList[index + 1].unit}}</span></div>
+                    <div style="position: relative" >
+                      <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
+                        <el-col :span="17">批次</el-col>
+                        <el-col :span="7">数量</el-col>
+                      </el-row >
+                      <div class="Card_item_text_box_bg1"></div>
+                      <div class="Card_item_text_box">
+                        <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index + 1].stocks" :key="index1">
+                          <el-col :span="17">{{item1.batch}}</el-col>
+                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -67,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, GRANARY_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 
 @Component({
@@ -119,7 +151,7 @@ export default class Index extends Vue {
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
@@ -136,27 +168,42 @@ export default class Index extends Vue {
       this.$message.error('请选择工厂')
       return
     }
+    this.searched = true
     // 保存选项值到common store
     this.setStore(this.params)
+    this.retrieveOrderList(this.params)
   }
   retrieveOrderList (params) {
     this.dataList = []
-    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_LIST_API}`, `POST`, params).then((res) => {
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}/${params.factoryId}/${params.workshopId}/002`, `GET`).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.list
+        this.dataList = res.data.data.holders
+        this.dataList.forEach((item) => {
+          item.total = 0
+          item.unit = 'KG'
+          if (item.stocks && item.stocks.length > 0) {
+            item.total = item.stocks.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0)
+            item.unit = item.stocks[0].unit
+          }
+        })
       } else {
         this.$message.error(res.data.msg)
       }
     })
   }
-  goDetail () {
-    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex')
+  goDetail (holderId) {
+    let params = {
+      factoryId: this.params.factoryId,
+      workshopId: this.params.workshopId,
+      holderId: holderId
+    }
+    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex', params)
   }
-  pushPage (name) {
+  pushPage (name, params) {
     this.mainTabs = this.mainTabs.filter(item => item.name !== name)
     let that = this
     setTimeout(function () {
-      that.$router.push({name})
+      that.$router.push({name, params})
     }, 100)
   }
   @Watch('params', {deep: true})

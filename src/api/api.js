@@ -1185,9 +1185,13 @@ export const SQU_API = {
  */
 export const GRANARY_API = {
   /**
+   * 小麦仓首页
+   */
+  WHEAT_POT_LIST: HOST + '/sys/deptInfos/queryInfo',
+  /**
    * 小麦仓库存 LIST
    */
-  WHEAT_POT_LIST: HOST + '/gra/material/list',
+  WHEAT_BATCH_LIST: HOST + '/gra/material/list',
   /**
    * 小麦仓调整 LIST
    */
