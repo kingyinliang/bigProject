@@ -234,7 +234,6 @@ import {GRANARY_API} from '@/api/api'
 })
 export default class Index extends Vue {
   factoryId = ''
-  deptId = ''
   holderId = ''
   activeName = '1'
   // 批次数据
@@ -270,9 +269,7 @@ export default class Index extends Vue {
   }
   mounted () {
     this.factoryId = this.$route.params.factoryId
-    this.deptId = this.$route.params.workshopId
     this.holderId = this.$route.params.holderId
-    console.log(this.factoryId)
     this.retrieveDetail()
     this.retrieveDataList()
     this.retrieveAdjustList()
@@ -314,7 +311,7 @@ export default class Index extends Vue {
   }
   retrieveDetail () {
     this.formData = {}
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_DETAIL}/${this.factoryId}/${this.deptId}/${this.holderId}`, `GET`).then((res) => {
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_DETAIL}/${this.factoryId}/${this.holderId}`, `GET`).then((res) => {
       if (res.data.code === 0) {
         this.formData = res.data.data
       } else {

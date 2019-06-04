@@ -171,13 +171,18 @@ export default class Index extends Vue {
     this.searched = true
     // 保存选项值到common store
     this.setStore(this.params)
-    this.retrieveOrderList(this.params)
+    let queryParams = {
+      factory: this.params.factoryId,
+      deptId: this.params.workshopId,
+      flag: '002'
+    }
+    this.retrieveOrderList(queryParams)
   }
   retrieveOrderList (params) {
     this.dataList = []
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}/${params.factoryId}/${params.workshopId}/002`, `GET`).then((res) => {
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}/${params.factory}?deptId=${params.deptId}&flag=${params.flag}`, `GET`).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.data.holders
+        this.dataList = res.data.data ? res.data.data.holders : []
         this.dataList.forEach((item) => {
           item.total = 0
           item.unit = 'KG'
@@ -194,7 +199,6 @@ export default class Index extends Vue {
   goDetail (holderId) {
     let params = {
       factoryId: this.params.factoryId,
-      workshopId: this.params.workshopId,
       holderId: holderId
     }
     this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex', params)
