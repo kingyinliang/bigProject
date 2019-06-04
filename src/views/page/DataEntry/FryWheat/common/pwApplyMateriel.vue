@@ -187,7 +187,7 @@ export default {
     }
   },
   mounted () {
-    this.getDictList()
+    // this.getDictList()
     // this.getMaterielDataList()
   },
   props: {
@@ -318,10 +318,10 @@ export default {
       }
       return true
     },
-    getDictList (order) {
+    getDictList (factory) {
       // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
       this.dictListObj = {}
-      let params = {types: ['PW_FEVOR', 'CM_material_prd', 'CM_material'], factory: order.factory}
+      let params = {types: ['PW_FEVOR', 'CM_material_prd', 'CM_material'], factory}
       this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {
           for (let dict of data.dicList) {
