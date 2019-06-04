@@ -149,9 +149,11 @@ export default {
           this.orderStatus = data.list[0].orderStatus
           // console.log('this.formHeader', JSON.stringify(this.formHeader))
           this.$refs.pwapplymateriel.getMaterielDataList(this.formHeader.orderId)
-          this.$refs.pwapplymateriel.getDictList(this.formHeader)
+          this.$refs.pwapplymateriel.getDictList(this.$store.state.common.FWfactoryid)
           this.$refs.pwtime.GetPwTimeList()
         })
+      } else {
+        this.$refs.pwapplymateriel.getDictList(this.$store.state.common.FWfactoryid)
       }
     },
     // 修改表头
