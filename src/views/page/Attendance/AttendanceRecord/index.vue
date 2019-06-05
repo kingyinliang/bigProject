@@ -815,7 +815,6 @@ export default {
                 }, (callback) => {
                   that.Setcode(Listobj, callback)
                 }], (callback, results) => {
-                  console.log(results)
                   that.datalist.push(Listobj)
                   that.tableLoding = false
                 })
@@ -915,7 +914,6 @@ export default {
       this.$http(`${SYSTEMSETUP_API.USERALL_API}`, 'POST', id ? {dept_id: id} : {}).then(({data}) => {
         if (data.code === 0) {
           this.userlist = setUserList(data.listUser)
-          console.log(this.userlist)
           if (!this.clearStatus) {
             this.selctId = this.row.userId
           } else {
@@ -932,7 +930,6 @@ export default {
               this.selctId = [this.row.userId]
             }
           }
-          console.log(this.selctId)
           this.visible = true
         } else {
           this.$message.error(data.msg)
@@ -1087,7 +1084,6 @@ export default {
                 this.datalist.splice(this.datalist.length, 0, {})
                 this.datalist.splice(this.datalist.length - 1, 1)
                 this.tableLoding = false
-                console.log(row)
               }
             })
           }

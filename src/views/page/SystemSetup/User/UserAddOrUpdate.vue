@@ -67,7 +67,6 @@ export default {
       if (id) {
         this.userId = id
         this.$http(`${SYSTEMSETUP_API.USERDETAIL_API}/${id}`, 'GET').then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.dataForm = data.user
           } else {
@@ -91,7 +90,6 @@ export default {
               if (this.userId) {
                 // 修改
                 this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
-                  console.log(data)
                   if (data.code === 0) {
                     this.$message({
                       message: '操作成功',
@@ -111,7 +109,6 @@ export default {
               } else {
                 // 新增
                 this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
-                  console.log(data)
                   if (data.code === 0) {
                     this.$message({
                       message: '操作成功',

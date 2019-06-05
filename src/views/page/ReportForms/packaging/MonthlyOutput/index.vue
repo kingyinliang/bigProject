@@ -256,7 +256,6 @@ export default {
       }
       this.$http(`${REP_API.REPPRODUCTMLIST_API}`, 'POST', this.plantList).then(({data}) => {
         if (data.code === 0) {
-          console.log(data.page.list)
           this.dataList = data.page.list
           this.plantList.currPage = data.page.currPage
           this.plantList.pageSize = data.page.pageSize

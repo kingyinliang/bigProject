@@ -303,8 +303,6 @@ export default {
     mistiming: function () {
       return function (end, start, row) {
         if (end && start && row.delFlag !== '1') {
-          console.log(toDate(end))
-          console.log(toDate(start))
           if (((toDate(end) - toDate(start)) / 60000) < 0) {
             this.$message.error('异常结束时间早于异常开始时间，请重新录入')
             return 'NaN'

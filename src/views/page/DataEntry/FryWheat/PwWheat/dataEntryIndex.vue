@@ -137,6 +137,7 @@ export default {
     // 获取表头
     GetOrderList () {
       this.isRedact = false
+      this.$refs.pwapplymateriel.GetWheatCangList(this.$store.state.common.FWfactoryid, this.$store.state.common.FWworkShop)
       if (this.orderNo) {
         // 有订单号
         this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {

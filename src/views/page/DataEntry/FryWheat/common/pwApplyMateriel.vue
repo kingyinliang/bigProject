@@ -101,13 +101,28 @@
                 <el-input type="number" v-model.number="scope.row.scrappedWeight" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
               </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               width="140"
               label="发料批次">
               <template slot-scope="scope">
                 <div class="required">
                   <i class="reqI">*</i>
                   <el-input maxlength='10' v-model="scope.row.issueBatch" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                </div>
+              </template>
+            </el-table-column> -->
+            <el-table-column width="100" label="剩余量(KG)">
+              <template slot-scope="scope">
+                {{scope.row.shengyu}}
+              </template>
+            </el-table-column>
+            <el-table-column width="180" label="发料批次">
+              <template slot-scope="scope">
+                <div class="required">
+                  <i class="reqI">*</i>
+                  <el-select @change="changeBatch(scope.row)"  v-model="scope.row.issueBatch" placeholder="请选择发料批次"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
+                    <el-option v-for="(item, index) in CangList" :key="index" :label="item.batch" :value="item.batch" ></el-option>
+                  </el-select>
                 </div>
               </template>
             </el-table-column>
@@ -183,7 +198,9 @@ export default {
       dispatcherCode: '',
       // dispatcherName: '',
       materielDataList: [],
-      readAudit: []
+      readAudit: [],
+      CangList: [],
+      BatchTotal: []
     }
   },
   mounted () {
@@ -198,50 +215,98 @@ export default {
   methods: {
     // 申请订单
     saveOrderMateriel () {
+      for (let sole of this.materielDataList) {
+        if (this.BatchTotal.find((item) => item === sole.issueBatch) === undefined) {
+          this.BatchTotal.push(sole.issueBatch)
+        }
+      }
       if (this.materielDataList.length > 0) {
         // 数据验证
         if (this.validate('apply')) {
-          for (let item of this.materielDataList) {
-            item.status = 'submit'
-            // item.productDate = this.order && this.order.productDate
-          }
-          this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
-            if (data.code === 0) {
-              // 申请订单成功，订单号回写，触发全局刷新
-              this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
-            } else {
-              this.$message.error(data.msg || '申请订单失败，请稍后尝试')
+          let abc = 0
+          this.BatchTotal.map((itemc) => {
+            let shengyu = this.CangList.find((itema) => itema.batch === itemc).currentQuantity
+            let total = 0
+            this.materielDataList.map((items) => {
+              if (itemc === items.issueBatch) {
+                total += items.issueWeight
+              }
+            })
+            if (total > shengyu) {
+              abc = 1
+              this.$message.error(itemc + '批次领取量不能大于剩余量')
+              return false
             }
-          }).catch((error) => {
-            console.log('catch data::', error)
           })
+          if (abc === 1) {
+            return false
+          } else {
+            for (let item of this.materielDataList) {
+              item.status = 'submit'
+              // item.productDate = this.order && this.order.productDate
+            }
+            this.$http(`${WHT_API.MATERIELSAVEORDER_API}`, 'POST', this.materielDataList).then(({data}) => {
+              if (data.code === 0) {
+                // 申请订单成功，订单号回写，触发全局刷新
+                this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
+              } else {
+                this.$message.error(data.msg || '申请订单失败，请稍后尝试')
+              }
+            }).catch((error) => {
+              console.log('catch data::', error)
+            })
+          }
         }
       }
     },
     // 保存/提交
     saveMateriel (resolve) {
       if (this.materielDataList.length > 0) {
-        this.materielDataList.forEach((item) => {
-          // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
-          // if (item.status !== 'submit' || item.status !== 'checked') {
-          //   item.status = 'saved'
-          // }
-          // 新增行赋值saved
-          if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
-            item.status = 'saved'
+        for (let sole of this.materielDataList) {
+          if (this.BatchTotal.find((item) => item === sole.issueBatch) === undefined) {
+            this.BatchTotal.push(sole.issueBatch)
+          }
+        }
+        let abc = 0
+        this.BatchTotal.map((itemc) => {
+          let shengyu = this.CangList.find((itema) => itema.batch === itemc).currentQuantity
+          let total = 0
+          this.materielDataList.map((items) => {
+            if (itemc === items.issueBatch) {
+              total += items.issueWeight
+            }
+          })
+          if (total > shengyu) {
+            abc = 1
+            this.$message.error(itemc + '批次领取量不能大于剩余量')
+            return false
           }
         })
-        this.$http(WHT_API.MATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch((error) => {
-          console.log('catch data::', error)
-        })
+        if (abc === 1) {
+          return false
+        } else {
+          this.materielDataList.forEach((item) => {
+            // 应产品要求，如果对不通过数据做修改保存操作，页签状态还是未通过，故此处不做状态赋值。
+            // if (item.status !== 'submit' || item.status !== 'checked') {
+            //   item.status = 'saved'
+            // }
+            // 新增行赋值saved
+            if (typeof item.status === 'undefined' || item.status == null || item.status.trim() === '') {
+              item.status = 'saved'
+            }
+          })
+          this.$http(WHT_API.MATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
+            if (data.code === 0) {
+            } else {
+              this.$message.error(data.msg)
+            }
+            if (resolve) {
+              resolve('resolve')
+            }
+          }).catch((error) => {
+            console.log('catch data::', error)
+          })
+        }
       } else {
         if (resolve) {
           resolve('resolve')
@@ -351,6 +416,12 @@ export default {
           let che = 0
           let sav = 0
           this.materielDataList.forEach((item) => {
+            let shengyu = this.CangList.find((itema) => itema.batch === item.issueBatch)
+            if (shengyu === undefined) {
+              item.shengyu = 0
+            } else {
+              item.shengyu = shengyu.currentQuantity
+            }
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.status === 'submit') {
@@ -422,7 +493,8 @@ export default {
         changer: user,
         // 申请订单之后订单号回写，再次新增，订单号带过来
         orderId: this.order && this.order.orderId,
-        orderNo: this.order && this.order.orderNo
+        orderNo: this.order && this.order.orderNo,
+        shengyu: last ? last.shengyu : 0
       })
     },
     // 删除
@@ -461,6 +533,23 @@ export default {
       if (issue) {
         row.issueName = issue.value
       }
+    },
+    // 获取粮仓
+    GetWheatCangList (factory, workShop) {
+      this.$http(`${WHT_API.WHEATCANGLIST_API}`, 'POST', {factory: factory, workShop: workShop}).then(({data}) => {
+        if (data.holder) {
+          data.holder.map((item) => {
+            item.wheatData.map((items) => {
+              if (this.CangList.find((itema) => itema.batch === items.batch) === undefined) {
+                this.CangList.push(items)
+              }
+            })
+          })
+        }
+      })
+    },
+    changeBatch (row) {
+      row.shengyu = this.CangList.find(item => item.batch === row.issueBatch).currentQuantity
     }
   },
   computed: {

@@ -131,7 +131,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            this.formHeader.workShop = data.typeList[0].deptId
+            if (data.typeList.length > 0) {
+              this.formHeader.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }

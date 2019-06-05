@@ -17,12 +17,12 @@
               <el-form-item>
                 <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:sapGranaryMaterial:list')">查询</el-button>
                 <el-button type="primary" size="small" @click="visible1 = true" v-if="isAuth('sys:sapGranaryMaterial:list')">高级查询</el-button>
-                <el-button type="primary" size="small" @click="addLocation()">同步</el-button>
+                <el-button type="primary" size="small" @click="DataSynchronism()" v-if="isAuth('sys:sapGranaryMaterial:syncInstorageManual')">同步</el-button>
               </el-form-item>
             </el-form>
           </el-row>
         </div>
-        <el-row>
+        <el-row v-loading.fullscreen.lock="loading" element-loading-text="正在同步中">
           <el-table
             ref="table1"
             header-row-class-name="tableHead"
@@ -96,6 +96,7 @@ export default {
   name: 'RawMaterial',
   data () {
     return {
+      loading: false,
       visible1: false,
       form: {
         bath: '',
@@ -116,7 +117,7 @@ export default {
     }
   },
   mounted () {
-    // this.GetList()
+    this.GetList()
   },
   methods: {
     // 获取库位列表
@@ -160,6 +161,44 @@ export default {
     handleCurrentChange (val) {
       this.currPage = val
       this.GetList()
+    },
+    // 数据同步
+    DataSynchronism () {
+      this.loading = true
+      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISM_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          this.orderTime = setInterval(() => {
+            this.GetDataSynchronismStatus()
+          }, 4000)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
+    GetDataSynchronismStatus () {
+      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISMSTASUS_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          if (data.asyncRecord) {
+            if (data.asyncRecord.asyncStatus === '0') {
+              this.loading = false
+              clearInterval(this.orderTime)
+              this.$message.error('同步失败')
+            } else if (data.asyncRecord.asyncStatus === '1') {
+              this.loading = false
+              clearInterval(this.orderTime)
+              this.$message.success('同步成功')
+              this.GetList()
+            }
+          }
+        } else {
+          this.loading = false
+          clearInterval(this.orderTime)
+          this.$message.error(data.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+        clearInterval(this.orderTime)
+      })
     }
   },
   computed: {},

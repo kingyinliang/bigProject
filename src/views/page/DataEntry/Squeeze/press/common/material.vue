@@ -78,7 +78,7 @@
         <el-table-column label="终压时间(H)" prop="pressTime" width="110px" :key="Math.random()"></el-table-column>
         <el-table-column label="终止压力(Mpa)" width="180px" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.Press" size="small"></el-input>
+            <el-input v-model="scope.row.Press" size="small" :disabled="!isRedact"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="调压人员" width="150px" :show-overflow-tooltip="true" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
@@ -96,7 +96,7 @@
         <el-table-column width="180px" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
           <template slot="header"><i class="reqI">*</i><span>压榨二碎布数（个）</span></template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.destoryNum" size="small"></el-input>
+            <el-input v-model="scope.row.destoryNum" size="small" :disabled="!isRedact"></el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -345,3 +345,20 @@ export default {
   }
 }
 </script>
+
+<style>
+.dialog-footer .el-button--primary:focus{
+  color: #000000;
+  background-color: #FFFFFF;
+  border-color: #D9D9D9;
+}
+.dialog-footer .el-button--primary:hover{
+  background-color: #1890FF;
+  color: #FFFFFF
+}
+.dialog-footer .el-button--primary{
+  background-color: #1890FF;
+  color: #FFFFFF;
+  border-color: #1890FF;
+}
+</style>

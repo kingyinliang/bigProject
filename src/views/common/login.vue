@@ -150,7 +150,6 @@ export default {
             username: this.ruleForm2.user,
             password: this.ruleForm2.pass
           }).then(res => {
-            console.log(res)
             if (res.data.code === 0) {
               this.$cookie.set('token', res.data.Authorization)
               this.mainTabs = []

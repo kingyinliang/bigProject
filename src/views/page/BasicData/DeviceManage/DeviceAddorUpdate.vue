@@ -53,7 +53,6 @@ export default {
         this.submitType = false
         if (this.id) {
           this.$http(`${BASICDATA_API.DEVICEUPDATE_API}`, 'POST', this.form).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 message: '操作成功',
@@ -72,7 +71,6 @@ export default {
           })
         } else {
           this.$http(`${BASICDATA_API.DEVICEADD_API}`, 'POST', this.form).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 message: '操作成功',

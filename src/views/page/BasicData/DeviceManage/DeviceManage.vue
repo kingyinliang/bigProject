@@ -124,7 +124,6 @@ export default {
     // 获取组织结构树
     getTree () {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
@@ -194,7 +193,6 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http(`${BASICDATA_API.DEVICEDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 type: 'success',

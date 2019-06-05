@@ -175,7 +175,6 @@ export default {
             })
           } else {
             this.submitType = true
-            console.log('error submit!!')
             return false
           }
         })
