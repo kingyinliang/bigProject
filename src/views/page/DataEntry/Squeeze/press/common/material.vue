@@ -345,3 +345,20 @@ export default {
   }
 }
 </script>
+
+<style>
+.dialog-footer .el-button--primary:focus{
+  color: #000000;
+  background-color: #FFFFFF;
+  border-color: #D9D9D9;
+}
+.dialog-footer .el-button--primary:hover{
+  background-color: #1890FF;
+  color: #FFFFFF
+}
+.dialog-footer .el-button--primary{
+  background-color: #1890FF;
+  color: #FFFFFF;
+  border-color: #1890FF;
+}
+</style>
