@@ -80,7 +80,7 @@
                   <el-table-column label="操作" width="150" fixed="right">
                     <template slot-scope="scope">
                       <el-button type="primary" size="small" @click="showLog(scope.row)">查看</el-button>
-                      <el-button type="primary" size="small" @click="makeAdjust">调整</el-button>
+                      <el-button type="primary" size="small" @click="makeAdjust(scope.row)">调整</el-button>
                     </template>
                   </el-table-column>
                 </el-table>

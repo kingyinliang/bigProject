@@ -34,7 +34,7 @@
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / 300}%`}"></div>
+                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / (item.holderHold*1)}%`}"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
@@ -95,9 +95,6 @@ export default {
       if (!this.plantList.factory) {
         this.$message.error('请选择工厂')
         return
-      } else if (!this.plantList.workshop) {
-        this.$message.error('请选择车间')
-        return
       }
       this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}?deptId=${this.plantList.workshop}&flag=012`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
@@ -114,8 +111,7 @@ export default {
     goBeanPulpDetail (item) {
       this.BeanPulp = {
         holderId: item.holderId,
-        factory: this.plantList.factory,
-        deptId: this.plantList.workshop
+        factory: this.plantList.factory
       }
       this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Granary-BeanPulp-dataEntryIndex')
       setTimeout(() => {
