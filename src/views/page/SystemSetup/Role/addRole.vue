@@ -56,7 +56,6 @@ export default {
       if (this.type) {
         this.type = false
         this.$http(`${this.roleId ? SYSTEMSETUP_API.ROLEUPDATE_API : SYSTEMSETUP_API.ROLEADD_API}`, 'POST', this.dataForm).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$message({
               message: '操作成功',

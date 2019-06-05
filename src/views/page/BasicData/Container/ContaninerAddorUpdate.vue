@@ -162,7 +162,6 @@ export default {
         }
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}).then(({data}) => {
           if (data.code === 0) {
-            console.log('------------------------------------------------------', data.typeList.length)
             this.workshop = data.typeList
           } else {
             this.$message.error(data.msg)
@@ -224,7 +223,6 @@ export default {
             }
           } else {
             this.submitType = true
-            console.log('error submit!!')
             return false
           }
         })
@@ -233,12 +231,10 @@ export default {
   },
   watch: {
     'dataForm.factory' (n) {
-      console.log('****************1*********************')
       this.Getdeptcode(n, false)
       this.getDictList(n)
     },
     'workshop' (n) {
-      console.log('****************2*********************')
     }
   },
   computed: {},

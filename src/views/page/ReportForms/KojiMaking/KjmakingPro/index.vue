@@ -242,7 +242,7 @@ export default class Index extends Vue {
         this.$message.error(res.data.msg)
       }
     }).catch(err => {
-      console.log('catch data::', err)
+      console.error(err)
     })
   }
   // 改变每页条数

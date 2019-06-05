@@ -302,7 +302,6 @@ export default {
               })
             }
           })
-          console.log(this.materielDataListArray)
           if (no > 0) {
             inState = 'noPass'
           } else if (sub > 0) {
@@ -451,7 +450,6 @@ export default {
           }
           let abc
           abc = this.cang.currentQuantity + this.materielDataListArray.find((items) => items.batch === this.cang.batch).quantotal
-          console.log(abc)
           if ((this.cang.wheatWeight + total) > abc) {
             this.$message.error('领用数大于该批次剩余量')
             return false

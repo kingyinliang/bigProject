@@ -198,7 +198,6 @@ export default {
         currPage: this.currPage,
         pageSize: this.pageSize
       }).then(({data}) => {
-        console.log(data)
         this.visible = false
         this.visible1 = false
         if (data.code === 0) {

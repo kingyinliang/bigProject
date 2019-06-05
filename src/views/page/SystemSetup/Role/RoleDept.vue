@@ -38,7 +38,6 @@ export default {
     init (id) {
       this.roleId = id
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: '1'}).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
         } else {
@@ -49,7 +48,6 @@ export default {
         this.$http(`${SYSTEMSETUP_API.LISTDEPT_API}`, 'POST', {
           roleId: id
         }).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$refs.deptListTree.setCheckedKeys(data.list)
           } else {
@@ -66,7 +64,6 @@ export default {
           roleId: this.roleId,
           deptId: [[].concat(this.$refs.deptListTree.getCheckedKeys()), [].concat(this.$refs.deptListTree.getHalfCheckedKeys())]
         }).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$message({
               message: '操作成功',
