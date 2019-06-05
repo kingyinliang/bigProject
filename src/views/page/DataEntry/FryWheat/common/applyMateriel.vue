@@ -4,88 +4,53 @@
     <!--数据录入-->
     <el-row>
       <el-col :span="24">
+        <el-row :gutter="10">
+          <el-col :span="12" v-for="(sole, index) in WheatCangList" :key="index">
+            <el-card class="Card_item">
+              <div slot="header">小麦罐号：{{sole.holderName}} <el-button type="primary" size="small" @click="Receive(sole.holderName, sole.holderId)" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'" style="float:right; margin-top:-8px;">立即领用</el-button></div>
+              <div style="display: flex">
+                <div class="Card_item_img">
+                  <div class="Card_item_img_box">
+                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                  </div>
+                  <img src="@/assets/img/granary.png" alt="">
+                </div>
+                <div class="Card_item_text">
+                  <el-card style="margin-top: 25px">
+                    <div slot="header">库存明细 <span style="float: right">合计：{{sole.cangtotal}}KG</span></div>
+                    <div style="position: relative">
+                      <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
+                        <el-col :span="17">批次</el-col>
+                        <el-col :span="7">数量</el-col>
+                      </el-row >
+                      <div class="Card_item_text_box_bg1"></div>
+                      <div class="Card_item_text_box">
+                        <el-row class="Card_item_text_item" v-for="(soles, indexs) in sole.wheatData" :key="indexs">
+                          <el-col :span="17">{{soles.batch}}</el-col>
+                          <el-col :span="7">{{soles.currentQuantity}}KG</el-col>
+                        </el-row>
+                      </div>
+                      <div class="Card_item_text_box_bg2"></div>
+                    </div>
+                  </el-card>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+<!-- <el-button @click="Receive(sole.holderName, sole.holderId)" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'">立即领用</el-button>
+-->
+        </el-row>
         <el-card body-style="padding-top:10px;">
-          <div class="clearfix topBox">
-            <div class="btn" style="margin-bottom:8px;">
-              <el-button  style="float:right;"  type="primary" @click="addNewRecord()" size="small" :disabled="!isRedact || applyMaterielState == 'submit' || applyMaterielState == 'checked'">新增</el-button>
-              <!-- <el-button  style="float:right;"  type="primary" @click="saveMaterielList()" size="small" >baocun</el-button>
-              <el-button  style="float:right;"  type="primary" @click="submitMaterielList()" size="small" >tijiao</el-button> -->
-              <div class='clearfix'></div>
-            </div>
-          </div>
-          <el-table
-            ref="table1"
-            header-row-class-name="tableHead"
-            :data="materielDataList"
-            :row-class-name="rowDelFlag"
-            border
-            tooltip-effect="dark"
-            style="width: 100%;  margin-bottom: 20px">
-            <el-table-column
-              label="物料"
-              width="220">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-select @change="changeProduct(scope.row)"  v-model="scope.row.materialCode" value-key="materialCode" placeholder="请选择物料"  :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in materialDictList" :key="index" :label="item.code + ' ' + item.value" :value="item.code" ></el-option>
-                  </el-select>
-                </div>
-              </template>
+          <el-table ref="table1" header-row-class-name="tableHead" :data="materielDataList" @row-dblclick="EditReceive" :row-class-name="rowDelFlag" border tooltip-effect="dark" style="width: 100%;  margin-bottom: 20px">
+            <el-table-column label="物料">
+              <template slot-scope="scope">{{scope.row.materialCode}} {{scope.row.materialName}}</template>
             </el-table-column>
-            <el-table-column
-              label="粮仓"
-              :show-overflow-tooltip="true"
-              width="200">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-select @change="changeWheatContainer(scope.row)"  v-model="scope.row.deviceId" value-key="deviceId" placeholder="请选择粮仓" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small">
-                    <el-option v-for="(item, index) in wheatContainerList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
-                  </el-select>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="180"
-              label="物料批次">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input v-model="scope.row.batch" maxlength='10' size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="160"
-              label="小麦领用数">
-              <template slot-scope="scope">
-                <div class="required">
-                  <i class="reqI">*</i>
-                  <el-input type='number' v-model.number="scope.row.wheatWeight" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="单位"
-              width="80">
-              <template slot-scope="scope">
-                <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                <span>{{ scope.row.weightUnit = 'KG'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="备注"
-              width="160">
-              <template slot-scope="scope">
-                <!--<span>{{scope.row.expContinue = (scope.row.expEndDate-scope.row.expStartDate)/60000}}</span>-->
-                <el-input v-model.trim="scope.row.remark" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'" placeholder="手工录入"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="60">
+            <el-table-column label="粮仓" :show-overflow-tooltip="true" prop="holderName"></el-table-column>
+            <el-table-column label="物料批次" prop="batch"></el-table-column>
+            <el-table-column width="160" label="小麦领用数" prop="wheatWeight"></el-table-column>
+            <el-table-column label="单位" width="120" prop="weightUnit"></el-table-column>
+            <!-- <el-table-column label="备注" width="160" prop="remark"></el-table-column> -->
+            <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)"></el-button>
               </template>
@@ -105,9 +70,31 @@
         <auditLog :tableData="readAudit"></auditLog>
       </el-col>
     </el-row>
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="450px">
+      <el-form :model="cang" size="small" :rules="cangrules" ref="cang">
+        <el-form-item label="领用粮仓：" :label-width="formLabelWidth">{{cang.holderName}}</el-form-item>
+        <el-form-item label="批次：" :label-width="formLabelWidth" prop="batch">
+          <el-select v-model="cang.batch">
+            <el-option v-for="(sole, index) in piciList" :label="sole.batch" :value="sole.batch" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="物料：" :label-width="formLabelWidth">{{cang.materialCode}} {{cang.materialName}}</el-form-item>
+        <el-form-item label="剩余量：" :label-width="formLabelWidth">{{cang.currentQuantity}}</el-form-item>
+        <el-form-item label="数量：" :label-width="formLabelWidth" prop="wheatWeight">
+          <el-input v-model.number="cang.wheatWeight" @keyup.native="proving1"></el-input>
+        </el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{cang.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{cang.changer}}</el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="DialogSave('cang')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+import { dateFormat } from '@/net/validate'
 import { WHT_API, BASICDATA_API, SYSTEMSETUP_API } from '@/api/api'
 export default {
   data () {
@@ -115,13 +102,33 @@ export default {
       materialDictList: [],
       wheatContainerList: [],
       readAudit: [],
-      materielDataList: []
+      materielDataList: [],
+      WheatCangList: [],
+      dialogFormVisible: false,
+      dialogTitle: '',
+      formLabelWidth: '100px',
+      cang: {},
+      cangrules: {
+        batch: [
+          {required: true, message: '请选择批次', trigger: 'change'}
+        ],
+        wheatWeight: [
+          {required: true, message: '请填写数量', trigger: 'blur'},
+          {type: 'number', message: '必须为数字'}
+        ]
+      },
+      piciList: {},
+      materielDataListArray: [{
+        batch: '',
+        quantotal: 0
+      }]
     }
   },
   mounted () {
     this.getMaterialDictList()
     this.getWheatContainerList()
     // this.getMaterielDataList()
+    // this.GetWheatCang()
   },
   props: {
     isRedact: Boolean,
@@ -166,6 +173,8 @@ export default {
           if (item.status !== 'checked') {
             item.status = 'submit'
           }
+          item.factory = this.order.factory
+          item.workShop = this.order.workShop
         })
         this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
@@ -283,7 +292,17 @@ export default {
             } else if (item.status === 'saved') {
               sav = sav + 1
             }
+            // 获取每个批次当前在list中使用的总和
+            if (this.materielDataListArray.find((items) => items.batch === item.batch)) {
+              this.materielDataListArray.find((items) => items.batch === item.batch).quantotal += item.wheatWeight
+            } else {
+              this.materielDataListArray.push({
+                batch: item.batch,
+                quantotal: item.wheatWeight
+              })
+            }
           })
+          console.log(this.materielDataListArray)
           if (no > 0) {
             inState = 'noPass'
           } else if (sub > 0) {
@@ -348,7 +367,7 @@ export default {
       if (ele) {
         row.materialName = ele.value
       }
-    }
+    },
     // saveOrSubmitMateriel (str, resolve) {
     //   if (this.materielDataList.length > 0) {
     //     console.log(this.materielDataList)
@@ -357,6 +376,109 @@ export default {
     //     }
     //   }
     // }
+    // 粮仓列表
+    GetWheatCang () {
+      this.$http(`${WHT_API.WHEATCANGLIST_API}`, 'POST', {factory: this.order.factory, workShop: this.order.workShop}).then(({data}) => {
+        if (data.code === 0) {
+          this.WheatCangList = data.holder
+          this.WheatCangList.map((item) => {
+            item.cangtotal = 0
+            item.wheatData.map((items) => {
+              item.cangtotal = item.cangtotal + items.currentQuantity
+              this.materielDataListArray.push({
+                batch: items.batch,
+                quantotal: 0
+              })
+            })
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 立即领用弹框
+    Receive (holderName, holderId) {
+      this.cang = {}
+      this.dialogTitle = holderName + '领用'
+      this.dialogFormVisible = true
+      this.piciList = this.WheatCangList.find(item => item.holderId === holderId).wheatData
+      this.cang = {
+        uid: this.uuid(),
+        id: '',
+        orderId: this.order.orderId,
+        deviceId: holderId,
+        holderName: holderName,
+        weightUnit: 'KG',
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        remark: '',
+        delFlag: '0'
+      }
+    },
+    // 修改弹框
+    EditReceive (row) {
+      if (this.isRedact) {
+        this.dialogFormVisible = true
+        this.piciList = this.WheatCangList.find(item => item.holderId === row.deviceId).wheatData
+        let picisole = this.piciList.find(item => item.batch === row.batch)
+        row.currentQuantity = picisole.currentQuantity
+        this.cang = Object.assign({}, row)
+      }
+    },
+    // 立即领用弹框保存
+    DialogSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 领用数是否大于剩余量
+          let total = 0
+          let currentRecord = []
+          if (this.cang.hasOwnProperty('uid')) {
+            // 新增行
+            this.materielDataList.map((item) => {
+              if (item.delFlag === '0' && (item.batch === this.cang.batch) && (item.uid !== this.cang.uid)) {
+                total += item.wheatWeight
+              }
+            })
+            currentRecord = this.materielDataList.filter(data => data.uid === this.cang.uid)
+          } else {
+            // 原有行
+            this.materielDataList.map((item) => {
+              if (item.delFlag === '0' && (item.batch === this.cang.batch) && (item.id !== this.cang.id)) {
+                total = total + item.wheatWeight
+              }
+            })
+            currentRecord = this.materielDataList.filter(data => data.id === this.cang.id)
+          }
+          let abc
+          abc = this.cang.currentQuantity + this.materielDataListArray.find((items) => items.batch === this.cang.batch).quantotal
+          console.log(abc)
+          if ((this.cang.wheatWeight + total) > abc) {
+            this.$message.error('领用数大于该批次剩余量')
+            return false
+          }
+          if (currentRecord && currentRecord.length > 0) {
+            Object.assign(currentRecord[0], {
+              batch: this.cang.batch,
+              currentQuantity: this.cang.currentQuantity,
+              wheatWeight: this.cang.wheatWeight
+            })
+          } else {
+            this.materielDataList.push(this.cang)
+          }
+          this.dialogFormVisible = false
+          // this.$nextTick(()=>{
+          //   this.$refs[formName].resetFields()
+          // })
+        } else {
+          return false
+        }
+      })
+    },
+    proving1 () {
+      // this.cang.wheatWeight = this.cang.wheatWeight.replace(/[^\.\d]/g, '')
+      this.cang.wheatWeight = this.cang.wheatWeight.replace('.', '')
+      this.cang.wheatWeight = this.cang.wheatWeight.replace('-', '')
+    }
   },
   computed: {
     totalInstock: function () {
@@ -370,6 +492,12 @@ export default {
     }
   },
   watch: {
+    'cang.batch' () {
+      let picisole = this.piciList.find(item => item.batch === this.cang.batch)
+      this.cang.materialCode = picisole.materialCode
+      this.cang.materialName = picisole.materialName
+      this.cang.currentQuantity = picisole.currentQuantity
+    }
   },
   components: {
     AuditLog: resolve => {
@@ -379,5 +507,122 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.Card_item{
+  .el-card__header{
+    padding: 15px 20px;
+    font-size: 16px;
+    color: #666;
+  }
+  &_detail{
+    float: right;
+    cursor: pointer;
+    color: #1890FF;
+  }
+  &_img{
+    width: 250px;
+    position: relative;
+    img{
+      width: 250px;
+    }
+    &_box{
+      width: 89px;
+      height: 161px;
+      position: absolute;
+      left: 83px;
+      top: 33px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-end;
+      &_bg{
+        flex: 1;
+        height: 161px;
+        align-items: center;
+        position: relative;
+        background: linear-gradient(#35C3FF,#1890FF);
+        overflow: hidden;
+        &:hover{
+          &::before,&::after{
+            animation: roateOne 10s linear infinite;
+          }
+        }
+        &::before,&::after{
+          content: "";
+          position: absolute;
+          left: 50%;
+          min-width: 155px;
+          min-height: 145px;
+          background: #fff;
+          animation: roateTwo 10s linear infinite;
+        }
+
+        &::before {
+          top: -138px;
+          border-radius: 45%;
+        }
+        &::after {
+          top: -132px;
+          opacity: 0.5;
+          border-radius: 47%;
+        }
+      }
+    }
+  }
+  &_text{
+    flex: 1;
+    .el-card__header{
+      font-size: 14px;
+      padding: 10px 12px;
+      background: #1890FF;
+      color: white;
+    }
+    &_box{
+      position: relative;
+      padding-bottom: 6px;
+      max-height: 180px;
+      overflow: scroll;
+      &_bg1,&_bg2{
+        position: absolute;
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+        z-index: 999;
+      }
+      &_bg2{
+        bottom: 0;
+        background: linear-gradient(rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+      }
+    }
+    .Card_item_text_box::-webkit-scrollbar {
+      display: none;
+    }
+    &_item{
+      color: #4A4A4A;
+      font-size: 14px;
+      padding-top: 10px;
+    }
+  }
+}
+@keyframes roateOne {
+  0% {
+    transform: translate(-50%, -0%) rotateZ(0deg);
+  }
+  50% {
+    transform: translate(-50%, -1%) rotateZ(180deg);
+  }
+  100% {
+    transform: translate(-50%, -0%) rotateZ(360deg);
+  }
+}
+@keyframes roateTwo {
+  0% {
+    transform: translate(-50%, -0%) rotateZ(0deg);
+  }
+  50% {
+    transform: translate(-50%, -0%) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -0%) rotateZ(0deg);
+  }
+}
 </style>
