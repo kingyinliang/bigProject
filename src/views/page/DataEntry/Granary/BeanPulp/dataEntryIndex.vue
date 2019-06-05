@@ -106,37 +106,37 @@
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
                   <el-table-column label="物料" :show-overflow-tooltip="true"  width="200">
                     <template slot-scope="scope">
-                      M397232090 小麦
+                      {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
                     <template slot-scope="scope">
-                      830030009030203
+                      {{scope.row.batch}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整类型" :show-overflow-tooltip="true" width="100">
                     <template slot-scope="scope">
-                      盘赢
+                      {{scope.row.adjustType === '0' ? '盘盈' : '盘亏'}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="数量(t)" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="数量" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      2000
+                      {{scope.row.quantity + ' ' + scope.row.unit}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
                     <template slot-scope="scope">
-                      手机打开数据丢失看
+                      {{scope.row.remark}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整时间" >
                     <template slot-scope="scope">
-                      2019-09-01 21:00:00
+                      {{scope.row.adjustTime}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整人" >
                     <template slot-scope="scope">
-                      张三(198290010)
+                      {{scope.row.adjuster}}
                     </template>
                   </el-table-column>
                 </el-table>
@@ -185,7 +185,7 @@
             </el-table-column>
             <el-table-column label="领用时间">
               <template slot-scope="scope">
-                {{scope.row.created}}
+                {{scope.row.changed}}
               </template>
             </el-table-column>
           </el-table>
