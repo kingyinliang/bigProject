@@ -329,6 +329,7 @@ export default class Index extends Vue {
   adjust () {
     Vue.prototype.$http(`${GRA_API.BATCHADJUST_API}`, `POST`, {
       holderId: this.holderId,
+      factory: this.$store.state.common.BeanPulp.factory,
       currPage: this.adjParms.currPage + '',
       pageSize: this.adjParms.pageSize + '',
       totalCount: this.adjParms.totalCount + ''
