@@ -186,7 +186,6 @@ export default {
       this.form.currPage = JSON.stringify(this.currPage)
       this.form.pageSize = JSON.stringify(this.pageSize)
       this.$http(`${BASICDATA_API.ORDERLIST_API}`, 'POST', this.form).then(({data}) => {
-        console.log(data)
         this.loading = false
         if (data.code === 0) {
           this.sapOrderlist = data.page.list

@@ -56,7 +56,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http(`${MAIN_API.LOGOUT_API}`, 'POST', {}).then(({data}) => {
-          console.log(data)
           if (data && data.code === 0) {
             this.$cookie.delete('token')
             this.$router.options.isAddDynamicMenuRoutes = false

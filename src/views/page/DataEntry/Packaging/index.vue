@@ -121,7 +121,6 @@ export default {
     // 获取车间
     Getdeptbyid (id, typ) {
       this.plantList.workShop = ''
-      console.log(this.plantList.workShop)
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {

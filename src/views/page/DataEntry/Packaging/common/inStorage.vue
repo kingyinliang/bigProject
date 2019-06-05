@@ -368,10 +368,6 @@ export default {
   },
   mounted () {
     // this.GetProductShift()
-    let that = this
-    setTimeout(() => {
-      console.log(that.InDate)
-    }, 10000)
   },
   methods: {
     // 修改生产入库

@@ -92,7 +92,6 @@ export default {
   },
   mounted () {
     this.menuList = JSON.parse(window.sessionStorage.getItem('menuList'))
-    console.log(this.menuList)
     this.active = this.$route.path.substring(1, this.$route.path.length)
   },
   methods: {

@@ -141,7 +141,6 @@ export default {
         currPage: JSON.stringify(this.currPage),
         pageSize: JSON.stringify(this.pageSize)
       }).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.role = data.page.list
           this.currPage = data.page.currPage
@@ -192,7 +191,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.ROLEDEL_API}`, 'POST', {roleId: id}).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$message({
               type: 'success',

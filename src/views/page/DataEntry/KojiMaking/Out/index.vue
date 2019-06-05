@@ -241,8 +241,6 @@ export default {
       this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     SetMeaterielNum (num) {
-      console.log('父组件')
-      console.log(num)
       // this.$refs.outtech.GetsaltWaterUsed(num)
       this.$refs.outinstorage.setBrineNum(num)
     },

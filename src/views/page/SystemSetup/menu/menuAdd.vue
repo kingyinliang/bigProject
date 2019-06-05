@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     init (id) {
-      console.log(id)
       this.$http(`${SYSTEMSETUP_API.MENUSELECT_API}`, 'GET', {}).then(({data}) => {
         this.menuList = treeDataTranslate(data.menuList, 'menuId')
       }).then(() => {
