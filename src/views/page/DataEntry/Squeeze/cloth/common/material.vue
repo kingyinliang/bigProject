@@ -214,7 +214,7 @@ export default {
   methods: {
     // 酱醪列表
     GetsauceClass (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YZ_ZUJIAN_MATERIAL'}).then(({data}) => {
         if (data.code === 0) {
           this.sauceClassList = data.dicList
         } else {
@@ -370,6 +370,8 @@ export default {
         if (data.code === 0) {
           if (data.prspro.length !== 0) {
             this.formHeader.id = data.prspro[0].id
+          } else {
+            this.formHeader.id = ''
           }
           this.materialList = data.propulp
           this.peopleList = data.propulpMan
@@ -443,19 +445,6 @@ export default {
           }
         }
       })
-      if (this.formHeader.clickstatus === 'submit') {
-        this.multipleSelection.map((item) => {
-          this.$set(item, 'processId', this.formHeader.id)
-          this.$set(item, 'productLine', this.formHeader.productLine)
-          this.$set(item, 'status', this.formHeader.clickstatus)
-        })
-        this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      }
       this.$http(`${SQU_API.CLOTHMATERIALSAVE_API}`, 'POST', this.materialList).then(({data}) => {
         if (data.code === 0) {
         } else {
@@ -469,6 +458,19 @@ export default {
           reject('reject')
         }
       })
+      if (this.formHeader.clickstatus === 'submit') {
+        this.multipleSelection.map((item) => {
+          this.$set(item, 'processId', this.formHeader.id)
+          this.$set(item, 'productLine', this.formHeader.productLine)
+          this.$set(item, 'status', this.formHeader.clickstatus)
+        })
+        this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     savepeople (resolve, reject) {
       this.peopleList.map((item) => {
