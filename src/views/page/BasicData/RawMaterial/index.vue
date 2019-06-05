@@ -117,7 +117,7 @@ export default {
     }
   },
   mounted () {
-    // this.GetList()
+    this.GetList()
   },
   methods: {
     // 获取库位列表
