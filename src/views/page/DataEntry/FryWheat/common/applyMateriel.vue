@@ -79,9 +79,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="物料：" :label-width="formLabelWidth">{{cang.materialCode}} {{cang.materialName}}</el-form-item>
-        <el-form-item label="剩余量：" :label-width="formLabelWidth">{{cang.currentQuantity}}</el-form-item>
-        <el-form-item label="数量：" :label-width="formLabelWidth" prop="wheatWeight">
-          <el-input v-model.number="cang.wheatWeight" @keyup.native="proving1"></el-input>
+        <el-form-item label="剩余量（KG）：" :label-width="formLabelWidth">{{cang.currentQuantity}}</el-form-item>
+        <el-form-item label="数量（KG）：" :label-width="formLabelWidth" prop="wheatWeight">
+          <el-input v-model.number="cang.wheatWeight" @keyup.native="proving1" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{cang.changed}}</el-form-item>
         <el-form-item label="操作人：" :label-width="formLabelWidth">{{cang.changer}}</el-form-item>
@@ -106,7 +106,7 @@ export default {
       WheatCangList: [],
       dialogFormVisible: false,
       dialogTitle: '',
-      formLabelWidth: '100px',
+      formLabelWidth: '150px',
       cang: {},
       cangrules: {
         batch: [
