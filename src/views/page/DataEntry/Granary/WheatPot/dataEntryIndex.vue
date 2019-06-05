@@ -104,7 +104,7 @@
                       {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="140">
                     <template slot-scope="scope">
                       {{scope.row.batch}}
                     </template>
@@ -293,7 +293,7 @@ export default class Index extends Vue {
       HOLDER_ID: row.holderId,
       ADJUST_TYPE: '0',
       QUANTITY: 0,
-      UNIT: 'KG',
+      UNIT: row.unit,
       REMARK: ''
     }
     this.dialogFormVisible2 = true
