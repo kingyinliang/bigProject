@@ -34,7 +34,7 @@
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" :style="`height:${dataList[index].total/5000}%`"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${Math.min(dataList[index].total/5000,100)}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
@@ -66,7 +66,7 @@
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" :style="`height:${dataList[index + 1].total/5000}%`"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${Math.min(dataList[index + 1].total/5000, 100)}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
