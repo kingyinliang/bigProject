@@ -40,17 +40,17 @@
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index].total + dataList[index].unit}}</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index].total.toLocaleString() + ' ' + dataList[index].unit}}</span></div>
                     <div style="position: relative" >
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="12">批次</el-col>
+                        <el-col :span="12">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index].stocks" :key="index1">
-                          <el-col :span="17">{{item1.batch}}</el-col>
-                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
+                          <el-col :span="12">{{item1.batch}}</el-col>
+                          <el-col :span="12">{{(item1.currentQuantity ? item1.currentQuantity.toLocaleString() : '') + ' ' + item1.unit}}</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -72,17 +72,17 @@
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index + 1].total + dataList[index + 1].unit}}</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index + 1].total.toLocaleString() + ' ' + dataList[index + 1].unit}}</span></div>
                     <div style="position: relative" >
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="12">批次</el-col>
+                        <el-col :span="12">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index + 1].stocks" :key="index1">
-                          <el-col :span="17">{{item1.batch}}</el-col>
-                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
+                          <el-col :span="12">{{item1.batch}}</el-col>
+                          <el-col :span="12">{{(item1.currentQuantity ? item1.currentQuantity.toLocaleString() : '') + ' ' + item1.unit}}</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>

@@ -23,13 +23,13 @@
                   <p class="header-form_input">{{formData.holderName ? formData.holderName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="罐体容量：">
-                  <p class="header-form_input">{{formData.capacity ? formData.capacity : ''}}KG</p>
+                  <p class="header-form_input">{{formData.capacity ? formData.capacity.toLocaleString() : ''}} KG</p>
                 </el-form-item>
                 <el-form-item label="物料编码：">
                   <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">{{total}}KG</p>
+                  <p class="header-form_input">{{total}} KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -73,14 +73,14 @@
                       {{scope.row.postingDate}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="入库数量" :show-overflow-tooltip="true" width="160" >
+                  <el-table-column label="入库数量(KG)" :show-overflow-tooltip="true" width="160" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity + scope.row.unit}}
+                      {{(scope.row.quantity? scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="当前数量" width="160">
+                  <el-table-column label="当前数量(KG)" width="160">
                     <template slot-scope="scope">
-                      {{(scope.row.currentQuantity ? scope.row.currentQuantity : '') + scope.row.unit}}
+                      {{(scope.row.currentQuantity ? scope.row.currentQuantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
                   <el-table-column label="操作" >
@@ -125,9 +125,9 @@
                       {{scope.row.adjustType === '0' ? '盘盈' : '盘亏'}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="数量" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="数量(KG)" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity + scope.row.unit}}
+                      {{(scope.row.quantity?scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
@@ -179,9 +179,9 @@
                 {{scope.row.batch}}
               </template>
             </el-table-column>
-            <el-table-column label="领用量" :show-overflow-tooltip="true" width="100">
+            <el-table-column label="领用量(KG)" :show-overflow-tooltip="true" width="100">
               <template slot-scope="scope">
-                {{scope.row.wheatWeight + scope.row.weightUnit}}
+                {{(scope.row.wheatWeight? scope.row.wheatWeight.toLocaleString() : '')}}
               </template>
             </el-table-column>
             <el-table-column label="领用订单" :show-overflow-tooltip="true" width="150" >
@@ -434,7 +434,7 @@ export default class Index extends Vue {
     this.dialogFormVisible2 = false
   }
   get total () {
-    return this.totalDataList.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0)
+    return this.totalDataList.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0).toLocaleString()
   }
 }
 </script>
