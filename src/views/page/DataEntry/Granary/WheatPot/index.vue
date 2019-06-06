@@ -30,11 +30,11 @@
         <el-row :gutter="10" v-for="(item, index) in dataList" :key="index" v-if="index%2===0" style="margin-top:10px;">
           <el-col :span="12" v-if="index < dataList.length">
             <el-card class="Card_item" >
-              <div slot="header">小麦罐号：{{dataList[index].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index].holderId)">详情>></span></div>
+              <div slot="header">小麦罐号：{{dataList[index].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index].holderId, dataList[index].holderName)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${dataList[index].total/5000}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
@@ -62,11 +62,11 @@
           </el-col>
           <el-col :span="12" v-if="index + 1 < dataList.length">
             <el-card class="Card_item" >
-              <div slot="header">小麦罐号：{{dataList[index + 1].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index + 1].holderId)">详情>></span></div>
+              <div slot="header">小麦罐号：{{dataList[index + 1].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index + 1].holderId, dataList[index + 1].holderName)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${dataList[index + 1].total/5000}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
@@ -196,18 +196,17 @@ export default class Index extends Vue {
       }
     })
   }
-  goDetail (holderId) {
-    let params = {
-      factoryId: this.params.factoryId,
-      holderId: holderId
-    }
-    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex', params)
+  goDetail (holderId, holderName) {
+    this.params.holderId = holderId
+    this.params.holderName = holderName
+    this.setStore(this.params)
+    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex')
   }
-  pushPage (name, params) {
+  pushPage (name) {
     this.mainTabs = this.mainTabs.filter(item => item.name !== name)
     let that = this
     setTimeout(function () {
-      that.$router.push({name, params})
+      that.$router.push({name})
     }, 100)
   }
   @Watch('params', {deep: true})

@@ -91,6 +91,17 @@
                   </el-table-column>
                 </el-table>
               </el-row>
+              <el-row>
+                <el-pagination
+                  @size-change="handleDataSizeChange"
+                  @current-change="handleDataCurrentChange"
+                  :current-page="dataCurrPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="dataPageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="dataTotalCount">
+                </el-pagination>
+              </el-row>
             </el-tab-pane>
             <el-tab-pane name="2">
               <span slot="label"  class="spanview">
@@ -135,6 +146,17 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </el-row>
+              <el-row>
+                <el-pagination
+                  @size-change="handleAdjustSizeChange"
+                  @current-change="handleAdjustCurrentChange"
+                  :current-page="adjustCurrPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="adjustPageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="adjustTotalCount">
+                </el-pagination>
               </el-row>
             </el-tab-pane>
           </el-tabs>
@@ -238,17 +260,24 @@ export default class Index extends Vue {
   activeName = '1'
   // 批次数据
   dataList = []
+  totalDataList = []
+  dataCurrPage: number = 1
+  dataPageSize: number = 10
+  dataTotalCount: number = 0
   // 调整数据
   adjustList = []
-  // 领用总数据
-  totalList = []
-  // 领用分页数据
+  totalAdjustList = []
+  adjustCurrPage: number = 1
+  adjustPageSize: number = 10
+  adjustTotalCount: number = 0
+  // 领用数据
   applyList = []
-  dialogFormVisible : boolean = false
-  dialogFormVisible2 : boolean = false
+  totalList = []
   currPage: number = 1
   pageSize: number = 10
   totalCount: number = 0
+  dialogFormVisible : boolean = false
+  dialogFormVisible2 : boolean = false
   formData = {}
   adjustForm = {
     MATERIAL_CODE: '',
@@ -268,8 +297,8 @@ export default class Index extends Vue {
     REMARK: ''
   }
   mounted () {
-    this.factoryId = this.$route.params.factoryId
-    this.holderId = this.$route.params.holderId
+    this.factoryId = this.$store.state.common.GranaryWheatPot.factoryId
+    this.holderId = this.$store.state.common.GranaryWheatPot.holderId
     this.retrieveDetail()
     this.retrieveDataList()
     this.retrieveAdjustList()
@@ -304,10 +333,28 @@ export default class Index extends Vue {
     this.currPage = 1
     this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
   }
+  handleDataSizeChange (val: number) {
+    this.dataPageSize = val
+    this.dataCurrPage = 1
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustSizeChange (val: number) {
+    this.adjustPageSize = val
+    this.adjustCurrPage = 1
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (this.adjustCurrPage - 1) * this.adjustPageSize + this.adjustPageSize)
+  }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
     this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
+  }
+  handleDataCurrentChange (val: number) {
+    this.dataCurrPage = val
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (val - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustCurrentChange (val: number) {
+    this.adjustCurrPage = val
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (val - 1) * this.adjustPageSize + this.adjustPageSize)
   }
   retrieveDetail () {
     this.formData = {}
@@ -321,10 +368,16 @@ export default class Index extends Vue {
   }
   // 当前库存量
   retrieveDataList () {
+    this.totalDataList = []
     this.dataList = []
+    this.dataTotalCount = 0
+    this.dataCurrPage = 1
+    this.dataPageSize = 10
     Vue.prototype.$http(`${GRANARY_API.WHEAT_BATCH_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.page.list
+        this.totalDataList = res.data.page.list
+        this.dataTotalCount = this.totalDataList.length
+        this.dataList = this.totalDataList.slice(0, this.dataPageSize)
       } else {
         this.$message.error(res.data.msg)
       }
@@ -332,10 +385,16 @@ export default class Index extends Vue {
   }
   // 调整信息
   retrieveAdjustList () {
+    this.totalAdjustList = []
     this.adjustList = []
+    this.adjustTotalCount = 0
+    this.adjustCurrPage = 1
+    this.adjustPageSize = 10
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJSUT_LIST}`, `POST`, {factory: this.factoryId, holderId: this.holderId}).then((res) => {
       if (res.data.code === 0) {
-        this.adjustList = res.data.adjustInfo.list
+        this.totalAdjustList = res.data.adjustInfo.list
+        this.adjustTotalCount = this.totalAdjustList.length
+        this.adjustList = this.totalAdjustList.slice(0, this.adjustPageSize)
       } else {
         this.$message.error(res.data.msg)
       }
@@ -345,6 +404,9 @@ export default class Index extends Vue {
   retrieveLogList (batch) {
     this.totalList = []
     this.applyList = []
+    this.currPage = 1
+    this.pageSize = 10
+    this.totalCount = 0
     Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Wheat', batch}).then((res) => {
       if (res.data.code === 0) {
         this.totalList = res.data.collarUseInfo.list
