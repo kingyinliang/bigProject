@@ -125,8 +125,8 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="updatauser(row)">确定</el-button>
+          <el-button @click="visible = false" style="background-color:#fff; color:#606266; border:1px solid #dcdfe6; font-weight:500; padding:12px 20px; font-size:14px; border-radius:4px;">取消</el-button>
+          <el-button type="primary" @click="updatauser(row)" style="background-color:#1890FF; color:#FFFFFF; border-color:#1890FF; font-weight:500; padding:12px 20px; font-size:14px;border-radius: 4px;">确定</el-button>
         </span>
     </el-dialog>
   </div>
