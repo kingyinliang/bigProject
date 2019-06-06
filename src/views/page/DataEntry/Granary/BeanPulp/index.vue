@@ -30,7 +30,7 @@
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in DataList" :key="index">
             <el-card class="Card_item">
-              <div slot="header">层豆粕罐号：{{item.holderName}} <span class="Card_item_detail" @click="goBeanPulpDetail(item)">详情>></span></div>
+              <div slot="header">豆粕罐号：{{item.holderName}} <span class="Card_item_detail" @click="goBeanPulpDetail(item)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
@@ -40,17 +40,17 @@
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{sumBatch(item.stocks)}}t</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{sumBatch(item.stocks).toLocaleString()}}KG</span></div>
                     <div style="position: relative">
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="15">批次</el-col>
+                        <el-col :span="9">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(items, index) in item.stocks" :key="index">
-                          <el-col :span="17">{{items.batch}}</el-col>
-                          <el-col :span="7">{{(items.currentQuantity*1)/1000}}t</el-col>
+                          <el-col :span="15">{{items.batch}}</el-col>
+                          <el-col :span="9">{{(items.currentQuantity*1).toLocaleString()}}KG</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -151,9 +151,9 @@ export default {
       return function (items) {
         let sum = 0
         items.forEach((item) => {
-          sum += (item.currentQuantity * 1) / 1000
+          sum = sum + (item.currentQuantity * 1)
         })
-        return sum.toFixed(2)
+        return sum
       }
     },
     mainTabs: {

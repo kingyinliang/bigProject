@@ -5,7 +5,7 @@
         <el-card class="searchCard newCard" style="margin: 0">
           <el-row type="flex" class="header">
             <el-col class="header-pot">
-              <div class='header-pot__label'>层豆粕罐号：{{formData.holderName ? formData.holderName : ''}}</div>
+              <div class='header-pot__label'>豆粕罐号：{{formData.holderName ? formData.holderName : ''}}</div>
               <div class="header-pot__image">
                 <div class="header-pot__image_box">
                   <div class="header-pot__image_content" :style="{height: `${(formData.current*1)/(formData.capacity)}%`}">
