@@ -227,7 +227,7 @@
             <el-form-item label="调整类型：" required>
               <el-select  placeholder="请选择"  v-model="adjustForm.ADJUST_TYPE" style="width:220px" >
                 <el-option label="盘亏" value="1" ></el-option>
-                <el-option label="盘赢" value="0" ></el-option>
+                <el-option label="盘盈" value="0" ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="调整量：" required>
