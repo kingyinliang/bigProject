@@ -65,21 +65,23 @@
       </el-card>
     </div>
     <el-dialog
-      title="高级查询"
       :close-on-click-modal="false"
-      :visible.sync="visible1" width="370px">
-      <el-form :model="form" size="small" label-width="110px" class="locationdialog">
+      :visible.sync="visible1" width="510px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">高级查询</div>
+      <el-form :model="form" size="small" label-width="130px" class="locationdialog">
         <el-form-item label="批次：" prop="orderNo1">
-          <el-input v-model="form.batch"></el-input>
+          <el-input v-model="form.batch" style="width:283px"></el-input>
         </el-form-item>
         <el-form-item label="物料：" prop="orderNo2">
-          <el-input v-model="form.materialCode"></el-input>
+          <el-input v-model="form.materialCode" style="width:283px"></el-input>
         </el-form-item>
-        <el-form-item label="基本开始日期：">
-          <el-date-picker v-model="form.commitDateOne" type="date" placeholder="选择日期"></el-date-picker>
+        <el-form-item label="罐号：" prop="holderId">
+          <el-select v-model="form.holderId" placeholder="请选择" filterable style="width:283px">
+            <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="基本结束日期：">
-          <el-date-picker v-model="form.commitDateTwo" type="date" placeholder="选择日期"></el-date-picker>
+        <el-form-item label="过账日期：">
+          <el-date-picker v-model="form.commitDateOne" type="date" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="form.commitDateTwo" type="date" placeholder="选择日期" style="width:135px"></el-date-picker>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -113,11 +115,13 @@ export default {
       currentPage: 1,
       currPage: 1,
       pageSize: 10,
-      totalCount: 0
+      totalCount: 0,
+      guanList: []
     }
   },
   mounted () {
     this.GetList()
+    this.PuplWheatList()
   },
   methods: {
     // 获取库位列表
@@ -139,7 +143,8 @@ export default {
         commitDateOne: this.form.commitDateOne,
         commitDateTwo: this.form.commitDateTwo,
         currPage: JSON.stringify(this.currPage),
-        pageSize: JSON.stringify(this.pageSize)
+        pageSize: JSON.stringify(this.pageSize),
+        holderId: this.form.holderId
       }).then(({data}) => {
         this.visible1 = false
         if (data.code === 0) {
@@ -199,6 +204,12 @@ export default {
         this.loading = false
         clearInterval(this.orderTime)
       })
+    },
+    // 罐号
+    PuplWheatList () {
+      this.$http(`${BASICDATA_API.PUPLWHEATLIST}`, 'POST', {types: ['002', '012']}).then(({data}) => {
+        this.guanList = data.list
+      })
     }
   },
   computed: {},
@@ -206,6 +217,18 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.dialog__class{
+  border-radius:6px 6px 6px 6px !important;
+  .el-dialog__header{
+    height:59px;
+    background:rgba(24,144,255,1);
+    border-radius:6px 6px 0px 0px;
+    color: #fff;
+    font-size:20px;
+    .el-dialog__headerbtn .el-dialog__close{
+      color: #fff
+    }
+  }
+}
 </style>

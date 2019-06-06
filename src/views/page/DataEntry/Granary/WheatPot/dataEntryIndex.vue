@@ -23,13 +23,13 @@
                   <p class="header-form_input">{{formData.holderName ? formData.holderName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="罐体容量：">
-                  <p class="header-form_input">{{formData.capacity ? formData.capacity : ''}}KG</p>
+                  <p class="header-form_input">{{formData.capacity ? formData.capacity.toLocaleString() : ''}} KG</p>
                 </el-form-item>
                 <el-form-item label="物料编码：">
                   <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">{{formData.current ? formData.current : ''}}KG</p>
+                  <p class="header-form_input">{{total}} KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -73,14 +73,14 @@
                       {{scope.row.postingDate}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="入库数量" :show-overflow-tooltip="true" width="160" >
+                  <el-table-column label="入库数量(KG)" :show-overflow-tooltip="true" width="160" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity + scope.row.unit}}
+                      {{(scope.row.quantity? scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="当前数量" width="160">
+                  <el-table-column label="当前数量(KG)" width="160">
                     <template slot-scope="scope">
-                      {{(scope.row.currentQuantity ? scope.row.currentQuantity : '') + scope.row.unit}}
+                      {{(scope.row.currentQuantity ? scope.row.currentQuantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
                   <el-table-column label="操作" >
@@ -90,6 +90,17 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </el-row>
+              <el-row>
+                <el-pagination
+                  @size-change="handleDataSizeChange"
+                  @current-change="handleDataCurrentChange"
+                  :current-page="dataCurrPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="dataPageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="dataTotalCount">
+                </el-pagination>
               </el-row>
             </el-tab-pane>
             <el-tab-pane name="2">
@@ -104,7 +115,7 @@
                       {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="140">
                     <template slot-scope="scope">
                       {{scope.row.batch}}
                     </template>
@@ -114,9 +125,9 @@
                       {{scope.row.adjustType === '0' ? '盘盈' : '盘亏'}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="数量" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="数量(KG)" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity + ' ' + scope.row.unit}}
+                      {{(scope.row.quantity?scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
@@ -135,6 +146,17 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </el-row>
+              <el-row>
+                <el-pagination
+                  @size-change="handleAdjustSizeChange"
+                  @current-change="handleAdjustCurrentChange"
+                  :current-page="adjustCurrPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="adjustPageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="adjustTotalCount">
+                </el-pagination>
               </el-row>
             </el-tab-pane>
           </el-tabs>
@@ -157,9 +179,9 @@
                 {{scope.row.batch}}
               </template>
             </el-table-column>
-            <el-table-column label="领用量" :show-overflow-tooltip="true" width="100">
+            <el-table-column label="领用量(KG)" :show-overflow-tooltip="true" width="100">
               <template slot-scope="scope">
-                {{scope.row.wheatWeight + scope.row.weightUnit}}
+                {{(scope.row.wheatWeight? scope.row.wheatWeight.toLocaleString() : '')}}
               </template>
             </el-table-column>
             <el-table-column label="领用订单" :show-overflow-tooltip="true" width="150" >
@@ -205,7 +227,7 @@
             <el-form-item label="调整类型：" required>
               <el-select  placeholder="请选择"  v-model="adjustForm.ADJUST_TYPE" style="width:220px" >
                 <el-option label="盘亏" value="1" ></el-option>
-                <el-option label="盘赢" value="0" ></el-option>
+                <el-option label="盘盈" value="0" ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="调整量：" required>
@@ -238,17 +260,24 @@ export default class Index extends Vue {
   activeName = '1'
   // 批次数据
   dataList = []
+  totalDataList = []
+  dataCurrPage: number = 1
+  dataPageSize: number = 10
+  dataTotalCount: number = 0
   // 调整数据
   adjustList = []
-  // 领用总数据
-  totalList = []
-  // 领用分页数据
+  totalAdjustList = []
+  adjustCurrPage: number = 1
+  adjustPageSize: number = 10
+  adjustTotalCount: number = 0
+  // 领用数据
   applyList = []
-  dialogFormVisible : boolean = false
-  dialogFormVisible2 : boolean = false
+  totalList = []
   currPage: number = 1
   pageSize: number = 10
   totalCount: number = 0
+  dialogFormVisible : boolean = false
+  dialogFormVisible2 : boolean = false
   formData = {}
   adjustForm = {
     MATERIAL_CODE: '',
@@ -268,8 +297,8 @@ export default class Index extends Vue {
     REMARK: ''
   }
   mounted () {
-    this.factoryId = this.$route.params.factoryId
-    this.holderId = this.$route.params.holderId
+    this.factoryId = this.$store.state.common.GranaryWheatPot.factoryId
+    this.holderId = this.$store.state.common.GranaryWheatPot.holderId
     this.retrieveDetail()
     this.retrieveDataList()
     this.retrieveAdjustList()
@@ -293,7 +322,7 @@ export default class Index extends Vue {
       HOLDER_ID: row.holderId,
       ADJUST_TYPE: '0',
       QUANTITY: 0,
-      UNIT: 'KG',
+      UNIT: row.unit,
       REMARK: ''
     }
     this.dialogFormVisible2 = true
@@ -304,10 +333,28 @@ export default class Index extends Vue {
     this.currPage = 1
     this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
   }
+  handleDataSizeChange (val: number) {
+    this.dataPageSize = val
+    this.dataCurrPage = 1
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustSizeChange (val: number) {
+    this.adjustPageSize = val
+    this.adjustCurrPage = 1
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (this.adjustCurrPage - 1) * this.adjustPageSize + this.adjustPageSize)
+  }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
     this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
+  }
+  handleDataCurrentChange (val: number) {
+    this.dataCurrPage = val
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (val - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustCurrentChange (val: number) {
+    this.adjustCurrPage = val
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (val - 1) * this.adjustPageSize + this.adjustPageSize)
   }
   retrieveDetail () {
     this.formData = {}
@@ -321,10 +368,16 @@ export default class Index extends Vue {
   }
   // 当前库存量
   retrieveDataList () {
+    this.totalDataList = []
     this.dataList = []
+    this.dataTotalCount = 0
+    this.dataCurrPage = 1
+    this.dataPageSize = 10
     Vue.prototype.$http(`${GRANARY_API.WHEAT_BATCH_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.page.list
+        this.totalDataList = res.data.page.list
+        this.dataTotalCount = this.totalDataList.length
+        this.dataList = this.totalDataList.slice(0, this.dataPageSize)
       } else {
         this.$message.error(res.data.msg)
       }
@@ -332,10 +385,16 @@ export default class Index extends Vue {
   }
   // 调整信息
   retrieveAdjustList () {
+    this.totalAdjustList = []
     this.adjustList = []
+    this.adjustTotalCount = 0
+    this.adjustCurrPage = 1
+    this.adjustPageSize = 10
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJSUT_LIST}`, `POST`, {factory: this.factoryId, holderId: this.holderId}).then((res) => {
       if (res.data.code === 0) {
-        this.adjustList = res.data.adjustInfo.list
+        this.totalAdjustList = res.data.adjustInfo.list
+        this.adjustTotalCount = this.totalAdjustList.length
+        this.adjustList = this.totalAdjustList.slice(0, this.adjustPageSize)
       } else {
         this.$message.error(res.data.msg)
       }
@@ -345,6 +404,9 @@ export default class Index extends Vue {
   retrieveLogList (batch) {
     this.totalList = []
     this.applyList = []
+    this.currPage = 1
+    this.pageSize = 10
+    this.totalCount = 0
     Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Wheat', batch}).then((res) => {
       if (res.data.code === 0) {
         this.totalList = res.data.collarUseInfo.list
@@ -370,6 +432,9 @@ export default class Index extends Vue {
       }
     })
     this.dialogFormVisible2 = false
+  }
+  get total () {
+    return this.totalDataList.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0).toLocaleString()
   }
 }
 </script>

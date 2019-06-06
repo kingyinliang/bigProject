@@ -20,14 +20,14 @@
                     <div slot="header">库存明细 <span style="float: right">合计：{{sole.cangtotal}}KG</span></div>
                     <div style="position: relative">
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="16">批次</el-col>
+                        <el-col :span="8">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(soles, indexs) in sole.wheatData" :key="indexs">
-                          <el-col :span="17">{{soles.batch}}</el-col>
-                          <el-col :span="7">{{soles.currentQuantity}}KG</el-col>
+                          <el-col :span="16">{{soles.batch}}</el-col>
+                          <el-col :span="8">{{soles.currentQuantity}}KG</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>

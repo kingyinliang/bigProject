@@ -93,7 +93,9 @@ export default {
       factoryId: '',
       factoryName: '',
       workshopId: '',
-      workshopName: ''
+      workshopName: '',
+      holderId: '',
+      holderName: ''
     },
     /**
      * 粮仓豆粕罐

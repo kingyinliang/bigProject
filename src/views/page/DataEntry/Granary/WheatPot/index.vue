@@ -30,27 +30,27 @@
         <el-row :gutter="10" v-for="(item, index) in dataList" :key="index" v-if="index%2===0" style="margin-top:10px;">
           <el-col :span="12" v-if="index < dataList.length">
             <el-card class="Card_item" >
-              <div slot="header">小麦罐号：{{dataList[index].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index].holderId)">详情>></span></div>
+              <div slot="header">小麦罐号：{{dataList[index].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index].holderId, dataList[index].holderName)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${Math.min(dataList[index].total/5000,100)}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index].total + dataList[index].unit}}</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index].total.toLocaleString() + ' ' + dataList[index].unit}}</span></div>
                     <div style="position: relative" >
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="12">批次</el-col>
+                        <el-col :span="12">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index].stocks" :key="index1">
-                          <el-col :span="17">{{item1.batch}}</el-col>
-                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
+                          <el-col :span="12">{{item1.batch}}</el-col>
+                          <el-col :span="12">{{(item1.currentQuantity ? item1.currentQuantity.toLocaleString() : '') + ' ' + item1.unit}}</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -62,27 +62,27 @@
           </el-col>
           <el-col :span="12" v-if="index + 1 < dataList.length">
             <el-card class="Card_item" >
-              <div slot="header">小麦罐号：{{dataList[index + 1].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index + 1].holderId)">详情>></span></div>
+              <div slot="header">小麦罐号：{{dataList[index + 1].holderName}} <span class="Card_item_detail" @click="goDetail(dataList[index + 1].holderId, dataList[index + 1].holderName)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" style="height: 50%"></div>
+                    <div class="Card_item_img_box_bg" :style="`height:${Math.min(dataList[index + 1].total/5000, 100)}%`"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index + 1].total + dataList[index + 1].unit}}</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{dataList[index + 1].total.toLocaleString() + ' ' + dataList[index + 1].unit}}</span></div>
                     <div style="position: relative" >
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="12">批次</el-col>
+                        <el-col :span="12">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(item1, index1) in dataList[index + 1].stocks" :key="index1">
-                          <el-col :span="17">{{item1.batch}}</el-col>
-                          <el-col :span="7">{{(item1.currentQuantity ? item1.currentQuantity : '') + item1.unit}}</el-col>
+                          <el-col :span="12">{{item1.batch}}</el-col>
+                          <el-col :span="12">{{(item1.currentQuantity ? item1.currentQuantity.toLocaleString() : '') + ' ' + item1.unit}}</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -196,18 +196,16 @@ export default class Index extends Vue {
       }
     })
   }
-  goDetail (holderId) {
-    let params = {
-      factoryId: this.params.factoryId,
-      holderId: holderId
-    }
-    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex', params)
+  goDetail (holderId, holderName) {
+    let p = Object.assign({}, this.params, {holderId, holderName})
+    this.setStore(p)
+    this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex')
   }
-  pushPage (name, params) {
+  pushPage (name) {
     this.mainTabs = this.mainTabs.filter(item => item.name !== name)
     let that = this
     setTimeout(function () {
-      that.$router.push({name, params})
+      that.$router.push({name})
     }, 100)
   }
   @Watch('params', {deep: true})
