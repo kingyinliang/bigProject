@@ -78,7 +78,7 @@
         <el-table-column label="终压时间(H)" prop="pressTime" width="110px" :key="Math.random()"></el-table-column>
         <el-table-column label="终止压力(Mpa)" width="180px" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.Press" size="small" :disabled="!isRedact"></el-input>
+            <el-input v-model="scope.row.press" size="small" :disabled="!isRedact"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="调压人员" width="150px" :show-overflow-tooltip="true" v-if="this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D'" :key="Math.random()">
