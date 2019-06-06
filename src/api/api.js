@@ -220,7 +220,11 @@ export const BASICDATA_API = {
   /**
    * 原料入库记录同步状态
    */
-  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_INSTORAGE'
+  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_INSTORAGE',
+  /**
+   * 豆粕 + 小麦 罐
+   */
+  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes'
 }
 /*
 *系统设置api
