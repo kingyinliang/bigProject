@@ -197,9 +197,8 @@ export default class Index extends Vue {
     })
   }
   goDetail (holderId, holderName) {
-    this.params.holderId = holderId
-    this.params.holderName = holderName
-    this.setStore(this.params)
+    let p = Object.assign({}, this.params, {holderId, holderName})
+    this.setStore(p)
     this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex')
   }
   pushPage (name) {
