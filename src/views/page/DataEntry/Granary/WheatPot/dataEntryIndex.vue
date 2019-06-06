@@ -29,7 +29,7 @@
                   <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">{{formData.current ? formData.current : ''}}KG</p>
+                  <p class="header-form_input">{{total}}KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -127,7 +127,7 @@
                   </el-table-column>
                   <el-table-column label="数量" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity + ' ' + scope.row.unit}}
+                      {{scope.row.quantity + scope.row.unit}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
@@ -432,6 +432,9 @@ export default class Index extends Vue {
       }
     })
     this.dialogFormVisible2 = false
+  }
+  get total () {
+    return this.totalDataList.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0)
   }
 }
 </script>
