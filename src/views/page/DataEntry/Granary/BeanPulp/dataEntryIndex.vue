@@ -181,7 +181,7 @@
             </el-table-column>
             <el-table-column label="领用量(KG)" :show-overflow-tooltip="true" width="100">
               <template slot-scope="scope">
-                {{(scope.row.wheatWeight? scope.row.wheatWeight.toLocaleString() : '')}}
+                {{(scope.row.useWeight? scope.row.useWeight.toLocaleString() : '')}}
               </template>
             </el-table-column>
             <el-table-column label="领用订单" :show-overflow-tooltip="true" width="150" >
@@ -407,7 +407,7 @@ export default class Index extends Vue {
     this.currPage = 1
     this.pageSize = 10
     this.totalCount = 0
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Wheat', batch}).then((res) => {
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Soybean', batch}).then((res) => {
       if (res.data.code === 0) {
         this.totalList = res.data.collarUseInfo.list
         this.totalCount = this.totalList.length
