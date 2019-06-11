@@ -566,8 +566,8 @@ export default class Index extends Vue {
     if (this.startForm.fermentPotNo === '') {
       this.$message.error('领用发酵罐不能为空')
       return false
-    } else if (this.startForm.batch === '') {
-      this.$message.error('批次不能为空')
+    } else if (this.startForm.batch.length !== 10) {
+      this.$message.error('批次长度必须为10')
       return false
     } else if (this.startForm.startAmount.toString() === '') {
       this.$message.error('起始数不能为空')
@@ -579,8 +579,8 @@ export default class Index extends Vue {
     if (this.modifyForm.fermentPotNo === '') {
       this.$message.error('领用发酵罐不能为空')
       return false
-    } else if (this.modifyForm.batch === '') {
-      this.$message.error('批次不能为空')
+    } else if (this.modifyForm.batch.length !== 10) {
+      this.$message.error('批次长度必须为10')
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
       this.$message.error('起始数不能为空')
