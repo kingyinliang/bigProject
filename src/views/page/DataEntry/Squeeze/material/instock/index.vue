@@ -425,9 +425,6 @@ export default class Index extends Vue {
         // 新增
         this.dataList.forEach((item, index) => { if (item.recordId === this.modifyForm.recordId) { matchedIndex = index } })
       }
-      console.log('index--------------, ', this.dataList)
-      console.log('index--------------, ', this.modifyForm)
-      console.log('index--------------, ', matchedIndex)
       if (matchedIndex >= 0) {
         let record = this.dataList[matchedIndex]
         Object.assign(record, {
@@ -453,7 +450,7 @@ export default class Index extends Vue {
   }
   inPotStart () {
     this.startForm = {
-      inDate: dateFormat(new Date(), 'yyyy-MM-dd'),
+      inDate: this.params.applyDate,
       potNo: '',
       potName: '',
       batch: '',
