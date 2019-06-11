@@ -41,8 +41,8 @@
           <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:inStorage:list')">查询</el-button>
             <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="(isAuth('prs:inStorage:mySaveOrUpdate') || isAuth('prs:inStorage:submitToOrde')) && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
-            <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:inStorage:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
-            <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:inStorage:submitToOrder') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
+            <el-button type="primary" size="small"  @click="doSaveAction()"  v-if="isAuth('prs:inStorage:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
+            <el-button type="primary" size="small"  @click="doSubmitAction()"  v-if="isAuth('prs:inStorage:submitToOrder') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff;padding-bottom:10px;">
@@ -391,7 +391,6 @@ export default class Index extends Vue {
     } else if (che > 0) {
       status = 'checked'
     }
-    console.log('status      ' + status)
     return status
   }
   modifyRecord (row) {
@@ -523,8 +522,8 @@ export default class Index extends Vue {
     if (this.startForm.potNo === '') {
       this.$message.error('原汁罐号不能为空')
       return false
-    } else if (this.startForm.batch === '') {
-      this.$message.error('批次不能为空')
+    } else if (this.startForm.batch.length !== 10) {
+      this.$message.error('批次长度必须为10')
       return false
     } else if (this.startForm.startAmount.toString() === '') {
       this.$message.error('起始数不能为空')
@@ -549,8 +548,8 @@ export default class Index extends Vue {
     if (this.modifyForm.potNo === '') {
       this.$message.error('原汁罐号不能为空')
       return false
-    } else if (this.modifyForm.batch === '') {
-      this.$message.error('批次不能为空')
+    } else if (this.modifyForm.batch.length !== 10) {
+      this.$message.error('批次长度必须为10')
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
       this.$message.error('起始数不能为空')
@@ -685,30 +684,91 @@ export default class Index extends Vue {
       }
     })
   }
-  save () {
+  async save () {
+    let result = {code: 0, msg: ''}
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
-    Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SAVE_API}`, `POST`, this.dataList).then((res) => {
-      if (res.data.code === 0) {
-        this.$message.success('保存成功')
-        this.getOrderList()
-      } else {
-        this.$message.error(res.data.msg)
-      }
+    await Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SAVE_API}`, `POST`, this.dataList).then((res) => {
+      result = {code: res.data.code, msg: res.data.code === 0 ? '保存成功' : res.data.msg}
     }).catch(err => {
-      this.$message.error('保存失败：' + err)
+      result = {code: 1, msg: '保存失败：' + err}
+    })
+    return result
+  }
+  save2 () {
+    let that = this
+    that.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
+    return new Promise(function (resolve, reject) {
+      let result = {code: 0, msg: ''}
+      Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SAVE_API}`, `POST`, that.dataList).then((res) => {
+        result = {code: res.data.code, msg: res.data.code === 0 ? '保存成功' : res.data.msg}
+        if (res.data.code === 0) {
+          resolve(result)
+        } else {
+          reject(result)
+        }
+      }).catch(err => {
+        result = {code: 1, msg: '保存失败：' + err}
+        reject(result)
+      })
     })
   }
-  submit () {
+  doSaveAction () {
+    // Promise.resolve(this.save()).then((result) => {
+    //   this.$message.success(result.msg)
+    //   if (result.code === 0) {
+    //     this.getOrderList()
+    //   }
+    // })
+    let that = this
+    this.save2().then((result : { code: number, msg: string }) => {
+      that.$message.success(result.msg)
+      that.getOrderList()
+    }).catch((result: { code: number, msg: string }) => {
+      that.$message.error(result.msg)
+    })
+  }
+  async submit () {
+    let result = {code: 0, msg: ''}
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
-    Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SUBMIT_API}`, `POST`, this.dataList).then((res) => {
-      if (res.data.code === 0) {
-        this.$message.success('提交成功')
-        this.getOrderList()
-      } else {
-        this.$message.error(res.data.msg)
-      }
+    await Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SUBMIT_API}`, `POST`, this.dataList).then((res) => {
+      result = {code: res.data.code, msg: res.data.code === 0 ? '提交成功' : res.data.msg}
     }).catch(err => {
-      this.$message.error('提交失败：' + err)
+      result = {code: 1, msg: '提交失败：' + err}
+    })
+    return result
+  }
+  submit2 () {
+    let that = this
+    let result = {code: 0, msg: ''}
+    that.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
+    return new Promise(function (resolve, reject) {
+      Vue.prototype.$http(`${SQU_API.MATERIAL_IN_SUBMIT_API}`, `POST`, that.dataList).then((res) => {
+        result = {code: res.data.code, msg: res.data.code === 0 ? '提交成功' : res.data.msg}
+        if (res.data.code === 0) {
+          resolve(result)
+        } else {
+          reject(result)
+        }
+      }).catch(err => {
+        result = {code: 1, msg: '提交失败：' + err}
+        reject(result)
+      })
+    })
+  }
+  doSubmitAction () {
+    // Promise.all([this.save(), this.submit()]).then((result) => {
+    //   if (result[0].code === 0 && result[1].code === 0) {
+    //     this.getOrderList()
+    //   } else {
+    //     this.$message.success('提交失败')
+    //   }
+    // })
+    let that = this
+    this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
+      that.$message.success(result.msg)
+      that.getOrderList()
+    }).catch((result : { code: number, msg: string }) => {
+      that.$message.error(result.msg)
     })
   }
   @Watch('params', {deep: true})
