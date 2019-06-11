@@ -58,7 +58,7 @@
                     width="55">
                   </el-table-column> -->
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
-                  <el-table-column label="物料" :show-overflow-tooltip="true"  width="200">
+                  <el-table-column label="物料" :show-overflow-tooltip="true">
                     <template slot-scope="scope" width="120">
                       {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
@@ -83,10 +83,10 @@
                       {{(scope.row.currentQuantity ? scope.row.currentQuantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="操作" >
+                  <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
-                      <el-button type="primary" size="small" @click="showLog(scope.row.batch)">查看</el-button>
-                      <el-button type="primary" size="small" @click="makeAdjust(scope.row)" v-if="isAuth('Gra:adjust:material:wheatUpdate')">调整</el-button>
+                      <el-button type="text" size="small" @click="showLog(scope.row.batch)"><i class="iconfont factory-fangdajing-copy" style="font-size: 12px;margin-right: 5px"></i>查看</el-button>
+                      <el-button type="text" size="small" @click="makeAdjust(scope.row)" v-if="isAuth('Gra:adjust:material:wheatUpdate')"><i class="iconfont factory-banshou" style="font-size: 12px;margin-right: 5px"></i>调整</el-button>
                     </template>
                   </el-table-column>
                 </el-table>

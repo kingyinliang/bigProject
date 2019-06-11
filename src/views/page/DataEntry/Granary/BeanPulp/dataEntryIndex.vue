@@ -85,8 +85,8 @@
                   </el-table-column>
                   <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
-                      <el-button type="text" size="small" @click="showLog(scope.row.batch)"><i class="iconfont factory-kanqujilu"></i>查看</el-button>
-                      <el-button type="text" size="small" @click="makeAdjust(scope.row)" v-if="isAuth('Gra:adjust:material:soybeanUpdate')">调整</el-button>
+                      <el-button type="text" size="small" @click="showLog(scope.row.batch)"><i class="iconfont factory-fangdajing-copy" style="font-size: 12px;margin-right: 5px"></i>查看</el-button>
+                      <el-button type="text" size="small" @click="makeAdjust(scope.row)" v-if="isAuth('Gra:adjust:material:soybeanUpdate')"><i class="iconfont factory-banshou" style="font-size: 12px;margin-right: 5px"></i>调整</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
