@@ -68,6 +68,7 @@
 
 <script>
 import { BASICDATA_API, GRA_API } from '@/api/api'
+import { isAuth } from '../../../../../net/validate'
 export default {
   name: 'index',
   data () {
@@ -109,6 +110,10 @@ export default {
     },
     // 去详请
     goBeanPulpDetail (item) {
+      if (!isAuth('gra:material:list')) {
+        this.$message.error('您无权限查看详情')
+        return
+      }
       this.BeanPulp = {
         holderId: item.holderId,
         factory: this.plantList.factory

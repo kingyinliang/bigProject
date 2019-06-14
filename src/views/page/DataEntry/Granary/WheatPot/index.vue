@@ -197,6 +197,10 @@ export default class Index extends Vue {
     })
   }
   goDetail (holderId, holderName) {
+    if (!this.isAuth('gra:material:list')) {
+      this.$message.error('您无权限查看详情')
+      return
+    }
     let p = Object.assign({}, this.params, {holderId, holderName})
     this.setStore(p)
     this.pushPage('DataEntry-Granary-WheatPot-dataEntryIndex')
