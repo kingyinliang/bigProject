@@ -316,7 +316,6 @@ export default {
       Object.keys(row).forEach((key) => {
         this.rows[key] = row[key]
       })
-      console.log(this.machineTimeData)
       this.visible2 = false
     },
     // 机器删除

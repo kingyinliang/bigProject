@@ -30,27 +30,27 @@
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in DataList" :key="index">
             <el-card class="Card_item">
-              <div slot="header">层豆粕罐号：{{item.holderName}} <span class="Card_item_detail" @click="goBeanPulpDetail(item)">详情>></span></div>
+              <div slot="header">豆粕罐号：{{item.holderName}} <span class="Card_item_detail" @click="goBeanPulpDetail(item)">详情>></span></div>
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / 300}%`}"></div>
+                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / (item.holderHold*1)}%`}"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>
                 <div class="Card_item_text">
                   <el-card style="margin-top: 25px">
-                    <div slot="header">库存明细 <span style="float: right">合计：{{sumBatch(item.stocks)}}t</span></div>
+                    <div slot="header">库存明细 <span style="float: right">合计：{{sumBatch(item.stocks).toLocaleString()}}KG</span></div>
                     <div style="position: relative">
                       <el-row  class="Card_item_text_item bgbox" style="padding-top: 0">
-                        <el-col :span="17">批次</el-col>
-                        <el-col :span="7">数量</el-col>
+                        <el-col :span="15">批次</el-col>
+                        <el-col :span="9">数量</el-col>
                       </el-row >
                       <div class="Card_item_text_box_bg1"></div>
                       <div class="Card_item_text_box">
                         <el-row class="Card_item_text_item" v-for="(items, index) in item.stocks" :key="index">
-                          <el-col :span="17">{{items.batch}}</el-col>
-                          <el-col :span="7">{{(items.currentQuantity*1)/1000}}t</el-col>
+                          <el-col :span="15">{{items.batch}}</el-col>
+                          <el-col :span="9">{{(items.currentQuantity*1).toLocaleString()}}KG</el-col>
                         </el-row>
                       </div>
                       <div class="Card_item_text_box_bg2"></div>
@@ -68,6 +68,7 @@
 
 <script>
 import { BASICDATA_API, GRA_API } from '@/api/api'
+import { isAuth } from '../../../../../net/validate'
 export default {
   name: 'index',
   data () {
@@ -95,9 +96,6 @@ export default {
       if (!this.plantList.factory) {
         this.$message.error('请选择工厂')
         return
-      } else if (!this.plantList.workshop) {
-        this.$message.error('请选择车间')
-        return
       }
       this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}?deptId=${this.plantList.workshop}&flag=012`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
@@ -112,10 +110,13 @@ export default {
     },
     // 去详请
     goBeanPulpDetail (item) {
+      if (!isAuth('gra:material:list')) {
+        this.$message.error('您无权限查看详情')
+        return
+      }
       this.BeanPulp = {
         holderId: item.holderId,
-        factory: this.plantList.factory,
-        deptId: this.plantList.workshop
+        factory: this.plantList.factory
       }
       this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Granary-BeanPulp-dataEntryIndex')
       setTimeout(() => {
@@ -155,9 +156,9 @@ export default {
       return function (items) {
         let sum = 0
         items.forEach((item) => {
-          sum += (item.currentQuantity * 1) / 1000
+          sum = sum + (item.currentQuantity * 1)
         })
-        return sum.toFixed(2)
+        return sum
       }
     },
     mainTabs: {

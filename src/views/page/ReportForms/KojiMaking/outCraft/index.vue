@@ -149,7 +149,6 @@ export default {
         }, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.room = data.page.list
-            console.log(this.room)
           } else {
             this.$message.error(data.msg)
           }
@@ -174,7 +173,6 @@ export default {
         }, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.Pot = data.page.list
-            console.log(this.Pot)
           } else {
             this.$message.error(data.msg)
           }

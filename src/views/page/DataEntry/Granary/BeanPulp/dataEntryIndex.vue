@@ -5,11 +5,9 @@
         <el-card class="searchCard newCard" style="margin: 0">
           <el-row type="flex" class="header">
             <el-col class="header-pot">
-              <div class='header-pot__label'>层豆粕罐号：{{formData.holderName ? formData.holderName : ''}}</div>
+              <div class='header-pot__label'>豆粕罐号：{{formData.holderName ? formData.holderName : ''}}</div>
               <div class="header-pot__image">
-                <div class="header-pot__image_box">
-                  <div class="header-pot__image_content" :style="{height: `${(formData.current*1)/(formData.capacity)}%`}">
-                </div>
+                <div class="header-pot__image_content">
                 </div>
               </div>
             </el-col>
@@ -25,13 +23,13 @@
                   <p class="header-form_input">{{formData.holderName ? formData.holderName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="罐体容量：">
-                  <p class="header-form_input">{{formData.capacity ? formData.capacity : ''}}KG</p>
+                  <p class="header-form_input">{{formData.capacity ? formData.capacity.toLocaleString() : ''}} KG</p>
                 </el-form-item>
                 <el-form-item label="物料编码：">
                   <p class="header-form_input">{{formData.materialNo ? formData.materialNo : '' + ' ' + formData.materialName ? formData.materialName : ''}}</p>
                 </el-form-item>
                 <el-form-item label="当前总量：">
-                  <p class="header-form_input">{{formData.current ? formData.current : ''}}KG</p>
+                  <p class="header-form_input">{{total}} KG</p>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -43,57 +41,65 @@
           <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
             <i class="el-icon-caret-bottom"></i>
           </div>
-          <el-tabs ref='tabs' v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
+          <el-tabs ref='tabs'  v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
             <el-tab-pane name="1">
               <span slot="label" class="spanview">
                 <el-button>当前库存信息</el-button>
               </span>
+              <!-- <el-row style="margin-bottom:10px;">
+                <el-col>
+                  <el-button type="primary" size="small" style="float:right;">数据处理</el-button>
+                </el-col>
+              </el-row> -->
               <el-row>
                 <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
-                  <el-table-column type="selection" width="35"></el-table-column>
+                  <!-- <el-table-column
+                    type="selection"
+                    width="55">
+                  </el-table-column> -->
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
                   <el-table-column label="物料" :show-overflow-tooltip="true">
-                    <template slot-scope="scope" width="120">
+                    <template slot-scope="scope">
                       {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="120">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
                     <template slot-scope="scope">
                       {{scope.row.batch}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="入库日期" :show-overflow-tooltip="true" width="120">
+                  <el-table-column label="入库日期" :show-overflow-tooltip="true" width="170">
                     <template slot-scope="scope">
                       {{scope.row.postingDate}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="入库数量(t)" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="入库数量(KG)" :show-overflow-tooltip="true" width="160" >
                     <template slot-scope="scope">
-                      {{scope.row.quantity}}
+                      {{(scope.row.quantity? scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="当前数量(t)" width="120">
+                  <el-table-column label="当前数量(KG)" width="160">
                     <template slot-scope="scope">
-                      {{scope.row.currentQuantity}}
+                      {{(scope.row.currentQuantity ? scope.row.currentQuantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="操作" width="150" fixed="right">
+                  <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
-                      <el-button type="primary" size="small" @click="showLog(scope.row)">查看</el-button>
-                      <el-button type="primary" size="small" @click="makeAdjust">调整</el-button>
+                      <el-button type="text" size="small" @click="showLog(scope.row.batch)"><i class="iconfont factory-fangdajing-copy" style="font-size: 12px;margin-right: 5px"></i>查看</el-button>
+                      <el-button type="text" size="small" @click="makeAdjust(scope.row)" v-if="isAuth('Gra:adjust:material:soybeanUpdate')"><i class="iconfont factory-banshou" style="font-size: 12px;margin-right: 5px"></i>调整</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
               </el-row>
               <el-row>
                 <el-pagination
-                  @size-change="handleSizeChangeBatch"
-                  @current-change="handleCurrentChangeBatch"
-                  :current-page="dataParms.currPage"
+                  @size-change="handleDataSizeChange"
+                  @current-change="handleDataCurrentChange"
+                  :current-page="dataCurrPage"
                   :page-sizes="[10, 15, 20]"
-                  :page-size="dataParms.pageSize"
+                  :page-size="dataPageSize"
                   layout="total, sizes, prev, pager, next, jumper"
-                  :total="dataParms.totalCount">
+                  :total="dataTotalCount">
                 </el-pagination>
               </el-row>
             </el-tab-pane>
@@ -106,50 +112,50 @@
                   <el-table-column type="index" label="序号" width="55"></el-table-column>
                   <el-table-column label="物料" :show-overflow-tooltip="true"  width="200">
                     <template slot-scope="scope">
-                      M397232090 小麦
+                      {{scope.row.materialCode + ' ' + scope.row.materialName}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="批次" :show-overflow-tooltip="true" width="180">
+                  <el-table-column label="批次" :show-overflow-tooltip="true" width="140">
                     <template slot-scope="scope">
-                      830030009030203
+                      {{scope.row.batch}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整类型" :show-overflow-tooltip="true" width="100">
                     <template slot-scope="scope">
-                      盘赢
+                      {{scope.row.adjustType === '0' ? '盘盈' : '盘亏'}}
                     </template>
                   </el-table-column>
-                  <el-table-column label="数量(t)" :show-overflow-tooltip="true" width="120" >
+                  <el-table-column label="数量(KG)" :show-overflow-tooltip="true" width="120" >
                     <template slot-scope="scope">
-                      2000
+                      {{(scope.row.quantity?scope.row.quantity.toLocaleString() : '')}}
                     </template>
                   </el-table-column>
                   <el-table-column label="说明" width="170">
                     <template slot-scope="scope">
-                      手机打开数据丢失看
+                      {{scope.row.remark}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整时间" >
                     <template slot-scope="scope">
-                      2019-09-01 21:00:00
+                      {{scope.row.adjustTime}}
                     </template>
                   </el-table-column>
                   <el-table-column label="调整人" >
                     <template slot-scope="scope">
-                      张三(198290010)
+                      {{scope.row.adjuster}}
                     </template>
                   </el-table-column>
                 </el-table>
               </el-row>
               <el-row>
                 <el-pagination
-                  @size-change="handleSizeChangeAdj"
-                  @current-change="handleCurrentChangeAdj"
-                  :current-page="adjParms.currPage"
+                  @size-change="handleAdjustSizeChange"
+                  @current-change="handleAdjustCurrentChange"
+                  :current-page="adjustCurrPage"
                   :page-sizes="[10, 15, 20]"
-                  :page-size="adjParms.pageSize"
+                  :page-size="adjustPageSize"
                   layout="total, sizes, prev, pager, next, jumper"
-                  :total="adjParms.totalCount">
+                  :total="adjustTotalCount">
                 </el-pagination>
               </el-row>
             </el-tab-pane>
@@ -163,41 +169,41 @@
         <div>
           <el-table header-row-class-name="tableHead" :data="applyList" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55"></el-table-column>
-            <el-table-column label="物料" :show-overflow-tooltip="true"  width="180">
+            <el-table-column label="物料" :show-overflow-tooltip="true"  width="160">
               <template slot-scope="scope">
                 {{scope.row.materialCode + ' ' + scope.row.materialName}}
               </template>
             </el-table-column>
-            <el-table-column label="批次" :show-overflow-tooltip="true" width="160">
+            <el-table-column label="批次" :show-overflow-tooltip="true" width="140">
               <template slot-scope="scope">
                 {{scope.row.batch}}
               </template>
             </el-table-column>
             <el-table-column label="领用量(KG)" :show-overflow-tooltip="true" width="100">
               <template slot-scope="scope">
-                {{scope.row.useWeight}}
+                {{(scope.row.useWeight? scope.row.useWeight.toLocaleString() : '')}}
               </template>
             </el-table-column>
-            <el-table-column label="领用订单" :show-overflow-tooltip="true" width="120" >
+            <el-table-column label="领用订单" :show-overflow-tooltip="true" width="150" >
               <template slot-scope="scope">
                 {{scope.row.orderNo}}
               </template>
             </el-table-column>
             <el-table-column label="领用时间">
               <template slot-scope="scope">
-                {{scope.row.created}}
+                {{scope.row.changed}}
               </template>
             </el-table-column>
           </el-table>
           <el-row>
             <el-pagination
-              @size-change="handleSizeChangeApply"
-              @current-change="handleCurrentChangeApply"
-              :current-page="applyParms.currPage"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currPage"
               :page-sizes="[10, 15, 20]"
-              :page-size="applyParms.pageSize"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="applyParms.totalCount">
+              :total="totalCount">
             </el-pagination>
           </el-row>
         </div>
@@ -221,7 +227,7 @@
             <el-form-item label="调整类型：" required>
               <el-select  placeholder="请选择"  v-model="adjustForm.ADJUST_TYPE" style="width:220px" >
                 <el-option label="盘亏" value="1" ></el-option>
-                <el-option label="盘赢" value="0" ></el-option>
+                <el-option label="盘盈" value="0" ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="调整量：" required>
@@ -243,41 +249,36 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator'
-import {GRA_API, GRANARY_API} from '@/api/api'
+import {GRANARY_API} from '@/api/api'
 @Component({
   components: {
   }
 })
 export default class Index extends Vue {
-  holderId = this.$store.state.common.BeanPulp.holderId
+  factoryId = ''
+  holderId = ''
   activeName = '1'
-  formData = {}
   // 批次数据
   dataList = []
-  dataParms = {
-    holderId: this.holderId,
-    currPage: 1,
-    pageSize: 10,
-    totalCount: 0
-  }
+  totalDataList = []
+  dataCurrPage: number = 1
+  dataPageSize: number = 10
+  dataTotalCount: number = 0
   // 调整数据
   adjustList = []
-  adjParms = {
-    holderId: this.holderId,
-    currPage: 1,
-    pageSize: 10,
-    totalCount: 0
-  }
-  // 领用分页数据
+  totalAdjustList = []
+  adjustCurrPage: number = 1
+  adjustPageSize: number = 10
+  adjustTotalCount: number = 0
+  // 领用数据
   applyList = []
-  applyParms = {
-    batch: '',
-    currPage: 1,
-    pageSize: 10,
-    totalCount: 0
-  }
+  totalList = []
+  currPage: number = 1
+  pageSize: number = 10
+  totalCount: number = 0
   dialogFormVisible : boolean = false
   dialogFormVisible2 : boolean = false
+  formData = {}
   adjustForm = {
     MATERIAL_CODE: '',
     MATERIAL_NAME: '',
@@ -296,74 +297,15 @@ export default class Index extends Vue {
     REMARK: ''
   }
   mounted () {
-    this.GetBatch()
-    this.adjust()
-    this.GetBasic()
+    this.factoryId = this.$store.state.common.BeanPulp.factory
+    this.holderId = this.$store.state.common.BeanPulp.holderId
+    this.retrieveDetail()
+    this.retrieveDataList()
+    this.retrieveAdjustList()
   }
-  GetBasic () {
-    Vue.prototype.$http(`${GRA_API.BASIC_API}/${this.$store.state.common.BeanPulp.factory}/${this.$store.state.common.BeanPulp.holderId}`, `POST`, {}).then(({data}) => {
-      if (data.code === 0) {
-        this.formData = data.data
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
-  }
-  GetBatch () {
-    Vue.prototype.$http(`${GRA_API.BATCH_API}`, `POST`, {
-      holderId: this.holderId,
-      currPage: this.dataParms.currPage + '',
-      pageSize: this.dataParms.pageSize + '',
-      totalCount: this.dataParms.totalCount + ''
-    }).then(({data}) => {
-      if (data.code === 0) {
-        this.dataList = data.page.list
-        this.dataParms.currPage = data.page.currPage
-        this.dataParms.pageSize = data.page.pageSize
-        this.dataParms.totalCount = data.page.totalCount
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
-  }
-  adjust () {
-    Vue.prototype.$http(`${GRA_API.BATCHADJUST_API}`, `POST`, {
-      holderId: this.holderId,
-      currPage: this.adjParms.currPage + '',
-      pageSize: this.adjParms.pageSize + '',
-      totalCount: this.adjParms.totalCount + ''
-    }).then(({data}) => {
-      if (data.code === 0) {
-        this.adjustList = data.adjustInfo.list
-        this.adjParms.currPage = data.adjustInfo.currPage
-        this.adjParms.pageSize = data.adjustInfo.pageSize
-        this.adjParms.totalCount = data.adjustInfo.totalCount
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
-  }
-  showLog (row) {
-    if (row) {
-      this.applyParms.batch = row.batch
-    }
-    Vue.prototype.$http(`${GRA_API.BATCHCOLLARUSE_API}`, `POST`, {
-      materielType: 'Soybean',
-      batch: this.applyParms.batch,
-      currPage: this.applyParms.currPage + '',
-      pageSize: this.applyParms.pageSize + '',
-      totalCount: this.applyParms.totalCount + ''
-    }).then(({data}) => {
-      if (data.code === 0) {
-        this.applyList = data.collarUseInfo.list
-        this.applyParms.currPage = data.collarUseInfo.currPage
-        this.applyParms.pageSize = data.collarUseInfo.pageSize
-        this.applyParms.totalCount = data.collarUseInfo.totalCount
-        this.dialogFormVisible = true
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
+  showLog (batch) {
+    this.retrieveLogList(batch)
+    this.dialogFormVisible = true
   }
   makeAdjust (row) {
     this.adjustForm = {
@@ -380,11 +322,100 @@ export default class Index extends Vue {
       HOLDER_ID: row.holderId,
       ADJUST_TYPE: '0',
       QUANTITY: 0,
-      UNIT: 'KG',
+      UNIT: row.unit,
       REMARK: ''
     }
     this.dialogFormVisible2 = true
-    this.dialogFormVisible2 = true
+  }
+  // 改变每页条数
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+    this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+  }
+  handleDataSizeChange (val: number) {
+    this.dataPageSize = val
+    this.dataCurrPage = 1
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustSizeChange (val: number) {
+    this.adjustPageSize = val
+    this.adjustCurrPage = 1
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (this.adjustCurrPage - 1) * this.adjustPageSize + this.adjustPageSize)
+  }
+  // 跳转页数
+  handleCurrentChange (val: number) {
+    this.currPage = val
+    this.applyList = this.totalList.slice((this.currPage - 1) * this.pageSize, (val - 1) * this.pageSize + this.pageSize)
+  }
+  handleDataCurrentChange (val: number) {
+    this.dataCurrPage = val
+    this.dataList = this.totalDataList.slice((this.dataCurrPage - 1) * this.dataPageSize, (val - 1) * this.dataPageSize + this.dataPageSize)
+  }
+  handleAdjustCurrentChange (val: number) {
+    this.adjustCurrPage = val
+    this.adjustList = this.totalAdjustList.slice((this.adjustCurrPage - 1) * this.adjustPageSize, (val - 1) * this.adjustPageSize + this.adjustPageSize)
+  }
+  retrieveDetail () {
+    this.formData = {}
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_DETAIL}/${this.factoryId}/${this.holderId}`, `GET`).then((res) => {
+      if (res.data.code === 0) {
+        this.formData = res.data.data
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 当前库存量
+  retrieveDataList () {
+    this.totalDataList = []
+    this.dataList = []
+    this.dataTotalCount = 0
+    this.dataCurrPage = 1
+    this.dataPageSize = 10
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_BATCH_LIST}`, `POST`, {holderId: this.holderId}).then((res) => {
+      if (res.data.code === 0) {
+        this.totalDataList = res.data.page.list
+        this.dataTotalCount = this.totalDataList.length
+        this.dataList = this.totalDataList.slice(0, this.dataPageSize)
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 调整信息
+  retrieveAdjustList () {
+    this.totalAdjustList = []
+    this.adjustList = []
+    this.adjustTotalCount = 0
+    this.adjustCurrPage = 1
+    this.adjustPageSize = 10
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJSUT_LIST}`, `POST`, {factory: this.factoryId, holderId: this.holderId}).then((res) => {
+      if (res.data.code === 0) {
+        this.totalAdjustList = res.data.adjustInfo.list
+        this.adjustTotalCount = this.totalAdjustList.length
+        this.adjustList = this.totalAdjustList.slice(0, this.adjustPageSize)
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 领用记录
+  retrieveLogList (batch) {
+    this.totalList = []
+    this.applyList = []
+    this.currPage = 1
+    this.pageSize = 10
+    this.totalCount = 0
+    Vue.prototype.$http(`${GRANARY_API.WHEAT_APPLY_LIST}`, `POST`, {materielType: 'Soybean', batch}).then((res) => {
+      if (res.data.code === 0) {
+        this.totalList = res.data.collarUseInfo.list
+        this.totalCount = this.totalList.length
+        this.applyList = this.totalList.slice(0, this.pageSize)
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
   }
   saveAdjust () {
     if (this.adjustForm.QUANTITY.toString() === '') {
@@ -394,43 +425,16 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
       if (res.data.code === 0) {
         this.$message.success('保存成功')
-        this.GetBatch()
-        this.adjust()
+        this.retrieveDataList()
+        this.retrieveAdjustList()
       } else {
         this.$message.error(res.data.msg)
       }
     })
     this.dialogFormVisible2 = false
   }
-  // 改变每页条数
-  handleSizeChangeBatch (val: number) {
-    this.dataParms.pageSize = val
-    this.GetBatch()
-  }
-  // 跳转页数
-  handleCurrentChangeBatch (val: number) {
-    this.dataParms.currPage = val
-    this.GetBatch()
-  }
-  // 改变每页条数
-  handleSizeChangeApply (val: number) {
-    this.applyParms.pageSize = val
-    this.showLog('')
-  }
-  // 跳转页数
-  handleCurrentChangeApply (val: number) {
-    this.applyParms.currPage = val
-    this.showLog('')
-  }
-  // 改变每页条数
-  handleSizeChangeAdj (val: number) {
-    this.adjParms.pageSize = val
-    this.adjust()
-  }
-  // 跳转页数
-  handleCurrentChangeAdj (val: number) {
-    this.adjParms.currPage = val
-    this.adjust()
+  get total () {
+    return this.totalDataList.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0).toLocaleString()
   }
 }
 </script>
@@ -479,18 +483,12 @@ export default class Index extends Vue {
         width:250px;
         background: url('~@/assets/img/pot.png') no-repeat top right;
         background-size:contain;
-        .header-pot__image_box{
-          position: absolute;
-          bottom: 61px;
-          right: 40px;
-          height: 82px;
-          width: 46px;
-        }
         .header-pot__image_content {
           height: 65px;
           width: 46px;
           position: absolute;
-          bottom: 0px;
+          right: 40px;
+          bottom: 61px;
           background: linear-gradient(#35C3FF,#1890FF);
         }
       }

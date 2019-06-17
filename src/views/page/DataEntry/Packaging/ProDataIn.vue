@@ -394,7 +394,6 @@ export default {
     },
     // 入库状态
     GetinstorageState (status) {
-      console.log(status)
       this.instorageState = status
     },
     // 物料状态

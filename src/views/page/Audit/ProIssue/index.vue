@@ -303,7 +303,6 @@ export default {
       this.GetParentline(n)
     },
     'lodingStatus' (n, o) {
-      console.log(n)
     }
   },
   mounted () {

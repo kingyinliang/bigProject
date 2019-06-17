@@ -212,7 +212,19 @@ export const BASICDATA_API = {
   /**
    * 原料入库记录
    */
-  MATERIALRAWLIST_API: HOST + '/sys/sapGranaryMaterial/list'
+  MATERIALRAWLIST_API: HOST + '/sys/sapGranaryMaterial/list',
+  /**
+   * 原料入库记录同步
+   */
+  MATERIALRAWSYNCHRONISM_API: HOST + '/sys/sapGranaryMaterial/syncInstorageThread',
+  /**
+   * 原料入库记录同步状态
+   */
+  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_INSTORAGE',
+  /**
+   * 豆粕 + 小麦 罐
+   */
+  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes'
 }
 /*
 *系统设置api

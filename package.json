@@ -11,7 +11,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js",
+    "build": "node build/version.js && node build/build.js",
     "version": "node build/version.js"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "element-ui": "^2.4.1",
     "file-saver": "^2.0.0-rc.3",
     "jquery": "^3.3.1",
+    "mockjs": "^1.0.1-beta3",
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.5.6",

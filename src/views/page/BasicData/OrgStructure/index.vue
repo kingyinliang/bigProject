@@ -205,7 +205,6 @@ export default {
   },
   ready () {
     document.addEventListener('click', (e) => {
-      console.log(e.target)
       if (!this.$el.contains(e.target)) this.menuVisible = false
     })
   },
@@ -228,7 +227,6 @@ export default {
     // 获取组织结构树
     getTree (type) {
       this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
@@ -266,7 +264,6 @@ export default {
             this.fileList[0].name = ''
             this.fileList[0].url = 'http://10.8.4.153:50080' + this.OrgDetail.img
           } else {
-            console.log('.....')
             this.fileList = []
           }
         } else {
@@ -277,7 +274,6 @@ export default {
     // 右键菜单
     showtab1 (event, object, value, element) {
       this.clickTreeNode = object
-      console.log(object)
       this.menuVisible = true
       let menu = document.querySelector('#menu')
       menu.style.left = event.clientX + 'px'
@@ -307,7 +303,6 @@ export default {
       this.OrgDetail.img = res
     },
     closethis () {
-      console.log(this.addDep)
       this.dialogFormVisible1 = false
     },
     // 查询
@@ -352,7 +347,6 @@ export default {
         this.$http(`${BASICDATA_API.DELETEORG_API}`, 'GET', {
           deptId: this.OrgDetail.deptId
         }).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$message({
               message: '操作成功',

@@ -217,7 +217,6 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http(`${BASICDATA_API.SPECDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 type: 'success',

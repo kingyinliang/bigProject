@@ -57,7 +57,6 @@ export default {
   methods: {
     init (id) {
       this.$http(`${BASICDATA_API.SAPDETAIL_API}/${id}`, 'GET', {}).then(({data}) => {
-        console.log(data)
         if (data.code === 0) {
           this.detailDialog = data.sapMaterialItemEntity
         } else {
