@@ -228,8 +228,6 @@ export default {
       this.MaterielDate.forEach((item) => {
         num = num + (item.delFlag === '0' ? item.amount * 1 : 0)
       })
-      console.log('原料领用')
-      console.log(num)
       this.$emit('SetMeaterielNum', num)
       return num
     }

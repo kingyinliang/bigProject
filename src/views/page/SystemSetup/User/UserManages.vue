@@ -217,7 +217,6 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            console.log(data)
             if (data.code === 0) {
               this.$message({
                 type: 'success',

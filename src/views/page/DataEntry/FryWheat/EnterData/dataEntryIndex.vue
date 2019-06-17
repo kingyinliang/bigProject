@@ -56,7 +56,7 @@
             <span slot="label" class="spanview">
               <el-button>异常记录</el-button>
             </span>
-            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+            <exc-record ref="excrecord" :isRedact="isRedact" :order="formHeader"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label" class="spanview">
@@ -147,6 +147,7 @@ export default {
         productDate: this.productDate,
         orderNo: this.orderNo
       }, false, false, false).then(({data}) => {
+        this.formHeader = {}
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.$refs.readytime.GetMachine(this.formHeader.productLine)
@@ -157,6 +158,7 @@ export default {
         this.$refs.workerref.GetProductShift(this.formHeader.factory)
         this.$refs.instock.getWheatDataList(this.formHeader.orderId)
         this.$refs.applymateriel.getMaterielDataList(this.formHeader.orderId)
+        this.$refs.applymateriel.GetWheatCang(this.formHeader)
         if (this.orderStatus !== '已同步') {
           this.$refs.readytime.GetReadyList(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)

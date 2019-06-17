@@ -66,6 +66,9 @@ a, a:link, a:visited, a:hover, a:active {
 .clearfix {
   zoom: 1; /*IE/7/6*/
 }
+.el-table{
+  border-radius: 6px 6px 0 0;
+}
 .tableHead,.tableHead th{
   background-color: #f9f9f9!important;
   /*text-align: center;*/

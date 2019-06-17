@@ -44,7 +44,6 @@ export default {
     init (id) {
       this.roleId = id
       this.$http(`${MAIN_API.MENULIST_API}`, 'GET', {}).then(({data}) => {
-        console.log(data)
         this.menuList = treeDataTranslate(data, 'menuId')
       }).then(() => {
         this.visible = true
@@ -68,7 +67,6 @@ export default {
           roleId: this.roleId,
           menuId: [[].concat(this.$refs.menuListTree.getCheckedKeys()), [].concat(this.$refs.menuListTree.getHalfCheckedKeys())]
         }).then(({data}) => {
-          console.log(data)
           if (data.code === 0) {
             this.$message({
               message: '操作成功',
