@@ -87,6 +87,16 @@ export default {
       applyDate: ''
     },
     /**
+     * 压榨车间开罐申请参数
+     */
+    SqueezeApplyPot: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      orderDateDate: ''
+    },
+    /**
      * 粮仓小麦罐
      */
     GranaryWheatPot: {
@@ -234,6 +244,9 @@ export default {
     /** 压榨 */
     updateSqueezeWorkshop (state, name) {
       state.SqueezeWorkshop = name
+    },
+    updateSqueezeApplyPot (state, name) {
+      state.SqueezeApplyPot = name
     },
     /** 粮仓小麦罐 */
     updateGranaryWheatPot (state, params) {

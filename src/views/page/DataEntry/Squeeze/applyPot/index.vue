@@ -5,7 +5,7 @@
         <el-row type="flex">
           <el-col>
             <el-form :model="params" size="small" :inline="true" label-position="right" label-width="50px">
-              <el-form-item label="工厂：" label-width="80px">
+              <el-form-item label="工厂：" >
                 <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
@@ -17,42 +17,14 @@
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="罐号：" @change="changeOptions('pot')">
-                <el-select v-model="params.potId" class="selectwpx" style="width: 140px">
-                  <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="物料：" @change="changeOptions('material')">
-                <el-select v-model="params.materialCode" class="selectwpx" style="width: 140px">
-                  <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item label="订单日期：" label-width="80px">
-                <el-date-picker type="date" v-model="params.startDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
-                - <el-date-picker type="date" v-model="params.endDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
-          <!-- <el-col style="width: 180px">
-            <div style="float:right; line-height:31px;font-size: 14px">
-              <div style="float:left">
-                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890ff' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
-              </div>
-              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
-            </div>
-          </el-col> -->
-        </el-row>
-        <el-row style="text-align:right" class="buttonCss">
-          <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" v-if="isAuth('key')" @click="getOrderList()">查询</el-button>
-            <el-button type="primary" class="button" size="small" @click="isEdit = !isEdit" v-if="isAuth('key')">{{isEdit?'取消':'编辑'}}</el-button>
-          </template>
-          <template v-if="isEdit" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" v-if="isAuth('key')">保存</el-button>
-            <el-button type="primary" size="small" v-if="isAuth('key')">提交</el-button>
-          </template>
+          <el-col style="width:80px">
+            <el-button type="primary" size="small" v-if="isAuth('key')"  @click="getOrderList()">查询</el-button>
+          </el-col>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -66,59 +38,64 @@
         </div>
         <el-card>
           <el-row>
-             <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">入库列表</span></div>
+            <el-col :span="12">
+              <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请列表</span></div>
+            </el-col>
+            <el-col :span="12">
+              <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'  @click="pushPage('DataEntry-Squeeze-applyPot-detail')">新增</el-button>
+            </el-col>
           </el-row>
           <el-row>
-            <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+            <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="状态" :show-overflow-tooltip="true">
+              <el-table-column label="车间" :show-overflow-tooltip="true"  width="120">
                 <template slot-scope="scope">
+                  {{scope.row.workShopName}}
                 </template>
               </el-table-column>
-              <el-table-column label="订单号" :show-overflow-tooltip="true" >
+              <el-table-column label="申请编码" :show-overflow-tooltip="true"  width="120">
                 <template slot-scope="scope">
+                   {{scope.row.applyNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="容器" :show-overflow-tooltip="true" >
+              <el-table-column label="物料" :show-overflow-tooltip="true"  width="180">
                 <template slot-scope="scope">
+                  {{scope.row.materialCode + ' ' + scope.row.materialName}}
                 </template>
               </el-table-column>
-              <el-table-column label="物料" :show-overflow-tooltip="true" >
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.halfName}}
                 </template>
               </el-table-column>
-              <el-table-column label="订单量">
+              <el-table-column label="申请数量(L)" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.amount}}
                 </template>
               </el-table-column>
-              <el-table-column label="单位">
+              <el-table-column label="生产日期" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.productDate}}
                 </template>
               </el-table-column>
-              <el-table-column label="入库数量" >
+              <el-table-column label="申请人员" width="150">
                 <template slot-scope="scope">
+                  {{scope.row.changer}}
                 </template>
               </el-table-column>
-              <el-table-column label="单位" >
+              <el-table-column label="申请时间" width="170">
                 <template slot-scope="scope">
+                  {{scope.row.changed}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次" >
-                <template slot-scope="scope">
-                </template>
-              </el-table-column>
-              <el-table-column label="备注" >
-                <template slot-scope="scope">
-                </template>
-              </el-table-column>
-              <el-table-column label="提交人员" >
-                <template slot-scope="scope">
-                </template>
-              </el-table-column>
-              <el-table-column label="提交时间" >
-                <template slot-scope="scope">
-                </template>
-              </el-table-column>
+               <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="80">
+                  <template slot-scope="scope">
+                    <el-button type="primary" size="small" >详情</el-button>
+                  </template>
+                </el-table-column>
             </el-table>
           </el-row>
           <el-row>
@@ -138,13 +115,59 @@
     <div class="main" style="padding-top: 0px">
       <div class="tableCard">
         <el-card>
-        <!-- <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
-          <i class="el-icon-caret-bottom"></i>
-        </div> -->
           <el-row>
-            <el-col :span="24">
-              <auditLog :tableData="readAudit"></auditLog>
-            </el-col>
+            <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">开罐明细</span></div>
+          </el-row>
+          <el-row>
+            <el-table header-row-class-name="tableHead" :data="detailList" border tooltip-effect="dark" >
+              <el-table-column type="index" label="序号" width="55"></el-table-column>
+              <el-table-column label="申请单号" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  {{scope.row.openId}}
+                </template>
+              </el-table-column>
+              <el-table-column label="罐号" :show-overflow-tooltip="true" >
+                <template slot-scope="scope">
+                  {{scope.row.holderNo}}
+                </template>
+              </el-table-column>
+              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" >
+                <template slot-scope="scope">
+                  {{scope.row.ferDays}}
+                </template>
+              </el-table-column>
+              <el-table-column label="酱醪类别" :show-overflow-tooltip="true" >
+                <template slot-scope="scope">
+                  {{scope.row.ferDays}}
+                </template>
+              </el-table-column>
+              <el-table-column label="批次">
+                <template slot-scope="scope">
+                  {{scope.row.batch}}
+                </template>
+              </el-table-column>
+              <el-table-column label="确认人员">
+                <template slot-scope="scope">
+                  {{scope.row.changer}}
+                </template>
+              </el-table-column>
+              <el-table-column label="确认时间" >
+                <template slot-scope="scope">
+                   {{scope.row.changed}}
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-row>
+          <el-row>
+            <!-- <el-pagination
+              @size-change="handleDataSizeChange"
+              @current-change="handleDataCurrentChange"
+              :current-page="dataCurrPage"
+              :page-sizes="[10, 15, 20]"
+              :page-size="dataPageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="dataTotalCount">
+            </el-pagination> -->
           </el-row>
         </el-card>
       </div>
@@ -154,35 +177,31 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, GRANARY_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, SQU_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {dateFormat, headanimation} from '@/net/validate'
-import AuditLog from '@/views/components/AuditLog.vue'
 @Component({
   components: {
-    AuditLog
   }
 })
 
 export default class Index extends Vue {
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.FerOrderManage))
+  params = JSON.parse(JSON.stringify(this.$store.state.common.SqueezeApplyPot))
   factoryList = []
   workshopList = []
   potList = []
   materialList = []
   dataList = []
-  readAudit = []
+  detailList = []
   searched: boolean = false
-  isEdit: boolean = false
   mounted () {
     headanimation(Vue.prototype.$)
     const now = dateFormat(new Date(), 'yyyy-MM-dd')
-    this.params.startDate = now
-    this.params.endDate = now
+    this.params.orderDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getFermentPot(this.params.factoryId)
+    // this.getFermentPot(this.params.factoryId)
   }
   isAuth (key) {
     return true
@@ -194,6 +213,13 @@ export default class Index extends Vue {
   set mainTabs (val) {
     this.$store.commit('common/updateMainTabs', val)
   }
+  pushPage (name) {
+    this.mainTabs = this.mainTabs.filter(item => item.name !== name)
+    let that = this
+    setTimeout(function () {
+      that.$router.push({name})
+    }, 100)
+  }
   changeOptions (flag: string) {
     if (flag === 'factory') {
       let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
@@ -201,9 +227,6 @@ export default class Index extends Vue {
     } else if (flag === 'workshop') {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
-    } else if (flag === 'pot') {
-      let item = this.potList.find(ele => ele.holderId === this.params.potId)
-      this.params.potName = item ? item.holderName : ''
     }
   }
   // 获取工厂
@@ -231,47 +254,35 @@ export default class Index extends Vue {
     }
   }
   // 发酵罐
-  getFermentPot (fid: string) {
-    this.potList = []
-    if (fid) {
-      Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
-        if (res.data.code === 0) {
-          this.potList = res.data.num
-          // if (!this.params.factoryId && res.data.num.length > 0) {
-          //   this.params.workshopId = res.data.num[0].holderId
-          // }
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
-    }
-  }
+  // getFermentPot (fid: string) {
+  //   this.potList = []
+  //   if (fid) {
+  //     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+  //       if (res.data.code === 0) {
+  //         this.potList = res.data.num
+  //         // if (!this.params.factoryId && res.data.num.length > 0) {
+  //         //   this.params.workshopId = res.data.num[0].holderId
+  //         // }
+  //       } else {
+  //         this.$message.error(res.data.msg)
+  //       }
+  //     })
+  //   }
+  // }
   setStore (params) {
-    this.$store.commit('common/updateFerOrderManage', params)
+    this.$store.commit('common/updateSqueezeApplyPot', params)
   }
   getOrderList () {
-    // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择工厂')
-    //   return
-    // }
+    if (this.params.factoryId === '') {
+      this.$message.error('请选择工厂')
+      return
+    }
     // if (this.params.workshopId === '') {
     //   this.$message.error('请选择车间')
     //   return
     // }
-    // if (this.params.potId === '') {
-    //   this.$message.error('请选择罐号')
-    //   return
-    // }
-    // if (this.params.materialCode === '') {
-    //   this.$message.error('请选择物料')
-    //   return
-    // }
-    // if (this.params.startDate === '') {
-    //   this.$message.error('请选择开始日期')
-    //   return
-    // }
-    // if (this.params.endDate === '') {
-    //   this.$message.error('请选择结束日期')
+    // if (this.params.orderDate === '') {
+    //   this.$message.error('请选择订单日期')
     //   return
     // }
     this.searched = true
@@ -279,24 +290,26 @@ export default class Index extends Vue {
     this.setStore(this.params)
     let queryParams = {
       factory: this.params.factoryId,
-      deptId: this.params.workshopId,
-      flag: '002'
+      workShop: this.params.workshopId,
+      productDate: this.params.orderDate ? this.params.orderDate : ''
     }
     this.retrieveOrderList(queryParams)
   }
   retrieveOrderList (params) {
     this.dataList = []
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}/${params.factory}?deptId=${params.deptId}&flag=${params.flag}`, `GET`).then((res) => {
+    Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.data ? res.data.data.holders : []
-        this.dataList.forEach((item) => {
-          item.total = 0
-          item.unit = 'KG'
-          if (item.stocks && item.stocks.length > 0) {
-            item.total = item.stocks.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0)
-            item.unit = item.stocks[0].unit
-          }
-        })
+        this.dataList = res.data.page.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  showDetail (row) {
+    this.detailList = []
+    Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_API}`, `POST`, {openId: row.id}, false, false, false).then((res) => {
+      if (res.data.code === 0) {
+        this.detailList = res.data.list
       } else {
         this.$message.error(res.data.msg)
       }
@@ -310,12 +323,8 @@ export default class Index extends Vue {
   onFactoryValue (newVal: string, oldVal: string) {
     this.params.workshopId = ''
     this.params.workshopName = ''
-    this.params.potId = ''
-    this.params.potName = ''
-    this.params.materialCode = ''
-    this.params.materialName = ''
     this.getWorkshop(newVal)
-    this.getFermentPot(newVal)
+    // this.getFermentPot(newVal)
   }
 }
 </script>

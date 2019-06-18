@@ -1086,6 +1086,14 @@ export const KJM_API = {
  */
 export const SQU_API = {
   /**
+   * 开罐申请列表
+   */
+  POT_APPLY_LIST_API: HOST + '/fer/openHolder/list',
+  /**
+   * 申请详情
+   */
+  POT_APPLY_DETAIL_API: HOST + '/fer/openHolderDEtail/list',
+  /**
    * 物料领用 LIST
    */
   MATERIAL_APPLY_LIST_API: HOST + '/prs/material/list',
