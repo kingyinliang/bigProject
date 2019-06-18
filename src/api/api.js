@@ -1255,3 +1255,17 @@ export const GRANARY_API = {
    */
   WHEAT_POT_DETAIL: HOST + '/sys/deptInfos/queryDetail'
 }
+
+/**
+ * 发酵 API  Fermentation ForRecipients
+ */
+export const FERMENTATION_API = {
+  /**
+   *  待领用申请列表
+   */
+  FORRECIPIENTSLIST_API: HOST + '/fer/openHolder/openHolderList',
+  /**
+   *  压榨通知单
+   */
+  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList'
+}

@@ -129,6 +129,12 @@ export default {
       materialName: '',
       startDate: '',
       endDate: ''
+    },
+    /*
+     * 发酵车间
+     */
+    Fermentation: {
+      orderId: ''
     }
   },
   mutations: {
@@ -259,6 +265,10 @@ export default {
     /** 发酵罐订单管理参数 */
     updateFerOrderManage (state, params) {
       state.FerOrderManage = params
+    },
+    /** 发酵 */
+    updateFermentation (state, params) {
+      state.Fermentation = params
     }
   }
 }
