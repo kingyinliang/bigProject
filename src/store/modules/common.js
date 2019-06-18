@@ -104,6 +104,21 @@ export default {
       holderId: '',
       factory: '',
       deptId: ''
+    },
+    /**
+     * 发酵罐订单管理
+     */
+    FerOrderManage: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      potId: '',
+      potName: '',
+      materialCode: '',
+      materialName: '',
+      startDate: '',
+      endDate: ''
     }
   },
   mutations: {
@@ -227,6 +242,10 @@ export default {
     /** 粮仓豆粕罐 */
     updateBeanPulp (state, params) {
       state.BeanPulp = params
+    },
+    /** 发酵罐订单管理参数 */
+    updateFerOrderManage (state, params) {
+      state.FerOrderManage = params
     }
   }
 }
