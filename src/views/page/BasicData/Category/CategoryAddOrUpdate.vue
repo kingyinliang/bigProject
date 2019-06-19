@@ -4,28 +4,30 @@
     class="shinhodialog"
     :title="id?'修改类别':'新增类别'"
     @close="closeDialog"
-    :close-on-click-modal="false"
+    :close-on-click-modal="closeDialog"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="155px"  size="small">
       <el-form-item label="生产工厂：">
         <el-select v-model="dataForm.factory" placeholder="请选择" style="width: 100%">
-          <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="发料物料：" prop="holderId">
-        <el-select v-model="dataForm.material" placeholder="请选择" filterable style="width: 100%">
-          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
+        <el-select v-model="dataForm.materialCode" placeholder="请选择" filterable style="width: 100%">
+          <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.materialCode" :label="sole.materialCode+ ' ' + sole.materialName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="半成品类别：">
-        <el-input v-model="dataForm.orderNo" placeholder="请输入"></el-input>
+        <el-input v-model="dataForm.halfType" placeholder="请输入"></el-input>
       </el-form-item>
-      <el-form-item label="发酵成熟天数（天）：">
-        <el-input v-model="dataForm.orderNo" placeholder="请输入"></el-input>
+      <el-form-item label="订单天数：">
+        <el-input v-model="dataForm.orderDays" placeholder="请输入"></el-input>
       </el-form-item>
-      <el-form-item label="发酵超期天数（天）：">
-        <el-input v-model="dataForm.orderNo" placeholder="请输入"></el-input>
+      <el-form-item label="发酵成熟天数：">
+        <el-input v-model="dataForm.matureDays" placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item label="发酵超期天数：">
+        <el-input v-model="dataForm.outDays" placeholder="请输入"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -36,23 +38,67 @@
 </template>
 
 <script>
+import {BASICDATA_API} from '@/api/api'
 export default {
   name: 'CategoryAddOrUpdate',
   data () {
     return {
       id: '',
       visible: false,
+      material: [],
       dataForm: {}
     }
   },
   props: {
     factory: []
   },
+  watch: {
+    'dataForm.factory' (n, o) {
+      this.GetMaterial(n)
+    }
+  },
   mounted () {
   },
   methods: {
-    init (id) {
+    // 初始化
+    init (data) {
+      if (data) {
+        this.dataForm = JSON.parse(JSON.stringify(data))
+        this.id = this.dataForm.id
+      } else {
+        this.dataForm = {}
+        this.id = ''
+      }
       this.visible = true
+    },
+    // 新增和修改
+    dataFormSubmit () {
+      this.dataForm.materialName = this.material.find((item) => item.materialCode === this.dataForm.materialCode).materialName
+      this.$http(`${this.id ? BASICDATA_API.CATEGORY_UPDATE : BASICDATA_API.CATEGORY_SAVE}`, 'POST', this.dataForm).then(({data}) => {
+        if (data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取物料
+    GetMaterial (n) {
+      this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.material = data.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     closeDialog () {
       this.visible = false

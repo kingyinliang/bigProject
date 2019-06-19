@@ -4,36 +4,39 @@
       <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
-            <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发料物料：" prop="holderId">
-          <el-select v-model="formHeader.material" placeholder="请选择" filterable style="width: 160px">
-            <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
+        <el-form-item label="发料物料：">
+          <el-select v-model="formHeader.materialCode" placeholder="请选择" filterable style="width: 160px">
+            <el-option label="请选择" value=""></el-option>
+            <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.materialCode" :label="sole.materialCode+ ' ' + sole.materialName"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" >查 询</el-button>
-        <el-button type="primary" size="small" @click="addOrupdate()">新 增</el-button>
-        <el-button type="danger" size="small" >批量删除</el-button>
+        <el-button type="primary" size="small" @click="GetDataList(true)">查 询</el-button>
+        <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('fer:sort:save')">新 增</el-button>
+        <el-button type="danger" size="small" @click="delList()" v-if="isAuth('fer:sort:delete')">批量删除</el-button>
       </el-form>
     </el-card>
     <el-card style="margin-top: 10px">
       <el-table ref="table1" v-loading="dataListLoading" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
-        <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
-        <el-table-column label="工厂" prop="factory" width="120"></el-table-column>
-        <el-table-column label="发酵物料" :show-overflow-tooltip="true" width="220">
+        <el-table-column type="selection" width="34"></el-table-column>
+        <el-table-column label="工厂" prop="factoryName" width="140" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="发酵物料" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ scope.row.materialCode + ' ' + scope.row.materialName}}
           </template>
         </el-table-column>
-        <el-table-column label="半成品类别" prop="factory" width="120"></el-table-column>
-        <el-table-column label="发酵成熟天数（天）" prop="factory" width="150"></el-table-column>
-        <el-table-column label="发酵超期天数（天）" prop="factory" width="150"></el-table-column>
-        <el-table-column label="操作人员" prop="factory" width="120"></el-table-column>
-        <el-table-column label="操作时间" prop="factory" width="120"></el-table-column>
-        <el-table-column label="操作" prop="factory" width="120">
-          <el-button style="padding: 0;" type="text" size="small" @click="addOrupdate(scope.row)">编辑</el-button>
+        <el-table-column label="半成品类别" prop="halfType" width="115"></el-table-column>
+        <el-table-column label="订单天数" prop="orderDays" width="110"></el-table-column>
+        <el-table-column label="发酵成熟天数" prop="matureDays" width="115"></el-table-column>
+        <el-table-column label="发酵超期天数" prop="outDays" width="115"></el-table-column>
+        <el-table-column label="操作人员" prop="changer" width="120" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="操作时间" prop="changed" width="140" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="操作" width="50" fixed="right">
+          <template slot-scope="scope">
+            <el-button style="padding: 0;" type="text" size="small" @click="addOrupdate(scope.row)" v-if="isAuth('fer:sort:update')">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-row >
@@ -62,33 +65,75 @@ export default {
       visible: false,
       formHeader: {
         factory: '',
-        material: '',
-        urrPage: 1,
+        materialCode: '',
+        currPage: 1,
         pageSize: 10,
         totalCount: 0
       },
       dataListLoading: false,
       factory: [],
-      guanList: [],
+      material: [],
       multipleSelection: [],
       DataList: []
     }
   },
   watch: {
     'formHeader.factory' (n, o) {
+      this.GetMaterial(n)
     }
   },
   mounted () {
     this.Getdeptcode()
   },
   methods: {
-    GetDataList () {},
+    // 查询
+    GetDataList (ty) {
+      if (ty) {
+        this.formHeader.currPage = 1
+      }
+      this.$http(`${BASICDATA_API.CATEGORY_LIST}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          this.visible = false
+          this.DataList = data.ferList.list
+          this.formHeader.currPage = data.ferList.currPage
+          this.formHeader.pageSize = data.ferList.pageSize
+          this.formHeader.totalCount = data.ferList.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 批量删除
+    delList () {
+      this.multipleSelection.forEach((item) => {
+        item.delFlag = '1'
+      })
+      this.$http(`${BASICDATA_API.CATEGORY_DELETE}`, 'POST', this.multipleSelection).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('删除成功')
+          this.GetDataList()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取工厂
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取物料
+    GetMaterial (n) {
+      this.formHeader.materialCode = ''
+      this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.material = data.list
         } else {
           this.$message.error(data.msg)
         }
@@ -107,14 +152,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrupdate.init(id)
       })
-    },
-    // 审核通过禁用
-    checkboxT (row) {
-      if ((row.status === 'checked' && row.interfaceReturnStatus === '1') || row.status === 'noPass') {
-        return 0
-      } else {
-        return 1
-      }
     },
     // 改变每页条数
     handleSizeChange (val) {

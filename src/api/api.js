@@ -232,7 +232,15 @@ export const BASICDATA_API = {
   /**
    *  物料列表
    */
-  BASEMATERIALIST_API: HOST + '/fer/order/materialList'
+  BASEMATERIALIST_API: HOST + '/fer/order/materialList',
+  /*
+   * 类别维护
+   */
+  MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
+  CATEGORY_LIST: HOST + '/fer/sort/list',
+  CATEGORY_SAVE: HOST + '/fer/sort/save',
+  CATEGORY_UPDATE: HOST + '/fer/sort/update',
+  CATEGORY_DELETE: HOST + '/fer/sort/delete'
 }
 /*
 *系统设置api
@@ -1102,6 +1110,10 @@ export const SQU_API = {
    */
   POT_APPLY_DETAIL_API: HOST + '/fer/openHolderDEtail/list',
   /**
+   * 详情保存提交
+   */
+  POT_APPLY_DETAIL_SAVE_API: HOST + '/fer/openHolder/mySaveOrUpdate',
+  /**
    * 物料领用 LIST
    */
   MATERIAL_APPLY_LIST_API: HOST + '/prs/material/list',
@@ -1281,5 +1293,14 @@ export const FERMENTATION_API = {
   /**
    *  类别判定
    */
-  CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders' // 罐
+  CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders', // 罐
+  /**
+   *  半成品列表
+   */
+  HALFTYPE_LIST_API: HOST + '/fer/sort/list',
+  /**
+   * 订单管理列表
+   */
+  ORDER_LIST_API: HOST + '/fer/order/list'
+
 }
