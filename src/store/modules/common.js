@@ -94,7 +94,7 @@ export default {
       factoryName: '',
       workshopId: '',
       workshopName: '',
-      orderDateDate: '',
+      orderDate: '',
       applyId: ''
     },
     /**

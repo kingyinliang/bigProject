@@ -1275,6 +1275,10 @@ export const FERMENTATION_API = {
   /**
    *  半成品列表
    */
-  HALFTYPE_LIST_API: HOST + '/fer/sort/list'
+  HALFTYPE_LIST_API: HOST + '/fer/sort/list',
+  /**
+   * 订单管理列表
+   */
+  ORDER_LIST_API: HOST + '/fer/order/list'
 
 }

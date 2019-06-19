@@ -99,15 +99,15 @@
             </el-table>
           </el-row>
           <el-row>
-            <!-- <el-pagination
-              @size-change="handleDataSizeChange"
-              @current-change="handleDataCurrentChange"
-              :current-page="dataCurrPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="dataPageSize"
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currPage"
+              :page-sizes="[5, 10, 20]"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="dataTotalCount">
-            </el-pagination> -->
+              :total="totalCount">
+            </el-pagination>
           </el-row>
         </el-card>
       </div>
@@ -121,32 +121,32 @@
           <el-row>
             <el-table header-row-class-name="tableHead" :data="detailList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="申请编码" :show-overflow-tooltip="true">
+              <el-table-column label="申请编码" width="140">
                 <template slot-scope="scope">
                   {{scope.row.applyNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="罐号" :show-overflow-tooltip="true" >
+              <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
                 <template slot-scope="scope">
                   {{scope.row.holderName}}
                 </template>
               </el-table-column>
-              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" >
+              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
                   {{scope.row.ferDays}}
                 </template>
               </el-table-column>
-              <el-table-column label="半成品类别" :show-overflow-tooltip="true" >
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
                   {{scope.row.halfName}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次">
+              <el-table-column label="批次" width="140">
                 <template slot-scope="scope">
                   {{scope.row.batch}}
                 </template>
               </el-table-column>
-              <el-table-column label="确认人员">
+              <el-table-column label="确认人员" width="160">
                 <template slot-scope="scope">
                   {{scope.row.changer}}
                 </template>
@@ -186,14 +186,23 @@ import {dateFormat, headanimation} from '@/net/validate'
 
 export default class Index extends Vue {
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.SqueezeApplyPot))
+  params = {
+    factoryId: this.$store.state.common.SqueezeApplyPot.factoryId,
+    factoryName: this.$store.state.common.SqueezeApplyPot.factoryName,
+    workshopId: this.$store.state.common.SqueezeApplyPot.workshopId,
+    workshopName: this.$store.state.common.SqueezeApplyPot.workshopName,
+    orderDate: this.$store.state.common.SqueezeApplyPot.orderDate
+  }
   factoryList = []
   workshopList = []
   potList = []
   materialList = []
-  dataList = []
+  totalList = []
   detailList = []
   searched: boolean = false
+  currPage: number = 1
+  pageSize: number = 5
+  totalCount: number = 0
   mounted () {
     headanimation(Vue.prototype.$)
     const now = dateFormat(new Date(), 'yyyy-MM-dd')
@@ -298,10 +307,11 @@ export default class Index extends Vue {
     this.retrieveOrderList(queryParams)
   }
   retrieveOrderList (params) {
-    this.dataList = []
+    this.totalList = []
     Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.page.list
+        this.totalList = res.data.page.list
+        this.totalCount = this.totalList.length
       } else {
         this.$message.error(res.data.msg)
       }
@@ -317,10 +327,23 @@ export default class Index extends Vue {
       }
     })
   }
+  // 改变每页条数
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+  }
+  // 跳转页数
+  handleCurrentChange (val: number) {
+    this.currPage = val
+  }
+  get dataList () {
+    return this.totalList.slice((this.currPage - 1) * this.pageSize, this.currPage * this.pageSize)
+  }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
+    console.log('aaaaaa', newVal)
     this.searched = false
-    this.dataList = []
+    this.totalList = []
     this.detailList = []
   }
   @Watch('params.factoryId')

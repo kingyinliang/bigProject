@@ -25,13 +25,13 @@
               <el-form-item label="酱醪名称：">
                 <el-select v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="半成品类别：" label-width="100px">
                 <el-select v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in halfTypeList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  <el-option v-for="sole in halfTypeList" :key="sole.halfType" :label="sole.halfName" :value="sole.halfType"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="申请数量：" label-width="100px">
@@ -90,33 +90,33 @@
           </el-row>
           <el-row>
             <el-table header-row-class-name="tableHead" :data="detailList" border tooltip-effect="dark" >
-              <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="申请编码" :show-overflow-tooltip="true">
+               <el-table-column type="index" label="序号" width="55"></el-table-column>
+              <el-table-column label="申请编码" width="140">
                 <template slot-scope="scope">
                   {{scope.row.applyNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="罐号" :show-overflow-tooltip="true" >
+              <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
                 <template slot-scope="scope">
                   {{scope.row.holderName}}
                 </template>
               </el-table-column>
-              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" >
+              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
                   {{scope.row.ferDays}}
                 </template>
               </el-table-column>
-              <el-table-column label="半成品类别" :show-overflow-tooltip="true" >
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
                   {{scope.row.halfName}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次">
+              <el-table-column label="批次" width="140">
                 <template slot-scope="scope">
                   {{scope.row.batch}}
                 </template>
               </el-table-column>
-              <el-table-column label="确认人员">
+              <el-table-column label="确认人员" width="160">
                 <template slot-scope="scope">
                   {{scope.row.changer}}
                 </template>
@@ -148,7 +148,7 @@
 
 <script lang="ts">
 import {BASICDATA_API, SQU_API, FERMENTATION_API} from '@/api/api'
-import {Vue, Component, Watch} from 'vue-property-decorator'
+import {Vue, Component} from 'vue-property-decorator'
 import {headanimation, dateFormat} from '@/net/validate'
 @Component({
   components: {
@@ -194,7 +194,7 @@ export default class Index extends Vue {
     this.getDetailList(this.formHeader.id)
     this.getFactory()
     this.getWorkshop(this.formHeader.factory)
-    this.getMaterialList()
+    this.getMaterialList(this.formHeader.factory)
     this.getHalfTypeList(this.formHeader.factory, this.formHeader.materialCode)
     // this.getFermentPot(this.params.factoryId)
   }
@@ -208,17 +208,25 @@ export default class Index extends Vue {
   }
   changeOptions (flag: string) {
     if (flag === 'factory') {
-      // let item = this.factoryList.find(ele => ele.deptId === this.formHeader.factory)
-      // this.formHeader.factoryName = item ? item.deptName : ''
+      this.formHeader.workShop = ''
+      this.formHeader.materialCode = ''
+      this.formHeader.materialName = ''
+      this.formHeader.halfType = ''
+      this.formHeader.halfName = ''
+      this.getWorkshop(this.formHeader.factory)
+      this.getMaterialList(this.formHeader.factory)
+      this.getHalfTypeList(this.formHeader.factory, this.formHeader.materialCode)
     } else if (flag === 'workshop') {
-      // let item = this.workshopList.find(ele => ele.deptId === this.formHeader.workShop)
-      // this.formHeader.workshopName = item ? item.deptName : ''
+      // DO NOTHING
     } else if (flag === 'material') {
-      let item = this.materialList.find(ele => ele.deptId === this.formHeader.workShop)
-      this.formHeader.materialName = item ? item.deptName : ''
+      let item = this.materialList.find(ele => ele.materialCode === this.formHeader.materialCode)
+      this.formHeader.materialName = item ? item.materialName : ''
+      this.formHeader.halfType = ''
+      this.formHeader.halfName = ''
+      this.getHalfTypeList(this.formHeader.factory, this.formHeader.materialCode)
     } else if (flag === 'halfType') {
-      let item = this.halfTypeList.find(ele => ele.deptId === this.formHeader.workShop)
-      this.formHeader.halfName = item ? item.deptName : ''
+      let item = this.halfTypeList.find(ele => ele.halfType === this.formHeader.halfType)
+      this.formHeader.halfName = item ? item.halfName : ''
     }
   }
   getHeaderForm (applyId) {
@@ -273,22 +281,24 @@ export default class Index extends Vue {
       })
     }
   }
-  getMaterialList () {
+  getMaterialList (factory) {
     this.materialList = []
-    Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptName: '发酵'}, false, false, false).then(res => {
-      if (res.data.code === 0) {
-        this.materialList = res.data.typeList
-      } else {
-        this.$message.error(res.data.msg)
-      }
-    })
+    if (factory) {
+      Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {factory, param: '欣和半成品'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.materialList = data.allList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    }
   }
   getHalfTypeList (factory, materialCode) {
     this.halfTypeList = []
     if (factory && materialCode) {
-      Vue.prototype.$http(`${FERMENTATION_API.HALFTYPE_LIST_API}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
+      Vue.prototype.$http(`${FERMENTATION_API.HALFTYPE_LIST_API}`, 'POST', {factory, materialCode, pageSize: '9999', currPage: '1'}, false, false, false).then(res => {
         if (res.data.code === 0) {
-          this.halfTypeList = res.data.typeList
+          this.halfTypeList = res.data.ferList.list
         } else {
           this.$message.error(res.data.msg)
         }
@@ -348,22 +358,25 @@ export default class Index extends Vue {
     }
     return true
   }
-  @Watch('formHeader.factory')
-  onFactoryValue (newVal: string, oldVal: string) {
-    this.formHeader.workShop = ''
-    this.formHeader.halfType = ''
-    this.formHeader.halfName = ''
-    this.getWorkshop(newVal)
-    this.getHalfTypeList(newVal, this.formHeader.materialCode)
-    // this.getFermentPot(newVal)
-  }
-  @Watch('formHeader.materialCode')
-  onMaterialCode (newVal: string, oldVal: string) {
-    this.formHeader.halfType = ''
-    this.formHeader.halfName = ''
-    this.getHalfTypeList(this.formHeader.factory, newVal)
-    // this.getFermentPot(newVal)
-  }
+  // @Watch('formHeader.factory')
+  // onFactoryValue (newVal: string, oldVal: string) {
+  //   this.formHeader.workShop = ''
+  //   // this.formHeader.halfType = ''
+  //   // this.formHeader.halfName = ''
+  //   this.formHeader.materialCode = ''
+  //   this.formHeader.materialName = ''
+  //   this.getWorkshop(newVal)
+  //   this.getMaterialList(newVal)
+  //   // this.getHalfTypeList(newVal, this.formHeader.materialCode)
+  //   // this.getFermentPot(newVal)
+  // }
+  // @Watch('formHeader.materialCode')
+  // onMaterialCode (newVal: string, oldVal: string) {
+  //   // this.formHeader.halfType = ''
+  //   // this.formHeader.halfName = ''
+  //   this.getHalfTypeList(this.formHeader.factory, newVal)
+  //   // this.getFermentPot(newVal)
+  // }
 }
 </script>
 
