@@ -217,7 +217,7 @@
           <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="散装-立体库" width="140">
+      <el-table-column label="正常品" width="140">
         <template slot-scope="scope">
           <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
@@ -227,7 +227,7 @@
           <span>{{ scope.row.manPackingUnitName}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="人工码垛-立体库" width="140">
+      <el-table-column label="需整理品" width="140">
         <template slot-scope="scope">
           <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>

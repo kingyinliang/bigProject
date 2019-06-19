@@ -130,7 +130,7 @@
 
 <script>
 import { BASICDATA_API } from '@/api/api'
-import Loglist from './common/logList'
+// import Loglist from './common/logList'
 export default {
   name: 'working',
   data () {

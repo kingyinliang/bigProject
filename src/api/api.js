@@ -1301,6 +1301,10 @@ export const FERMENTATION_API = {
   /**
    * 订单管理列表
    */
-  ORDER_LIST_API: HOST + '/fer/order/list'
+  ORDER_LIST_API: HOST + '/fer/order/list',
+  /**
+   * 发料管理
+   */
+  SHOOT_LIST_API: HOST + '/fer/shoot/list'
 
 }

@@ -23,7 +23,7 @@
     </el-table-column>
     <el-table-column label="操作" width="80">
       <template slot-scope="scope">
-        <el-button v-if="scope.row.fumet.fullPort !== '正常'" type="text" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="splitDate(scope.row.fumet, $index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+        <el-button v-if="scope.row.fumet.fullPort !== '正常'" type="text" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="splitDate(scope.row.fumet, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
       </template>
     </el-table-column>
     <el-table-column label="酱醪领用">
@@ -183,7 +183,7 @@ export default {
     },
     // 拆分
     splitDate (row, index) {
-      this.SumDate.splice(index + 2, 0, {
+      this.SumDate.splice(index + 1, 0, {
         fumet: row,
         material: {
           childId: '',
@@ -213,12 +213,15 @@ export default {
       console.log(s)
       if (s > 1) {
         row.delFlag = '1'
+        this.SumDate.splice(this.SumDate.length, 0, {})
+        this.SumDate.splice(this.SumDate.length - 1, 1)
         console.log(this.SumDate)
       } else {
         this.$message.error('此订单最后一条了，不能删除')
       }
     },
     RowDelFlag ({row, rowIndex}) {
+      console.log(row)
       if (row.delFlag === '1') {
         return 'rowDel'
       } else {
