@@ -19,7 +19,8 @@
             </el-form-item>
             <el-form-item label="生产物料：">
               <el-select v-model="form.materialCode">
-                <el-option v-for="(item, index) in MaterialType" :key="index" :value="item.id" :label="item.value"></el-option>
+                <el-option value="">请选择</el-option>
+                <el-option v-for="(item, index) in MaterialType" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="申请日期：">
@@ -38,11 +39,11 @@
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="0" label="未确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="车间" prop="workShop"></el-table-column>
+          <el-table-column label="车间" prop="workShopName"></el-table-column>
           <el-table-column label="申请编码" prop="applyNo"></el-table-column>
           <el-table-column label="物料" width="250">
             <template slot-scope="scope">
-              <a @click="Go(row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              <a @click="Go(scope.row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
           </el-table-column>
           <el-table-column label="半成品类别" prop="halfType"></el-table-column>
@@ -50,7 +51,9 @@
           <el-table-column label="申请时间" prop="created"></el-table-column>
           <el-table-column label="生产日期" prop="productDate"></el-table-column>
           <el-table-column label="操作">
-            <el-button type="primary" size="small" @click="Go(row)">确认</el-button>
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" @click="Go(scope.row)">确认</el-button>
+            </template>
           </el-table-column>
         </el-table>
         <el-pagination
@@ -65,7 +68,7 @@
       </el-tab-pane>
       <el-tab-pane name="1" label="已确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="车间" prop="workShop"></el-table-column>
+          <el-table-column label="车间" prop="workShopName"></el-table-column>
           <el-table-column label="申请编码" prop="applyNo"></el-table-column>
           <el-table-column label="物料" width="250">
             <template slot-scope="scope">
@@ -93,7 +96,7 @@
 </template>
 
 <script>
-import { BASICDATA_API, SYSTEMSETUP_API, FERMENTATION_API } from '@/api/api'
+import { BASICDATA_API, FERMENTATION_API } from '@/api/api'
 export default {
   name: 'forlist',
   data () {
@@ -157,9 +160,9 @@ export default {
     },
     //  生产物料
     GetMaterialType () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: this.form.factory, type: 'materiel_code'}).then(({data}) => {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSHOLDER_API}`, 'POST').then(({data}) => {
         if (data.code === 0) {
-          this.MaterialType = data.dicList
+          this.MaterialType = data.productsInfo
         } else {
           this.$message.error(data.msg)
         }

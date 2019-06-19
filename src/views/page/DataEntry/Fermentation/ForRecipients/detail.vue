@@ -27,39 +27,61 @@
       </el-row>
       <el-row style="margin-top:15px">
         <el-col :span="22">
-          <el-form :inline="true" v-model="searchform" size="small">
+          <el-form :inline="true" :model="searchform" size="small">
             <el-form-item label="罐号">
-              <el-select></el-select>
+              <el-select v-model="searchform.holder" @change="Search()">
+                <el-option value="">请选择</el-option>
+                <el-option v-for="(item, index) of holderList" :key="index" :value="item" :label="item"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="类别">
-              <el-select></el-select>
+              <el-select v-model="searchform.types" @change="Search()">
+                <el-option value="">请选择</el-option>
+                <el-option v-for="(item, index) of typesList" :key="index" :value="item" :label="item"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="状态">
-              <el-select></el-select>
+              <el-select v-model="searchform.status" @change="Search()">
+                <el-option value="">请选择</el-option>
+                <el-option v-for="(item, index) of statusList" :key="index" :value="item" :label="item"></el-option>
+              </el-select>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
+          <el-button type="primary" @click="OpenHolder()" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
         </el-col>
       </el-row>
       <el-row>
         <el-col>
-          <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="dataList" border header-row-class-name="tableHead">
+          <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="newDataList" border header-row-class-name="tableHead">
             <el-table-column type="selection" :selectable="CheckBoxInit" width="35"></el-table-column>
-            <el-table-column label="罐号" prop="id"></el-table-column>
-            <el-table-column label="物料" prop=""></el-table-column>
-            <el-table-column label="酱醪类别" prop=""></el-table-column>
-            <el-table-column label="发酵天数/天" prop=""></el-table-column>
-            <el-table-column label="酱醪状态" prop=""></el-table-column>
-            <el-table-column label="数量" prop=""></el-table-column>
-            <el-table-column label="单位" prop=""></el-table-column>
-            <el-table-column label="入库日期" prop=""></el-table-column>
-            <el-table-column label="批次" prop=""></el-table-column>
-            <el-table-column label="备注" prop=""></el-table-column>
+            <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
+            <el-table-column label="物料" width="180">
+              <template slot-scope="scope">
+                {{scope.row.materialCode}}{{scope.row.materialName}}
+              </template>
+            </el-table-column>
+            <el-table-column label="酱醪类别" prop="halfName"></el-table-column>
+            <el-table-column label="发酵天数/天" prop="matureDays"></el-table-column>
+            <el-table-column label="酱醪状态" prop="state"></el-table-column>
+            <el-table-column label="数量" prop="inAmount"></el-table-column>
+            <el-table-column label="单位" prop="inUnit"></el-table-column>
+            <el-table-column label="入库日期" prop="created"></el-table-column>
+            <el-table-column label="批次" prop="batch"></el-table-column>
+            <el-table-column label="备注" prop="remark"></el-table-column>
           </el-table>
         </el-col>
       </el-row>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="searchform.currentPage"
+        :page-sizes="[10, 15, 20]"
+        :page-size="searchform.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="searchform.currentTotal">
+      </el-pagination>
       <el-row style="margin-top:15px">
         <el-col>可用数量：{{total}} 个，已选择：{{already}} 个</el-col>
       </el-row>
@@ -76,13 +98,18 @@ export default {
     return {
       formHeader: [],
       already: 0,
-      searchform: {},
-      dataList: [{
-        id: 1
-      }, {
-        id: 2
-      }],
-      isRedact: false
+      searchform: {
+        currentTotal: 0, // 总条数
+        currentPage: 1, // 当前页数
+        pageSize: 10
+      },
+      dataList: [],
+      newDataList: [],
+      newsDataList: [],
+      isRedact: false,
+      statusList: ['未成熟', '已成熟'],
+      holderList: [],
+      typesList: []
     }
   },
   mounted () {
@@ -98,6 +125,7 @@ export default {
           if (data.openBasicsInfo.PRODUCT_DATE <= dateFormat(new Date(), 'yyyy-MM-dd')) {
             this.isRedact = true
           }
+          this.GetList()
         } else {
           this.$message.error(data.msg)
         }
@@ -113,6 +141,90 @@ export default {
       } else {
         return 1
       }
+    },
+    Search () {
+      this.newDataList = []
+      this.newDataList = this.dataList
+      if (this.searchform.holder !== undefined && this.searchform.holder !== '') {
+        this.newsDataList = []
+        this.newDataList.map((item) => {
+          if (this.searchform.holder === item.holderNo) {
+            this.newsDataList.push(item)
+          }
+          this.newDataList = this.newsDataList
+        })
+      }
+      if (this.searchform.types !== undefined && this.searchform.types !== '') {
+        this.newsDataList = []
+        this.newDataList.map((item) => {
+          if (this.searchform.types === item.halfName) {
+            this.newsDataList.push(item)
+          }
+          this.newDataList = this.newsDataList
+        })
+      }
+      if (this.searchform.status !== undefined && this.searchform.status !== '') {
+        this.newsDataList = []
+        this.newDataList.map((item) => {
+          if (this.searchform.status === item.state) {
+            this.newsDataList.push(item)
+          }
+          this.newDataList = this.newsDataList
+        })
+      }
+      this.searchform.currentTotal = this.newDataList.length
+      this.searchform.currentPage = 1
+      this.newDataList = this.newDataList.slice((this.searchform.currentPage - 1) * this.searchform.pageSize, this.searchform.currentPage * this.searchform.pageSize)
+      // this.newDataList = []
+      // this.newDataList = this.dataList
+      // for (var i = 0; i < this.newDataList.length; i++) {
+      //   if (this.searchform.holder !== '') {
+      //     if (this.searchform.holder !== this.newDataList[i].holderNo) {
+      //       // console.log(this.newDataList.splice(i, 1))
+      //     }
+      //   }
+      // }
+    },
+    // 罐列表
+    GetList () {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1'}).then(({data}) => {
+        if (data.code === 0) {
+          this.newDataList = []
+          this.dataList = data.openFermentationInfo.list
+          this.newDataList = data.openFermentationInfo.list.slice((this.searchform.currentPage - 1) * this.searchform.pageSize, this.searchform.currentPage * this.searchform.pageSize)
+          this.searchform.currentTotal = this.dataList.length
+          this.dataList.map((item) => {
+            if (this.holderList.indexOf(item.holderNo) === -1) {
+              this.holderList.push(item.holderNo)
+            }
+            if (this.typesList.indexOf(item.halfName) === -1) {
+              this.typesList.push(item.halfName)
+            }
+          })
+        }
+      })
+    },
+    // 开罐动作
+    OpenHolder () {
+      if (this.multipleSelection === undefined) {
+        this.$message.error('请勾选罐号')
+        return false
+      } else {
+        this.$http(`${FERMENTATION_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            this.GetList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    handleSizeChange (val) {
+      this.searchform.pageSize = val
+    },
+    handleCurrentChange (val) {
+      this.searchform.currentPage = val
+      this.newDataList = this.dataList.slice((this.searchform.currentPage - 1) * this.searchform.pageSize, this.searchform.currentPage * this.searchform.pageSize)
     }
   },
   computed: {

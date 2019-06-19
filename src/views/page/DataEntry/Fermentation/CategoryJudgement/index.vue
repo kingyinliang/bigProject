@@ -160,10 +160,15 @@ export default {
   },
   mounted () {
     this.GetFactoryList()
+    this.GetHolderList()
   },
   watch: {
     'form.factory' (n, o) {
       this.GetWorkshopList(n)
+      this.GetHolderList(n)
+    },
+    'form.workShop' (n, o) {
+      this.GetHolderList(n)
     }
   },
   methods: {
@@ -198,6 +203,12 @@ export default {
       } else {
         this.workshop = []
       }
+    },
+    // 罐
+    GetHolderList (id) {
+      this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENT_API}`, 'POST', {factory: this.form.factory, deptId: this.form.workShop}).then(({data}) => {
+
+      })
     }
   }
 }

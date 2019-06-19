@@ -224,7 +224,15 @@ export const BASICDATA_API = {
   /**
    * 豆粕 + 小麦 罐
    */
-  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes'
+  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes',
+  /**
+   *  罐列表
+   */
+  BASEHOLDERLIST_API: HOST + '/fer/order/holderList',
+  /**
+   *  物料列表
+   */
+  BASEMATERIALIST_API: HOST + '/fer/order/materialList'
 }
 /*
 *系统设置api
@@ -1264,8 +1272,14 @@ export const FERMENTATION_API = {
    *  待领用申请列表
    */
   FORRECIPIENTSLIST_API: HOST + '/fer/openHolder/openHolderList',
+  FORRECIPIENTSHOLDER_API: HOST + '/fer/openHolder/productsList', // 罐
   /**
    *  压榨通知单
    */
-  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList'
+  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList',
+  FORRECIPIENTSDETAILIST_API: HOST + '/fer/openHolder/openFermentationList',
+  /**
+   *  类别判定
+   */
+  CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders' // 罐
 }
