@@ -1094,6 +1094,10 @@ export const SQU_API = {
    */
   POT_APPLY_DETAIL_API: HOST + '/fer/openHolderDEtail/list',
   /**
+   * 详情保存提交
+   */
+  POT_APPLY_DETAIL_SAVE_API: HOST + '/fer/openHolder/mySaveOrUpdate',
+  /**
    * 物料领用 LIST
    */
   MATERIAL_APPLY_LIST_API: HOST + '/prs/material/list',
@@ -1267,5 +1271,10 @@ export const FERMENTATION_API = {
   /**
    *  压榨通知单
    */
-  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList'
+  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList',
+  /**
+   *  半成品列表
+   */
+  HALFTYPE_LIST_API: HOST + '/fer/sort/list'
+
 }

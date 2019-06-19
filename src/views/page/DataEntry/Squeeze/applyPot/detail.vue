@@ -2,29 +2,77 @@
   <div>
     <div class="main">
       <el-card class="searchCard newCard">
-        <el-row type="flex">
+        <el-row>
           <el-col>
-            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="50px">
-              <el-form-item label="工厂：" >
-                <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
+            <div style="line-height:40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请基本信息</span></div>
+          </el-col>
+        </el-row>
+        <el-row type="flex">
+          <el-col class="header-form" :span="24">
+            <el-form :model="formHeader" size="small" :inline="true" label-position="right" label-width="100px" class="topform">
+              <el-form-item label="生产工厂：" >
+                <el-select v-model="formHeader.factory" class="selectwpx" style="width: 140px" @change="changeOptions('factory')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" @change="changeOptions('workshop')">
-                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+              <el-form-item label="生产车间：" >
+                <el-select v-model="formHeader.workShop" class="selectwpx" style="width: 140px" @change="changeOptions('workshop')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="订单日期：" label-width="80px">
-                <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+              <el-form-item label="酱醪名称：">
+                <el-select v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
+                  <el-option label="请选择" value=""></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="半成品类别：" label-width="100px">
+                <el-select v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
+                  <el-option label="请选择" value=""></el-option>
+                  <el-option v-for="sole in halfTypeList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="申请数量：" label-width="100px">
+                <el-input type="number" size="small" v-model.number="formHeader.amount" style="width: 140px" :disabled="!isEdit"></el-input>
+              </el-form-item>
+              <el-form-item label="生产日期：">
+                <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" style="width:140px" :disabled="!isEdit"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="申请编号：">
+                <p class="header-form_input" >{{formHeader.applyNo}}</p>
+              </el-form-item>
+              <el-form-item label="申请时间：">
+                <p class="header-form_input" >{{formHeader.changed}}</p>
+              </el-form-item>
+              <el-form-item label="订单状态：">
+                <p class="header-form_input" >{{formHeader.status === 'saved'? '已保存' : formHeader.status === 'submit'? '已提交' : formHeader.status}}</p>
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width:80px">
-            <el-button type="primary" size="small" v-if="isAuth('key')"  @click="getOrderList()">查询</el-button>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form :model="formHeader" size="small" :inline="true" label-position="right" label-width="100px" class="topform">
+              <el-form-item label="备注：">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  v-model.trim="formHeader.remark"
+                  style="width:500px"
+                  :disabled="!isEdit"
+                  placeholder="请输入内容">
+                </el-input>
+              </el-form-item>
+            </el-form>
           </el-col>
+        </el-row>
+        <el-row style="text-align:right" class="buttonCss">
+          <template style="float:right; margin-left: 10px;">
+            <el-button type="primary" size="small" :disabled="!isEdit" @click="save()">保存</el-button>
+            <el-button type="primary" size="small" :disabled="!isEdit" @click="submit()">提交</el-button>
+          </template>
         </el-row>
         <div class="toggleSearchBottom">
           <i class="el-icon-caret-top"></i>
@@ -38,115 +86,44 @@
         </div>
         <el-card>
           <el-row>
-            <el-col :span="12">
-              <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请列表</span></div>
-            </el-col>
-            <el-col :span="12">
-              <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'> 新增</el-button>
-            </el-col>
+            <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请反馈信息</span></div>
           </el-row>
           <el-row>
-            <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+            <el-table header-row-class-name="tableHead" :data="detailList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="车间" :show-overflow-tooltip="true"  width="120">
+              <el-table-column label="申请编码" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  {{scope.row.workShopName}}
-                </template>
-              </el-table-column>
-              <el-table-column label="申请编码" :show-overflow-tooltip="true"  width="120">
-                <template slot-scope="scope">
-                   {{scope.row.applyNo}}
-                </template>
-              </el-table-column>
-              <el-table-column label="物料" :show-overflow-tooltip="true"  width="180">
-                <template slot-scope="scope">
-                  {{scope.row.materialCode + ' ' + scope.row.materialName}}
-                </template>
-              </el-table-column>
-              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="100">
-                <template slot-scope="scope">
-                  {{scope.row.halfName}}
-                </template>
-              </el-table-column>
-              <el-table-column label="申请数量(L)" width="100">
-                <template slot-scope="scope">
-                  {{scope.row.amount}}
-                </template>
-              </el-table-column>
-              <el-table-column label="生产日期" width="100">
-                <template slot-scope="scope">
-                  {{scope.row.productDate}}
-                </template>
-              </el-table-column>
-              <el-table-column label="申请人员" >
-                <template slot-scope="scope">
-                  {{scope.row.changer}}
-                </template>
-              </el-table-column>
-              <el-table-column label="申请时间" >
-                <template slot-scope="scope">
-                  {{scope.row.changed}}
-                </template>
-              </el-table-column>
-               <el-table-column
-                  fixed="right"
-                  label="操作"
-                  width="80">
-                  <template slot-scope="scope">
-                    <el-button type="primary" size="small" >详情</el-button>
-                  </template>
-                </el-table-column>
-            </el-table>
-          </el-row>
-          <el-row>
-            <!-- <el-pagination
-              @size-change="handleDataSizeChange"
-              @current-change="handleDataCurrentChange"
-              :current-page="dataCurrPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="dataPageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="dataTotalCount">
-            </el-pagination> -->
-          </el-row>
-        </el-card>
-      </div>
-    </div>
-    <div class="main" style="padding-top: 0px">
-      <div class="tableCard">
-        <el-card>
-          <el-row>
-            <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">开罐明细</span></div>
-          </el-row>
-          <el-row>
-            <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
-              <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="申请单号" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
+                  {{scope.row.applyNo}}
                 </template>
               </el-table-column>
               <el-table-column label="罐号" :show-overflow-tooltip="true" >
                 <template slot-scope="scope">
+                  {{scope.row.holderName}}
                 </template>
               </el-table-column>
               <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" >
                 <template slot-scope="scope">
+                  {{scope.row.ferDays}}
                 </template>
               </el-table-column>
-              <el-table-column label="酱醪类别" :show-overflow-tooltip="true" >
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" >
                 <template slot-scope="scope">
+                  {{scope.row.halfName}}
                 </template>
               </el-table-column>
               <el-table-column label="批次">
                 <template slot-scope="scope">
+                  {{scope.row.batch}}
                 </template>
               </el-table-column>
               <el-table-column label="确认人员">
                 <template slot-scope="scope">
+                  {{scope.row.changer}}
                 </template>
               </el-table-column>
               <el-table-column label="确认时间" >
                 <template slot-scope="scope">
+                   {{scope.row.changed}}
                 </template>
               </el-table-column>
             </el-table>
@@ -170,9 +147,9 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, SQU_API, FERMENTATION_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
-import {dateFormat, headanimation} from '@/net/validate'
+import {headanimation, dateFormat} from '@/net/validate'
 @Component({
   components: {
   }
@@ -181,38 +158,95 @@ import {dateFormat, headanimation} from '@/net/validate'
 export default class Index extends Vue {
   // 将common中的参数复制一份到本地
   params = JSON.parse(JSON.stringify(this.$store.state.common.SqueezeApplyPot))
+  formHeader = {
+    id: this.params.applyId,
+    status: '',
+    factory: this.params.factoryId,
+    factoryCode: '',
+    workShop: this.params.workshopId,
+    applyNo: '',
+    materialCode: '',
+    materialName: '',
+    halfType: '',
+    halfName: '',
+    productDate: dateFormat(new Date(), 'yyyy-MM-dd'),
+    amount: 0,
+    remark: '',
+    confirmFlag: 0,
+    delFlag: 0,
+    created: '',
+    creator: '',
+    changed: '',
+    changer: ''
+  }
   factoryList = []
   workshopList = []
-  potList = []
+  // 酱醪列表
   materialList = []
-  dataList = []
+  // 半成品列表
+  halfTypeList = []
+  detailList = []
   searched: boolean = false
   mounted () {
     headanimation(Vue.prototype.$)
-    const now = dateFormat(new Date(), 'yyyy-MM-dd')
-    this.params.orderDate = now
-    this.params.endDate = now
+    // 获取表头数据
+    this.getHeaderForm(this.formHeader.id)
+    this.getDetailList(this.formHeader.id)
     this.getFactory()
-    this.getWorkshop(this.params.factoryId)
+    this.getWorkshop(this.formHeader.factory)
+    this.getMaterialList()
+    this.getHalfTypeList(this.formHeader.factory, this.formHeader.materialCode)
     // this.getFermentPot(this.params.factoryId)
   }
   isAuth (key) {
     return true
     // return Vue.prototype.isAuth(key)
   }
-  get mainTabs () {
-    return this.$store.state.common.mainTabs
-  }
-  set mainTabs (val) {
-    this.$store.commit('common/updateMainTabs', val)
+  get isEdit () {
+    // 提交之后不能再修改
+    return this.formHeader.status !== 'submit'
   }
   changeOptions (flag: string) {
     if (flag === 'factory') {
-      let item = this.factoryList.find(ele => ele.deptId === this.params.factoryId)
-      this.params.factoryName = item ? item.deptName : ''
+      // let item = this.factoryList.find(ele => ele.deptId === this.formHeader.factory)
+      // this.formHeader.factoryName = item ? item.deptName : ''
     } else if (flag === 'workshop') {
-      let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
-      this.params.workshopName = item ? item.deptName : ''
+      // let item = this.workshopList.find(ele => ele.deptId === this.formHeader.workShop)
+      // this.formHeader.workshopName = item ? item.deptName : ''
+    } else if (flag === 'material') {
+      let item = this.materialList.find(ele => ele.deptId === this.formHeader.workShop)
+      this.formHeader.materialName = item ? item.deptName : ''
+    } else if (flag === 'halfType') {
+      let item = this.halfTypeList.find(ele => ele.deptId === this.formHeader.workShop)
+      this.formHeader.halfName = item ? item.deptName : ''
+    }
+  }
+  getHeaderForm (applyId) {
+    if (applyId) {
+      // 有applyId才取表头数据
+      let params = {id: applyId}
+      Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
+        if (res.data.code === 0) {
+          if (res.data.page.list && res.data.page.list.length > 0) {
+            this.formHeader = res.data.page.list[0]
+          }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  getDetailList (applyId) {
+    this.detailList = []
+    if (applyId) {
+      // 有applyId才取详情数据
+      Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_API}`, `POST`, {openId: applyId}).then((res) => {
+        if (res.data.code === 0) {
+          this.detailList = res.data.list
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
     }
   }
   // 获取工厂
@@ -239,188 +273,120 @@ export default class Index extends Vue {
       })
     }
   }
-  // 发酵罐
-  // getFermentPot (fid: string) {
-  //   this.potList = []
-  //   if (fid) {
-  //     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
-  //       if (res.data.code === 0) {
-  //         this.potList = res.data.num
-  //         // if (!this.params.factoryId && res.data.num.length > 0) {
-  //         //   this.params.workshopId = res.data.num[0].holderId
-  //         // }
-  //       } else {
-  //         this.$message.error(res.data.msg)
-  //       }
-  //     })
-  //   }
-  // }
-  setStore (params) {
-    this.$store.commit('common/updateSqueezeApplyPot', params)
-  }
-  getOrderList () {
-    if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
-      return
-    }
-    // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择车间')
-    //   return
-    // }
-    // if (this.params.orderDate === '') {
-    //   this.$message.error('请选择订单日期')
-    //   return
-    // }
-    this.searched = true
-    // 保存选项值到common store
-    this.setStore(this.params)
-    let queryParams = {
-      factory: this.params.factoryId,
-      workShop: this.params.workshopId,
-      productDate: this.params.orderDate ? this.params.orderDate : ''
-    }
-    this.retrieveOrderList(queryParams)
-  }
-  retrieveOrderList (params) {
-    this.dataList = []
-    Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
+  getMaterialList () {
+    this.materialList = []
+    Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptName: '发酵'}, false, false, false).then(res => {
       if (res.data.code === 0) {
-        this.dataList = res.data.page.list
+        this.materialList = res.data.typeList
       } else {
         this.$message.error(res.data.msg)
       }
     })
   }
-  @Watch('params', {deep: true})
-  onChangeValue (newVal: string, oldVal: string) {
-    this.searched = false
+  getHalfTypeList (factory, materialCode) {
+    this.halfTypeList = []
+    if (factory && materialCode) {
+      Vue.prototype.$http(`${FERMENTATION_API.HALFTYPE_LIST_API}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
+        if (res.data.code === 0) {
+          this.halfTypeList = res.data.typeList
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
   }
-  @Watch('params.factoryId')
+  save () {
+    if (this.validate()) {
+      this.formHeader.status = 'saved'
+      Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_SAVE_API}`, 'POST', this.formHeader).then(res => {
+        if (res.data.code === 0) {
+          this.getHeaderForm(res.data.id)
+          this.getDetailList(res.data.id)
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  submit () {
+    if (this.validate()) {
+      this.formHeader.status = 'submit'
+      Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_SAVE_API}`, 'POST', this.formHeader).then(res => {
+        if (res.data.code === 0) {
+          this.getHeaderForm(res.data.id)
+          this.getDetailList(res.data.id)
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  validate () {
+    if (!this.formHeader.factory) {
+      this.$message.error('请选择工厂')
+      return false
+    }
+    if (!this.formHeader.workShop) {
+      this.$message.error('请选择车间')
+      return false
+    }
+    if (!this.formHeader.materialCode) {
+      this.$message.error('请选择酱醪')
+      return false
+    }
+    if (!this.formHeader.halfType) {
+      this.$message.error('请选择半成品类别')
+      return false
+    }
+    if (!this.formHeader.amount) {
+      this.$message.error('请填写申请数量')
+      return false
+    }
+    if (!this.formHeader.productDate) {
+      this.$message.error('请选择生产日期')
+      return false
+    }
+    return true
+  }
+  @Watch('formHeader.factory')
   onFactoryValue (newVal: string, oldVal: string) {
-    this.params.workshopId = ''
-    this.params.workshopName = ''
+    this.formHeader.workShop = ''
+    this.formHeader.halfType = ''
+    this.formHeader.halfName = ''
     this.getWorkshop(newVal)
+    this.getHalfTypeList(newVal, this.formHeader.materialCode)
+    // this.getFermentPot(newVal)
+  }
+  @Watch('formHeader.materialCode')
+  onMaterialCode (newVal: string, oldVal: string) {
+    this.formHeader.halfType = ''
+    this.formHeader.halfName = ''
+    this.getHalfTypeList(this.formHeader.factory, newVal)
     // this.getFermentPot(newVal)
   }
 }
 </script>
 
 <style lang="scss">
-.Card_item{
-  .el-card__header{
-    padding: 15px 20px;
-    font-size: 16px;
-    color: #666;
-  }
-  &_detail{
-    float: right;
-    cursor: pointer;
-    color: #1890FF;
-  }
-  &_img{
-    width: 250px;
-    position: relative;
-    img{
-      width: 250px;
-    }
-    &_box{
-      width: 89px;
-      height: 161px;
-      position: absolute;
-      left: 83px;
-      top: 33px;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-end;
-      &_bg{
-        flex: 1;
-        height: 161px;
-        align-items: center;
-        position: relative;
-        background: linear-gradient(#35C3FF,#1890FF);
-        overflow: hidden;
-        &:hover{
-          &::before,&::after{
-            animation: roateOne 10s linear infinite;
-          }
-        }
-        &::before,&::after{
-          content: "";
-          position: absolute;
-          left: 50%;
-          min-width: 155px;
-          min-height: 145px;
-          background: #fff;
-          animation: roateTwo 10s linear infinite;
-        }
-
-        &::before {
-          top: -138px;
-          border-radius: 45%;
-        }
-        &::after {
-          top: -132px;
-          opacity: 0.5;
-          border-radius: 47%;
-        }
-      }
-    }
-  }
-  &_text{
-    flex: 1;
-    .el-card__header{
-      font-size: 14px;
-      padding: 10px 12px;
-      background: #1890FF;
-      color: white;
-    }
-    &_box{
-      position: relative;
-      padding-bottom: 6px;
-      max-height: 180px;
-      overflow: scroll;
-      &_bg1,&_bg2{
-        position: absolute;
-        width: 100%;
-        height: 20px;
-        background: linear-gradient(rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
-        z-index: 999;
-      }
-      &_bg2{
-        bottom: 0;
-        background: linear-gradient(rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-      }
-    }
-    .Card_item_text_box::-webkit-scrollbar {
-      display: none;
-    }
-    &_item{
-      color: #4A4A4A;
-      font-size: 14px;
-      padding-top: 10px;
-    }
+.topform{
+  .el-form-item__content{
+    height: 32px;
+    border-bottom: 1px solid #D8D8D8;
   }
 }
-@keyframes roateOne {
-  0% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  50% {
-    transform: translate(-50%, -1%) rotateZ(180deg);
-  }
-  100% {
-    transform: translate(-50%, -0%) rotateZ(360deg);
-  }
-}
-@keyframes roateTwo {
-  0% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  50% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  100% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
+</style>
+<style lang="scss" scoped>
+@import '@/assets/scss/_common.scss';
+.header-form {
+  .header-form_input {
+    width:140px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(0,0,0,0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 </style>

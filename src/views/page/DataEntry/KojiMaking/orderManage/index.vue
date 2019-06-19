@@ -447,7 +447,7 @@ export default class Index extends Vue {
     if (params.holder_type === '') {
       return
     }
-    Vue.prototype.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
+    Vue.prototype.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params, false, false, false).then(({data}) => {
       if (data.code === 0) {
         if (type === '入罐') {
           this.potList = data.page.list
@@ -494,7 +494,7 @@ export default class Index extends Vue {
   }
   retrieveOrderData (params) {
     this.orderList = []
-    Vue.prototype.$http(`${KJM_API.ORDERLIST_API}`, `POST`, params, false, false, false).then((res) => {
+    Vue.prototype.$http(`${KJM_API.ORDERLIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         for (let item of res.data.list) {
           let order = new Order(item.orderId, item.orderNo, item.orderDate, item.orderStatus, item.materialCode, item.materialName, item.planOutput, item.outputUnit, item.remark, item.delFlag)
@@ -579,7 +579,7 @@ export default class Index extends Vue {
         delFlag: item.delFlag
       })
     }
-    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dialogFormVisible = false
         this.getOrderList()
@@ -603,7 +603,7 @@ export default class Index extends Vue {
       currPage: '1',
       pageSize: '9999'
     }
-    Vue.prototype.$http(`${KJM_API.ORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+    Vue.prototype.$http(`${KJM_API.ORDERDETAILLIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         for (let item of res.data.page.list) {
           let detail = new OrderDetail()
@@ -657,7 +657,7 @@ export default class Index extends Vue {
       // this.selectedDetailList.forEach(item => {
       //   item.delFlag = '1'
       // })
-      Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList, false, false, false).then((res) => {
+      Vue.prototype.$http(`${KJM_API.DELETEORDERDETAILLIST_API}`, `POST`, this.selectedDetailList).then((res) => {
         if (res.data.code === 0) {
           this.retrieveDetail(this.selectedDetailList[0].orderId)
         } else {
@@ -699,7 +699,7 @@ export default class Index extends Vue {
       return false
     }
     let params: OrderDetail[] = [this.detailForm]
-    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params, false, false, false).then((res) => {
+    Vue.prototype.$http(`${KJM_API.SPLITORDERDETAILLIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dialogFormVisible2 = false
         this.retrieveDetail(this.detailForm.orderId)
