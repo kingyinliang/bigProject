@@ -224,7 +224,16 @@ export const BASICDATA_API = {
   /**
    * 豆粕 + 小麦 罐
    */
-  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes'
+  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes',
+  /**
+   * 类别维护
+   */
+  MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
+  CATEGORY_LIST: HOST + '/fer/sort/list',
+  CATEGORY_SAVE: HOST + '/fer/sort/save',
+  CATEGORY_UPDATE: HOST + '/fer/sort/update',
+  CATEGORY_DELETE: HOST + '/fer/sort/delete'
+
 }
 /*
 *系统设置api
