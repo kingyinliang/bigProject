@@ -11,8 +11,8 @@
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" @change="changeOptions('workshop')">
-                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+              <el-form-item label="车间：">
+                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px" @change="changeOptions('workshop')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
@@ -42,7 +42,7 @@
               <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请列表</span></div>
             </el-col>
             <el-col :span="12">
-              <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'  @click="pushPage('DataEntry-Squeeze-applyPot-detail')">新增</el-button>
+              <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'  @click="pushPage('')">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -53,7 +53,7 @@
                   {{scope.row.workShopName}}
                 </template>
               </el-table-column>
-              <el-table-column label="申请编码" :show-overflow-tooltip="true"  width="120">
+              <el-table-column label="申请编码" :show-overflow-tooltip="true"  width="140">
                 <template slot-scope="scope">
                    {{scope.row.applyNo}}
                 </template>
@@ -68,17 +68,17 @@
                   {{scope.row.halfName}}
                 </template>
               </el-table-column>
-              <el-table-column label="申请数量(L)" width="100">
+              <el-table-column label="申请数量" width="100">
                 <template slot-scope="scope">
                   {{scope.row.amount}}
                 </template>
               </el-table-column>
-              <el-table-column label="生产日期" width="100">
+              <el-table-column label="生产日期" width="120">
                 <template slot-scope="scope">
                   {{scope.row.productDate}}
                 </template>
               </el-table-column>
-              <el-table-column label="申请人员" width="150">
+              <el-table-column label="申请人员" width="170">
                 <template slot-scope="scope">
                   {{scope.row.changer}}
                 </template>
@@ -93,21 +93,21 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="small" >详情</el-button>
+                    <el-button type="primary" size="small" @click="pushPage(scope.row.id)" >详情</el-button>
                   </template>
                 </el-table-column>
             </el-table>
           </el-row>
           <el-row>
-            <!-- <el-pagination
-              @size-change="handleDataSizeChange"
-              @current-change="handleDataCurrentChange"
-              :current-page="dataCurrPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="dataPageSize"
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currPage"
+              :page-sizes="[5, 10, 20]"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="dataTotalCount">
-            </el-pagination> -->
+              :total="totalCount">
+            </el-pagination>
           </el-row>
         </el-card>
       </div>
@@ -121,32 +121,32 @@
           <el-row>
             <el-table header-row-class-name="tableHead" :data="detailList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="申请单号" :show-overflow-tooltip="true">
+              <el-table-column label="申请编码" width="140">
                 <template slot-scope="scope">
-                  {{scope.row.openId}}
+                  {{scope.row.applyNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="罐号" :show-overflow-tooltip="true" >
+              <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
                 <template slot-scope="scope">
-                  {{scope.row.holderNo}}
+                  {{scope.row.holderName}}
                 </template>
               </el-table-column>
-              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" >
-                <template slot-scope="scope">
-                  {{scope.row.ferDays}}
-                </template>
-              </el-table-column>
-              <el-table-column label="酱醪类别" :show-overflow-tooltip="true" >
+              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
                   {{scope.row.ferDays}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次">
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
+                <template slot-scope="scope">
+                  {{scope.row.halfName}}
+                </template>
+              </el-table-column>
+              <el-table-column label="批次" width="140">
                 <template slot-scope="scope">
                   {{scope.row.batch}}
                 </template>
               </el-table-column>
-              <el-table-column label="确认人员">
+              <el-table-column label="确认人员" width="160">
                 <template slot-scope="scope">
                   {{scope.row.changer}}
                 </template>
@@ -172,7 +172,6 @@
         </el-card>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -187,14 +186,23 @@ import {dateFormat, headanimation} from '@/net/validate'
 
 export default class Index extends Vue {
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.SqueezeApplyPot))
+  params = {
+    factoryId: this.$store.state.common.SqueezeApplyPot.factoryId,
+    factoryName: this.$store.state.common.SqueezeApplyPot.factoryName,
+    workshopId: this.$store.state.common.SqueezeApplyPot.workshopId,
+    workshopName: this.$store.state.common.SqueezeApplyPot.workshopName,
+    orderDate: this.$store.state.common.SqueezeApplyPot.orderDate
+  }
   factoryList = []
   workshopList = []
   potList = []
   materialList = []
-  dataList = []
+  totalList = []
   detailList = []
   searched: boolean = false
+  currPage: number = 1
+  pageSize: number = 5
+  totalCount: number = 0
   mounted () {
     headanimation(Vue.prototype.$)
     const now = dateFormat(new Date(), 'yyyy-MM-dd')
@@ -213,7 +221,10 @@ export default class Index extends Vue {
   set mainTabs (val) {
     this.$store.commit('common/updateMainTabs', val)
   }
-  pushPage (name) {
+  pushPage (applyId) { // applyNo = ''就是新增
+    // 保存当前单号
+    this.$store.commit('common/updateSqueezeApplyPotApplyId', applyId)
+    const name = 'DataEntry-Squeeze-applyPot-detail'
     this.mainTabs = this.mainTabs.filter(item => item.name !== name)
     let that = this
     setTimeout(function () {
@@ -296,10 +307,11 @@ export default class Index extends Vue {
     this.retrieveOrderList(queryParams)
   }
   retrieveOrderList (params) {
-    this.dataList = []
+    this.totalList = []
     Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.page.list
+        this.totalList = res.data.page.list
+        this.totalCount = this.totalList.length
       } else {
         this.$message.error(res.data.msg)
       }
@@ -307,7 +319,7 @@ export default class Index extends Vue {
   }
   showDetail (row) {
     this.detailList = []
-    Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_API}`, `POST`, {openId: row.id}, false, false, false).then((res) => {
+    Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_API}`, `POST`, {openId: row.id}).then((res) => {
       if (res.data.code === 0) {
         this.detailList = res.data.list
       } else {
@@ -315,9 +327,24 @@ export default class Index extends Vue {
       }
     })
   }
+  // 改变每页条数
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+  }
+  // 跳转页数
+  handleCurrentChange (val: number) {
+    this.currPage = val
+  }
+  get dataList () {
+    return this.totalList.slice((this.currPage - 1) * this.pageSize, this.currPage * this.pageSize)
+  }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
+    console.log('aaaaaa', newVal)
     this.searched = false
+    this.totalList = []
+    this.detailList = []
   }
   @Watch('params.factoryId')
   onFactoryValue (newVal: string, oldVal: string) {
@@ -330,121 +357,4 @@ export default class Index extends Vue {
 </script>
 
 <style lang="scss">
-.Card_item{
-  .el-card__header{
-    padding: 15px 20px;
-    font-size: 16px;
-    color: #666;
-  }
-  &_detail{
-    float: right;
-    cursor: pointer;
-    color: #1890FF;
-  }
-  &_img{
-    width: 250px;
-    position: relative;
-    img{
-      width: 250px;
-    }
-    &_box{
-      width: 89px;
-      height: 161px;
-      position: absolute;
-      left: 83px;
-      top: 33px;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-end;
-      &_bg{
-        flex: 1;
-        height: 161px;
-        align-items: center;
-        position: relative;
-        background: linear-gradient(#35C3FF,#1890FF);
-        overflow: hidden;
-        &:hover{
-          &::before,&::after{
-            animation: roateOne 10s linear infinite;
-          }
-        }
-        &::before,&::after{
-          content: "";
-          position: absolute;
-          left: 50%;
-          min-width: 155px;
-          min-height: 145px;
-          background: #fff;
-          animation: roateTwo 10s linear infinite;
-        }
-
-        &::before {
-          top: -138px;
-          border-radius: 45%;
-        }
-        &::after {
-          top: -132px;
-          opacity: 0.5;
-          border-radius: 47%;
-        }
-      }
-    }
-  }
-  &_text{
-    flex: 1;
-    .el-card__header{
-      font-size: 14px;
-      padding: 10px 12px;
-      background: #1890FF;
-      color: white;
-    }
-    &_box{
-      position: relative;
-      padding-bottom: 6px;
-      max-height: 180px;
-      overflow: scroll;
-      &_bg1,&_bg2{
-        position: absolute;
-        width: 100%;
-        height: 20px;
-        background: linear-gradient(rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
-        z-index: 999;
-      }
-      &_bg2{
-        bottom: 0;
-        background: linear-gradient(rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-      }
-    }
-    .Card_item_text_box::-webkit-scrollbar {
-      display: none;
-    }
-    &_item{
-      color: #4A4A4A;
-      font-size: 14px;
-      padding-top: 10px;
-    }
-  }
-}
-@keyframes roateOne {
-  0% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  50% {
-    transform: translate(-50%, -1%) rotateZ(180deg);
-  }
-  100% {
-    transform: translate(-50%, -0%) rotateZ(360deg);
-  }
-}
-@keyframes roateTwo {
-  0% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  50% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-  100% {
-    transform: translate(-50%, -0%) rotateZ(0deg);
-  }
-}
 </style>

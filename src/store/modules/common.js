@@ -94,7 +94,8 @@ export default {
       factoryName: '',
       workshopId: '',
       workshopName: '',
-      orderDateDate: ''
+      orderDate: '',
+      applyId: ''
     },
     /**
      * 粮仓小麦罐
@@ -253,6 +254,9 @@ export default {
     },
     updateSqueezeApplyPot (state, name) {
       state.SqueezeApplyPot = name
+    },
+    updateSqueezeApplyPotApplyId (state, applyId) {
+      state.SqueezeApplyPot.applyId = applyId
     },
     /** 粮仓小麦罐 */
     updateGranaryWheatPot (state, params) {
