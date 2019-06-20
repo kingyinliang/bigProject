@@ -5,41 +5,41 @@
         <el-col :span="23">
           <el-form :inline="true" :model="form" size="small" label-width="84px">
             <el-form-item label="生产工厂：">
-              <el-select v-model="form.factory" placeholder="请选择" class="selectwidth">
+              <el-select v-model="form.factory" placeholder="请选择" class="width160px">
                 <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产车间：">
-              <el-select v-model="form.workShop" placeholder="请选择" class="selectwidth">
+              <el-select v-model="form.workShop" placeholder="请选择" class="width160px">
                 <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="状态：">
-              <el-select v-model="form.frozenStatus" class="selectwidth">
+              <el-select v-model="form.frozenStatus" class="width160px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of statusList" :key="index" :label="item.name" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="发酵罐号：">
-              <el-select v-model="form.holderId" filterable class="selectwidth">
+              <el-select v-model="form.holderId" filterable class="width160px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="订单编号：">
-              <el-input v-model="form.orderNo" class="selectwidth"></el-input>
+              <el-input v-model="form.orderNo" style="width:160px"></el-input>
             </el-form-item>
             <el-form-item label="物料：">
-              <el-select v-model="form.materialCode" filterable class="selectwidth">
+              <el-select v-model="form.materialCode" filterable class="width160px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of materialList" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="发酵天数：">
-              <el-input v-model="form.ferDays" class="selectwidth"></el-input>
+              <el-input v-model="form.ferDays" class="width160px" style="width:160px"></el-input>
             </el-form-item>
             <el-form-item label="物料类别：">
-              <el-select v-model="form.halfId" filterable class="selectwidth">
+              <el-select v-model="form.halfId" filterable class="width160px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of materialTypeList" :key="index" :value="item.id" :label="item.halfName"></el-option>
               </el-select>
@@ -385,7 +385,7 @@ export default {
 </script>
 
 <style lang="less">
-.selectwidth{width:160px;}
+.width160px{width:160px;}
 .dialog__class{
   border-radius:6px 6px 6px 6px !important;
   .el-dialog__header{
