@@ -1290,10 +1290,13 @@ export const FERMENTATION_API = {
    */
   FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList',
   FORRECIPIENTSDETAILIST_API: HOST + '/fer/openHolder/openFermentationList',
+  FORRECIPIENTSDETAILOPEN_API: HOST + '/fer/openHolder/openFermentation',
   /**
    *  类别判定
    */
   CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders', // 罐
+  CATEGORYJUDGEMENTLIST_API: HOST + '/sys/fer-sort-judge/query', // 判定1 未判定0
+  CATEGORYJUDGEMENTTODO_API: HOST + '/sys/fer-sort-judge/judge', // 判定动作
   /**
    *  半成品列表
    */
