@@ -11,27 +11,42 @@
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" @change="changeOptions('workshop')">
-                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+              <el-form-item label="车间：" >
+                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px" @change="changeOptions('workshop')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="罐号：" @change="changeOptions('pot')">
-                <el-select v-model="params.potId" class="selectwpx" style="width: 140px">
+              <el-form-item label="罐号：" >
+                <el-select v-model="params.potList" class="selectwpx" style="width: 140px" filterable multiple @change="changeOptions('pot')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="物料：" @change="changeOptions('material')">
+              <!-- <el-form-item label="物料：" @change="changeOptions('material')">
                 <el-select v-model="params.materialCode" class="selectwpx" style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="订单日期：" label-width="80px">
                 <el-date-picker type="date" v-model="params.startDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 - <el-date-picker type="date" v-model="params.endDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="订单号："  filterable multiple allow-create>
+                <el-select v-model="params.orderList" class="selectwpx" style="width: 140px" @change="changeOptions('order')">
+                  <el-option label="请选择" value=""></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="状态：" >
+                <el-select v-model="params.status" class="selectwpx" style="width: 140px" @change="changeOptions('status')">
+                  <el-option label="未录入" value=""></el-option>
+                  <el-option label="已保存" value="saved"></el-option>
+                  <el-option label="已提交" value="submit"></el-option>
+                  <el-option label="未通过" value="noPass"></el-option>
+                  <el-option label="已通过" value="checked"></el-option>
+                </el-select>
               </el-form-item>
             </el-form>
           </el-col>

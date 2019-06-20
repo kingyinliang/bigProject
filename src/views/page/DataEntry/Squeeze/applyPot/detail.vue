@@ -23,13 +23,13 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="酱醪名称：">
-                <el-select v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
+                <el-select filterable v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="半成品类别：" label-width="100px">
-                <el-select v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
+              <el-form-item  label="半成品类别：" label-width="100px">
+                <el-select filterable v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in halfTypeList" :key="sole.halfType" :label="sole.halfName" :value="sole.halfType"></el-option>
                 </el-select>

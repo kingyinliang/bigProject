@@ -11,20 +11,20 @@
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" @change="changeOptions('workshop')">
-                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px">
+              <el-form-item label="车间：">
+                <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px"  @change="changeOptions('workshop')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="罐号：" @change="changeOptions('pot')">
-                <el-select v-model="params.potId" class="selectwpx" style="width: 140px">
+              <el-form-item label="罐号：" >
+                <el-select v-model="params.potId" class="selectwpx" filterable style="width: 140px" @change="changeOptions('pot')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="物料：" @change="changeOptions('material')">
-                <el-select v-model="params.materialCode" class="selectwpx" style="width: 140px">
+              <el-form-item label="物料：" >
+                <el-select v-model="params.materialCode" @change="changeOptions('material')" class="selectwpx" filterable style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
