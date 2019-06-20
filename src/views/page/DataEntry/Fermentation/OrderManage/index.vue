@@ -227,15 +227,15 @@
               </el-table>
             </el-row>
             <el-row>
-              <!-- <el-pagination
-                @size-change="handleAdjustSizeChange"
-                @current-change="handleAdjustCurrentChange"
-                :current-page="adjustCurrPage"
+              <el-pagination
+                @size-change="handleApplySizeChange"
+                @current-change="handleApplyCurrentChange"
+                :current-page="applyCurrPage"
                 :page-sizes="[10, 15, 20]"
-                :page-size="adjustPageSize"
+                :page-size="applyPageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="adjustTotalCount">
-              </el-pagination> -->
+                :total="applyTotalCount">
+              </el-pagination>
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -265,9 +265,9 @@ export default class Index extends Vue {
   pageSize = 10
   totalCount = 0
   applyedList = []
-  // currPage = 0
-  // pageSize = 10
-  // totalCount = 0
+  applyCurrPage = 0
+  applyPageSize = 10
+  applyTotalCount = 0
   selectedList = []
   activeName = '1'
   searched: boolean = false
@@ -304,6 +304,28 @@ export default class Index extends Vue {
       let item = this.materialList.find(ele => ele.materialCode === this.params.materialCode)
       this.params.materialName = item ? item.materialName : ''
     }
+  }
+
+  // 改变每页条数
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+    this.retrieveDataList()
+  }
+  handleApplySizeChange (val: number) {
+    this.applyPageSize = val
+    this.applyCurrPage = 1
+    this.retrieveApplyedList()
+  }
+  // 跳转页数
+  handleCurrentChange (val: number) {
+    this.currPage = val
+    this.retrieveDataList()
+  }
+  // 跳转页数
+  handleApplyCurrentChange (val: number) {
+    this.applyCurrPage = val
+    this.retrieveApplyedList()
   }
   // 获取工厂
   getFactory () {
@@ -391,34 +413,48 @@ export default class Index extends Vue {
     this.searched = true
     // 保存选项值到common store
     this.setStore(this.params)
+    this.retrieveDataList()
+    this.retrieveApplyedList()
+  }
+  retrieveDataList () {
     let queryParams = {
       factory: this.params.factoryId,
       workShop: this.params.workshopId,
       startDateFrom: this.params.startDate,
       startDateTo: this.params.endDate,
       holderId: this.params.potId,
-      kjmMaterialCode: this.params.materialCode
+      kjmMaterialCode: this.params.materialCode,
+      turnFlag: '0',
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
     }
-    this.retrieveDataList(JSON.parse(JSON.stringify(queryParams)))
-    this.retrieveApplyedList(JSON.parse(JSON.stringify(queryParams)))
-  }
-  retrieveDataList (params) {
-    params.turnFlag = '0'
     this.dataList = []
-    Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, params).then((res) => {
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, queryParams).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.orderPage.list
+        this.totalCount = res.data.orderPage.totalCount
       } else {
         this.$message.error(res.data.msg)
       }
     })
   }
-  retrieveApplyedList (params) {
-    params.turnFlag = '1'
+  retrieveApplyedList () {
+    let queryParams = {
+      factory: this.params.factoryId,
+      workShop: this.params.workshopId,
+      startDateFrom: this.params.startDate,
+      startDateTo: this.params.endDate,
+      holderId: this.params.potId,
+      kjmMaterialCode: this.params.materialCode,
+      turnFlag: '1',
+      currPage: this.applyCurrPage + '',
+      pageSize: this.applyPageSize + ''
+    }
     this.applyedList = []
-    Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, params).then((res) => {
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, queryParams).then((res) => {
       if (res.data.code === 0) {
         this.applyedList = res.data.orderPage.list
+        this.applyTotalCount = res.data.orderPage.totalCount
       } else {
         this.$message.error(res.data.msg)
       }
@@ -444,6 +480,15 @@ export default class Index extends Vue {
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
+    this.selectedList = []
+    this.dataList = []
+    this.applyedList = []
+    this.currPage = 1
+    this.pageSize = 10
+    this.totalCount = 0
+    this.applyCurrPage = 1
+    this.applyPageSize = 10
+    this.applyTotalCount = 0
   }
   @Watch('params.factoryId')
   onFactoryValue (newVal: string, oldVal: string) {
