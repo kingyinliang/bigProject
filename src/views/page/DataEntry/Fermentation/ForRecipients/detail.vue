@@ -57,7 +57,7 @@
           <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="newDataList" border header-row-class-name="tableHead">
             <el-table-column type="selection" :selectable="CheckBoxInit" width="35"></el-table-column>
             <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
-            <el-table-column label="物料" width="180">
+            <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.materialCode}}{{scope.row.materialName}}
               </template>
@@ -66,9 +66,9 @@
             <el-table-column label="发酵天数/天" prop="matureDays"></el-table-column>
             <el-table-column label="酱醪状态" prop="state"></el-table-column>
             <el-table-column label="数量" prop="inAmount"></el-table-column>
-            <el-table-column label="单位" prop="inUnit"></el-table-column>
+            <el-table-column label="单位" prop="inUnit" width="80"></el-table-column>
             <el-table-column label="入库日期" prop="created"></el-table-column>
-            <el-table-column label="批次" prop="batch"></el-table-column>
+            <el-table-column label="批次" prop="batch" width="120"></el-table-column>
             <el-table-column label="备注" prop="remark"></el-table-column>
           </el-table>
         </el-col>
@@ -115,8 +115,7 @@ export default {
   mounted () {
     this.Getdetail()
   },
-  watch: {
-  },
+  watch: {},
   methods: {
     Getdetail () {
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAIL_API}`, 'POST', {id: this.$store.state.common.Fermentation.orderId}).then(({data}) => {
@@ -187,7 +186,7 @@ export default {
     },
     // 罐列表
     GetList () {
-      this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1'}).then(({data}) => {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE}).then(({data}) => {
         if (data.code === 0) {
           this.newDataList = []
           this.dataList = data.openFermentationInfo.list
@@ -210,8 +209,20 @@ export default {
         this.$message.error('请勾选罐号')
         return false
       } else {
-        this.$http(`${FERMENTATION_API}`, 'POST', this.multipleSelection).then(({data}) => {
+        this.multipleSelection.map((item) => {
+          item.openId = this.$store.state.common.Fermentation.orderId
+          item.amount = item.inAmount
+          item.unit = item.inUnit
+          item.inStoreDate = item.created
+          item.isNum = this.formHeader.AMOUNT
+        })
+        // console.log(this.multipleSelection)
+        this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
+            this.searchform = {
+              currentPage: 1, // 当前页数
+              pageSize: 10
+            }
             this.GetList()
           } else {
             this.$message.error(data.msg)
