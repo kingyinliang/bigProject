@@ -131,6 +131,23 @@ export default {
       startDate: '',
       endDate: ''
     },
+    /**
+     * 发酵罐入库管理参数
+     */
+    FerInStockManage: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      startDate: '',
+      endDate: '',
+      // 罐号多选
+      potList: [],
+      // 订单号多选
+      orderList: [],
+      // 状态
+      status: ''
+    },
     /*
      * 发酵车间
      */
@@ -269,6 +286,10 @@ export default {
     /** 发酵罐订单管理参数 */
     updateFerOrderManage (state, params) {
       state.FerOrderManage = params
+    },
+    /** 发酵罐入库管理参数 */
+    updateFerInStockManage (state, params) {
+      state.FerInStockManage = params
     },
     /** 发酵 */
     updateFermentation (state, params) {
