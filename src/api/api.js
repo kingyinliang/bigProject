@@ -1312,6 +1312,15 @@ export const FERMENTATION_API = {
   /*
    * 订单申请
    */
-  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder'
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+
+  /**
+   * 入库管理订单下拉列表 (未录入，保存，提交，未通过的)
+   */
+  ORDER_SELECT_LIST_API: HOST + '/fer/inStore/orderSelect',
+  /**
+   * 入库管理订单列表
+   */
+  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list'
 
 }
