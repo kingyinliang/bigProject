@@ -341,7 +341,6 @@ export default class Index extends Vue {
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
-    console.log('aaaaaa', newVal)
     this.searched = false
     this.totalList = []
     this.detailList = []

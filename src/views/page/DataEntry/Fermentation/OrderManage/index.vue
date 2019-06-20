@@ -26,7 +26,7 @@
               <el-form-item label="物料：" @change="changeOptions('material')">
                 <el-select v-model="params.materialCode" class="selectwpx" style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="订单日期：" label-width="80px">
@@ -56,11 +56,11 @@
             </span>
             <el-row>
               <el-col>
-                <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'>申请订单</el-button>
+                <el-button type='primary' size='small' style='float:right; margin-bottom:10px;' @click="applyOrder()">申请订单</el-button>
               </el-col>
             </el-row>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table    @selection-change="handleChange" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
                 <el-table-column
                   type="selection"
                   width="55">
@@ -121,7 +121,7 @@
                     {{scope.row.batch}}
                   </template>
                 </el-table-column>
-                <el-table-column label="申请人员" width="100">
+                <!-- <el-table-column label="申请人员" width="100">
                   <template slot-scope="scope">
                   </template>
                 </el-table-column>
@@ -132,19 +132,19 @@
                 <el-table-column label="订单号" width="100">
                   <template slot-scope="scope">
                   </template>
-                </el-table-column>
+                </el-table-column> -->
               </el-table>
             </el-row>
             <el-row>
-              <!-- <el-pagination
-                @size-change="handleDataSizeChange"
-                @current-change="handleDataCurrentChange"
-                :current-page="dataCurrPage"
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currPage"
                 :page-sizes="[10, 15, 20]"
-                :page-size="dataPageSize"
+                :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="dataTotalCount">
-              </el-pagination> -->
+                :total="totalCount">
+              </el-pagination>
             </el-row>
           </el-tab-pane>
           <el-tab-pane name="2">
@@ -152,68 +152,76 @@
               <el-button>已申请</el-button>
             </span>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table header-row-class-name="tableHead" :data="applyedList" border tooltip-effect="dark" >
                 <el-table-column type="index" label="序号" width="55"></el-table-column>
-                <el-table-column label="容器" :show-overflow-tooltip="true" width="100" >
+                <el-table-column label="容器" :show-overflow-tooltip="true" width="100">
                   <template slot-scope="scope">
                     {{scope.row.holdName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="状态" width="100">
-                  <template slot-scope="scope">
-                  </template>
-                </el-table-column>
                 <el-table-column label="物料" :show-overflow-tooltip="true" width="140">
                   <template slot-scope="scope">
+                    {{scope.row.ferMaterialCode + ' ' + scope.row.ferMaterialName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="订单量" width="100">
                   <template slot-scope="scope">
+                    {{scope.row.ferAmount}}
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
+                    {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
                 <el-table-column label="开始日期" width="100">
                   <template slot-scope="scope">
-                    {{scope.row.adjustTime}}
+                    {{scope.row.startDate}}
                   </template>
                 </el-table-column>
                 <el-table-column label="结束日期" width="100">
                   <template slot-scope="scope">
+                    {{scope.row.endDate}}
                   </template>
                 </el-table-column>
                 <el-table-column label="制曲工单" width="120">
                   <template slot-scope="scope">
+                    {{scope.row.kjmOrderNo}}
                   </template>
                 </el-table-column>
                 <el-table-column label="制曲物料" :show-overflow-tooltip="true" width="140">
                   <template slot-scope="scope">
+                    {{scope.row.kjmMaterialCode + ' ' + scope.row.kjmMaterialName}}
                   </template>
                 </el-table-column>
                 <el-table-column label="数量" width="100">
                   <template slot-scope="scope">
+                    {{scope.row.kjmAmount}}
                   </template>
                 </el-table-column>
                 <el-table-column label="单位" width="60">
                   <template slot-scope="scope">
+                    {{scope.row.kjmUnit}}
                   </template>
                 </el-table-column>
                 <el-table-column label="批次" width="120">
                   <template slot-scope="scope">
+                    {{scope.row.batch}}
                   </template>
                 </el-table-column>
-                <el-table-column label="申请人员" width="120">
+                <el-table-column label="申请人员" width="140">
                   <template slot-scope="scope">
+                    {{scope.row.applyUser}}
                   </template>
                 </el-table-column>
-                <el-table-column label="申请时间" width="120">
+                <el-table-column label="申请时间" width="160">
                   <template slot-scope="scope">
+                    {{scope.row.applyDate}}
                   </template>
                 </el-table-column>
                 <el-table-column label="订单号" width="120">
                   <template slot-scope="scope">
+                    {{scope.row.ferOrderNo}}
                   </template>
                 </el-table-column>
               </el-table>
@@ -237,7 +245,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, FERMENTATION_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {dateFormat, headanimation} from '@/net/validate'
 @Component({
@@ -253,6 +261,14 @@ export default class Index extends Vue {
   potList = []
   materialList = []
   dataList = []
+  currPage = 0
+  pageSize = 10
+  totalCount = 0
+  applyedList = []
+  // currPage = 0
+  // pageSize = 10
+  // totalCount = 0
+  selectedList = []
   activeName = '1'
   searched: boolean = false
   mounted () {
@@ -262,7 +278,8 @@ export default class Index extends Vue {
     this.params.endDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getFermentPot(this.params.factoryId)
+    this.getMaterialList(this.params.factoryId)
+    this.getFermentPot(this.params.factoryId, this.params.workshopId)
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -283,6 +300,9 @@ export default class Index extends Vue {
     } else if (flag === 'pot') {
       let item = this.potList.find(ele => ele.holderId === this.params.potId)
       this.params.potName = item ? item.holderName : ''
+    } else if (flag === 'material') {
+      let item = this.materialList.find(ele => ele.materialCode === this.params.materialCode)
+      this.params.materialName = item ? item.materialName : ''
     }
   }
   // 获取工厂
@@ -310,12 +330,27 @@ export default class Index extends Vue {
     }
   }
   // 发酵罐
-  getFermentPot (fid: string) {
+  getFermentPot (fid: string, wid: string) {
     this.potList = []
-    if (fid) {
-      Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+    if (fid && wid) {
+      Vue.prototype.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: fid, workShop: wid}, false, false, false).then(res => {
         if (res.data.code === 0) {
-          this.potList = res.data.num
+          this.potList = res.data.holderList
+          // if (!this.params.factoryId && res.data.num.length > 0) {
+          //   this.params.workshopId = res.data.num[0].holderId
+          // }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  getMaterialList (fid: string) {
+    this.materialList = []
+    if (fid) {
+      Vue.prototype.$http(`${BASICDATA_API.BASEMATERIALIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+        if (res.data.code === 0) {
+          this.materialList = res.data.materialList
           // if (!this.params.factoryId && res.data.num.length > 0) {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
@@ -329,10 +364,10 @@ export default class Index extends Vue {
     this.$store.commit('common/updateFerOrderManage', params)
   }
   getOrderList () {
-    // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择工厂')
-    //   return
-    // }
+    if (this.params.factoryId === '') {
+      this.$message.error('请选择工厂')
+      return
+    }
     // if (this.params.workshopId === '') {
     //   this.$message.error('请选择车间')
     //   return
@@ -362,16 +397,45 @@ export default class Index extends Vue {
       startDateFrom: this.params.startDate,
       startDateTo: this.params.endDate,
       holderId: this.params.potId,
-      kjmMaterialCode: this.params.materialCode,
-      turnFlag: '0'
+      kjmMaterialCode: this.params.materialCode
     }
-    this.retrieveOrderList(queryParams)
+    this.retrieveDataList(JSON.parse(JSON.stringify(queryParams)))
+    this.retrieveApplyedList(JSON.parse(JSON.stringify(queryParams)))
   }
-  retrieveOrderList (params) {
+  retrieveDataList (params) {
+    params.turnFlag = '0'
     this.dataList = []
     Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.orderPage.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  retrieveApplyedList (params) {
+    params.turnFlag = '1'
+    this.applyedList = []
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_LIST_API}`, `POST`, params).then((res) => {
+      if (res.data.code === 0) {
+        this.applyedList = res.data.orderPage.list
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 多选
+  handleChange (selections) {
+    this.selectedList = selections
+  }
+  applyOrder () {
+    if (!this.selectedList || this.selectedList.length === 0) {
+      this.$message.error('请选择要申请的订单')
+      return
+    }
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
+      if (res.data.code === 0) {
+        this.getOrderList()
       } else {
         this.$message.error(res.data.msg)
       }
@@ -390,7 +454,14 @@ export default class Index extends Vue {
     this.params.materialCode = ''
     this.params.materialName = ''
     this.getWorkshop(newVal)
-    this.getFermentPot(newVal)
+    this.getMaterialList(newVal)
+    this.getFermentPot(newVal, this.params.workshopId)
+  }
+  @Watch('params.workshopId')
+  onWorkshopValue (newVal: string, oldVal: string) {
+    this.params.potId = ''
+    this.params.potName = ''
+    this.getFermentPot(this.params.factoryId, newVal)
   }
 }
 </script>
