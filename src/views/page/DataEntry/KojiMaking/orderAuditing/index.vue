@@ -210,6 +210,11 @@
                 <div><span>入库数合计：</span>{{totalInstock}} L</div>
               </el-col>
             </el-row>
+            <el-row style="margin-top:20px;">
+              <el-col>
+                <span>实际入库数：</span><el-input size="small" type="number" v-model.number='realInAmount' style="display:inline-block; width:150px;"></el-input> L
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="24">
                 <auditLog :tableData="inStockAuditList"></auditLog>
@@ -322,7 +327,9 @@ export default class Index extends Vue {
     inPotNo: '',
     inPotNoId: '',
     inPotNoName: '',
-    inKjmDate: ''
+    inKjmDate: '',
+    // 实际入库值
+    realInAmount: 0
   }
   workHourList: WorkHour[] = []
   workHourAuditList = []
@@ -330,6 +337,8 @@ export default class Index extends Vue {
   inStockAuditList = []
   applyMaterieList: Material[] = []
   applyMaterieAuditList = []
+  // 实际入库数量
+  realInAmount = 0
   activeName = '1'
   // 报工工时状态
   readyState = ''
@@ -340,20 +349,25 @@ export default class Index extends Vue {
   mounted () {
     this.getList()
   }
-  get totalInstock () {
+  get totalInstock () : number {
     let total = 0
     for (let ele of this.inStockList) {
       total += parseFloat(ele.sauceWeight)
     }
-    return total
+    return parseFloat(total.toFixed(2))
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
   getList () {
-    this.getFormHeader()
     // 全部页签页返回数据之后强制刷新tabs
-    Promise.all([this.getWorkHourList(), this.getInStockList(), this.getMaterialList()]).then((result) => {
+    Promise.all([this.getFormHeader(), this.getWorkHourList(), this.getInStockList(), this.getMaterialList()]).then((result) => {
+      // 如果订单状态是 submit/noPass/checked 实际入库值从表头取， 否则自动从storeageList计算出
+      if (this.formHeader.orderStatus === 'submit' || this.formHeader.orderStatus === 'noPass' || this.formHeader.orderStatus === 'checked') {
+        this.realInAmount = this.formHeader.realInAmount
+      } else {
+        this.realInAmount = this.totalInstock
+      }
       let tabs: any = this.$refs.tabs
       tabs.handleTabClick(tabs.panes[parseInt(tabs.currentName) - 1])
     })
@@ -362,9 +376,9 @@ export default class Index extends Vue {
     let tabs: any = this.$refs.tabs
     tabs.setCurrentName(val.name)
   }
-  getFormHeader () {
+  async getFormHeader () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
-    Vue.prototype.$http(`${KJM_API.KJMAKINGHEAD_API}`, 'POST', {orderId}).then(res => {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGHEAD_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0 && res.data.list && res.data.list.length > 0) {
         let item = res.data.list[0]
         Object.assign(this.formHeader, item)
@@ -374,6 +388,7 @@ export default class Index extends Vue {
     }).catch(err => {
       console.log('catch data::', err)
     })
+    return 'ooooo'
   }
   async getWorkHourList () {
     let orderId = this.$store.state.common.ZQWorkshop.checkParams.orderId
@@ -620,9 +635,11 @@ export default class Index extends Vue {
   }
   async timeSubmit () {
     let total = this.totalInstock
+    let realTotal = this.realInAmount
     this.workHourList.forEach(function (item) {
       item.status = 'submit'
       item.countOutput = total
+      item.realInAmount = realTotal
       item.countOutputUnit = 'L'
     })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
@@ -636,9 +653,11 @@ export default class Index extends Vue {
   }
   async storageSubmit () {
     let total = this.totalInstock
+    let realTotal = this.realInAmount
     this.inStockList.forEach(function (item) {
       item.status = 'submit'
       item.countOutput = total
+      item.realInAmount = realTotal
       item.countOutputUnit = 'L'
     })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
