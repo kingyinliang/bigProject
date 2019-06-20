@@ -27,7 +27,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="订单编号：">
-              <el-input v-model="form.orderNo" class="width160px"></el-input>
+              <el-input v-model="form.orderNo" style="width:160px"></el-input>
             </el-form-item>
             <el-form-item label="物料：">
               <el-select v-model="form.materialCode" filterable class="width160px">
@@ -36,7 +36,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="发酵天数：">
-              <el-input v-model="form.ferDays" class="width160px"></el-input>
+              <el-input v-model="form.ferDays" class="width160px" style="width:160px"></el-input>
             </el-form-item>
             <el-form-item label="物料类别：">
               <el-select v-model="form.halfId" filterable class="width160px">
