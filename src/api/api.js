@@ -1312,6 +1312,12 @@ export const FERMENTATION_API = {
   /*
    * 订单申请
    */
-  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder'
-
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+  /**
+   * 报工管理
+   */
+  WORKINGHOURSMANLIST_API: HOST + '/sys/fer-report/selectReports',
+  WORKINGHOURSMANSAVE_API: HOST + '/sys/fer-report/save',
+  WORKINGHOURSMANSUBMIT_API: HOST + '/sys/fer-report/submit',
+  WORKINGHOURSMANLOGLIST_API: HOST + '/sys/fer-report/selectRecords'
 }

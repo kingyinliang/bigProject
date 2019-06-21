@@ -1,11 +1,5 @@
 <template>
-  <el-table>
-    <el-table-column label="序号"></el-table-column>
-    <el-table-column label="审核动作"></el-table-column>
-    <el-table-column label="审核意见"></el-table-column>
-    <el-table-column label="审核人"></el-table-column>
-    <el-table-column label="序号"></el-table-column>
-  </el-table>
+  <div></div>
 </template>
 
 <script>

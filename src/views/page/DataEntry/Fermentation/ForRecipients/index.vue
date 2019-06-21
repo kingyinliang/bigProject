@@ -190,7 +190,6 @@ export default {
       this.Fermentation = {
         orderId: item.id
       }
-      console.log('list + ' + this.Fermentation.orderId)
       this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-ForRecipients-detail')
       setTimeout(() => {
         this.$router.push({ name: `DataEntry-Fermentation-ForRecipients-detail` })
