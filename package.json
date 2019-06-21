@@ -12,7 +12,18 @@
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/version.js && node build/build.js",
-    "version": "node build/version.js"
+    "version": "node build/version.js",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $GIT_PARAMS"
+    }
   },
   "pre-commit": [
     "lint"
@@ -22,7 +33,6 @@
     "@sentry/webpack-plugin": "^1.6.2",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
-    "commit-msg": "^0.2.3",
     "echarts": "^4.1.0",
     "element-ui": "^2.4.1",
     "file-saver": "^2.0.0-rc.3",
@@ -39,6 +49,8 @@
     "xlsx": "^0.14.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/jquery": "^3.3.29",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
@@ -56,9 +68,11 @@
     "babel-register": "^6.22.0",
     "chalk": "^2.0.1",
     "chromedriver": "^2.27.2",
+    "commitizen": "^3.1.1",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.0",
+    "cz-conventional-changelog": "^2.1.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
