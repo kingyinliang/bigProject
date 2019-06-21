@@ -296,7 +296,7 @@ export default class Index extends Vue {
   getHalfTypeList (factory, materialCode) {
     this.halfTypeList = []
     if (factory && materialCode) {
-      Vue.prototype.$http(`${FERMENTATION_API.CATEGORY_LIST}`, 'POST', {factory, materialCode, pageSize: '9999', currPage: '1'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${FERMENTATION_API.CATEGORY_SORTLIST}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.halfTypeList = res.data.ferList.list
         } else {

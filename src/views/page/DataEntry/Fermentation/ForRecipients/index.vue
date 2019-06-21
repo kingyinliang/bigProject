@@ -24,7 +24,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="申请日期：">
-              <el-date-picker type="date" v-model="form.created" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
+              <el-date-picker type="date" v-model="form.sqTime" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
             </el-form-item>
             <el-form-item label="生产日期：">
               <el-date-picker type="date" v-model="form.productDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>

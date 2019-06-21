@@ -237,7 +237,7 @@ export const BASICDATA_API = {
    * 类别维护
    */
   MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
-  CATEGORY_LIST: HOST + '/fer/sort/sortList',
+  CATEGORY_SORTLIST: HOST + '/fer/sort/sortList',
   CATEGORYS_LIST: HOST + '/fer/sort/list',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',

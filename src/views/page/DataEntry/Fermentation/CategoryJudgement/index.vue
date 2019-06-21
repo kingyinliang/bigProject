@@ -314,9 +314,9 @@ export default {
     },
     // 物料类别
     GetMaterialTypeList (id) {
-      this.$http(`${BASICDATA_API.CATEGORY_LIST}`, 'POST', {factory: id}).then(({data}) => {
+      this.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory: id}).then(({data}) => {
         if (data.code === 0) {
-          this.materialTypeList = data.ferList.list
+          this.materialTypeList = data.ferList
         } else {
           this.$message.error(data.msg)
         }
