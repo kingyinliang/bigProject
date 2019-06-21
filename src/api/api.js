@@ -1321,6 +1321,17 @@ export const FERMENTATION_API = {
   /**
    * 入库管理订单列表
    */
-  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list'
-
+  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list',
+  /**
+   * 入库管理保存接口
+   */
+  ORDER_IN_STOCK_SAVE_API: HOST + '/fer/inStore/mySaveOrUpdate',
+  /**
+   * 入库管理提交接口
+   */
+  ORDER_IN_STOCK_SUBMIT_API: HOST + '/fer/inStore/submit',
+  /**
+   * 审核日志接口
+   */
+  ORDER_IN_STOCK_AUDIT_API: HOST + '/fer/inStore/verifyRecordList'
 }

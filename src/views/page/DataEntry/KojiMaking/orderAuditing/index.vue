@@ -207,14 +207,17 @@
             </el-row>
             <el-row style="margin-top:20px;">
               <el-col>
-                <div><span>入库数合计：</span>{{totalInstock}} L</div>
+                <div>
+                  <span>入库数合计：</span>{{totalInstock}} L
+                  <span>&nbsp;&nbsp;实际入库数：</span><el-input size="small" type="number" v-model.number='realInAmount' style="display:inline-block; width:150px;" :disabled="!isEdit"></el-input> L
+                </div>
               </el-col>
             </el-row>
-            <el-row style="margin-top:20px;">
+            <!-- <el-row style="margin-top:20px;">
               <el-col>
                 <span>实际入库数：</span><el-input size="small" type="number" v-model.number='realInAmount' style="display:inline-block; width:150px;"></el-input> L
               </el-col>
-            </el-row>
+            </el-row> -->
             <el-row>
               <el-col :span="24">
                 <auditLog :tableData="inStockAuditList"></auditLog>
@@ -371,6 +374,9 @@ export default class Index extends Vue {
       let tabs: any = this.$refs.tabs
       tabs.handleTabClick(tabs.panes[parseInt(tabs.currentName) - 1])
     })
+  }
+  get isEdit () {
+    return this.formHeader.orderStatus !== 'submit' && this.formHeader.orderStatus !== 'checked'
   }
   tabClick (val: any) {
     let tabs: any = this.$refs.tabs

@@ -66,8 +66,8 @@
             <el-button type="primary" class="button" size="small" @click="isEdit = !isEdit" v-if="isAuth('key')">{{isEdit?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isEdit" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" v-if="isAuth('key')">保存</el-button>
-            <el-button type="primary" size="small" v-if="isAuth('key')">提交</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('key')" @click="save()">保存</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('key')" @click="submit()">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -85,7 +85,7 @@
              <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">入库列表</span></div>
           </el-row>
           <el-row>
-            <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+            <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
               <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
@@ -156,15 +156,15 @@
             </el-table>
           </el-row>
           <el-row>
-            <!-- <el-pagination
-              @size-change="handleDataSizeChange"
-              @current-change="handleDataCurrentChange"
-              :current-page="dataCurrPage"
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currPage"
               :page-sizes="[10, 15, 20]"
-              :page-size="dataPageSize"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="dataTotalCount">
-            </el-pagination> -->
+              :total="totalCount">
+            </el-pagination>
           </el-row>
         </el-card>
       </div>
@@ -183,7 +183,6 @@
         </el-card>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -207,6 +206,9 @@ export default class Index extends Vue {
   orderDataList = []
   materialList = []
   dataList = []
+  currPage = 0
+  pageSize = 10
+  totalCount = 0
   readAudit = []
   searched: boolean = false
   isEdit: boolean = false
@@ -343,11 +345,88 @@ export default class Index extends Vue {
       commitDateTwo: this.params.endDate,
       orderList: this.params.orderList,
       holderList: this.params.holderList,
-      status: this.params.status
+      status: this.params.status,
+      pageSize: this.pageSize + '',
+      currPage: this.currPage + ''
     }
     Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.page.list
+        this.totalCount = res.data.page.totalCount
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
+  }
+  // 改变每页条数
+  handleSizeChange (val: number) {
+    this.pageSize = val
+    this.currPage = 1
+    this.retrieveOrderList()
+  }
+  // 跳转页数
+  handleCurrentChange (val: number) {
+    this.currPage = val
+    this.retrieveOrderList()
+  }
+  save () {
+    if (this.validate()) {
+      this.dataList.forEach((item) => {
+        if (item.status !== 'submit' && item.status !== 'checked') {
+          item.status = 'saved'
+        }
+      })
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SAVE_API}`, `POST`, this.dataList).then((res) => {
+        if (res.data.code === 0) {
+          this.retrieveOrderList()
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  submit () {
+    if (this.validate()) {
+      this.dataList.forEach((item) => {
+        if (item.status !== 'checked') {
+          item.status = 'submit'
+        }
+      })
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SUBMIT_API}`, `POST`, this.dataList).then((res) => {
+        if (res.data.code === 0) {
+          this.retrieveOrderList()
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  validate () {
+    if (!this.dataList || this.dataList.length === 0) {
+      this.$message.error('当前无订单数据，无法操作')
+      return false
+    }
+    for (let item of this.dataList) {
+      if (!item.inAmount || item.inAmount === '') {
+        this.$message.error('入库数不能为空')
+        return false
+      }
+      if (item.batch === null || item.batch === '') {
+        this.$message.error('批次不能为空')
+        return false
+      }
+      if (item.batch.length !== 10) {
+        this.$message.error('批次长度为10')
+        return false
+      }
+    }
+    return true
+  }
+  showDetail (row) {
+    this.readAudit = []
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_AUDIT_API}`, `POST`, {orderNo: row.orderNo}).then((res) => {
+      if (res.data.code === 0) {
+        this.readAudit = res.data.list
       } else {
         this.$message.error(res.data.msg)
       }
@@ -356,6 +435,12 @@ export default class Index extends Vue {
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
+    this.isEdit = false
+    this.dataList = []
+    this.readAudit = []
+    this.pageSize = 10
+    this.totalCount = 0
+    this.currPage = 1
   }
   @Watch('params.factoryId')
   onFactoryValue (newVal: string, oldVal: string) {
