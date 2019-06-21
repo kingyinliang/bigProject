@@ -91,7 +91,7 @@ export default {
       if (ty) {
         this.formHeader.currPage = 1
       }
-      this.$http(`${BASICDATA_API.CATEGORY_LIST}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${BASICDATA_API.CATEGORYS_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
           this.DataList = data.ferList.list

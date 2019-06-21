@@ -22,6 +22,7 @@
     "@sentry/webpack-plugin": "^1.6.2",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "commit-msg": "^0.2.3",
     "echarts": "^4.1.0",
     "element-ui": "^2.4.1",
     "file-saver": "^2.0.0-rc.3",
