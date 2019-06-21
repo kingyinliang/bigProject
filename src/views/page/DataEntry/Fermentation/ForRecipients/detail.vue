@@ -13,7 +13,7 @@
             <el-form-item label="申请数量："><p class="bottomline">{{formHeader.AMOUNT}}</p></el-form-item>
             <el-form-item label="申请人员："><p class="bottomline">{{formHeader.CREATOR}}</p></el-form-item>
             <el-form-item label="申请时间："><p class="bottomline" style="width:212px;">{{formHeader.CREATED}}</p></el-form-item>
-            <el-form-item label="状态："><p class="bottomline">{{formHeader.CONFIRM_FLAG === 1 ? '未确认' : '已确认'}}</p></el-form-item>
+            <el-form-item label="状态："><p class="bottomline">{{formHeader.CONFIRM_FLAG === '1' ? '已确认' : '未确认'}}</p></el-form-item>
           </el-form>
         </el-col>
       </el-row>
