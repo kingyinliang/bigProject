@@ -200,7 +200,7 @@ export default {
     }
   },
   components: {
-    Loglist
+    // Loglist
   }
 }
 </script>
