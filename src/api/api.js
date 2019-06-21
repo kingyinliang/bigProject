@@ -238,6 +238,7 @@ export const BASICDATA_API = {
    */
   MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
   CATEGORY_LIST: HOST + '/fer/sort/list',
+  CATEGORY_SORTLIST: HOST + '/fer/sort/sortList',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',
   CATEGORY_DELETE: HOST + '/fer/sort/delete'
