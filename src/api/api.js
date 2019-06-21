@@ -1319,5 +1319,15 @@ export const FERMENTATION_API = {
   WORKINGHOURSMANLIST_API: HOST + '/sys/fer-report/selectReports',
   WORKINGHOURSMANSAVE_API: HOST + '/sys/fer-report/save',
   WORKINGHOURSMANSUBMIT_API: HOST + '/sys/fer-report/submit',
-  WORKINGHOURSMANLOGLIST_API: HOST + '/sys/fer-report/selectRecords'
+  WORKINGHOURSMANLOGLIST_API: HOST + '/sys/fer-report/selectRecords',
+
+  /**
+   * 入库管理订单下拉列表 (未录入，保存，提交，未通过的)
+   */
+  ORDER_SELECT_LIST_API: HOST + '/fer/inStore/orderSelect',
+  /**
+   * 入库管理订单列表
+   */
+  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list'
+
 }

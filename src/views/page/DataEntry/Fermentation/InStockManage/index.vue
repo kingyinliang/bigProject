@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="罐号：" >
-                <el-select v-model="params.potList" class="selectwpx" style="width: 140px" filterable multiple @change="changeOptions('pot')">
+                <el-select v-model="params.holderList" class="selectwpx" style="width: 140px" filterable multiple @change="changeOptions('pot')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
                 </el-select>
@@ -33,19 +33,20 @@
                 <el-date-picker type="date" v-model="params.startDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 - <el-date-picker type="date" v-model="params.endDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="订单号："  filterable multiple allow-create>
-                <el-select v-model="params.orderList" class="selectwpx" style="width: 140px" @change="changeOptions('order')">
+              <el-form-item label="订单号：" label-width="80px" >
+                <el-select v-model="params.orderList" class="selectwpx" style="width: 140px" filterable multiple allow-create @change="changeOptions('order')">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
+                  <el-option v-for="sole in orderDataList" :key="sole.orderNo" :label="sole.orderNo" :value="sole.orderNo"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="状态：" >
                 <el-select v-model="params.status" class="selectwpx" style="width: 140px" @change="changeOptions('status')">
-                  <el-option label="未录入" value=""></el-option>
+                  <el-option label="请选择" value=''></el-option>
+                  <el-option label="未录入" value='未录入'></el-option>
                   <el-option label="已保存" value="saved"></el-option>
                   <el-option label="已提交" value="submit"></el-option>
-                  <el-option label="未通过" value="noPass"></el-option>
-                  <el-option label="已通过" value="checked"></el-option>
+                  <el-option label="审核未通过" value="noPass"></el-option>
+                  <el-option label="审核已通过" value="checked"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -86,52 +87,70 @@
           <el-row>
             <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
               <el-table-column type="index" label="序号" width="55"></el-table-column>
-              <el-table-column label="状态" :show-overflow-tooltip="true">
+              <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.status === 'checked' ? '审核已通过' : scope.row.status == 'noPass' ? '审核未通过' : scope.row.status === 'submit' ? '已提交' : scope.row.status === 'saved' ? '已保存' : '未录入'}}
                 </template>
               </el-table-column>
-              <el-table-column label="订单号" :show-overflow-tooltip="true" >
+              <el-table-column label="订单号" :show-overflow-tooltip="true" width="120">
                 <template slot-scope="scope">
+                  {{scope.row.orderNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="容器" :show-overflow-tooltip="true" >
+              <el-table-column label="容器" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.holderName}}
                 </template>
               </el-table-column>
-              <el-table-column label="物料" :show-overflow-tooltip="true" >
+              <el-table-column label="物料" :show-overflow-tooltip="true" width="120">
                 <template slot-scope="scope">
+                  {{scope.row.materialCode + ' ' + scope.row.materialName}}
                 </template>
               </el-table-column>
-              <el-table-column label="订单量">
+              <el-table-column label="订单量" width="100">
                 <template slot-scope="scope">
+                  {{scope.row.orderAmount}}
                 </template>
               </el-table-column>
-              <el-table-column label="单位">
+              <el-table-column label="单位" width="60">
                 <template slot-scope="scope">
+                  {{scope.row.orderUnit}}
                 </template>
               </el-table-column>
-              <el-table-column label="入库数量" >
+              <el-table-column label="入库数量" width="160">
                 <template slot-scope="scope">
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-input type="number"  v-model.number="scope.row.inAmount"  :disabled="!isEdit || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入" style="display:inline-block"></el-input>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column label="单位" >
+              <el-table-column label="单位" width="60">
                 <template slot-scope="scope">
+                  {{scope.row.inUnit}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次" >
+              <el-table-column label="批次" width="160">
                 <template slot-scope="scope">
+                  <div class="required">
+                    <i class="reqI">*</i>
+                    <el-input type="text"  v-model.trim="scope.row.batch"  :disabled="!isEdit || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column label="备注" >
+              <el-table-column label="备注" width="180">
                 <template slot-scope="scope">
+                  <el-input type="text"  v-model.trim="scope.row.remark"  :disabled="!isEdit || scope.row.status === 'submit' || scope.row.status === 'checked'" size="small"  placeholder="手工录入"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="提交人员" >
+              <el-table-column label="提交人员" width="140">
                 <template slot-scope="scope">
+                  {{scope.row.changer}}
                 </template>
               </el-table-column>
-              <el-table-column label="提交时间" >
+              <el-table-column label="提交时间" width="160">
                 <template slot-scope="scope">
+                  {{scope.row.changed}}
                 </template>
               </el-table-column>
             </el-table>
@@ -169,7 +188,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, GRANARY_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {dateFormat, headanimation} from '@/net/validate'
 import AuditLog from '@/views/components/AuditLog.vue'
@@ -181,10 +200,11 @@ import AuditLog from '@/views/components/AuditLog.vue'
 
 export default class Index extends Vue {
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.FerOrderManage))
+  params = JSON.parse(JSON.stringify(this.$store.state.common.FerInStockManage))
   factoryList = []
   workshopList = []
   potList = []
+  orderDataList = []
   materialList = []
   dataList = []
   readAudit = []
@@ -197,7 +217,8 @@ export default class Index extends Vue {
     this.params.endDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getFermentPot(this.params.factoryId)
+    this.getFermentPot(this.params.factoryId, this.params.workshopId)
+    this.getOrderDataList(this.params.factoryId, this.params.workshopId)
   }
   isAuth (key) {
     return true
@@ -217,8 +238,11 @@ export default class Index extends Vue {
       let item = this.workshopList.find(ele => ele.deptId === this.params.workshopId)
       this.params.workshopName = item ? item.deptName : ''
     } else if (flag === 'pot') {
-      let item = this.potList.find(ele => ele.holderId === this.params.potId)
-      this.params.potName = item ? item.holderName : ''
+      // let item = this.potList.find(ele => ele.holderId === this.params.potId)
+      // this.params.potName = item ? item.holderName : ''
+    } else if (flag === 'order') {
+      // let item = this.potList.find(ele => ele.holderId === this.params.potId)
+      // this.params.potName = item ? item.holderName : ''
     }
   }
   // 获取工厂
@@ -246,12 +270,28 @@ export default class Index extends Vue {
     }
   }
   // 发酵罐
-  getFermentPot (fid: string) {
+  getFermentPot (fid: string, wid: string) {
     this.potList = []
-    if (fid) {
-      Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_POT_LIST_API}`, 'POST', {factory: fid}, false, false, false).then(res => {
+    if (fid && wid) {
+      Vue.prototype.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: fid, workShop: wid}, false, false, false).then(res => {
         if (res.data.code === 0) {
-          this.potList = res.data.num
+          this.potList = res.data.holderList
+          // if (!this.params.factoryId && res.data.num.length > 0) {
+          //   this.params.workshopId = res.data.num[0].holderId
+          // }
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    }
+  }
+  // 全部的订单数据
+  getOrderDataList (fid: string, wid: string) {
+    this.orderDataList = []
+    if (fid && wid) {
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_SELECT_LIST_API}`, 'POST', {factory: fid, workShop: wid}, false, false, false).then(res => {
+        if (res.data.code === 0) {
+          this.orderDataList = res.data.orderList
           // if (!this.params.factoryId && res.data.num.length > 0) {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
@@ -262,13 +302,13 @@ export default class Index extends Vue {
     }
   }
   setStore (params) {
-    this.$store.commit('common/updateFerOrderManage', params)
+    this.$store.commit('common/updateFerInStockManage', params)
   }
   getOrderList () {
-    // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择工厂')
-    //   return
-    // }
+    if (this.params.factoryId === '') {
+      this.$message.error('请选择工厂')
+      return
+    }
     // if (this.params.workshopId === '') {
     //   this.$message.error('请选择车间')
     //   return
@@ -292,26 +332,22 @@ export default class Index extends Vue {
     this.searched = true
     // 保存选项值到common store
     this.setStore(this.params)
-    let queryParams = {
-      factory: this.params.factoryId,
-      deptId: this.params.workshopId,
-      flag: '002'
-    }
-    this.retrieveOrderList(queryParams)
+    this.retrieveOrderList()
   }
-  retrieveOrderList (params) {
+  retrieveOrderList () {
     this.dataList = []
-    Vue.prototype.$http(`${GRANARY_API.WHEAT_POT_LIST}/${params.factory}?deptId=${params.deptId}&flag=${params.flag}`, `GET`).then((res) => {
+    let params = {
+      factory: this.params.factoryId,
+      workshop: this.params.workshopId,
+      commitDateOne: this.params.startDate,
+      commitDateTwo: this.params.endDate,
+      orderList: this.params.orderList,
+      holderList: this.params.holderList,
+      status: this.params.status
+    }
+    Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
-        this.dataList = res.data.data ? res.data.data.holders : []
-        this.dataList.forEach((item) => {
-          item.total = 0
-          item.unit = 'KG'
-          if (item.stocks && item.stocks.length > 0) {
-            item.total = item.stocks.reduce((prev, next) => { return prev + (next.currentQuantity ? next.currentQuantity : 0) }, 0)
-            item.unit = item.stocks[0].unit
-          }
-        })
+        this.dataList = res.data.page.list
       } else {
         this.$message.error(res.data.msg)
       }
@@ -325,15 +361,31 @@ export default class Index extends Vue {
   onFactoryValue (newVal: string, oldVal: string) {
     this.params.workshopId = ''
     this.params.workshopName = ''
-    this.params.potId = ''
-    this.params.potName = ''
-    this.params.materialCode = ''
-    this.params.materialName = ''
+    this.params.holderList = []
+    this.params.orderList = []
     this.getWorkshop(newVal)
-    this.getFermentPot(newVal)
+    this.getFermentPot(newVal, this.params.workshopId)
+    this.getOrderDataList(newVal, this.params.workshopId)
+  }
+  @Watch('params.workshopId')
+  onWorkshopValue (newVal: string, oldVal: string) {
+    this.params.holderList = []
+    this.params.orderList = []
+    this.getFermentPot(this.params.factoryId, newVal)
+    this.getOrderDataList(this.params.factoryId, newVal)
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.required{
+  position: relative;
+  padding-left: 15px;
+  .reqI{
+    color: red;
+    position: absolute;
+    left: 0;
+    line-height: 32px;
+  }
+}
 </style>
