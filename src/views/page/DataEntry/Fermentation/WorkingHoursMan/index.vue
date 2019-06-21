@@ -50,7 +50,7 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '' : socpe.row.status === 'submit' ? '已提交' : ''}}
+              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
@@ -63,41 +63,41 @@
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
           <el-table-column label="实际生产数量" :show-overflow-tooltip="true" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.actAmount" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.actAmount" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="unit" width="50"></el-table-column>
           <el-table-column label="准备工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.prepareTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.prepareTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="prepareTimesUnit" width="50"></el-table-column>
           <el-table-column label="机器工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.machineTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.machineTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="machineTimesUnit" width="50"></el-table-column>
           <el-table-column label="人工工时" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.humanTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.humanTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" :show-overflow-tooltip="true" v-model="scope.row.startDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.rowendDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -110,7 +110,7 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.totalCount">
+          :total="form.total">
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="maturedReport" label="已成熟">
@@ -118,54 +118,54 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '' : socpe.row.status === 'submit' ? '已提交' : ''}}
+              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
             <template slot-scope="scope">
-              {{scope.row.materialCode}}{{scope.row.materialName}}
+              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
           <el-table-column label="实际生产数量" :show-overflow-tooltip="true" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.actAmount" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.actAmount" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="unit" width="50"></el-table-column>
           <el-table-column label="准备工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.prepareTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.prepareTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="prepareTimesUnit" width="50"></el-table-column>
           <el-table-column label="机器工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.machineTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.machineTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="machineTimesUnit" width="50"></el-table-column>
           <el-table-column label="人工工时" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.humanTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.humanTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" :show-overflow-tooltip="true" v-model="scope.row.startDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.rowendDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -178,7 +178,7 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.totalCount">
+          :total="form.total">
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="rework" label="返工订单">
@@ -186,54 +186,54 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '' : socpe.row.status === 'submit' ? '已提交' : ''}}
+              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
             <template slot-scope="scope">
-              {{scope.row.materialCode}}{{scope.row.materialName}}
+              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
           <el-table-column label="实际生产数量" :show-overflow-tooltip="true" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.actAmount" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.actAmount" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="unit" width="50"></el-table-column>
           <el-table-column label="准备工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.prepareTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.prepareTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="prepareTimesUnit" width="50"></el-table-column>
           <el-table-column label="机器工时" :show-overflow-tooltip="true" prop="created">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.machineTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.machineTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="machineTimesUnit" width="50"></el-table-column>
           <el-table-column label="人工工时" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.humanTimes" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.humanTimes" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.rowendDate" placeholder="选择日期" size="small"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="!isRedact" size="small"></el-input>
+              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -246,18 +246,22 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.totalCount">
+          :total="form.total">
         </el-pagination>
       </el-tab-pane>
     </el-tabs>
     <el-card style="margin-top:15px">
       <div class="audit"><i class="iconfont factory-shouqicaidan"></i><span>审核日志</span></div>
       <el-table border header-row-class-name="tableHead">
-        <el-table-column label="序号"></el-table-column>
-        <el-table-column label="审核动作"></el-table-column>
-        <el-table-column label="审核意见"></el-table-column>
-        <el-table-column label="审核人"></el-table-column>
-        <el-table-column label="序号"></el-table-column>
+        <el-table-column label="序号" type="index" width="50"></el-table-column>
+        <el-table-column label="审核动作">
+          <template slot-scope="scope">
+            {{scope.row.status === 'checked' ? '审核成功' : scope.row.status === 'noPass' ? '审核失败' : scope.row.status === 'submit' ? '提交' : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="审核意见" prop="memo"></el-table-column>
+        <el-table-column label="审核人" prop="verifyMan"></el-table-column>
+        <el-table-column label="审核时间" prop="verifyDate"></el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -288,6 +292,7 @@ export default {
         value: 'submit'
       }],
       activeName: 'noMatureReport',
+      multipleSelection: [],
       holderList: [],
       dataList: []
     }
@@ -353,6 +358,7 @@ export default {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
+          this.form.total = data.data.list.length
         } else {
           this.$message.error(data.msg)
         }
@@ -364,7 +370,7 @@ export default {
     },
     // 复选框勾选
     CheckBoxInit (row, index) {
-      if (this.isRedact === false) {
+      if (this.isRedact === false || row.status === 'submit' || row.status === 'success') {
         return 0
       } else {
         return 1
@@ -381,6 +387,7 @@ export default {
       this.SearchList()
     },
     SaveForm (types) {
+      console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
         this.$message.error('请先勾选数据')
       } else {
@@ -409,6 +416,10 @@ export default {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLOGLIST_API}`, 'POST', {orderId: orderId}).then(({data}) => {
         this.LogList = data
       })
+    },
+    GetCheck (row) {
+      console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
+      return (!this.isRedact || row.status === 'submit' || row.status === 'success')
     }
   }
   // components: {
