@@ -340,7 +340,7 @@ export default class Index extends Vue {
     this.dataList = []
     let params = {
       factory: this.params.factoryId,
-      workshop: this.params.workshopId,
+      workShop: this.params.workshopId,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
       orderList: this.params.orderList,
