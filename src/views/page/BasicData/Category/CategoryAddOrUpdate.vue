@@ -116,13 +116,18 @@ export default {
     },
     // 获取物料
     GetMaterial (n) {
-      this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.material = data.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (n) {
+        this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {
+          factory: n,
+          materialTypeCode: 'ZHAL'
+        }, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.material = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     closeDialog () {
       this.visible = false

@@ -237,7 +237,7 @@ export const BASICDATA_API = {
    * 类别维护
    */
   MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
-  CATEGORY_LIST: HOST + '/fer/sort/sortList',
+  CATEGORY_LIST: HOST + '/fer/sort/list',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',
   CATEGORY_DELETE: HOST + '/fer/sort/delete'
@@ -1304,7 +1304,12 @@ export const FERMENTATION_API = {
   /**
    * 发料管理
    */
+  SHOOT_GETORDER_API: HOST + '/fer/shoot/getOrder',
   SHOOT_LIST_API: HOST + '/fer/shoot/list',
+  SHOOT_LOG_API: HOST + '/fer/shoot/getLog',
+  SHOOT_DEL_API: HOST + '/fer/shoot/delete',
+  SHOOT_UPDATE_API: HOST + '/fer/shoot/update',
+  SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit',
   /*
    * 订单申请
    */

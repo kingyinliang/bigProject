@@ -10,7 +10,7 @@
           </div>
         </el-col>
         <el-col>
-          <el-form :inline="true" size="small" label-width="84px" class="topforms">
+          <el-form :inline="true" size="small" label-width="84px" class="topforms topformsde">
             <el-form-item label="生产工厂：">
               <p class="el-input">{{formData.factoryName ? formData.factoryName : ''}}</p>
             </el-form-item>
@@ -147,7 +147,7 @@ export default {
 </script>
 
 <style lang="scss">
-.topforms{
+.topformsde{
   .el-form-item__content{
     height: 32px;
     border-bottom: 1px solid #D8D8D8;
