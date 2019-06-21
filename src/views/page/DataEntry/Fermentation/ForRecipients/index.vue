@@ -24,10 +24,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="申请日期：">
-              <el-date-picker type="date" v-model="form.created" placeholder="请选择" style="width:199px"></el-date-picker>
+              <el-date-picker type="date" v-model="form.created" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker type="date" v-model="form.productDate" placeholder="请选择" style="width:199px"></el-date-picker>
+              <el-date-picker type="date" v-model="form.productDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -141,7 +141,7 @@ export default {
     GetWorkshopList (id) {
       this.form.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
