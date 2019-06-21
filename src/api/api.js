@@ -237,7 +237,7 @@ export const BASICDATA_API = {
    * 类别维护
    */
   MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
-  CATEGORY_LIST: HOST + '/fer/sort/list',
+  CATEGORY_LIST: HOST + '/fer/sort/sortList',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',
   CATEGORY_DELETE: HOST + '/fer/sort/delete'
@@ -1297,10 +1297,6 @@ export const FERMENTATION_API = {
   CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders', // 罐
   CATEGORYJUDGEMENTLIST_API: HOST + '/sys/fer-sort-judge/query', // 判定1 未判定0
   CATEGORYJUDGEMENTTODO_API: HOST + '/sys/fer-sort-judge/judge', // 判定动作
-  /**
-   *  半成品列表
-   */
-  HALFTYPE_LIST_API: HOST + '/fer/sort/list',
   /**
    * 订单管理列表
    */
