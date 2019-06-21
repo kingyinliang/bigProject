@@ -13,7 +13,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>

@@ -255,7 +255,7 @@ export default class Index extends Vue {
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '发酵'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
@@ -341,7 +341,6 @@ export default class Index extends Vue {
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
-    console.log('aaaaaa', newVal)
     this.searched = false
     this.totalList = []
     this.detailList = []

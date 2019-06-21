@@ -23,13 +23,13 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="酱醪名称：">
-                <el-select v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
+                <el-select filterable v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="半成品类别：" label-width="100px">
-                <el-select v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
+              <el-form-item  label="半成品类别：" label-width="100px">
+                <el-select filterable v-model="formHeader.halfType" class="selectwpx" style="width: 140px" @change="changeOptions('halfType')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in halfTypeList" :key="sole.halfType" :label="sole.halfName" :value="sole.halfType"></el-option>
                 </el-select>
@@ -272,7 +272,7 @@ export default class Index extends Vue {
   getWorkshop (fid: string) {
     this.workshopList = []
     if (fid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '发酵'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
@@ -296,7 +296,7 @@ export default class Index extends Vue {
   getHalfTypeList (factory, materialCode) {
     this.halfTypeList = []
     if (factory && materialCode) {
-      Vue.prototype.$http(`${FERMENTATION_API.HALFTYPE_LIST_API}`, 'POST', {factory, materialCode, pageSize: '9999', currPage: '1'}, false, false, false).then(res => {
+      Vue.prototype.$http(`${FERMENTATION_API.CATEGORY_LIST}`, 'POST', {factory, materialCode, pageSize: '9999', currPage: '1'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.halfTypeList = res.data.ferList.list
         } else {

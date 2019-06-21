@@ -131,6 +131,23 @@ export default {
       startDate: '',
       endDate: ''
     },
+    /**
+     * 发酵罐入库管理参数
+     */
+    FerInStockManage: {
+      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
+      factoryName: '烟台欣和企业食品有限公司工厂',
+      workshopId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A',
+      workshopName: '发酵一车间',
+      startDate: '',
+      endDate: '',
+      // 罐号多选
+      holderList: [],
+      // 订单号多选
+      orderList: [],
+      // 状态
+      status: ''
+    },
     /*
      * 发酵车间
      */
@@ -269,6 +286,10 @@ export default {
     /** 发酵罐订单管理参数 */
     updateFerOrderManage (state, params) {
       state.FerOrderManage = params
+    },
+    /** 发酵罐入库管理参数 */
+    updateFerInStockManage (state, params) {
+      state.FerInStockManage = params
     },
     /** 发酵 */
     updateFermentation (state, params) {

@@ -24,10 +24,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="申请日期：">
-              <el-date-picker type="date" v-model="form.created" placeholder="请选择" style="width:199px"></el-date-picker>
+              <el-date-picker type="date" v-model="form.created" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker type="date" v-model="form.productDate" placeholder="请选择" style="width:199px"></el-date-picker>
+              <el-date-picker type="date" v-model="form.productDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="请选择" style="width:199px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -40,15 +40,15 @@
       <el-tab-pane name="0" label="未确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" prop="applyNo"></el-table-column>
-          <el-table-column label="物料" width="250">
+          <el-table-column label="申请编码" prop="applyNo" width="120"></el-table-column>
+          <el-table-column label="物料" width="230">
             <template slot-scope="scope">
               <a @click="Go(scope.row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
           </el-table-column>
           <el-table-column label="半成品类别" prop="halfType"></el-table-column>
           <el-table-column label="申请数量" prop="amount"></el-table-column>
-          <el-table-column label="申请时间" prop="created"></el-table-column>
+          <el-table-column label="申请时间" prop="created" width="170"></el-table-column>
           <el-table-column label="生产日期" prop="productDate"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -69,8 +69,8 @@
       <el-tab-pane name="1" label="已确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" prop="applyNo"></el-table-column>
-          <el-table-column label="物料" width="250">
+          <el-table-column label="申请编码" prop="applyNo" width="120"></el-table-column>
+          <el-table-column label="物料" width="230">
             <template slot-scope="scope">
               <a @click="Go(scope.row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
@@ -78,7 +78,7 @@
           <el-table-column label="半成品类别" prop="halfType"></el-table-column>
           <el-table-column label="申请数量" prop="amount"></el-table-column>
           <el-table-column label="确认数量" prop="confirmNum"></el-table-column>
-          <el-table-column label="申请时间" prop="created"></el-table-column>
+          <el-table-column label="申请时间" prop="created" width="170"></el-table-column>
           <el-table-column label="生产日期" prop="productDate"></el-table-column>
         </el-table>
         <el-pagination
@@ -141,7 +141,7 @@ export default {
     GetWorkshopList (id) {
       this.form.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
@@ -190,6 +190,7 @@ export default {
       this.Fermentation = {
         orderId: item.id
       }
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-ForRecipients-detail')
       setTimeout(() => {
         this.$router.push({ name: `DataEntry-Fermentation-ForRecipients-detail` })
       }, 100)
@@ -206,6 +207,14 @@ export default {
     }
   },
   computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    },
     Fermentation: {
       get () {
         return this.$store.state.common.Fermentation

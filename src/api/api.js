@@ -1290,14 +1290,13 @@ export const FERMENTATION_API = {
    */
   FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList',
   FORRECIPIENTSDETAILIST_API: HOST + '/fer/openHolder/openFermentationList',
+  FORRECIPIENTSDETAILOPEN_API: HOST + '/fer/openHolder/openFermentation',
   /**
    *  类别判定
    */
   CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders', // 罐
-  /**
-   *  半成品列表
-   */
-  HALFTYPE_LIST_API: HOST + '/fer/sort/list',
+  CATEGORYJUDGEMENTLIST_API: HOST + '/sys/fer-sort-judge/query', // 判定1 未判定0
+  CATEGORYJUDGEMENTTODO_API: HOST + '/sys/fer-sort-judge/judge', // 判定动作
   /**
    * 订单管理列表
    */
@@ -1310,6 +1309,37 @@ export const FERMENTATION_API = {
   SHOOT_LOG_API: HOST + '/fer/shoot/getLog',
   SHOOT_DEL_API: HOST + '/fer/shoot/delete',
   SHOOT_UPDATE_API: HOST + '/fer/shoot/update',
-  SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit'
+  SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit',
+  /*
+   * 订单申请
+   */
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+  /**
+   * 报工管理
+   */
+  WORKINGHOURSMANLIST_API: HOST + '/sys/fer-report/selectReports',
+  WORKINGHOURSMANSAVE_API: HOST + '/sys/fer-report/save',
+  WORKINGHOURSMANSUBMIT_API: HOST + '/sys/fer-report/submit',
+  WORKINGHOURSMANLOGLIST_API: HOST + '/sys/fer-report/selectRecords',
 
+  /**
+   * 入库管理订单下拉列表 (未录入，保存，提交，未通过的)
+   */
+  ORDER_SELECT_LIST_API: HOST + '/fer/inStore/orderSelect',
+  /**
+   * 入库管理订单列表
+   */
+  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list',
+  /**
+   * 入库管理保存接口
+   */
+  ORDER_IN_STOCK_SAVE_API: HOST + '/fer/inStore/mySaveOrUpdate',
+  /**
+   * 入库管理提交接口
+   */
+  ORDER_IN_STOCK_SUBMIT_API: HOST + '/fer/inStore/submit',
+  /**
+   * 审核日志接口
+   */
+  ORDER_IN_STOCK_AUDIT_API: HOST + '/fer/inStore/verifyRecordList'
 }
