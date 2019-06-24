@@ -209,24 +209,30 @@ export default {
         this.$message.error('请勾选罐号')
         return false
       } else {
-        this.multipleSelection.map((item) => {
-          item.openId = this.$store.state.common.Fermentation.orderId
-          item.amount = item.inAmount
-          item.unit = item.inUnit
-          item.inStoreDate = item.created
-          item.isNum = this.formHeader.AMOUNT
-        })
-        // console.log(this.multipleSelection)
-        this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
-          if (data.code === 0) {
-            this.searchform = {
-              currentPage: 1, // 当前页数
-              pageSize: 10
+        this.$confirm('确认执行开罐操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.multipleSelection.map((item) => {
+            item.openId = this.$store.state.common.Fermentation.orderId
+            item.amount = item.inAmount
+            item.unit = item.inUnit
+            item.inStoreDate = item.created
+            item.isNum = this.formHeader.AMOUNT
+          })
+          // console.log(this.multipleSelection)
+          this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.searchform = {
+                currentPage: 1, // 当前页数
+                pageSize: 10
+              }
+              this.GetList()
+            } else {
+              this.$message.error(data.msg)
             }
-            this.GetList()
-          } else {
-            this.$message.error(data.msg)
-          }
+          })
         })
       }
     },

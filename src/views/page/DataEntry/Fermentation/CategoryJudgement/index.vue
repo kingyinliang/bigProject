@@ -54,7 +54,7 @@
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="0" label="未判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态" prop="workShop"></el-table-column>
+          <el-table-column label="状态" prop="workShop">正常</el-table-column>
           <el-table-column label="发酵罐">
             <template slot-scope="scope">
               {{scope.row.order.holderNo}}
@@ -236,6 +236,7 @@ export default {
       },
       materialList: [],
       materialTypeList: [],
+      materialTypeListTan: [],
       holderList: [],
       judgerules: {
         halfId: [
@@ -322,6 +323,16 @@ export default {
         }
       })
     },
+    // 弹框物料类别
+    GetMaterialTypeListTan () {
+      this.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory: this.form.factory, materialCode: this.judge.ferMaterialCode}).then(({data}) => {
+        if (data.code === 0) {
+          this.materialTypeList = data.ferList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     GetList () {
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENTLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
@@ -363,6 +374,7 @@ export default {
         holderNo: row.order.holderNo,
         halfId: row.judge ? row.judge.halfId : ''
       }
+      this.GetMaterialTypeListTan()
     },
     SaveJudge (formName) {
       this.$refs[formName].validate((valid) => {

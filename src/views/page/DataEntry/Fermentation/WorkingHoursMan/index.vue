@@ -396,6 +396,13 @@ export default {
         let url
         let msg
         if (types === 'submit') {
+          // 非空判断
+          for (var i in this.multipleSelection) {
+            if (this.multipleSelection[i].actAmount === '' || this.multipleSelection[i].prepareTimes === '' || this.multipleSelection[i].machineTimes === '' || this.multipleSelection[i].humanTimes === '' || this.multipleSelection[i].startDate === '' || this.multipleSelection[i].endDate === '' || this.multipleSelection[i].unMatureUse === '' || this.multipleSelection[i].actAmount === null || this.multipleSelection[i].prepareTimes === null || this.multipleSelection[i].machineTimes === null || this.multipleSelection[i].humanTimes === null || this.multipleSelection[i].startDate === null || this.multipleSelection[i].endDate === null || this.multipleSelection[i].unMatureUse === null) {
+              this.$message.error('请填写必填项')
+              return false
+            }
+          }
           msg = '成功'
           url = FERMENTATION_API.WORKINGHOURSMANSUBMIT_API
         } else {
