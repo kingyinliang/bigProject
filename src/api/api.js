@@ -1311,6 +1311,13 @@ export const FERMENTATION_API = {
   SHOOT_DEL_API: HOST + '/fer/shoot/delete',
   SHOOT_UPDATE_API: HOST + '/fer/shoot/update',
   SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit',
+  /**
+   * 发酵罐管理
+   */
+  FER_LIST_API: HOST + '/fer/holderManage/list', // 列表
+  FER_DETAIL_API: HOST + '/fer/holderManage/detail', // 详情
+  FER_HALF_LIST_API: HOST + '/fer/holderManage/halfList', // 获取半成品
+  FER_HOLDER_STATUS_API: HOST + '/fer/holderManage/ferHolderStatusList', // 发酵罐状态
   /*
    * 订单申请
    */

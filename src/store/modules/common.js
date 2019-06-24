@@ -152,7 +152,8 @@ export default {
      * 发酵车间
      */
     Fermentation: {
-      orderId: ''
+      orderId: '',
+      details: {}
     }
   },
   mutations: {

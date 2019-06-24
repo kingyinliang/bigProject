@@ -14,7 +14,7 @@
           <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetDataList" style="float: right">查询</el-button>
+      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right">查询</el-button>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px">
@@ -22,17 +22,17 @@
     <div class="sumbox">
     <div class="topBox clearfix">
       <div class="clearfix" v-for="(item, index) in topBox" :key="index" style="float: left">
-        <div class="topBox_boxItem">
+        <div class="topBox_boxItem" @click="topClick(item)">
           <div class="topBox_boxItem_bar">
             <div class="topBox_boxItem_bar_box" :style="{'background': `linear-gradient(to right,${item.startColor} 0%,${item.startColor} 10%,${item.endColor})`}"></div>
           </div>
-          <p class="topBox_boxItem_tit">空罐</p>
+          <p class="topBox_boxItem_tit">{{item.ptext}}</p>
           <p class="topBox_boxItem_detail">
-            总计: <span>4</span> 罐
+            总计: <span>{{item.num}}</span> 罐
           </p>
-          <div class="topBox_boxItem_popover">
-            <p class=""><i class="dot" style="background: #1890FF"></i>味达美<span style="float: right">82 罐</span></p>
-            <p class=""><i class="dot" style="background: #FFBF00"></i>六月鲜<span style="float: right">82 罐</span></p>
+          <div class="topBox_boxItem_popover" v-if="index === 2 || index === 3">
+            <p class=""><i class="dot" style="background: #1890FF"></i>味达美<span style="float: right">{{item.wdm}} 罐</span></p>
+            <p class=""><i class="dot" style="background: #FFBF00"></i>六月鲜<span style="float: right">{{item.lyx}} 罐</span></p>
             <i class="topBox_boxItem_popover_ar"></i>
           </div>
         </div>
@@ -45,104 +45,159 @@
     <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表</h3>
     <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
       <el-form-item label="罐号：">
-        <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
-          <el-option label="请选择"  value=""></el-option>
+        <el-select v-model="formHeader.holdNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
+          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="类别：">
-        <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
-          <el-option label="请选择"  value=""></el-option>
+        <el-select v-model="formHeader.halfType" placeholder="请选择" style="width: 160px">
+          <el-option :label="item.halfName" v-for="(item, index) in halfList" :key="index" :value="item.halfName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态：">
-        <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
-          <el-option label="请选择"  value=""></el-option>
+        <el-select v-model="formHeader.holderStatus" placeholder="请选择" style="width: 160px">
+          <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
-    <el-row class="dataList" :gutter="10">
-      <el-col :span="6" v-for="item in 40" :key="item">
+    <el-row class="dataList" :gutter="10" style="min-height: 150px">
+      <el-col :span="6" v-for="(item, index) in dataList" :key="index">
         <el-card class="dataList_item">
-          <h3 class="dataList_item_tit">4#罐 <span style="color: #333333;font-weight: normal">—发酵中</span> <span class="dataList_item_a">详情>></span></h3>
+          <h3 class="dataList_item_tit">
+            {{item.holderName}}
+            <span style="color: #333333;font-weight: normal">
+              {{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵-已入库' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
+            </span>
+            <span class="dataList_item_a" @click="godetails(item)">详情>></span>
+          </h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box_item1"></div>
-              <div class="dataList_item_pot_box_item2"></div>
+              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount / item.sumAmout}%`"><p style="text-align: center">{{item.reWorkAmount}}</p></div>
+              <div class="dataList_item_pot_box_item2" :style="`height:${item.ferAmount / item.sumAmout}%`"><p style="text-align: center">{{item.ferAmount}}</p></div>
             </div>
             <div class="dataList_item_pot_detail">
-              <p>711000002345</p>
-              <p>普通熟酱醪</p>
-              <p>80方</p>
-              <p>95天</p>
+              <p>{{item.ferMaterialCode}}</p>
+              <p>{{item.ferMaterialName}}</p>
+              <p>{{item.ferDays}}天</p>
+              <p>{{item.sumAmout}}方</p>
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="6" class="dataList_item_btn_item">发料</el-col>
-            <el-col :span="6" class="dataList_item_btn_item">类别判定</el-col>
-            <el-col :span="6" class="dataList_item_btn_item">入库</el-col>
-            <el-col :span="6" class="dataList_item_btn_item">清洗</el-col>
+            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('1')">发料</el-col>
+            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('2')">类别判定</el-col>
+            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('3')">入库</el-col>
+            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('4')">清洗</el-col>
           </el-row>
         </el-card>
       </el-col>
+    </el-row>
+    <el-row >
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="formHeader.currPage"
+        :page-sizes="[40, 60, 80]"
+        :page-size="formHeader.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="formHeader.totalCount">
+      </el-pagination>
     </el-row>
   </el-card>
 </div>
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
-      topBox: [{
-        color: '#999999',
-        startColor: '#999999',
-        endColor: '#999999',
-        text: '空'
-      }, {
-        color: '#D6D2C4',
-        startColor: '#E9E9E9',
-        endColor: '#D6D2C4',
-        text: '1'
-      }, {
-        color: '#B58150',
-        startColor: '#D6D2C4',
-        endColor: '#B58150',
-        text: '3'
-      }, {
-        color: '#3F2021',
-        startColor: '#B58150',
-        endColor: '#3F2021',
-        text: '6'
-      }, {
-        color: '#C70909',
-        startColor: '#3F2021',
-        endColor: '#C70909',
-        text: '超'
-      }, {
-        color: '#8BC34A',
-        startColor: '#C70909',
-        endColor: '#8BC34A',
-        text: '压'
-      }, {
-        color: '',
-        startColor: '#999999',
-        endColor: '#999999',
-        text: ''
-      }],
+      topBox: [
+        {
+          color: '#999999',
+          startColor: '#999999',
+          endColor: '#999999',
+          text: '空',
+          ptext: '空罐',
+          holderStatus: '0',
+          num: ''
+        }, {
+          color: '#D6D2C4',
+          startColor: '#E9E9E9',
+          endColor: '#D6D2C4',
+          text: '1',
+          ptext: '酿造 0-1个月',
+          search: '1',
+          num: ''
+        }, {
+          color: '#B58150',
+          startColor: '#D6D2C4',
+          endColor: '#B58150',
+          text: '3',
+          ptext: '酿造 1-3个月',
+          search: '2',
+          num: ''
+        }, {
+          color: '#3F2021',
+          startColor: '#B58150',
+          endColor: '#3F2021',
+          text: '6',
+          ptext: '酿造 3-6个月',
+          search: '3',
+          num: ''
+        }, {
+          color: '#C70909',
+          startColor: '#3F2021',
+          endColor: '#C70909',
+          text: '超',
+          ptext: '超时超期',
+          search: '4',
+          num: ''
+        }, {
+          color: '#8BC34A',
+          startColor: '#C70909',
+          endColor: '#8BC34A',
+          text: '压',
+          ptext: '压榨',
+          holderStatus: '4',
+          num: ''
+        }, {
+          color: '',
+          startColor: '#999999',
+          endColor: '#999999',
+          text: '',
+          ptext: '空罐',
+          holderStatus: '0',
+          num: ''
+        }
+      ],
       formHeader: {
         factory: '',
-        workShop: ''
+        workShop: '',
+        holdNo: '',
+        halfType: '',
+        holderStatus: '',
+        dateFlag: '',
+        currPage: 1,
+        pageSize: 40,
+        totalCount: 0
       },
       factory: [],
-      workshop: []
+      workshop: [],
+      guanList: [],
+      halfList: [],
+      holderStatusList: [],
+      dataList: []
     }
   },
   watch: {
     'formHeader.factory' (n, o) {
       this.Getdeptbyid(n)
-      this.GetMaterial(n)
+      this.GetHolderStatusList(n)
+    },
+    'formHeader.workShop' (n, o) {
+      this.GetHalfList(n)
+      this.HolderList(n)
     }
   },
   mounted () {
@@ -157,10 +212,12 @@ export default {
         $(this).find('.topBox_boxItem_bar_box').stop()
         $(this).find('.topBox_boxItem_popover').show(500)
         $(this).find('.topBox_boxItem_bar_box').css({width: 0})
+        $(this).find('.topBox_boxItem_tit').css({color: '#1890FF'})
         $(this).find('.topBox_boxItem_bar_box').animate({width: '100%'}, 500)
         $(this).parent().find('.topBox_circle').css({transform: 'scale(1.2)'})
         $(this).parent().prev().find('.topBox_circle').css({transform: 'scale(1.2)'})
       }, function () {
+        $(this).find('.topBox_boxItem_tit').css({color: 'black'})
         $(this).find('.topBox_boxItem_popover').hide(500)
         $(this).parent().find('.topBox_circle').css({transform: 'scale(1.0)'})
         $(this).parent().prev().find('.topBox_circle').css({transform: 'scale(1.0)'})
@@ -180,7 +237,59 @@ export default {
         })
       }
     },
-    GetDataList () {},
+    // 总览点击
+    topClick (item) {
+      if (!this.formHeader.factory) {
+        this.$message.error('请选择工厂')
+        return
+      }
+      this.formHeader.currPage = 1
+      this.formHeader.holdNo = []
+      this.formHeader.halfType = ''
+      this.formHeader.dateFlag = ''
+      this.formHeader.holderStatus = ''
+      if (item.search) {
+        this.formHeader.dateFlag = item.search
+      } else {
+        this.formHeader.holderStatus = item.holderStatus
+      }
+      this.GetDataList('top')
+    },
+    // 查询
+    GetDataList (ty) {
+      if (ty) {
+        this.formHeader.currPage = 1
+        if (ty === true) {
+          this.formHeader.dateFlag = ''
+        }
+      }
+      let obj = JSON.parse(JSON.stringify(this.formHeader))
+      obj.currPage = obj.currPage + ''
+      obj.pageSize = obj.pageSize + ''
+      obj.totalCount = obj.totalCount + ''
+      obj.holdNo = obj.holdNo.join(',')
+      this.$http(`${FERMENTATION_API.FER_LIST_API}`, 'POST', obj).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.orderPage.list
+          this.formHeader.currPage = data.orderPage.totalPage
+          this.formHeader.totalCount = data.orderPage.totalCount
+          this.formHeader.pageSize = data.orderPage.pageSize
+          this.topBox[0].num = data.overView.emptyCount
+          this.topBox[1].num = data.overView.oneMonthCount
+          this.topBox[2].num = data.overView.threeMonthCount
+          this.topBox[3].num = data.overView.sixMonthCount
+          this.topBox[4].num = data.overView.outCount
+          this.topBox[5].num = data.overView.useCount
+          this.topBox[6].num = data.overView.emptyCount
+          this.topBox[2].wdm = data.overView.wdmThreeMonthCount
+          this.topBox[2].lyx = data.overView.lyxThreeMonthCount
+          this.topBox[3].wdm = data.overView.wdmSixMonthCount
+          this.topBox[3].lyx = data.overView.lyxSixMonthCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取工厂
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
@@ -208,11 +317,83 @@ export default {
         })
       }
     },
-    godetails () {
-      this.$router.push({ name: `DataEntry-Fermentation-Fermenter-details` })
+    // 罐号
+    HolderList () {
+      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
+        this.guanList = data.holderList
+      })
+    },
+    // 获取半成品
+    GetHalfList (id) {
+      if (id) {
+        this.$http(`${FERMENTATION_API.FER_HALF_LIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: id}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.halfList = data.halfList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 获取发酵罐状态
+    GetHolderStatusList (id) {
+      if (id) {
+        this.$http(`${FERMENTATION_API.FER_HOLDER_STATUS_API}`, 'POST', {factory: id}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.holderStatusList = data.statusList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
+    // 去详请
+    godetails (row) {
+      this.$store.state.common.Fermentation.details = row
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Packaging-ProDataIn')
+      let that = this
+      setTimeout(function () {
+        that.$router.push({ name: `DataEntry-Fermentation-Fermenter-details` })
+      }, 100)
+    },
+    toRouter (str) {
+      let url = ''
+      if (str === '1') {
+        url = 'DataEntry-Fermentation-MaterialManage-index'
+      } else if (str === '1') {
+        url = 'DataEntry-Fermentation-CategoryJudgement-index'
+      } else if (str === '1') {
+        url = 'DataEntry-Fermentation-InStockManage-index'
+      } else if (str === '1') {
+        url = ''
+      }
+      this.mainTabs = this.mainTabs.filter(item => item.name !== url)
+      let that = this
+      setTimeout(function () {
+        that.$router.push({ name: url })
+      }, 100)
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.formHeader.pageSize = val
+      this.GetDataList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.formHeader.currPage = val
+      this.GetDataList()
     }
   },
-  computed: {},
+  computed: {
+    ainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    }
+  },
   components: {}
 }
 </script>
@@ -358,7 +539,7 @@ export default {
           margin: 0 9px;
         }
         &_item1{
-          height: 80px;
+          height: 50px;
           background: #69C0FF;
           position: relative;
           overflow: hidden;
@@ -383,7 +564,7 @@ export default {
         }
         &_item2{
           margin-bottom: 9px;
-          height: 30px;
+          height: 100px;
           background: #1890FF;
         }
         &:hover &_item1::before,&:hover &_item1::after{

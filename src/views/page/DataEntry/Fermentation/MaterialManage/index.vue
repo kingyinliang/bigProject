@@ -60,7 +60,7 @@
         <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
         <el-table-column type="index" label="序号" width="55"></el-table-column>
         <el-table-column label="订单号" width="120" prop="ferOrderNo"></el-table-column>
-        <el-table-column label="状态" width="70" prop="approveStatus">
+        <el-table-column label="状态" width="93" prop="approveStatus">
           <template slot-scope="scope">
             {{ scope.row.approveStatus === 'saved'? '已保存': scope.row.approveStatus === 'submit'? ' 已提交' : scope.row.approveStatus === 'noPass'? '审核不通过' : scope.row.approveStatus === 'checked'? '审核通过' : '未录入'}}
           </template>
@@ -225,6 +225,9 @@ export default {
       let newobj = JSON.parse(JSON.stringify(row))
       newobj.approveStatus = ''
       newobj.id = ''
+      newobj.kjmAmount = ''
+      newobj.batch = ''
+      newobj.remark = ''
       this.dataList.splice(index + 1, 0, newobj)
     },
     // 删除
