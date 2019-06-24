@@ -32,7 +32,7 @@
           </el-form>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" size="small" @click="SearchList(true)" style="float:right">查询</el-button>
+          <el-button type="primary" size="small" @click="SearchList(true)" v-if="isAuth('fer:openholderg:openHolderList')" style="float:right">查询</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -52,7 +52,7 @@
           <el-table-column label="生产日期" prop="productDate"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="Go(scope.row)">确认</el-button>
+              <el-button type="primary" size="small" @click="Go(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">确认</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -187,13 +187,15 @@ export default {
       })
     },
     Go (item) {
-      this.Fermentation = {
-        orderId: item.id
+      if (this.isAuth('fer:openholderg:confirm')) {
+        this.Fermentation = {
+          orderId: item.id
+        }
+        this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-ForRecipients-detail')
+        setTimeout(() => {
+          this.$router.push({ name: `DataEntry-Fermentation-ForRecipients-detail` })
+        }, 100)
       }
-      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-ForRecipients-detail')
-      setTimeout(() => {
-        this.$router.push({ name: `DataEntry-Fermentation-ForRecipients-detail` })
-      }, 100)
     },
     // 改变每页条数
     handleSizeChange (val) {

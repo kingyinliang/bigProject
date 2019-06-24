@@ -49,7 +49,7 @@
           </el-form>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="OpenHolder()" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
+          <el-button type="primary" @click="OpenHolder()" v-if="isAuth('fer:openholderg:openFermentation')" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
         </el-col>
       </el-row>
       <el-row>

@@ -47,7 +47,7 @@
           </el-form>
         </el-col>
         <el-col :span="1">
-          <el-button type="primary" @click="GetList()" size="small" style="float:right">查询</el-button>
+          <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -93,7 +93,7 @@
           <el-table-column label="物料类别"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)">判定</el-button>
+              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">判定</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -162,7 +162,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)">调整</el-button>
+              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">调整</el-button>
             </template>
           </el-table-column>
         </el-table>

@@ -35,8 +35,8 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('fer:report:selectReports')">查询</el-button>
+          <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="SaveForm()">保存</el-button>
@@ -366,7 +366,9 @@ export default {
     },
     tabClick (value) {
       this.activeName = value.name
-      console.log(this.activeName)
+      this.SearchList()
+      this.form.pageNum = 1
+      // console.log(this.activeName)
     },
     // 复选框勾选
     CheckBoxInit (row, index) {
@@ -387,7 +389,7 @@ export default {
       this.SearchList()
     },
     SaveForm (types) {
-      console.log(this.multipleSelection)
+      // console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
         this.$message.error('请先勾选数据')
       } else {
@@ -418,7 +420,7 @@ export default {
       })
     },
     GetCheck (row) {
-      console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
+      // console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
       return (!this.isRedact || row.status === 'submit' || row.status === 'success')
     }
   }
