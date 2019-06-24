@@ -49,7 +49,7 @@
           </el-form>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click="OpenHolder()" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
+          <el-button type="primary" @click="OpenHolder()" v-if="isAuth('fer:openholderg:openFermentation')" :disabled="isRedact" size="small" style="float:right">开罐</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -209,24 +209,30 @@ export default {
         this.$message.error('请勾选罐号')
         return false
       } else {
-        this.multipleSelection.map((item) => {
-          item.openId = this.$store.state.common.Fermentation.orderId
-          item.amount = item.inAmount
-          item.unit = item.inUnit
-          item.inStoreDate = item.created
-          item.isNum = this.formHeader.AMOUNT
-        })
-        // console.log(this.multipleSelection)
-        this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
-          if (data.code === 0) {
-            this.searchform = {
-              currentPage: 1, // 当前页数
-              pageSize: 10
+        this.$confirm('确认执行开罐操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.multipleSelection.map((item) => {
+            item.openId = this.$store.state.common.Fermentation.orderId
+            item.amount = item.inAmount
+            item.unit = item.inUnit
+            item.inStoreDate = item.created
+            item.isNum = this.formHeader.AMOUNT
+          })
+          // console.log(this.multipleSelection)
+          this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.searchform = {
+                currentPage: 1, // 当前页数
+                pageSize: 10
+              }
+              this.GetList()
+            } else {
+              this.$message.error(data.msg)
             }
-            this.GetList()
-          } else {
-            this.$message.error(data.msg)
-          }
+          })
         })
       }
     },

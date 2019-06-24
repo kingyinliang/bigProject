@@ -47,14 +47,14 @@
           </el-form>
         </el-col>
         <el-col :span="1">
-          <el-button type="primary" @click="GetList()" size="small" style="float:right">查询</el-button>
+          <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
         </el-col>
       </el-row>
     </el-card>
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="0" label="未判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态" prop="workShop"></el-table-column>
+          <el-table-column label="状态" prop="workShop">正常</el-table-column>
           <el-table-column label="发酵罐">
             <template slot-scope="scope">
               {{scope.row.order.holderNo}}
@@ -93,7 +93,7 @@
           <el-table-column label="物料类别"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)">判定</el-button>
+              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">判定</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -162,7 +162,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)">调整</el-button>
+              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">调整</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -236,6 +236,7 @@ export default {
       },
       materialList: [],
       materialTypeList: [],
+      materialTypeListTan: [],
       holderList: [],
       judgerules: {
         halfId: [
@@ -322,6 +323,16 @@ export default {
         }
       })
     },
+    // 弹框物料类别
+    GetMaterialTypeListTan () {
+      this.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory: this.form.factory, materialCode: this.judge.ferMaterialCode}).then(({data}) => {
+        if (data.code === 0) {
+          this.materialTypeList = data.ferList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     GetList () {
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENTLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
@@ -363,6 +374,7 @@ export default {
         holderNo: row.order.holderNo,
         halfId: row.judge ? row.judge.halfId : ''
       }
+      this.GetMaterialTypeListTan()
     },
     SaveJudge (formName) {
       this.$refs[formName].validate((valid) => {

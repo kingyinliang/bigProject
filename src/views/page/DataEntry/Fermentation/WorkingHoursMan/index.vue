@@ -35,8 +35,8 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('fer:report:selectReports')">查询</el-button>
+          <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="SaveForm()">保存</el-button>
@@ -366,7 +366,9 @@ export default {
     },
     tabClick (value) {
       this.activeName = value.name
-      console.log(this.activeName)
+      this.SearchList()
+      this.form.pageNum = 1
+      // console.log(this.activeName)
     },
     // 复选框勾选
     CheckBoxInit (row, index) {
@@ -387,13 +389,20 @@ export default {
       this.SearchList()
     },
     SaveForm (types) {
-      console.log(this.multipleSelection)
+      // console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
         this.$message.error('请先勾选数据')
       } else {
         let url
         let msg
         if (types === 'submit') {
+          // 非空判断
+          for (var i in this.multipleSelection) {
+            if (this.multipleSelection[i].actAmount === '' || this.multipleSelection[i].prepareTimes === '' || this.multipleSelection[i].machineTimes === '' || this.multipleSelection[i].humanTimes === '' || this.multipleSelection[i].startDate === '' || this.multipleSelection[i].endDate === '' || this.multipleSelection[i].unMatureUse === '' || this.multipleSelection[i].actAmount === null || this.multipleSelection[i].prepareTimes === null || this.multipleSelection[i].machineTimes === null || this.multipleSelection[i].humanTimes === null || this.multipleSelection[i].startDate === null || this.multipleSelection[i].endDate === null || this.multipleSelection[i].unMatureUse === null) {
+              this.$message.error('请填写必填项')
+              return false
+            }
+          }
           msg = '成功'
           url = FERMENTATION_API.WORKINGHOURSMANSUBMIT_API
         } else {
@@ -418,7 +427,7 @@ export default {
       })
     },
     GetCheck (row) {
-      console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
+      // console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
       return (!this.isRedact || row.status === 'submit' || row.status === 'success')
     }
   }
