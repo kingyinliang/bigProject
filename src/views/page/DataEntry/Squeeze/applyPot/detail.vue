@@ -25,7 +25,7 @@
               <el-form-item label="酱醪名称：">
                 <el-select filterable v-model="formHeader.materialCode" class="selectwpx" style="width: 140px" @change="changeOptions('material')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialCode + ' ' + sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item  label="半成品类别：" label-width="100px">
@@ -147,7 +147,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, SQU_API, FERMENTATION_API} from '@/api/api'
+import {BASICDATA_API, SQU_API} from '@/api/api'
 import {Vue, Component} from 'vue-property-decorator'
 import {headanimation, dateFormat} from '@/net/validate'
 @Component({
@@ -296,7 +296,7 @@ export default class Index extends Vue {
   getHalfTypeList (factory, materialCode) {
     this.halfTypeList = []
     if (factory && materialCode) {
-      Vue.prototype.$http(`${FERMENTATION_API.CATEGORY_SORTLIST}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
+      Vue.prototype.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.halfTypeList = res.data.ferList.list
         } else {
