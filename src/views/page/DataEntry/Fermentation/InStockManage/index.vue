@@ -85,7 +85,11 @@
              <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">入库列表</span></div>
           </el-row>
           <el-row>
-            <el-table @row-dblclick="showDetail" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+            <el-table @selection-change="handleChange" @row-dblclick="showDetail" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column type="index" label="序号" width="55"></el-table-column>
               <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
@@ -206,6 +210,7 @@ export default class Index extends Vue {
   orderDataList = []
   materialList = []
   dataList = []
+  selectedList = []
   currPage = 0
   pageSize = 10
   totalCount = 0
@@ -371,12 +376,12 @@ export default class Index extends Vue {
   }
   save () {
     if (this.validate()) {
-      this.dataList.forEach((item) => {
+      this.selectedList.forEach((item) => {
         if (item.status !== 'submit' && item.status !== 'checked') {
           item.status = 'saved'
         }
       })
-      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SAVE_API}`, `POST`, this.dataList).then((res) => {
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SAVE_API}`, `POST`, this.selectedList).then((res) => {
         if (res.data.code === 0) {
           this.retrieveOrderList()
         } else {
@@ -387,12 +392,12 @@ export default class Index extends Vue {
   }
   submit () {
     if (this.validate()) {
-      this.dataList.forEach((item) => {
+      this.selectedList.forEach((item) => {
         if (item.status !== 'checked') {
           item.status = 'submit'
         }
       })
-      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SUBMIT_API}`, `POST`, this.dataList).then((res) => {
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SUBMIT_API}`, `POST`, this.selectedList).then((res) => {
         if (res.data.code === 0) {
           this.retrieveOrderList()
         } else {
@@ -402,8 +407,8 @@ export default class Index extends Vue {
     }
   }
   validate () {
-    if (!this.dataList || this.dataList.length === 0) {
-      this.$message.error('当前无订单数据，无法操作')
+    if (!this.selectedList || this.selectedList.length === 0) {
+      this.$message.error('请选择要入库的订单')
       return false
     }
     for (let item of this.dataList) {
@@ -432,10 +437,15 @@ export default class Index extends Vue {
       }
     })
   }
+  // 多选
+  handleChange (selections) {
+    this.selectedList = selections
+  }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
     this.isEdit = false
+    this.selectedList = []
     this.dataList = []
     this.readAudit = []
     this.pageSize = 10

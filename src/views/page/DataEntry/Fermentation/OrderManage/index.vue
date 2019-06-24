@@ -60,7 +60,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-table    @selection-change="handleChange" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table @selection-change="handleChange" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
                 <el-table-column
                   type="selection"
                   width="55">
