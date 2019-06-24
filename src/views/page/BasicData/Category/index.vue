@@ -7,15 +7,17 @@
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发料物料：">
+        <el-form-item label="发酵物料：">
           <el-select v-model="formHeader.materialCode" placeholder="请选择" filterable style="width: 160px">
             <el-option label="请选择" value=""></el-option>
             <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.materialCode" :label="sole.materialCode+ ' ' + sole.materialName"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetDataList(true)">查 询</el-button>
-        <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('fer:sort:save')">新 增</el-button>
-        <el-button type="danger" size="small" @click="delList()" v-if="isAuth('fer:sort:delete')">批量删除</el-button>
+        <div style="float: right">
+          <el-button type="primary" size="small" @click="GetDataList(true)">查 询</el-button>
+          <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('fer:sort:save')">新 增</el-button>
+          <el-button type="danger" size="small" @click="delList()" v-if="isAuth('fer:sort:delete')">批量删除</el-button>
+        </div>
       </el-form>
     </el-card>
     <el-card style="margin-top: 10px">
@@ -105,17 +107,36 @@ export default {
     },
     // 批量删除
     delList () {
-      this.multipleSelection.forEach((item) => {
-        item.delFlag = '1'
-      })
-      this.$http(`${BASICDATA_API.CATEGORY_DELETE}`, 'POST', this.multipleSelection).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('删除成功')
-          this.GetDataList()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请选择要删除的容器')
+      } else {
+        this.$confirm('确认删除容器, 是否继续?', '删除容器', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.multipleSelection.forEach((item) => {
+            item.delFlag = '1'
+          })
+          this.$http(`${BASICDATA_API.CATEGORY_DELETE}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.multipleSelection = []
+              this.GetDataList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
     },
     // 获取工厂
     Getdeptcode () {
@@ -155,13 +176,13 @@ export default {
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.plantList.pageSize = val
-      this.GetAuditList()
+      this.formHeader.pageSize = val
+      this.GetDataList()
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.plantList.currPage = val
-      this.GetAuditList()
+      this.formHeader.currPage = val
+      this.GetDataList()
     }
   },
   computed: {},
