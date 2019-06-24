@@ -23,7 +23,7 @@
             </el-form>
           </el-col>
           <el-col style="width:80px">
-            <el-button type="primary" size="small" v-if="isAuth('key')"  @click="getOrderList()">查询</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('fer:openHolder:list')"  @click="getOrderList()">查询</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -93,7 +93,7 @@
                   label="操作"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="small" @click="pushPage(scope.row.id)" >详情</el-button>
+                    <el-button type="primary" size="small" @click="pushPage(scope.row.id)" v-if="isAuth('fer:openHolder:list')" >详情</el-button>
                   </template>
                 </el-table-column>
             </el-table>
@@ -138,7 +138,7 @@
               </el-table-column>
               <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
-                  {{scope.row.halfName}}
+                  {{scope.row.halfType}}
                 </template>
               </el-table-column>
               <el-table-column label="批次" width="140">
@@ -212,8 +212,7 @@ export default class Index extends Vue {
     // this.getFermentPot(this.params.factoryId)
   }
   isAuth (key) {
-    return true
-    // return Vue.prototype.isAuth(key)
+    return Vue.prototype.isAuth(key)
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs

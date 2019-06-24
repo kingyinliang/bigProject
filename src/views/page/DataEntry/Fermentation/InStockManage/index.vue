@@ -62,12 +62,12 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" v-if="isAuth('key')" @click="getOrderList()">查询</el-button>
-            <el-button type="primary" class="button" size="small" @click="isEdit = !isEdit" v-if="isAuth('key')">{{isEdit?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('fer:inStore:list')" @click="getOrderList()">查询</el-button>
+            <el-button type="primary" class="button" size="small" v-if="isAuth('fer:inStore:mySaveOrUpdate') || isAuth('fer:inStore:submit')" @click="isEdit = !isEdit">{{isEdit?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isEdit" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" v-if="isAuth('key')" @click="save()">保存</el-button>
-            <el-button type="primary" size="small" v-if="isAuth('key')" @click="submit()">提交</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('fer:inStore:mySaveOrUpdate')" @click="save()">保存</el-button>
+            <el-button type="primary" size="small" v-if="isAuth('fer:inStore:submit')" @click="submit()">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -228,8 +228,7 @@ export default class Index extends Vue {
     this.getOrderDataList(this.params.factoryId, this.params.workshopId)
   }
   isAuth (key) {
-    return true
-    // return Vue.prototype.isAuth(key)
+    return Vue.prototype.isAuth(key)
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs

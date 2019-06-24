@@ -70,8 +70,8 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" :disabled="!isEdit" @click="save()">保存</el-button>
-            <el-button type="primary" size="small" :disabled="!isEdit" @click="submit()">提交</el-button>
+            <el-button type="primary" size="small" :disabled="!isEdit" @click="save()" v-if="isAuth('fer:openHolder:mySaveOrUpdate')">保存</el-button>
+            <el-button type="primary" size="small" :disabled="!isEdit" @click="submit()" v-if="isAuth('fer:openHolder:submit')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -108,7 +108,7 @@
               </el-table-column>
               <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
                 <template slot-scope="scope">
-                  {{scope.row.halfName}}
+                  {{scope.row.halfType}}
                 </template>
               </el-table-column>
               <el-table-column label="批次" width="140">
@@ -147,7 +147,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, SQU_API, FERMENTATION_API} from '@/api/api'
 import {Vue, Component} from 'vue-property-decorator'
 import {headanimation, dateFormat} from '@/net/validate'
 @Component({
@@ -199,8 +199,7 @@ export default class Index extends Vue {
     // this.getFermentPot(this.params.factoryId)
   }
   isAuth (key) {
-    return true
-    // return Vue.prototype.isAuth(key)
+    return Vue.prototype.isAuth(key)
   }
   get isEdit () {
     // 提交之后不能再修改
@@ -283,10 +282,17 @@ export default class Index extends Vue {
   }
   getMaterialList (factory) {
     this.materialList = []
+    // this.$http(`${FERMENTATION_API.FORRECIPIENTSHOLDER_API}`, 'POST').then(({data}) => {
+    //   if (data.code === 0) {
+    //     this.MaterialType = data.productsInfo
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // })
     if (factory) {
-      Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {factory, param: '欣和半成品'}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${FERMENTATION_API.FORRECIPIENTSHOLDER_API}`, 'POST', {factory}, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.materialList = data.allList
+          this.materialList = data.productsInfo
         } else {
           this.$message.error(data.msg)
         }
