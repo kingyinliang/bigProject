@@ -87,6 +87,17 @@ export default {
       applyDate: ''
     },
     /**
+     * 压榨车间开罐申请参数
+     */
+    SqueezeApplyPot: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      orderDate: '',
+      applyId: ''
+    },
+    /**
      * 粮仓小麦罐
      */
     GranaryWheatPot: {
@@ -104,6 +115,44 @@ export default {
       holderId: '',
       factory: '',
       deptId: ''
+    },
+    /**
+     * 发酵罐订单管理
+     */
+    FerOrderManage: {
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
+      potId: '',
+      potName: '',
+      materialCode: '',
+      materialName: '',
+      startDate: '',
+      endDate: ''
+    },
+    /**
+     * 发酵罐入库管理参数
+     */
+    FerInStockManage: {
+      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
+      factoryName: '烟台欣和企业食品有限公司工厂',
+      workshopId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A',
+      workshopName: '发酵一车间',
+      startDate: '',
+      endDate: '',
+      // 罐号多选
+      holderList: [],
+      // 订单号多选
+      orderList: [],
+      // 状态
+      status: ''
+    },
+    /*
+     * 发酵车间
+     */
+    Fermentation: {
+      orderId: ''
     }
   },
   mutations: {
@@ -220,6 +269,12 @@ export default {
     updateSqueezeWorkshop (state, name) {
       state.SqueezeWorkshop = name
     },
+    updateSqueezeApplyPot (state, name) {
+      state.SqueezeApplyPot = name
+    },
+    updateSqueezeApplyPotApplyId (state, applyId) {
+      state.SqueezeApplyPot.applyId = applyId
+    },
     /** 粮仓小麦罐 */
     updateGranaryWheatPot (state, params) {
       state.GranaryWheatPot = params
@@ -227,6 +282,18 @@ export default {
     /** 粮仓豆粕罐 */
     updateBeanPulp (state, params) {
       state.BeanPulp = params
+    },
+    /** 发酵罐订单管理参数 */
+    updateFerOrderManage (state, params) {
+      state.FerOrderManage = params
+    },
+    /** 发酵罐入库管理参数 */
+    updateFerInStockManage (state, params) {
+      state.FerInStockManage = params
+    },
+    /** 发酵 */
+    updateFermentation (state, params) {
+      state.Fermentation = params
     }
   }
 }

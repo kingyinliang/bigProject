@@ -67,7 +67,7 @@
         <span slot="label" class="spanview">
           物料领用
         </span>
-        <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapList"></materiel>
+        <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapListM"></materiel>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">
@@ -103,6 +103,7 @@ export default {
         productDate: ''
       },
       SerchSapList: [],
+      SerchSapListM: [],
       orderFumet: [],
       fumet: []
     }
@@ -131,6 +132,7 @@ export default {
       }
       this.$refs.materielref.getPot(this.formHeader)
       this.getMaterial(this.formHeader.factory)
+      this.getMaterialM(this.formHeader.factory)
       this.GetFunet()
     },
     // 获取原汁信息
@@ -144,8 +146,10 @@ export default {
           this.orderS = GetStatus(data.orderList)
           this.orderFumet = data.orderList
           this.fumet = data.orderList
-          this.formHeader.changed = data.orderList[0].changed
-          this.formHeader.changer = data.orderList[0].changer
+          if (data.orderList) {
+            this.formHeader.changed = data.orderList[0].changed
+            this.formHeader.changer = data.orderList[0].changer
+          }
           let list1 = new Promise((resolve, reject) => {
             this.$refs.materielref.getMaterialList(this.formHeader, resolve, reject)
           })
@@ -232,6 +236,16 @@ export default {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.SerchSapList = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取物料下拉
+    getMaterialM (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YZ_ZUJIAN_MATERIAL'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.SerchSapListM = data.dicList
         } else {
           this.$message.error(data.msg)
         }

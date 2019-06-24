@@ -224,7 +224,24 @@ export const BASICDATA_API = {
   /**
    * 豆粕 + 小麦 罐
    */
-  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes'
+  PUPLWHEATLIST: HOST + '/sys/holder/findListByTypes',
+  /**
+   *  罐列表
+   */
+  BASEHOLDERLIST_API: HOST + '/fer/order/holderList',
+  /**
+   *  物料列表
+   */
+  BASEMATERIALIST_API: HOST + '/fer/order/materialList',
+  /*
+   * 类别维护
+   */
+  MATERIAL_LIST: HOST + '/fer/sort/getMaterial',
+  CATEGORY_SORTLIST: HOST + '/fer/sort/sortList',
+  CATEGORYS_LIST: HOST + '/fer/sort/list',
+  CATEGORY_SAVE: HOST + '/fer/sort/save',
+  CATEGORY_UPDATE: HOST + '/fer/sort/update',
+  CATEGORY_DELETE: HOST + '/fer/sort/delete'
 }
 /*
 *系统设置api
@@ -1086,6 +1103,18 @@ export const KJM_API = {
  */
 export const SQU_API = {
   /**
+   * 开罐申请列表
+   */
+  POT_APPLY_LIST_API: HOST + '/fer/openHolder/list',
+  /**
+   * 申请详情
+   */
+  POT_APPLY_DETAIL_API: HOST + '/fer/openHolderDEtail/list',
+  /**
+   * 详情保存提交
+   */
+  POT_APPLY_DETAIL_SAVE_API: HOST + '/fer/openHolder/mySaveOrUpdate',
+  /**
    * 物料领用 LIST
    */
   MATERIAL_APPLY_LIST_API: HOST + '/prs/material/list',
@@ -1246,4 +1275,72 @@ export const GRANARY_API = {
    * 小麦仓详情
    */
   WHEAT_POT_DETAIL: HOST + '/sys/deptInfos/queryDetail'
+}
+
+/**
+ * 发酵 API  Fermentation ForRecipients
+ */
+export const FERMENTATION_API = {
+  /**
+   *  待领用申请列表
+   */
+  FORRECIPIENTSLIST_API: HOST + '/fer/openHolder/openHolderList',
+  FORRECIPIENTSHOLDER_API: HOST + '/fer/openHolder/productsList', // 罐
+  /**
+   *  压榨通知单
+   */
+  FORRECIPIENTSDETAIL_API: HOST + '/fer/openHolder/openBasicsList',
+  FORRECIPIENTSDETAILIST_API: HOST + '/fer/openHolder/openFermentationList',
+  FORRECIPIENTSDETAILOPEN_API: HOST + '/fer/openHolder/openFermentation',
+  /**
+   *  类别判定
+   */
+  CATEGORYJUDGEMENT_API: HOST + '/sys/fer-sort-judge/queryHolders', // 罐
+  CATEGORYJUDGEMENTLIST_API: HOST + '/sys/fer-sort-judge/query', // 判定1 未判定0
+  CATEGORYJUDGEMENTTODO_API: HOST + '/sys/fer-sort-judge/judge', // 判定动作
+  /**
+   * 订单管理列表
+   */
+  ORDER_LIST_API: HOST + '/fer/order/list',
+  /**
+   * 发料管理
+   */
+  SHOOT_GETORDER_API: HOST + '/fer/shoot/getOrder',
+  SHOOT_LIST_API: HOST + '/fer/shoot/list',
+  SHOOT_LOG_API: HOST + '/fer/shoot/getLog',
+  SHOOT_DEL_API: HOST + '/fer/shoot/delete',
+  SHOOT_UPDATE_API: HOST + '/fer/shoot/update',
+  SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit',
+  /*
+   * 订单申请
+   */
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+  /**
+   * 报工管理
+   */
+  WORKINGHOURSMANLIST_API: HOST + '/sys/fer-report/selectReports',
+  WORKINGHOURSMANSAVE_API: HOST + '/sys/fer-report/save',
+  WORKINGHOURSMANSUBMIT_API: HOST + '/sys/fer-report/submit',
+  WORKINGHOURSMANLOGLIST_API: HOST + '/sys/fer-report/selectRecords',
+
+  /**
+   * 入库管理订单下拉列表 (未录入，保存，提交，未通过的)
+   */
+  ORDER_SELECT_LIST_API: HOST + '/fer/inStore/orderSelect',
+  /**
+   * 入库管理订单列表
+   */
+  ORDER_IN_STOCK_LIST_API: HOST + '/fer/inStore/list',
+  /**
+   * 入库管理保存接口
+   */
+  ORDER_IN_STOCK_SAVE_API: HOST + '/fer/inStore/mySaveOrUpdate',
+  /**
+   * 入库管理提交接口
+   */
+  ORDER_IN_STOCK_SUBMIT_API: HOST + '/fer/inStore/submit',
+  /**
+   * 审核日志接口
+   */
+  ORDER_IN_STOCK_AUDIT_API: HOST + '/fer/inStore/verifyRecordList'
 }
