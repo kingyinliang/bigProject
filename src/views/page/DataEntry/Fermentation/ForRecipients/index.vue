@@ -118,11 +118,11 @@ export default {
   },
   mounted () {
     this.GetFactoryList()
-    this.GetMaterialType()
   },
   watch: {
     'form.factory' (n, o) {
       this.GetWorkshopList(n)
+      this.GetMaterialType(n)
     }
   },
   methods: {
@@ -159,8 +159,8 @@ export default {
       }
     },
     //  生产物料
-    GetMaterialType () {
-      this.$http(`${FERMENTATION_API.FORRECIPIENTSHOLDER_API}`, 'POST', {factory: this.form.factory}).then(({data}) => {
+    GetMaterialType (n) {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSHOLDER_API}`, 'POST', {factory: n}).then(({data}) => {
         if (data.code === 0) {
           this.MaterialType = data.productsInfo
         } else {
