@@ -298,7 +298,7 @@ export default class Index extends Vue {
     if (factory && materialCode) {
       Vue.prototype.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory, materialCode}, false, false, false).then(res => {
         if (res.data.code === 0) {
-          this.halfTypeList = res.data.ferList.list
+          this.halfTypeList = res.data.ferList
         } else {
           this.$message.error(res.data.msg)
         }
