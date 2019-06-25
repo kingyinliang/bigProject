@@ -97,7 +97,10 @@
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
+              <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
+                <el-option v-for="(item, index) in reportTypeList" :key="index" :label="item.name" :value="item.value"></el-option>
+              </el-select>
+              <!-- <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input> -->
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -165,7 +168,10 @@
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
+              <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
+                <el-option v-for="(item, index) in reportTypeList" :key="index" :label="item.name" :value="item.value"></el-option>
+              </el-select>
+              <!-- <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input> -->
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -252,7 +258,7 @@
     </el-tabs>
     <el-card style="margin-top:15px">
       <div class="audit"><i class="iconfont factory-shouqicaidan"></i><span>审核日志</span></div>
-      <el-table border header-row-class-name="tableHead">
+      <el-table border :data="LogList" header-row-class-name="tableHead">
         <el-table-column label="序号" type="index" width="50"></el-table-column>
         <el-table-column label="审核动作">
           <template slot-scope="scope">
@@ -290,11 +296,25 @@ export default {
       }, {
         name: '已提交',
         value: 'submit'
+      }, {
+        name: '审核成功',
+        value: 'success'
+      }, {
+        name: '审核失败',
+        value: 'fail'
+      }],
+      reportTypeList: [{
+        name: '部分报工',
+        value: 'part'
+      }, {
+        name: '完全报工',
+        value: 'all'
       }],
       activeName: 'noMatureReport',
       multipleSelection: [],
       holderList: [],
-      dataList: []
+      dataList: [],
+      LogList: []
     }
   },
   mounted () {
@@ -359,6 +379,7 @@ export default {
         if (data.code === 0) {
           this.dataList = data.data.list
           this.form.total = data.data.list.length
+          this.LogList = []
         } else {
           this.$message.error(data.msg)
         }
@@ -368,6 +389,7 @@ export default {
       this.activeName = value.name
       this.SearchList()
       this.form.pageNum = 1
+      this.LogList = []
       // console.log(this.activeName)
     },
     // 复选框勾选
@@ -412,6 +434,10 @@ export default {
         this.$http(url, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success(msg + '成功')
+            this.SearchList()
+            this.isRedact = false
+            this.form.pageNum = 1
+            this.LogList = []
           } else {
             this.$message.error(data.msg)
           }
@@ -423,7 +449,11 @@ export default {
     },
     GetLogList (orderId) {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLOGLIST_API}`, 'POST', {orderId: orderId}).then(({data}) => {
-        this.LogList = data
+        if (data.code === 0) {
+          this.LogList = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     GetCheck (row) {

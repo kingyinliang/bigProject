@@ -1158,7 +1158,6 @@ export const SQU_API = {
    * 物料入库 提交
    */
   MATERIAL_IN_SUBMIT_API: HOST + '/prs/inStorage/submitToOrder',
-  REMAIN_AMOUNT_API: HOST + '/prs/storagePot/getRemainAmount',
   // 布浆
   CLOTHMATERIALIST_API: HOST + '/prs/pro/materialList', // 物料领用列表
   CLOTHFORMHEADER_API: HOST + '/prs/pro/updatePro', // 物料保存表头

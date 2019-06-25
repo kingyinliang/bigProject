@@ -88,6 +88,7 @@
             <el-table @selection-change="handleChange" @row-dblclick="showDetail" header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
               <el-table-column
                 type="selection"
+                :selectable="selectable"
                 width="55">
               </el-table-column>
               <el-table-column type="index" label="序号" width="55"></el-table-column>
@@ -439,6 +440,9 @@ export default class Index extends Vue {
   // 多选
   handleChange (selections) {
     this.selectedList = selections
+  }
+  selectable (row, index) {
+    return !(row.status && (row.status === 'checked' || row.status === 'submit'))
   }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {

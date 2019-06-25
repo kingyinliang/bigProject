@@ -54,7 +54,11 @@
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="0" label="未判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态" prop="workShop">正常</el-table-column>
+          <el-table-column label="状态">
+            <template slot-scope="scope">
+              {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : '正常'}}
+            </template>
+          </el-table-column>
           <el-table-column label="发酵罐">
             <template slot-scope="scope">
               {{scope.row.order.holderNo}}
@@ -183,7 +187,7 @@
         <el-form-item label="订单编号：">{{this.judge.ferOrderNo}}</el-form-item>
         <el-form-item label="物料：">{{this.judge.ferMaterialCode}}{{this.judge.ferMaterialName}}</el-form-item>
         <el-form-item label="发酵天数：">{{this.judge.ferDays}} 天</el-form-item>
-        <el-form-item label="半成品类别：" prop="halfId">
+        <el-form-item label="半成品类别：">
           <el-select v-model="judge.halfId" filterable class="selectwidth">
             <el-option v-for="(item, index) of materialTypeList" :key="index" :value="item.id" :label="item.halfName"></el-option>
           </el-select>
