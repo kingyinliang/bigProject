@@ -412,6 +412,9 @@ export default {
         this.$http(url, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success(msg + '成功')
+            this.SearchList()
+            this.isRedact = false
+            this.form.pageNum = 1
           } else {
             this.$message.error(data.msg)
           }
