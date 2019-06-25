@@ -229,9 +229,10 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="65">
+              width="90">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="redact(scope.row)" v-if="!(scope.row.status === 'checked' || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+                <el-button style="color: red" type="text" size="small" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && (scope.row.interfaceReturnStatus === '1' || scope.row.interfaceReturnStatus === null) && isAuth('verify:material:resetMaterial')">反审</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -259,6 +260,17 @@
           <el-button type="primary" @click="repulseAutio()">确定</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="反审"
+        :close-on-click-modal="false"
+        :visible.sync="visibleRe">
+        <p style="line-height: 42px">请填写反审意见</p>
+        <el-input type="textarea" v-model="ReText" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visibleRe = false">取消</el-button>
+          <el-button type="primary" @click="ResetIs()">确定</el-button>
+        </span>
+      </el-dialog>
     </el-col>
   </el-col>
 </template>
@@ -273,6 +285,9 @@ export default {
       lodingStatus1: false,
       dataListLoading: false,
       visible: false,
+      visibleRe: false,
+      ReText: '',
+      reData: {},
       factory: [],
       workshop: [],
       productline: [],
@@ -333,6 +348,34 @@ export default {
           this.$message.error(data.msg)
         }
         this.dataListLoading = false
+      })
+    },
+    // 反审
+    ResetD (row) {
+      this.visibleRe = true
+      this.reData = row
+    },
+    ResetIs () {
+      this.$confirm('部分数据已经调用SAP接口已发料，请确认sap冲销，确认要反审？', '反审', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.reData.status = 'submit'
+        this.reData.memo = this.ReText
+        this.dataListLoading = true
+        this.$http(`${AUDIT_API.AUDIT_ISSUE_RESET_API}`, 'POST', this.reData).then(({data}) => {
+          this.dataListLoading = false
+          if (data.code === 0) {
+            this.visibleRe = false
+            this.ReText = ''
+            this.reData = {}
+            this.GetAuditList()
+            this.$message.success('操作成功')
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     },
     // 获取移动原因

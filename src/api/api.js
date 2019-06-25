@@ -569,7 +569,11 @@ export const LTK_API = {
   /**
    * @property {string} MAINTAINSAVE_API 立体库审核
    */
-  LTKAUDIT_API: HOST + '/sys/verifyLTK/auditing'
+  LTKAUDIT_API: HOST + '/sys/verifyLTK/auditing',
+  /**
+   * @property {string} MAINTAINSAVE_API 立体库反审
+   */
+  LTK_RESET_API: HOST + '/sys/verifyLTK/resetLTK'
 }
 /*
 *生管审核api
@@ -588,6 +592,10 @@ export const AUDIT_API = {
    */
   INUPDATE_API: HOST + '/sys/verifyInStorage/update',
   /**
+   * @property {string} AUDITHOURSUPDATE_API 生产入库反审
+   */
+  AUDIT_IN_RESET_API: HOST + '/sys/verifyInStorage/resetIns',
+  /**
    * @property {string} AUDITHOURSLIST_API 生产报工列表
    */
   AUDITHOURSLIST_API: HOST + '/verify/time/list',
@@ -596,13 +604,21 @@ export const AUDIT_API = {
    */
   AUDITHOURSUPDATE_API: HOST + '/verify/time/update',
   /**
+   * @property {string} AUDITHOURSUPDATE_API 生产报工反审
+   */
+  AUDIT_HOURS_RESET_API: HOST + '/verify/time/resetTime',
+  /**
    * @property {string} AUDITISSUELIST_API 生产发料列表
    */
   AUDITISSUELIST_API: HOST + '/verify/material/list',
   /**
    * @property {string} AUDITLIST_API 生产发料审核
    */
-  AUDITISSUEUPDATE_API: HOST + '/verify/material/update'
+  AUDITISSUEUPDATE_API: HOST + '/verify/material/update',
+  /**
+   * @property {string} AUDIT_ISSUE_RESET_API 生产发料反审
+   */
+  AUDIT_ISSUE_RESET_API: HOST + '/verify/material/resetMaterial'
 }
 /*
 *考勤api

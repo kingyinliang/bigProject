@@ -5,7 +5,7 @@
         <el-col class="header_pot">
           <p class='header_pot_label'>罐号：{{formData.holderName ? formData.holderName : ''}}</p>
           <div class="header_pot_image">
-            <div class="header-pot__image_content">
+            <div class="header_pot_image_content">
             </div>
           </div>
         </el-col>
@@ -208,12 +208,22 @@ export default {
     font-size: 18px;
     font-weight: 400;
     color: rgba(102,102,102,1);
+    margin-bottom: 15px;
   }
   &_image{
     width: 160px;
     height: 190px;
-    background: url('~@/assets/img/pot.png') no-repeat;
+    background: url('~@/assets/img/ferPot.png') no-repeat center center;
     background-size:contain;
+    display: flex;
+    align-items:flex-end;
+    justify-content: center;
+    &_content{
+      margin-bottom: 8px;
+      width: 84px;
+      height: 90px;
+      background: linear-gradient(#35C3FF,#1890FF);
+    }
   }
 }
 </style>

@@ -222,9 +222,10 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="65">
+              width="90">
               <template slot-scope="scope">
                 <el-button style="padding: 0;" @click="redact(scope.row)" type="text" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('sys:verifyInStorage:auditing')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+                <el-button style="padding: 0;color: red" type="text" size="small" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1' && isAuth('sys:verifyInStorage:resetIns')">反审</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -252,6 +253,17 @@
           <el-button type="primary" @click="repulseAutio()">确定</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="反审"
+        :close-on-click-modal="false"
+        :visible.sync="visibleRe">
+        <p style="line-height: 42px">请填写反审意见</p>
+        <el-input type="textarea" v-model="ReText" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visibleRe = false">取消</el-button>
+          <el-button type="primary" @click="ResetIn()">确定</el-button>
+        </span>
+      </el-dialog>
     </el-col>
   </el-col>
 </template>
@@ -266,6 +278,9 @@ export default {
       lodingStatus1: false,
       dataListLoading: false,
       visible: false,
+      visibleRe: false,
+      ReText: '',
+      reData: {},
       factory: [],
       workshop: [],
       productline: [],
@@ -324,6 +339,37 @@ export default {
           this.$message.error(data.msg)
         }
         this.dataListLoading = false
+      })
+    },
+    // 反审
+    ResetD (row) {
+      this.visibleRe = true
+      this.reData = row
+    },
+    ResetIn () {
+      this.$confirm('数据已调用SAP接口已入库，请确认SAP冲销，确认要反审？', '反审', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.reData.status = 'submit'
+        this.reData.memo = this.ReText
+        this.dataListLoading = true
+        this.$http(`${AUDIT_API.AUDIT_IN_RESET_API}`, 'POST', this.reData).then(({data}) => {
+          this.dataListLoading = false
+          if (data.code === 0) {
+            this.visibleRe = false
+            this.ReText = ''
+            this.reData = {}
+            this.GetAuditList()
+            this.$message.success('操作成功')
+          } else {
+            this.$message.error(data.msg)
+          }
+        }).catch(() => {
+          this.$message.error('网络错误')
+          this.dataListLoading = false
+        })
       })
     },
     // 获取工厂

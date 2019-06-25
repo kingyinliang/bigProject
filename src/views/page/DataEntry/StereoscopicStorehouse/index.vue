@@ -163,6 +163,14 @@
           :show-overflow-tooltip="true"
           label="备注">
         </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="50">
+          <template slot-scope="scope">
+            <el-button style="padding: 0;color: red" type="text" size="small" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked'">反审</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       </div>
       <el-row >
@@ -185,9 +193,20 @@
     <p style="line-height: 42px">请填写不通过原因</p>
     <el-input type="textarea" v-model="Text" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
     <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" @click="repulseAutio()">确定</el-button>
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" @click="repulseAutio()">确定</el-button>
       </span>
+  </el-dialog>
+  <el-dialog
+    title="反审"
+    :close-on-click-modal="false"
+    :visible.sync="visibleRe">
+    <p style="line-height: 42px">请填写反审意见</p>
+    <el-input type="textarea" v-model="ReText" :rows="6" class="textarea" style="width: 100%;height: 200px"></el-input>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visibleRe = false">取消</el-button>
+      <el-button type="primary" @click="ResetSt()">确定</el-button>
+    </span>
   </el-dialog>
 </el-col>
 </template>
@@ -203,6 +222,9 @@ export default {
       lodingS: false,
       visible: false,
       visible1: false,
+      visibleRe: false,
+      ReText: '',
+      reData: {},
       factory: [],
       workshop: [],
       productline: [],
@@ -259,6 +281,37 @@ export default {
           this.$message.error(data.msg)
         }
         this.lodingS = false
+      })
+    },
+    // 反审
+    ResetD (row) {
+      this.visibleRe = true
+      this.reData = row
+    },
+    ResetSt () {
+      this.$confirm('反审后需要重新审核，确认要反审？', '反审', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.reData.status = 'submit'
+        this.reData.memo = this.ReText
+        this.lodingS = true
+        this.$http(`${LTK_API.LTK_RESET_API}`, 'POST', this.reData).then(({data}) => {
+          this.lodingS = false
+          if (data.code === 0) {
+            this.visibleRe = false
+            this.ReText = ''
+            this.reData = {}
+            this.GetLtkList()
+            this.$message.success('操作成功')
+          } else {
+            this.$message.error(data.msg)
+          }
+        }).catch(() => {
+          this.$message.error('网络错误')
+          this.lodingS = false
+        })
       })
     },
     // 获取工厂

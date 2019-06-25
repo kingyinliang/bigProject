@@ -51,11 +51,13 @@
       </el-form-item>
       <el-form-item label="类别：">
         <el-select v-model="formHeader.halfType" placeholder="请选择" style="width: 160px">
-          <el-option :label="item.halfName" v-for="(item, index) in halfList" :key="index" :value="item.halfName"></el-option>
+          <el-option label="请选择"  value=""></el-option>
+          <el-option :label="item.value" v-for="(item, index) in halfList" :key="index" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态：">
         <el-select v-model="formHeader.holderStatus" placeholder="请选择" style="width: 160px">
+          <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
@@ -66,28 +68,28 @@
         <el-card class="dataList_item">
           <h3 class="dataList_item_tit">
             {{item.holderName}}
-            <span style="color: #333333;font-weight: normal">
-              {{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵-已入库' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
+            <span style="color: #333333;font-weight: normal;font-size: 14px">
+              -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵-已入库' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
             </span>
-            <span class="dataList_item_a" @click="godetails(item)">详情>></span>
+            <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px">详情>></span>
           </h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount / item.sumAmout}%`"><p style="text-align: center">{{item.reWorkAmount}}</p></div>
-              <div class="dataList_item_pot_box_item2" :style="`height:${item.ferAmount / item.sumAmout}%`"><p style="text-align: center">{{item.ferAmount}}</p></div>
+              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box_item2" :class="`${item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${(item.ferAmount / item.sumAmout) * 100}%`"><p>{{(item.ferAmount / 1000).toFixed(2)}}方</p></div>
             </div>
             <div class="dataList_item_pot_detail">
               <p>{{item.ferMaterialCode}}</p>
-              <p>{{item.ferMaterialName}}</p>
+              <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
               <p>{{item.ferDays}}天</p>
-              <p>{{item.sumAmout}}方</p>
+              <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('1')">发料</el-col>
-            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('2')">类别判定</el-col>
-            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('3')">入库</el-col>
-            <el-col :span="6" class="dataList_item_btn_item" @click="toRouter('4')">清洗</el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1')">发料</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2')">类别判定</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3')">入库</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4')">清洗</p></el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -277,7 +279,7 @@ export default {
       this.$http(`${FERMENTATION_API.FER_LIST_API}`, 'POST', obj).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.orderPage.list
-          this.formHeader.currPage = data.orderPage.totalPage
+          this.formHeader.currPage = data.orderPage.currPage
           this.formHeader.totalCount = data.orderPage.totalCount
           this.formHeader.pageSize = data.orderPage.pageSize
           this.topBox[0].num = data.overView.emptyCount
@@ -363,16 +365,18 @@ export default {
       }, 100)
     },
     toRouter (str) {
+      console.log('-----')
       let url = ''
       if (str === '1') {
         url = 'DataEntry-Fermentation-MaterialManage-index'
-      } else if (str === '1') {
+      } else if (str === '2') {
         url = 'DataEntry-Fermentation-CategoryJudgement-index'
-      } else if (str === '1') {
+      } else if (str === '3') {
         url = 'DataEntry-Fermentation-InStockManage-index'
-      } else if (str === '1') {
+      } else if (str === '4') {
         url = ''
       }
+      console.log(url)
       this.mainTabs = this.mainTabs.filter(item => item.name !== url)
       let that = this
       setTimeout(function () {
@@ -532,6 +536,8 @@ export default {
     &_pot{
       padding: 17px 10px 10px 10px;
       &_box{
+        padding-top: 35px;
+        color: white;
         float: left;
         display: flex;
         flex-wrap: wrap;
@@ -543,8 +549,12 @@ export default {
         &_item1,&_item2{
           width: 100%;
           margin: 0 9px;
+          display:flex;
+          align-items:center;
+          justify-content: center;
+          font-size: 14px;
         }
-        &_item1{
+        &_item2s,&_item1{
           height: 50px;
           background: #69C0FF;
           position: relative;
@@ -573,7 +583,7 @@ export default {
           height: 100px;
           background: #1890FF;
         }
-        &:hover &_item1::before,&:hover &_item1::after{
+        &:hover &_item1::before,&:hover &_item1::after,&:hover &_item2s::before,&:hover &_item2s::after{
           animation: roateOne 10s linear infinite;
         }
       }
