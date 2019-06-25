@@ -17,8 +17,8 @@
       <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right">查询</el-button>
     </el-form>
   </el-card>
-  <el-card class="searchCard  newCard ferCard" style="margin-top: 5px">
-    <h3 class="cardTit"><i class="iconfont factory-shujuzonglan" style="color: #666666;margin-right: 10px"></i>发酵情况总览 <i class="gotop" @click="gotop">收起 <i class="el-icon-caret-top"></i></i></h3>
+  <el-card class="searchCard  newCard ferCard" style="margin-top: 5px" v-show="fastS">
+    <h3 class="cardTit"><i class="iconfont factory-shujuzonglan" style="color: #666666;margin-right: 10px"></i>发酵情况总览 <i class="gotop" @click="gotop"><span>收起</span><i class="el-icon-caret-top"></i></i></h3>
     <div class="sumbox">
     <div class="topBox clearfix">
       <div class="clearfix" v-for="(item, index) in topBox" :key="index" style="float: left">
@@ -41,7 +41,7 @@
     </div>
     </div>
   </el-card>
-  <el-card class="searchCard  newCard ferCard" style="margin-top: 5px">
+  <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
     <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表</h3>
     <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
       <el-form-item label="罐号：">
@@ -59,6 +59,7 @@
           <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right">查询</el-button>
     </el-form>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="6" v-for="(item, index) in dataList" :key="index">
@@ -112,6 +113,7 @@ export default {
   name: 'index',
   data () {
     return {
+      fastS: false,
       topBox: [
         {
           color: '#999999',
@@ -227,11 +229,14 @@ export default {
       let $ = this.$
       $('.sumbox').stop()
       let hei = $('.sumbox .topBox').height()
-      console.log(hei)
       if ($('.sumbox').height()) {
         $('.sumbox').css({overflow: 'hidden'})
+        $('.gotop span').text('展开')
+        $('.gotop i').attr('class', 'el-icon-caret-bottom')
         $('.sumbox').animate({height: 0}, 300, function () {})
       } else {
+        $('.gotop span').text('收起')
+        $('.gotop i').attr('class', 'el-icon-caret-top')
         $('.sumbox').animate({height: `${hei + 35}px`}, 300, function () {
           $('.sumbox').css({overflow: 'initial'})
         })
@@ -257,6 +262,7 @@ export default {
     },
     // 查询
     GetDataList (ty) {
+      this.fastS = true
       if (ty) {
         this.formHeader.currPage = 1
         if (ty === true) {
@@ -319,7 +325,7 @@ export default {
     },
     // 罐号
     HolderList () {
-      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
+      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
         this.guanList = data.holderList
       })
     },
@@ -350,7 +356,7 @@ export default {
     // 去详请
     godetails (row) {
       this.$store.state.common.Fermentation.details = row
-      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Packaging-ProDataIn')
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-Fermenter-details')
       let that = this
       setTimeout(function () {
         that.$router.push({ name: `DataEntry-Fermentation-Fermenter-details` })
@@ -385,7 +391,7 @@ export default {
     }
   },
   computed: {
-    ainTabs: {
+    mainTabs: {
       get () {
         return this.$store.state.common.mainTabs
       },
