@@ -26,7 +26,7 @@
               <el-form-item label="物料：" >
                 <el-select v-model="params.materialCode" @change="changeOptions('material')" class="selectwpx" filterable style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
-                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialName" :value="sole.materialCode"></el-option>
+                  <el-option v-for="sole in materialList" :key="sole.materialCode" :label="sole.materialCode + ' ' + sole.materialName" :value="sole.materialCode"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="订单日期：" label-width="80px">
@@ -36,7 +36,7 @@
             </el-form>
           </el-col>
           <el-col style="width: 80px">
-            <el-button type="primary" size="small" @click="getOrderList()" style="float: right">查询</el-button>
+            <el-button type="primary" size="small" @click="getOrderList()" style="float: right" v-if="isAuth('fer:order:list')">查询</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -56,7 +56,7 @@
             </span>
             <el-row>
               <el-col>
-                <el-button type='primary' size='small' style='float:right; margin-bottom:10px;' @click="applyOrder()">申请订单</el-button>
+                <el-button type='primary' size='small' style='float:right; margin-bottom:10px;' @click="applyOrder()" v-if="isAuth('fer:order:applyFerOrder')">申请订单</el-button>
               </el-col>
             </el-row>
             <el-row>
@@ -469,12 +469,18 @@ export default class Index extends Vue {
       this.$message.error('请选择要申请的订单')
       return
     }
-    Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
-      if (res.data.code === 0) {
-        this.getOrderList()
-      } else {
-        this.$message.error(res.data.msg)
-      }
+    this.$confirm('确认申请订单，是否继续?', '申请确认', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
+        if (res.data.code === 0) {
+          this.getOrderList()
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
     })
   }
   @Watch('params', {deep: true})
