@@ -2,7 +2,7 @@
   <div style="padding: 10px">
     <el-card class="searchCard  newCard">
       <el-row type="flex">
-        <el-col class="header_pot">
+        <el-col class="header_pot" style="width: 160px">
           <p class='header_pot_label'>罐号：{{formData.holderName ? formData.holderName : ''}}</p>
           <div class="header_pot_image">
             <div class="header_pot_image_content">

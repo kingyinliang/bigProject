@@ -75,8 +75,8 @@
           </h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
-              <div class="dataList_item_pot_box_item2" :class="`${item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${(item.ferAmount / item.sumAmout) * 100}%`"><p>{{(item.ferAmount / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box_item2" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : (item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
             </div>
             <div class="dataList_item_pot_detail">
               <p>{{item.ferMaterialCode}}</p>
