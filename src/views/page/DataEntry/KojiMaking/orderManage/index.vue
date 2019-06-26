@@ -440,6 +440,7 @@ export default class Index extends Vue {
       dept_id: workshopId,
       workShopName: workshopName,
       type: 'holder_type',
+      holderStatus: type === '入罐' ? '0' : null,
       holder_type: type === '入罐' ? '001' : type === '曲房' ? '005' : type === '连续蒸煮' ? '008' : '',
       pageSize: 9999,
       currPage: 1
