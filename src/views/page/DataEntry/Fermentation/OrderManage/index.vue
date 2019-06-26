@@ -469,12 +469,18 @@ export default class Index extends Vue {
       this.$message.error('请选择要申请的订单')
       return
     }
-    Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
-      if (res.data.code === 0) {
-        this.getOrderList()
-      } else {
-        this.$message.error(res.data.msg)
-      }
+    this.$confirm('确认申请订单，是否继续?', '申请确认', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
+        if (res.data.code === 0) {
+          this.getOrderList()
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
     })
   }
   @Watch('params', {deep: true})

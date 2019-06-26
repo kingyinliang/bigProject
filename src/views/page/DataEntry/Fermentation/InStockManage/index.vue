@@ -45,8 +45,8 @@
                   <el-option label="未录入" value='未录入'></el-option>
                   <el-option label="已保存" value="saved"></el-option>
                   <el-option label="已提交" value="submit"></el-option>
-                  <el-option label="审核未通过" value="noPass"></el-option>
-                  <el-option label="审核已通过" value="checked"></el-option>
+                  <el-option label="审核不通过" value="noPass"></el-option>
+                  <el-option label="已审核" value="checked"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -94,7 +94,7 @@
               <el-table-column type="index" label="序号" width="55"></el-table-column>
               <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
-                  {{scope.row.status === 'checked' ? '审核已通过' : scope.row.status == 'noPass' ? '审核未通过' : scope.row.status === 'submit' ? '已提交' : scope.row.status === 'saved' ? '已保存' : '未录入'}}
+                  <label :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#7ED321' : '' }">{{scope.row.status === 'checked' ? '已审核' : scope.row.status == 'noPass' ? '审核不通过' : scope.row.status === 'submit' ? '已提交' : scope.row.status === 'saved' ? '已保存' : '未录入'}}</label>
                 </template>
               </el-table-column>
               <el-table-column label="订单号" :show-overflow-tooltip="true" width="120">
@@ -357,6 +357,13 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.page.list
+        this.dataList.forEach(e => {
+          // 未录入的入库数默认等于订单数/ 不带出批次
+          if (e.status !== 'checked' && e.status !== 'submit' && e.status !== 'saved' && e.status !== 'noPass') {
+            e.inAmount = e.orderAmount
+            e.batch = ''
+          }
+        })
         this.totalCount = res.data.page.totalCount
       } else {
         this.$message.error(res.data.msg)
@@ -392,17 +399,23 @@ export default class Index extends Vue {
   }
   submit () {
     if (this.validate()) {
-      this.selectedList.forEach((item) => {
-        if (item.status !== 'checked') {
-          item.status = 'submit'
-        }
-      })
-      Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SUBMIT_API}`, `POST`, this.selectedList).then((res) => {
-        if (res.data.code === 0) {
-          this.retrieveOrderList()
-        } else {
-          this.$message.error(res.data.msg)
-        }
+      this.$confirm('确认数据提交，是否继续?', '提交确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.selectedList.forEach((item) => {
+          if (item.status !== 'checked') {
+            item.status = 'submit'
+          }
+        })
+        Vue.prototype.$http(`${FERMENTATION_API.ORDER_IN_STOCK_SUBMIT_API}`, `POST`, this.selectedList).then((res) => {
+          if (res.data.code === 0) {
+            this.retrieveOrderList()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
       })
     }
   }
@@ -411,7 +424,7 @@ export default class Index extends Vue {
       this.$message.error('请选择要入库的订单')
       return false
     }
-    for (let item of this.dataList) {
+    for (let item of this.selectedList) {
       if (!item.inAmount || item.inAmount === '') {
         this.$message.error('入库数不能为空')
         return false
