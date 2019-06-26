@@ -45,8 +45,8 @@
     <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表</h3>
     <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
       <el-form-item label="罐号：">
-        <el-select v-model="formHeader.holdNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
-          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
+        <el-select v-model="formHeader.holderNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
+          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="类别：">
@@ -178,7 +178,7 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        holdNo: '',
+        holderNo: '',
         halfType: '',
         holderStatus: '',
         dateFlag: '',
@@ -251,7 +251,7 @@ export default {
         return
       }
       this.formHeader.currPage = 1
-      this.formHeader.holdNo = []
+      this.formHeader.holderNo = []
       this.formHeader.halfType = ''
       this.formHeader.dateFlag = ''
       this.formHeader.holderStatus = ''
@@ -275,7 +275,13 @@ export default {
       obj.currPage = obj.currPage + ''
       obj.pageSize = obj.pageSize + ''
       obj.totalCount = obj.totalCount + ''
-      obj.holdNo = obj.holdNo.join(',')
+      // if (obj.holdNo.length > 1) {
+      //   obj.holdNo.splice(0, 1)
+      //   obj.holdNo = obj.holdNo.join(',')
+      // } else {
+      //   obj.holdNo = obj.holdNo.join(',')
+      // }
+      obj.holderNo = obj.holderNo.join(',')
       this.$http(`${FERMENTATION_API.FER_LIST_API}`, 'POST', obj).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.orderPage.list

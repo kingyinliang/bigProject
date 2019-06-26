@@ -33,7 +33,7 @@
               <p class="el-input">{{formData.inStoreAmount}}</p>
             </el-form-item>
             <el-form-item label="发酵物料：">
-              <p class="el-input">{{formData.ferMaterialCode + ' ' + formData.ferMaterialName}}</p>
+              <p class="el-input">{{(formData.ferMaterialCode? formData.ferMaterialCode: '') + ' ' + (formData.ferMaterialName? formData.ferMaterialName : '')}}</p>
             </el-form-item>
             <el-form-item label="半成品类别：">
               <p class="el-input">{{formData.halfTypeName}}</p>

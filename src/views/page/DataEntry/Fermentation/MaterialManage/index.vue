@@ -99,7 +99,7 @@
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-plus" circle size="small" :disabled="!isRedact" @click="AddData(scope.row, scope.$index)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delData(scope.row)" v-if="scope.row.approveStatus !== '' && scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delData(scope.row)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -232,14 +232,18 @@ export default {
     },
     // 删除
     delData (row) {
-      this.$http(`${FERMENTATION_API.SHOOT_DEL_API}`, 'POST', {id: row.id}).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('删除成功')
-          this.GetDataList()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (row.approveStatus === '') {
+        this.dataList.splice(this.dataList.indexOf(row), 1)
+      } else {
+        this.$http(`${FERMENTATION_API.SHOOT_DEL_API}`, 'POST', {id: row.id}).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('删除成功')
+            this.GetDataList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 审核通过禁用
     checkboxT (row) {
