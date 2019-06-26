@@ -14,7 +14,7 @@
           <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right">查询</el-button>
+      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px" v-show="fastS">
@@ -61,7 +61,7 @@
           <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right">查询</el-button>
+      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
     </el-form>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="6" v-for="(item, index) in dataList" :key="index">
@@ -71,7 +71,7 @@
             <span style="color: #333333;font-weight: normal;font-size: 14px">
               -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵-已入库' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
             </span>
-            <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px">详情>></span>
+            <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
           </h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
