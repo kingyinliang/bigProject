@@ -192,7 +192,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-date-editor .el-range-input {width:100px;}
 .el-range-editor--small .el-range-separator {padding-right:20px}
 .searchCard {

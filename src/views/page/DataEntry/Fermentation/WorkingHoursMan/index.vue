@@ -467,8 +467,22 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" >
 .width170px {width:170px}
+.audit{
+  line-height: 40px;
+  i{
+    font-size: 22px;
+    float: left;
+  }
+  span{
+    margin-left: 12px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+</style>
+<style lang="less" scoped>
 .searchCard {
   .el-button--primary,.el-button--primary:focus{
     color: #000000;
@@ -483,18 +497,6 @@ export default {
     background-color: #1890FF;
     color: #FFFFFF;
     border-color: #1890FF;
-  }
-}
-.audit{
-  line-height: 40px;
-  i{
-    font-size: 22px;
-    float: left;
-  }
-  span{
-    margin-left: 12px;
-    font-size: 16px;
-    font-weight: bold;
   }
 }
 </style>

@@ -49,8 +49,8 @@
             </el-form-item>
             <el-form-item label="订单选择：" class="noneBorder">
               <el-radio-group v-model="formData.frozenStatus" :disabled="true">
-                <el-radio label="正常" value="1"></el-radio>
-                <el-radio label="冻结" value="0"></el-radio>
+                <el-radio label="1">正常</el-radio>
+                <el-radio label="0">冻结</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -121,7 +121,9 @@ export default {
   name: 'Ferdetails',
   data () {
     return {
-      formData: {},
+      formData: {
+        frozenStatus: '1'
+      },
       activeName: '1',
       dataListOrder: [],
       dataListUse: [],
@@ -146,6 +148,12 @@ export default {
           this.dataUseTotalCount = this.formData.currentUseInfo.length
           this.dataListOrder = this.formData.currentOrderInfo.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
           this.dataListUse = this.formData.currentUseInfo.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (this.dataUseCurrPage - 1) * this.dataUsePageSize + this.dataUsePageSize)
+          if (this.formData.frozenStatus !== 0) {
+            this.formData.frozenStatus = '1'
+          } else {
+            this.formData.frozenStatus = '0'
+          }
+          console.log(this.formData.frozenStatus)
         } else {
           this.$message.error(data.msg)
         }

@@ -209,7 +209,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-table th>.cell {text-align: center}
 .width199px {width:199px;}
 .el-date-editor .el-range-input {width:100px;}
