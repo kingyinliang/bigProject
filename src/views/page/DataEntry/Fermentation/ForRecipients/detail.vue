@@ -121,7 +121,7 @@ export default {
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAIL_API}`, 'POST', {id: this.$store.state.common.Fermentation.orderId}).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.openBasicsInfo
-          if (data.openBasicsInfo.PRODUCT_DATE <= dateFormat(new Date(), 'yyyy-MM-dd')) {
+          if (data.openBasicsInfo.PRODUCT_DATE < dateFormat(new Date(), 'yyyy-MM-dd')) {
             this.isRedact = true
           }
           this.GetList()
@@ -135,7 +135,7 @@ export default {
       this.already = this.multipleSelection.length
     },
     CheckBoxInit (row, index) {
-      if (this.formHeader.PRODUCT_DATE <= dateFormat(new Date(), 'yyyy-MM-dd')) {
+      if (this.formHeader.PRODUCT_DATE < dateFormat(new Date(), 'yyyy-MM-dd')) {
         return 0
       } else {
         return 1

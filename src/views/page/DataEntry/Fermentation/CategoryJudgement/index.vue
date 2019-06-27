@@ -104,7 +104,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="form.pageNum"
+          :current-page="form.currPage"
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
@@ -173,7 +173,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="form.pageNum"
+          :current-page="form.currPage"
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
@@ -217,7 +217,7 @@ export default {
       form: {
         factory: '',
         workShop: '',
-        pageNum: 1,
+        currPage: 1,
         pageSize: 10,
         totalCount: 0,
         isJudged: 0
@@ -341,6 +341,7 @@ export default {
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENTLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
+          this.form.totalCount = data.data.totalCount
           // console.log(this.dataList)
         } else {
           this.$message.error(data.msg)
@@ -354,12 +355,12 @@ export default {
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.form.pageNum = val
+      this.form.currPage = val
       this.GetList()
     },
     tabClick (value) {
       this.form.isJudged = value.name
-      this.form.pageNum = 1
+      this.form.currPage = 1
       this.GetList()
     },
     // 判定
