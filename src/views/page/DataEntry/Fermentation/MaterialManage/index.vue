@@ -171,10 +171,9 @@ export default {
       this.$http(`${FERMENTATION_API.SHOOT_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.SumdataList = data.ferList
-          this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
-          this.Audit = []
-          this.currPage = 1
           this.totalCount = data.ferList.length
+          this.dataList = data.ferList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+          this.Audit = []
         } else {
           this.$message.error(data.msg)
         }
@@ -332,12 +331,12 @@ export default {
     handleSizeChange (val) {
       this.pageSize = val
       this.currPage = 1
-      this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+      this.GetDataList()
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.currPage = val
-      this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+      this.GetDataList()
     }
   },
   computed: {},
