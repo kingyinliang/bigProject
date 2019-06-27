@@ -48,9 +48,9 @@
       <el-tab-pane name="noMatureReport" label="未成熟">
         <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
-          <el-table-column label="状态" :show-overflow-tooltip="true">
+          <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
@@ -104,7 +104,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
-          <el-table-column label="操作时间" :show-overflow-tooltip="true" width="180" prop="changed"></el-table-column>
+          <el-table-column label="操作时间" :show-overflow-tooltip="true" width="170" prop="changed"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"
@@ -113,20 +113,20 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.total">
+          :total="form.totalCount">
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="maturedReport" label="已成熟">
         <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
-          <el-table-column label="状态" :show-overflow-tooltip="true">
+          <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
-          <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
+          <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
               <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
@@ -166,7 +166,7 @@
               <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
+          <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">
             <template slot-scope="scope">
               <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
                 <el-option v-for="(item, index) in reportTypeList" :key="index" :label="item.name" :value="item.value"></el-option>
@@ -175,7 +175,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
-          <el-table-column label="操作时间" :show-overflow-tooltip="true" width="180" prop="changed"></el-table-column>
+          <el-table-column label="操作时间" :show-overflow-tooltip="true" width="170" prop="changed"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"
@@ -184,20 +184,20 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.total">
+          :total="form.totalCount">
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="rework" label="返工订单">
         <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
-          <el-table-column label="状态" :show-overflow-tooltip="true">
+          <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              {{scope.row.status === 'success' ? '审核成功' : scope.row.status === 'fail' ? '审核失败' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
-          <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
+          <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
               <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
             </template>
@@ -237,7 +237,7 @@
               <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
+          <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">
             <template slot-scope="scope">
               <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
@@ -252,7 +252,7 @@
           :page-sizes="[10, 15, 20]"
           :page-size="form.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="form.total">
+          :total="form.totalCount">
         </el-pagination>
       </el-tab-pane>
     </el-tabs>
@@ -283,9 +283,9 @@ export default {
       form: {
         factory: '',
         workShop: '',
-        pageNum: 1,
+        currPage: 1,
         pageSize: 10,
-        total: 0
+        totalCount: 0
       },
       factory: '',
       workshop: '',
@@ -378,7 +378,7 @@ export default {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
-          this.form.total = data.data.list.length
+          this.form.totalCount = data.data.totalCount
           this.LogList = []
         } else {
           this.$message.error(data.msg)
@@ -388,7 +388,7 @@ export default {
     tabClick (value) {
       this.activeName = value.name
       this.SearchList()
-      this.form.pageNum = 1
+      this.form.currPage = 1
       this.LogList = []
       // console.log(this.activeName)
     },
@@ -436,7 +436,7 @@ export default {
             this.$message.success(msg + '成功')
             this.SearchList()
             this.isRedact = false
-            this.form.pageNum = 1
+            this.form.currPage = 1
             this.LogList = []
           } else {
             this.$message.error(data.msg)
