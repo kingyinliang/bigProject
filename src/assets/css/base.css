@@ -71,7 +71,7 @@ a, a:link, a:visited, a:hover, a:active {
 }
 .tableHead,.tableHead th{
   background-color: #f9f9f9!important;
-  /*text-align: center;*/
+  text-align: center;
   color: black;
   font-weight: bold;
 }

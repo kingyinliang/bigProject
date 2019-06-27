@@ -35,6 +35,9 @@ Vue.prototype.clearForm = function (form: any) {
   this[form] = {}
 }
 
+// mock
+require('../mock/index')
+
 // 生成uuid
 Vue.prototype.uuid = function (len: any, radix: any) {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')

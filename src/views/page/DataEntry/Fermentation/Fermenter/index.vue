@@ -76,9 +76,9 @@
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
-              <div class="dataList_item_pot_box_item2" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : (item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : (item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
             </div>
-            <div class="dataList_item_pot_detail">
+            <div class="dataList_item_pot_detail" v-if="item.sumAmout">
               <p>{{item.ferMaterialCode}}</p>
               <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
               <p>{{item.ferDays}}天</p>
@@ -541,6 +541,9 @@ export default {
     }
     &_pot{
       padding: 17px 10px 10px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       &_box{
         padding-top: 35px;
         color: white;
@@ -594,6 +597,8 @@ export default {
         }
       }
       &_detail{
+        max-width: 100px;
+        height: auto;
         float: left;
         margin-top: 25px;
         margin-left: 10px;

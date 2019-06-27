@@ -62,7 +62,7 @@
         <el-table-column label="订单号" width="120" prop="ferOrderNo"></el-table-column>
         <el-table-column label="状态" width="93" prop="approveStatus">
           <template slot-scope="scope">
-            {{ scope.row.approveStatus === 'saved'? '已保存': scope.row.approveStatus === 'submit'? ' 已提交' : scope.row.approveStatus === 'noPass'? '审核不通过' : scope.row.approveStatus === 'checked'? '审核通过' : '未录入'}}
+            <p :style="{'color': scope.row.approveStatus === 'noPass'? 'red' : scope.row.approveStatus === 'checked'? '#7ED321' : '' }">{{ scope.row.approveStatus === 'saved'? '已保存': scope.row.approveStatus === 'submit'? ' 已提交' : scope.row.approveStatus === 'noPass'? '审核不通过' : scope.row.approveStatus === 'checked'? '已审核' : '未录入'}}</p>
           </template>
         </el-table-column>
         <el-table-column label="容器" width="110" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
@@ -103,6 +103,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-row >
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currPage"
+          :page-sizes="[20, 30, 40]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount">
+        </el-pagination>
+      </el-row>
     </el-card>
     <el-card class="searchCard  newCard" style="margin-top: 10px">
       <auditLog :tableData="Audit"></auditLog>
@@ -133,8 +144,12 @@ export default {
       OrderList: [],
       material: [],
       dataList: [],
+      SumdataList: [],
       Audit: [],
-      multipleSelection: []
+      multipleSelection: [],
+      currPage: 1,
+      pageSize: 20,
+      totalCount: 0
     }
   },
   watch: {
@@ -155,7 +170,11 @@ export default {
     GetDataList () {
       this.$http(`${FERMENTATION_API.SHOOT_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
-          this.dataList = data.ferList
+          this.SumdataList = data.ferList
+          this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+          this.Audit = []
+          this.currPage = 1
+          this.totalCount = data.ferList.length
         } else {
           this.$message.error(data.msg)
         }
@@ -163,9 +182,6 @@ export default {
     },
     // 获取日志
     GetLog (row) {
-      if (this.isRedact) {
-        return
-      }
       this.$http(`${FERMENTATION_API.SHOOT_LOG_API}`, 'POST', {ferOrderNo: row.ferOrderNo}).then(({data}) => {
         if (data.code === 0) {
           this.Audit = data.verList
@@ -210,15 +226,16 @@ export default {
             this.$message.error(data.msg)
           }
         })
+      } else {
+        this.$http(`${FERMENTATION_API.SHOOT_UPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('操作成功')
+            this.GetDataList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
-      this.$http(`${FERMENTATION_API.SHOOT_UPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('操作成功')
-          this.GetDataList()
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
     },
     // 拆分
     AddData (row, index) {
@@ -234,6 +251,7 @@ export default {
     delData (row) {
       if (row.approveStatus === '') {
         this.dataList.splice(this.dataList.indexOf(row), 1)
+        this.Audit = []
       } else {
         this.$http(`${FERMENTATION_API.SHOOT_DEL_API}`, 'POST', {id: row.id}).then(({data}) => {
           if (data.code === 0) {
@@ -309,6 +327,17 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.currPage = 1
+      this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.currPage = val
+      this.dataList = this.SumdataList.splice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
     }
   },
   computed: {},
