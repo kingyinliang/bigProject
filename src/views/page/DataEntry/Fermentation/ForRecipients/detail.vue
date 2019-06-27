@@ -228,7 +228,8 @@ export default {
                 currentPage: 1, // 当前页数
                 pageSize: 10
               }
-              this.GetList()
+              this.$message.success('开罐成功')
+              this.Getdetail()
             } else {
               this.$message.error(data.msg)
             }

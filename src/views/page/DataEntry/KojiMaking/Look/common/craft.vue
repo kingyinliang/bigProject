@@ -570,6 +570,9 @@ export default {
       }
     },
     overcha: function () {
+      console.log(Number(this.tech.overEndWeight))
+      console.log(this.tech.overStartWeight)
+      console.log(Number(this.tech.overEndWeight) - Number(this.tech.overStartWeight))
       return this.tech.overEndWeight - this.tech.overStartWeight
     },
     outcha: function () {
