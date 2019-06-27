@@ -58,7 +58,8 @@
       <el-form-item label="状态：">
         <el-select v-model="formHeader.holderStatus" placeholder="请选择" style="width: 160px">
           <el-option label="请选择"  value=""></el-option>
-          <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
+          <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code" v-if="item.code !== '2' && item.code !== '3'"></el-option>
+          <el-option label="发酵中" v-for="(item, index) in holderStatusList" :key="index" value="2,3" v-if="item.code === '2'"></el-option>
         </el-select>
       </el-form-item>
       <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
@@ -69,7 +70,7 @@
           <h3 class="dataList_item_tit">
             {{item.holderName}}
             <span style="color: #333333;font-weight: normal;font-size: 14px">
-              -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵-已入库' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
+              -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵中' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
             </span>
             <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
           </h3>
@@ -79,7 +80,7 @@
               <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : (item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
             </div>
             <div class="dataList_item_pot_detail" v-if="item.sumAmout">
-              <p>{{item.ferMaterialCode}}</p>
+              <p>{{item.ferOrderNo}}</p>
               <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
               <p>{{item.ferDays}}天</p>
               <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
@@ -89,7 +90,7 @@
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1')">发料</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2')">类别判定</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3')">入库</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4')">清洗</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item)">清洗</p></el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -106,6 +107,40 @@
       </el-pagination>
     </el-row>
   </el-card>
+  <el-dialog
+    width="450px"
+    class="shinhodialog"
+    :title="dialogData.holderName+'清洗'"
+    :close-on-click-modal="false"
+    :visible.sync="visible">
+    <div style="display: flex">
+      <el-form label-width="100px" class="topform marbottom" style="margin: auto">
+        <el-form-item label="罐号：">
+          <p>{{dialogData.holderNo}}</p>
+        </el-form-item>
+        <el-form-item label="状态：">
+          <p>待清洗</p>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox-group v-model="a">
+            <el-checkbox label="清洗完成" name="type" :disabled="true"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input v-model="dialogData.remark" size="small" placeholder="手工录入" style="width: 260px"></el-input>
+        </el-form-item>
+        <el-form-item label="录入人员：">
+          {{$store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
+        </el-form-item>
+        <el-form-item label="录入时间：">
+        </el-form-item>
+      </el-form>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" @click="rinse()">确定</el-button>
+    </span>
+  </el-dialog>
 </div>
 </template>
 
@@ -116,6 +151,9 @@ export default {
   data () {
     return {
       fastS: false,
+      visible: false,
+      dialogData: {},
+      a: true,
       topBox: [
         {
           color: '#999999',
@@ -370,8 +408,7 @@ export default {
         that.$router.push({ name: `DataEntry-Fermentation-Fermenter-details` })
       }, 100)
     },
-    toRouter (str) {
-      console.log('-----')
+    toRouter (str, row) {
       let url = ''
       if (str === '1') {
         url = 'DataEntry-Fermentation-MaterialManage-index'
@@ -381,13 +418,29 @@ export default {
         url = 'DataEntry-Fermentation-InStockManage-index'
       } else if (str === '4') {
         url = ''
+        if (row.holderStatus === '5') {
+          this.dialogData = row
+          this.visible = true
+        } else {
+          this.$message.error('该罐不是未清洗状态')
+        }
+        return
       }
-      console.log(url)
       this.mainTabs = this.mainTabs.filter(item => item.name !== url)
       let that = this
       setTimeout(function () {
         that.$router.push({ name: url })
       }, 100)
+    },
+    rinse () {
+      this.$http(`${FERMENTATION_API.FER_RINSE_API}`, 'POST', this.dialogData).then(({data}) => {
+        if (data.code === 0) {
+          this.dialogData.holderStatus = '0'
+          this.visible = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {
@@ -597,7 +650,7 @@ export default {
         }
       }
       &_detail{
-        max-width: 100px;
+        max-width: 112px;
         height: auto;
         float: left;
         margin-top: 25px;

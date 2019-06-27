@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column width="125" label="入库酱醪量">
         <template slot-scope="scope">
-          <p>{{scope.row.sauceWeight = (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2)}}</p>
+          <p>{{scope.row.sauceWeight = (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(3)*1}}</p>
           <!--<p v-show="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')">{{(scope.row.websign === scope.row.saltWaterWeight? scope.row.sauceWeight = scope.row.sauceWeight : scope.row.sauceWeight =  (((scope.row.pulpWeight*1 + scope.row.wheatWeight*1) * params.params1 + scope.row.saltWaterWeight * params.params2) / params.params3).toFixed(2))}}</p>-->
           <!--<el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>-->
         </template>

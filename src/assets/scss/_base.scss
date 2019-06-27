@@ -516,3 +516,15 @@ img {
 .el-input.is-disabled .el-input__inner {
   color: #606266 !important;
 }
+.shinhodialog{
+  .el-dialog{
+    border-radius: 10px 10px 0 0;
+  }
+  .el-dialog__header{
+    border-radius: 10px 10px 0 0;
+    background: #3a8ee6;
+    span,button,i{
+      color: white!important;
+    }
+  }
+}
