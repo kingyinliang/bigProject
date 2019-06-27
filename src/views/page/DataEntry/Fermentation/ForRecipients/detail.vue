@@ -186,7 +186,7 @@ export default {
     },
     // 罐列表
     GetList () {
-      this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE}).then(({data}) => {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE, materialCode: this.formHeader.MATERIAL_CODE}).then(({data}) => {
         if (data.code === 0) {
           this.newDataList = []
           this.dataList = data.openFermentationInfo.list
@@ -214,26 +214,30 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.multipleSelection.map((item) => {
-            item.openId = this.$store.state.common.Fermentation.orderId
-            item.amount = item.inAmount
-            item.unit = item.inUnit
-            item.inStoreDate = item.created
-            item.isNum = this.formHeader.AMOUNT
-          })
-          // console.log(this.multipleSelection)
-          this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.searchform = {
-                currentPage: 1, // 当前页数
-                pageSize: 10
+          if (this.formHeader.AMOUNT < (this.formHeader.isNum + this.multipleSelection.length)) {
+            this.$message.error('勾选开罐数量不能大于申请数')
+          } else {
+            this.multipleSelection.map((item) => {
+              item.openId = this.$store.state.common.Fermentation.orderId
+              item.amount = item.inAmount
+              item.unit = item.inUnit
+              item.inStoreDate = item.created
+              item.isNum = this.formHeader.AMOUNT
+            })
+            // console.log(this.multipleSelection)
+            this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
+              if (data.code === 0) {
+                this.searchform = {
+                  currentPage: 1, // 当前页数
+                  pageSize: 10
+                }
+                this.$message.success('开罐成功')
+                this.Getdetail()
+              } else {
+                this.$message.error(data.msg)
               }
-              this.$message.success('开罐成功')
-              this.Getdetail()
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
+            })
+          }
         })
       }
     },

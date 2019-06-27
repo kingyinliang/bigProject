@@ -570,13 +570,10 @@ export default {
       }
     },
     overcha: function () {
-      console.log(Number(this.tech.overEndWeight))
-      console.log(this.tech.overStartWeight)
-      console.log(Number(this.tech.overEndWeight) - Number(this.tech.overStartWeight))
-      return this.tech.overEndWeight - this.tech.overStartWeight
+      return (this.tech.overEndWeight - this.tech.overStartWeight).toFixed(3)
     },
     outcha: function () {
-      return this.tech.outEndWeight - this.tech.outStartWeight
+      return (this.tech.outEndWeight - this.tech.outStartWeight).toFixed(3)
     }
   },
   components: {
