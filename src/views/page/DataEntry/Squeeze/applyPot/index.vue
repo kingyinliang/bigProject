@@ -22,8 +22,9 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width:80px">
+          <el-col style="width:140px">
             <el-button type="primary" size="small" v-if="isAuth('fer:openHolder:list')"  @click="getOrderList()">查询</el-button>
+            <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'  @click="pushPage('')">新增</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -38,11 +39,8 @@
         </div>
         <el-card>
           <el-row>
-            <el-col :span="12">
+            <el-col>
               <div style="line-height: 40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请列表</span></div>
-            </el-col>
-            <el-col :span="12">
-              <el-button type='primary' size='small' style='float:right; margin-bottom:10px;'  @click="pushPage('')">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
