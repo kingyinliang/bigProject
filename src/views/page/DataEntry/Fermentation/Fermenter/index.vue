@@ -77,19 +77,20 @@
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
-              <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : (item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : item.halfAmount? (item.halfAmount / item.sumAmout) * 100:(item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.halfAmount?item.halfAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
             </div>
             <div class="dataList_item_pot_detail" v-if="item.sumAmout">
               <p>{{item.ferOrderNo}}</p>
               <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
               <p>{{item.ferDays}}天</p>
               <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
+              <p v-if="item.holderStatus === '3'">已入库</p>
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1')">发料</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2')">类别判定</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3')">入库</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1', item)">发料</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2', item)">类别判定</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3', item)">入库</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item)">清洗</p></el-col>
           </el-row>
         </el-card>
@@ -133,6 +134,7 @@
           {{$store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
         </el-form-item>
         <el-form-item label="录入时间：">
+          {{newData}}
         </el-form-item>
       </el-form>
     </div>
@@ -145,11 +147,13 @@
 </template>
 
 <script>
+import { dateFormat } from '@/net/validate'
 import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
     return {
+      newData: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
       fastS: false,
       visible: false,
       dialogData: {},
@@ -216,7 +220,7 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        holderNo: '',
+        holderNo: [],
         halfType: '',
         holderStatus: '',
         dateFlag: '',
@@ -234,10 +238,14 @@ export default {
   },
   watch: {
     'formHeader.factory' (n, o) {
+      this.formHeader.workShop = ''
+      this.formHeader.holderStatus = ''
       this.Getdeptbyid(n)
       this.GetHolderStatusList(n)
     },
     'formHeader.workShop' (n, o) {
+      this.formHeader.holderNo = []
+      this.formHeader.halfType = ''
       this.GetHalfList(n)
       this.HolderList(n)
     }
@@ -355,7 +363,6 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.formHeader.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
@@ -411,10 +418,33 @@ export default {
     toRouter (str, row) {
       let url = ''
       if (str === '1') {
+        this.$store.state.common.Fermentation.materia.factory = row.factory
+        this.$store.state.common.Fermentation.materia.workShop = row.workShop
+        this.$store.state.common.Fermentation.materia.ferMaterialCode = row.ferMaterialCode
+        this.$store.state.common.Fermentation.materia.holderIds = [row.holderId]
+        this.$store.state.common.Fermentation.materia.ferOrderNos = [row.ferOrderNo]
+        this.$store.state.common.Fermentation.materia.approveStatus = ''
+        this.$store.state.common.Fermentation.materia.productDateOne = ''
+        this.$store.state.common.Fermentation.materia.productDateTwo = ''
         url = 'DataEntry-Fermentation-MaterialManage-index'
       } else if (str === '2') {
+        this.$store.state.common.Fermentation.category.factory = row.factory
+        this.$store.state.common.Fermentation.category.workShop = row.workShop
+        this.$store.state.common.Fermentation.category.holderId = row.holderId
+        this.$store.state.common.Fermentation.category.orderNo = row.ferOrderNo
+        this.$store.state.common.Fermentation.category.materialCode = row.ferMaterialCode
+        this.$store.state.common.Fermentation.category.ferDays = row.ferDays
+        this.$store.state.common.Fermentation.category.halfId = row.halfType
+        this.$store.state.common.Fermentation.category.currPage = 1
+        this.$store.state.common.Fermentation.category.pageSize = 1
+        this.$store.state.common.Fermentation.category.totalCount = 10
+        this.$store.state.common.Fermentation.category.isJudged = 0
         url = 'DataEntry-Fermentation-CategoryJudgement-index'
       } else if (str === '3') {
+        this.$store.state.common.FerInStockManage.factoryId = row.factory
+        this.$store.state.common.FerInStockManage.workshopId = row.workShop
+        this.$store.state.common.FerInStockManage.holderList = [row.holderId]
+        this.$store.state.common.FerInStockManage.orderList = [row.ferOrderNo]
         url = 'DataEntry-Fermentation-InStockManage-index'
       } else if (str === '4') {
         url = ''

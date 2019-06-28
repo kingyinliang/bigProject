@@ -136,16 +136,7 @@ export default {
   data () {
     return {
       isRedact: false,
-      formHeader: {
-        factory: '',
-        workShop: '',
-        ferMaterialCode: '',
-        ferOrderNos: [],
-        holderIds: [],
-        approveStatus: '',
-        productDateOne: '',
-        productDateTwo: ''
-      },
+      formHeader: JSON.parse(JSON.stringify(this.$store.state.common.Fermentation.materia)),
       factory: [],
       workshop: [],
       guanList: [],
@@ -162,16 +153,25 @@ export default {
   },
   watch: {
     'formHeader.factory' (n, o) {
+      this.formHeader.workShop = ''
+      this.formHeader.ferMaterialCode = ''
       this.Getdeptbyid(n)
       this.GetMaterial(n)
     },
     'formHeader.workShop' (n, o) {
+      this.formHeader.holderIds = []
+      this.formHeader.ferOrderNos = []
       this.HolderList(n)
       this.GetOrderList(n)
     }
   },
   mounted () {
     this.Getdeptcode()
+    this.Getdeptbyid(this.formHeader.factory)
+    this.GetMaterial(this.formHeader.factory)
+    this.HolderList(this.formHeader.workShop)
+    this.GetOrderList(this.formHeader.workShop)
+    this.GetDataList()
   },
   methods: {
     // 查询
@@ -182,6 +182,7 @@ export default {
           this.totalCount = data.ferList.length
           this.dataList = data.ferList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
           this.Audit = []
+          this.$store.commit('common/updateFermentationM', this.formHeader)
         } else {
           this.$message.error(data.msg)
         }
@@ -307,7 +308,6 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
-          this.formHeader.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -315,14 +315,10 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id) {
-      this.formHeader.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            if (data.typeList.length) {
-              this.formHeader.workShop = data.typeList[0].deptId
-            }
           } else {
             this.$message.error(data.msg)
           }
@@ -343,7 +339,6 @@ export default {
     },
     // 获取物料
     GetMaterial (n) {
-      this.formHeader.ferMaterialCode = ''
       this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.material = data.list

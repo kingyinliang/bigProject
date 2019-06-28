@@ -214,14 +214,7 @@ export default {
     return {
       dialogVisible: false,
       radio: '1',
-      form: {
-        factory: '',
-        workShop: '',
-        currPage: 1,
-        pageSize: 10,
-        totalCount: 0,
-        isJudged: 0
-      },
+      form: JSON.parse(JSON.stringify(this.$store.state.common.Fermentation.category)),
       factory: '',
       workshop: '',
       statusList: [{
@@ -251,7 +244,10 @@ export default {
   },
   mounted () {
     this.GetFactoryList()
+    this.GetWorkshopList(this.form.factory)
     this.GetHolderList()
+    this.GetMaterialType(this.form.factory)
+    this.GetMaterialTypeList(this.form.factory)
   },
   watch: {
     'form.factory' (n, o) {
@@ -270,7 +266,6 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
-          this.form.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -278,16 +273,12 @@ export default {
     },
     // 获取车间
     GetWorkshopList (id) {
-      this.form.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
               this.workshop = data.typeList
-              if (data.typeList.length > 0) {
-                this.form.workShop = data.typeList[0].deptId
-              }
             }
           } else {
             this.$message.error(data.msg)

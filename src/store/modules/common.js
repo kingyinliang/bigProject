@@ -135,10 +135,10 @@ export default {
      * 发酵罐入库管理参数
      */
     FerInStockManage: {
-      factoryId: '2812A6620E204D0FBAFB40ECA8AD58FF',
-      factoryName: '烟台欣和企业食品有限公司工厂',
-      workshopId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A',
-      workshopName: '发酵一车间',
+      factoryId: '',
+      factoryName: '',
+      workshopId: '',
+      workshopName: '',
       startDate: '',
       endDate: '',
       // 罐号多选
@@ -153,7 +153,32 @@ export default {
      */
     Fermentation: {
       orderId: '',
-      details: {}
+      details: {},
+      materia: {
+        factory: '',
+        workShop: '',
+        ferMaterialCode: '',
+        ferOrderNos: [],
+        holderIds: [],
+        approveStatus: '',
+        productDateOne: '',
+        productDateTwo: ''
+      },
+      category: {
+        factory: '',
+        workShop: '',
+        frozenStatus: '',
+        holderId: '',
+        orderNo: '',
+        materialCode: '',
+        ferDays: '',
+        halfId: '',
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0,
+        isJudged: 0
+      },
+      instock: {}
     }
   },
   mutations: {
@@ -295,6 +320,10 @@ export default {
     /** 发酵 */
     updateFermentation (state, params) {
       state.Fermentation = params
+    },
+    /** 发酵 */
+    updateFermentationM (state, params) {
+      state.Fermentation.materia = params
     }
   }
 }
