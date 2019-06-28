@@ -97,10 +97,10 @@
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
+              <!-- <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
                 <el-option v-for="(item, index) in reportTypeList" :key="index" :label="item.name" :value="item.value"></el-option>
-              </el-select>
-              <!-- <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input> -->
+              </el-select> -->
+              <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -168,10 +168,10 @@
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
+              <!-- <el-select v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small">
                 <el-option v-for="(item, index) in reportTypeList" :key="index" :label="item.name" :value="item.value"></el-option>
-              </el-select>
-              <!-- <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input> -->
+              </el-select> -->
+              <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -239,7 +239,7 @@
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unMatureUse" :disabled="GetCheck(scope.row)" size="small"></el-input>
+              <el-input v-model="scope.row.reportType" :disabled="GetCheck(scope.row)" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="操作人员" :show-overflow-tooltip="true" prop="creator" width="100"></el-table-column>
@@ -378,6 +378,13 @@ export default {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
+          this.dataList.map((item) => {
+            if (item.reportType === 'part') {
+              item.reportType = ''
+            } else {
+              item.reportType = 'X'
+            }
+          })
           this.form.totalCount = data.data.totalCount
           this.LogList = []
         } else {
