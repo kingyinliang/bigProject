@@ -47,7 +47,7 @@
     </el-card>
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="noMatureReport" label="未成熟">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
@@ -58,7 +58,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -129,7 +129,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -200,7 +200,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -460,6 +460,15 @@ export default {
     },
     GetLogList (orderId) {
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLOGLIST_API}`, 'POST', {orderId: orderId}).then(({data}) => {
+        if (data.code === 0) {
+          this.LogList = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    editRow (row) {
+      this.$http(`${FERMENTATION_API.WORKINGHOURSMANLOGLIST_API}`, 'POST', {orderId: row.orderId}).then(({data}) => {
         if (data.code === 0) {
           this.LogList = data.data
         } else {
