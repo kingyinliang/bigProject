@@ -40,10 +40,14 @@
       <el-tab-pane name="0" label="未确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" prop="applyNo" width="120"></el-table-column>
+          <el-table-column label="申请编码" prop="applyNo" width="120">
+            <template slot-scope="scope">
+              <a @click="Go(scope.row)">{{scope.row.applyNo}}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="物料" width="230">
             <template slot-scope="scope">
-              <a @click="Go(scope.row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="半成品类别" prop="halfType"></el-table-column>
@@ -69,10 +73,14 @@
       <el-tab-pane name="1" label="已确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" prop="applyNo" width="120"></el-table-column>
+          <el-table-column label="申请编码" width="120">
+            <template slot-scope="scope">
+              <a @click="Go(scope.row)">{{scope.row.applyNo}}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="物料" width="230">
             <template slot-scope="scope">
-              <a @click="Go(scope.row)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="半成品类别" prop="halfType"></el-table-column>

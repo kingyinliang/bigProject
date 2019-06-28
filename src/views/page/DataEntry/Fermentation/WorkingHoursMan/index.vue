@@ -35,6 +35,7 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" @click="DataSynchronism()" size="small">报工同步</el-button>
           <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('fer:report:selectReports')">查询</el-button>
           <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
@@ -323,10 +324,13 @@ export default {
   watch: {
     'form.factory' (n, o) {
       this.GetWorkshopList(n)
-      this.GetHolderList(n)
+      this.GetHolderList()
     },
     'form.workShop' (n, o) {
-      this.GetHolderList(n)
+      setTimeout(() => {
+        this.GetHolderList()
+      }, 900)
+      // this.GetHolderList()
     }
   },
   methods: {
@@ -363,7 +367,7 @@ export default {
       }
     },
     // 罐
-    GetHolderList (id) {
+    GetHolderList () {
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENT_API}`, 'POST', {factory: this.form.factory, deptId: this.form.workShop}).then(({data}) => {
         if (data.code === 0) {
           this.holderList = data.data
@@ -466,6 +470,16 @@ export default {
     GetCheck (row) {
       // console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
       return (!this.isRedact || row.status === 'submit' || row.status === 'success')
+    },
+    // 数据同步
+    DataSynchronism () {
+      this.$http(`${FERMENTATION_API.WORKINGHOURTONGBU_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('同步成功')
+        } else {
+          this.$message.error('同步失败')
+        }
+      })
     }
   }
   // components: {
