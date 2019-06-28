@@ -25,7 +25,7 @@
       </div>
       <div class="lookarBox">
         <el-row style="line-height: 32px; margin-bottom:10px">
-          <el-col :span="5">第（<el-input type="number" size="small" v-model="tech.guardProcess" style="width:80px; padding:0;" class="guard-form-input">{{tech.guardProcess}}</el-input>）套程序</el-col>
+          <el-col :span="5">第（<el-input size="small" v-model="tech.guardProcess" style="width:80px; padding:0;" class="guard-form-input">{{tech.guardProcess}}</el-input>）套程序</el-col>
           <el-col :span="15">
             <el-radio-group v-model="tech.processType">
               <el-radio label="自动" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')">自动</el-radio>
