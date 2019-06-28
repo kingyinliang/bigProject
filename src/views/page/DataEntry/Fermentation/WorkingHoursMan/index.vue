@@ -35,7 +35,7 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" @click="DataSynchronism()" size="small">报工同步</el-button>
+          <el-button type="primary" @click="DataSynchronism()" v-if="isAuth('fer:report:workingSaveAndSubmit')" size="small">报工同步</el-button>
           <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('fer:report:selectReports')">查询</el-button>
           <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
