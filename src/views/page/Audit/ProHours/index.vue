@@ -212,10 +212,10 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="90">
+              width="75">
               <template slot-scope="scope">
-                <el-button style="padding: 0;" type="text" size="small" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:time:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-                <el-button style="padding: 0;color: red" type="text" size="small" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1' && isAuth('verify:time:resetTime')">反审</el-button>
+                <el-button type="primary" round size="mini" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:time:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+                <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1' && isAuth('verify:time:resetTime')">反审</el-button>
               </template>
             </el-table-column>
           </el-table>

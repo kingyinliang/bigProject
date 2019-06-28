@@ -79,27 +79,35 @@
           </template>
         </el-table-column>
         <el-table-column label="数量" width="100" prop="kjmAmount">
+          <template slot="header">
+            <i class="reqI">*</i>
+            <span>数量</span>
+          </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.kjmAmount" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
+            <el-input v-model="scope.row.kjmAmount" size="mini" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="50" prop="kjmUnit"></el-table-column>
         <el-table-column label="批次" width="120" prop="batch">
+          <template slot="header">
+            <i class="reqI">*</i>
+            <span>批次</span>
+          </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batch" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
+            <el-input v-model="scope.row.batch" size="mini" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="备注" width="80" prop="remark">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.remark" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
+            <el-input v-model="scope.row.remark" size="mini" placeholder="手工录入" :disabled="!(isRedact && (scope.row.approveStatus ==='noPass' || scope.row.approveStatus ==='saved' || scope.row.approveStatus ===''))"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="提交人员" width="120" prop="changer" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="提交时间" width="120" prop="changed" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="操作" width="100" fixed="right">
+        <el-table-column label="操作" width="112" fixed="right">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-plus" circle size="small" :disabled="!isRedact" @click="AddData(scope.row, scope.$index)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delData(scope.row)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"></el-button>
+            <el-button type="text" style="" size="mini" :disabled="!isRedact" @click="AddData(scope.row, scope.$index)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+            <el-button type="text" style="color: red;margin-left: 0px" icon="el-icon-delete" size="mini" :disabled="!isRedact" @click="delData(scope.row)" v-if="scope.row.approveStatus !=='submit' && scope.row.approveStatus !== 'checked'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -199,7 +207,22 @@ export default {
         this.savedOrSubmitForm('submit')
       })
     },
+    check () {
+      let ty = false
+      this.multipleSelection.forEach((item) => {
+        if (item.kjmAmount && item.batch) {} else {
+          ty = true
+        }
+      })
+      return ty
+    },
     savedOrSubmitForm (str) {
+      if (str === 'submit') {
+        if (this.check()) {
+          this.$message.error('有必填项未填写')
+          return false
+        }
+      }
       if (this.multipleSelection.length) {
         this.multipleSelection.forEach((item) => {
           if (item.approveStatus) {
@@ -217,6 +240,8 @@ export default {
           if (data.code === 0) {
             this.$http(`${FERMENTATION_API.SHOOT_SUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
+                this.$message.success('操作成功')
+                this.GetDataList()
               } else {
                 this.$message.error(data.msg)
               }
@@ -349,5 +374,7 @@ export default {
 </script>
 
 <style scoped>
-
+.reqI{
+  color: red;
+}
 </style>
