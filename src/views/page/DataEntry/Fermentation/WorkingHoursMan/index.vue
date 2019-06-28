@@ -35,6 +35,7 @@
       </el-row>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" @click="DataSynchronism()" v-if="isAuth('fer:report:workingSaveAndSubmit')" size="small">报工同步</el-button>
           <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('fer:report:selectReports')">查询</el-button>
           <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
@@ -46,7 +47,7 @@
     </el-card>
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="noMatureReport" label="未成熟">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
@@ -57,7 +58,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="210">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -128,7 +129,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -199,7 +200,7 @@
           <el-table-column label="订单号" :show-overflow-tooltip="true" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="200">
             <template slot-scope="scope">
-              <a @click="GetLogList(scope.row.orderId)">{{scope.row.materialCode}}{{scope.row.materialName}}</a>
+              {{scope.row.materialCode}}{{scope.row.materialName}}
             </template>
           </el-table-column>
           <el-table-column label="订单量(L)" :show-overflow-tooltip="true" width="90" prop="amount"></el-table-column>
@@ -323,10 +324,13 @@ export default {
   watch: {
     'form.factory' (n, o) {
       this.GetWorkshopList(n)
-      this.GetHolderList(n)
+      this.GetHolderList()
     },
     'form.workShop' (n, o) {
-      this.GetHolderList(n)
+      setTimeout(() => {
+        this.GetHolderList()
+      }, 900)
+      // this.GetHolderList()
     }
   },
   methods: {
@@ -363,7 +367,7 @@ export default {
       }
     },
     // 罐
-    GetHolderList (id) {
+    GetHolderList () {
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENT_API}`, 'POST', {factory: this.form.factory, deptId: this.form.workShop}).then(({data}) => {
         if (data.code === 0) {
           this.holderList = data.data
@@ -463,9 +467,28 @@ export default {
         }
       })
     },
+    editRow (row) {
+      this.$http(`${FERMENTATION_API.WORKINGHOURSMANLOGLIST_API}`, 'POST', {orderId: row.orderId}).then(({data}) => {
+        if (data.code === 0) {
+          this.LogList = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     GetCheck (row) {
       // console.log(!this.isRedact || row.status === 'submit' || row.status === 'success')
       return (!this.isRedact || row.status === 'submit' || row.status === 'success')
+    },
+    // 数据同步
+    DataSynchronism () {
+      this.$http(`${FERMENTATION_API.WORKINGHOURTONGBU_API}`, 'GET').then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('同步成功')
+        } else {
+          this.$message.error('同步失败')
+        }
+      })
     }
   }
   // components: {

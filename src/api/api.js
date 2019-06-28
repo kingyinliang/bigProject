@@ -1365,5 +1365,9 @@ export const FERMENTATION_API = {
   /**
    * 审核日志接口
    */
-  ORDER_IN_STOCK_AUDIT_API: HOST + '/fer/inStore/verifyRecordList'
+  ORDER_IN_STOCK_AUDIT_API: HOST + '/fer/inStore/verifyRecordList',
+  /**
+   * 报工同步
+   */
+  WORKINGHOURTONGBU_API: HOST + '/sys/fer-report/reportAfter'
 }
