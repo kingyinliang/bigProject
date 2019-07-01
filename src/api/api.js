@@ -210,6 +210,10 @@ export const BASICDATA_API = {
    */
   MATERIAL_API: HOST + '/sys/sapmaterial/findInfoByParams',
   /**
+   * @property {string} MATERIAL_API 成品品项2
+   */
+  MATERIALS_API: HOST + '/sys/capacity/materialList',
+  /**
    * 原料入库记录
    */
   MATERIALRAWLIST_API: HOST + '/sys/sapGranaryMaterial/list',

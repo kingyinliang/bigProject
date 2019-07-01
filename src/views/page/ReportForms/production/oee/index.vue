@@ -348,7 +348,7 @@ export default class Index extends Vue {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getProductLine(this.params.workshopId)
-    this.getMaterialList()
+    // this.getMaterialList()
   }
   // button 权限
   isQueryAuth () {
@@ -418,15 +418,22 @@ export default class Index extends Vue {
       })
     }
   }
-  getMaterialList () {
+  getMaterialList (wid: string) {
     this.materialList = []
-    Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
+    Vue.prototype.$http(`${BASICDATA_API.MATERIALS_API}`, 'POST', {productLine: wid}).then(({data}) => {
       if (data.code === 0) {
-        this.materialList = data.allList
+        this.materialList = data.materialList
       } else {
         this.$message.error(data.msg)
       }
     })
+    // Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
+    //   if (data.code === 0) {
+    //     this.materialList = data.allList
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // })
   }
   exportExcel () {
     this.plantList = {
@@ -665,6 +672,10 @@ export default class Index extends Vue {
     this.params.productlineId = ''
     this.params.productlineName = ''
     this.getProductLine(newVal)
+  }
+  @Watch('params.productlineId')
+  onChangeProductLineId (newVal: string, oldVal: string) {
+    this.getMaterialList(newVal)
   }
 }
 </script>
