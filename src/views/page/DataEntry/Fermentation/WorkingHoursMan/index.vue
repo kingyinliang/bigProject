@@ -381,6 +381,7 @@ export default {
     // 查询
     SearchList () {
       this.form.reportType = this.activeName
+      this.form.currPage = 1
       this.$http(`${FERMENTATION_API.WORKINGHOURSMANLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
