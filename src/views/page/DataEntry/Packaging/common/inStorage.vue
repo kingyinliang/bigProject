@@ -259,7 +259,7 @@
       </el-table-column>
       <el-table-column label="产出数" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+          <span>{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.sample*1) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
