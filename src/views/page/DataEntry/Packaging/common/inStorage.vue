@@ -32,7 +32,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
-        <span>{{ scope.row.manPackingUnitName}}</span>
+        <span>{{ scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="自动码垛-包材库" width="140" v-if="order.workShopName === '包装三车间'">
@@ -42,7 +42,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
       <template slot-scope="scope">
-        <span>{{scope.row.aiPackingUnitName}}</span>
+        <span>{{scope.row.aiPackingUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="人工码垛-立体库" width="140">
@@ -52,7 +52,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
-        <span>{{scope.row.manSolidUnitName}}</span>
+        <span>{{scope.row.manSolidUnitName = ratio.productUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="自动码垛-立体库" width="120" v-if="order.workShopName === '包装三车间'">
@@ -62,7 +62,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
       <template slot-scope="scope">
-        <span>{{scope.row.aiSolidUnitName}}</span>
+        <span>{{scope.row.aiSolidUnitName = ratio.productUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="自动上架-立体库" width="140" v-if="order.workShopName !== '包装三车间'">
@@ -72,7 +72,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60" v-if="order.workShopName !== '包装三车间'">
       <template slot-scope="scope">
-        <span>{{scope.row.aiShelvesUnitName}}</span>
+        <span>{{scope.row.aiShelvesUnitName = ratio.productUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="不良品" width="120">
@@ -82,7 +82,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
-        <span>{{scope.row.badUnitName}}</span>
+        <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="样品" width="120">
@@ -92,7 +92,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
-        <span>{{scope.row.sampleUnitName}}</span>
+        <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="产出数" width="120">
@@ -103,7 +103,7 @@
     </el-table-column>
     <el-table-column label="单位" width="60">
       <template slot-scope="scope">
-        <span>{{scope.row.outputUnitName}}</span>
+        <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
       </template>
     </el-table-column>
     <el-table-column label="备注" width="120">
@@ -224,7 +224,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{ scope.row.manPackingUnitName}}</span>
+          <span>{{ scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="需整理品" width="140">
@@ -234,7 +234,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{scope.row.manSolidUnitName}}</span>
+          <span>{{scope.row.manSolidUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="不良品" width="120">
@@ -244,7 +244,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{scope.row.badUnitName}}</span>
+          <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="样品" width="120">
@@ -254,7 +254,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{scope.row.sampleUnitName}}</span>
+          <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="产出数" width="120">
@@ -264,7 +264,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{scope.row.outputUnitName}}</span>
+          <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">

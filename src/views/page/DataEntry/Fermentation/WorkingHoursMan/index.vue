@@ -16,11 +16,13 @@
             </el-form-item>
             <el-form-item label="罐号：">
               <el-select v-model="form.holderId" clearable filterable class="width170px">
+                <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="状态：">
               <el-select v-model="form.status" clearable class="width170px">
+                <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in statusList" :key="index" :value="item.value" :label="item.name"></el-option>
               </el-select>
             </el-form-item>
