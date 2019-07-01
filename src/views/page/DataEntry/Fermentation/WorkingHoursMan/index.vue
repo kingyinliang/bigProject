@@ -53,7 +53,7 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '已审核' : scope.row.status === 'fail' ? '审核不通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
@@ -124,7 +124,7 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '已审核' : scope.row.status === 'fail' ? '审核不通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
@@ -195,7 +195,7 @@
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
-              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '审核已通过' : scope.row.status === 'fail' ? '审核未通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
+              <label :style="{'color': scope.row.status === 'fail'? 'red' : scope.row.status === 'success'? '#7ED321' : '' }">{{scope.row.status === 'success' ? '已审核' : scope.row.status === 'fail' ? '审核不通过' : scope.row.status === 'init' ? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}</label>
             </template>
           </el-table-column>
           <el-table-column label="容器" :show-overflow-tooltip="true" prop="holderNo"></el-table-column>
