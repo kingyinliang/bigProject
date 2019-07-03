@@ -441,7 +441,7 @@ export default {
               return false
             }
           }
-          msg = '成功'
+          msg = '提交'
           url = FERMENTATION_API.WORKINGHOURSMANSUBMIT_API
         } else {
           msg = '保存'

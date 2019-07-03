@@ -13,13 +13,13 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="生产车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
+                  <el-select v-model="params.workshopId" multiple class="selectwpx" style="width:293px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="生产产线：">
-                  <el-select v-model="params.productlineId" class="selectwpx" style="width:140px" @change="changeOptions('productline')">
+                  <el-select v-model="params.productlineId" multiple class="selectwpx" style="width:140px" @change="changeOptions('productline')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in productlineList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
@@ -321,9 +321,9 @@ export default class Index extends Vue {
   params = {
     factoryId: '',
     factoryName: '',
-    workshopId: '',
+    workshopId: [],
     workshopName: '',
-    productlineId: '',
+    productlineId: [],
     productlineName: '',
     materialCode: '',
     materialName: '',
@@ -406,10 +406,11 @@ export default class Index extends Vue {
     }
   }
   // 产线
-  getProductLine (wid: string) {
+  getProductLine (wid) {
+    wid = wid.join(',')
     this.productlineList = []
     if (wid) {
-      Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+      Vue.prototype.$http(`${REP_API.OEE_PRODUCT_API}`, 'POST', {deptIds: wid}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
         } else {
@@ -417,6 +418,16 @@ export default class Index extends Vue {
         }
       })
     }
+    // this.productlineList = []
+    // if (wid) {
+    //   Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid}, false, false, false).then(({data}) => {
+    //     if (data.code === 0) {
+    //       this.productlineList = data.childList
+    //     } else {
+    //       this.$message.error(data.msg)
+    //     }
+    //   })
+    // }
   }
   getMaterialList (wid: string) {
     this.materialList = []
@@ -455,8 +466,8 @@ export default class Index extends Vue {
     this.searched = true
     let params = {
       factory: this.params.factoryId,
-      workshop: this.params.workshopId,
-      productLine: this.params.productlineId,
+      workshop: this.params.workshopId.join(','),
+      productLine: this.params.productlineId.join(','),
       materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
@@ -597,8 +608,8 @@ export default class Index extends Vue {
     this.pageSize = val
     let params = {
       factory: this.params.factoryId,
-      workshop: this.params.workshopId,
-      productLine: this.params.productlineId,
+      workshop: this.params.workshopId.join(','),
+      productLine: this.params.productlineId.join(','),
       materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
@@ -628,8 +639,8 @@ export default class Index extends Vue {
     this.currPage = val
     let params = {
       factory: this.params.factoryId,
-      workshop: this.params.workshopId,
-      productLine: this.params.productlineId,
+      workshop: this.params.workshopId.join(','),
+      productLine: this.params.productlineId.join(','),
       materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate,
@@ -663,13 +674,13 @@ export default class Index extends Vue {
   }
   @Watch('params.factoryId')
   onChangeFactory (newVal: string, oldVal: string) {
-    this.params.workshopId = ''
+    this.params.workshopId = []
     this.params.workshopName = ''
     this.getWorkshop(newVal)
   }
   @Watch('params.workshopId')
   onChangeWorkshop (newVal: string, oldVal: string) {
-    this.params.productlineId = ''
+    this.params.productlineId = []
     this.params.productlineName = ''
     this.getProductLine(newVal)
   }

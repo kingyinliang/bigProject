@@ -801,6 +801,7 @@ export const REP_API = {
   OEE_LIST_API: HOST + '/report/formh/productEfficiencyList',
   OEE_EXCEL_API: HOST + '/report/formh/exportProductEfficiencyList',
   OEE_SUM_API: HOST + '/report/formh/productEfficiencySumList',
+  OEE_PRODUCT_API: HOST + '/sys/dept/findListByParentParams',
   /**
    * OPE
    */
@@ -1374,4 +1375,12 @@ export const FERMENTATION_API = {
    * 报工同步
    */
   WORKINGHOURTONGBU_API: HOST + '/sys/fer-report/reportAfter'
+}
+/**
+ *  杀菌 api Sterilized
+ */
+export const STERILIZED_API = {
+  // 待领用
+  WAITDEPLOYMENTLIST_API: HOST + '/ste/order/orderList',
+  WAITDEPLOYMENTMATERIALISTAPI: HOST + '/ste/order/productsList'
 }
