@@ -1,3 +1,4 @@
+import {BASICDATA_API} from '@/api/api'
 /**
  * 邮箱
  * @param {*} s
@@ -276,4 +277,37 @@ export function orderList (data) {
     })
   }
   return result
+}
+/**
+ * 获取工厂
+ */
+export function getFactory (Vue) {
+  Vue.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
+    if (data.code === 0) {
+      Vue.factory = data.typeList
+      Vue.formHeader.factory = data.typeList[0].deptId
+    } else {
+      Vue.$message.error(data.msg)
+    }
+  })
+}
+/**
+ * 获取工厂
+ */
+export function getWorkshop (Vue, id, workshopName) {
+  if (id) {
+    Vue.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {
+      deptId: id,
+      deptName: workshopName
+    }, false, false, false).then(({data}) => {
+      if (data.code === 0) {
+        Vue.workshop = data.typeList
+        if (data.typeList.length) {
+          Vue.formHeader.workShop = data.typeList[0].deptId
+        }
+      } else {
+        Vue.$message.error(data.msg)
+      }
+    })
+  }
 }

@@ -171,7 +171,9 @@ export default {
     this.GetMaterial(this.formHeader.factory)
     this.HolderList(this.formHeader.workShop)
     this.GetOrderList(this.formHeader.workShop)
-    this.GetDataList()
+    if (this.formHeader.factory) {
+      this.GetDataList()
+    }
   },
   methods: {
     // 查询

@@ -1375,3 +1375,12 @@ export const FERMENTATION_API = {
    */
   WORKINGHOURTONGBU_API: HOST + '/sys/fer-report/reportAfter'
 }
+/**
+ * 杀菌 API
+ */
+export const STERILIZED_API = {
+  /**
+   *  杀菌首页
+   */
+  STE_HOME_LIST_API: HOST + '/ste/order/list'
+}

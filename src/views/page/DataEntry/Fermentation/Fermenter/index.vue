@@ -497,12 +497,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.marbottom{
-  .el-form-item,.el-form-item--small{
-    margin-bottom: 0!important;
-  }
-}
+<style lang="scss" scoped>
 .ferCard{
   .el-card__body{
     padding: 7px;
@@ -606,9 +601,6 @@ export default {
   margin-top: 10px;
   &_item{
     margin-bottom: 10px;
-    .el-card__body{
-      padding: 0;
-    }
     &_tit{
       font-weight: 600;
       color: black;
@@ -636,6 +628,7 @@ export default {
         align-content: flex-end;
         width: 120px;
         height: 229px;
+        min-width: 120px;
         background: url('~@/assets/img/ferPot.png') no-repeat;
         background-size:contain;
         &_item1,&_item2{
@@ -691,17 +684,6 @@ export default {
         padding: 5px;
         border-radius: 4px;
         border: 1px solid #1890FF;
-      }
-    }
-    &_btn{
-      background: #F7F9FA;
-      text-align: center;
-      color: #333333;
-      font-size: 14px;
-      padding: 14px 0 10px 0;
-      &_item{
-        cursor: pointer;
-        border-right: 1px solid #E8E8E8;
       }
     }
   }

@@ -467,10 +467,15 @@ img {
 }
 .newCard{
   .el-card__body {
-    padding: 12px;
+    padding: 7px;
   }
   .el-form-item__label{
     padding: 0;
+  }
+}
+.marbottom{
+  .el-form-item,.el-form-item--small{
+    margin-bottom: 0!important;
   }
 }
 .NewDaatTtabs{
@@ -525,6 +530,24 @@ img {
     background: #3a8ee6;
     span,button,i{
       color: white!important;
+    }
+  }
+}
+.dataList{
+  &_item{
+    .el-card__body{
+      padding: 0;
+    }
+    &_btn{
+      background: #F7F9FA;
+      text-align: center;
+      color: #333333;
+      font-size: 14px;
+      padding: 14px 0 10px 0;
+      &_item{
+        cursor: pointer;
+        border-right: 1px solid #E8E8E8;
+      }
     }
   }
 }
