@@ -132,20 +132,37 @@ export function dateFormat (date, fmt) {
  * 导出
  * @param {*} ulr fileName vue
  */
+// export function exportFile (url, fileName, vue) {
+//   vue.lodingS = true
+//   vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
+//     let blob = new Blob([data], {
+//       type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+//     })
+//     if (window.navigator.msSaveOrOpenBlob) {
+//       navigator.msSaveBlob(blob)
+//     } else {
+//       let elink = document.createElement('a')
+//       elink.download = `${fileName}${getNewDate()}.xlsx`
+//       elink.style.display = 'none'
+//       elink.href = URL.createObjectURL(blob)
+//       document.body.appendChild(elink)
+//       elink.click()
+//       document.body.removeChild(elink)
+//     }
+//     vue.lodingS = false
+//   })
+// }
 export function exportFile (url, fileName, vue) {
   vue.lodingS = true
   vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
-    let blob = new Blob([data], {
-      type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    })
-    if (window.navigator.msSaveOrOpenBlob) {
-      navigator.msSaveBlob(blob)
-    } else {
+    let blob = data
+    let reader = new FileReader()
+    reader.readAsDataURL(blob)
+    reader.onload = function (e) {
       let elink = document.createElement('a')
       elink.download = `${fileName}${getNewDate()}.xlsx`
       elink.style.display = 'none'
-      elink.href = URL.createObjectURL(blob)
-      document.body.appendChild(elink)
+      elink.href = e.target.result
       elink.click()
       document.body.removeChild(elink)
     }

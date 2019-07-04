@@ -76,8 +76,10 @@
           </h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
-              <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : item.halfAmount? (item.halfAmount / item.sumAmout) * 100:(item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.halfAmount?item.halfAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
+              <div class="dataList_item_pot_box1">
+                <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.sumAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
+                <div class="dataList_item_pot_box_item2" v-if="item.sumAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.sumAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.sumAmout) * 100 : item.halfAmount? (item.halfAmount / item.sumAmout) * 100:(item.ferAmount / item.sumAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.halfAmount?item.halfAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
+              </div>
             </div>
             <div class="dataList_item_pot_detail" v-if="item.sumAmout">
               <p>{{item.ferOrderNo}}</p>
@@ -420,7 +422,7 @@ export default {
       if (str === '1') {
         this.$store.state.common.Fermentation.materia.factory = row.factory
         this.$store.state.common.Fermentation.materia.workShop = row.workShop
-        this.$store.state.common.Fermentation.materia.ferMaterialCode = row.ferMaterialCode
+        this.$store.state.common.Fermentation.materia.ferMaterialCode = ''
         this.$store.state.common.Fermentation.materia.holderIds = [row.holderId]
         this.$store.state.common.Fermentation.materia.ferOrderNos = [row.ferOrderNo]
         this.$store.state.common.Fermentation.materia.approveStatus = ''
@@ -433,7 +435,7 @@ export default {
         this.$store.state.common.Fermentation.category.holderId = row.holderId
         this.$store.state.common.Fermentation.category.orderNo = row.ferOrderNo
         this.$store.state.common.Fermentation.category.materialCode = row.ferMaterialCode
-        this.$store.state.common.Fermentation.category.ferDays = row.ferDays
+        this.$store.state.common.Fermentation.category.ferDays = row.ferDays + ''
         this.$store.state.common.Fermentation.category.halfId = row.halfType
         this.$store.state.common.Fermentation.category.currPage = 1
         this.$store.state.common.Fermentation.category.pageSize = 1
@@ -443,6 +445,8 @@ export default {
       } else if (str === '3') {
         this.$store.state.common.FerInStockManage.factoryId = row.factory
         this.$store.state.common.FerInStockManage.workshopId = row.workShop
+        this.$store.state.common.FerInStockManage.startDate = ''
+        this.$store.state.common.FerInStockManage.endDate = ''
         this.$store.state.common.FerInStockManage.holderList = [row.holderId]
         this.$store.state.common.FerInStockManage.orderList = [row.ferOrderNo]
         url = 'DataEntry-Fermentation-InStockManage-index'
@@ -619,8 +623,15 @@ export default {
       display: flex;
       justify-content: center;
       align-items: flex-start;
+      overflow: hidden;
+      &_box1{
+        overflow: hidden;
+        width: 102px;
+        height: 197px;
+      }
       &_box{
-        padding-top: 35px;
+        overflow: hidden;
+        padding: 25px 9px 9px 9px;
         color: white;
         float: left;
         display: flex;
@@ -633,7 +644,6 @@ export default {
         background-size:contain;
         &_item1,&_item2{
           width: 100%;
-          margin: 0 9px;
           display:flex;
           align-items:center;
           justify-content: center;
@@ -664,7 +674,6 @@ export default {
           }
         }
         &_item2{
-          margin-bottom: 9px;
           height: 100px;
           background: #1890FF;
         }

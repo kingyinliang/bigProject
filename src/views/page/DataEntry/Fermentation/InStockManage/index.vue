@@ -220,13 +220,16 @@ export default class Index extends Vue {
   isEdit: boolean = false
   mounted () {
     headanimation(Vue.prototype.$)
-    const now = dateFormat(new Date(), 'yyyy-MM-dd')
-    this.params.startDate = now
-    this.params.endDate = now
+    // const now = dateFormat(new Date(), 'yyyy-MM-dd')
+    // this.params.startDate = now
+    // this.params.endDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getFermentPot(this.params.factoryId, this.params.workshopId)
     this.getOrderDataList(this.params.factoryId, this.params.workshopId)
+    if (this.params.factoryId) {
+      this.getOrderList()
+    }
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)

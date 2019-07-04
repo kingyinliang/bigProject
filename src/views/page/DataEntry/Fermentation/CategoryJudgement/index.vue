@@ -248,6 +248,9 @@ export default {
     this.GetHolderList()
     this.GetMaterialType(this.form.factory)
     this.GetMaterialTypeList(this.form.factory)
+    if (this.form.factory) {
+      this.GetList()
+    }
   },
   watch: {
     'form.factory' (n, o) {
