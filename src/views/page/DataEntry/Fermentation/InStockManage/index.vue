@@ -194,7 +194,7 @@
 <script lang="ts">
 import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
-import {dateFormat, headanimation} from '@/net/validate'
+import {headanimation} from '@/net/validate'
 import AuditLog from '@/views/components/AuditLog.vue'
 @Component({
   components: {

@@ -190,8 +190,10 @@ export default {
         order_id: id
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.readyTimeDate = data.listForm[0]
-          status = data.listForm[0].status
+          if (data.listForm[0]) {
+            this.readyTimeDate = data.listForm[0]
+            status = data.listForm[0].status
+          }
           this.machineTimeData = data.listFormMachine
           this.timeAuditlog = data.listApproval
         } else {
