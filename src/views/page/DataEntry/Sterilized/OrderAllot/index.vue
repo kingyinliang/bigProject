@@ -18,16 +18,20 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="订单号：">
-                <el-input v-model="formHeader.orderId"></el-input>
+                <el-input v-model="formHeader.orderNo"></el-input>
               </el-form-item>
               <el-form-item label="订单状态：">
-                <el-select v-model="formHeader.materialCode" palceholder="请选择" class="width180px">
-                  <el-option value="">请选择</el-option>
-                  <el-option v-for="(item, index) in materialList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+                <el-select v-model="formHeader.orderStatus" placeholder="请选择" style="width: 160px">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option label="未录入"  value="已同步"></el-option>
+                  <el-option label="已保存"  value="saved"></el-option>
+                  <el-option label="已提交"  value="submit"></el-option>
+                  <el-option label="审核通过"  value="checked"></el-option>
+                  <el-option label="审核不通过"  value="noPass"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker v-model="formHeader.created" type="date" placeholder="请选择" style="width:180px"></el-date-picker>
+                <el-date-picker v-model="formHeader.productDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="date" placeholder="请选择" style="width:180px"></el-date-picker>
               </el-form-item>
             </el-form>
           </el-col>
@@ -38,8 +42,8 @@
             <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
           </template>
           <template v-if="isRedact">
-            <el-button type="primary" size="small" @click="GetList(true)">保存</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact">提交</el-button>
+            <el-button type="primary" size="small" @click="SaveForm('saved')">保存</el-button>
+            <el-button type="primary" size="small" @click="SaveForm('submit')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -54,28 +58,67 @@
         </div>
       </div>
       <el-card>
-        <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">>
-          <el-table-column label="序号"></el-table-column>
-          <el-table-column label="订单状态"></el-table-column>
-          <el-table-column label="订单号"></el-table-column>
-          <el-table-column label="品项"></el-table-column>
-          <el-table-column label="数量"></el-table-column>
-          <el-table-column label="单位"></el-table-column>
-          <el-table-column label="订单开始日期"></el-table-column>
-          <el-table-column label="订单结束日期"></el-table-column>
-          <el-table-column label="调配罐号"></el-table-column>
-          <el-table-column label="BL原汁量"></el-table-column>
-          <el-table-column label="生产日期"></el-table-column>
-          <el-table-column label="锅号"></el-table-column>
-          <el-table-column label="备注"></el-table-column>
+        <el-table :data="dataList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead" style="margin-top:10px">>
+          <el-table-column type="selection" width="35" :selectable="CheckBoxInit" fixed="left"></el-table-column>
+          <el-table-column label="订单状态" prop="orderStatus">
+            <template slot-scope="scope">
+              {{scope.row.orderStatus === '已同步' ? '未录入' : scope.row.orderStatus === 'saved' ? '已保存' : scope.row.orderStatus === 'submit' ? '已提交' : scope.row.orderStatus === 'checked' ? '审核通过' : scope.row.orderStatus === 'nopass' ? '审核不通过' : '' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="订单号" width="120" prop="orderNo"></el-table-column>
+          <el-table-column label="品项" :show-overflow-tooltip="true" width="180">
+            <template slot-scope="scope">
+              {{scope.row.materialCode}} {{scope.row.materialName}}
+            </template>
+          </el-table-column>
+          <el-table-column label="数量" prop="planOutput"></el-table-column>
+          <el-table-column label="单位" width="50" prop="outputUnit"></el-table-column>
+          <el-table-column label="订单开始日期" width="110" prop="startDate"></el-table-column>
+          <el-table-column label="订单结束日期" width="110" prop="commitDate"></el-table-column>
+          <el-table-column label="调配罐号" width="110" prop="holderName"></el-table-column>
+          <el-table-column label="BL原汁量" width="110" prop="amount"></el-table-column>
+          <el-table-column width="160" prop="orderDate">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>生产日期</span>
+            </template>
+            <template slot-scope="scope">
+              <el-date-picker v-model="scope.row.orderDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" :disabled="ReturnStatus(scope.row)" size="small" type="date" placeholder="请选择" style="width:140px"></el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column width="140">
+            <template slot="header">
+              <i class="reqI">*</i>
+              <span>锅号</span>
+            </template>
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.panId" :disabled="ReturnStatus(scope.row)" size="small" placeholder="请选择">
+                <el-option v-for="(item, index) of holderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" width="110" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.remark" :disabled="ReturnStatus(scope.row)" size="small"></el-input>
+            </template>
+          </el-table-column>
         </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="formHeader.currPage"
+          :page-sizes="[10, 15, 20]"
+          :page-size="formHeader.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="formHeader.totalCount">
+        </el-pagination>
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
 export default {
   name: 'OrderAllot',
@@ -85,16 +128,31 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        currPage: '1',
-        pageSize: '10',
-        totalCount: '0'
+        orderNo: '',
+        orderStatus: '',
+        productDate: '',
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0
       },
       factory: [],
-      workshop: []
+      workshop: [],
+      holderList: [],
+      dataList: [],
+      multipleSelection: []
     }
   },
   mounted () {
     headanimation(this.$)
+    this.Getdeptcode()
+  },
+  watch: {
+    'formHeader.factory' (n, o) {
+      this.Getdeptbyid(n)
+    },
+    'formHeader.workShop' (n, o) {
+      this.getHolderList(n)
+    }
   },
   methods: {
     // 获取工厂
@@ -127,6 +185,99 @@ export default {
         })
       } else {
         this.workshop = []
+      }
+    },
+    // 锅
+    getHolderList () {
+      let params = {
+        type: 'holder_type',
+        holder_type: '014',
+        currPage: 1,
+        pageSize: 9999,
+        factory: this.formHeader.factory,
+        dept_id: this.formHeader.workshop
+      }
+      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.holderList = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
+    },
+    GetList (st) {
+      if (this.formHeader.factory === '') {
+        this.$message.error('请选择工厂')
+        return false
+      }
+      if (this.formHeader.workShop === '') {
+        this.$message.error('请选择车间')
+        return false
+      }
+      if (st) {
+        this.formHeader.currPage = 1
+      }
+      this.$http(`${STERILIZED_API.ORDERALLOTLIST}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.list.list
+          this.formHeader.totalCount = data.list.list.length
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    // 复选框初始状态
+    CheckBoxInit (row, index) {
+      if (this.isRedact === false || !row.holderName || row.orderStatus === 'submit' || row.orderStatus === 'checked') {
+        return 0
+      } else {
+        return 1
+      }
+    },
+    ReturnStatus (row) {
+      return (this.isRedact === false || !row.holderName || row.orderStatus === 'submit' || row.orderStatus === 'checked')
+    },
+    handleSizeChange (val) {
+      this.formHeader.pageSize = val
+      this.GetList()
+    },
+    handleCurrentChange (val) {
+      this.formHeader.currPage = val
+      this.GetList()
+    },
+    // 保存
+    SaveForm (orderStatus) {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请勾选数据')
+        return false
+      } else {
+        for (let item of this.multipleSelection) {
+          if (!item.orderDate || !item.panId) {
+            this.$message.error('生产日期与锅号为必填项')
+            return false
+          }
+        }
+        this.multipleSelection.map((item) => {
+          item.orderStatus = orderStatus
+        })
+        this.$http(`${STERILIZED_API.ORDERALLOTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            if (orderStatus === 'saved') {
+              this.$message.success('保存成功')
+            } else {
+              this.$message.success('提交成功')
+            }
+            this.isRedact = false
+            this.GetList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     }
   }
