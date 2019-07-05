@@ -138,17 +138,17 @@
                   {{scope.row.netOprTime}}
                 </template>
               </el-table-column>
-              <el-table-column label="产出数(pcs)" :show-overflow-tooltip="true" width="100">
+              <el-table-column label="产出数(件)" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.output}}
                 </template>
               </el-table-column>
-              <el-table-column label="不良品数(pcs)" :show-overflow-tooltip="true" width="120">
+              <el-table-column label="不良品数(件)" :show-overflow-tooltip="true" width="120">
                 <template slot-scope="scope">
                   {{scope.row.allBad}}
                 </template>
               </el-table-column>
-              <el-table-column label="标准产能(pcs/h)" :show-overflow-tooltip="true" width="130">
+              <el-table-column label="标准产能(件/h)" :show-overflow-tooltip="true" width="130">
                 <template slot-scope="scope">
                   {{scope.row.basicCapacity}}
                 </template>
@@ -250,17 +250,17 @@
                   {{scope.row.netOprTime}}
                 </template>
               </el-table-column>
-              <el-table-column label="产出数(pcs)" :show-overflow-tooltip="true" width="100">
+              <el-table-column label="产出数(件)" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.output}}
                 </template>
               </el-table-column>
-              <el-table-column label="不良品数(pcs)" :show-overflow-tooltip="true" width="120">
+              <el-table-column label="不良品数(件)" :show-overflow-tooltip="true" width="120">
                 <template slot-scope="scope">
                   {{scope.row.allBad}}
                 </template>
               </el-table-column>
-              <el-table-column label="标准产能(pcs/h)" :show-overflow-tooltip="true" width="130">
+              <el-table-column label="标准产能(件/h)" :show-overflow-tooltip="true" width="130">
                 <template slot-scope="scope">
                   {{scope.row.basicCapacity}}
                 </template>
