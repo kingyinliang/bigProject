@@ -207,7 +207,7 @@ export default {
     UpdateformHeader (str, resolve, reject) {
       this.formHeader.orderStatus = str
       this.formHeader.realOutput = this.$refs.instorage.countOutputNum / this.ratio.ratio
-      this.formHeader.countOutputUnit = this.formHeader.properties === '二合一&礼盒产线' ? this.ratio.basicUnit : 'BOT'// 生产入库单位
+      this.formHeader.countOutputUnit = this.ratio.basicUnit // 生产入库单位
       this.formHeader.countOutput = this.$refs.instorage.countOutputNum
       this.formHeader.countMan = this.$refs.workerref.countMan
       this.formHeader.expAllDate = this.$refs.excrecord.ExcNum

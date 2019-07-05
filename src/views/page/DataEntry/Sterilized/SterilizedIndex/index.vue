@@ -40,13 +40,13 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="生产品项：">
-                    <p class="dataList_item_body_text_tit" style="line-height: 20px;">{{item.selectOrder.materialCode + ' ' + item.selectOrder.materialName}}</p>
+                    <p class="dataList_item_body_text_tit" style="line-height: 20px;">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
                   </el-form-item>
                   <el-form-item label="订单日期：">
-                    <p class="dataList_item_body_text_tit">{{item.selectOrder.productDate}}</p>
+                    <p class="dataList_item_body_text_tit">{{item.selectOrder.productDate || ''}}</p>
                   </el-form-item>
                   <el-form-item label="计划产量：">
-                    <p class="dataList_item_body_text_tit">{{item.selectOrder.planOutput}}</p>
+                    <p class="dataList_item_body_text_tit">{{item.selectOrder.planOutput || ''}}</p>
                   </el-form-item>
                 </el-form>
               </div>
@@ -97,7 +97,11 @@ export default {
         if (data.code === 0) {
           this.dataList = data.list
           this.dataList.forEach((item, index) => {
-            item.selectOrder = item.steList[0]
+            if (item.steList.length > 0) {
+              item.selectOrder = item.steList[0]
+            } else {
+              item.selectOrder = {}
+            }
           })
         } else {
           this.$message.error(data.msg)
@@ -106,6 +110,10 @@ export default {
     },
     toRouter (str, item) {
       let url
+      if (!item.orderId) {
+        this.$message.error('请选择订单')
+        return
+      }
       if (str === '1') {
         this.$store.state.common.sterilized.seiOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'

@@ -4,199 +4,199 @@
     <el-button type="primary" @click="AddInDate(InDate)" size="small" :disabled="!(isRedact)" style="float: right">新增</el-button>
   </div>
   <div class="a" v-if="order.factoryCode !== '6010'">
-  <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
-  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
-    <el-table-column type="index" width="55" label="序号"></el-table-column>
-    <el-table-column label="白/中/夜班" width="120">
-      <template slot-scope="scope">
-        <div class="required">
-          <i class="reqI">*</i>
-          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-          </el-select>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column label="生产批次" width="150">
-      <template slot-scope="scope">
-        <div class="required">
-          <i class="reqI">*</i>
-          <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" maxlength="10"></el-input>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column label="人工码垛-包材库" width="140">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60">
-      <template slot-scope="scope">
-        <span>{{ scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="自动码垛-包材库" width="140" v-if="order.workShopName === '包装三车间'">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
-      <template slot-scope="scope">
-        <span>{{scope.row.aiPackingUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="人工码垛-立体库" width="140">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60">
-      <template slot-scope="scope">
-        <span>{{scope.row.manSolidUnitName = ratio.productUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="自动码垛-立体库" width="120" v-if="order.workShopName === '包装三车间'">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
-      <template slot-scope="scope">
-        <span>{{scope.row.aiSolidUnitName = ratio.productUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="自动上架-立体库" width="140" v-if="order.workShopName !== '包装三车间'">
-      <template slot-scope="scope">
-        <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60" v-if="order.workShopName !== '包装三车间'">
-      <template slot-scope="scope">
-        <span>{{scope.row.aiShelvesUnitName = ratio.productUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="不良品" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60">
-      <template slot-scope="scope">
-        <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="样品" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60">
-      <template slot-scope="scope">
-        <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="产出数" width="120">
-      <template slot-scope="scope">
-        <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-        <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="60">
-      <template slot-scope="scope">
-        <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="备注" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="60">
-      <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  </div>
-  <div v-if="order.properties && order.properties === '二合一&礼盒产线'">
-  <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties === '二合一&礼盒产线'">
-    <el-table-column type="index" width="55" label="序号"></el-table-column>
-    <el-table-column label="白/中/夜班" width="120">
-      <template slot-scope="scope">
-        <div class="required">
-          <i class="reqI">*</i>
-          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
-          </el-select>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column label="生产批次" width="150">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
-        <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="人工码垛-立体库" width="130">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="50">
-      <template slot-scope="scope">
-        <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="不良品" width="90">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="50">
-      <template slot-scope="scope">
-        <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="样品" width="90">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="单位" width="50">
-      <template slot-scope="scope">
-        <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="产出数" width="90">
-      <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
-    </el-table-column>
-    <el-table-column label="单位" width="50">
-      <template slot-scope="scope">
-        <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="主产品批次" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="赠品批次" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column label="备注" width="120">
-      <template slot-scope="scope">
-        <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="60">
-      <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  </div>
+    <div v-if="order.properties && order.properties !== '二合一&礼盒产线'">
+      <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties !== '二合一&礼盒产线'">
+        <el-table-column type="index" width="55" label="序号"></el-table-column>
+        <el-table-column label="白/中/夜班" width="120">
+          <template slot-scope="scope">
+            <div class="required">
+              <i class="reqI">*</i>
+              <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+                <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+              </el-select>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="生产批次" width="150">
+          <template slot-scope="scope">
+            <div class="required">
+              <i class="reqI">*</i>
+              <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" maxlength="10"></el-input>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="人工码垛-包材库" width="140">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">
+            <span>{{ scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="自动码垛-包材库" width="140" v-if="order.workShopName === '包装三车间'">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
+          <template slot-scope="scope">
+            <span>{{scope.row.aiPackingUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="人工码垛-立体库" width="140">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.manSolidUnitName = ratio.productUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="自动码垛-立体库" width="120" v-if="order.workShopName === '包装三车间'">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
+          <template slot-scope="scope">
+            <span>{{scope.row.aiSolidUnitName = ratio.productUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="自动上架-立体库" width="140" v-if="order.workShopName !== '包装三车间'">
+          <template slot-scope="scope">
+            <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60" v-if="order.workShopName !== '包装三车间'">
+          <template slot-scope="scope">
+            <span>{{scope.row.aiShelvesUnitName = ratio.productUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="不良品" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="样品" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="产出数" width="120">
+          <template slot-scope="scope">
+            <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+            <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="60">
+          <template slot-scope="scope">
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div v-if="order.properties && order.properties === '二合一&礼盒产线'">
+      <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px" v-if="order.properties && order.properties === '二合一&礼盒产线'">
+        <el-table-column type="index" width="55" label="序号"></el-table-column>
+        <el-table-column label="白/中/夜班" width="120">
+          <template slot-scope="scope">
+            <div class="required">
+              <i class="reqI">*</i>
+              <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+                <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+              </el-select>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="生产批次" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.batch" maxlength="10" placeholder="手工录入" size="small" v-if="isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input>
+            <el-input v-model="scope.row.batch" placeholder="手工录入" size="small" v-else disabled></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="人工码垛-立体库" width="130">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="50">
+          <template slot-scope="scope">
+            <span>{{order.workShopName === '组装车间2（礼盒）'? (scope.row.manSolidUnitName = ratio.basicUnitName):(ratio.productUnitName? scope.row.manSolidUnitName = ratio.productUnitName : scope.row.manSolidUnitName = ratio.basicUnitName)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="不良品" width="90">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="50">
+          <template slot-scope="scope">
+            <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="样品" width="90">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="50">
+          <template slot-scope="scope">
+            <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="产出数" width="90">
+          <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
+        </el-table-column>
+        <el-table-column label="单位" width="50">
+          <template slot-scope="scope">
+            <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="主产品批次" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.mainBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="赠品批次" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.attachBatch" maxlength="10" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="60">
+          <template slot-scope="scope">
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
   <div class="b" v-if="order.factoryCode === '6010'">
     <el-table ref="table1" header-row-class-name="tableHead" :data="InDate" :row-class-name="RowDelFlag" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
@@ -234,7 +234,7 @@
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
-          <span>{{scope.row.manSolidUnitName = ratio.basicUnitName}}</span>
+          <span>{{scope.row.aiPackingUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="不良品" width="120">
@@ -387,12 +387,14 @@ export default {
             item.status = str
           }
           item.isPkgThree = types
-          if (this.order.properties === '二合一&礼盒产线') {
-            this.ratio.productUnit ? item.manSolidUnit = this.ratio.productUnit : item.manSolidUnit = this.ratio.basicUnit
-            item.badUnit = this.ratio.basicUnit
-            item.sampleUnit = this.ratio.basicUnit
-            item.outputUnit = this.ratio.basicUnit
-          }
+          // item.badUnit = this.ratio.basicUnit
+          // item.sampleUnit = this.ratio.basicUnit
+          // item.outputUnit = this.ratio.basicUnit
+          // item.manPackingUnit = this.ratio.basicUnit
+          // item.aiPackingUnit = this.ratio.basicUnit
+          // item.aiSolidUnit = this.ratio.productUnit
+          // item.aiShelvesUnit = this.ratio.productUnit
+          // this.order.workShopName === '组装车间2（礼盒）' ? (item.manSolidUnit = this.ratio.basicUnit) : (this.ratio.productUnit ? item.manSolidUnit = this.ratio.productUnit : item.manSolidUnit = this.ratio.basicUnit)
         })
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
           if (data.code === 0) {
@@ -425,12 +427,6 @@ export default {
           item.status = str
         }
         item.isPkgThree = types
-        if (this.order.properties === '二合一&礼盒产线') {
-          this.ratio.productUnit ? item.manSolidUnit = this.ratio.productUnit : item.manSolidUnit = this.ratio.basicUnit
-          item.badUnit = this.ratio.basicUnit
-          item.sampleUnit = this.ratio.basicUnit
-          item.outputUnit = this.ratio.basicUnit
-        }
       })
       this.$http(`${PACKAGING_API.PKGSAVEFORMIN_API}`, 'POST', this.InDate).then(({data}) => {
         if (data.code === 0) {
@@ -564,29 +560,29 @@ export default {
         classType: '',
         batch: '',
         manPacking: '',
-        manPackingUnit: 'BOT',
-        manPackingUnitName: '瓶',
+        manPackingUnit: this.ratio.basicUnit,
+        manPackingUnitName: this.ratio.basicUnitName,
         aiPacking: '',
-        aiPackingUnit: 'BOT',
-        aiPackingUnitName: '瓶',
+        aiPackingUnit: this.ratio.basicUnit,
+        aiPackingUnitName: this.ratio.basicUnitName,
         aiShelves: '',
-        aiShelvesUnit: 'CAR',
-        aiShelvesUnitName: '箱',
+        aiShelvesUnit: this.ratio.productUnit,
+        aiShelvesUnitName: this.ratio.productUnitName,
         aiSolid: '',
-        aiSolidUnit: 'CAR',
-        aiSolidUnitName: '箱',
+        aiSolidUnit: this.ratio.productUnit,
+        aiSolidUnitName: this.ratio.productUnitName,
         manSolid: '',
-        manSolidUnit: 'CAR',
-        manSolidUnitName: '箱',
+        manSolidUnit: (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit)),
+        manSolidUnitName: (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName)),
         bad: '',
-        badUnit: 'BOT',
-        badUnitName: '瓶',
+        badUnit: this.ratio.basicUnit,
+        badUnitName: this.ratio.basicUnitName,
         sample: 0,
-        sampleUnit: 'BOT',
-        sampleUnitName: '瓶',
+        sampleUnit: this.ratio.basicUnit,
+        sampleUnitName: this.ratio.basicUnitName,
         output: '',
-        outputUnit: 'BOT',
-        outputUnitName: '瓶',
+        outputUnit: this.ratio.basicUnit,
+        outputUnitName: this.ratio.basicUnitName,
         mainBatch: '',
         attachBatch: '',
         delFlag: '0'
