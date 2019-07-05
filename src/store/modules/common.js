@@ -179,6 +179,12 @@ export default {
         isJudged: 0
       },
       instock: {}
+    },
+    sterilized: {
+      seiOrderId: '',
+      acceOrderId: '',
+      craftOrderId: '',
+      inOrderId: ''
     }
   },
   mutations: {

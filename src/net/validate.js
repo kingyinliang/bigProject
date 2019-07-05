@@ -1,4 +1,4 @@
-import {BASICDATA_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API} from '@/api/api'
 // import Vue from "vue/types/index";
 /**
  * 邮箱
@@ -133,24 +133,47 @@ export function dateFormat (date, fmt) {
  * 导出
  * @param {*} ulr fileName vue
  */
+// var fileDownload = require('js-file-download')
+// export function exportFile (url, fileName, vue) {
+//   vue.lodingS = true
+//   vue.$http(url, 'POST', vue.plantList, false, true).then((res) => {
+//     fileDownload(res.data, `${fileName}${getNewDate()}.xls`)
+//     vue.lodingS = false
+//   })
+// }
+// export function exportFile (url, fileName, vue) {
+//   vue.lodingS = true
+//   vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
+//     let blob = new Blob([data], {
+//       type: 'application/ms-excel'
+//     })
+//     if (window.navigator.msSaveOrOpenBlob) {
+//       navigator.msSaveBlob(blob)
+//     } else {
+//       let elink = document.createElement('a')
+//       elink.download = `${fileName}${getNewDate()}.xls`
+//       elink.style.display = 'none'
+//       elink.href = URL.createObjectURL(blob)
+//       document.body.appendChild(elink)
+//       elink.click()
+//       document.body.removeChild(elink)
+//     }
+//     vue.lodingS = false
+//   })
+// }
 export function exportFile (url, fileName, vue) {
-  vue.lodingS = true
   vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
-    let blob = new Blob([data], {
-      type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    })
-    if (window.navigator.msSaveOrOpenBlob) {
-      navigator.msSaveBlob(blob)
-    } else {
+    if (data.code === 0) {
       let elink = document.createElement('a')
       elink.download = `${fileName}${getNewDate()}.xls`
       elink.style.display = 'none'
-      elink.href = URL.createObjectURL(blob)
+      elink.href = data.url
       document.body.appendChild(elink)
       elink.click()
       document.body.removeChild(elink)
+    } else {
+      vue.$message.error(data.msg)
     }
-    vue.lodingS = false
   })
 }
 /**
@@ -308,6 +331,31 @@ export function getWorkshop (Vue, id, workshopName) {
         }
       } else {
         Vue.$message.error(data.msg)
+      }
+    })
+  }
+}
+export class Stesave {
+  constructor (formHeader) {
+    this.formHeader = formHeader
+  }
+  excUpdate (vue, str, resolve, reject) {
+    return vue.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
+  }
+  textUpdate (vue, str, resolve, reject) {
+    return vue.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+  }
+  orderUpdate (vue, str, resolve, reject) {
+    this.formHeader.status = str
+    vue.$http(`${STERILIZED_API.STE_ORDER_HEAD_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+      if (data.code === 0) {
+        if (resolve) {
+          resolve('resolve')
+        }
+      } else {
+        if (reject) {
+          reject('表头保存' + data.msg)
+        }
       }
     })
   }

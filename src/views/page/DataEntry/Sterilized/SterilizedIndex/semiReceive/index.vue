@@ -2,6 +2,15 @@
   <div style="padding: 5px 10px">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
       <form-head :formHeader="formHeader"></form-head>
+      <el-row style="text-align:right" class="buttonCss">
+        <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+        </template>
+        <template v-if="isRedact" style="float:right; margin-left: 10px;">
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+        </template>
+      </el-row>
     </el-card>
     <el-card class="searchCard  newCard">
       <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
@@ -54,6 +63,8 @@
 <script>
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
+import {STERILIZED_API} from '@/api/api'
+import {Stesave} from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -65,8 +76,70 @@ export default {
     }
   },
   mounted () {
+    this.GetOrderHead()
   },
-  methods: {},
+  methods: {
+    // 保存提交
+    SubmitForm () {
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.savedOrSubmitForm('submit')
+      })
+    },
+    savedOrSubmitForm (str) {
+      if (str === 'submit') {
+      }
+      let net0 = new Promise((resolve, reject) => {
+        this.Stesave.orderUpdate(this, str, resolve, reject)
+      })
+      let net1 = new Promise((resolve, reject) => {
+        this.Stesave.excUpdate(this, str, resolve, reject)
+      })
+      let net2 = new Promise((resolve, reject) => {
+        this.Stesave.textUpdate(this, str, resolve, reject)
+      })
+      let net3 = new Promise((resolve, reject) => {
+      })
+      if (str === 'submit') {
+        let submitNet = Promise.all([net0, net1, net2, net3])
+        submitNet.then(() => {
+          this.$message.success('提交成功')
+          this.GetOrderHead()
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      } else {
+        let savedNet = Promise.all([net0, net1, net2, net3])
+        savedNet.then(() => {
+          this.$message.success('保存成功')
+          this.GetOrderHead()
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      }
+    },
+    // 获取订单表头
+    GetOrderHead () {
+      this.$http(`${STERILIZED_API.STE_ORDER_HEAD_API}`, 'POST', {orderId: this.$store.state.common.sterilized.seiOrderId}).then(({data}) => {
+        if (data.code === 0) {
+          this.isRedact = false
+          this.formHeader = data.list[0]
+          this.Stesave = new Stesave(this.formHeader)
+          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+          this.$refs.excrecord.getDataList(this.formHeader.factory)
+          if (this.formHeader.status !== '') {
+            this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+            this.$refs.textrecord.GetText(this.formHeader.orderId)
+          }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    }
+  },
   computed: {},
   components: {
     ExcRecord,

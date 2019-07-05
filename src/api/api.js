@@ -1384,6 +1384,12 @@ export const STERILIZED_API = {
    *  杀菌首页
    */
   STE_HOME_LIST_API: HOST + '/ste/order/list',
+  // 杀菌录入表头
+  STE_ORDER_HEAD_API: HOST + '/ste/order/headList',
+  STE_ORDER_HEAD_UPDATE_API: HOST + '/ste/order/updateHead',
+  // 杀菌录入工艺
+  STE_ENTER_CRAF_LIST_API: HOST + '/ste/tec/list',
+  STE_ENTER_CRAF_UPDATE_API: HOST + '/ste/tec/mySaveOrUpdate',
   // 待领用
   WAITDEPLOYMENTLIST_API: HOST + '/ste/order/orderList',
   WAITDEPLOYMENTMATERIALISTAPI: HOST + '/ste/order/productsList'

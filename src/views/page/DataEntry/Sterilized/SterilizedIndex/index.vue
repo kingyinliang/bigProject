@@ -104,15 +104,19 @@ export default {
         }
       })
     },
-    toRouter (str) {
+    toRouter (str, item) {
       let url
       if (str === '1') {
+        this.$store.state.common.sterilized.seiOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
+        this.$store.state.common.sterilized.acceOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'
       } else if (str === '3') {
+        this.$store.state.common.sterilized.craftOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-craftControl-index'
       } else if (str === '4') {
+        this.$store.state.common.sterilized.inOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-inStock-index'
       }
       this.mainTabs = this.mainTabs.filter(item => item.name !== url)
