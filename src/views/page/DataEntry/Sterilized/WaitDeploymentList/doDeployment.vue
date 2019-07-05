@@ -34,13 +34,13 @@
                 </el-form-item>
                 <el-form-item>
                   <span style="color:#606266; width:162px; float:left; margin-left:15px;">计划BL原汁总量（L）：</span>
-                  <p style="float:left" class="input_bottom">{{this.$store.state.common.Sterilized.planOutputTotal}}</p>
+                  <p style="float:left" class="input_bottom">{{this.planOutputTotal}}</p>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-form-item label="备注：">
-              <textarea :disabled="!isRedact" style="width:941px; height:51px; background:rgba(255,255,255,1); border-radius:4px; border:1px solid rgba(217,217,217,1);"></textarea>
+              <textarea v-model="remark" :disabled="!isRedact" style="width:941px; height:51px; background:rgba(255,255,255,1); border-radius:4px; border:1px solid rgba(217,217,217,1);"></textarea>
             </el-form-item>
           </el-row>
           <el-row>
@@ -49,8 +49,8 @@
                 <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
               </template>
               <template v-if="isRedact">
-                <el-button type="primary" size="small" @click="GetList(true)">保存</el-button>
-                <el-button type="primary" size="small" @click="GetList(true)">生成</el-button>
+                <el-button type="primary" size="small" @click="SaveOrderNo(true)">保存</el-button>
+                <el-button type="primary" size="small" @click="CreatePro(true)">生成</el-button>
               </template>
             </el-col>
           </el-row>
@@ -86,13 +86,17 @@
           <el-table-column label="订单结束日期"></el-table-column>
           <el-table-column label="生产调度员" prop="dispatchMan"></el-table-column>
           <el-table-column label="订单备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="操作"></el-table-column>
+          <el-table-column label="操作" width="50">
+            <template slot-scope="scope">
+              <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="DelOrderNo(scope.row)"></el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-card>
     </div>
     <el-dialog :visible.sync="dialogTableVisible" width="1000px" custom-class='dialog__class'>
       <div slot="title" style="line-hight:59px">订单分配</div>
-      <el-table :data="orderPropList" border header-row-class-name="tableHead">
+      <el-table :data="orderPropList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
         <el-table-column type="selection" width="35"></el-table-column>
         <el-table-column label="订单号" prop="orderNo" width="120"></el-table-column>
         <el-table-column label="物料" :show-overflow-tooltip="true" width="180">
@@ -107,15 +111,20 @@
         <el-table-column label="生产调度员" prop="dispatchMan" width="120"></el-table-column>
         <el-table-column label="订单备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagesForm.currPage"
-        :page-sizes="[1, 20, 30, 40]"
-        :page-size="pagesForm.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pagesForm.totalCount">
-      </el-pagination>
+      <el-row style="position:relative;">
+        <el-col :span="20" style="text-align:center">
+          <el-pagination style="float:left; width: 960px; text-align:center;" background
+            layout="prev, pager, next"
+            :current-page.sync="pagesForm.currPage"
+            :page-size="pagesForm.pageSize"
+            :total="pagesForm.totalCount">
+          </el-pagination>
+        </el-col>
+        <el-col :span="4" style="float:right; margin-top:13px; text-align:right;">
+          <el-button @click="dialogTableVisible = false" size="small">取 消</el-button>
+          <el-button type="primary" @click="SaveOderNo()" size="small">确 定</el-button>
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -130,12 +139,16 @@ export default {
       formHeader: {},
       isRedact: false,
       dialogTableVisible: false,
+      orderArray: this.$store.state.common.Sterilized.orderNo,
+      planOutputTotal: this.$store.state.common.Sterilized.planOutputTotal,
+      remark: '',
       orderList: [],
       orderPropAllList: [],
       orderPropList: [],
+      multipleSelection: [],
       pagesForm: {
         currPage: 1,
-        pageSize: 1,
+        pageSize: 10,
         totalCount: 0
       }
     }
@@ -144,6 +157,13 @@ export default {
     headanimation(this.$)
     this.GetorderNo()
   },
+  watch: {
+    'pagesForm.currPage': {
+      handler (n) {
+        this.orderPropList = this.DataProcessing()
+      }
+    }
+  },
   methods: {
     // 拉取订单
     GetorderNo () {
@@ -151,12 +171,16 @@ export default {
         factory: this.$store.state.common.Sterilized.factoryId,
         workShop: this.$store.state.common.Sterilized.workshopId,
         materialCode: this.$store.state.common.Sterilized.materialCode,
-        orderNo: this.$store.state.common.Sterilized.orderNo,
+        orderNo: this.orderArray,
         currPage: '1',
         pageSize: '9000'
       }
       this.$http(`${STERILIZED_API.WAITDEPLOYMENTLIST_API}`, 'POST', params).then(({data}) => {
-        this.orderList = data.orderInfo.list
+        if (data.code === 0) {
+          this.orderList = data.orderInfo.list
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     },
     // 新增订单
@@ -165,29 +189,109 @@ export default {
         factory: this.$store.state.common.Sterilized.factoryId,
         workShop: this.$store.state.common.Sterilized.workshopId,
         materialCode: this.$store.state.common.Sterilized.materialCode,
-        orderNo: this.$store.state.common.Sterilized.orderNo
+        orderNo: this.orderArray
       }
       this.$http(`${STERILIZED_API.DODEPLOYMENTORDERLIST_API}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {
           this.orderPropAllList = data.orderAddInfo
           this.orderPropList = this.DataProcessing()
           this.pagesForm.totalCount = this.orderPropAllList.length
+          this.dialogTableVisible = true
         } else {
           this.$message.error(data.msg)
         }
       })
-      this.dialogTableVisible = true
     },
-    handleSizeChange (val) {
-      this.pagesForm.pageSize = val
-      this.orderPropList = this.DataProcessing()
-    },
-    handleCurrentChange (val) {
-      this.pagesForm.currPage = val
-      this.orderPropList = this.DataProcessing()
-    },
+    // handleSizeChange (val) {
+    //   this.pagesForm.pageSize = val
+    //   this.orderPropList = this.DataProcessing()
+    // },
+    // handleCurrentChange (val) {
+    //   this.pagesForm.currPage = val
+    //   this.orderPropList = this.DataProcessing()
+    // },
     DataProcessing () {
       return this.orderPropAllList.slice((this.pagesForm.currPage - 1) * this.pagesForm.pageSize, Number((this.pagesForm.currPage - 1) * this.pagesForm.pageSize) + Number(this.pagesForm.pageSize))
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    // 新增订单
+    SaveOderNo () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请勾选订单')
+      } else {
+        let materialCode
+        let dispatchMan
+        if (this.orderList.length === 0) {
+          materialCode = this.multipleSelection[0].materialCode
+          dispatchMan = this.multipleSelection[0].dispatchMan
+        } else {
+          materialCode = this.orderList[0].materialCode
+          dispatchMan = this.orderList[0].dispatchMan
+        }
+        for (let item of this.multipleSelection) {
+          if (materialCode !== item.materialCode) {
+            this.$message.error('物料冲突，请重新选择订单！')
+            return false
+          }
+          if (dispatchMan !== item.dispatchMan) {
+            this.$message.error('调度人员冲突，请重新选择订单！')
+            return false
+          }
+        }
+        this.multipleSelection.map((item) => {
+          this.orderArray.push(item.orderNo)
+          this.orderList.push(item)
+        })
+        this.dialogTableVisible = false
+        this.planOutputTotal = 0
+        this.orderList.map((item) => {
+          this.planOutputTotal = this.planOutputTotal + item.planOutput
+        })
+      }
+    },
+    // 删除
+    DelOrderNo (row) {
+      this.orderList.splice(this.orderList.indexOf(row), 1)
+      this.orderArray.splice(this.orderArray.indexOf(row.orderNo), 1)
+      this.planOutputTotal = 0
+      this.orderList.map((item) => {
+        this.planOutputTotal = this.planOutputTotal + item.planOutput
+      })
+    },
+    SaveOrderNo () {
+      if (this.orderList.length === 0) {
+        this.$message.error('请添加订单')
+      } else {
+        let params = {
+          factory: this.$store.state.common.Sterilized.factoryId,
+          workShop: this.$store.state.common.Sterilized.workshopId,
+          materialCode: this.orderList[0].materialCode,
+          materialName: this.orderList[0].materialName,
+          planAmount: this.planOutputTotal,
+          unit: this.orderList[0].outputUnit,
+          remark: this.remark
+        }
+        this.$http(`${STERILIZED_API.DODEPLOYMENTHEADERSAVE}`, 'POST', params).then(({data}) => {
+          if (data.code === 0) {
+            this.orderList.map((item) => {
+              item.allocateId = data.allocateId
+              item.remark = this.remark
+              item.orderId = item.orderNo
+            })
+            this.$http(`${STERILIZED_API.DODEPLOYMENTLISTSAVE}`, 'POST', this.orderList).then(({data}) => {
+              if (data.code === 0) {
+                this.$message.success('保存成功')
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   }
 }
