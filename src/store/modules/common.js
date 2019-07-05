@@ -180,11 +180,22 @@ export default {
       },
       instock: {}
     },
+    /**
+     * 杀菌车间
+     */
     sterilized: {
       seiOrderId: '',
       acceOrderId: '',
       craftOrderId: '',
-      inOrderId: ''
+      inOrderId: '',
+      factory: '',
+      workshop: '',
+      factoryId: '',
+      workshopId: '',
+      materialCode: '',
+      materialName: '',
+      orderNo: [],
+      planOutputTotal: 0
     }
   },
   mutations: {
@@ -330,6 +341,9 @@ export default {
     /** 发酵 */
     updateFermentationM (state, params) {
       state.Fermentation.materia = params
+    },
+    updateSterilized (state, params) {
+      state.Sterilized = params
     }
   }
 }

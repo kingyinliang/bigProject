@@ -449,8 +449,8 @@ export default class Index extends Vue {
   exportExcel () {
     this.plantList = {
       factory: this.params.factoryId,
-      workshop: this.params.workshopId,
-      productLine: this.params.productlineId,
+      workshop: this.params.workshopId.join(','),
+      productLine: this.params.productlineId.join(','),
       materialCode: this.params.materialCode,
       commitDateOne: this.params.startDate,
       commitDateTwo: this.params.endDate

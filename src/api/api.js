@@ -1392,5 +1392,7 @@ export const STERILIZED_API = {
   STE_ENTER_CRAF_UPDATE_API: HOST + '/ste/tec/mySaveOrUpdate',
   // 待领用
   WAITDEPLOYMENTLIST_API: HOST + '/ste/order/orderList',
-  WAITDEPLOYMENTMATERIALISTAPI: HOST + '/ste/order/productsList'
+  WAITDEPLOYMENTMATERIALISTAPI: HOST + '/ste/order/productsList',
+  // 调配
+  DODEPLOYMENTORDERLIST_API: HOST + '/ste/order/orderAdd'
 }
