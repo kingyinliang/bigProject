@@ -628,6 +628,9 @@ export default {
         overflow: hidden;
         width: 102px;
         height: 197px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-end;
       }
       &_box{
         overflow: hidden;
