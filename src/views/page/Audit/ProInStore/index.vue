@@ -136,7 +136,7 @@
             <el-table-column
               prop="batch"
               label="物料批次"
-              width="105">
+              width="112">
             </el-table-column>
             <el-table-column
               label="生产日期"
@@ -225,7 +225,7 @@
               width="75">
               <template slot-scope="scope">
                 <el-button type="primary" round size="mini" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('sys:verifyInStorage:auditing')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-                <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1' && isAuth('sys:verifyInStorage:resetIns')">反审</el-button>
+                <!--<el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1' && isAuth('sys:verifyInStorage:resetIns')">反审</el-button>-->
               </template>
             </el-table-column>
           </el-table>
