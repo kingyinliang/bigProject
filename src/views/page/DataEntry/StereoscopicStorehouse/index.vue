@@ -115,19 +115,29 @@
           width="91">
         </el-table-column>
         <el-table-column
+          prop="aiSolid"
+          label="正常品入库数"
+          width="140" v-if="deptCode === '6010'">
+        </el-table-column>
+        <el-table-column
+          prop="manSolid"
+          label="供应商待买数"
+          width="140" v-if="deptCode === '6010'">
+        </el-table-column>
+        <el-table-column
           prop="manSolid"
           label="人工码垛数-立体库"
-          width="140">
+          width="140" v-if="deptCode !== '6010'">
         </el-table-column>
         <el-table-column
           prop="aiShelves"
           label="自动上架-立体库"
-          width="140">
+          width="140" v-if="deptCode !== '6010'">
         </el-table-column>
         <el-table-column
           prop="aiSolid"
           label="自动码垛-立体库"
-          width="140">
+          width="140" v-if="deptCode !== '6010'">
         </el-table-column>
         <el-table-column
           prop="unitName"
@@ -241,7 +251,8 @@ export default {
         totalCount: 0
       },
       multipleSelection: [],
-      LtkList: []
+      LtkList: [],
+      deptCode: ''
     }
   },
   watch: {
@@ -267,6 +278,11 @@ export default {
     },
     // 获取列表
     GetLtkList (st) {
+      if (!this.plantList.factory) {
+        this.$message.error('请选择工厂')
+        return
+      }
+      this.deptCode = (this.factory.filter(item => item.deptId === this.plantList.factory))[0].deptCode
       this.lodingS = true
       if (st) {
         this.plantList.currPage = 1
