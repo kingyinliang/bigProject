@@ -112,7 +112,7 @@
   </el-card>
   <el-dialog
     width="450px"
-    class="shinhodialog"
+    class="ShinHoDialog"
     :title="dialogData.holderName+'清洗'"
     :close-on-click-modal="false"
     :visible.sync="visible">

@@ -190,6 +190,8 @@ export default {
       inOrderId: '',
       seiFactory: '',
       seiOrderNo: '',
+      inFactory: '',
+      inOrderNo: '',
       factory: '',
       workshop: '',
       factoryId: '',

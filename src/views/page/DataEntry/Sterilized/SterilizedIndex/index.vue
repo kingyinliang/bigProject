@@ -128,6 +128,8 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-craftControl-index'
       } else if (str === '4') {
         this.$store.state.common.sterilized.inOrderId = item.orderId
+        this.$store.state.common.sterilized.inFactory = item.factory
+        this.$store.state.common.sterilized.inOrderNo = item.orderNo
         url = 'DataEntry-Sterilized-SterilizedIndex-inStock-index'
       }
       this.mainTabs = this.mainTabs.filter(item => item.name !== url)
