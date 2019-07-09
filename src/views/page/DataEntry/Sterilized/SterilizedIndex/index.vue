@@ -40,7 +40,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="生产品项：">
-                    <p class="dataList_item_body_text_tit" style="line-height: 20px;">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
+                    <p class="dataList_item_body_text_tit">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
                   </el-form-item>
                   <el-form-item label="订单日期：">
                     <p class="dataList_item_body_text_tit">{{item.selectOrder.productDate || ''}}</p>
@@ -48,6 +48,7 @@
                   <el-form-item label="计划产量：">
                     <p class="dataList_item_body_text_tit">{{item.selectOrder.planOutput || ''}}</p>
                   </el-form-item>
+                  <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.orderStatus === 'checked'">
                 </el-form>
               </div>
             </div>
@@ -116,6 +117,8 @@ export default {
       }
       if (str === '1') {
         this.$store.state.common.sterilized.seiOrderId = item.orderId
+        this.$store.state.common.sterilized.seiFactory = item.factory
+        this.$store.state.common.sterilized.seiOrderNo = item.orderNo
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
         this.$store.state.common.sterilized.acceOrderId = item.orderId
@@ -232,6 +235,7 @@ export default {
         &_text{
           width: 220px;
           padding-top: 32px;
+          position: relative;
           .el-form-item{
             margin-bottom: 4px!important;
             margin-right: 0px!important;
@@ -240,6 +244,17 @@ export default {
             width: 150px;
             min-height: 32px;
             border-bottom: 1px solid #D8D8D8;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+          }
+          &_img{
+            position: absolute;
+            top: 150px;
+            left: 113px;
+            width: 100px;
+            height: 100px;
+            transform: rotateZ(-50deg);
           }
         }
       }

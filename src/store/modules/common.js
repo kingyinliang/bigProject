@@ -188,6 +188,8 @@ export default {
       acceOrderId: '',
       craftOrderId: '',
       inOrderId: '',
+      seiFactory: '',
+      seiOrderNo: '',
       factory: '',
       workshop: '',
       factoryId: '',

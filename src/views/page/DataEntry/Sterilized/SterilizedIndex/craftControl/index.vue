@@ -1,7 +1,14 @@
 <template>
   <div style="padding: 5px 10px">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <form-head :formHeader="formHeader"></form-head>
+      <el-row type="flex">
+        <el-col>
+          <form-head :formHeader="formHeader"></form-head>
+        </el-col>
+        <el-col style="width: 100px">
+          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</div>
+        </el-col>
+      </el-row>
       <el-row style="text-align:right;position: absolute;top:110px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -126,6 +133,7 @@ export default {
       this.$http(`${STERILIZED_API.STE_ENTER_CRAF_LIST_API}`, 'POST', {orderId: this.$store.state.common.sterilized.craftOrderId}).then(({data}) => {
         if (data.code === 0) {
           this.crafData = data.list
+          this.orderStatus = data.list.status
         } else {
           this.$message.error(data.msg)
         }
@@ -160,7 +168,11 @@ export default {
     },
     // 修改工艺数据
     UpdateCraft (str, resolve, reject) {
-      this.crafData.status = str
+      if (this.crafData.status) {
+        if (this.crafData.status === 'saved') { this.crafData.status = str } else if (this.crafData.status === 'noPass' && str === 'submit') { this.crafData.status = str }
+      } else {
+        this.crafData.status = str
+      }
       this.crafData.orderId = this.formHeader.orderId
       this.$http(`${STERILIZED_API.STE_ENTER_CRAF_UPDATE_API}`, 'POST', this.crafData).then(({data}) => {
         if (data.code === 0) {
