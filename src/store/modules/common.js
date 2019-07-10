@@ -198,7 +198,8 @@ export default {
       workshopId: '',
       materialCode: '',
       materialName: '',
-      orderNo: [],
+      orderNoList: [],
+      orderNo: '',
       planOutputTotal: 0
     }
   },

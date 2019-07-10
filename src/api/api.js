@@ -1410,9 +1410,31 @@ export const STERILIZED_API = {
   DODEPLOYMENTORDERLIST_API: HOST + '/ste/order/orderAdd',
   DODEPLOYMENTHEADERSAVE: HOST + '/ste/allocate/allocateOrderSave',
   DODEPLOYMENTLISTSAVE: HOST + '/ste/allocate/allocateSave',
+  DODEPLOYMENTALLOCATELIST: HOST + '/ste/allocate/allocateListInfo',
   /**
    *  订单分配
    */
   ORDERALLOTLIST: HOST + '/ste/allot/list',
-  ORDERALLOTSAVE: HOST + '/ste/allot/update'
+  ORDERALLOTSAVE: HOST + '/ste/allot/update',
+  /**
+   * 原汁分配
+   */
+  JUICEDEPLOYMENTSEARCHLIST: HOST + '/ste/allocate/allocateList',
+  JUICEDEPLOYMENTITEMS: HOST + '/ste/allocate/allocateItems',
+  JUICEDEPLOYMENTITEMSAVE: HOST + '/ste/allocate/allocateItemsUpdate',
+  JUICEDEPLOYMENTSAVE: HOST + '/ste/allocate/allocateUpdate',
+  JUICEDEPLOYMENTSUBMIT: HOST + '/ste/allocate/allocateSubmit',
+  JUICEDEPLOYMENTHOLDER: HOST + '/ste/allocate/holderList',
+  /**
+   * 半成品罐
+   */
+  SEMIFINISHEDPRODUCTLIST: HOST + '/ste/semi/list',
+  SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
+  SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
+  SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/inStorage/halfHolderList',
+  /**
+   *  调配列表
+   */
+  JUICEDEPLOYMENTLIST: HOST + '/ste/allocate/allocateList',
+  JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate'
 }
