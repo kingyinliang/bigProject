@@ -9,7 +9,7 @@
           <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</div>
         </el-col>
       </el-row>
-      <el-row style="text-align:right;position: absolute;top:110px;right: 20px;" class="buttonCss">
+      <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
@@ -63,12 +63,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <el-dialog
-      width="400px"
-      title="入罐开始"
-      class="ShinHoDialog"
-      :close-on-click-modal="false"
-      :visible.sync="visible">
+    <el-dialog width="400px" title="入罐开始" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
         <el-form-item label="半成品罐号：" prop="holderId">
           <el-select v-model="dataForm.holderId" filterable placeholder="请选择" style="width: 100%">

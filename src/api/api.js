@@ -1403,6 +1403,8 @@ export const STERILIZED_API = {
   STE_ENTER_SUP_LIST_API: HOST + '/ste/supMaterial/list',
   STE_ENTER_SUP_UPDATE_API: HOST + '/ste/supMaterial/mySaveOrUpdate',
   STE_ENTER_SUP_SUBMIT_API: HOST + '/ste/supMaterial/submit',
+  // 工时录入
+  STE_HOUR_LIST_API: HOST + '/ste/supMaterial/list',
   /**
    * 待领用
    */
