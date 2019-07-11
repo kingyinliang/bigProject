@@ -18,7 +18,7 @@
           <el-form-item label="生产日期：">
             <el-date-picker v-model="formHeader.allocateDate" type="date" placeholder="请选择" style="width:150px" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
-          <el-form-item label="订单号：">
+          <el-form-item label="调配单号：">
             <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
           </el-form-item>
         </el-form>
@@ -109,14 +109,14 @@
             <el-button type="text" :disabled="lineStatus === '已提交' || lineStatus === '审核通过' || isRedact === false" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="productDate" >
+        <el-table-column prop="productDate" width="150" >
           <template slot="header">
             <i class="reqI">*</i> 罐号
           </template>
           <template slot-scope="scope">
             <el-select v-model="scope.row.holderId" size="small"  :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">
               <el-option value=''>请选择</el-option>
-              <el-option v-for="(item, index) in holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
+              <el-option v-for="(item, index) in thrwHolderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -136,7 +136,7 @@
             <el-input v-model="scope.row.batch" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)" size="small"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="备注" width="150" :show-overflow-tooltip="true">
+        <el-table-column label="备注" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <el-input v-model="scope.row.remark" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)" size="small"></el-input>
           </template>
@@ -181,7 +181,8 @@ export default {
       ItemList: [],
       multipleSelection: [],
       holderList: [],
-      lineStatus: ''
+      lineStatus: '',
+      thrwHolderList: []
     }
   },
   mounted () {
@@ -195,6 +196,7 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.dataList = []
+      this.ThrowHolder(n)
     }
   },
   methods: {
@@ -239,6 +241,23 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    ThrowHolder (id) {
+      this.thrwHolderList = []
+      if (id) {
+        let params = {
+          factory: this.formHeader.factory,
+          workShop: id,
+          code: '013'
+        }
+        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params).then(({data}) => {
+          if (data.code === 0) {
+            this.thrwHolderList = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 查询
     SearchList () {
