@@ -1438,6 +1438,8 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
   SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/inStorage/halfHolderList',
+  SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
+  SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
   /**
    *  调配列表
    */

@@ -35,16 +35,17 @@
                 <div class="dataList_item_pot_box_item1" :style="`height:95%`"><p></p></div>
               </div>
             </div>
-            <div class="dataList_item_pot_detail" v-if="item.batch">
+            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1'">
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
               <p>{{item.amount}}</p>
-              <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
+              <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="12" class="dataList_item_btn_item"><p @click="GnProp(item)">GN搅罐</p></el-col>
-            <el-col :span="12" class="dataList_item_btn_item"><p @click="JsbProp(item)">JBS出库</p></el-col>
+            <el-col :span="12" class="dataList_item_btn_item"><el-button @click="GnProp(item)" style='border:none; background:none; padding:0px;'>GN搅罐</el-button></el-col>
+            <!-- <el-col :span="12" class="dataList_item_btn_item"><p @click="GnProp(item)">GN搅罐</p></el-col> -->
+            <el-col :span="12" class="dataList_item_btn_item"><el-button @click="JsbProp(item)" style='border:none; background:none; padding:0px;'>JBS出库</el-button></el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -75,6 +76,11 @@
         <el-form-item label="备注：">
           <el-input v-model="formGn.remark" style="width:200px"></el-input>
         </el-form-item>
+        <el-form-item label="操作人：" prop="operator">
+          <el-select v-model="formGn.operator">
+            <el-option v-for="(item, index) in PeopleList" :key="index" :label="item.realName + `(${item.userName})`" :value="item.realName + `(${item.userName})`"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -92,10 +98,14 @@
           <el-input v-model="formJsb.receiveAmount" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
-          <el-input v-model="formJsb.inHolderType" style="width:200px"></el-input>
+          <el-select v-model="formJsb.inHolderType">
+            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.code"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
-          <el-input v-model="formJsb.inHolderId" style="width:200px"></el-input>
+          <el-select filterable v-model="formJsb.inHolderId">
+            <el-option v-for="(item, index) in thrwHolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="formJsb.remark" style="width:200px"></el-input>
@@ -111,7 +121,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, STERILIZED_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -134,6 +144,9 @@ export default {
         ],
         gnEndTime: [
           {required: true, message: '请选择搅罐结束时间', trigger: 'change'}
+        ],
+        operator: [
+          { required: true, message: '请选择操作人', trigger: 'blur' }
         ]
       },
       JsbDialogTableVisible: false,
@@ -151,7 +164,10 @@ export default {
       },
       fastS: false,
       factory: [],
-      workshop: []
+      workshop: [],
+      typeList: [],
+      thrwHolderList: [],
+      PeopleList: []
     }
   },
   watch: {
@@ -161,6 +177,10 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.GetHolder(n)
+      this.GetPeople(n)
+    },
+    'formJsb.inHolderType' (n, o) {
+      this.ThrowHolder(n)
     }
   },
   mounted () {
@@ -208,6 +228,24 @@ export default {
         })
       }
     },
+    // 打入罐
+    ThrowHolder (id) {
+      this.thrwHolderList = []
+      if (id) {
+        let params = {
+          factory: this.formHeader.factory,
+          workShop: this.formHeader.workShop,
+          code: id
+        }
+        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params).then(({data}) => {
+          if (data.code === 0) {
+            this.thrwHolderList = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
+    },
     GetList (st) {
       if (!this.formHeader.factory) {
         this.$message.error('请选择工厂')
@@ -242,8 +280,13 @@ export default {
     },
     GnProp (row) {
       if (row.holderStatus === '1') {
-        this.formGn.holderId = row.holderId
-        this.formGn.holderNo = row.holderNo
+        this.formGn = {
+          holderId: row.holderId,
+          holderNo: row.holderNo,
+          gnStartTime: '',
+          gnEndTime: '',
+          remark: ''
+        }
         this.GnDialogTableVisible = true
       }
     },
@@ -255,6 +298,7 @@ export default {
               this.$message.success('保存成功')
               this.GnDialogTableVisible = false
               this.GetList()
+              this.$refs[formName].resetFields()
             } else {
               this.$message.error(data.msg)
             }
@@ -266,9 +310,23 @@ export default {
     },
     JsbProp (row) {
       if (row.holderStatus === '1') {
-        this.formJsb.holderId = row.holderId
-        this.formJsb.receiveHolderId = row.holderNo
-        this.formJsb.batch = row.batch
+        this.typeList = []
+        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTYPE}`, 'POST').then(({data}) => {
+          if (data.code === 0) {
+            this.typeList = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+        this.formJsb = {
+          holderId: row.holderId,
+          receiveHolderId: row.holderNo,
+          batch: row.batch,
+          receiveAmount: '',
+          inHolderType: '',
+          inHolderId: '',
+          remark: ''
+        }
         this.JsbDialogTableVisible = true
       }
     },
@@ -280,6 +338,7 @@ export default {
               this.$message.success('保存成功')
               this.JsbDialogTableVisible = false
               this.GetList()
+              this.$refs[formName].resetFields()
             } else {
               this.$message.error(data.msg)
             }
@@ -288,6 +347,18 @@ export default {
           return false
         }
       })
+    },
+    GetPeople (id) {
+      this.PeopleList = []
+      if (id) {
+        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {currPage: '1', deptId: id, pageSize: '1000', param: ''}).then(({data}) => {
+          if (data.code === 0) {
+            this.PeopleList = data.page.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     }
   },
   computed: {
