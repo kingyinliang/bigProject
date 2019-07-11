@@ -35,8 +35,8 @@
               <div class="dataList_item_body_text">
                 <el-form :inline="true" size="small">
                   <el-form-item label="订单编号：">
-                    <el-select v-model="item.selectOrder" placeholder="请选择" style="width: 150px">
-                      <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1"></el-option>
+                    <el-select v-model="item.selectOrderId" placeholder="请选择" style="width: 150px" @change="OrderChange($event, item)" value-key="orderId">
+                      <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1.orderId"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="生产品项：">
@@ -99,7 +99,9 @@ export default {
           this.dataList = data.list
           this.dataList.forEach((item, index) => {
             if (item.steList.length > 0) {
-              item.selectOrder = item.steList[0]
+              // item.selectOrder = item.steList[0]
+              item.selectOrder = {}
+              // item.selectOrderId = item.steList[0].orderId
             } else {
               item.selectOrder = {}
             }
@@ -108,6 +110,10 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    OrderChange (e, row) {
+      console.log(e)
+      row.selectOrder = row.steList.filter(item => e === item.orderId)[0]
     },
     toRouter (str, item) {
       let url
@@ -122,6 +128,8 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
         this.$store.state.common.sterilized.acceOrderId = item.orderId
+        this.$store.state.common.sterilized.acceFactory = item.factory
+        this.$store.state.common.sterilized.acceOrderNo = item.orderNo
         url = 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'
       } else if (str === '3') {
         this.$store.state.common.sterilized.craftOrderId = item.orderId

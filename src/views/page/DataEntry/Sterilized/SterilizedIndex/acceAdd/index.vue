@@ -1,8 +1,15 @@
 <template>
   <div style="padding: 5px 10px">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <form-head :formHeader="formHeader"></form-head>
-      <el-row style="text-align:right" class="buttonCss">
+      <el-row type="flex">
+        <el-col>
+          <form-head :formHeader="formHeader"></form-head>
+        </el-col>
+        <el-col style="width: 100px">
+          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</div>
+        </el-col>
+      </el-row>
+      <el-row style="text-align:right;position: absolute;top:110px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
@@ -23,20 +30,33 @@
               <h3 style="line-height: 32px">辅料添加记录</h3>
               <el-button type="primary" size="mini" style="float: right">添加完成</el-button>
             </div>
-            <el-table header-row-class-name="tableHead" :data="AddDate" border tooltip-effect="dark">
-              <el-table-column type="index" width="55" label="序号"></el-table-column>
-              <el-table-column label="添加状态" width="150"></el-table-column>
-              <el-table-column label="物料" width="150"></el-table-column>
-              <el-table-column label="需求数量" width="150"></el-table-column>
-              <el-table-column label="单位" width="150"></el-table-column>
-              <el-table-column label="操作" width="150"></el-table-column>
+            <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
+              <el-table-column type="selection" width="34"></el-table-column>
+              <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+              <el-table-column label="需求数量" width="80" prop="planAmount" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="操作" width="80">
+                <template slot-scope="scope">
+                  <el-button type="text" size="mini" :disabled="!isRedact" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+                </template>
+              </el-table-column>
               <el-table-column width="140">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
-                <template slot-scope="scope"></template>
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.batch" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                </template>
               </el-table-column>
-              <el-table-column label="领用数量" width="150"></el-table-column>
+              <el-table-column label="领用数量" width="150">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.receiveAmount" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column label="备注" width="140">
-                <template slot-scope="scope"></template>
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                </template>
               </el-table-column>
             </el-table>
           </el-card>
@@ -45,7 +65,8 @@
               <h3 style="line-height: 32px">增补料记录</h3>
               <el-button type="primary" size="mini" style="float: right">添加完成</el-button>
             </div>
-            <el-table header-row-class-name="tableHead" :data="AddDate" border tooltip-effect="dark">
+            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
+              <el-table-column type="selection" width="34"></el-table-column>
               <el-table-column type="index" width="55" label="序号"></el-table-column>
               <el-table-column label="添加状态" width="150"></el-table-column>
               <el-table-column label="物料" width="150"></el-table-column>
@@ -92,13 +113,48 @@ export default {
       isRedact: false,
       formHeader: {},
       activeName: '1',
-      AddDate: [{}]
+      orderStatus: '',
+      multipleSelectionAddSup: [],
+      AddSupDate: [],
+      multipleSelectionSup: [],
+      SupDate: []
     }
   },
   mounted () {
     this.GetOrderHead()
   },
   methods: {
+    GetDataList () {
+      this.$http(`${STERILIZED_API.STE_ENTER_SUP_LIST_API}`, 'POST', {
+        orderId: this.$store.state.common.sterilized.acceOrderId,
+        factory: this.$store.state.common.sterilized.acceFactory,
+        orderNo: this.$store.state.common.sterilized.acceOrderNo
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.AddSupDate = data.steSupMaterialBean.resultList
+          this.SupDate = data.steSupMaterialBean.supList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 拆分
+    addData () {
+    },
+    // 辅料添加多选
+    handleSelectionChangeAddSup (val) {
+      this.multipleSelectionAddSup = []
+      val.forEach((item, index) => {
+        this.multipleSelectionAddSup.push(item)
+      })
+    },
+    // 增补料多选
+    handleSelectionChangeSup (val) {
+      this.multipleSelectionSup = []
+      val.forEach((item, index) => {
+        this.multipleSelectionSup.push(item)
+      })
+    },
     // 保存提交
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -143,7 +199,7 @@ export default {
     },
     // 获取订单表头
     GetOrderHead () {
-      this.$http(`${STERILIZED_API.STE_ORDER_HEAD_API}`, 'POST', {orderId: this.$store.state.common.sterilized.seiOrderId}).then(({data}) => {
+      this.$http(`${STERILIZED_API.STE_ORDER_HEAD_API}`, 'POST', {orderId: this.$store.state.common.sterilized.acceOrderId}).then(({data}) => {
         if (data.code === 0) {
           this.isRedact = false
           this.formHeader = data.list[0]
@@ -151,6 +207,7 @@ export default {
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.formHeader.status !== '') {
+            this.GetDataList()
             this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
             this.$refs.textrecord.GetText(this.formHeader.orderId)
           }

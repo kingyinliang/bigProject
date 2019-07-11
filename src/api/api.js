@@ -1399,6 +1399,10 @@ export const STERILIZED_API = {
   STE_ENTER_IN_UPDATE_API: HOST + '/ste/inStorage/mySaveOrUpdate',
   STE_ENTER_IN_SUBMIT_API: HOST + '/ste/inStorage/submit',
   STE_ENTER_IN_POT_LIST_API: HOST + '/ste/inStorage/halfHolderList',
+  // 杀菌录入辅料添加
+  STE_ENTER_SUP_LIST_API: HOST + '/ste/supMaterial/list',
+  STE_ENTER_SUP_UPDATE_API: HOST + '/ste/supMaterial/mySaveOrUpdate',
+  STE_ENTER_SUP_SUBMIT_API: HOST + '/ste/supMaterial/submit',
   /**
    * 待领用
    */

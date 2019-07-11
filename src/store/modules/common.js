@@ -192,6 +192,8 @@ export default {
       seiOrderNo: '',
       inFactory: '',
       inOrderNo: '',
+      acceFactory: '',
+      acceOrderNo: '',
       factory: '',
       workshop: '',
       factoryId: '',
