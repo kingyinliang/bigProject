@@ -46,7 +46,7 @@
       <el-card>
         <el-table :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="ShowDetail" border header-row-class-name="tableHead">
           <el-table-column type="selection" width="35" :selectable="CheckBoxInit"></el-table-column>
-          <el-table-column label="状态" prop="status"></el-table-column>
+          <el-table-column label="状态" width="90" prop="status" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="调配单号" prop="orderNo" width="130"></el-table-column>
           <el-table-column label="生产车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="调配单日期" prop="allocateDate" width="170"></el-table-column>
@@ -106,7 +106,7 @@
         <el-table-column label="计划领料" prop="planAmount" width="80"></el-table-column>
         <el-table-column width="60">
           <template slot-scope="scope">
-            <el-button type="text" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+            <el-button type="text" :disabled="lineStatus === '已提交' || lineStatus === '审核通过' || isRedact === false" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="productDate" >
@@ -295,12 +295,18 @@ export default {
       })
     },
     SaveSplit () {
+      let batchList = []
       for (let item of this.ItemList) {
+        batchList.push(item.batch)
         item.ID = this.ID
         if (!item.holderId || !item.receiveAmount || !item.batch || item.holderId === '' || item.receiveAmount === '' || item.batch === '') {
           this.$message.error('请先填写必填项')
           return false
         }
+      }
+      if (new Set(batchList).size !== batchList.length) {
+        this.$message.error('批次不能重复')
+        return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
