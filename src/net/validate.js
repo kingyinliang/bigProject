@@ -340,10 +340,16 @@ export class Stesave {
     this.formHeader = formHeader
   }
   excUpdate (vue, str, resolve, reject) {
-    return vue.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
+    return vue.$refs.excrecord.saveOrSubmitExc({
+      orderId: this.formHeader.orderId,
+      sign: str
+    }, 'ste', resolve, reject)
   }
   textUpdate (vue, str, resolve, reject) {
-    return vue.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+    return vue.$refs.textrecord.UpdateText({
+      orderId: this.formHeader.orderId,
+      sign: str
+    }, 'ste', resolve, reject)
   }
   orderUpdate (vue, str, resolve, reject) {
     this.formHeader.status = str

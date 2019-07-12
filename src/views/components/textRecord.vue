@@ -51,6 +51,9 @@ export default {
         this.textObj.workShop = formHeader.workShop
         this.textObj.productLine = formHeader.productLine
         this.textObj.productDate = formHeader.productDate
+      } else if (str === 'ste') {
+        this.textObj.orderId = formHeader.orderId
+        this.textObj.sign = formHeader.sign
       } else {
         this.textObj.orderId = formHeader.orderId
       }

@@ -224,10 +224,10 @@ export default {
         this.Stesave.orderUpdate(this, str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
-        this.Stesave.excUpdate(this, str, resolve, reject)
+        this.Stesave.excUpdate(this, 'Craft', resolve, reject)
       })
       let net2 = new Promise((resolve, reject) => {
-        this.Stesave.textUpdate(this, str, resolve, reject)
+        this.Stesave.textUpdate(this, 'Craft', resolve, reject)
       })
       let net3 = new Promise((resolve, reject) => {
         this.UpdateCraft(str, resolve, reject)
@@ -261,8 +261,14 @@ export default {
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.formHeader.status !== '') {
             this.GetCraft()
-            this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
-            this.$refs.textrecord.GetText(this.formHeader.orderId)
+            this.$refs.excrecord.GetExcDate({
+              order_id: this.formHeader.orderId,
+              sign: 'Craft'
+            })
+            this.$refs.textrecord.GetText({
+              order_id: this.formHeader.orderId,
+              sign: 'Craft'
+            })
           }
         } else {
           this.$message.error(data.msg)

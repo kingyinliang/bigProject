@@ -48,7 +48,7 @@
                   <el-form-item label="计划产量：">
                     <p class="dataList_item_body_text_tit">{{item.selectOrder.planOutput || ''}}</p>
                   </el-form-item>
-                  <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.orderStatus === 'checked'">
+                  <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">
                 </el-form>
               </div>
             </div>
@@ -67,7 +67,7 @@
 
 <script>
 import {getFactory, getWorkshop} from '@/net/validate'
-import {STERILIZED_API} from '@/api/api'
+import {STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -80,6 +80,7 @@ export default {
       },
       factory: [],
       workshop: [],
+      Materails: [],
       dataList: []
     }
   },
@@ -96,6 +97,7 @@ export default {
     GetDataList () {
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
+          this.GetMaterails(this.formHeader.factory)
           this.dataList = data.list
           this.dataList.forEach((item, index) => {
             if (item.steList.length > 0) {
@@ -115,6 +117,16 @@ export default {
       console.log(e)
       row.selectOrder = row.steList.filter(item => e === item.orderId)[0]
     },
+    // 物料字典
+    GetMaterails (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'TeShuShaJun_Material'}).then(({data}) => {
+        if (data.code === 0) {
+          this.Materails = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     toRouter (str, item) {
       let url
       if (!item.orderId) {
@@ -122,6 +134,11 @@ export default {
         return
       }
       if (str === '1') {
+        let st = this.Materails.filter(item => item.code === item.materialCode)
+        if (st.length === 0) {
+          this.$message.error('不能跳转哦')
+          return
+        }
         this.$store.state.common.sterilized.seiOrderId = item.orderId
         this.$store.state.common.sterilized.seiFactory = item.factory
         this.$store.state.common.sterilized.seiOrderNo = item.orderNo

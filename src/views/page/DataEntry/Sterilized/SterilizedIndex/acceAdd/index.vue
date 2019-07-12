@@ -8,6 +8,7 @@
         <el-col style="width: 100px">
           <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
         </el-col>
+        <img src="@/assets/img/zhang.png" alt="" class="supStatus" v-if="supStatus">
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
@@ -31,40 +32,41 @@
               <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')">添加完成</el-button>
             </div>
             <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
-              <el-table-column type="selection" width="40"></el-table-column>
+              <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
               <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
               <el-table-column label="需求数量" width="80" prop="adjustAmount" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  {{scope.row.supStatus === '已推送'? scope.row.adjustAmount : scope.row.adjustAmountPro}}
+                  {{scope.row.supStatus === '已推送'? scope.row.adjustAmount : scope.row.supStatus === '已确认'? scope.row.adjustAmount : scope.row.adjustAmountPro}}
                 </template>
               </el-table-column>
               <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="操作" width="80">
+              <el-table-column label="操作" width="65">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!isRedact" @click="addData(scope.row, scope.$index, AddSupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, AddSupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
                 </template>
               </el-table-column>
-              <el-table-column width="140">
+              <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="领用数量" width="150">
+              <el-table-column label="领用数量" width="100">
+                <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="备注" width="140">
+              <el-table-column label="备注" width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
+                  <el-button type="primary" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -75,36 +77,37 @@
               <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')">添加完成</el-button>
             </div>
             <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" border tooltip-effect="dark">
-              <el-table-column type="selection" width="34"></el-table-column>
+              <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
               <el-table-column type="index" width="55" label="序号"></el-table-column>
               <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
               <el-table-column label="添加数量" width="80" prop="addAmount" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="操作" width="80">
+              <el-table-column label="操作" width="65">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!isRedact" @click="addData(scope.row, scope.$index, SupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, SupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
                 </template>
               </el-table-column>
-              <el-table-column width="140">
+              <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="领用数量" width="150">
+              <el-table-column label="领用数量" width="100">
+                <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="备注" width="140">
+              <el-table-column label="备注" width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
+                  <el-button type="primary" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -148,6 +151,7 @@ export default {
     return {
       visible: false,
       isRedact: false,
+      supStatus: false,
       formHeader: {},
       activeName: '1',
       orderStatus: '',
@@ -178,6 +182,12 @@ export default {
           }
           let c = this.AddSupDate.concat(this.SupDate)
           this.orderStatus = GetStatus(c)
+          this.supStatus = true
+          c.forEach((items) => {
+            if (items.supStatus !== '已确认') {
+              this.supStatus = false
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }
@@ -224,6 +234,7 @@ export default {
         }
       }
     },
+    // 添加完成确认
     addOverTo () {
       this.addSupOverData.forEach((item) => {
         item.addStatus = '已添加'
@@ -258,6 +269,7 @@ export default {
         this.multipleSelectionSup.push(item)
       })
     },
+    // 辅料修改
     UpdateSup (str, resolve, reject) {
       this.AddSupDate.forEach((item) => {
         if (item.status) {
@@ -300,15 +312,18 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.dataRul()) {
+          return
+        }
       }
       let net0 = new Promise((resolve, reject) => {
         this.Stesave.orderUpdate(this, str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
-        this.Stesave.excUpdate(this, str, resolve, reject)
+        this.Stesave.excUpdate(this, 'AddSup', resolve, reject)
       })
       let net2 = new Promise((resolve, reject) => {
-        this.Stesave.textUpdate(this, str, resolve, reject)
+        this.Stesave.textUpdate(this, 'AddSup', resolve, reject)
       })
       let net3 = new Promise((resolve, reject) => {
         this.UpdateSup(str, resolve, reject)
@@ -331,6 +346,70 @@ export default {
         })
       }
     },
+    // 验证
+    dataRul () {
+      let ty = true
+      this.AddSupDate.forEach((item) => {
+        if (!item.batch) {
+          ty = false
+          this.$message.error('批次必填')
+        }
+        if (!item.receiveAmount) {
+          ty = false
+          this.$message.error('领用数量必填')
+        }
+        if (item.supStatus !== '已确认') {
+          ty = false
+          this.$message.error('品保未确认')
+        }
+        if (item.isSplit === '0') {
+          let sum = 0
+          this.AddSupDate.forEach((it) => {
+            if (it.materialCode === item.materialCode) {
+              sum += it.receiveAmount
+            }
+          })
+          if (sum > item.adjustAmount) {
+            ty = false
+            this.$message.error('领用数量大于需求数量')
+          }
+        }
+      })
+      this.SupDate.forEach((item) => {
+        if (!item.batch) {
+          ty = false
+          this.$message.error('批次必填')
+        }
+        if (!item.receiveAmount) {
+          ty = false
+          this.$message.error('领用数量必填')
+        }
+        if (item.supStatus !== '已确认') {
+          ty = false
+          this.$message.error('品保未确认')
+        }
+        if (item.isSplit === '0') {
+          let sum = 0
+          this.SupDate.forEach((it) => {
+            if (it.materialCode === item.materialCode) {
+              sum += it.receiveAmount
+            }
+          })
+          if (sum > item.addAmount) {
+            ty = false
+            this.$message.error('领用数量大于添加数量')
+          }
+        }
+      })
+      return ty
+    },
+    CheckBoxA (row) {
+      if (row.status === 'checked' || row.status === 'submit') {
+        return 0
+      } else {
+        return 1
+      }
+    },
     // 获取订单表头
     GetOrderHead () {
       this.$http(`${STERILIZED_API.STE_ORDER_HEAD_API}`, 'POST', {orderId: this.$store.state.common.sterilized.acceOrderId}).then(({data}) => {
@@ -342,8 +421,14 @@ export default {
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           if (this.formHeader.status !== '') {
             this.GetDataList()
-            this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
-            this.$refs.textrecord.GetText(this.formHeader.orderId)
+            this.$refs.excrecord.GetExcDate({
+              order_id: this.formHeader.orderId,
+              sign: 'AddSup'
+            })
+            this.$refs.textrecord.GetText({
+              order_id: this.formHeader.orderId,
+              sign: 'AddSup'
+            })
           }
         } else {
           this.$message.error(data.msg)
@@ -362,6 +447,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.supStatus{
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  right: 90px;
+  top: 20px;
+  transform: rotateZ(-30deg);
+}
 </style>
