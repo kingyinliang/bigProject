@@ -1415,7 +1415,9 @@ export const STERILIZED_API = {
   STE_SUP_PUSH_API: HOST + '/ste/supMaterialQQA/pushInfo',
   STE_SUP_SAVED_API: HOST + '/ste/supMaterialQQA/mySaveOrUpdate',
   // 工时录入
-  STE_HOUR_LIST_API: HOST + '/ste/supMaterial/list',
+  STE_HOUR_LIST_API: HOST + '/ste/timeSheet/list',
+  STE_HOUR_UPDATE_API: HOST + '/ste/timeSheet/update',
+  STE_HOUR_SUBMIT_API: HOST + '/ste/timeSheet/submit',
   /**
    * 待领用
    */
