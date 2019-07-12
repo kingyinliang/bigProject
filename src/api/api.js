@@ -245,7 +245,14 @@ export const BASICDATA_API = {
   CATEGORYS_LIST: HOST + '/fer/sort/list',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',
-  CATEGORY_DELETE: HOST + '/fer/sort/delete'
+  CATEGORY_DELETE: HOST + '/fer/sort/delete',
+  /**
+   * 杀菌物料比例
+   */
+  STERILIZEMATERIALRATIOLIST: HOST + '/ste/mid/list',
+  STERILIZEMATERIALRATIOSAVE_API: HOST + '/ste/mid/save',
+  STERILIZEMATERIALRATIOUPDATE_API: HOST + '/ste/mid/update',
+  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete'
 }
 /*
 *系统设置api
