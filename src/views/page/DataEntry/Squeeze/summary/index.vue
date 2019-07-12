@@ -21,10 +21,10 @@
               <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>
             </el-form-item>
             <el-form-item label="提交人员：">
-              <p class="el-input" style="width: 180px">{{formHeader.changer}}</p>
+              <p class="el-input" style="width: 180px">{{formHeader.changer || ''}}</p>
             </el-form-item>
             <el-form-item label="提交时间：">
-              <p class="el-input" style="width: 180px">{{formHeader.changed}}</p>
+              <p class="el-input" style="width: 180px">{{formHeader.changed || ''}}</p>
             </el-form-item>
           </el-form>
         </el-col>
@@ -56,22 +56,28 @@
         <i class="el-icon-caret-bottom"></i>
       </div>
     </div>
-    <el-tabs ref='tabs' v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
+    <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
       <el-tab-pane name="1">
         <span slot="label" class="spanview">
-          申请订单
+          <el-tooltip class="item" effect="dark" :content="statusArr[0].status === 'noPass'? '不通过':statusArr[0].status === 'saved'? '已保存':statusArr[0].status === 'submit' ? '已提交' : statusArr[0].status === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
+          </el-tooltip>
         </span>
         <apply-order ref="applyorder" :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
-          物料领用
+          <el-tooltip class="item" effect="dark" :content="statusArr[1].status === 'noPass'? '不通过':statusArr[1].status === 'saved'? '已保存':statusArr[1].status === 'submit' ? '已提交' : statusArr[1].status === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': statusArr[1].status === 'noPass'? 'red' : ''}" style="font-size: 14px">物料领用</el-button>
+          </el-tooltip>
         </span>
         <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapListM"></materiel>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">
-          工时计算
+          <el-tooltip class="item" effect="dark" :content="statusArr[2].status === 'noPass'? '不通过':statusArr[2].status === 'saved'? '已保存':statusArr[2].status === 'submit' ? '已提交' : statusArr[2].status === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': statusArr[2].status === 'noPass'? 'red' : ''}" style="font-size: 14px">工时计算</el-button>
+          </el-tooltip>
         </span>
         <man-hour ref="manhour" :isRedact="isRedact" :formHeader="formHeader"></man-hour>
       </el-tab-pane>
@@ -105,7 +111,8 @@ export default {
       SerchSapList: [],
       SerchSapListM: [],
       orderFumet: [],
-      fumet: []
+      fumet: [],
+      statusArr: [{status: ''}, {status: ''}, {status: ''}]
     }
   },
   watch: {
@@ -117,6 +124,9 @@ export default {
     this.Getdeptcode()
   },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     GetList () {
       if (!this.formHeader.factory) {
         this.$message.error('请选择工厂')
@@ -139,7 +149,7 @@ export default {
     GetFunet () {
       this.$http(`${SQU_API.SUM_FUMET_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
-          this.isSerch = true
+          this.isSerch = false
           data.orderList.forEach((item, index) => {
             item.material = item.materialCode + ' ' + item.materialName
           })
@@ -166,11 +176,12 @@ export default {
     },
     // 订单状态
     GetOrderStatus () {
-      let arr = [{}, {}, {}]
-      arr[0].status = this.orderS
-      arr[1].status = this.$refs.materielref.materialS
-      arr[2].status = this.$refs.manhour.timeS
-      this.orderStatus = GetStatus(arr)
+      this.statusArr[0].status = this.orderS
+      this.statusArr[1].status = this.$refs.materielref.materialS
+      this.statusArr[2].status = this.$refs.manhour.timeS
+      this.orderStatus = GetStatus(this.statusArr)
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+      this.isSerch = true
     },
     // 保存or提交
     savedOrSubmitForm (str) {
@@ -269,7 +280,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '压榨'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            this.formHeader.workShop = data.typeList[0].deptId
+            if (data.typeList[0]) {
+              this.formHeader.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }

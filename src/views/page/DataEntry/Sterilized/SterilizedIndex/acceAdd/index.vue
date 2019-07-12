@@ -6,7 +6,7 @@
           <form-head :formHeader="formHeader"></form-head>
         </el-col>
         <el-col style="width: 100px">
-          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</div>
+          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
         </el-col>
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
@@ -28,7 +28,7 @@
           <el-card class="newCard">
             <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
               <h3 style="line-height: 32px">辅料添加记录</h3>
-              <el-button type="primary" size="mini" style="float: right">添加完成</el-button>
+              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')">添加完成</el-button>
             </div>
             <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
               <el-table-column type="selection" width="40"></el-table-column>
@@ -64,7 +64,7 @@
               </el-table-column>
               <el-table-column label="操作" width="100" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver()">添加完成</el-button>
+                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -72,9 +72,9 @@
           <el-card class="newCard">
             <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
               <h3 style="line-height: 32px">增补料记录</h3>
-              <el-button type="primary" size="mini" style="float: right">添加完成</el-button>
+              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')">添加完成</el-button>
             </div>
-            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
+            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" border tooltip-effect="dark">
               <el-table-column type="selection" width="34"></el-table-column>
               <el-table-column type="index" width="55" label="序号"></el-table-column>
               <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
@@ -104,7 +104,7 @@
               </el-table-column>
               <el-table-column label="操作" width="100" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver()">添加完成</el-button>
+                  <el-button type="primary" size="mini" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -124,13 +124,14 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <el-dialog width="400px" title="添加确认" class="ShinHoDialog" @selection-change="handleSelectionChangeSup" :close-on-click-modal="false" :visible.sync="visible">
-      <div>
-        <p>*物料*已经添加*领用数量*单位*,确认添加完成！</p>
+    <el-dialog width="400px" title="添加确认" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
+      <div style="max-height: 300px;overflow-y: initial" :style="{'overflow-y':(addSupOverData.length > 6 || SupOverData.length > 6)? 'scroll' : 'initial'}">
+        <p style="line-height: 20px;margin-bottom: 8px" v-for="(item, index) in addSupOverData" :key="index">{{item.materialCode + ' ' + item.materialName}}已经添加{{item.receiveAmount + item.unit}},确认添加完成！</p>
+        <p style="line-height: 20px;margin-bottom: 8px" v-for="(item, index) in SupOverData" :key="index">{{item.materialCode + ' ' + item.materialName}}已经添加{{item.receiveAmount + item.unit}},确认添加完成！</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false" size="small">取消</el-button>
-        <el-button type="primary" @click="addIn()" size="small">确定</el-button>
+        <el-button type="primary" @click="addOverTo()" size="small">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -140,7 +141,7 @@
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
 import {STERILIZED_API} from '@/api/api'
-import {Stesave} from '@/net/validate'
+import {Stesave, GetStatus} from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -153,7 +154,9 @@ export default {
       multipleSelectionAddSup: [],
       AddSupDate: [],
       multipleSelectionSup: [],
-      SupDate: []
+      SupDate: [],
+      addSupOverData: [],
+      SupOverData: []
     }
   },
   mounted () {
@@ -173,6 +176,8 @@ export default {
           if (data.steSupMaterialBean.supList) {
             this.SupDate = data.steSupMaterialBean.supList
           }
+          let c = this.AddSupDate.concat(this.SupDate)
+          this.orderStatus = GetStatus(c)
         } else {
           this.$message.error(data.msg)
         }
@@ -203,8 +208,41 @@ export default {
         unit: row.unit
       })
     },
-    addOver () {
-      this.visible = true
+    // 添加完成
+    addOver (data, str, row) {
+      this.addSupOverData = []
+      this.SupOverData = []
+      if (row) {
+        str === 'addSup' ? this.addSupOverData = [row] : this.SupOverData = [row]
+        this.visible = true
+      } else {
+        if (data.length > 0) {
+          str === 'addSup' ? this.addSupOverData = data : this.SupOverData = data
+          this.visible = true
+        } else {
+          this.$message.error('请选择数据')
+        }
+      }
+    },
+    addOverTo () {
+      this.addSupOverData.forEach((item) => {
+        item.addStatus = '已添加'
+      })
+      this.SupOverData.forEach((item) => {
+        item.addStatus = '已添加'
+      })
+      this.$http(`${STERILIZED_API.STE_ENTER_SUP_UPDATE_API}`, 'POST', {
+        resultList: this.addSupOverData,
+        supList: this.SupOverData
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.visible = false
+          this.$message.success('操作成功')
+          this.GetOrderHead()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 辅料添加多选
     handleSelectionChangeAddSup (val) {
