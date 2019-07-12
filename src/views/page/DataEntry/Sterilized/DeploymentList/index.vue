@@ -194,8 +194,10 @@ export default {
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTLIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataListAll = data.orderInfo
+          this.pages.currPage = 1
           this.dataList = this.GetPagesList()
           this.pages.totalCount = this.dataListAll.length
+          this.orderInfoList = []
         } else {
           this.$message.error(data.msg)
         }
