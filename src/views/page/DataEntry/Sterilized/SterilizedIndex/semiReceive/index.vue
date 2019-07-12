@@ -34,13 +34,13 @@
             <el-table-column label="计划领料" width="100" prop="planAmount"></el-table-column>
             <el-table-column label="操作" width="70">
               <template slot-scope="scope">
-                <el-button type="text" size="mini" :disabled="!isRedact" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
               </template>
             </el-table-column>
             <el-table-column width="120">
               <template slot="header"><i class="reqI">*</i><span>罐号</span></template>
               <template slot-scope="scope">
-                <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable v-if="scope.row.hloderId" size="mini" :disabled="!isRedact">
+                <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable v-if="scope.row.hloderId" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
                   <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
                 </el-select>
               </template>
@@ -48,18 +48,18 @@
             <el-table-column width="120">
               <template slot="header"><i class="reqI">*</i><span>批次</span></template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.batch" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
+                <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
               </template>
             </el-table-column>
             <el-table-column width="120">
               <template slot="header"><i class="reqI">*</i><span>实际领料</span></template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.receiveAmount" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
+                <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="备注" width="110">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
+                <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
               </template>
             </el-table-column>
           </el-table>
@@ -173,6 +173,9 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.dataRul()) {
+          return
+        }
       }
       let net0 = new Promise((resolve, reject) => {
         this.Stesave.orderUpdate(this, str, resolve, reject)
@@ -203,6 +206,28 @@ export default {
           this.$message.error(err)
         })
       }
+    },
+    // 验证
+    dataRul () {
+      let ty = true
+      this.MaterialDate.forEach((item) => {
+        if (!item.hloderId) {
+          ty = false
+          this.$message.error('罐号未填')
+          return false
+        }
+        if (!item.batch) {
+          ty = false
+          this.$message.error('批次未填')
+          return false
+        }
+        if (!item.receiveAmount) {
+          ty = false
+          this.$message.error('实际领料未填')
+          return false
+        }
+      })
+      return ty
     },
     // 获取订单表头
     GetOrderHead () {

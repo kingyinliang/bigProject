@@ -129,7 +129,7 @@ export default {
         delFlag: '0',
         dischargeTemp: '',
         displayTemp: '',
-        hotMedium: '',
+        hotMedium: '热水',
         hotTemp: '',
         id: '',
         mechanicalTemp: '',
@@ -207,6 +207,23 @@ export default {
         }
       })
     },
+    SbumitCarft (str, resolve, reject) {
+      this.$http(`${STERILIZED_API.STE_ENTER_CRAF_SUBMIT_API}`, 'POST', {
+        orderId: this.formHeader.orderId,
+        upStartTime: this.crafData.upStartTime,
+        coolingEndTime: this.crafData.coolingEndTime
+      }).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('工艺保存' + data.msg)
+          }
+        }
+      })
+    },
     // 保存提交
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -233,7 +250,10 @@ export default {
         this.UpdateCraft(str, resolve, reject)
       })
       if (str === 'submit') {
-        let submitNet = Promise.all([net0, net1, net2, net3])
+        let net4 = new Promise((resolve, reject) => {
+          this.SbumitCarft(str, resolve, reject)
+        })
+        let submitNet = Promise.all([net0, net1, net2, net3, net4])
         submitNet.then(() => {
           this.$message.success('提交成功')
           this.GetOrderHead()

@@ -114,7 +114,6 @@ export default {
       })
     },
     OrderChange (e, row) {
-      console.log(e)
       row.selectOrder = row.steList.filter(item => e === item.orderId)[0]
     },
     // 物料字典
@@ -134,7 +133,7 @@ export default {
         return
       }
       if (str === '1') {
-        let st = this.Materails.filter(item => item.code === item.materialCode)
+        let st = this.Materails.filter(items => items.code === item.materialCode)
         if (st.length === 0) {
           this.$message.error('不能跳转哦')
           return

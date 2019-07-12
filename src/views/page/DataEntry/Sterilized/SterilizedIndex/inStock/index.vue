@@ -29,7 +29,7 @@
             <div style="width: 158px" class="inStorage_card_left">
               <p>杀菌罐</p>
               <div style="text-align: center;padding: 0 20px"><img src="@/assets/img/ferPot.png" alt="" style="width: 92px;height: 190px"></div>
-              <el-button type="text" class="inStorage_card_left_btn" size="small" :disabled="!isRedact" @click="showDialog()">入罐</el-button>
+              <el-button type="text" class="inStorage_card_left_btn" size="small" :disabled="!(isRedact && (orderStatus !== 'submit' && orderStatus !== 'checked'))" @click="showDialog()">入罐</el-button>
             </div>
             <div style="flex: 1">
               <el-table header-row-class-name="tableHead" :data="InStorageDate" border tooltip-effect="dark" @row-dblclick="updateRow" >
@@ -66,7 +66,7 @@
     <el-dialog width="400px" title="入罐开始" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
         <el-form-item label="半成品罐号：" prop="holderId">
-          <el-select v-model="dataForm.holderId" filterable placeholder="请选择" style="width: 100%">
+          <el-select v-model="dataForm.holderId" filterable placeholder="请选择" @change="PotinTankAmount" style="width: 100%">
             <el-option :label="item.holderName" v-for="(item, index) in PotList" :key="index" :value="item.holderId"></el-option>
           </el-select>
         </el-form-item>
@@ -178,18 +178,25 @@ export default {
         id: ''
       }
     },
+    PotinTankAmount (id) {
+      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
+    },
     // 弹窗确认
     addIn () {
-      this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName
-      if (this.isUpdate) {
-        Reflect.ownKeys(this.dataForm).forEach((key) => {
-          this.rowData[key] = this.dataForm[key]
-        })
-      } else {
-        this.InStorageDate.push(this.dataForm)
-      }
-      this.isUpdate = false
-      this.visible = false
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName
+          if (this.isUpdate) {
+            Reflect.ownKeys(this.dataForm).forEach((key) => {
+              this.rowData[key] = this.dataForm[key]
+            })
+          } else {
+            this.InStorageDate.push(this.dataForm)
+          }
+          this.isUpdate = false
+          this.visible = false
+        }
+      })
     },
     // 表格双击修改
     updateRow (row) {

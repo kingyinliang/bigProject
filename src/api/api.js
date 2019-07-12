@@ -1397,6 +1397,7 @@ export const STERILIZED_API = {
   // 杀菌录入工艺
   STE_ENTER_CRAF_LIST_API: HOST + '/ste/tec/list',
   STE_ENTER_CRAF_UPDATE_API: HOST + '/ste/tec/mySaveOrUpdate',
+  STE_ENTER_CRAF_SUBMIT_API: HOST + '/verify/material/getSteMachineTime',
   // 杀菌录入半成品领用
   STE_ENTER_MATERIAL_LIST_API: HOST + '/ste/semiMaterial/list',
   STE_ENTER_MATERIAL_UPDATE_API: HOST + '/ste/semiMaterial/mySaveOrUpdate',
