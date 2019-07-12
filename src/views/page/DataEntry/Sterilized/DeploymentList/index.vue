@@ -223,9 +223,6 @@ export default {
       this.dataList = this.GetPagesList()
     },
     GetPagesList () {
-      console.log(this.dataListAll)
-      console.log((this.pages.currPage - 1) * this.pages.pageSize)
-      console.log(Number((this.pages.currPage - 1) * this.pages.pageSize) + Number(this.pages.pageSize))
       return this.dataListAll.slice((this.pages.currPage - 1) * this.pages.pageSize, Number((this.pages.currPage - 1) * this.pages.pageSize) + Number(this.pages.pageSize))
     },
     GetInfo (row) {
