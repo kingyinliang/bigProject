@@ -237,10 +237,11 @@
       </el-table-column>
       <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.manSolidUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
-            <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
-          </el-select>
+          <!--<el-select v-model="scope.row.manSolidUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{ scope.row.manSolidUnit = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="需整理品" width="140">
@@ -250,10 +251,11 @@
       </el-table-column>
       <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.manPackingUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
-            <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
-          </el-select>
+          <!--<el-select v-model="scope.row.manPackingUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="不良品" width="120">
@@ -263,10 +265,11 @@
       </el-table-column>
       <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.badUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
-            <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
-          </el-select>
+          <!--<el-select v-model="scope.row.badUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="样品" width="120">
@@ -276,15 +279,16 @@
       </el-table-column>
       <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.sampleUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
-            <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
-            <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
-          </el-select>
+          <!--<el-select v-model="scope.row.sampleUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="产出数" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.output = (scope.row.aiShelves*1*(scope.row.aiShelvesUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manSolid*1*(scope.row.manSolidUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.aiPacking*1*(scope.row.aiPackingUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.sample*1*(scope.row.sampleUnit === ratio.productUnit?ratio.ratio*1:1)) }}</span>
+          <span>{{ scope.row.output = (scope.row.aiShelves*1*(scope.row.aiShelvesUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manSolid*1*(scope.row.manSolidUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manPacking*1*(scope.row.manPackingUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.sample*1*(scope.row.sampleUnit === ratio.productUnit?ratio.ratio*1:1)) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
@@ -511,7 +515,7 @@ export default {
         }
       })
       let that = this
-      if (this.order.workShopName !== '包装三车间') {
+      if (this.order.workShopName !== '包装三车间' && this.order.factoryCode !== '6010') {
         Object.keys(obj).forEach(function (key) {
           let tmp = true
           that.InVlist.forEach((item) => {
@@ -591,29 +595,29 @@ export default {
           classType: '',
           batch: '',
           manPacking: '',
-          manPackingUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          manPackingUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          manPackingUnit: this.ratio.basicUnit,
+          manPackingUnitName: this.ratio.basicUnitName,
           aiPacking: '',
-          aiPackingUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          aiPackingUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          aiPackingUnit: this.ratio.basicUnit,
+          aiPackingUnitName: this.ratio.basicUnitName,
           aiShelves: '',
           aiShelvesUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
           aiShelvesUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
           aiSolid: '',
-          aiSolidUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          aiSolidUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          aiSolidUnit: this.ratio.basicUnit,
+          aiSolidUnitName: this.ratio.basicUnitName,
           manSolid: '',
           manSolidUnit: this.ratio.basicUnit,
           manSolidUnitName: this.ratio.basicUnitName,
           bad: '',
-          badUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          badUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          badUnit: this.ratio.basicUnit,
+          badUnitName: this.ratio.basicUnitName,
           sample: 0,
-          sampleUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          sampleUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          sampleUnit: this.ratio.basicUnit,
+          sampleUnitName: this.ratio.basicUnitName,
           output: '',
-          outputUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
-          outputUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          outputUnit: this.ratio.basicUnit,
+          outputUnitName: this.ratio.basicUnitName,
           mainBatch: '',
           attachBatch: '',
           delFlag: '0'
