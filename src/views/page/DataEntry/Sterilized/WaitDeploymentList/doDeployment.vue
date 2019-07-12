@@ -397,13 +397,25 @@ export default {
             }
           })
         } else {
-          this.formHeaders.id = this.formHeaders.ID
-          let params = [this.formHeaders]
-          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
+          this.orderList.map((item) => {
+            item.allocateId = this.allocateId
+            item.remark = this.remark
+            item.orderId = item.orderNo
+          })
+          this.$http(`${STERILIZED_API.DODEPLOYMENTLISTSAVE}`, 'POST', this.orderList).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('生成成功')
-              this.isRedact = false
-              this.GetInfoList(this.allocateId)
+              this.formHeaders.id = this.formHeaders.ID
+              this.formHeaders.remark = this.remark
+              let params = [this.formHeaders]
+              this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
+                if (data.code === 0) {
+                  this.$message.success('生成成功')
+                  this.isRedact = false
+                  this.GetInfoList(this.allocateId)
+                } else {
+                  this.$message.error(data.msg)
+                }
+              })
             } else {
               this.$message.error(data.msg)
             }

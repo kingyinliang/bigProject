@@ -343,6 +343,9 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请勾选数据')
       } else {
+        this.multipleSelection.map((item) => {
+          item.status = '已调配'
+        })
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('保存成功')
@@ -369,11 +372,17 @@ export default {
               return false
             }
           }
-          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
+          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('提交成功')
-              this.isRedact = false
-              this.SearchList()
+              this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
+                if (data.code === 0) {
+                  this.$message.success('提交成功')
+                  this.isRedact = false
+                  this.SearchList()
+                } else {
+                  this.$message.error(data.msg)
+                }
+              })
             } else {
               this.$message.error(data.msg)
             }
