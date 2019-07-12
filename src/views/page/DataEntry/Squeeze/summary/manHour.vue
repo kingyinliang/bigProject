@@ -22,6 +22,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <auditLog :tableData="TimeAudit"></auditLog>
 </div>
 </template>
 
@@ -33,7 +34,8 @@ export default {
   data () {
     return {
       timeDate: [],
-      timeS: ''
+      timeS: '',
+      TimeAudit: []
     }
   },
   props: {
@@ -48,6 +50,7 @@ export default {
       this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', formHeader).then(({data}) => {
         if (data.code === 0) {
           this.timeDate = data.timeList
+          this.TimeAudit = data.TimeAudit
           this.timeS = GetStatus(data.timeList)
           if (resolve) {
             resolve('resolve')
@@ -103,7 +106,11 @@ export default {
     }
   },
   computed: {},
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 

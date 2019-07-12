@@ -63,7 +63,7 @@
             <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
           </el-tooltip>
         </span>
-        <apply-order ref="applyorder" :isRedact="isRedact" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
+        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -111,6 +111,7 @@ export default {
       SerchSapList: [],
       SerchSapListM: [],
       orderFumet: [],
+      orderAudit: [],
       fumet: [],
       statusArr: [{status: ''}, {status: ''}, {status: ''}]
     }
@@ -155,6 +156,7 @@ export default {
           })
           this.orderS = GetStatus(data.orderList)
           this.orderFumet = data.orderList
+          this.orderAudit = data.orderAudit
           this.fumet = data.orderList
           if (data.orderList) {
             this.formHeader.changed = data.orderList[0].changed

@@ -330,25 +330,37 @@ export default {
     },
     // 罐号
     HolderList () {
-      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
-        this.guanList = data.holderList
-      })
+      if (this.formHeader.factory && this.formHeader.workShop) {
+        this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
+          this.guanList = data.holderList
+        })
+      }
     },
     // 订单
     GetOrderList () {
-      this.$http(`${FERMENTATION_API.SHOOT_GETORDER_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
-        this.OrderList = data.verList
-      })
+      if (this.formHeader.factory && this.formHeader.workShop) {
+        this.$http(`${FERMENTATION_API.SHOOT_GETORDER_API}`, 'POST', {
+          factory: this.formHeader.factory,
+          workShop: this.formHeader.workShop
+        }, false, false, false).then(({data}) => {
+          this.OrderList = data.verList
+        })
+      }
     },
     // 获取物料
     GetMaterial (n) {
-      this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.material = data.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (n) {
+        this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {
+          factory: n,
+          materialTypeCode: 'ZHAL'
+        }, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.material = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 改变每页条数
     handleSizeChange (val) {

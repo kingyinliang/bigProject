@@ -43,6 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <auditLog :tableData="orderAudit"></auditLog>
   </div>
 </template>
 
@@ -58,6 +59,10 @@ export default {
   },
   props: {
     isRedact: '',
+    orderAudit: {
+      type: Array,
+      default () { return [] }
+    },
     fumet: {
       type: Array,
       default () { return [] }
@@ -138,7 +143,11 @@ export default {
     }
   },
   computed: {},
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 

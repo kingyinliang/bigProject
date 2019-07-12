@@ -40,7 +40,7 @@
             <el-table-column width="120">
               <template slot="header"><i class="reqI">*</i><span>罐号</span></template>
               <template slot-scope="scope">
-                <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable v-if="scope.row.hloderId" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
+                <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
                   <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
                 </el-select>
               </template>
