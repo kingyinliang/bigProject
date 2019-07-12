@@ -245,12 +245,12 @@
       </el-table-column>
       <el-table-column label="需整理品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.aiPackingUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+          <el-select v-model="scope.row.manPackingUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
             <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
             <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
           </el-select>
