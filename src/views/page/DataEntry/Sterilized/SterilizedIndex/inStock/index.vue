@@ -71,7 +71,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="批次：" prop="batch">
-          <el-input v-model="dataForm.batch" placeholder="请输入"></el-input>
+          <el-input v-model="dataForm.batch" placeholder="请输入" :disabled="PotObject.batch"></el-input>
         </el-form-item>
         <el-form-item label="入罐数量：">
           <el-input v-model="dataForm.inAmount" placeholder="请输入"></el-input>
@@ -80,7 +80,7 @@
           {{dataForm.unit = 'L'}}
         </el-form-item>
         <el-form-item label="罐内库存：">
-          <el-input v-model="dataForm.inTankAmount" placeholder="请输入"></el-input>
+          <el-input v-model="dataForm.inTankAmount" placeholder="请输入" :disabled="PotObject.inTankAmount"></el-input>
         </el-form-item>
         <el-form-item label="是否满罐：" prop="isFull">
           <el-select v-model="dataForm.isFull" filterable placeholder="请选择" style="width: 100%">
@@ -100,8 +100,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" @click="addIn()">确定</el-button>
+        <el-button @click="visible = false" size="small">取消</el-button>
+        <el-button type="primary" @click="addIn()" size="small" :disabled="PotObject.maxStatus">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -136,6 +136,11 @@ export default {
         isFull: [
           { required: true, message: '是否满罐不能为空', trigger: 'blur' }
         ]
+      },
+      PotObject: {
+        inTankAmount: false,
+        batch: false,
+        maxStatus: false
       }
     }
   },
@@ -180,6 +185,13 @@ export default {
     },
     PotinTankAmount (id) {
       this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
+      if (this.dataForm.inTankAmount) {
+        this.PotObject.inTankAmount = true
+      }
+      if (this.dataForm.batch) {
+        this.PotObject.batch = true
+      }
     },
     // 弹窗确认
     addIn () {
@@ -205,6 +217,7 @@ export default {
         this.isUpdate = true
         this.dataForm = JSON.parse(JSON.stringify(row))
         this.rowData = row
+        this.PotinTankAmount(this.dataForm.holderId)
       }
     },
     // 罐列表
