@@ -115,7 +115,7 @@
           width="91">
         </el-table-column>
         <el-table-column
-          prop="aiSolid"
+          prop="aiShelves"
           label="正常品入库数"
           width="140" v-if="deptCode === '6010'">
         </el-table-column>

@@ -241,7 +241,7 @@
             <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
             <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
           <!--</el-select>-->
-          <span>{{ scope.row.manSolidUnit = ratio.basicUnitName}}</span>
+          <span>{{ scope.row.manSolidUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="需整理品" width="140">
