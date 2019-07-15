@@ -20,7 +20,7 @@
           <el-option v-for="(item, index) in HolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetList(true)" style="float: right" >查询</el-button>
+      <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allocate:allocateUpdate')" style="float: right" >查询</el-button>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
@@ -44,9 +44,9 @@
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="12" class="dataList_item_btn_item"><el-button @click="GnProp(item)" style='border:none; background:none; padding:0px;'>GN搅罐</el-button></el-col>
+            <el-col :span="12" class="dataList_item_btn_item"><el-button :disabled="!isAuth('ste:gn:save')" @click="GnProp(item)" style='border:none; background:none; padding:0px;'>GN搅罐</el-button></el-col>
             <!-- <el-col :span="12" class="dataList_item_btn_item"><p @click="GnProp(item)">GN搅罐</p></el-col> -->
-            <el-col :span="12" class="dataList_item_btn_item"><el-button @click="JsbProp(item)" style='border:none; background:none; padding:0px;'>JBS出库</el-button></el-col>
+            <el-col :span="12" class="dataList_item_btn_item"><el-button :disabled="!isAuth('ste:gn:save')" @click="JsbProp(item)" style='border:none; background:none; padding:0px;'>JBS出库</el-button></el-col>
           </el-row>
         </el-card>
       </el-col>
