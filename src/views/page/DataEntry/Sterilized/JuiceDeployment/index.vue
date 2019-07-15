@@ -99,20 +99,17 @@
       <el-table :data="ItemList" border header-row-class-name="tableHead">
         <el-table-column label="物料" :show-overflow-tooltip="true" width="180">
           <template slot-scope="scope">
-            {{scope.row.materialName}} {{scope.row.materialCode}}
+            {{scope.row.materialCode}} {{scope.row.materialName}}
           </template>
         </el-table-column>
         <el-table-column label="订单单位" width="80" prop="unit"></el-table-column>
         <el-table-column label="计划领料" prop="planAmount" width="80"></el-table-column>
         <el-table-column width="60">
           <template slot-scope="scope">
-            <el-button type="text" :disabled="lineStatus === '已提交' || lineStatus === '审核通过' || isRedact === false" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+            <el-button type="text" :disabled="SplitStatus(scope.row.materialName)" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="productDate" width="150" >
-          <template slot="header">
-            <i class="reqI">*</i> 罐号
-          </template>
+        <el-table-column label="罐号" prop="productDate" width="150" >
           <template slot-scope="scope">
             <el-select v-model="scope.row.holderId" size="small"  :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">
               <el-option value=''>请选择</el-option>
@@ -125,7 +122,7 @@
             <i class="reqI">*</i> 实际领料
           </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.receiveAmount" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)" size="small"></el-input>
+            <el-input v-model="scope.row.receiveAmount" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column width="120">
@@ -133,7 +130,7 @@
             <i class="reqI">*</i> 批次
           </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batch" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)" size="small"></el-input>
+            <el-input v-model="scope.row.batch" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="备注" :show-overflow-tooltip="true">
@@ -288,7 +285,7 @@ export default {
           this.ItemList = data.info
           this.ItemList.map((item) => {
             if (item.receiveAmount === '' || !item.receiveAmount) {
-              item.receiveAmount = item.PLAN_AMOUNT
+              item.receiveAmount = item.planAmount
             }
           })
           this.dialogTableVisible = true
@@ -318,8 +315,12 @@ export default {
       for (let item of this.ItemList) {
         batchList.push(item.batch)
         item.ID = this.ID
-        if (!item.holderId || !item.receiveAmount || !item.batch || item.holderId === '' || item.receiveAmount === '' || item.batch === '') {
+        if (!item.receiveAmount || !item.batch || item.receiveAmount === '' || item.batch === '') {
           this.$message.error('请先填写必填项')
+          return false
+        }
+        if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
+          this.$message.error('原汁物料需选择罐号')
           return false
         }
       }
@@ -408,6 +409,20 @@ export default {
     // 删除
     DelOrderNo (row) {
       this.ItemList.splice(this.ItemList.indexOf(row), 1)
+    },
+    SplitStatus (materialName) {
+      if (materialName.indexOf('原汁') === -1) {
+        return (this.lineStatus === '已提交' || this.lineStatus === '审核通过' || this.isRedact === false)
+      } else {
+        return true
+      }
+    },
+    SplitStatuss (materialName) {
+      if (materialName.indexOf('原汁') === -1) {
+        return (!(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false))
+      } else {
+        return true
+      }
     }
   }
 }
