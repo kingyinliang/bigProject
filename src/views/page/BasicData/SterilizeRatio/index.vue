@@ -18,9 +18,9 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('report:form:listWorkshopWHoursM')">查询</el-button>
-          <el-button type="primary" size="small" @click="AddInfo()" v-if="isAuth('report:form:exportWorkshopWHoursM')">新增</el-button>
-          <el-button type="primary" size="small" @click="DeleteInfo()" v-if="isAuth('report:form:exportWorkshopWHoursM')">批量删除</el-button>
+          <el-button type="primary" size="small" @click="GetList()">查询</el-button>
+          <el-button type="primary" size="small" @click="AddInfo()" v-if="isAuth('ste:mid:save')">新增</el-button>
+          <el-button type="primary" size="small" @click="DeleteInfo()" v-if="isAuth('ste:mid:delete')">批量删除</el-button>
         </el-col>
       </el-row>
       <div class="toggleSearchBottom">

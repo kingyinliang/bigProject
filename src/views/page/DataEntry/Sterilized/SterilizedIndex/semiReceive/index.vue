@@ -25,9 +25,9 @@
           <span slot="label" class="spanview">
             原汁领用
           </span>
-          <el-table header-row-class-name="tableHead" :data="MaterialDate" border tooltip-effect="dark">
+          <el-table header-row-class-name="tableHead" :data="MaterialDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
             <el-table-column type="index" width="55" label="序号"></el-table-column>
-            <el-table-column label="领用物料">
+            <el-table-column label="领用物料" :show-overflow-tooltip="true">
               <template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template>
             </el-table-column>
             <el-table-column label="单位" width="50" prop="unit"></el-table-column>
@@ -40,8 +40,8 @@
             <el-table-column width="120">
               <template slot="header"><i class="reqI">*</i><span>罐号</span></template>
               <template slot-scope="scope">
-                <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
-                  <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
+                <el-select v-model="scope.row.hloderId" @change="setBatch(scope.row)" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
+                  <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -60,6 +60,11 @@
             <el-table-column label="备注" width="110">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="50">
+              <template slot-scope="scope">
+                <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -84,7 +89,7 @@
 <script>
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
-import {BASICDATA_API, STERILIZED_API} from '@/api/api'
+import {STERILIZED_API} from '@/api/api'
 import {Stesave, GetStatus} from '@/net/validate'
 export default {
   name: 'index',
@@ -135,10 +140,35 @@ export default {
         unit: row.unit
       })
     },
-    GetPot (id) {
-      this.$http(`${BASICDATA_API.PUPLWHEATLIST}`, 'POST', {types: ['006'], factory: id}).then(({data}) => {
-        this.PotList = data.list
+    GetPot () {
+      this.$http(`${STERILIZED_API.STE_ENTER_IN_POT_LIST_API}`, 'POST', {
+        factory: this.formHeader.factory,
+        workShop: this.formHeader.workShop
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.PotList = data.halfList
+        } else {
+          this.$message.error(data.msg)
+        }
       })
+    },
+    setBatch (row) {
+      row.batch = this.PotList.filter(items => items.holderId === row.hloderId)[0].batch
+    },
+    delRow (row) {
+      if (this.MaterialDate.filter(item => item.delFlag === '0').length === 1) {
+        this.$message.error('最后一条了哦，不能再删了')
+      } else {
+        row.delFlag = '1'
+      }
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     },
     // 保存提交
     UpdateMaterial (str, resolve, reject) {
@@ -235,7 +265,7 @@ export default {
         if (data.code === 0) {
           this.isRedact = false
           this.formHeader = data.list[0]
-          this.GetPot(this.formHeader.factory)
+          this.GetPot()
           this.Stesave = new Stesave(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)

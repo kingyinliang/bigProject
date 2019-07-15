@@ -31,7 +31,7 @@
               <h3 style="line-height: 32px">辅料添加记录</h3>
               <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')">添加完成</el-button>
             </div>
-            <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" border tooltip-effect="dark">
+            <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
               <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
               <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
@@ -64,9 +64,10 @@
                   <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="100" fixed="right">
+              <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -76,7 +77,7 @@
               <h3 style="line-height: 32px">增补料记录</h3>
               <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')">添加完成</el-button>
             </div>
-            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" border tooltip-effect="dark">
+            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
               <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
               <el-table-column type="index" width="55" label="序号"></el-table-column>
               <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
@@ -105,9 +106,10 @@
                   <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="100" fixed="right">
+              <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -257,18 +259,45 @@ export default {
         }
       })
     },
+    delRow (row) {
+      if (this.multipleSelectionAddSup.length > 0) {
+        this.multipleSelectionAddSup.forEach((item, index) => {
+          if (item === row) {
+            this.multipleSelectionAddSup.splice(index, 1)
+          }
+        })
+        this.multipleSelectionSup.forEach((item, index) => {
+          if (item === row) {
+            this.multipleSelectionSup.splice(index, 1)
+          }
+        })
+      }
+      row.delFlag = '1'
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
+    },
     // 辅料添加多选
     handleSelectionChangeAddSup (val) {
       this.multipleSelectionAddSup = []
       val.forEach((item, index) => {
-        this.multipleSelectionAddSup.push(item)
+        if (item.delFlag !== '1') {
+          this.multipleSelectionAddSup.push(item)
+        }
       })
     },
     // 增补料多选
     handleSelectionChangeSup (val) {
       this.multipleSelectionSup = []
       val.forEach((item, index) => {
-        this.multipleSelectionSup.push(item)
+        if (item.delFlag !== '1') {
+          this.multipleSelectionSup.push(item)
+        }
       })
     },
     // 辅料修改
@@ -352,54 +381,58 @@ export default {
     dataRul () {
       let ty = true
       this.AddSupDate.forEach((item) => {
-        if (!item.batch) {
-          ty = false
-          this.$message.error('批次必填')
-        }
-        if (!item.receiveAmount) {
-          ty = false
-          this.$message.error('领用数量必填')
-        }
-        if (item.supStatus !== '已确认') {
-          ty = false
-          this.$message.error('品保未确认')
-        }
-        if (item.isSplit === '0') {
-          let sum = 0
-          this.AddSupDate.forEach((it) => {
-            if (it.materialCode === item.materialCode) {
-              sum += it.receiveAmount
-            }
-          })
-          if (sum > item.adjustAmount) {
+        if (item.delFlag === '0') {
+          if (!item.batch) {
             ty = false
-            this.$message.error('领用数量大于需求数量')
+            this.$message.error('批次必填')
+          }
+          if (!item.receiveAmount) {
+            ty = false
+            this.$message.error('领用数量必填')
+          }
+          if (item.supStatus !== '已确认') {
+            ty = false
+            this.$message.error('品保未确认')
+          }
+          if (item.isSplit === '0') {
+            let sum = 0
+            this.AddSupDate.forEach((it) => {
+              if (it.materialCode === item.materialCode && it.delFlag !== '1') {
+                sum += it.receiveAmount
+              }
+            })
+            if (sum > item.adjustAmount) {
+              ty = false
+              this.$message.error('领用数量大于需求数量')
+            }
           }
         }
       })
       this.SupDate.forEach((item) => {
-        if (!item.batch) {
-          ty = false
-          this.$message.error('批次必填')
-        }
-        if (!item.receiveAmount) {
-          ty = false
-          this.$message.error('领用数量必填')
-        }
-        if (item.supStatus !== '已确认') {
-          ty = false
-          this.$message.error('品保未确认')
-        }
-        if (item.isSplit === '0') {
-          let sum = 0
-          this.SupDate.forEach((it) => {
-            if (it.materialCode === item.materialCode) {
-              sum += it.receiveAmount
-            }
-          })
-          if (sum > item.addAmount) {
+        if (item.delFlag === '0') {
+          if (!item.batch) {
             ty = false
-            this.$message.error('领用数量大于添加数量')
+            this.$message.error('批次必填')
+          }
+          if (!item.receiveAmount) {
+            ty = false
+            this.$message.error('领用数量必填')
+          }
+          if (item.supStatus !== '已确认') {
+            ty = false
+            this.$message.error('品保未确认')
+          }
+          if (item.isSplit === '0') {
+            let sum = 0
+            this.SupDate.forEach((it) => {
+              if (it.materialCode === item.materialCode && it.delFlag !== '1') {
+                sum += it.receiveAmount
+              }
+            })
+            if (sum > item.addAmount) {
+              ty = false
+              this.$message.error('领用数量大于添加数量')
+            }
           }
         }
       })
