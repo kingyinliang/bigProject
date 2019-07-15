@@ -222,7 +222,7 @@ export default {
       this.$http(`${STERILIZED_API.ORDERALLOTLIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.list.list
-          this.formHeader.totalCount = data.list.list.length
+          this.formHeader.totalCount = data.list.totalCount
         } else {
           this.$message.error(data.msg)
         }

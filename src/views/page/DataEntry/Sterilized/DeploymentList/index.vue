@@ -32,8 +32,8 @@
         </el-col>
       </el-row>
       <el-row style="text-align: right">
-        <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-        <el-button type="primary" size="small" @click="CreateOrder()">生成</el-button>
+        <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allocate:allocateListTp')">查询</el-button>
+        <el-button type="primary" size="small" @click="CreateOrder()" v-if="isAuth('ste:allocate:allocateCreateTp')">生成</el-button>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
@@ -191,7 +191,7 @@ export default {
         this.$message.error('请选择工厂')
         return false
       }
-      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTLIST}`, 'POST', this.formHeader).then(({data}) => {
+      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTLISTTP}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataListAll = data.orderInfo
           this.pages.currPage = 1
@@ -254,7 +254,8 @@ export default {
           this.$message.error('请勾选数据')
           return false
         }
-        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', this.multipleSelection).then(({data}) => {
+        console.log(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`)
+        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('生成成功')
             this.GetList()

@@ -28,8 +28,8 @@
           </el-form>
         </el-col>
         <el-col  style="width:127px; float:right">
-          <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-          <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
+          <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:pkgOrder:orderList')">查询</el-button>
+          <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allocate:allocateOrderSave')">{{isRedact === false? '编辑' : '取消'}}</el-button>
         </el-col>
       </el-row>
     </el-card>
