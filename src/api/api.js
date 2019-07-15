@@ -1458,5 +1458,7 @@ export const STERILIZED_API = {
    *  调配列表
    */
   JUICEDEPLOYMENTLIST: HOST + '/ste/allocate/allocateList',
-  JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate'
+  JUICEDEPLOYMENTLISTTP: HOST + '/ste/allocate/allocateListTp',
+  JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate',
+  JUICEDEPLOYMENTCREATETP: HOST + '/ste/allocate/allocateCreateTp'
 }

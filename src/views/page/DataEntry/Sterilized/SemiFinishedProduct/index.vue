@@ -39,6 +39,7 @@
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
               <p>{{item.amount}}</p>
+              <p>{{item.gnEndTime}}</p>
               <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
           </div>
@@ -319,8 +320,9 @@ export default {
           }
         })
         this.formJsb = {
+          amount: row.amount,
           holderId: row.holderId,
-          receiveHolderId: row.holderNo,
+          receiveHolderId: row.holderId,
           batch: row.batch,
           receiveAmount: '',
           inHolderType: '',
@@ -333,6 +335,10 @@ export default {
     JsbSave (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if (this.formJsb.receiveAmount > this.formJsb.amount) {
+            this.$message.error('领用量不能大于库存')
+            return false
+          }
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTJSBSAVE}`, 'POST', this.formJsb).then(({data}) => {
             if (data.code === 0) {
               this.$message.success('保存成功')
