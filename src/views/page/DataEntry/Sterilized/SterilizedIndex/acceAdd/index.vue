@@ -238,9 +238,11 @@ export default {
     addOverTo () {
       this.addSupOverData.forEach((item) => {
         item.addStatus = '已添加'
+        item.status = 'saved'
       })
       this.SupOverData.forEach((item) => {
         item.addStatus = '已添加'
+        item.status = 'saved'
       })
       this.$http(`${STERILIZED_API.STE_ENTER_SUP_UPDATE_API}`, 'POST', {
         resultList: this.addSupOverData,
