@@ -351,7 +351,7 @@ export default {
     workTime: function () {
       return function (end, start, row) {
         if (end && start && row.delFlag !== '1') {
-          return ((toDate(end) - toDate(start)) / 3600000).toFixed(2) * 1 - (row.dinner * 1) / 60
+          return ((toDate(end) - toDate(start)) / 3600000).toFixed(2) * 1 - ((row.dinner * 1) / 60).toFixed(2) * 1
         }
       }
     }

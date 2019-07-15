@@ -429,7 +429,8 @@ export default class Index extends Vue {
     //   })
     // }
   }
-  getMaterialList (wid: string) {
+  getMaterialList (wid) {
+    wid = wid.join(',')
     this.materialList = []
     Vue.prototype.$http(`${BASICDATA_API.MATERIALS_API}`, 'POST', {productLine: wid}).then(({data}) => {
       if (data.code === 0) {

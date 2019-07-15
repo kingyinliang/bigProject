@@ -64,6 +64,12 @@
                       width="87">
                     </el-table-column>
                     <el-table-column
+                      prop="deptName"
+                      label="所属部门"
+                      width="87"
+                      :show-overflow-tooltip="true">
+                    </el-table-column>
+                    <el-table-column
                       prop="post"
                       label="职务"
                       :show-overflow-tooltip="true"
@@ -112,7 +118,7 @@
           </el-row>
         </el-card>
       </div>
-      <user-add-or-update v-if="visible" ref="addOrupdate" @refreshDataList="getList"></user-add-or-update>
+      <user-add-or-update v-if="visible" ref="addOrupdate" @refreshDataList="getList" :OrgTree="OrgTree"></user-add-or-update>
     </el-col>
 </template>
 
@@ -128,6 +134,7 @@ export default {
       },
       visible: false,
       deptId: '',
+      deptName: '',
       OrgTree: [],
       userArr: [],
       multipleSelection: [],
@@ -159,6 +166,7 @@ export default {
     // 根据deptId查询用户
     setdetail (data) {
       this.deptId = data.deptId
+      this.deptName = data.deptName
       this.getList()
     },
     // 获取列表
@@ -200,7 +208,7 @@ export default {
       if (this.deptId) {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs.addOrupdate.init(this.deptId, id)
+          this.$refs.addOrupdate.init(this.deptId, this.deptName, id)
         })
       } else {
         this.$message.error('请先选择部门')

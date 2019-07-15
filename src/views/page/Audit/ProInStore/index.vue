@@ -136,7 +136,7 @@
             <el-table-column
               prop="batch"
               label="物料批次"
-              width="105">
+              width="112">
             </el-table-column>
             <el-table-column
               label="生产日期"
