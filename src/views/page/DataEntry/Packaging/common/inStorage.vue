@@ -219,22 +219,43 @@
       </el-table-column>
       <el-table-column label="正常品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="单位" width="60">
+      <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <span>{{ scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
+          <el-select v-model="scope.row.aiShelvesUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+            <el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>
+            <el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="供应商待买" width="140">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="单位" width="90">
+        <template slot-scope="scope">
+          <!--<el-select v-model="scope.row.manSolidUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{ scope.row.manSolidUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="需整理品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="单位" width="60">
+      <el-table-column label="单位" width="90">
         <template slot-scope="scope">
-          <span>{{scope.row.aiPackingUnitName = ratio.basicUnitName}}</span>
+          <!--<el-select v-model="scope.row.manPackingUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
+          <span>{{scope.row.manPackingUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="不良品" width="120">
@@ -242,8 +263,12 @@
           <el-input v-model="scope.row.bad" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="单位" width="60">
+      <el-table-column label="单位" width="90">
         <template slot-scope="scope">
+          <!--<el-select v-model="scope.row.badUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
           <span>{{scope.row.badUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
@@ -252,19 +277,28 @@
           <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="单位" width="60">
+      <el-table-column label="单位" width="90">
         <template slot-scope="scope">
+          <!--<el-select v-model="scope.row.sampleUnit" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">-->
+            <!--<el-option :label="ratio.productUnitName" :value="ratio.productUnit" v-if="ratio.productUnit"></el-option>-->
+            <!--<el-option :label="ratio.basicUnitName" :value="ratio.basicUnit" v-if="ratio.basicUnit"></el-option>-->
+          <!--</el-select>-->
           <span>{{scope.row.sampleUnitName = ratio.basicUnitName}}</span>
         </template>
       </el-table-column>
       <el-table-column label="产出数" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.sample*1) }}</span>
+          <span>{{ scope.row.output = (scope.row.aiShelves*1*(scope.row.aiShelvesUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manSolid*1*(scope.row.manSolidUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manPacking*1*(scope.row.manPackingUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.sample*1*(scope.row.sampleUnit === ratio.productUnit?ratio.ratio*1:1)) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">
         <template slot-scope="scope">
           <span>{{scope.row.outputUnitName = ratio.basicUnitName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" width="120">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
@@ -481,7 +515,7 @@ export default {
         }
       })
       let that = this
-      if (this.order.workShopName !== '包装三车间') {
+      if (this.order.workShopName !== '包装三车间' && this.order.factoryCode !== '6010') {
         Object.keys(obj).forEach(function (key) {
           let tmp = true
           that.InVlist.forEach((item) => {
@@ -553,40 +587,77 @@ export default {
     },
     // 新增入库
     AddInDate (form) {
-      form.push({
-        status: '',
-        isPkgThree: '',
-        orderId: '',
-        classType: '',
-        batch: '',
-        manPacking: '',
-        manPackingUnit: this.ratio.basicUnit,
-        manPackingUnitName: this.ratio.basicUnitName,
-        aiPacking: '',
-        aiPackingUnit: this.ratio.basicUnit,
-        aiPackingUnitName: this.ratio.basicUnitName,
-        aiShelves: '',
-        aiShelvesUnit: this.ratio.productUnit,
-        aiShelvesUnitName: this.ratio.productUnitName,
-        aiSolid: '',
-        aiSolidUnit: this.ratio.productUnit,
-        aiSolidUnitName: this.ratio.productUnitName,
-        manSolid: '',
-        manSolidUnit: this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnit : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit)),
-        manSolidUnitName: this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnitName : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName)),
-        bad: '',
-        badUnit: this.ratio.basicUnit,
-        badUnitName: this.ratio.basicUnitName,
-        sample: 0,
-        sampleUnit: this.ratio.basicUnit,
-        sampleUnitName: this.ratio.basicUnitName,
-        output: '',
-        outputUnit: this.ratio.basicUnit,
-        outputUnitName: this.ratio.basicUnitName,
-        mainBatch: '',
-        attachBatch: '',
-        delFlag: '0'
-      })
+      if (this.order.factoryCode === '6010') {
+        form.push({
+          status: '',
+          isPkgThree: '',
+          orderId: '',
+          classType: '',
+          batch: '',
+          manPacking: '',
+          manPackingUnit: this.ratio.basicUnit,
+          manPackingUnitName: this.ratio.basicUnitName,
+          aiPacking: '',
+          aiPackingUnit: this.ratio.basicUnit,
+          aiPackingUnitName: this.ratio.basicUnitName,
+          aiShelves: '',
+          aiShelvesUnit: this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit,
+          aiShelvesUnitName: this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName,
+          aiSolid: '',
+          aiSolidUnit: this.ratio.basicUnit,
+          aiSolidUnitName: this.ratio.basicUnitName,
+          manSolid: '',
+          manSolidUnit: this.ratio.basicUnit,
+          manSolidUnitName: this.ratio.basicUnitName,
+          bad: '',
+          badUnit: this.ratio.basicUnit,
+          badUnitName: this.ratio.basicUnitName,
+          sample: 0,
+          sampleUnit: this.ratio.basicUnit,
+          sampleUnitName: this.ratio.basicUnitName,
+          output: '',
+          outputUnit: this.ratio.basicUnit,
+          outputUnitName: this.ratio.basicUnitName,
+          mainBatch: '',
+          attachBatch: '',
+          delFlag: '0'
+        })
+      } else {
+        form.push({
+          status: '',
+          isPkgThree: '',
+          orderId: '',
+          classType: '',
+          batch: '',
+          manPacking: '',
+          manPackingUnit: this.ratio.basicUnit,
+          manPackingUnitName: this.ratio.basicUnitName,
+          aiPacking: '',
+          aiPackingUnit: this.ratio.basicUnit,
+          aiPackingUnitName: this.ratio.basicUnitName,
+          aiShelves: '',
+          aiShelvesUnit: this.ratio.productUnit,
+          aiShelvesUnitName: this.ratio.productUnitName,
+          aiSolid: '',
+          aiSolidUnit: this.ratio.productUnit,
+          aiSolidUnitName: this.ratio.productUnitName,
+          manSolid: '',
+          manSolidUnit: this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnit : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit)),
+          manSolidUnitName: this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnitName : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName)),
+          bad: '',
+          badUnit: this.ratio.basicUnit,
+          badUnitName: this.ratio.basicUnitName,
+          sample: 0,
+          sampleUnit: this.ratio.basicUnit,
+          sampleUnitName: this.ratio.basicUnitName,
+          output: '',
+          outputUnit: this.ratio.basicUnit,
+          outputUnitName: this.ratio.basicUnitName,
+          mainBatch: '',
+          attachBatch: '',
+          delFlag: '0'
+        })
+      }
     },
     // 删除
     dellistbomS (row) {

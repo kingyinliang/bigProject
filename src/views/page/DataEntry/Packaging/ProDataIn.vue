@@ -375,7 +375,7 @@ export default {
         outputUnit: this.formHeader.outputUnit,
         realOutput: this.formHeader.realOutput + '',
         countOutput: this.$refs.instorage.countOutputNum.toString(),
-        countOutputUnit: this.formHeader.properties === '二合一&礼盒产线' ? this.ratio.basicUnit : 'BOT',
+        countOutputUnit: this.ratio.basicUnit,
         productDate: this.formHeader.productDate
       }]
       this.$http(`${PACKAGING_API.PKGSAVEFORM_API}`, 'POST', data).then(({data}) => {
