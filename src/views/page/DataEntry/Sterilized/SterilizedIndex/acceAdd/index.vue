@@ -50,24 +50,24 @@
               <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="领用数量" width="100">
                 <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="备注" width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -92,24 +92,24 @@
               <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="领用数量" width="100">
                 <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="备注" width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -238,6 +238,12 @@ export default {
     },
     // 添加完成确认
     addOverTo () {
+      if (!this.dataRul(this.addSupOverData, 'AddSupDate', true)) {
+        return
+      }
+      if (!this.dataRul(this.SupOverData, 'SupDate', true)) {
+        return
+      }
       this.addSupOverData.forEach((item) => {
         item.addStatus = '已添加'
         item.status = 'saved'
@@ -247,8 +253,8 @@ export default {
         item.status = 'saved'
       })
       this.$http(`${STERILIZED_API.STE_ENTER_SUP_UPDATE_API}`, 'POST', {
-        resultList: this.addSupOverData,
-        supList: this.SupOverData
+        resultList: this.AddSupDate,
+        supList: this.SupDate
       }).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
@@ -343,7 +349,10 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.dataRul()) {
+        if (!this.dataRul(this.AddSupDate, 'AddSupDate')) {
+          return
+        }
+        if (!this.dataRul(this.SupDate, 'SupDate')) {
           return
         }
       }
@@ -378,9 +387,9 @@ export default {
       }
     },
     // 验证
-    dataRul () {
+    dataRul (data, data1, st) {
       let ty = true
-      this.AddSupDate.forEach((item) => {
+      data.forEach((item) => {
         if (item.delFlag === '0') {
           if (!item.batch) {
             ty = false
@@ -390,45 +399,32 @@ export default {
             ty = false
             this.$message.error('领用数量必填')
           }
-          if (item.supStatus !== '已确认') {
-            ty = false
-            this.$message.error('品保未确认')
+          if (!st) {
+            if (item.supStatus !== '已确认') {
+              ty = false
+              this.$message.error('品保未确认')
+            }
           }
-          if (item.isSplit === '0') {
-            let sum = 0
-            this.AddSupDate.forEach((it) => {
-              if (it.materialCode === item.materialCode && it.delFlag !== '1') {
-                sum += it.receiveAmount
-              }
-            })
+          let sum = 0
+          let dataArr = []
+          if (data1 === 'AddSupDate') {
+            dataArr = this.AddSupDate
+          } else if (data1 === 'SupDate') {
+            dataArr = this.SupDate
+          }
+          dataArr.forEach((it) => {
+            if (it.materialCode === item.materialCode && it.delFlag !== '1') {
+              sum += it.receiveAmount * 1
+            }
+          })
+          if (data1 === 'AddSupDate') {
+            console.log(sum)
             if (sum > item.adjustAmount) {
               ty = false
               this.$message.error('领用数量大于需求数量')
             }
-          }
-        }
-      })
-      this.SupDate.forEach((item) => {
-        if (item.delFlag === '0') {
-          if (!item.batch) {
-            ty = false
-            this.$message.error('批次必填')
-          }
-          if (!item.receiveAmount) {
-            ty = false
-            this.$message.error('领用数量必填')
-          }
-          if (item.supStatus !== '已确认') {
-            ty = false
-            this.$message.error('品保未确认')
-          }
-          if (item.isSplit === '0') {
-            let sum = 0
-            this.SupDate.forEach((it) => {
-              if (it.materialCode === item.materialCode && it.delFlag !== '1') {
-                sum += it.receiveAmount
-              }
-            })
+          } else if (data1 === 'SupDate') {
+            console.log(sum)
             if (sum > item.addAmount) {
               ty = false
               this.$message.error('领用数量大于添加数量')
@@ -439,7 +435,7 @@ export default {
       return ty
     },
     CheckBoxA (row) {
-      if (row.status === 'checked' || row.status === 'submit') {
+      if (row.status === 'checked' || row.status === 'submit' || row.addStatus === '已添加') {
         return 0
       } else {
         return 1

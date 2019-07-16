@@ -22,7 +22,7 @@
             <el-form-item label="杀菌锅：">
               <el-select v-model="formHeader.panId" placeholder="请选择" style="width: 180px">
                 <el-option label="请选择"  value=""></el-option>
-                <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
+                <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产订单：">
@@ -53,7 +53,7 @@
       <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
         <h3 style="line-height: 32px">订单列表</h3>
       </div>
-      <el-table header-row-class-name="tableHead" :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="Dblckick" border tooltip-effect="dark">
+      <el-table ref="multipleTable" header-row-class-name="tableHead" :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="Dblckick" border tooltip-effect="dark">
         <el-table-column type="selection" :selectable="CheckBoxOrder" width="40"></el-table-column>
         <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="辅料状态" width="80" prop="supStatus" :show-overflow-tooltip="true"></el-table-column>
@@ -238,6 +238,9 @@ export default {
     },
     // 双击
     Dblckick (row) {
+      if (row.supStatus !== '已确认') {
+        this.$refs.multipleTable.toggleRowSelection(row)
+      }
       if (row.steSupMaterialBean.resultList) {
         this.AddSupDate = row.steSupMaterialBean.resultList
       } else {
@@ -262,6 +265,7 @@ export default {
         item.supStatus = str
         item.steSupMaterialBean.resultList.forEach((item1) => {
           item1.supStatus = str
+          item1.status = 'saved'
         })
         item.steSupMaterialBean.supList.forEach((item1) => {
           item1.supStatus = str
@@ -305,6 +309,7 @@ export default {
         item.supStatus = str
         item.steSupMaterialBean.resultList.forEach((item1) => {
           item1.supStatus = str
+          item1.status = 'saved'
         })
         item.steSupMaterialBean.supList.forEach((item1) => {
           item1.supStatus = str

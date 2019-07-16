@@ -40,7 +40,9 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="生产品项：">
-                    <p class="dataList_item_body_text_tit">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
+                    <el-tooltip class="item" effect="dark" :content="(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')" placement="top">
+                      <p class="dataList_item_body_text_tit">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
+                    </el-tooltip>
                   </el-form-item>
                   <el-form-item label="订单日期：">
                     <p class="dataList_item_body_text_tit">{{item.selectOrder.productDate || ''}}</p>
