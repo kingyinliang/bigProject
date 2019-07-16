@@ -181,8 +181,10 @@ export function exportFile (url, fileName, vue) {
  * @param {*}
  */
 export function headanimation ($) {
+  $('.toggleSearchBottom').parents('.searchCard').css('padding-bottom', '18px')
   // 搜索切换显隐
   $('.toggleSearchBottom').click(function () {
+    $('.toggleSearchBottom').parents('.searchCard').css('padding-bottom', '0')
     $('.searchCard').animate({height: 0}, 300, function () {
       $('.searchCard').parent('.main').css('padding-bottom', 0)
     })

@@ -188,9 +188,13 @@ export default {
       this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
       if (this.dataForm.inTankAmount) {
         this.PotObject.inTankAmount = true
+      } else {
+        this.PotObject.inTankAmount = false
       }
       if (this.dataForm.batch) {
         this.PotObject.batch = true
+      } else {
+        this.PotObject.batch = false
       }
     },
     // 弹窗确认
