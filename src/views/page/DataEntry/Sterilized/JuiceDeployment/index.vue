@@ -125,12 +125,12 @@
             <el-input v-model="scope.row.receiveAmount" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
           </template>
         </el-table-column>
-        <el-table-column width="120">
+        <el-table-column width="130">
           <template slot="header">
             <i class="reqI">*</i> 批次
           </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batch" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
+            <el-input v-model="scope.row.batch" maxlength="10" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="备注" :show-overflow-tooltip="true">
@@ -323,6 +323,10 @@ export default {
           this.$message.error('请填写批次')
           return false
         }
+        if (item.batch.length !== 10) {
+          this.$message.error('批次应为10位')
+          return false
+        }
         if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
           this.$message.error('原汁物料需选择罐号')
           return false
@@ -363,36 +367,36 @@ export default {
       }
     },
     SubmitForm () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请勾选数据')
+        return false
+      }
       this.$confirm('确认要提交数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.multipleSelection.length === 0) {
-          this.$message.error('请勾选数据')
-        } else {
-          for (let item of this.multipleSelection) {
-            if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
-              this.$message.error('请填写必填项')
-              return false
-            }
+        for (let item of this.multipleSelection) {
+          if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
+            this.$message.error('请填写必填项')
+            return false
           }
-          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
-                if (data.code === 0) {
-                  this.$message.success('提交成功')
-                  this.isRedact = false
-                  this.SearchList()
-                } else {
-                  this.$message.error(data.msg)
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
         }
+        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
+              if (data.code === 0) {
+                this.$message.success('提交成功')
+                this.isRedact = false
+                this.SearchList()
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     },
     // 复选框初始状态

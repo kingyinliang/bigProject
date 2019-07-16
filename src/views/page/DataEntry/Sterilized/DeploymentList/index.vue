@@ -245,16 +245,15 @@ export default {
       }, 100)
     },
     CreateOrder () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请勾选数据')
+        return false
+      }
       this.$confirm('确认生成调配单吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.multipleSelection.length === 0) {
-          this.$message.error('请勾选数据')
-          return false
-        }
-        console.log(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`)
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$message.success('生成成功')
