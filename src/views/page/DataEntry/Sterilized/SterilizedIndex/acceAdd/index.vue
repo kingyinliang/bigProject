@@ -185,11 +185,15 @@ export default {
           let c = this.AddSupDate.concat(this.SupDate)
           this.orderStatus = GetStatus(c)
           this.supStatus = true
-          c.forEach((items) => {
-            if (items.supStatus !== '已确认') {
-              this.supStatus = false
-            }
-          })
+          if (c.length > 0) {
+            c.forEach((items) => {
+              if (items.supStatus !== '已确认') {
+                this.supStatus = false
+              }
+            })
+          } else {
+            this.supStatus = false
+          }
         } else {
           this.$message.error(data.msg)
         }

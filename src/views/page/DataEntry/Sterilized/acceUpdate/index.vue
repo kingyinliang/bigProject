@@ -134,7 +134,7 @@
           <template slot-scope="scope">
             <el-select v-model="scope.row.materialCode" placeholder="请选择" size="mini" style="width: 180px">
               <el-option label="请选择"  value=""></el-option>
-              <el-option :label="item.value" v-for="(item, index) in Materails" :key="index" :value="item.code"></el-option>
+              <el-option :label="item.materialCode + ' ' + item.materialName" v-for="(item, index) in Materails" :key="index" :value="item.materialCode"></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -212,7 +212,6 @@ export default {
       getWorkshop(this, n, '杀菌')
       this.GetPot(n)
       this.GetMaterail(n)
-      this.GetMaterails(n)
       this.GetUnit(n)
     }
   },
@@ -238,6 +237,7 @@ export default {
     },
     // 双击
     Dblckick (row) {
+      this.GetMaterails(row.factory, row.orderNo)
       if (row.supStatus !== '已确认') {
         this.$refs.multipleTable.toggleRowSelection(row)
       }
@@ -258,9 +258,6 @@ export default {
         this.$message.error('请选择订单')
         return
       }
-      if (!this.dataRul()) {
-        return
-      }
       this.multipleSelection.forEach((item) => {
         item.supStatus = str
         item.steSupMaterialBean.resultList.forEach((item1) => {
@@ -271,7 +268,7 @@ export default {
           item1.supStatus = str
           item1.planAmount = item.planOutPut
           item1.orderId = item.orderId
-          item1.materialName = (this.Materails.filter(it => it.code === item1.materialCode)[0]).value
+          item1.materialName = (this.Materails.filter(it => it.materialCode === item1.materialCode)[0]).materialName
         })
       })
       this.$http(`${STERILIZED_API.STE_SUP_SAVED_API}`, 'POST', this.multipleSelection).then(({data}) => {
@@ -315,7 +312,7 @@ export default {
           item1.supStatus = str
           item1.planAmount = item.planOutPut
           item1.orderId = item.orderId
-          item1.materialName = (this.Materails.filter(it => it.code === item1.materialCode)[0]).value
+          item1.materialName = (this.Materails.filter(it => it.code === item1.materialCode)[0]).materialName
         })
       })
       this.$http(`${STERILIZED_API.STE_SUP_PUSH_API}`, 'POST', this.multipleSelection).then(({data}) => {
@@ -399,10 +396,10 @@ export default {
       row.delFlag = '1'
     },
     // 物料字典
-    GetMaterails (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ZengBu_material'}).then(({data}) => {
+    GetMaterails (factory, id) {
+      this.$http(`${STERILIZED_API.STE_SUP_MAT_LIST_API}`, 'POST', {factory: factory, orderNo: id}).then(({data}) => {
         if (data.code === 0) {
-          this.Materails = data.dicList
+          this.Materails = data.list
         } else {
           this.$message.error(data.msg)
         }

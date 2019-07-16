@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import {getFactory, getWorkshop} from '@/net/validate'
+import {getFactory, getWorkshop, dateFormat} from '@/net/validate'
 import {STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
@@ -78,7 +78,7 @@ export default {
         holderType: '014',
         factory: '',
         workShop: '',
-        productDate: ''
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       },
       factory: [],
       workshop: [],
@@ -97,6 +97,10 @@ export default {
   },
   methods: {
     GetDataList () {
+      if (!this.formHeader.productDate || !this.formHeader.factory || !this.formHeader.workShop) {
+        this.$message.error('请选择查询条件')
+        return
+      }
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.GetMaterails(this.formHeader.factory)
