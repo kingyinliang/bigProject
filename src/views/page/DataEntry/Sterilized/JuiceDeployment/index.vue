@@ -315,8 +315,12 @@ export default {
       for (let item of this.ItemList) {
         batchList.push(item.batch)
         item.ID = this.ID
-        if (!item.receiveAmount || !item.batch || item.receiveAmount === '' || item.batch === '') {
-          this.$message.error('请先填写必填项')
+        if (!item.receiveAmount || item.receiveAmount === '') {
+          this.$message.error('请填写实际领料')
+          return false
+        }
+        if (!item.batch || item.batch === '') {
+          this.$message.error('请填写批次')
           return false
         }
         if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
