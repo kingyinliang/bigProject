@@ -38,7 +38,7 @@
             <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1'">
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
-              <p>{{item.amount}}</p>
+              <p>{{(item.amount / 1000).toFixed(3)}}方</p>
               <p>{{item.gnEndTime}}</p>
               <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
@@ -100,7 +100,7 @@
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
           <el-select v-model="formJsb.inHolderType">
-            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.code"></el-option>
+            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">

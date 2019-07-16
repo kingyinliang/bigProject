@@ -48,7 +48,7 @@
       <el-form :model="formAdd" :inline="true" size="small" :rules="Addrulestar" ref="Addstar" label-width="85px">
         <el-form-item label="工厂：">{{this.factoryName}}</el-form-item>
         <el-form-item label="物料：" prop="materialCode">
-          <el-select v-model="formAdd.materialCode" style="width:230px">
+          <el-select v-model="formAdd.materialCode" filterable style="width:230px">
             <el-option value="">请选择</el-option>
             <el-option v-for="(item, index) in materialList" :key="index" :label="item.materialCode + ` ${item.materialName}`" :value="item.materialCode"></el-option>
           </el-select>
@@ -196,23 +196,23 @@ export default {
       this.multipleSelection = val
     },
     DeleteInfo () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请勾选数据')
+        return false
+      }
       this.$confirm('确认要删除数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.multipleSelection.length === 0) {
-          this.$message.error('请勾选数据')
-        } else {
-          this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIODELETE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.$message.success('删除成功')
-              this.GetList()
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        }
+        this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIODELETE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+          if (data.code === 0) {
+            this.$message.success('删除成功')
+            this.GetList()
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     }
   }

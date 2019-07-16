@@ -2,56 +2,56 @@
   <div>
     <div class="main">
       <el-card class="newCard searchCard searchCards">
-        <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
+        <el-form :model="formHeader" :inline="true" size="small" label-width="80px" style="margin-top:10px">
           <el-row>
-            <el-col>
-                <el-form-item label="生产工厂：">
+            <el-col :span="21">
+              <el-form-item label="生产工厂：">
+                <el-tooltip class="item" effect="dark" :content="formHeader.factory" placement="top-start">
                   <p class="input_bottom">{{this.formHeader.factory}}</p>
-                </el-form-item>
-                <el-form-item label="生产车间：">
-                  <p class="input_bottom">{{this.formHeader.workshop}}</p>
-                </el-form-item>
-                <el-form-item label="调配单号：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.ORDER_NO}}</p>
-                </el-form-item>
-                <el-form-item label="调配罐号：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.HOLDER_ID}}</p>
-                </el-form-item>
-                <el-form-item label="提交人员：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.CREATOR}}</p>
-                </el-form-item>
-                <el-form-item label="提交日期：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.CREATED}}</p>
-                </el-form-item>
-                <el-form-item label="调配日期：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.ALLOCATE_DATE}}</p>
-                </el-form-item>
-                <el-form-item label="杀菌物料：">
+                </el-tooltip>
+              </el-form-item>
+              <el-form-item label="生产车间：">
+                <p class="input_bottom">{{this.formHeader.workshop}}</p>
+              </el-form-item>
+              <el-form-item label="调配单号：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.ORDER_NO}}</p>
+              </el-form-item>
+              <el-form-item label="调配罐号：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.HOLDER_ID}}</p>
+              </el-form-item>
+              <el-form-item label="提交人员：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.CREATOR}}</p>
+              </el-form-item>
+              <el-form-item label="提交日期：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.CREATED}}</p>
+              </el-form-item>
+              <el-form-item label="调配日期：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.ALLOCATE_DATE}}</p>
+              </el-form-item>
+              <el-form-item label="杀菌物料：">
+                <el-tooltip class="item" effect="dark" :content="formHeader.materialCode + `${formHeader.materialName}`" placement="top-start">
                   <p class="input_bottom">{{this.formHeader.materialCode}}{{this.formHeader.materialName}}</p>
-                </el-form-item>
-                <el-form-item label="订单状态：">
-                  <p class="input_bottom">&nbsp;{{this.formHeaders.STATUS}}</p>
-                </el-form-item>
-                <el-form-item>
-                  <span style="color:#606266; width:162px; float:left; margin-left:15px;">计划BL原汁总量（L）：</span>
-                  <p style="float:left" class="input_bottom">{{this.planOutputTotal}}</p>
-                </el-form-item>
+                </el-tooltip>
+              </el-form-item>
+              <el-form-item label="订单状态：">
+                <p class="input_bottom">&nbsp;{{this.formHeaders.STATUS}}</p>
+              </el-form-item>
+              <el-form-item>
+                <span style="color:#606266; width:162px; float:left; margin-left:15px;">计划BL原汁总量（L）：</span>
+                <p style="float:left" class="input_bottom">{{this.planOutputTotal}}</p>
+              </el-form-item>
+              <el-form-item label="备注：">
+                <textarea v-model="remark" :disabled="!isRedact" style="width:887px; height:50px; background:rgba(255,255,255,1); border-radius:4px; border:1px solid rgba(217,217,217,1);"></textarea>
+              </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item label="备注：">
-              <textarea v-model="remark" :disabled="!isRedact" style="width:941px; height:51px; background:rgba(255,255,255,1); border-radius:4px; border:1px solid rgba(217,217,217,1);"></textarea>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-col style="text-align:right">
-              <template>
+            <el-col :span="3" style="text-align:right">
+              <div style="width:100%">
                 <el-button type="primary" size="small" v-if="isAuth('ste:allocate:allocateOrderSave')" :disabled="(formHeaders.STATUS !== '已保存' && formHeaders.STATUS !== '')" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
-              </template>
-              <template v-if="isRedact">
+              </div>
+              <div v-if="isRedact" style="margin-top:15px">
                 <el-button type="primary" size="small" @click="SaveOrderNo(true)">保存</el-button>
                 <el-button type="primary" size="small" @click="CreateOrder(true)">生成</el-button>
-              </template>
+              </div>
             </el-col>
           </el-row>
         </el-form>
@@ -447,7 +447,7 @@ export default {
 
 <style lang="less">
 .input_bottom {
-  width:160px;
+  width:150px;
   border-bottom: 1px solid rgba(216,216,216,1);
   overflow: hidden;
   height: 33px;
@@ -466,5 +466,10 @@ export default {
       color: #fff
     }
   }
+}
+</style>
+<style lang="scss" scoped>
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+  margin-bottom: 8px!important;
 }
 </style>
