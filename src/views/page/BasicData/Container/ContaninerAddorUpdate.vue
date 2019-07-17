@@ -15,7 +15,7 @@
         <el-form-item label="容器号：" prop="holderNo">
           <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
         </el-form-item>
-        <el-form-item label="容器描述：">
+        <el-form-item label="容器描述：" prop="holderName">
           <el-input v-model="dataForm.holderName" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="容器量：">
@@ -87,6 +87,9 @@ export default {
         ],
         holderNo: [
           { required: true, message: '容器号不能为空', trigger: 'blur' }
+        ],
+        holderName: [
+          { required: true, message: '容器描述不能为空', trigger: 'blur' }
         ],
         factory: [
           { required: true, message: '归属工厂不能为空', trigger: 'blur' }

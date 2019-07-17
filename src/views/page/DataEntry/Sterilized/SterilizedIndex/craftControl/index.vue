@@ -6,7 +6,7 @@
           <form-head :formHeader="formHeader"></form-head>
         </el-col>
         <el-col style="width: 100px">
-          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
+          <div style="padding-top: 0px;float: right" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
         </el-col>
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
@@ -25,48 +25,48 @@
           <span slot="label" class="spanview">
             工艺控制
           </span>
-          <el-form :inline="true" size="small" :model="crafData" class="topform">
-            <el-form-item label="原汁换热介质：">
-              <el-radio-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 180px">
-                <el-radio label="热水">热水</el-radio>
-                <el-radio label="酱油">酱油</el-radio>
-              </el-radio-group>
+          <el-form :inline="true" size="small" :model="crafData" :rules="dataRule" ref="dataForm" class="topform">
+            <el-form-item label="原汁换热介质：" prop="hotMedium">
+              <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 180px">
+                <el-checkbox label="热水" name="type"></el-checkbox>
+                <el-checkbox label="酱油" name="type"></el-checkbox>
+              </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="热水温度：" label-width="100px">
+            <el-form-item label="热水温度：" label-width="110px">
               <el-input v-model="crafData.hotTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
             <el-form-item label="酱油温度：">
               <el-input v-model="crafData.sauceTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="原汁入锅温度：">
+            <el-form-item label="原汁入锅温度：" prop="originalTemp">
               <el-input v-model="crafData.originalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="升温开始时间：">
+            <el-form-item label="升温开始时间：" prop="upStartTime">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.upStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 180px"></el-date-picker>
             </el-form-item>
             <el-card class="searchCard  newCard" style="padding: 8px 4px">
-              <h3>保温时间及屏显温度(手工录入)</h3>
-              <el-form-item label="冷却开始时间：">
+              <el-form-item label="冷却开始时间：" prop="coolingStartTime">
                 <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="机械温度：">
+              <el-form-item label="机械温度：" label-width="108px">
                 <el-input v-model="crafData.mechanicalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
               <el-form-item label="出料温度：">
                 <el-input v-model="crafData.dischargeTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
-              <el-form-item label="数显温度：">
-                <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
-              </el-form-item>
-              <el-form-item label="冷却结束时间：">
+              <el-form-item label="冷却结束时间：" prop="coolingEndTime">
                 <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingEndTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
               </el-form-item>
+              <el-form-item label="数显温度：" label-width="108px">
+                <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+              </el-form-item>
               <el-row>
+                <h3>保温时间及屏显温度(手工录入)</h3>
                 <el-button type="primary" size="small" @click="addresult()" style="float: right" :disabled="!isRedact" >新增</el-button>
               </el-row>
               <el-table header-row-class-name="tableHead" :data="crafData.result" :row-class-name="RowDelFlag" border tooltip-effect="dark">
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
-                <el-table-column label="温度(℃)">
+                <el-table-column label="屏显温度(℃)">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.temp" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
                   </template>
@@ -89,6 +89,7 @@
               </el-table>
             </el-card>
           </el-form>
+          <auditLog :tableData="DataAudit"></auditLog>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
@@ -130,7 +131,7 @@ export default {
         delFlag: '0',
         dischargeTemp: '',
         displayTemp: '',
-        hotMedium: '热水',
+        hotMedium: ['热水'],
         hotTemp: '',
         id: '',
         mechanicalTemp: '',
@@ -141,6 +142,24 @@ export default {
         status: '',
         upStartTime: '',
         result: []
+      },
+      DataAudit: [],
+      dataRule: {
+        hotMedium: [
+          { required: true, message: '原汁换热介质不能为空', trigger: 'blur' }
+        ],
+        originalTemp: [
+          { required: true, message: '原汁入锅温度不能为空', trigger: 'blur' }
+        ],
+        upStartTime: [
+          { required: true, message: '升温开始时间不能为空', trigger: 'blur' }
+        ],
+        coolingStartTime: [
+          { required: true, message: '冷却开始时间不能为空', trigger: 'blur' }
+        ],
+        coolingEndTime: [
+          { required: true, message: '冷却结束时间不能为空', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -154,7 +173,8 @@ export default {
         if (data.code === 0) {
           if (data.list) {
             this.crafData = data.list
-            this.orderStatus = data.list.status
+            this.DataAudit = data.vList
+            this.crafData.hotMedium = this.crafData.hotMedium.split(',')
           }
         } else {
           this.$message.error(data.msg)
@@ -196,6 +216,8 @@ export default {
         this.crafData.status = str
       }
       this.crafData.orderId = this.formHeader.orderId
+      console.log(this.crafData.hotMedium)
+      this.crafData.hotMedium = this.crafData.hotMedium.join(',')
       this.$http(`${STERILIZED_API.STE_ENTER_CRAF_UPDATE_API}`, 'POST', this.crafData).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -208,6 +230,7 @@ export default {
         }
       })
     },
+    // 工艺提交
     SbumitCarft (str, resolve, reject) {
       this.$http(`${STERILIZED_API.STE_ENTER_CRAF_SUBMIT_API}`, 'POST', {
         orderId: this.formHeader.orderId,
@@ -225,6 +248,39 @@ export default {
         }
       })
     },
+    // 校验
+    dataRul () {
+      let ty = true
+      if (this.crafData.hotMedium.length > 0) {
+        this.crafData.hotMedium.forEach((item) => {
+          if (item === '酱油') {
+            if (!this.crafData.sauceTemp) {
+              ty = false
+              this.$message.error('酱油温度必填')
+            }
+          } else if (item === '热水"') {
+            if (!this.crafData.hotTemp) {
+              ty = false
+              this.$message.error('热水温度必填')
+            }
+          }
+        })
+      } else {
+        ty = false
+        this.$message.error('原汁换热介质必填')
+      }
+      this.crafData.result.forEach((item) => {
+        if (!item.temp) {
+          ty = false
+          this.$message.error('屏显温度必填')
+        }
+        if (!item.created) {
+          ty = false
+          this.$message.error('记录时间必填')
+        }
+      })
+      return ty
+    },
     // 保存提交
     SubmitForm () {
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -232,14 +288,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.savedOrSubmitForm('submit')
+        this.$refs.dataForm.validate((valid) => {
+          if (valid) {
+            this.savedOrSubmitForm('submit')
+          }
+        })
       })
     },
     savedOrSubmitForm (str) {
       if (str === 'submit') {
+        if (!this.dataRul()) {
+          return
+        }
       }
       let net0 = new Promise((resolve, reject) => {
-        this.Stesave.orderUpdate(this, str, resolve, reject)
+        this.Stesave.orderUpdate(this, 'techStatus', str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
         this.Stesave.excUpdate(this, 'Craft', resolve, reject)
@@ -277,6 +340,7 @@ export default {
         if (data.code === 0) {
           this.isRedact = false
           this.formHeader = data.list[0]
+          this.orderStatus = this.formHeader.techStatus
           this.Stesave = new Stesave(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
@@ -303,6 +367,9 @@ export default {
     TextRecord,
     FormHead: resolve => {
       require(['../components/formHead'], resolve)
+    },
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
     }
   }
 }

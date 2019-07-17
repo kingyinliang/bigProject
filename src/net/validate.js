@@ -353,8 +353,8 @@ export class Stesave {
       sign: str
     }, 'ste', resolve, reject)
   }
-  orderUpdate (vue, str, resolve, reject) {
-    // this.formHeader.status = str
+  orderUpdate (vue, status, str, resolve, reject) {
+    this.formHeader[status] = str
     vue.$http(`${STERILIZED_API.STE_ORDER_HEAD_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
       if (data.code === 0) {
         if (resolve) {

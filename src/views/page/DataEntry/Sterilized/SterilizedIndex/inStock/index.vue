@@ -6,7 +6,7 @@
           <form-head :formHeader="formHeader"></form-head>
         </el-col>
         <el-col style="width: 100px">
-          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
+          <div style="padding-top: 0px;float: right" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
         </el-col>
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
@@ -48,6 +48,7 @@
               </el-table>
             </div>
           </div>
+          <auditLog :tableData="DataAudit"></auditLog>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
@@ -71,7 +72,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="批次：" prop="batch">
-          <el-input v-model="dataForm.batch" placeholder="请输入" :disabled="PotObject.batch"></el-input>
+          <el-input v-model="dataForm.batch" placeholder="请输入" :disabled="PotObject.batch" maxlength="10"></el-input>
         </el-form-item>
         <el-form-item label="入罐数量：">
           <el-input v-model="dataForm.inAmount" placeholder="请输入"></el-input>
@@ -111,7 +112,7 @@
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
 import {STERILIZED_API} from '@/api/api'
-import {Stesave, dateFormat, GetStatus} from '@/net/validate'
+import {Stesave, dateFormat} from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -126,12 +127,14 @@ export default {
       isUpdate: false,
       PotList: [],
       InStorageDate: [],
+      DataAudit: [],
       dataRule: {
         holderId: [
           { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
         ],
         batch: [
-          { required: true, message: '批次不能为空', trigger: 'blur' }
+          { required: true, message: '批次不能为空', trigger: 'blur' },
+          { min: 10, max: 10, message: '批次长度为10 个字符', trigger: 'blur' }
         ],
         isFull: [
           { required: true, message: '是否满罐不能为空', trigger: 'blur' }
@@ -157,7 +160,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InStorageDate = data.list
-          this.orderStatus = GetStatus(this.InStorageDate)
+          this.DataAudit = data.vList
         } else {
           this.$message.error(data.msg)
         }
@@ -251,7 +254,7 @@ export default {
       if (str === 'submit') {
       }
       let net0 = new Promise((resolve, reject) => {
-        this.Stesave.orderUpdate(this, str, resolve, reject)
+        this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
         this.Stesave.excUpdate(this, 'In', resolve, reject)
@@ -307,6 +310,7 @@ export default {
         if (data.code === 0) {
           this.isRedact = false
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].insStatus
           this.Stesave = new Stesave(this.formHeader)
           this.GetPotList()
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
@@ -334,6 +338,9 @@ export default {
     TextRecord,
     FormHead: resolve => {
       require(['../components/formHead'], resolve)
+    },
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
     }
   }
 }

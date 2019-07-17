@@ -6,7 +6,7 @@
           <form-head :formHeader="formHeader"></form-head>
         </el-col>
         <el-col style="width: 100px">
-          <div style="padding-top: 30px"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
+          <div style="padding-top: 0px;float: right" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
         </el-col>
         <img src="@/assets/img/zhang.png" alt="" class="supStatus" v-if="supStatus">
       </el-row>
@@ -114,6 +114,7 @@
               </el-table-column>
             </el-table>
           </el-card>
+          <auditLog :tableData="DataAudit"></auditLog>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
@@ -130,7 +131,7 @@
       </el-tabs>
     </el-card>
     <el-dialog width="400px" title="添加确认" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
-      <div style="max-height: 300px;overflow-y: initial" :style="{'overflow-y':(addSupOverData.length > 6 || SupOverData.length > 6)? 'scroll' : 'initial'}">
+      <div style="height: 160px;overflow-y: initial" :style="{'overflow-y':(addSupOverData.length > 5 || SupOverData.length > 5)? 'scroll' : 'initial'}">
         <p style="line-height: 20px;margin-bottom: 8px" v-for="(item, index) in addSupOverData" :key="index">{{item.materialCode + ' ' + item.materialName}}已经添加{{item.receiveAmount + item.unit}},确认添加完成！</p>
         <p style="line-height: 20px;margin-bottom: 8px" v-for="(item, index) in SupOverData" :key="index">{{item.materialCode + ' ' + item.materialName}}已经添加{{item.receiveAmount + item.unit}},确认添加完成！</p>
       </div>
@@ -146,7 +147,7 @@
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
 import {STERILIZED_API} from '@/api/api'
-import {Stesave, GetStatus} from '@/net/validate'
+import {Stesave} from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -161,6 +162,7 @@ export default {
       AddSupDate: [],
       multipleSelectionSup: [],
       SupDate: [],
+      DataAudit: [],
       addSupOverData: [],
       SupOverData: []
     }
@@ -183,7 +185,7 @@ export default {
             this.SupDate = data.steSupMaterialBean.supList
           }
           let c = this.AddSupDate.concat(this.SupDate)
-          this.orderStatus = GetStatus(c)
+          this.DataAudit = data.vList
           this.supStatus = true
           if (c.length > 0) {
             c.forEach((items) => {
@@ -361,7 +363,7 @@ export default {
         }
       }
       let net0 = new Promise((resolve, reject) => {
-        this.Stesave.orderUpdate(this, str, resolve, reject)
+        this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
       })
       let net1 = new Promise((resolve, reject) => {
         this.Stesave.excUpdate(this, 'AddSup', resolve, reject)
@@ -392,21 +394,25 @@ export default {
     },
     // 验证
     dataRul (data, data1, st) {
+      console.log(data)
       let ty = true
       data.forEach((item) => {
         if (item.delFlag === '0') {
           if (!item.batch) {
             ty = false
             this.$message.error('批次必填')
+            return false
           }
           if (!item.receiveAmount) {
             ty = false
             this.$message.error('领用数量必填')
+            return false
           }
           if (!st) {
             if (item.supStatus !== '已确认') {
               ty = false
               this.$message.error('品保未确认')
+              return false
             }
           }
           let sum = 0
@@ -423,15 +429,15 @@ export default {
           })
           if (data1 === 'AddSupDate') {
             console.log(sum)
-            if (sum > item.adjustAmount) {
+            if (sum !== item.adjustAmount * 1) {
               ty = false
-              this.$message.error('领用数量大于需求数量')
+              this.$message.error('领用数量不等于需求数量')
             }
           } else if (data1 === 'SupDate') {
             console.log(sum)
-            if (sum > item.addAmount) {
+            if (sum !== item.addAmount * 1) {
               ty = false
-              this.$message.error('领用数量大于添加数量')
+              this.$message.error('领用数量不等于添加数量')
             }
           }
         }
@@ -451,6 +457,7 @@ export default {
         if (data.code === 0) {
           this.isRedact = false
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].supmStatus
           this.Stesave = new Stesave(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
@@ -477,6 +484,9 @@ export default {
     TextRecord,
     FormHead: resolve => {
       require(['../components/formHead'], resolve)
+    },
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
     }
   }
 }

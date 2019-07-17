@@ -532,6 +532,17 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$message.error('请选择订单')
       } else {
+        let st = false
+        this.multipleSelection.forEach((item) => {
+          if (item.confActivity2 * 1 > 0) {} else {
+            st = true
+            this.$message.error('机器工时必须大于0')
+            return false
+          }
+        })
+        if (st) {
+          return
+        }
         this.$confirm('确认审核通过, 是否继续?', '审核通过', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

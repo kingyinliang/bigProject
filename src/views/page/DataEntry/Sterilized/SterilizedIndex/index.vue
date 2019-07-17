@@ -50,15 +50,25 @@
                   <el-form-item label="计划产量：">
                     <p class="dataList_item_body_text_tit">{{item.selectOrder.planOutput || ''}}</p>
                   </el-form-item>
-                  <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">
+                  <!--<img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">-->
                 </el-form>
               </div>
+              <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">
             </div>
             <el-row class="dataList_item_btn">
-              <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1', item.selectOrder)">半成品领用</p></el-col>
-              <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2', item.selectOrder)">辅料添加</p></el-col>
-              <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3', item.selectOrder)">工艺控制</p></el-col>
-              <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item.selectOrder)">杀菌入库</p></el-col>
+              <el-col :span="6" class="dataList_item_btn_item">
+                <el-tooltip class="item" effect="dark" :content="item.selectOrder.semiStatus === 'noPass'? '审核不通过':item.selectOrder.semiStatus === 'saved'? '已保存':item.selectOrder.semiStatus === 'submit' ? '已提交' : item.selectOrder.semiStatus === 'checked'? '通过':item.selectOrder.semiStatus === '已同步' ? '未录入' : '未录入'" placement="top" v-if="(Materails.filter(items => items.code === item.selectOrder.materialCode)).length"><p @click="toRouter('1', item.selectOrder)">半成品领用</p></el-tooltip>
+                <p @click="toRouter('1', item.selectOrder)" v-if="(Materails.filter(items => items.code === item.selectOrder.materialCode)).length === 0">半成品领用</p>
+              </el-col>
+              <el-col :span="6" class="dataList_item_btn_item">
+                <el-tooltip class="item" effect="dark" :content="item.selectOrder.supmStatus === 'noPass'? '审核不通过':item.selectOrder.supmStatus === 'saved'? '已保存':item.selectOrder.supmStatus === 'submit' ? '已提交' : item.selectOrder.supmStatus === 'checked'? '通过':item.selectOrder.supmStatus === '已同步' ? '未录入' : '未录入'" placement="top"><p @click="toRouter('2', item.selectOrder)">辅料添加</p></el-tooltip>
+              </el-col>
+              <el-col :span="6" class="dataList_item_btn_item">
+                <el-tooltip class="item" effect="dark" :content="item.selectOrder.techStatus === 'noPass'? '审核不通过':item.selectOrder.techStatus === 'saved'? '已保存':item.selectOrder.techStatus === 'submit' ? '已提交' : item.selectOrder.techStatus === 'checked'? '通过':item.selectOrder.techStatus === '已同步' ? '未录入' : '未录入'" placement="top"><p @click="toRouter('3', item.selectOrder)">工艺控制</p></el-tooltip>
+              </el-col>
+              <el-col :span="6" class="dataList_item_btn_item">
+                <el-tooltip class="item" effect="dark" :content="item.selectOrder.insStatus === 'noPass'? '审核不通过':item.selectOrder.insStatus === 'saved'? '已保存':item.selectOrder.insStatus === 'submit' ? '已提交' : item.selectOrder.insStatus === 'checked'? '通过':item.selectOrder.insStatus === '已同步' ? '未录入' : '未录入'" placement="top"><p @click="toRouter('4', item.selectOrder)">杀菌入库</p></el-tooltip>
+              </el-col>
             </el-row>
           </el-card>
         </el-col>
@@ -141,7 +151,7 @@ export default {
       if (str === '1') {
         let st = this.Materails.filter(items => items.code === item.materialCode)
         if (st.length === 0) {
-          this.$message.error('不能跳转哦')
+          this.$message.error('非特殊物料，不能跳转')
           return
         }
         this.$store.state.common.sterilized.seiOrderId = item.orderId
@@ -282,8 +292,8 @@ export default {
           }
           &_img{
             position: absolute;
-            top: 150px;
-            left: 113px;
+            top: 60px;
+            left: 30px;
             width: 100px;
             height: 100px;
             transform: rotateZ(-50deg);
