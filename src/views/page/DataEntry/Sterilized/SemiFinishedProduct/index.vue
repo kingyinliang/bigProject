@@ -28,18 +28,18 @@
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="6" v-for="(item, index) in DataList" :key="index">
         <el-card class="dataList_item">
-          <h3 class="dataList_item_tit">{{item.holderNo}}罐</h3>
+          <h3 class="dataList_item_tit">{{item.holderName}}罐 - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '非空罐' : '空罐'}}</span></h3>
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box1">
-                <div class="dataList_item_pot_box_item1" :style="`height:95%`"><p></p></div>
+              <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end;">
+                <div class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`"><p>{{(item.amount / 1000).toFixed(3)}}方</p></div>
               </div>
             </div>
             <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1'">
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
               <p>{{(item.amount / 1000).toFixed(3)}}方</p>
-              <p>{{item.gnEndTime}}</p>
+              <p style="font-size:12px;">{{item.gnEndTime}}</p>
               <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
           </div>
@@ -67,7 +67,7 @@
     <div slot="title" style="line-hight:59px">GN搅罐</div>
     <div>
       <el-form size="small" :model="formGn" :rules="Gnrulestar" ref="Gnstar" label-width="150px">
-        <el-form-item label="罐号：">{{formGn.holderNo}}</el-form-item>
+        <el-form-item label="罐号：">{{formGn.holderName}}</el-form-item>
         <el-form-item label="搅罐开始时间：" prop="gnStartTime">
           <el-date-picker v-model="formGn.gnStartTime" type="datetime" placeholder="请选择" style="width:200px" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-form-item>
@@ -93,14 +93,14 @@
     <div slot="title" style="line-hight:59px">JSB出库</div>
     <div>
       <el-form size="small" :model="formJsb" :rules="Jsbrulestar" ref="Jsbstar" label-width="150px">
-        <el-form-item label="领用罐号：">{{formJsb.receiveHolderId}}</el-form-item>
+        <el-form-item label="领用罐号：">{{formJsb.holderName}}</el-form-item>
         <el-form-item label="批次：">{{formJsb.batch}}</el-form-item>
         <el-form-item label="领用量（L）：" prop="receiveAmount">
           <el-input v-model="formJsb.receiveAmount" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
           <el-select v-model="formJsb.inHolderType">
-            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.value"></el-option>
+            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.code + ` ${item.value}`"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
@@ -282,6 +282,7 @@ export default {
     GnProp (row) {
       if (row.holderStatus === '1') {
         this.formGn = {
+          holderName: row.holderName,
           holderId: row.holderId,
           holderNo: row.holderNo,
           gnStartTime: '',
@@ -322,6 +323,7 @@ export default {
         this.formJsb = {
           amount: row.amount,
           holderId: row.holderId,
+          holderName: row.holderName,
           receiveHolderId: row.holderId,
           batch: row.batch,
           receiveAmount: '',
@@ -570,7 +572,7 @@ export default {
         color: #333333;
         font-size: 14px;
         line-height: 18px;
-        padding: 5px;
+        padding: 5px 4px;
         border-radius: 4px;
         border: 1px solid #1890FF;
       }

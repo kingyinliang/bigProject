@@ -196,7 +196,7 @@ export default {
         currPage: 1,
         pageSize: 9999,
         factory: this.formHeader.factory,
-        dept_id: this.formHeader.workshop
+        dept_id: this.formHeader.workShop
       }
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {
