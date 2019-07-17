@@ -325,6 +325,8 @@ export default {
           holderId: row.holderId,
           holderName: row.holderName,
           receiveHolderId: row.holderId,
+          materialName: row.materialName,
+          materialCode: row.materialCode,
           batch: row.batch,
           receiveAmount: '',
           inHolderType: '',

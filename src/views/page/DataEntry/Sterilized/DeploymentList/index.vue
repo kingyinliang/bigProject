@@ -34,6 +34,9 @@
                 <el-option v-for="(item, index) in statusList" :key="index" :value="item" :label="item"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="订单号：">
+              <el-input style="width:150px" v-model="formHeader.orderId"></el-input>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -123,7 +126,8 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        holderId: ''
+        holderId: '',
+        orderId: ''
       },
       pages: {
         currPage: 1,
