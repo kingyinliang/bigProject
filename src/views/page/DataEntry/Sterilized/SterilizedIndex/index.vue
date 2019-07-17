@@ -221,6 +221,7 @@ export default {
         }
       }
       &_body{
+        position: relative;
         padding-top: 10px;
         display: flex;
         justify-content: center;
