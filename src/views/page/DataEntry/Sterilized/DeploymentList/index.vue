@@ -3,7 +3,7 @@
     <el-card class="searchCard searchCards">
       <el-row>
         <el-col>
-          <el-form :model="formHeader" :inline="true" size="small" label-width="82px">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="100px">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" class="width150px">
                 <el-option value="">请选择</el-option>
@@ -27,6 +27,15 @@
             </el-form-item>
             <el-form-item label="调配单号：">
               <el-input style="width:150px" v-model="formHeader.orderNo"></el-input>
+            </el-form-item>
+            <el-form-item label="调配单状态：">
+              <el-select v-model="formHeader.status" palceholder="请选择" class="width150px">
+                <el-option value="">请选择</el-option>
+                <el-option v-for="(item, index) in statusList" :key="index" :value="item" :label="item"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="订单号：">
+              <el-input style="width:150px" v-model="formHeader.orderId"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -117,7 +126,8 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        holderId: ''
+        holderId: '',
+        orderId: ''
       },
       pages: {
         currPage: 1,
@@ -130,7 +140,8 @@ export default {
       dataListAll: [],
       dataList: [],
       multipleSelection: [],
-      orderInfoList: []
+      orderInfoList: [],
+      statusList: ['已保存', '已生成', '已调配', '已提交', '审核通过', '审核不通过']
     }
   },
   mounted () {
