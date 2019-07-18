@@ -49,7 +49,7 @@
           <el-table-column label="状态" width="90" prop="status" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="调配单号" prop="orderNo" width="130"></el-table-column>
           <el-table-column label="生产车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="调配单日期" prop="allocateDate" width="170"></el-table-column>
+          <el-table-column label="调配单日期" prop="allocateDate" width="130" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="杀菌物料" width="190" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               {{scope.row.materialCode}}{{scope.row.materialName}}
@@ -106,7 +106,7 @@
         <el-table-column label="计划领料" prop="planAmount" width="80"></el-table-column>
         <el-table-column width="60">
           <template slot-scope="scope">
-            <el-button type="text" :disabled="SplitStatus(scope.row.materialName)" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+            <el-button type="text" :disabled="SplitStatus(scope.row)" @click="SplitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
         </el-table-column>
         <el-table-column label="罐号" prop="productDate" width="150" >
@@ -377,6 +377,10 @@ export default {
         type: 'warning'
       }).then(() => {
         for (let item of this.multipleSelection) {
+          if (item.isUpdate === false) {
+            this.$message.error('请先保存物料（调配单：' + item.orderNo + '）')
+            return false
+          }
           if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
             this.$message.error('请填写必填项')
             return false
@@ -418,8 +422,8 @@ export default {
     DelOrderNo (row) {
       this.ItemList.splice(this.ItemList.indexOf(row), 1)
     },
-    SplitStatus (materialName) {
-      if (materialName.indexOf('原汁') === -1) {
+    SplitStatus (row) {
+      if (row.materialName.indexOf('原汁') === -1) {
         return (this.lineStatus === '已提交' || this.lineStatus === '审核通过' || this.isRedact === false)
       } else {
         return true

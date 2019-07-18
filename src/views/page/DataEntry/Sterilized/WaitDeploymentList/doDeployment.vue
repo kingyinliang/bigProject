@@ -96,8 +96,8 @@
     </div>
     <el-dialog :visible.sync="dialogTableVisible" width="1000px" custom-class='dialog__class'>
       <div slot="title" style="line-hight:59px">订单分配</div>
-      <el-table :data="orderPropList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
-        <el-table-column type="selection" width="35"></el-table-column>
+      <el-table ref="multipleTable" :data="orderPropList" :row-key="getRowKeys" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
+        <el-table-column type="selection" width="35" :reserve-selection="true" prop="orderNo"></el-table-column>
         <el-table-column label="订单号" prop="orderNo" width="120"></el-table-column>
         <el-table-column label="物料" :show-overflow-tooltip="true" width="180">
           <template slot-scope="scope">
@@ -207,7 +207,6 @@ export default {
     },
     // 拉取订单
     GetorderNo (orderArray) {
-      console.log(orderArray)
       let params = {
         factory: this.formHeader.factoryId,
         workShop: this.formHeader.workshopId,
@@ -285,6 +284,7 @@ export default {
           this.orderArray.push(item.orderNo)
           this.orderList.push(item)
         })
+        this.$refs.multipleTable.clearSelection()
         this.dialogTableVisible = false
         this.planOutputTotal = 0
         this.orderList.map((item) => {
@@ -422,6 +422,9 @@ export default {
           })
         }
       })
+    },
+    getRowKeys (row) {
+      return row.orderNo
     }
   },
   computed: {
