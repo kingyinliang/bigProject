@@ -20,7 +20,7 @@
           <el-option v-for="(item, index) in HolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allocate:allocateUpdate')" style="float: right" >查询</el-button>
+      <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:semi:list')" style="float: right" >查询</el-button>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">

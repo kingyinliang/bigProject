@@ -39,7 +39,7 @@
         </el-row>
         <el-row style="text-align:right">
           <template>
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allot:list')">查询</el-button>
             <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allot:update')">{{isRedact === false? '编辑' : '取消'}}</el-button>
           </template>
           <template v-if="isRedact">
