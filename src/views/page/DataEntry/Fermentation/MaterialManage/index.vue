@@ -46,7 +46,7 @@
       </el-form>
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="GetDataList()">查 询</el-button>
+          <el-button type="primary" size="small" @click="GetDataList()" v-if="isAuth('fer:shoot:list')">查 询</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('fer:shoot:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">

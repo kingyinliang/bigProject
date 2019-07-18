@@ -17,7 +17,7 @@
         <el-form-item label="生产日期：">
           <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
+        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('ste:order:list')">查询</el-button>
       </el-form>
     </el-card>
     <el-card class="searchCard  newCard" style="min-height: 420px">
@@ -153,19 +153,35 @@ export default {
           this.$message.error('非特殊物料，不能跳转')
           return
         }
+        if (!this.isAuth('ste:semiMaterial:list')) {
+          this.$message.error('没有分配权限')
+          return
+        }
         this.$store.state.common.sterilized.seiOrderId = item.orderId
         this.$store.state.common.sterilized.seiFactory = item.factory
         this.$store.state.common.sterilized.seiOrderNo = item.orderNo
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
+        if (!this.isAuth('ste:supMaterial:list')) {
+          this.$message.error('没有分配权限')
+          return
+        }
         this.$store.state.common.sterilized.acceOrderId = item.orderId
         this.$store.state.common.sterilized.acceFactory = item.factory
         this.$store.state.common.sterilized.acceOrderNo = item.orderNo
         url = 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'
       } else if (str === '3') {
+        if (!this.isAuth('ste:tec:list')) {
+          this.$message.error('没有分配权限')
+          return
+        }
         this.$store.state.common.sterilized.craftOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-craftControl-index'
       } else if (str === '4') {
+        if (!this.isAuth('ste:inStorage:list')) {
+          this.$message.error('没有分配权限')
+          return
+        }
         this.$store.state.common.sterilized.inOrderId = item.orderId
         this.$store.state.common.sterilized.inFactory = item.factory
         this.$store.state.common.sterilized.inOrderNo = item.orderNo

@@ -18,7 +18,7 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button type="primary" size="small" @click="GetList()">查询</el-button>
+          <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('ste:mid:list')">查询</el-button>
           <el-button type="primary" size="small" @click="AddInfo()" v-if="isAuth('ste:mid:save')">新增</el-button>
           <el-button type="primary" size="small" @click="DeleteInfo()" v-if="isAuth('ste:mid:delete')">批量删除</el-button>
         </el-col>

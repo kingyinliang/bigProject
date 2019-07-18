@@ -14,7 +14,7 @@
           </el-select>
         </el-form-item>
         <div style="float: right">
-          <el-button type="primary" size="small" @click="GetDataList(true)">查 询</el-button>
+          <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('fer:sort:list')">查 询</el-button>
           <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('fer:sort:save')">新 增</el-button>
           <el-button type="danger" size="small" @click="delList()" v-if="isAuth('fer:sort:delete')">批量删除</el-button>
         </div>

@@ -38,13 +38,13 @@
         </el-col>
         <el-col style="width: 250px">
           <el-row>
-            <el-button type="primary" size="small" @click="GetDataList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:supMaterialQQA:orderList')">查询</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:supMaterialQQA:orderList')">{{isRedact?'取消':'编辑'}}</el-button>
           </el-row>
           <el-row style="margin-top: 15px" v-if="isRedact ">
-            <el-button type="primary" size="small" @click="SavedOr('已保存')">保存</el-button>
-            <el-button type="primary" size="small" @click="pushData('已推送')">推送</el-button>
-            <el-button type="primary" size="small" @click="pushData('已确认')">确认</el-button>
+            <el-button type="primary" size="small" @click="SavedOr('已保存')" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">保存</el-button>
+            <el-button type="primary" size="small" @click="pushData('已推送')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">推送</el-button>
+            <el-button type="primary" size="small" @click="pushData('已确认')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">确认</el-button>
           </el-row>
         </el-col>
       </el-row>

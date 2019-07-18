@@ -12,11 +12,11 @@
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('ste:supMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('wht:order:update')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:whtInStorage:submit')">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('ste:supMaterial:submit')">提交</el-button>
         </template>
       </el-row>
     </el-card>
@@ -29,7 +29,7 @@
           <el-card class="newCard">
             <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
               <h3 style="line-height: 32px">辅料添加记录</h3>
-              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')">添加完成</el-button>
+              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
             </div>
             <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
               <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
@@ -66,7 +66,7 @@
               </el-table-column>
               <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
                   <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
@@ -75,7 +75,7 @@
           <el-card class="newCard">
             <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
               <h3 style="line-height: 32px">增补料记录</h3>
-              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')">添加完成</el-button>
+              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
             </div>
             <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
               <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
@@ -108,7 +108,7 @@
               </el-table-column>
               <el-table-column label="操作" width="115" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionSup, 'Sup', scope.row)">添加完成</el-button>
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionSup, 'Sup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
                   <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
                 </template>
               </el-table-column>
