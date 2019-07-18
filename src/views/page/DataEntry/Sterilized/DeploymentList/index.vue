@@ -98,7 +98,7 @@
           <el-col style="font-weight:bold;">调配订单信息</el-col>
         </el-row>
         <el-table :data="orderInfoList" border header-row-class-name="tableHead" style="margin-top:10px">
-          <el-table-column label=" 订单号" prop="orderNo" width="120"></el-table-column>
+          <el-table-column label="订单号" prop="orderNo" width="120"></el-table-column>
           <el-table-column label="物料" :show-overflow-tooltip="true" width="180">
             <template slot-scope="scope">
               {{scope.row.materialCode}} {{scope.row.materialName}}
