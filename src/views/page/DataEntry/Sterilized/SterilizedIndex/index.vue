@@ -116,10 +116,9 @@ export default {
           this.GetMaterails(this.formHeader.factory)
           this.dataList = data.list
           this.dataList.forEach((item, index) => {
-            if (item.steList.length > 0) {
-              // item.selectOrder = item.steList[0]
-              item.selectOrder = {}
-              // item.selectOrderId = item.steList[0].orderId
+            if (item.steList.length === 1) {
+              item.selectOrder = item.steList[0]
+              item.selectOrderId = item.steList[0].orderId
             } else {
               item.selectOrder = {}
             }
