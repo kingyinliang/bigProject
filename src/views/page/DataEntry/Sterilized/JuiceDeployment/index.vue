@@ -111,7 +111,7 @@
         </el-table-column>
         <el-table-column label="罐号" prop="productDate" width="150" >
           <template slot-scope="scope">
-            <el-select v-model="scope.row.holderId" size="small"  :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">
+            <el-select v-model="scope.row.holderId" size="small"  :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false && scope.row.status !== 'submit' && scope.row.status !== 'checked')">
               <el-option value=''>请选择</el-option>
               <el-option v-for="(item, index) in thrwHolderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
             </el-select>
@@ -122,7 +122,7 @@
             <i class="reqI">*</i> 实际领料
           </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.receiveAmount" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
+            <el-input v-model="scope.row.receiveAmount" :disabled="SplitStatuss(scope.row)" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column width="130">
@@ -130,7 +130,7 @@
             <i class="reqI">*</i> 批次
           </template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batch" maxlength="10" :disabled="SplitStatuss(scope.row.materialName)" size="small"></el-input>
+            <el-input v-model="scope.row.batch" maxlength="10" :disabled="SplitStatuss(scope.row)" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="备注" :show-overflow-tooltip="true">
@@ -140,7 +140,7 @@
         </el-table-column>
         <el-table-column label="操作" width="50">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="scope.row.isSplit === '0' || lineStatus === '已提交' || lineStatus === '审核通过' || isRedact === false"  @click="DelOrderNo(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="scope.row.isSplit === '0' || lineStatus === '已提交' || lineStatus === '审核通过' || isRedact === false || scope.row.status === 'checked' || scope.row.status === 'submit'"  @click="DelOrderNo(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -424,14 +424,14 @@ export default {
     },
     SplitStatus (row) {
       if (row.materialName.indexOf('原汁') === -1) {
-        return (this.lineStatus === '已提交' || this.lineStatus === '审核通过' || this.isRedact === false)
+        return (this.lineStatus === '已提交' || this.lineStatus === '审核通过' || this.isRedact === false || row.status === 'submit' || row.status === 'checked')
       } else {
         return true
       }
     },
-    SplitStatuss (materialName) {
-      if (materialName.indexOf('原汁') === -1) {
-        return (!(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false))
+    SplitStatuss (row) {
+      if (row.materialName.indexOf('原汁') === -1) {
+        return (!(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false && row.status !== 'submit' && row.status !== 'checked'))
       } else {
         return true
       }
