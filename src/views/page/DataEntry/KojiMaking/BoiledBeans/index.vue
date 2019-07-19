@@ -203,6 +203,15 @@ export default {
     },
     // 保存 or 提交
     SubmitForm () {
+      if (!this.$refs.material.mainrules()) {
+        return false
+      }
+      if (!this.$refs.craft.craftrules()) {
+        return false
+      }
+      if (!this.$refs.excrecord.excrul()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -218,15 +227,6 @@ export default {
       }
       if (str === 'submit') {
         this.$set(this.formHeader, 'submitStatus', 'submit')
-        if (!this.$refs.material.mainrules()) {
-          return false
-        }
-        if (!this.$refs.craft.craftrules()) {
-          return false
-        }
-        if (!this.$refs.excrecord.excrul()) {
-          return false
-        }
         this.succmessage = '提交成功'
       } else {
         this.$set(this.formHeader, 'submitStatus', 'saved')
