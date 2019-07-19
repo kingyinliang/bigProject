@@ -65,10 +65,11 @@
       <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
     </el-form>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
-      <el-col :span="6" v-for="(item, index) in dataList" :key="index">
+      <el-col :span="4" v-for="(item, index) in dataList" :key="index">
         <el-card class="dataList_item">
           <h3 class="dataList_item_tit">
-            {{item.holderName}}
+            <!--{{item.holderName}}-->
+            {{item.holderNo}}
             <span style="color: #333333;font-weight: normal;font-size: 14px">
               -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '投料中' : item.holderStatus === '2' ? '发酵中' : item.holderStatus === '3' ? '发酵中' : item.holderStatus === '4' ? '领用中' : item.holderStatus === '5' ? '待清洗' : ''}}
             </span>
@@ -77,21 +78,32 @@
           <div class="dataList_item_pot clearfix">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
-                <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.holderAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'"><p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p></div>
-                <div class="dataList_item_pot_box_item2" v-if="item.holderAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.holderAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.holderAmout) * 100 : item.halfAmount? (item.halfAmount / item.holderAmout) * 100:(item.ferAmount / item.holderAmout) * 100}%`"><p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.halfAmount?item.halfAmount:item.ferAmount) / 1000).toFixed(2)}}方</p></div>
+                <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.holderAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'">
+                  <!--<p>{{(item.reWorkAmount / 1000).toFixed(2)}}方</p>-->
+                </div>
+                <div class="dataList_item_pot_box_item2" v-if="item.holderAmout" :class="`${item.holderStatus === '4'? 'dataList_item_pot_box_item2s' : item.reWorkAmount? 'dataList_item_pot_box_item2' : 'dataList_item_pot_box_item2s'}`" :style="`height:${item.holderStatus === '4'? (item.useRemainAmount / item.holderAmout) * 100 : item.holderStatus === '3'? (item.inStoreAmount / item.holderAmout) * 100 : item.halfAmount? (item.halfAmount / item.holderAmout) * 100:(item.ferAmount / item.holderAmout) * 100}%`">
+                  <!--<p>{{((item.holderStatus === '4'? item.useRemainAmount:item.holderStatus === '3'? item.inStoreAmount:item.halfAmount?item.halfAmount:item.ferAmount) / 1000).toFixed(2)}}方</p>-->
+                </div>
+                <div class="dataList_item_pot_box_detail" v-if="item.sumAmout">
+                  <p>{{item.ferOrderNo}}</p>
+                  <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
+                  <p>{{item.ferDays}}天</p>
+                  <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
+                  <p v-if="item.holderStatus === '3'">已入库</p>
+                </div>
               </div>
             </div>
-            <div class="dataList_item_pot_detail" v-if="item.sumAmout">
-              <p>{{item.ferOrderNo}}</p>
-              <p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>
-              <p>{{item.ferDays}}天</p>
-              <p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>
-              <p v-if="item.holderStatus === '3'">已入库</p>
-            </div>
+            <!--<div class="dataList_item_pot_detail" v-if="item.sumAmout">-->
+              <!--<p>{{item.ferOrderNo}}</p>-->
+              <!--<p>{{item.halfTypeName? item.halfTypeName : item.ferMaterialName}}</p>-->
+              <!--<p>{{item.ferDays}}天</p>-->
+              <!--<p>{{(item.sumAmout / 1000).toFixed(2)}}方</p>-->
+              <!--<p v-if="item.holderStatus === '3'">已入库</p>-->
+            <!--</div>-->
           </div>
           <el-row class="dataList_item_btn">
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1', item)">发料</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2', item)">类别判定</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2', item)">判定</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3', item)">入库</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item)">清洗</p></el-col>
           </el-row>
@@ -625,6 +637,7 @@ export default {
       align-items: flex-start;
       overflow: hidden;
       &_box1{
+        position: relative;
         overflow: hidden;
         width: 102px;
         height: 197px;
@@ -645,6 +658,13 @@ export default {
         min-width: 120px;
         background: url('~@/assets/img/ferPot.png') no-repeat;
         background-size:contain;
+        &_detail{
+          width: 100%;
+          position: absolute;
+          font-size: 14px;
+          bottom: 40px;
+          left: 3px;
+        }
         &_item1,&_item2{
           width: 100%;
           display:flex;
