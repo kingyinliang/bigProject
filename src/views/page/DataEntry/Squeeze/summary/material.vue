@@ -27,6 +27,14 @@
       </template>
     </el-table-column>
     <el-table-column label="酱醪领用">
+      <el-table-column width="120">
+        <template slot="header"><i class="reqI">*</i><span>发酵罐号</span></template>
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
+            <el-option v-for="item in potList" :key="item.holderId" :label="item.holderName" :value="item.holderId"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
           <el-select v-model="scope.row.material.childMaterial" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
@@ -36,14 +44,6 @@
               :label="item.code+' '+item.value"
               :value="item.code+' '+item.value">
             </el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column width="120">
-        <template slot="header"><i class="reqI">*</i><span>发酵罐号</span></template>
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
-            <el-option v-for="item in potList" :key="item.holderId" :label="item.holderName" :value="item.holderId"></el-option>
           </el-select>
         </template>
       </el-table-column>
