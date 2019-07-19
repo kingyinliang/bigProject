@@ -75,6 +75,11 @@
           <el-col :span="19">
             <el-row  style="margin-top:20px">
               <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
+                <el-table-column label="状态" width='80'>
+                  <template slot-scope="scope">
+                    {{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}
+                  </template>
+                </el-table-column>
                 <el-table-column label="日期" width='100'>
                   <template slot-scope="scope">
                      {{scope.row.inDate}}
