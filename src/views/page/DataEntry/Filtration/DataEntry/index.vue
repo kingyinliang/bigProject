@@ -28,7 +28,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col v-for="(item, index) in 4" :key="index" id="normal" :span="12">
+      <el-col v-for="(item, index) in 4" :key="index" id="normal" :span="12" style="padding-bottom: 20px">
         <div class="title_left" style="font-size: 16px;font-weight: bold;margin-bottom: 8px;">工序： <font style="color:red">{{item.productLineName}}</font></div>
         <div class="sole_cont">
           <el-form size="small" :inline="true" label-position="right" label-width="90px">
