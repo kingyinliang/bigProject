@@ -155,6 +155,12 @@ export default {
     },
     // 提交
     SubmitForm () {
+      if (!this.$refs.craft.Readyrules()) {
+        return false
+      }
+      if (!this.$refs.excrecord.excrul()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -168,12 +174,6 @@ export default {
       // 提交
       if (str === 'submit') {
         this.submitStatus = 'submit'
-        if (!this.$refs.craft.Readyrules()) {
-          return false
-        }
-        if (!this.$refs.excrecord.excrul()) {
-          return false
-        }
         this.succmessage = '提交成功'
       } else {
         this.submitStatus = 'saved'
