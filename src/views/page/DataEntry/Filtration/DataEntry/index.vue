@@ -68,7 +68,7 @@
 
 <script>
 import {getFactory, getWorkshop} from '@/net/validate'
-import {WHT_API} from '@/api/api'
+import {FILTRATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -76,29 +76,36 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        productDate: '',
-        currPage: 1,
-        pageSize: 2,
-        totalCount: 0
+        productDate: ''
       },
       factory: [],
-      workshop: []
+      workshop: [],
+      dataList: []
     }
   },
   watch: {
     'formHeader.factory' (n, o) {
       this.formHeader.workShop = ''
-      getWorkshop(this, n, '杀菌')
+      getWorkshop(this, n, '过滤')
     }
   },
   mounted () {
     getFactory(this)
   },
   methods: {
+    GetOrderList () {
+      this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 订单号下拉
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
-        this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
+        this.$http(`${FILTRATION_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
           productDate: this.productDate.replace(/-/g, ''),
           orderNo: row.orderNo

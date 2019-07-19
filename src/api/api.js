@@ -1463,3 +1463,10 @@ export const STERILIZED_API = {
   JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate',
   JUICEDEPLOYMENTCREATETP: HOST + '/ste/allocate/allocateCreateTp'
 }
+/**
+ *  过滤 api Sterilized
+ */
+export const FILTRATION_API = {
+  // 过滤首页
+  FILTER_HOME_LIST_API: HOST + '/filter/order/list'
+}

@@ -78,6 +78,12 @@
           </span>
           <Material ref="material" :isRedact="isRedact"></Material>
         </el-tab-pane>
+        <el-tab-pane name="5">
+          <span slot="label" class="spanview">
+            <el-button>生产入库</el-button>
+          </span>
+          <in-storage ref="material" :isRedact="isRedact"></in-storage>
+        </el-tab-pane>
         <el-tab-pane name="6">
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
@@ -94,6 +100,7 @@ import {headanimation} from '@/net/validate'
 import EquWorkinghours from './common/equWorkingHours'
 import Craft from './common/craft'
 import Material from './common/material'
+import InStorage from './common/inStorage'
 import ExcRecord from '@/views/components/excRecord'
 import TextRecord from '@/views/components/textRecord'
 export default {
@@ -129,6 +136,7 @@ export default {
     EquWorkinghours,
     Craft,
     Material,
+    InStorage,
     ExcRecord,
     TextRecord
   }
