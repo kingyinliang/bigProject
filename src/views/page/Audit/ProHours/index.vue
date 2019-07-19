@@ -319,6 +319,14 @@ export default {
   methods: {
     // 获取列表
     GetAuditList (st) {
+      if (!this.plantList.factory) {
+        this.$message.error('请选择工厂')
+        return
+      }
+      if (!this.plantList.workShop) {
+        this.$message.error('请选择车间')
+        return
+      }
       if (st) {
         this.plantList.currPage = 1
       }
@@ -533,13 +541,15 @@ export default {
         this.$message.error('请选择订单')
       } else {
         let st = false
-        this.multipleSelection.forEach((item) => {
-          if (item.confActivity2 * 1 > 0) {} else {
-            st = true
-            this.$message.error('机器工时必须大于0')
-            return false
-          }
-        })
+        if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0) {
+          this.multipleSelection.forEach((item) => {
+            if (item.confActivity2 * 1 > 0) {} else {
+              st = true
+              this.$message.error('机器工时必须大于0')
+              return false
+            }
+          })
+        }
         if (st) {
           return
         }

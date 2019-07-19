@@ -61,7 +61,7 @@
                 <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
               <el-row>
-                <h3>保温时间及屏显温度(手工录入)</h3>
+                <h3>保温时间及屏显温度</h3>
                 <el-button type="primary" size="small" @click="addresult()" style="float: right" :disabled="!isRedact" >新增</el-button>
               </el-row>
               <el-table header-row-class-name="tableHead" :data="crafData.result" :row-class-name="RowDelFlag" border tooltip-effect="dark">
@@ -283,6 +283,9 @@ export default {
     },
     // 保存提交
     SubmitForm () {
+      if (!this.dataRul()) {
+        return
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
