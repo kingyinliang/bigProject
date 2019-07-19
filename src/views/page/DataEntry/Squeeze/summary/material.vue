@@ -14,12 +14,12 @@
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">{{scope.row.fumet.material}}</template>
       </el-table-column>
-      <el-table-column label="入罐数量" width="120" prop="fumet.inPotAmount"></el-table-column>
-      <el-table-column label="满罐数量" width="140" prop="fumet.fullPotAmount"></el-table-column>
+      <el-table-column label="入罐数量" width="80" :show-overflow-tooltip="true" prop="fumet.inPotAmount"></el-table-column>
+      <el-table-column label="满罐数量" width="80" :show-overflow-tooltip="true" prop="fumet.fullPotAmount"></el-table-column>
       <el-table-column label="单位" width="50" prop="fumet.unit"></el-table-column>
-      <el-table-column label="满罐日期" width="140" prop="fumet.fullPotDate"></el-table-column>
-      <el-table-column label="原汁批次" width="140" prop="fumet.batch"></el-table-column>
-      <el-table-column label="生产订单" width="140" prop="fumet.orderNo"></el-table-column>
+      <el-table-column label="满罐日期" width="90" :show-overflow-tooltip="true" prop="fumet.fullPotDate"></el-table-column>
+      <el-table-column label="原汁批次" width="110" :show-overflow-tooltip="true" prop="fumet.batch"></el-table-column>
+      <el-table-column label="生产订单" width="110" :show-overflow-tooltip="true" prop="fumet.orderNo"></el-table-column>
     </el-table-column>
     <el-table-column label="操作" width="80">
       <template slot-scope="scope">
