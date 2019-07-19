@@ -23,7 +23,8 @@
               <el-form-item label="订单状态：">
                 <el-select v-model="formHeader.orderStatus" placeholder="请选择" style="width: 160px">
                   <el-option label="请选择"  value=""></el-option>
-                  <el-option label="未录入"  value="已同步"></el-option>
+                  <el-option label="未录入"  value="未录入"></el-option>
+                  <el-option label="已同步"  value="已同步"></el-option>
                   <el-option label="已保存"  value="saved"></el-option>
                   <el-option label="已提交"  value="submit"></el-option>
                   <el-option label="审核通过"  value="checked"></el-option>
@@ -38,12 +39,12 @@
         </el-row>
         <el-row style="text-align:right">
           <template>
-            <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
+            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allot:list')">查询</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allot:update')">{{isRedact === false? '编辑' : '取消'}}</el-button>
           </template>
           <template v-if="isRedact">
-            <el-button type="primary" size="small" @click="SaveForm('saved')">保存</el-button>
-            <el-button type="primary" size="small" @click="SaveForm('submit')">提交</el-button>
+            <el-button type="primary" size="small" @click="SaveForm()">保存</el-button>
+            <!-- <el-button type="primary" size="small" @click="SaveForm()">提交</el-button> -->
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -62,7 +63,7 @@
           <el-table-column type="selection" width="35" :selectable="CheckBoxInit" fixed="left"></el-table-column>
           <el-table-column label="订单状态" prop="orderStatus">
             <template slot-scope="scope">
-              {{scope.row.orderStatus === '已同步' ? '未录入' : scope.row.orderStatus === 'saved' ? '已保存' : scope.row.orderStatus === 'submit' ? '已提交' : scope.row.orderStatus === 'checked' ? '审核通过' : scope.row.orderStatus === 'nopass' ? '审核不通过' : '' }}
+              {{scope.row.orderStatus === 'saved' ? '已保存' : scope.row.orderStatus === 'submit' ? '已提交' : scope.row.orderStatus === 'checked' ? '审核通过' : scope.row.orderStatus === 'nopass' ? '审核不通过' : scope.row.orderStatus }}
             </template>
           </el-table-column>
           <el-table-column label="订单号" width="120" prop="orderNo"></el-table-column>
@@ -195,7 +196,7 @@ export default {
         currPage: 1,
         pageSize: 9999,
         factory: this.formHeader.factory,
-        dept_id: this.formHeader.workshop
+        dept_id: this.formHeader.workShop
       }
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {
@@ -222,7 +223,7 @@ export default {
       this.$http(`${STERILIZED_API.ORDERALLOTLIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.list.list
-          this.formHeader.totalCount = data.list.list.length
+          this.formHeader.totalCount = data.list.totalCount
         } else {
           this.$message.error(data.msg)
         }
@@ -233,14 +234,14 @@ export default {
     },
     // 复选框初始状态
     CheckBoxInit (row, index) {
-      if (this.isRedact === false || !row.holderName || row.orderStatus === 'submit' || row.orderStatus === 'checked') {
+      if (this.isRedact === false || row.orderStatus === 'submit' || row.orderStatus === 'checked') {
         return 0
       } else {
         return 1
       }
     },
     ReturnStatus (row) {
-      return (this.isRedact === false || !row.holderName || row.orderStatus === 'submit' || row.orderStatus === 'checked')
+      return (this.isRedact === false || row.orderStatus === 'submit' || row.orderStatus === 'checked')
     },
     handleSizeChange (val) {
       this.formHeader.pageSize = val
@@ -251,7 +252,7 @@ export default {
       this.GetList()
     },
     // 保存
-    SaveForm (orderStatus) {
+    SaveForm () {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请勾选数据')
         return false
@@ -263,15 +264,15 @@ export default {
           }
         }
         this.multipleSelection.map((item) => {
-          item.orderStatus = orderStatus
+          if (item.orderStatus === '已同步') {
+            item.orderStatus = '未录入'
+          } else {
+            item.orderStatus = item.orderStatus
+          }
         })
         this.$http(`${STERILIZED_API.ORDERALLOTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            if (orderStatus === 'saved') {
-              this.$message.success('保存成功')
-            } else {
-              this.$message.success('提交成功')
-            }
+            this.$message.success('保存成功')
             this.isRedact = false
             this.GetList()
           } else {

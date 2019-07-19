@@ -270,17 +270,17 @@ export default {
     // 校验
     saprul (st) {
       let ty = true
-      for (var i = 0; i < this.listbomS.length - 1; i++) {
-        for (var j = i + 1; j < this.listbomS.length; j++) {
-          if (this.listbomS[i].delFlag !== '1' && this.listbomS[j].delFlag !== '1') {
-            if (this.listbomS[i].potNo !== '' && this.listbomS[i].batch !== '' && this.listbomS[j].potNo !== '' && this.listbomS[j].batch !== '' && this.listbomS[i].materialCode === this.listbomS[j].materialCode && this.listbomS[i].potNo === this.listbomS[j].potNo && this.listbomS[i].batch === this.listbomS[j].batch) {
-              ty = false
-              this.$message.error('存在重复批次，请核实')
-              return false
-            }
-          }
-        }
-      }
+      // for (var i = 0; i < this.listbomS.length - 1; i++) {
+      //   for (var j = i + 1; j < this.listbomS.length; j++) {
+      //     if (this.listbomS[i].delFlag !== '1' && this.listbomS[j].delFlag !== '1') {
+      //       if (this.listbomS[i].potNo !== '' && this.listbomS[i].batch !== '' && this.listbomS[j].potNo !== '' && this.listbomS[j].batch !== '' && this.listbomS[i].materialCode === this.listbomS[j].materialCode && this.listbomS[i].potNo === this.listbomS[j].potNo && this.listbomS[i].batch === this.listbomS[j].batch) {
+      //         ty = false
+      //         this.$message.error('存在重复批次，请核实')
+      //         return false
+      //       }
+      //     }
+      //   }
+      // }
       if (st === 'submit') {
         this.listbomP.forEach((item) => {
           if (item.delFlag !== '1') {

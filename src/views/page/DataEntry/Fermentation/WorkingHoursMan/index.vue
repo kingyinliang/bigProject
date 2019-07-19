@@ -42,7 +42,7 @@
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="SaveForm()">保存</el-button>
-          <el-button type="primary" size="small" @click="SaveForm('submit')">提交</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
         </template>
         <template style="float:right; margin-left: 10px;"><el-button type="primary" @click="DataSynchronism()" v-if="isAuth('fer:report:workingSaveAndSubmit')" size="small">报工同步</el-button></template>
       </el-row>
@@ -459,6 +459,15 @@ export default {
           }
         })
       }
+    },
+    SubmitForm () {
+      this.$confirm('是否提交数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.SaveForm('submit')
+      })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

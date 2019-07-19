@@ -27,7 +27,7 @@
         </el-table-column>
         <el-table-column label="人工码垛-包材库" width="140">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isZ === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60">
@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column label="自动码垛-包材库" width="140" v-if="order.workShopName === '包装三车间'">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.aiPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isZ === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column label="人工码垛-立体库" width="140">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60">
@@ -57,7 +57,7 @@
         </el-table-column>
         <el-table-column label="自动码垛-立体库" width="120" v-if="order.workShopName === '包装三车间'">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.aiSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60" v-if="order.workShopName === '包装三车间'">
@@ -67,7 +67,7 @@
         </el-table-column>
         <el-table-column label="自动上架-立体库" width="140" v-if="order.workShopName !== '包装三车间'">
           <template slot-scope="scope">
-            <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input type="number" min="0" v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60" v-if="order.workShopName !== '包装三车间'">
@@ -87,7 +87,7 @@
         </el-table-column>
         <el-table-column label="样品" width="120">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isS === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60">
@@ -139,7 +139,7 @@
         </el-table-column>
         <el-table-column label="人工码垛-立体库" width="130">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="50">
@@ -159,7 +159,7 @@
         </el-table-column>
         <el-table-column label="样品" width="90">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+            <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isS === '0')"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="50">
@@ -219,7 +219,7 @@
       </el-table-column>
       <el-table-column label="正常品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isZ === '0')"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">
@@ -232,7 +232,7 @@
       </el-table-column>
       <el-table-column label="供应商待买" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manSolid" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">
@@ -246,7 +246,7 @@
       </el-table-column>
       <el-table-column label="需整理品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.manPacking" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isZ === '0')"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">
@@ -274,7 +274,7 @@
       </el-table-column>
       <el-table-column label="样品" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.sample" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isS === '0')"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">
@@ -589,6 +589,9 @@ export default {
     AddInDate (form) {
       if (this.order.factoryCode === '6010') {
         form.push({
+          isL: '0',
+          isZ: '0',
+          isS: '0',
           status: '',
           isPkgThree: '',
           orderId: '',
@@ -624,6 +627,9 @@ export default {
         })
       } else {
         form.push({
+          isL: '0',
+          isZ: '0',
+          isS: '0',
           status: '',
           isPkgThree: '',
           orderId: '',

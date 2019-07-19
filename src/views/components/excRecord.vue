@@ -135,6 +135,9 @@ export default {
               item.workShop = id.workShop
               item.productLine = id.productLine
               item.productDate = id.productDate
+            } else if (str === 'ste') {
+              item.orderId = id.orderId
+              item.sign = id.sign
             } else {
               item.orderId = id.orderId
               item.orderHouseId = id.orderHouseId

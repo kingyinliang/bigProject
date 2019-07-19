@@ -181,8 +181,10 @@ export function exportFile (url, fileName, vue) {
  * @param {*}
  */
 export function headanimation ($) {
+  $('.toggleSearchBottom').parents('.searchCard').css('padding-bottom', '18px')
   // 搜索切换显隐
   $('.toggleSearchBottom').click(function () {
+    $('.toggleSearchBottom').parents('.searchCard').css('padding-bottom', '0')
     $('.searchCard').animate({height: 0}, 300, function () {
       $('.searchCard').parent('.main').css('padding-bottom', 0)
     })
@@ -340,13 +342,19 @@ export class Stesave {
     this.formHeader = formHeader
   }
   excUpdate (vue, str, resolve, reject) {
-    return vue.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
+    return vue.$refs.excrecord.saveOrSubmitExc({
+      orderId: this.formHeader.orderId,
+      sign: str
+    }, 'ste', resolve, reject)
   }
   textUpdate (vue, str, resolve, reject) {
-    return vue.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+    return vue.$refs.textrecord.UpdateText({
+      orderId: this.formHeader.orderId,
+      sign: str
+    }, 'ste', resolve, reject)
   }
-  orderUpdate (vue, str, resolve, reject) {
-    this.formHeader.status = str
+  orderUpdate (vue, status, str, resolve, reject) {
+    this.formHeader[status] = str
     vue.$http(`${STERILIZED_API.STE_ORDER_HEAD_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
       if (data.code === 0) {
         if (resolve) {

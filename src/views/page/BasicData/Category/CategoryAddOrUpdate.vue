@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="450px"
-    class="shinhodialog"
+    class="ShinHoDialog"
     :title="id?'修改类别':'新增类别'"
     @close="closeDialog"
     :close-on-click-modal="closeDialog"
@@ -140,16 +140,4 @@ export default {
 </script>
 
 <style lang="scss">
-.shinhodialog{
-  .el-dialog{
-    border-radius: 10px 10px 0 0;
-  }
-  .el-dialog__header{
-    border-radius: 10px 10px 0 0;
-    background: #3a8ee6;
-    span,button,i{
-      color: white!important;
-    }
-  }
-}
 </style>

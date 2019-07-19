@@ -32,7 +32,7 @@
         </el-form-item>
         <el-form-item label="订单编号：">
           <el-select v-model="formHeader.ferOrderNos" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
-            <el-option v-for="(sole, index) in this.OrderList" :key="index" :value="sole.ferOrderNo" :label="sole.ferOrderNo"></el-option>
+            <el-option v-for="(sole, index) in OrderList" :key="index" :value="sole.ferOrderNo" :label="sole.ferOrderNo"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="罐号：" prop="holderId" label-width="70px">
@@ -46,7 +46,7 @@
       </el-form>
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="GetDataList()">查 询</el-button>
+          <el-button type="primary" size="small" @click="GetDataList()" v-if="isAuth('fer:shoot:list')">查 询</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('fer:shoot:update')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -330,25 +330,37 @@ export default {
     },
     // 罐号
     HolderList () {
-      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
-        this.guanList = data.holderList
-      })
+      if (this.formHeader.factory && this.formHeader.workShop) {
+        this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
+          this.guanList = data.holderList
+        })
+      }
     },
     // 订单
     GetOrderList () {
-      this.$http(`${FERMENTATION_API.SHOOT_GETORDER_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
-        this.OrderList = data.verList
-      })
+      if (this.formHeader.factory && this.formHeader.workShop) {
+        this.$http(`${FERMENTATION_API.SHOOT_GETORDER_API}`, 'POST', {
+          factory: this.formHeader.factory,
+          workShop: this.formHeader.workShop
+        }, false, false, false).then(({data}) => {
+          this.OrderList = data.verList
+        })
+      }
     },
     // 获取物料
     GetMaterial (n) {
-      this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {factory: n, materialTypeCode: 'ZHAL'}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.material = data.list
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      if (n) {
+        this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {
+          factory: n,
+          materialTypeCode: 'ZHAL'
+        }, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.material = data.list
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }
     },
     // 改变每页条数
     handleSizeChange (val) {

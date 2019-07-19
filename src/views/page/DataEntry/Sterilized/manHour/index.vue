@@ -43,12 +43,12 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="GetTimeList" v-if="isAuth('kjm:timeSheet:list')">查询</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('kjm:timeSheet:update')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" @click="GetTimeList" v-if="isAuth('ste:timeSheet:list')">查询</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('ste:timeSheet:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact && searchCard" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('kjm:timeSheet:update')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('kjm:timeSheet:update')">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('ste:timeSheet:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('ste:timeSheet:update')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, KJM_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, KJM_API, STERILIZED_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
 export default {
@@ -158,10 +158,8 @@ export default {
         factory: '',
         workShop: '',
         inKjmDate: getNewDate(),
-        deptId: '',
-        inKjmBatch: ''
+        deptId: ''
       },
-      inKjmBatch: '',
       readyTimeDate: {
         id: '',
         status: '',
@@ -225,7 +223,7 @@ export default {
       this.searchCard = true
       this.isRedact = false
       this.uid = ''
-      this.$http(`${SQU_API.PRS_TIME_LIST_API}`, 'POST', {
+      this.$http(`${STERILIZED_API.STE_HOUR_LIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
         inKjmDate: this.formHeader.inKjmDate,
@@ -239,6 +237,7 @@ export default {
             this.userOrder.orderId = this.uid
             this.headList = this.formHeader
             this.headList.status = ''
+            this.headList.deptName = this.deptId.filter(item => item.deptId === this.headList.deptId)[0].deptName || ''
             this.$refs.workerref.GetTimeUserList(data.userList)
             this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
             this.$refs.workerref.getTree(this.formHeader.factory)
@@ -256,7 +255,6 @@ export default {
             this.$refs.workerref.getTree(this.formHeader.factory)
             this.$refs.workerref.GetProductShift(this.formHeader.factory)
           }
-          this.inKjmBatch = data.inKjmBatch
         } else {
           this.$message.error(data.msg)
         }
@@ -285,16 +283,16 @@ export default {
       if (str === 'submit') {
         let saveNet = Promise.all([headSave, readySave, userSave])
         saveNet.then(function () {
-          // let submit = new Promise((resolve, reject) => {
-          //   that.manHourSubmit(str, resolve, reject)
-          // })
-          // let submitNet = Promise.all([submit])
-          // submitNet.then(function () {
-          that.GetTimeList()
-          that.$message.success('提交成功')
-          // }, err => {
-          //   that.$message.error(err)
-          // })
+          let submit = new Promise((resolve, reject) => {
+            that.manHourSubmit(str, resolve, reject)
+          })
+          let submitNet = Promise.all([submit])
+          submitNet.then(function () {
+            that.GetTimeList()
+            that.$message.success('提交成功')
+          }, err => {
+            that.$message.error(err)
+          })
         }, err => {
           that.$message.error(err)
         })
@@ -319,18 +317,24 @@ export default {
     },
     // 提交
     manHourSubmit (str, resolve, reject) {
-      this.$http(`${KJM_API.OUTTIMEHEADSUBMIT_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
-        if (data.code === 0) {
-          if (resolve) {
-            resolve('resolve')
+      if (this.headList.deptName === '杀菌') {
+        this.$http(`${STERILIZED_API.STE_HOUR_SUBMIT_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
+          if (data.code === 0) {
+            if (resolve) {
+              resolve('resolve')
+            }
+          } else {
+            this.$message.error(data.msg)
+            if (reject) {
+              reject('提交' + data.msg)
+            }
           }
-        } else {
-          this.$message.error(data.msg)
-          if (reject) {
-            reject('提交' + data.msg)
-          }
+        })
+      } else {
+        if (resolve) {
+          resolve('resolve')
         }
-      })
+      }
     },
     // 表头保存
     HeadSave (str, resolve, reject) {
@@ -339,9 +343,8 @@ export default {
         this.headList.addOrupdate = '0'
       }
       this.headList.status = str
-      this.headList.inKjmBatch = this.inKjmBatch + ''
       console.log(this.headList)
-      this.$http(`${SQU_API.PRS_TIMESHEET_UPDATE_API}`, 'POST', this.headList).then(({data}) => {
+      this.$http(`${STERILIZED_API.STE_HOUR_UPDATE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')
@@ -439,7 +442,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '杀菌'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            this.formHeader.workShop = data.typeList[0].deptId
+            if (data.typeList.length > 0) {
+              this.formHeader.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }
@@ -453,7 +458,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYPARENTID1_API}`, 'POST', {parentId: id, deptType: 'process'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.deptId = data.childList
-            this.formHeader.deptId = data.childList[0].deptId
+            if (data.childList.length > 0) {
+              this.formHeader.deptId = data.childList[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }

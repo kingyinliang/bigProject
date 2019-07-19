@@ -254,6 +254,17 @@
           <el-button type="primary" @click="ResetTime()">确定</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="类型选择"
+        :close-on-click-modal="false"
+        :visible.sync="visibleSterilized">
+        <el-radio v-model="backType" label="0">人工工时退回</el-radio>
+        <el-radio v-model="backType" label="1">机器工时退回</el-radio>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visibleSterilized = false">取消</el-button>
+          <el-button type="primary" @click="repulseAutioSterilized()">确定</el-button>
+        </span>
+      </el-dialog>
     </el-col>
   </el-col>
 </template>
@@ -269,6 +280,8 @@ export default {
       dataListLoading: false,
       visible: false,
       visibleRe: false,
+      visibleSterilized: false,
+      backType: '0',
       factory: [],
       workshop: [],
       productline: [],
@@ -454,11 +467,32 @@ export default {
     },
     // 审核拒绝
     repulseAutios () {
+      if (this.plantList.factory === '') {
+        this.$message.error('请选择工厂')
+        return false
+      }
+      if (this.plantList.workShop === '') {
+        this.$message.error('请选择车间')
+        return false
+      }
       if (this.multipleSelection.length <= 0) {
         this.$message.error('请选择订单')
+        return false
+      }
+      if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0) {
+        this.visibleSterilized = true
       } else {
         this.visible = true
       }
+      // if (this.multipleSelection.length <= 0) {
+      //   this.$message.error('请选择订单')
+      // } else {
+      //   this.visible = true
+      // }
+    },
+    repulseAutioSterilized () {
+      this.visible = true
+      this.visibleSterilized = false
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
@@ -473,6 +507,7 @@ export default {
             item.status = 'noPass'
             item.memo = this.Text
             item.postgDate = this.plantList.postgDate
+            item.backType = this.backType
           })
           this.lodingStatus1 = true
           this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
@@ -497,6 +532,17 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$message.error('请选择订单')
       } else {
+        let st = false
+        this.multipleSelection.forEach((item) => {
+          if (item.confActivity2 * 1 > 0) {} else {
+            st = true
+            this.$message.error('机器工时必须大于0')
+            return false
+          }
+        })
+        if (st) {
+          return
+        }
         this.$confirm('确认审核通过, 是否继续?', '审核通过', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

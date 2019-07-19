@@ -245,7 +245,14 @@ export const BASICDATA_API = {
   CATEGORYS_LIST: HOST + '/fer/sort/list',
   CATEGORY_SAVE: HOST + '/fer/sort/save',
   CATEGORY_UPDATE: HOST + '/fer/sort/update',
-  CATEGORY_DELETE: HOST + '/fer/sort/delete'
+  CATEGORY_DELETE: HOST + '/fer/sort/delete',
+  /**
+   * 杀菌物料比例
+   */
+  STERILIZEMATERIALRATIOLIST: HOST + '/ste/mid/list',
+  STERILIZEMATERIALRATIOSAVE_API: HOST + '/ste/mid/save',
+  STERILIZEMATERIALRATIOUPDATE_API: HOST + '/ste/mid/update',
+  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete'
 }
 /*
 *系统设置api
@@ -1390,6 +1397,29 @@ export const STERILIZED_API = {
   // 杀菌录入工艺
   STE_ENTER_CRAF_LIST_API: HOST + '/ste/tec/list',
   STE_ENTER_CRAF_UPDATE_API: HOST + '/ste/tec/mySaveOrUpdate',
+  STE_ENTER_CRAF_SUBMIT_API: HOST + '/verify/material/getSteMachineTime',
+  // 杀菌录入半成品领用
+  STE_ENTER_MATERIAL_LIST_API: HOST + '/ste/semiMaterial/list',
+  STE_ENTER_MATERIAL_UPDATE_API: HOST + '/ste/semiMaterial/mySaveOrUpdate',
+  STE_ENTER_MATERIAL_SUBMIT_API: HOST + '/ste/semiMaterial/submit',
+  // 杀菌录入入库
+  STE_ENTER_IN_LIST_API: HOST + '/ste/inStorage/list',
+  STE_ENTER_IN_UPDATE_API: HOST + '/ste/inStorage/mySaveOrUpdate',
+  STE_ENTER_IN_SUBMIT_API: HOST + '/ste/inStorage/submit',
+  STE_ENTER_IN_POT_LIST_API: HOST + '/ste/inStorage/halfHolderList',
+  // 杀菌录入辅料添加
+  STE_ENTER_SUP_LIST_API: HOST + '/ste/supMaterial/list',
+  STE_ENTER_SUP_UPDATE_API: HOST + '/ste/supMaterial/mySaveOrUpdate',
+  STE_ENTER_SUP_SUBMIT_API: HOST + '/ste/supMaterial/submit',
+  // 杀菌品保
+  STE_SUP_LIST_API: HOST + '/ste/supMaterialQQA/orderList',
+  STE_SUP_PUSH_API: HOST + '/ste/supMaterialQQA/pushInfo',
+  STE_SUP_SAVED_API: HOST + '/ste/supMaterialQQA/mySaveOrUpdate',
+  STE_SUP_MAT_LIST_API: HOST + '/ste/supMaterialQQA/supMatList',
+  // 工时录入
+  STE_HOUR_LIST_API: HOST + '/ste/timeSheet/list',
+  STE_HOUR_UPDATE_API: HOST + '/ste/timeSheet/update',
+  STE_HOUR_SUBMIT_API: HOST + '/ste/timeSheet/submit',
   /**
    * 待领用
    */
@@ -1401,9 +1431,35 @@ export const STERILIZED_API = {
   DODEPLOYMENTORDERLIST_API: HOST + '/ste/order/orderAdd',
   DODEPLOYMENTHEADERSAVE: HOST + '/ste/allocate/allocateOrderSave',
   DODEPLOYMENTLISTSAVE: HOST + '/ste/allocate/allocateSave',
+  DODEPLOYMENTALLOCATELIST: HOST + '/ste/allocate/allocateListInfo',
   /**
    *  订单分配
    */
   ORDERALLOTLIST: HOST + '/ste/allot/list',
-  ORDERALLOTSAVE: HOST + '/ste/allot/update'
+  ORDERALLOTSAVE: HOST + '/ste/allot/update',
+  /**
+   * 原汁分配
+   */
+  JUICEDEPLOYMENTSEARCHLIST: HOST + '/ste/allocate/allocateList',
+  JUICEDEPLOYMENTITEMS: HOST + '/ste/allocate/allocateItems',
+  JUICEDEPLOYMENTITEMSAVE: HOST + '/ste/allocate/allocateItemsUpdate',
+  JUICEDEPLOYMENTSAVE: HOST + '/ste/allocate/allocateUpdate',
+  JUICEDEPLOYMENTSUBMIT: HOST + '/ste/allocate/allocateSubmit',
+  JUICEDEPLOYMENTHOLDER: HOST + '/ste/allocate/holderList',
+  /**
+   * 半成品罐
+   */
+  SEMIFINISHEDPRODUCTLIST: HOST + '/ste/semi/list',
+  SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
+  SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
+  SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/inStorage/halfHolderList',
+  SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
+  SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
+  /**
+   *  调配列表
+   */
+  JUICEDEPLOYMENTLIST: HOST + '/ste/allocate/allocateList',
+  JUICEDEPLOYMENTLISTTP: HOST + '/ste/allocate/allocateListTp',
+  JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate',
+  JUICEDEPLOYMENTCREATETP: HOST + '/ste/allocate/allocateCreateTp'
 }

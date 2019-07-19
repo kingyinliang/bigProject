@@ -23,13 +23,13 @@
               </el-select>
             </el-form-item>
             <el-form-item label="生产日期：">
-              <el-date-picker v-model="formHeader.created" type="date" placeholder="请选择" style="width:140px"></el-date-picker>
+              <el-date-picker v-model="formHeader.created" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="请选择" style="width:140px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col  style="width:127px; float:right">
-          <el-button type="primary" size="small" @click="GetList(true)">查询</el-button>
-          <el-button type="primary" size="small" @click="isRedact = !isRedact">{{isRedact === false? '编辑' : '取消'}}</el-button>
+          <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:pkgOrder:orderList')">查询</el-button>
+          <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allocate:allocateOrderSave')">{{isRedact === false? '编辑' : '取消'}}</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -50,7 +50,7 @@
         <el-table-column label="订单数量" prop="planOutput" width="80"></el-table-column>
         <el-table-column label="订单单位" prop="outputUnit" width="80"></el-table-column>
         <el-table-column label="订单开始日期" prop="productDate"></el-table-column>
-        <el-table-column label="订单结束日期"></el-table-column>
+        <!-- <el-table-column label="订单结束日期"></el-table-column> -->
         <el-table-column label="生产调度员" prop="dispatchMan"></el-table-column>
         <el-table-column label="订单备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="操作"></el-table-column>
@@ -78,6 +78,7 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
+        materialCode: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
@@ -136,6 +137,7 @@ export default {
     },
     // 物料下拉
     GetMaterialList () {
+      this.formHeader.materialCode = ''
       this.$http(`${STERILIZED_API.WAITDEPLOYMENTMATERIALISTAPI}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
         if (data.code === 0) {
           this.materialList = data.productsInfo
@@ -219,7 +221,8 @@ export default {
           workshop: this.workshop.find(item => item.deptId === this.formHeader.workShop)['deptName'],
           factoryId: this.formHeader.factory,
           workshopId: this.formHeader.workShop,
-          orderNo: this.checkList,
+          orderNoList: this.checkList,
+          orderNo: '',
           planOutputTotal: planOutputTotal,
           materialCode: materialCode,
           materialName: this.multipleSelection[0].materialName

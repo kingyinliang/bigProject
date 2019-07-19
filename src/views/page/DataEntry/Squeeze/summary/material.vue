@@ -68,6 +68,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <auditLog :tableData="MaterialAudit"></auditLog>
 </div>
 </template>
 
@@ -80,7 +81,8 @@ export default {
       SumDate: [],
       materialDate: [],
       potList: [],
-      materialS: ''
+      materialS: '',
+      MaterialAudit: []
     }
   },
   props: {
@@ -102,6 +104,7 @@ export default {
       this.$http(`${SQU_API.SUM_MATERIAL_LIST_API}`, 'POST', formHeader).then(({data}) => {
         if (data.code === 0) {
           this.materialDate = data.maList
+          this.MaterialAudit = data.MaterialAudit
           let sub = 0
           let che = 0
           let no = 0
@@ -315,7 +318,11 @@ export default {
       }
     }
   },
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 
