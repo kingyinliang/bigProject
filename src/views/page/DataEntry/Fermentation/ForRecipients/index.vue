@@ -40,7 +40,7 @@
       <el-tab-pane name="0" label="未确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" prop="applyNo" width="120">
+          <el-table-column label="申请编码" prop="applyNo" width="140">
             <template slot-scope="scope">
               <a @click="Go(scope.row)">{{scope.row.applyNo}}</a>
             </template>
@@ -73,7 +73,7 @@
       <el-tab-pane name="1" label="已确认">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="车间" prop="workShopName"></el-table-column>
-          <el-table-column label="申请编码" width="120">
+          <el-table-column label="申请编码" width="140">
             <template slot-scope="scope">
               <a @click="Go(scope.row)">{{scope.row.applyNo}}</a>
             </template>
