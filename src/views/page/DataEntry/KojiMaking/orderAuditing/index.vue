@@ -371,6 +371,7 @@ export default class Index extends Vue {
       } else {
         this.realInAmount = this.totalInstock
       }
+      console.log('realInAmount: ' + this.realInAmount)
       let tabs: any = this.$refs.tabs
       tabs.handleTabClick(tabs.panes[parseInt(tabs.currentName) - 1])
     })
@@ -640,11 +641,16 @@ export default class Index extends Vue {
     return true
   }
   async timeSubmit () {
-    let total = this.totalInstock
-    let realTotal = this.realInAmount
+    let realTotal
+    if (this.realInAmount > 0) {
+      realTotal = this.realInAmount
+    } else {
+      realTotal = this.totalInstock
+    }
+    // let realTotal = this.realInAmount
     this.workHourList.forEach(function (item) {
       item.status = 'submit'
-      item.countOutput = total
+      item.countOutput = realTotal
       item.realInAmount = realTotal
       item.countOutputUnit = 'L'
     })
@@ -659,7 +665,13 @@ export default class Index extends Vue {
   }
   async storageSubmit () {
     let total = this.totalInstock
-    let realTotal = this.realInAmount
+    // let realTotal = this.realInAmount
+    let realTotal
+    if (this.realInAmount > 0) {
+      realTotal = this.realInAmount
+    } else {
+      realTotal = this.totalInstock
+    }
     this.inStockList.forEach(function (item) {
       item.status = 'submit'
       item.countOutput = total
