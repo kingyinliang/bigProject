@@ -339,6 +339,7 @@ export default {
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('保存成功')
+          this.SearchList()
           this.dialogTableVisible = false
         } else {
           this.$message.error(data.msg)
@@ -371,21 +372,21 @@ export default {
         this.$message.error('请勾选数据')
         return false
       }
+      for (let item of this.multipleSelection) {
+        if (item.isUpdate === false) {
+          this.$message.error('请先保存调配列表（调配单：' + item.orderNo + '）')
+          return false
+        }
+        if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
+          this.$message.error('请填写必填项')
+          return false
+        }
+      }
       this.$confirm('确认要提交数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        for (let item of this.multipleSelection) {
-          if (item.isUpdate === false) {
-            this.$message.error('请先保存物料（调配单：' + item.orderNo + '）')
-            return false
-          }
-          if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
-            this.$message.error('请填写必填项')
-            return false
-          }
-        }
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
