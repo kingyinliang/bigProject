@@ -113,7 +113,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="60">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -192,7 +192,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="60">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -303,7 +303,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="dellistbomS(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -414,6 +414,7 @@ export default {
           types = 'isPkgThree'
         }
         this.InDate.forEach((item) => {
+          this.SetUnit(item)
           item.orderId = id
           if (item.status) {
             if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
@@ -445,6 +446,41 @@ export default {
         }
       }
     },
+    // 入库单位重新赋值
+    SetUnit (item) {
+      if (this.order.factoryCode === '6010') {
+        item.manPackingUnit = this.ratio.basicUnit
+        item.manPackingUnitName = this.ratio.basicUnitName
+        item.aiPackingUnit = this.ratio.basicUnit
+        item.aiPackingUnitName = this.ratio.basicUnitName
+        item.aiSolidUnit = this.ratio.basicUnit
+        item.aiSolidUnitName = this.ratio.basicUnitName
+        item.manSolidUnit = this.ratio.basicUnit
+        item.manSolidUnitName = this.ratio.basicUnitName
+        item.badUnit = this.ratio.basicUnit
+        item.badUnitName = this.ratio.basicUnitName
+        item.sampleUnit = this.ratio.basicUnit
+        item.sampleUnitName = this.ratio.basicUnitName
+        item.outputUnit = this.ratio.basicUnit
+        item.outputUnitName = this.ratio.basicUnitName
+      } else {}
+      item.manPackingUnit = this.ratio.basicUnit
+      item.manPackingUnitName = this.ratio.basicUnitName
+      item.aiPackingUnit = this.ratio.basicUnit
+      item.aiPackingUnitName = this.ratio.basicUnitName
+      item.aiShelvesUnit = this.ratio.productUnit
+      item.aiShelvesUnitName = this.ratio.productUnitName
+      item.aiSolidUnit = this.ratio.productUnit
+      item.aiSolidUnitName = this.ratio.productUnitName
+      item.manSolidUnit = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnit : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit))
+      item.manSolidUnitName = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnitName : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName))
+      item.badUnit = this.ratio.basicUnit
+      item.badUnitName = this.ratio.basicUnitName
+      item.sampleUnit = this.ratio.basicUnit
+      item.sampleUnitName = this.ratio.basicUnitName
+      item.outputUnit = this.ratio.basicUnit
+      item.outputUnitName = this.ratio.basicUnitName
+    },
     // 入库提交
     submitIn (id, str, resolve, reject) {
       let types = ''
@@ -454,6 +490,7 @@ export default {
         types = 'isPkgThree'
       }
       this.InDate.forEach((item) => {
+        this.SetUnit(item)
         item.orderId = id
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
@@ -483,6 +520,11 @@ export default {
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
           item.aiShelves = item.aiShelves + ''
+          // if (!this.UnitRul(item)) {
+          //   ty = false
+          //   this.$message.error('生产入库单位未获取')
+          //   return false
+          // }
           if (!item.output) {
             ty = false
             this.$message.error('生产入库产出数不能为空或0')
@@ -529,6 +571,24 @@ export default {
             return false
           }
         })
+      }
+      return ty
+    },
+    // 单位校验
+    UnitRul (item) {
+      let ty = true
+      if (this.order.factoryCode === '6010') {
+        if (item.manPackingUnit && item.aiPackingUnit && item.aiShelvesUnit && item.aiSolidUnit && item.manSolidUnit && item.badUnit && item.sampleUnit && item.outputUnit) {} else {
+          ty = false
+        }
+      } else {
+        if (item.manPackingUnit && item.aiPackingUnit && item.badUnit && item.sampleUnit && item.outputUnit) {
+          if (this.order.properties && this.order.properties !== '二合一&礼盒产线') {} else if (item.manSolidUnit) {} else {
+            ty = false
+          }
+        } else {
+          ty = false
+        }
       }
       return ty
     },

@@ -32,19 +32,24 @@
               <el-button type="text" class="inStorage_card_left_btn" size="small" :disabled="!(isRedact && (orderStatus !== 'submit' && orderStatus !== 'checked'))" @click="showDialog()">入罐</el-button>
             </div>
             <div style="flex: 1">
-              <el-table header-row-class-name="tableHead" :data="InStorageDate" border tooltip-effect="dark" @row-dblclick="updateRow" >
+              <el-table header-row-class-name="tableHead" :data="InStorageDate" border tooltip-effect="dark" :row-class-name="RowDelFlag" @row-dblclick="updateRow" >
                 <el-table-column type="index" width="50" label="序号" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="日期" width="80" prop="date"  :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="半成品罐号" width="95" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="半成品批次" width="95" prop="batch" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="入罐数量" width="90" prop="inAmount" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="满罐数量" width="90" prop="fullAmount" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column label="入罐数量" width="80" prop="inAmount" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column label="满罐数量" width="80" prop="fullAmount" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="罐内库存" width="80" prop="inTankAmount" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="是否满罐" width="80" prop="isFull" :show-overflow-tooltip="true"> <template slot-scope="scope">{{scope.row.isFull === '1'? '是' : '否'}}</template></el-table-column>
+                <el-table-column label="满罐" width="60" prop="isFull" :show-overflow-tooltip="true"> <template slot-scope="scope">{{scope.row.isFull === '1'? '是' : '否'}}</template></el-table-column>
                 <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="操作时间" width="100" prop="changed" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column label="操作时间"  prop="changed" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
+                  </template>
+                </el-table-column>
               </el-table>
             </div>
           </div>
@@ -303,6 +308,17 @@ export default {
           }
         }
       })
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
+    },
+    delRow (row) {
+      row.delFlag = '1'
     },
     // 获取订单表头
     GetOrderHead () {

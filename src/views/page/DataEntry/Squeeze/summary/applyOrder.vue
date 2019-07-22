@@ -4,7 +4,7 @@
       <h3 style="color: rgba(0, 0, 0, 0.65);font-size: 14px;float: left">原汁信息</h3>
       <el-button type="primary" style="float: right" size="small" :disabled="!isRedact" @click="ApplyOrder">申请订单</el-button>
     </el-row>
-    <el-table ref="table1" :data="fumet" header-row-class-name="tableHead" @selection-change="handleSelectionChange" border tooltip-effect="dark">
+    <el-table ref="table1" :data="fumet" header-row-class-name="tableHead" @row-dblclick="GetLog" @selection-change="handleSelectionChange" border tooltip-effect="dark">
       <el-table-column type="selection" :selectable='checkboxApply' width="34"></el-table-column>
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>原汁罐号</span></template>
@@ -54,15 +54,12 @@ export default {
   data () {
     return {
       multipleSelection: [],
-      OrderDate: [{}]
+      OrderDate: [{}],
+      orderAudit: []
     }
   },
   props: {
     isRedact: '',
-    orderAudit: {
-      type: Array,
-      default () { return [] }
-    },
     fumet: {
       type: Array,
       default () { return [] }
@@ -88,6 +85,16 @@ export default {
       this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
           this.$emit('GetFunet')
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 日志
+    GetLog (row) {
+      this.$http(`${SQU_API.SUM_LOG_FUM_API}`, 'POST', {orderId: row.orderId}).then(({data}) => {
+        if (data.code === 0) {
+          this.orderAudit = data.listRecord
         } else {
           this.$message.error(data.msg)
         }

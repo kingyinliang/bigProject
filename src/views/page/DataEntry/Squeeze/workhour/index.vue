@@ -265,12 +265,6 @@ export default {
     // 保存
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.readyTimeRul()) {
-          return false
-        }
-        if (!this.$refs.workerref.userrul()) {
-          return false
-        }
       }
       let that = this
       let headSave = new Promise((resolve, reject) => {
@@ -309,6 +303,12 @@ export default {
       }
     },
     SubmitForm () {
+      if (!this.readyTimeRul()) {
+        return false
+      }
+      if (!this.$refs.workerref.userrul()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

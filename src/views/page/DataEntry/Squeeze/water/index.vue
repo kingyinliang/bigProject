@@ -234,6 +234,16 @@ export default {
     },
     // 提交
     SubmitForm () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('没有勾选提交数据')
+        return false
+      }
+      for (let items of this.multipleSelection) {
+        if (!items.moveOperator || items.moveOperator === '') {
+          this.$message.error('请选择挪笼操作人')
+          return false
+        }
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -246,16 +256,6 @@ export default {
     savedOrSubmitForm (str) {
       let configurl
       if (str === 'submit') {
-        if (this.multipleSelection.length === 0) {
-          this.$message.error('没有勾选提交数据')
-          return false
-        }
-        for (let items of this.multipleSelection) {
-          if (!items.moveOperator || items.moveOperator === '') {
-            this.$message.error('请选择挪笼操作人')
-            return false
-          }
-        }
         configurl = SQU_API.WATERSUBMIT_API
         this.succmessage = '提交成功'
         this.$http(`${configurl}`, 'POST', this.multipleSelection).then(({data}) => {

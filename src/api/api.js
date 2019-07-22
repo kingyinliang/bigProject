@@ -1191,6 +1191,20 @@ export const SQU_API = {
    */
   SUM_MATERIAL_LIST_API: HOST + '/mid/prsMaterial/materialList',
   /**
+   * 车间汇总发酵罐号
+   */
+  SUM_POT_LIST_API: HOST + '/mid/prsMaterial/holderInfo',
+  /**
+   * 车间汇总发酵罐号
+   */
+  SUM_POT_STATUS_API: HOST + '/mid/prsMaterial/updateHolderStatus',
+  /**
+   * 车间汇总日志
+   */
+  SUM_LOG_FUM_API: HOST + '/mid/prsOrder/getInAuditLog',
+  SUM_LOG_MATERIAL_API: HOST + '/mid/prsOrder/getMaterialAuditLog',
+  SUM_LOG_TIME_API: HOST + '/mid/prsOrder/getTimeAuditLog',
+  /**
    * 车间汇总物料修改
    */
   SUM_MATERIAL_UPDATE_API: HOST + '/mid/prsMaterial/updateMaterial',

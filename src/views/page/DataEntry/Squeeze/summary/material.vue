@@ -4,7 +4,7 @@
     <p style="float: left;font-size: 14px">布浆总量：</p>
     <el-button type="primary" style="float: right" size="small" :disabled="true">酱醪领用</el-button>
   </el-row>
-  <el-table ref="table1" header-row-class-name="tableHead" :data="SumDate" :row-class-name="RowDelFlag">
+  <el-table ref="table1" header-row-class-name="tableHead" @row-dblclick="GetLog"  :data="SumDate" :row-class-name="RowDelFlag">
     <el-table-column label="原汁信息">
       <el-table-column width="110">
         <template slot="header"><i class="reqI">*</i><span>原汁罐号</span></template>
@@ -30,21 +30,22 @@
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>发酵罐号</span></template>
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
+          <el-select @change="PotChange(scope.row)" v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
             <el-option v-for="item in potList" :key="item.holderId" :label="item.holderName" :value="item.holderId"></el-option>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material.childMaterial" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
-            <el-option
-              v-for="item in SerchSapList"
-              :key="item.code+' '+item.value"
-              :label="item.code+' '+item.value"
-              :value="item.code+' '+item.value">
-            </el-option>
-          </el-select>
+          {{scope.row.material.childMaterial}}
+          <!--<el-select v-model="scope.row.material.childMaterial" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">-->
+            <!--<el-option-->
+              <!--v-for="item in SerchSapList"-->
+              <!--:key="item.code+' '+item.value"-->
+              <!--:label="item.code+' '+item.value"-->
+              <!--:value="item.code+' '+item.value">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
         </template>
       </el-table-column>
       <el-table-column width="120">
@@ -55,10 +56,16 @@
         <template slot-scope="scope">{{scope.row.material.childUnit = 'L'}}</template>
       </el-table-column>
       <el-table-column label="物料批次" width="120">
-        <template slot-scope="scope"><el-input v-model="scope.row.material.childBatch" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))"></el-input></template>
+        <template slot-scope="scope">
+          {{scope.row.material.childBatch}}
+          <!--<el-input v-model="scope.row.material.childBatch" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))"></el-input>-->
+        </template>
       </el-table-column>
-      <el-table-column label="满罐数量" width="120">
-        <template slot-scope="scope"><el-input v-model="scope.row.material.childFullPotAmount" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))"></el-input></template>
+      <el-table-column label="剩余数量" width="120">
+        <template slot-scope="scope">
+          {{scope.row.material.childFullPotAmount}}
+          <!--<el-input v-model="scope.row.material.childFullPotAmount" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))"></el-input>-->
+        </template>
       </el-table-column>
       <el-table-column label="记录人" width="120" prop="material.childRecordMan"></el-table-column>
     </el-table-column>
@@ -73,13 +80,15 @@
 </template>
 
 <script>
-import {BASICDATA_API, SQU_API} from '@/api/api'
+import {SQU_API} from '@/api/api'
 export default {
   name: 'material',
   data () {
     return {
       SumDate: [],
       materialDate: [],
+      sumAmount1: {},
+      sumAmount2: {},
       potList: [],
       materialS: '',
       MaterialAudit: []
@@ -109,7 +118,11 @@ export default {
           let che = 0
           let no = 0
           let sav = 0
+          this.sumAmount1 = {}
           data.maList.forEach((item) => {
+            if (item.childPotNo && item.childUsedAmount) {
+              this.sumAmount1[item.childPotNo] ? this.sumAmount1[item.childPotNo] += item.childUsedAmount * 1 : this.sumAmount1[item.childPotNo] = item.childUsedAmount * 1
+            }
             if (item.status === 'noPass') {
               no = no + 1
             } else if (item.childStatus === 'submit') {
@@ -122,6 +135,7 @@ export default {
               sav = sav + 1
             }
           })
+          console.log(this.sumAmount1)
           if (no > 0) {
             this.materialS = 'noPass'
           } else if (sub > 0) {
@@ -143,6 +157,16 @@ export default {
         }
       })
     },
+    // 日志
+    GetLog (row) {
+      this.$http(`${SQU_API.SUM_LOG_MATERIAL_API}`, 'POST', {orderNo: row.fumet.orderNo}).then(({data}) => {
+        if (data.code === 0) {
+          this.MaterialAudit = data.listRecord
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 修改酱
     updateMaterial (str, resolve, reject, st = false) {
       let tmp = []
@@ -159,6 +183,13 @@ export default {
         }
         tmp.push(item.material)
       })
+      Object.keys(this.sumAmount2).forEach((key) => {
+        if (this.potList.filter(it => it.holderId === key).length !== 0) {
+          if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) === this.potList.filter(it => it.holderId === key)[0].sumAmount) {
+            this.$http(`${SQU_API.SUM_POT_STATUS_API}`, 'POST', {holderId: key}).then(({data}) => {})
+          }
+        }
+      })
       this.$http(`${st === false ? SQU_API.SUM_MATERIAL_UPDATE_API : SQU_API.SUM_MATERIAL_SUBMIT_API}`, 'POST', tmp).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -172,13 +203,49 @@ export default {
         }
       })
     },
+    PotChange (row) {
+      let pot = this.potList.filter(it => it.holderId === row.material.childPotNo)[0]
+      row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
+      row.material.childBatch = pot.batch
+      row.material.childFullPotAmount = pot.sumAmount
+    },
     // 校验
     materialRul () {
+      this.sumAmount2 = {}
       let ty = true
       this.SumDate.forEach((item) => {
         if (!item.material.childPotNo && !item.material.childUsedAmount) {
           ty = false
           this.$message.error('物料领用必填项未填写')
+          return false
+        } else {
+          this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
+        }
+      })
+      Object.keys(this.sumAmount2).forEach((key) => {
+        console.log(key, this.sumAmount2[key], this.sumAmount1[key])
+        if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
+          ty = false
+          this.$message.error('剩余量不足')
+          return false
+        }
+      })
+      return ty
+    },
+    // 数量校验
+    AmountRul () {
+      this.sumAmount2 = {}
+      let ty = true
+      this.SumDate.forEach((item) => {
+        if (item.material.childPotNo) {
+          this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
+        }
+      })
+      Object.keys(this.sumAmount2).forEach((key) => {
+        console.log(key, this.sumAmount2[key], this.sumAmount1[key])
+        if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
+          ty = false
+          this.$message.error('剩余量不足')
           return false
         }
       })
@@ -213,18 +280,15 @@ export default {
           s++
         }
       })
-      console.log(s)
       if (s > 1) {
         row.delFlag = '1'
         this.SumDate.splice(this.SumDate.length, 0, {})
         this.SumDate.splice(this.SumDate.length - 1, 1)
-        console.log(this.SumDate)
       } else {
         this.$message.error('此订单最后一条了，不能删除')
       }
     },
     RowDelFlag ({row, rowIndex}) {
-      console.log(row)
       if (row.delFlag === '1') {
         return 'rowDel'
       } else {
@@ -233,16 +297,12 @@ export default {
     },
     // 获取罐
     getPot (formHeader) {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
-        holder_type: '001',
-        type: 'holder_type',
+      this.$http(`${SQU_API.SUM_POT_LIST_API}`, 'POST', {
         factory: formHeader.factory,
-        dept_id: formHeader.workShop,
-        currPage: 1,
-        pageSize: 9999
+        workShop: formHeader.workShop
       }).then(({data}) => {
         if (data.code === 0) {
-          this.potList = data.page.list
+          this.potList = data.holderInfo
         } else {
           this.$message.error(data.msg)
         }

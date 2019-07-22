@@ -3,7 +3,7 @@
   <el-row class="clearfix">
     <el-button type="primary" style="float: right" size="small" :disabled="!isRedact" @click="GetTime">获取工时</el-button>
   </el-row>
-  <el-table ref="table1" header-row-class-name="tableHead" :data="timeDate" tooltip-effect="dark">
+  <el-table ref="table1" header-row-class-name="tableHead" @row-dblclick="GetLog" :data="timeDate" tooltip-effect="dark">
     <el-table-column label="生产订单" width="120" prop="orderNo"></el-table-column>
     <el-table-column label="工序" width="120" prop="processIdName"></el-table-column>
     <el-table-column label="生产品项" prop="ssssss" :show-overflow-tooltip="true">
@@ -50,7 +50,6 @@ export default {
       this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', formHeader).then(({data}) => {
         if (data.code === 0) {
           this.timeDate = data.timeList
-          this.TimeAudit = data.TimeAudit
           this.timeS = GetStatus(data.timeList)
           if (resolve) {
             resolve('resolve')
@@ -59,6 +58,16 @@ export default {
           if (reject) {
             reject(data.msg)
           }
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 日志
+    GetLog (row) {
+      this.$http(`${SQU_API.SUM_LOG_MATERIAL_API}`, 'POST', {orderNo: row.orderNo}).then(({data}) => {
+        if (data.code === 0) {
+          this.TimeAudit = data.listRecord
+        } else {
           this.$message.error(data.msg)
         }
       })

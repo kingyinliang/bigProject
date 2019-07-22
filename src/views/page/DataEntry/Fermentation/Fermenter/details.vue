@@ -70,7 +70,8 @@
             <el-table-column label="物料编码" :show-overflow-tooltip="true" prop="materialCode" width="110"></el-table-column>
             <el-table-column label="物料描述" :show-overflow-tooltip="true" prop="materialName"></el-table-column>
             <el-table-column label="曲房号" :show-overflow-tooltip="true" prop="kjmHouse" width="80"></el-table-column>
-            <el-table-column label="数量" :show-overflow-tooltip="true" prop="amount" width="80"></el-table-column>
+            <el-table-column label="计划数量" :show-overflow-tooltip="true" prop="amount" width="80"></el-table-column>
+            <el-table-column label="入库数量" :show-overflow-tooltip="true" prop="instorageAmount" width="80"></el-table-column>
             <el-table-column label="单位" :show-overflow-tooltip="true" prop="unit" width="50"></el-table-column>
             <el-table-column label="投料日期" :show-overflow-tooltip="true" prop="shootDate" width="80"></el-table-column>
             <el-table-column label="入罐日期" :show-overflow-tooltip="true" prop="inHolderDate" width="80"></el-table-column>
