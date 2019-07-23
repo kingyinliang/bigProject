@@ -88,7 +88,7 @@ export default {
       }
     }
     return {
-      iconList: ['factory-shouye', 'factory-shezhi', 'factory-luru', 'factory-shenhe', 'factory-baobiao', 'factory-yibiao', 'factory-icon-test'],
+      iconList: ['factory-shouye', 'factory-shezhi', 'factory-luru', 'factory-shenhe', 'factory-baobiao', 'factory-yibiao', 'factory-icon-test', 'factory-baozhuang', 'factory-filter', 'factory-chechuangjiqiren', 'factory-qiyaguanjianhua', 'factory-chaohuo', 'factory-guanquguanli', 'factory-air-compressor'],
       visible: false,
       type: true,
       dataForm: {
