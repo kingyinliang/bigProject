@@ -362,6 +362,15 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .inStorage_card_left_btn{
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 0px 0px 6px 6px;
+    color: white!important;
+    background: #1890FF!important;
+  }
+</style>
 <style lang="scss" scoped>
 .inStorage_card{
   display: flex;
@@ -376,11 +385,6 @@ export default {
     p{
       padding: 10px;
       font-size: 14px;
-    }
-    &_btn{
-      width: 100%;
-      margin-top: 10px;
-      background: #F7F9FA;
     }
   }
 }

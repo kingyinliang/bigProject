@@ -10,7 +10,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="物料：">
-              <el-select v-model="formHeader.materialCode">
+              <el-select filterable v-model="formHeader.materialCode">
                 <el-option value="">请选择</el-option>
                 <el-option v-for="(item, index) in materialList" :key="index" :label="item.materialCode +  `${item.materialName}`" :value="item.materialCode"></el-option>
               </el-select>

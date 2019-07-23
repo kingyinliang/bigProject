@@ -345,6 +345,12 @@ export default {
     },
     // 保存提交
     SubmitForm () {
+      if (!this.dataRul(this.AddSupDate, 'AddSupDate')) {
+        return
+      }
+      if (!this.dataRul(this.SupDate, 'SupDate')) {
+        return
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -354,14 +360,6 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
-      if (str === 'submit') {
-        if (!this.dataRul(this.AddSupDate, 'AddSupDate')) {
-          return
-        }
-        if (!this.dataRul(this.SupDate, 'SupDate')) {
-          return
-        }
-      }
       let net0 = new Promise((resolve, reject) => {
         this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
       })
@@ -401,6 +399,11 @@ export default {
           if (!item.batch) {
             ty = false
             this.$message.error('批次必填')
+            return false
+          }
+          if (item.batch.length !== 10) {
+            ty = false
+            this.$message.error('批次长度限制10位')
             return false
           }
           if (!item.receiveAmount) {

@@ -35,7 +35,7 @@
             <el-form-item label="热水温度：" label-width="110px">
               <el-input v-model="crafData.hotTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="酱油温度：">
+            <el-form-item label="酱油温度：" label-width="80px">
               <el-input v-model="crafData.sauceTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
             <el-form-item label="原汁入锅温度：" prop="originalTemp">
@@ -51,7 +51,7 @@
               <el-form-item label="机械温度：" label-width="108px">
                 <el-input v-model="crafData.mechanicalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
-              <el-form-item label="出料温度：">
+              <el-form-item label="出料温度：" prop="dischargeTemp">
                 <el-input v-model="crafData.dischargeTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
               <el-form-item label="冷却结束时间：" prop="coolingEndTime">
@@ -153,6 +153,9 @@ export default {
         ],
         upStartTime: [
           { required: true, message: '升温开始时间不能为空', trigger: 'blur' }
+        ],
+        dischargeTemp: [
+          { required: true, message: '出料温度不能为空', trigger: 'blur' }
         ],
         coolingStartTime: [
           { required: true, message: '冷却开始时间不能为空', trigger: 'blur' }
@@ -258,7 +261,7 @@ export default {
               ty = false
               this.$message.error('酱油温度必填')
             }
-          } else if (item === '热水"') {
+          } else if (item === '热水') {
             if (!this.crafData.hotTemp) {
               ty = false
               this.$message.error('热水温度必填')
@@ -286,16 +289,16 @@ export default {
       if (!this.dataRul()) {
         return
       }
-      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$refs.dataForm.validate((valid) => {
-          if (valid) {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
             this.savedOrSubmitForm('submit')
-          }
-        })
+          })
+        }
       })
     },
     savedOrSubmitForm (str) {
