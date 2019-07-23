@@ -84,11 +84,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currPage"
+          :current-page="formHeader.currPage"
           :page-sizes="[10, 15, 20]"
-          :page-size="pageSize"
+          :page-size="formHeader.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount">
+          :total="formHeader.totalCount">
         </el-pagination>
       </el-row>
     </el-card>
@@ -183,6 +183,9 @@ export default {
     return {
       isRedact: false,
       formHeader: {
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0,
         factory: '',
         workShop: '',
         productDate: '',
@@ -200,10 +203,7 @@ export default {
       dataList: [],
       multipleSelection: [],
       AddSupDate: [],
-      SupDate: [],
-      currPage: 1,
-      pageSize: 10,
-      totalCount: 0
+      SupDate: []
     }
   },
   watch: {
@@ -221,15 +221,22 @@ export default {
   methods: {
     GetDataList (st) {
       if (st) {
-        this.currPage = 1
+        this.formHeader.currPage = 1
       }
-      this.$http(`${STERILIZED_API.STE_SUP_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
+      let obj = JSON.parse(JSON.stringify(this.formHeader))
+      obj.currPage = obj.currPage + ''
+      obj.pageSize = obj.pageSize + ''
+      obj.totalCount = obj.totalCount + ''
+      this.$http(`${STERILIZED_API.STE_SUP_LIST_API}`, 'POST', obj).then(({data}) => {
         if (data.code === 0) {
-          this.SumDataList = data.list
+          this.dataList = data.pageResult.list
           this.AddSupDate = []
           this.SupDate = []
-          this.totalCount = data.list.length
-          this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+          this.formHeader.currPage = data.pageResult.currPage
+          this.formHeader.pageSize = data.pageResult.pageSize
+          this.formHeader.totalCount = data.pageResult.totalCount
+          // this.totalCount = data.list.length
+          // this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
         } else {
           this.$message.error(data.msg)
         }
@@ -437,13 +444,15 @@ export default {
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.pageSize = val
-      this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+      this.formHeader.pageSize = val
+      this.GetDataList()
+      // this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.currPage = val
-      this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
+      this.formHeader.currPage = val
+      this.GetDataList()
+      // this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
     }
   },
   computed: {},

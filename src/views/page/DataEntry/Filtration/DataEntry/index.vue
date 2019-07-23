@@ -28,7 +28,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col v-for="(item, index) in 4" :key="index" id="normal" :span="12" style="padding-bottom: 20px">
+      <el-col v-for="(item, index) in dataList" :key="index" id="normal" :span="12" style="padding-bottom: 20px">
         <div class="title_left" style="font-size: 16px;font-weight: bold;margin-bottom: 8px;">工序： <font style="color:red">{{item.productLineName}}</font></div>
         <div class="sole_cont">
           <el-form size="small" :inline="true" label-position="right" label-width="90px">
@@ -49,13 +49,15 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="计划产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.planOutput + ' ' + item.outputUnit}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.planOutput || '') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
               <el-form-item label="品项：" class="width50b">
-                <div style="width:150px; border-bottom:1px solid #ccc">&nbsp;{{item.materialCode + ' ' + item.materialName}}</div>
+                <el-tooltip class="item" effect="dark" :content="(item.materialCode || '') + ' ' + (item.materialName || '')" placement="top">
+                  <div class="hiddenP">&nbsp;{{(item.materialCode || '') + ' ' + (item.materialName || '')}}</div>
+                </el-tooltip>
               </el-form-item>
               <el-form-item label="实际产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{item.realOutput + ' ' + item.outputUnit}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.realOutput || '') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
             </div>
           </el-form>
@@ -67,7 +69,7 @@
 </template>
 
 <script>
-import {getFactory, getWorkshop} from '@/net/validate'
+import {getFactory, getWorkshop, orderList} from '@/net/validate'
 import {FILTRATION_API} from '@/api/api'
 export default {
   name: 'index',
@@ -96,7 +98,8 @@ export default {
     GetOrderList () {
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
-          this.dataList = data.list
+          this.dataList = orderList(data.list)
+          console.log(this.dataList)
         } else {
           this.$message.error(data.msg)
         }
@@ -105,9 +108,9 @@ export default {
     // 订单号下拉
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
-        this.$http(`${FILTRATION_API.CINDEXORDERLIST_API}`, 'POST', {
+        this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', {
           workShop: this.workShop,
-          productDate: this.productDate.replace(/-/g, ''),
+          productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {
@@ -125,9 +128,25 @@ export default {
           }
         })
       }
+    },
+    // 跳转
+    go (item) {
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+      setTimeout(() => {
+        this.$router.push({ name: `DataEntry-Filtration-DataEntry-detail` })
+      }, 100)
     }
   },
-  computed: {},
+  computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    }
+  },
   components: {}
 }
 </script>
@@ -199,5 +218,12 @@ export default {
   }
   .selectwpx{
     width:120px;
+  }
+  .hiddenP{
+    width:150px;
+    border-bottom: 1px solid #cccccc;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
 </style>
