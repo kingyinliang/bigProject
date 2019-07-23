@@ -1,8 +1,8 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
-      <el-card>
-        <el-form :model="plantList" size="small" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
+      <el-card class="newCard">
+        <el-form :model="plantList" size="small" class="marbottom" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
           <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
               <el-option label="" value=""></el-option>
@@ -21,6 +21,8 @@
             <el-button type="primary" @click="GetOrderList()">查询</el-button>
           </el-form-item>
         </el-form>
+      </el-card>
+      <el-card style="margin-top: 10px" v-if="list.length">
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in list" :key="index" style="margin-bottom: 10px">
             <el-card class="box-card">
@@ -72,8 +74,8 @@ export default {
       factory: [],
       workshop: [],
       plantList: {
-        factoryid: '',
-        workShop: '',
+        factoryid: this.$store.state.common.Pkgfactoryid,
+        workShop: this.$store.state.common.PkgworkShop,
         orderNo: '',
         productDate: ''
       },
@@ -86,6 +88,7 @@ export default {
   },
   watch: {
     'plantList.factoryid' (n, o) {
+      this.plantList.workShop = ''
       this.Getdeptbyid(n)
     }
   },
@@ -95,14 +98,8 @@ export default {
     } else {
       this.plantList.productDate = this.PkgproductDate
     }
-    this.plantList.factoryid = this.Pkgfactoryid
     this.Getdeptcode()
-    let that = this
-    setTimeout(function () {
-      if (that.plantList.workShop) {
-        that.GetOrderList()
-      }
-    }, 1000)
+    this.Getdeptbyid(this.plantList.workShop)
   },
   methods: {
     // 获取工厂,ceshi
@@ -120,15 +117,12 @@ export default {
     },
     // 获取车间
     Getdeptbyid (id, typ) {
-      this.plantList.workShop = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            if (this.PkgworkShop === '' && this.plantList.workShop === '') {
+            if (data.typeList.length > 0) {
               this.plantList.workShop = data.typeList[0].deptId
-            } else {
-              this.plantList.workShop = this.PkgworkShop
             }
           } else {
             this.$message.error(data.msg)

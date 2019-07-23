@@ -61,7 +61,7 @@
                 <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
               </el-form-item>
               <el-row>
-                <h3>保温时间及屏显温度</h3>
+                <h3><i class="iconfont factory-shezhi"></i>保温时间及屏显温度</h3>
                 <el-button type="primary" size="small" @click="addresult()" style="float: right" :disabled="!isRedact" >新增</el-button>
               </el-row>
               <el-table header-row-class-name="tableHead" :data="crafData.result" :row-class-name="RowDelFlag" border tooltip-effect="dark">

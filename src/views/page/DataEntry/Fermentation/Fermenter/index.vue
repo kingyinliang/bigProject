@@ -239,7 +239,7 @@ export default {
         holderStatus: '',
         dateFlag: '',
         currPage: 1,
-        pageSize: 40,
+        pageSize: 42,
         totalCount: 0
       },
       factory: [],
@@ -324,7 +324,6 @@ export default {
     },
     // 查询
     GetDataList (ty) {
-      this.fastS = true
       if (ty) {
         this.formHeader.currPage = 1
         if (ty === true) {
@@ -344,6 +343,7 @@ export default {
       obj.holderNo = obj.holderNo.join(',')
       this.$http(`${FERMENTATION_API.FER_LIST_API}`, 'POST', obj).then(({data}) => {
         if (data.code === 0) {
+          this.fastS = true
           this.dataList = data.orderPage.list
           this.formHeader.currPage = data.orderPage.currPage
           this.formHeader.totalCount = data.orderPage.totalCount
@@ -662,7 +662,8 @@ export default {
           width: 100%;
           position: absolute;
           font-size: 14px;
-          bottom: 40px;
+          top: 70px;
+          color: black;
           left: 3px;
         }
         &_item1,&_item2{
