@@ -1482,5 +1482,8 @@ export const STERILIZED_API = {
  */
 export const FILTRATION_API = {
   // 过滤首页
-  FILTER_HOME_LIST_API: HOST + '/filter/order/list'
+  FILTER_HOME_LIST_API: HOST + '/filter/order/list',
+  FILTER_IN_LIST_API: HOST + '/filter/instorage/list',
+  FILTER_IN_UPDATE_API: HOST + '/filter/instorage/list',
+  FILTER_IN_SAVE_API: HOST + '/filter/instorage/list'
 }

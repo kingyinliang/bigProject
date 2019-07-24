@@ -109,8 +109,6 @@ export default {
     orderchange (row) {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', {
-          workShop: this.workShop,
-          productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {
@@ -131,6 +129,8 @@ export default {
     },
     // 跳转
     go (item) {
+      this.$store.state.common.orderNo = item.orderNo
+      this.$store.state.common.orderId = item.orderIdList[item.orderNo]
       this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
       setTimeout(() => {
         this.$router.push({ name: `DataEntry-Filtration-DataEntry-detail` })
