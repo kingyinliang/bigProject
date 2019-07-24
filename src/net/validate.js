@@ -141,7 +141,7 @@ export function dateFormat (date, fmt) {
 //     vue.lodingS = false
 //   })
 // }
-// export function exportFile (url, fileName, vue) {
+// export function exportFileNoS3 (url, fileName, vue) {
 //   vue.lodingS = true
 //   vue.$http(url, 'POST', vue.plantList, false, true).then(({data}) => {
 //     let blob = new Blob([data], {
@@ -151,7 +151,7 @@ export function dateFormat (date, fmt) {
 //       navigator.msSaveBlob(blob)
 //     } else {
 //       let elink = document.createElement('a')
-//       elink.download = `${fileName}${getNewDate()}.xls`
+//       elink.download = `${fileName}${getNewDate()}.xlsx`
 //       elink.style.display = 'none'
 //       elink.href = URL.createObjectURL(blob)
 //       document.body.appendChild(elink)

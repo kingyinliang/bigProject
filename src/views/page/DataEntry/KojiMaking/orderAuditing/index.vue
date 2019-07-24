@@ -357,7 +357,7 @@ export default class Index extends Vue {
     for (let ele of this.inStockList) {
       total += parseFloat(ele.sauceWeight)
     }
-    return parseFloat(total.toFixed(2))
+    return parseInt(total.toString())
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
