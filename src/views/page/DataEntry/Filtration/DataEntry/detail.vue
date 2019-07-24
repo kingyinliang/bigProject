@@ -53,7 +53,7 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" id="DaatTtabs">
+      <el-tabs ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-button>设备工时</el-button>
@@ -110,12 +110,13 @@ export default {
     return {
       formHeader: {},
       isRedact: false,
-      activeName: '1'
+      activeName: '4'
     }
   },
   mounted () {
     headanimation(this.$)
     this.GetOrder()
+    this.GetOrderList()
   },
   methods: {
     GetOrder () {
@@ -130,8 +131,23 @@ export default {
         }
       })
     },
+    // 数据拉取
+    GetOrderList () {
+      let params = {
+        orderId: '123123',
+        deptId: '44640E0D9FFF49238C233439C2D2D2F8'
+      }
+      this.$refs.craft.GetList(params)
+      this.$refs.equworkinghours.GetList(params)
+    },
     // 保存 or 提交
     SubmitForm () {
+      if (!this.$refs.equworkinghours.Readyrules()) {
+        return false
+      }
+      if (!this.$refs.craft.Readyrules()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -141,8 +157,39 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
+      let that = this
+      let net103 = new Promise((resolve, reject) => {
+        that.$refs.equworkinghours.SaveEquWorking(str, resolve)
+      })
+      let net100 = new Promise((resolve, reject) => {
+        that.$refs.craft.SaveTech(str, resolve)
+      })
+      let net101 = new Promise((resolve, reject) => {
+        that.$refs.craft.SaveMaterial(str, resolve)
+      })
       if (str === 'submit') {
+        let net102 = new Promise((resolve, reject) => {
+          that.$refs.craft.SubmitMaterial(str, resolve)
+        })
+        Promise.all([net100, net101]).then(function () {
+          Promise.all([net102]).then(function () {
+            that.$message.success('提交成功')
+            that.GetOrderList()
+            that.isRedact = false
+          }).catch(() => {
+            that.$message.error('网络请求失败，请刷新重试')
+          })
+        }).catch(() => {
+          that.$message.error('网络请求失败，请刷新重试')
+        })
       } else {
+        Promise.all([net103, net100, net101]).then(function () {
+          that.$message.success('保存成功')
+          that.GetOrderList()
+          that.isRedact = false
+        }).catch(() => {
+          that.$message.error('网络请求失败，请刷新重试')
+        })
       }
     }
   },

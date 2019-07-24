@@ -1326,6 +1326,7 @@ export const FERMENTATION_API = {
    *  待领用申请列表
    */
   FORRECIPIENTSLIST_API: HOST + '/fer/openHolder/openHolderList',
+  FORRECIPIENTSALREADYLIST_API: HOST + '/fer/openHolder/isOpenFermentationList',
   FORRECIPIENTSHOLDER_API: HOST + '/fer/openHolder/productsList', // 罐
   /**
    *  压榨通知单
@@ -1485,5 +1486,18 @@ export const FILTRATION_API = {
   FILTER_HOME_LIST_API: HOST + '/filter/order/list',
   FILTER_IN_LIST_API: HOST + '/filter/instorage/list',
   FILTER_IN_UPDATE_API: HOST + '/filter/instorage/list',
-  FILTER_IN_SAVE_API: HOST + '/filter/instorage/list'
+  FILTER_IN_SAVE_API: HOST + '/filter/instorage/list',
+  /**
+   *  工艺控制
+   */
+  FILTER_CRAFT_LIST: HOST + '/filter/tech/techList',
+  FILTER_CRAFT_TECHSAVE: HOST + '/filter/tech/techInsert',
+  FILTER_CRAFT_MATERIALSAVE: HOST + '/filter/tech/materialUpdate',
+  FILTER_CRAFT_MATERIALIST: HOST + '/filter/tech/materialList',
+  FILTER_CRAFT_MATERIASUBMIT: HOST + '/filter/tech/materialSubmit',
+  /**
+   *  设备工时
+   */
+  FILTER_EQUWORKINGHOURS_LIST: HOST + '/filter/machine/machineList',
+  FILTER_EQUWORKINGHOURS_SAVE: HOST + '/filter/machine/machineUpdate'
 }

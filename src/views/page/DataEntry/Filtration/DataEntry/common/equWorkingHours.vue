@@ -2,11 +2,11 @@
   <div>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="8">
+        <el-col :span="8" v-for="(item, index) in filterList" :key="index">
           <div class="grid-content">
             <el-row style="flex-grow:1">
               <el-col :span="10" style="padding-left:16px;">
-                <div class="title">1# 过滤机</div>
+                <div class="title">{{item.deviceName}}</div>
                 <div class="content">
                   请点击下方操作按钮，<br>进行相应操作
                 </div>
@@ -15,77 +15,162 @@
             </el-row>
             <el-row class="footer">
               <el-col :span="8">
-                <el-button class="button" @click="ShowDialog('清洗')">清洗</el-button>
+                <el-button class="button" @click="ShowDialog(item, '清洗')" :disabled="!isRedact">清洗</el-button>
               </el-col>
               <el-col :span="8">
-                <el-button class="button" @click="ShowDialog('预涂')">预涂</el-button>
+                <el-button class="button" @click="ShowDialog(item, '预涂')" :disabled="!isRedact">预涂</el-button>
               </el-col>
               <el-col :span="8">
-                <el-button class="button" @click="ShowDialog('过滤')">过滤</el-button>
+                <el-button class="button" @click="ShowDialog(item, '过滤')" :disabled="!isRedact">过滤</el-button>
               </el-col>
             </el-row>
           </div>
         </el-col>
-        <el-col :span="8"><div class="grid-content">2</div></el-col>
       </el-row>
-      <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">>
+      <el-table :data="dataList" @row-dblclick="EditInfo" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column label="过滤机号" prop="orderStatus"></el-table-column>
-        <el-table-column label="工作内容" prop="orderStatus"></el-table-column>
-        <el-table-column label="开始时间" prop="orderStatus"></el-table-column>
-        <el-table-column label="结束时间" prop="orderStatus"></el-table-column>
-        <el-table-column label="时长" prop="orderStatus"></el-table-column>
-        <el-table-column label="备注"></el-table-column>
-        <el-table-column label="操作时间" prop="orderStatus"></el-table-column>
-        <el-table-column label="操作人" prop="orderStatus"></el-table-column>
-        <el-table-column prop="orderStatus" width="50">
+        <el-table-column label="过滤机号" prop="deviceName" width="120"></el-table-column>
+        <el-table-column label="工作内容" prop="content"></el-table-column>
+        <el-table-column label="开始时间" prop="startTime" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="结束时间" prop="endTime" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="时长(H)" prop="timeLength"></el-table-column>
+        <el-table-column label="备注" prop="remark"></el-table-column>
+        <el-table-column label="操作时间" prop="orderStatus" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作人" prop="orderStatus" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="orderStatus" width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="del(scope.row)" size="small"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="small" :disabled="!isRedact"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
     <el-card>
-      <audit-log :tableData="readAudit"></audit-log>
+      <audit-log :tableData="recordList"></audit-log>
     </el-card>
     <el-dialog :visible.sync="dialogVisible" width="400px" custom-class='dialog__class'>
-      <div slot="title" style="line-hight:59px">{{this.dialog.holderNo}} 类别判定</div>
-      <el-form :model="dialog" size="small" label-width="110px" :rules="dialogrules" ref="dialog">
-        <el-form-item label="工作内容：">{{this.dialog.ferOrderNo}}</el-form-item>
-        <el-form-item label="开始时间：">
-          <el-date-picker v-model="dialog.value1" type="datetime" placeholder="选择时间" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
+      <div slot="title" style="line-hight:59px">{{this.workInfo.deviceName}}</div>
+      <el-form :model="workInfo" size="small" label-width="110px" :rules="workInforules" ref="workInfo">
+        <el-form-item label="工作内容：">{{this.workInfo.content}}</el-form-item>
+        <el-form-item label="开始时间：" prop="startTime">
+          <el-date-picker v-model="workInfo.startTime" type="datetime" placeholder="选择时间" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-form-item>
-        <el-form-item label="结束时间：">
-          <el-date-picker v-model="dialog.value1" type="datetime" placeholder="选择时间" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
+        <el-form-item label="结束时间：" prop="endTime">
+          <el-date-picker v-model="workInfo.endTime" type="datetime" placeholder="选择时间" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input v-model="dialog.frozenStatus" style="width:220px"></el-input>
+          <el-input v-model="workInfo.remark" style="width:220px"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="SaveDialog('dialog')">确 定</el-button>
+        <el-button type="primary" @click="SaveDialog('workInfo')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
   data () {
     return {
+      orderId: '',
       dialogVisible: false,
-      dialog: {},
-      dataList: ['1'],
-      readAudit: ['2']
+      filterList: [],
+      dataList: [],
+      recordList: [],
+      workInfo: {},
+      workInforules: {
+        startTime: [
+          { required: true, message: '请选择开始时间', trigger: 'change' }
+        ],
+        endTime: [
+          { required: true, message: '请选择结束时间', trigger: 'change' }
+        ]
+      }
     }
   },
+  props: ['isRedact'],
   methods: {
-    ShowDialog () {
+    GetList (params) {
+      this.orderId = params.orderId
+      this.$http(`${FILTRATION_API.FILTER_EQUWORKINGHOURS_LIST}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.filterList = data.listInfo.filterList
+          this.dataList = data.listInfo.machineList
+          this.recordList = data.listInfo.record
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    Readyrules () {
+      let ty = true
+      let i = 0
+      this.dataList.map((item) => {
+        if (item.delFlag === 0) {
+          i = 1
+        }
+      })
+      if (i === 0) {
+        ty = false
+        this.$message.error('请录入设备工时数据')
+        return false
+      }
+      return ty
+    },
+    ShowDialog (item, content) {
+      this.workInfo = {
+        orderId: this.orderId,
+        deviceName: item.deviceName,
+        content: content,
+        status: 'save',
+        filterMachineId: item.deviceId,
+        startTime: '',
+        endTime: '',
+        delFlag: 0
+      }
       this.dialogVisible = true
     },
-    SaveDialog () {
+    SaveDialog (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.workInfo.timeLength = ((new Date(this.workInfo.endTime) - new Date(this.workInfo.startTime)) / 3600000).toFixed(2)
+          this.dataList.push(this.workInfo)
+          this.dialogVisible = false
+        } else {
+          return false
+        }
+      })
+    },
+    EditInfo (row) {
+      this.dialogVisible = true
+      this.workInfo = Object.assign({}, row)
+    },
+    DelRow (row) {
+      row.delFlag = 1
+    },
+    rowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === 1) {
+        return 'rowDel'
+      } else {
+        return ''
+      }
+    },
+    SaveEquWorking (resolve, reject) {
+      this.$http(`${FILTRATION_API.FILTER_EQUWORKINGHOURS_SAVE}`, 'POST', this.dataList).then(({data}) => {
+        if (data.code === 0) {} else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
     }
   },
   components: {
@@ -97,6 +182,9 @@ export default {
 </script>
 
 <style lang="scss">
+.rowDel{
+  display: none;
+}
 .grid-content {
   height:176px;
   border-radius:2px;

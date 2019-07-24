@@ -56,6 +56,7 @@
         <el-col>
           <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="newDataList" border header-row-class-name="tableHead">
             <el-table-column type="selection" :selectable="CheckBoxInit" width="35"></el-table-column>
+            <el-table-column label="状态" width="70" prop="guan"></el-table-column>
             <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
             <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">
@@ -63,11 +64,11 @@
               </template>
             </el-table-column>
             <el-table-column label="酱醪类别" prop="halfName"></el-table-column>
-            <el-table-column label="发酵天数/天" prop="matureDays"></el-table-column>
+            <el-table-column label="发酵天数/天" prop="matureDays" width="100"></el-table-column>
             <el-table-column label="酱醪状态" prop="state"></el-table-column>
-            <el-table-column label="数量" prop="inAmount"></el-table-column>
-            <el-table-column label="单位" prop="inUnit" width="80"></el-table-column>
-            <el-table-column label="入库日期" prop="created"></el-table-column>
+            <el-table-column label="数量" prop="inAmount" width="100"></el-table-column>
+            <el-table-column label="单位" prop="inUnit" width="70"></el-table-column>
+            <el-table-column label="入库日期" prop="created" show-overflow-tooltip width="150"></el-table-column>
             <el-table-column label="批次" prop="batch" width="120"></el-table-column>
             <el-table-column label="备注" prop="remark"></el-table-column>
           </el-table>
@@ -77,7 +78,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="searchform.currentPage"
-        :page-sizes="[10, 15, 20]"
+        :page-sizes="[2, 15, 20]"
         :page-size="searchform.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="searchform.currentTotal">
@@ -101,7 +102,7 @@ export default {
       searchform: {
         currentTotal: 0, // 总条数
         currentPage: 1, // 当前页数
-        pageSize: 10
+        pageSize: 2
       },
       dataList: [],
       newDataList: [],
@@ -115,7 +116,17 @@ export default {
   mounted () {
     this.Getdetail()
   },
-  watch: {},
+  watch: {
+    'newDataList' (n, o) {
+      this.$nextTick(function () {
+        this.dataList.forEach((ele, indexItem) => {
+          if (ele.guan === '已开罐') {
+            this.$refs.multipleTable.toggleRowSelection(ele)
+          }
+        })
+      })
+    }
+  },
   methods: {
     Getdetail () {
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAIL_API}`, 'POST', {id: this.$store.state.common.Fermentation.orderId}).then(({data}) => {
@@ -135,7 +146,7 @@ export default {
       this.already = this.multipleSelection.length
     },
     CheckBoxInit (row, index) {
-      if (this.formHeader.PRODUCT_DATE < dateFormat(new Date(), 'yyyy-MM-dd')) {
+      if (this.formHeader.PRODUCT_DATE < dateFormat(new Date(), 'yyyy-MM-dd') || row.guan === '已开罐') {
         return 0
       } else {
         return 1
@@ -186,11 +197,38 @@ export default {
     },
     // 罐列表
     GetList () {
+      this.$http(`${FERMENTATION_API.FORRECIPIENTSALREADYLIST_API}`, 'POST', {applyNO: this.formHeader.APPLY_NO}).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.isOpenFermentationList
+          data.isOpenFermentationList.map((item) => {
+            item.guan = '已开罐'
+          })
+          // this.$nextTick(() => {
+          //   let selected = data.isOpenFermentationList
+          //   selected.forEach(i => {
+          //     this.$refs.multipleTable.toggleRowSelection(this.dataList.find(d => d.guan === '已开罐'), true)
+          //   })
+          // })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE, materialCode: this.formHeader.MATERIAL_CODE}).then(({data}) => {
         if (data.code === 0) {
           this.newDataList = []
-          this.dataList = data.openFermentationInfo.list
-          this.newDataList = data.openFermentationInfo.list.slice((this.searchform.currentPage - 1) * this.searchform.pageSize, this.searchform.currentPage * this.searchform.pageSize)
+          // this.dataList = data.openFermentationInfo.list
+          data.openFermentationInfo.list.map((item) => {
+            item.guan = ''
+            this.dataList.push(item)
+          })
+          // this.$nextTick(function () {
+          //   this.dataList.forEach((ele, indexItem) => {
+          //     if (ele.guan === '已开罐') {
+          //       this.$refs.multipleTable.toggleRowSelection(ele)
+          //     }
+          //   })
+          // })
+          this.newDataList = this.dataList.slice((this.searchform.currentPage - 1) * this.searchform.pageSize, this.searchform.currentPage * this.searchform.pageSize)
           this.searchform.currentTotal = this.dataList.length
           this.dataList.map((item) => {
             if (this.holderList.indexOf(item.holderNo) === -1) {
@@ -205,39 +243,45 @@ export default {
     },
     // 开罐动作
     OpenHolder () {
-      if (this.multipleSelection === undefined) {
+      let i = 0
+      this.multipleSelection.map((item) => {
+        if (item.guan === '') {
+          i = 1
+        }
+      })
+      if (i === 0) {
         this.$message.error('请勾选罐号')
         return false
       } else {
+        if (this.formHeader.AMOUNT < (this.formHeader.isNum + this.multipleSelection.length)) {
+          this.$message.error('勾选开罐数量不能大于申请数')
+          return false
+        }
         this.$confirm('确认执行开罐操作吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (this.formHeader.AMOUNT < (this.formHeader.isNum + this.multipleSelection.length)) {
-            this.$message.error('勾选开罐数量不能大于申请数')
-          } else {
-            this.multipleSelection.map((item) => {
-              item.openId = this.$store.state.common.Fermentation.orderId
-              item.amount = item.inAmount
-              item.unit = item.inUnit
-              item.inStoreDate = item.created
-              item.isNum = this.formHeader.AMOUNT
-            })
-            // console.log(this.multipleSelection)
-            this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
-              if (data.code === 0) {
-                this.searchform = {
-                  currentPage: 1, // 当前页数
-                  pageSize: 10
-                }
-                this.$message.success('开罐成功')
-                this.Getdetail()
-              } else {
-                this.$message.error(data.msg)
+          this.multipleSelection.map((item) => {
+            item.openId = this.$store.state.common.Fermentation.orderId
+            item.amount = item.inAmount
+            item.unit = item.inUnit
+            item.inStoreDate = item.created
+            item.isNum = this.formHeader.AMOUNT
+          })
+          // console.log(this.multipleSelection)
+          this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILOPEN_API}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.searchform = {
+                currentPage: 1, // 当前页数
+                pageSize: 2
               }
-            })
-          }
+              this.$message.success('开罐成功')
+              this.Getdetail()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         })
       }
     },
