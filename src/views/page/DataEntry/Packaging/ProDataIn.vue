@@ -240,8 +240,10 @@ export default {
         return false
       }
       if (this.submitRadio === '2') {
+        this.formHeader.isUrgent = '0'
         this.savedOrSubmitForm('submit')
       } else if (this.submitRadio === '1') {
+        this.formHeader.isUrgent = '1'
         let that = this
         let net0 = new Promise((resolve, reject) => {
           that.UpdateformHeader('saved', resolve, reject)
