@@ -78,7 +78,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="searchform.currentPage"
-        :page-sizes="[2, 15, 20]"
+        :page-sizes="[10, 15, 20]"
         :page-size="searchform.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="searchform.currentTotal">
@@ -102,7 +102,7 @@ export default {
       searchform: {
         currentTotal: 0, // 总条数
         currentPage: 1, // 当前页数
-        pageSize: 2
+        pageSize: 10
       },
       dataList: [],
       newDataList: [],
@@ -274,7 +274,7 @@ export default {
             if (data.code === 0) {
               this.searchform = {
                 currentPage: 1, // 当前页数
-                pageSize: 2
+                pageSize: 10
               }
               this.$message.success('开罐成功')
               this.Getdetail()
