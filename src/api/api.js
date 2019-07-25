@@ -1467,7 +1467,7 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTLIST: HOST + '/ste/semi/list',
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
-  SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/inStorage/halfHolderList',
+  SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/semi/oneselfHolderList',
   SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
   /**
@@ -1503,5 +1503,11 @@ export const FILTRATION_API = {
    *  设备工时
    */
   FILTER_EQUWORKINGHOURS_LIST: HOST + '/filter/machine/machineList',
-  FILTER_EQUWORKINGHOURS_SAVE: HOST + '/filter/machine/machineUpdate'
+  FILTER_EQUWORKINGHOURS_SAVE: HOST + '/filter/machine/machineUpdate',
+  /**
+   *  物料领用
+   */
+  FILTER_MATERIAL_HOLDERLIST: HOST + '/filter/material/holderList',
+  FILTER_MATERIAL_LIST: HOST + '/filter/material/list',
+  FILTER_MATERIAL_SAVE: HOST + '/filter/material/save'
 }

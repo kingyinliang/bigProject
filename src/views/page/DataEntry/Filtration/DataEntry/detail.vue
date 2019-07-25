@@ -37,7 +37,7 @@
         </el-row>
         <el-row style="text-align:right;">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry/Filtration/DataEntry/index'})">返回</el-button>
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Filtration-DataEntry-index'})">返回</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -114,13 +114,12 @@ export default {
       formHeader: {},
       isRedact: false,
       orderStatus: '',
-      activeName: '4'
+      activeName: '1'
     }
   },
   mounted () {
     headanimation(this.$)
     this.GetOrder()
-    this.GetOrderList()
   },
   methods: {
     GetOrder () {
@@ -132,19 +131,26 @@ export default {
           this.orderStatus = data.list[0].orderStatus
           this.$refs.instorage.getList()
           this.$refs.instorage.GetholderList(this.formHeader.workShopName)
+          let params = {
+            orderId: this.formHeader.orderId,
+            deptId: this.formHeader.productLine,
+            factory: this.formHeader.factory,
+            workShop: this.formHeader.workShop,
+            orderNo: this.formHeader.orderNo
+          }
+          this.$refs.craft.GetList(params)
+          this.$refs.equworkinghours.GetList(params)
+          this.$refs.material.GetList(params)
+          this.$refs.material.GetHolderList(params)
+          console.log(this.formHeader)
+          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+          this.$refs.excrecord.getDataList(this.formHeader.factory)
+          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+          this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
           this.$message.error(data.msg)
         }
       })
-    },
-    // 数据拉取
-    GetOrderList () {
-      let params = {
-        orderId: '123123',
-        deptId: '44640E0D9FFF49238C233439C2D2D2F8'
-      }
-      this.$refs.craft.GetList(params)
-      this.$refs.equworkinghours.GetList(params)
     },
     // 修改表头
     updateHead (str, resolve, reject) {
@@ -170,6 +176,9 @@ export default {
       if (!this.$refs.craft.Readyrules()) {
         return false
       }
+      if (!this.$refs.material.Readyrules()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -180,46 +189,53 @@ export default {
     },
     savedOrSubmitForm (str) {
       let that = this
+      let net101 = new Promise((resolve, reject) => {
+        that.$refs.equworkinghours.SaveEquWorking(resolve, reject)
+      })
+      let net102 = new Promise((resolve, reject) => {
+        that.$refs.craft.SaveTech(str, resolve)
+      })
       let headUpdate = new Promise((resolve, reject) => {
         this.updateHead(str, resolve, reject)
       })
       let net103 = new Promise((resolve, reject) => {
-        that.$refs.equworkinghours.SaveEquWorking(str, resolve)
-      })
-      let net100 = new Promise((resolve, reject) => {
-        that.$refs.craft.SaveTech(str, resolve)
-      })
-      let net101 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveMaterial(str, resolve)
       })
+      let net104 = new Promise((resolve, reject) => {
+        that.$refs.material.SaveMaterial(str, resolve)
+      })
+      let excSaveNet = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
+      })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+      })
       if (str === 'submit') {
-        let net102 = new Promise((resolve, reject) => {
+        let net201 = new Promise((resolve, reject) => {
           that.$refs.craft.SubmitMaterial(str, resolve)
         })
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([headUpdate, net100, net101, inSubmit]).then(function () {
-          Promise.all([net102]).then(function () {
+        Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
+          Promise.all([net201]).then(function () {
             that.$message.success('提交成功')
-            that.GetOrderList()
+            that.GetOrder()
             that.isRedact = false
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
           })
-        }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
         })
       } else {
         let inSave = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([headUpdate, net103, net100, net101, inSave]).then(function () {
+        Promise.all([headUpdate, net101, net102, net103, net104, inSave, excSaveNet, textSaveNet]).then(function () {
           that.$message.success('保存成功')
-          that.GetOrderList()
+          that.GetOrder()
           that.isRedact = false
-        }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+        }).catch(function (reason) {
+          that.$message.error('网络请求失败，请刷新重试' + reason)
         })
       }
     }

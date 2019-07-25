@@ -11,7 +11,9 @@
                   请点击下方操作按钮，<br>进行相应操作
                 </div>
               </el-col>
-              <el-col :span="14"></el-col>
+              <el-col :span="14">
+                <img src="@/assets/img/Filtration.png" alt="" style="width:92%; margin-top:19px;">
+              </el-col>
             </el-row>
             <el-row class="footer">
               <el-col>
@@ -124,10 +126,10 @@
           <el-input v-model="techInfo.filterAidBef" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="助滤剂添加量(kg)：" prop="filterAidAdd">
-          <el-input v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
+          <el-input type="number" v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input v-model="techInfo.remark" style="width:220px"></el-input>
+          <el-input type="number" v-model="techInfo.remark" style="width:220px"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -139,6 +141,7 @@
 </template>
 
 <script>
+import { dateFormat } from '@/net/validate'
 import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
@@ -183,6 +186,11 @@ export default {
     }
   },
   props: ['isRedact'],
+  watch: {
+    'techInfo.filterAidAdd' (n, o) {
+      this.techInfo.filterAidAdd = this.techInfo.filterAidAdd.replace(/^[0]+/, '')
+    }
+  },
   methods: {
     GetList (params) {
       this.orderId = params.orderId
@@ -231,7 +239,9 @@ export default {
         materialName: item.materialName,
         materialUnit: item.materialUnit,
         materialSupplier: item.materialSupplier,
-        materialType: item.materialType
+        materialType: item.materialType,
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
       }
       this.dialogVisible = true
     },
@@ -414,20 +424,21 @@ export default {
     // 提交验证
     Readyrules () {
       let ty = true
-      if (this.techList.length === 0) {
+      let i = 0
+      this.techList.map((item) => {
+        if (item.delFlag === '0') {
+          i = 1
+        }
+      })
+      if (i === 0) {
         ty = false
-        this.$message.error('请录入数据')
-        return false
-      }
-      if (this.supMaterialList.length === 0) {
-        ty = false
-        this.$message.error('辅料领用物料不能为空')
+        this.$message.error('请录入工艺控制数据')
         return false
       }
       for (let item of this.supMaterialList) {
         if (item.filterAidAmount === '' || !item.filterAidAmount || item.batch === '' || !item.batch) {
           ty = false
-          this.$message.error('辅料领用必填不能为空')
+          this.$message.error('工艺控制中辅料领用必填项不能为空')
           return false
         }
       }
