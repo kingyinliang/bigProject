@@ -21,7 +21,7 @@
                 <p class="input_bottom">{{formHeader.orderDate}}</p>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <p class="input_bottom">{{formHeader.productDate}}</p>
+                <el-date-picker size="small" type="date" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 145px"></el-date-picker>
               </el-form-item>
               <el-form-item label="提交人员：">
                 <p class="input_bottom">{{formHeader.changer}}</p>
@@ -141,6 +141,22 @@ export default {
       this.$refs.craft.GetList(params)
       this.$refs.equworkinghours.GetList(params)
     },
+    // 修改表头
+    updateHead (str, resolve, reject) {
+      this.formHeader.status = str
+      this.formHeader.countOutput = this.$refs.instorage.countOutputNum
+      this.$http(`${FILTRATION_API.FILTER_HOME_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('表头保存' + data.msg)
+          }
+        }
+      })
+    },
     // 保存 or 提交
     SubmitForm () {
       if (!this.$refs.equworkinghours.Readyrules()) {
@@ -159,6 +175,9 @@ export default {
     },
     savedOrSubmitForm (str) {
       let that = this
+      let headUpdate = new Promise((resolve, reject) => {
+        this.updateHead(str, resolve, reject)
+      })
       let net103 = new Promise((resolve, reject) => {
         that.$refs.equworkinghours.SaveEquWorking(str, resolve)
       })
@@ -175,7 +194,7 @@ export default {
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net100, net101, inSubmit]).then(function () {
+        Promise.all([headUpdate, net100, net101, inSubmit]).then(function () {
           Promise.all([net102]).then(function () {
             that.$message.success('提交成功')
             that.GetOrderList()
@@ -190,7 +209,7 @@ export default {
         let inSave = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net103, net100, net101, inSave]).then(function () {
+        Promise.all([headUpdate, net103, net100, net101, inSave]).then(function () {
           that.$message.success('保存成功')
           that.GetOrderList()
           that.isRedact = false

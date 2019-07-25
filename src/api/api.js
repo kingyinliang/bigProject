@@ -1484,9 +1484,13 @@ export const STERILIZED_API = {
 export const FILTRATION_API = {
   // 过滤首页
   FILTER_HOME_LIST_API: HOST + '/filter/order/list',
+  FILTER_HOME_UPDATE_API: HOST + '/filter/order/updateHead',
   FILTER_IN_LIST_API: HOST + '/filter/instorage/list',
   FILTER_IN_UPDATE_API: HOST + '/filter/instorage/mySaveOrUpdate',
   FILTER_IN_SAVE_API: HOST + '/filter/instorage/submit',
+  FILTER_MANHOUR_LIST_API: HOST + '/filter/timeSheet/list',
+  FILTER_MANHOUR_UPDATE_API: HOST + '/filter/timeSheet/update',
+  FILTER_MANHOUR_SAVE_API: HOST + '/filter/timeSheet/submit',
   /**
    *  工艺控制
    */

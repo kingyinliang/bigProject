@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, KJM_API, STERILIZED_API} from '@/api/api'
+import {BASICDATA_API, KJM_API, FILTRATION_API} from '@/api/api'
 import { headanimation, Readyanimation, getNewDate } from '@/net/validate'
 import Worker from '@/views/components/worker'
 export default {
@@ -223,7 +223,7 @@ export default {
       this.searchCard = true
       this.isRedact = false
       this.uid = ''
-      this.$http(`${STERILIZED_API.STE_HOUR_LIST_API}`, 'POST', {
+      this.$http(`${FILTRATION_API.FILTER_MANHOUR_LIST_API}`, 'POST', {
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
         inKjmDate: this.formHeader.inKjmDate,
@@ -263,12 +263,6 @@ export default {
     // 保存
     savedOrSubmitForm (str) {
       if (str === 'submit') {
-        if (!this.readyTimeRul()) {
-          return false
-        }
-        if (!this.$refs.workerref.userrul()) {
-          return false
-        }
       }
       let that = this
       let headSave = new Promise((resolve, reject) => {
@@ -307,6 +301,12 @@ export default {
       }
     },
     SubmitForm () {
+      if (!this.readyTimeRul()) {
+        return false
+      }
+      if (!this.$refs.workerref.userrul()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -317,8 +317,8 @@ export default {
     },
     // 提交
     manHourSubmit (str, resolve, reject) {
-      if (this.headList.deptName === '杀菌') {
-        this.$http(`${STERILIZED_API.STE_HOUR_SUBMIT_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
+      if (this.headList.deptName === '过滤') {
+        this.$http(`${FILTRATION_API.FILTER_MANHOUR_SAVE_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
           if (data.code === 0) {
             if (resolve) {
               resolve('resolve')
@@ -344,7 +344,7 @@ export default {
       }
       this.headList.status = str
       console.log(this.headList)
-      this.$http(`${STERILIZED_API.STE_HOUR_UPDATE_API}`, 'POST', this.headList).then(({data}) => {
+      this.$http(`${FILTRATION_API.FILTER_MANHOUR_UPDATE_API}`, 'POST', this.headList).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')
