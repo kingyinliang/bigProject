@@ -211,6 +211,7 @@ export default {
           this.$message.error(data.msg)
         }
       })
+      // 过滤机详细信息
       this.$http(`${FILTRATION_API.FILTER_CRAFT_MATERIALIST}`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.filterAidMaterialList = data.materialInfo.material
@@ -223,6 +224,7 @@ export default {
     },
     ShowDialog (item) {
       this.techInfo = {
+        xiu: 0,
         orderId: this.orderId,
         id: '',
         uid: this.uuid(),
@@ -234,7 +236,7 @@ export default {
         filterAidBef: '',
         filterBefTem: '',
         filterEndPre: '',
-        delFlag: 0,
+        delFlag: '0',
         materialCode: item.materialCode,
         materialName: item.materialName,
         materialUnit: item.materialUnit,
@@ -255,7 +257,7 @@ export default {
           } else {
             this.techList.push(this.techInfo)
           }
-          if (this.techInfo.id === '') {
+          if (this.techInfo.xiu === 0) {
             // 新增
             let p = -2
             this.supMaterialList.map((item, index) => {
@@ -282,6 +284,13 @@ export default {
               for (let item of this.supMaterialList) {
                 if (item.filterMachineId === this.techInfo.filterMachineId && (item.batch === '' || item.batch === null)) {
                   item.filterAidAmount = Number(item.filterAidAmount) + Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd)
+                  // let filterAidAmountss = 0
+                  // this.techList.map((itemss) => {
+                  //   if (itemss.delFlag === '0' && itemss.filterMachineId === this.techInfo.filterMachineId) {
+                  //     filterAidAmountss = Number(filterAidAmountss) + Number(itemss.filterAidBef) + Number(itemss.filterAidAdd)
+                  //   }
+                  // })
+                  // item.filterAidAmount = filterAidAmountss
                   this.dialogVisible = false
                   return false
                 }
@@ -314,6 +323,7 @@ export default {
     },
     EditTechInfo (row) {
       this.dialogVisible = true
+      row.xiu = 1
       this.techInfo = Object.assign({}, row)
     },
     SplitData (row, index) {
