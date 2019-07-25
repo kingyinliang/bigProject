@@ -2,7 +2,7 @@
   <div>
     <div class="main">
       <el-card class="searchCards searchCard">
-        <el-row>
+        <el-row type="flex">
           <el-col>
             <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
               <el-form-item label="车间：">
@@ -21,7 +21,7 @@
                 <p class="input_bottom">{{formHeader.orderDate}}</p>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <p class="input_bottom">{{formHeader.productDate}}</p>
+                <el-date-picker size="small" type="date" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 145px"></el-date-picker>
               </el-form-item>
               <el-form-item label="提交人员：">
                 <p class="input_bottom">{{formHeader.changer}}</p>
@@ -30,6 +30,9 @@
                 <p class="input_bottom">{{formHeader.changed}}</p>
               </el-form-item>
             </el-form>
+          </el-col>
+          <el-col style="max-width: 173px">
+            <div style="padding-top: 0px;float: right;font-size: 14px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>订单状态：{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
           </el-col>
         </el-row>
         <el-row style="text-align:right;">
@@ -110,6 +113,7 @@ export default {
     return {
       formHeader: {},
       isRedact: false,
+      orderStatus: '',
       activeName: '1'
     }
   },
@@ -124,6 +128,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].orderStatus
           this.$refs.instorage.getList()
           this.$refs.instorage.GetholderList(this.formHeader.workShopName)
           let params = {
@@ -144,6 +149,22 @@ export default {
           this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
           this.$message.error(data.msg)
+        }
+      })
+    },
+    // 修改表头
+    updateHead (str, resolve, reject) {
+      this.formHeader.orderStatus = str
+      this.formHeader.countOutput = this.$refs.instorage.countOutputNum
+      this.$http(`${FILTRATION_API.FILTER_HOME_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('表头保存' + data.msg)
+          }
         }
       })
     },
@@ -174,6 +195,9 @@ export default {
       let net102 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveTech(str, resolve)
       })
+      let headUpdate = new Promise((resolve, reject) => {
+        this.updateHead(str, resolve, reject)
+      })
       let net103 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveMaterial(str, resolve)
       })
@@ -193,7 +217,7 @@ export default {
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
+        Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
           Promise.all([net201]).then(function () {
             that.$message.success('提交成功')
             that.GetOrder()
@@ -206,7 +230,7 @@ export default {
         let inSave = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net101, net102, net103, net104, inSave, excSaveNet, textSaveNet]).then(function () {
+        Promise.all([headUpdate, net101, net102, net103, net104, inSave, excSaveNet, textSaveNet]).then(function () {
           that.$message.success('保存成功')
           that.GetOrder()
           that.isRedact = false

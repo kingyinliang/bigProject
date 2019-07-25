@@ -25,6 +25,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <div style="line-height: 32px;font-size: 14px;margin-top: 8px">产出数合计：{{countOutputNum}}</div>
       </div>
     </div>
     <el-card style="margin-top: 10px">
@@ -233,7 +234,15 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    countOutputNum: function () {
+      let num = 0
+      this.InStorageDate.forEach((item) => {
+        num = num + (item.delFlag === '0' ? item.inAmount : 0)
+      })
+      return num
+    }
+  },
   components: {
     AuditLog: resolve => {
       require(['@/views/components/AuditLog'], resolve)
