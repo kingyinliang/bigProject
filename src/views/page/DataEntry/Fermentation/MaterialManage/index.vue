@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="订单编号：">
-          <el-select v-model="formHeader.ferOrderNos" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
+          <el-select v-model="formHeader.ferOrderNos" placeholder="请选择" multiple filterable default-first-op style="width: 160px">
             <el-option v-for="(sole, index) in OrderList" :key="index" :value="sole.ferOrderNo" :label="sole.ferOrderNo"></el-option>
           </el-select>
         </el-form-item>

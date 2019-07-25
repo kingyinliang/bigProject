@@ -26,8 +26,8 @@
             工艺控制
           </span>
           <el-form :inline="true" size="small" :model="crafData" :rules="dataRule" ref="dataForm" class="topform">
-            <el-form-item label="原汁换热介质：" prop="hotMedium">
-              <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 180px">
+            <el-form-item label="原汁换热介质：" prop="hotMedium" label-width="120px">
+              <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 170px">
                 <el-checkbox label="热水" name="type"></el-checkbox>
                 <el-checkbox label="酱油" name="type"></el-checkbox>
               </el-checkbox-group>
@@ -38,8 +38,8 @@
             <el-form-item label="酱油温度：" label-width="80px">
               <el-input v-model="crafData.sauceTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="原汁入锅温度：" prop="originalTemp">
-              <el-input v-model="crafData.originalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+            <el-form-item label="原汁入锅温度：" prop="originalTemp" label-width="120px">
+              <el-input v-model="crafData.originalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 170px"></el-input>
             </el-form-item>
             <el-form-item label="升温开始时间：" prop="upStartTime">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.upStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 180px"></el-date-picker>
