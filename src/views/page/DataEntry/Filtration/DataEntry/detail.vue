@@ -6,28 +6,28 @@
           <el-col>
             <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
               <el-form-item label="车间：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.workShopName}}</p>
               </el-form-item>
               <el-form-item label="生产订单：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.orderNo}}</p>
               </el-form-item>
               <el-form-item label="生产品相：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{(formHeader.materialCode || '') + ' ' + (formHeader.materialName || '')}}</p>
               </el-form-item>
               <el-form-item label="计划产量：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{(formHeader.planOutput || '') + ' ' + (formHeader.outputUnit || '')}}</p>
               </el-form-item>
               <el-form-item label="订单日期：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.orderDate}}</p>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.productDate}}</p>
               </el-form-item>
               <el-form-item label="提交人员：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.changer}}</p>
               </el-form-item>
               <el-form-item label="提交时间：">
-                <p class="input_bottom">&nbsp;123</p>
+                <p class="input_bottom">{{formHeader.changed}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -82,7 +82,7 @@
           <span slot="label" class="spanview">
             <el-button>生产入库</el-button>
           </span>
-          <in-storage ref="material" :isRedact="isRedact"></in-storage>
+          <in-storage ref="instorage" :isRedact="isRedact"></in-storage>
         </el-tab-pane>
         <el-tab-pane name="6">
           <span slot="label" class="spanview">
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import {FILTRATION_API} from '@/api/api'
 import {headanimation} from '@/net/validate'
 import EquWorkinghours from './common/equWorkingHours'
 import Craft from './common/craft'
@@ -114,9 +115,22 @@ export default {
   },
   mounted () {
     headanimation(this.$)
+    this.GetOrder()
     this.GetOrderList()
   },
   methods: {
+    GetOrder () {
+      this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', {
+        orderNo: this.$store.state.common.orderNo
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.formHeader = data.list[0]
+          this.$refs.instorage.getList()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 数据拉取
     GetOrderList () {
       let params = {

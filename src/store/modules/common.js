@@ -203,6 +203,15 @@ export default {
       orderNoList: [],
       orderNo: '',
       planOutputTotal: 0
+    },
+    /**
+     * 过滤车间
+     */
+    filtration: {
+      orderNo: '',
+      workShop: '',
+      orderId: '',
+      productDate: ''
     }
   },
   mutations: {

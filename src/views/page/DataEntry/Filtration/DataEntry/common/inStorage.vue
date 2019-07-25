@@ -61,10 +61,12 @@
         <el-button type="primary" @click="addIn()" size="small">确定</el-button>
       </span>
     </el-dialog>
+    <auditLog :tableData="DataAudit"></auditLog>
   </div>
 </template>
 
 <script>
+import {FILTRATION_API} from '@/api/api'
 export default {
   name: 'inStorage',
   data () {
@@ -73,6 +75,7 @@ export default {
       dataForm: {},
       PotList: [],
       InStorageDate: [],
+      DataAudit: [],
       dataRule: {
         holderId: [
           { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
@@ -93,6 +96,39 @@ export default {
   mounted () {
   },
   methods: {
+    getList () {
+      this.$http(`${FILTRATION_API.FILTER_IN_LIST_API}`, 'POST', {
+        orderId: this.$store.state.common.orderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.InStorageDate = data.list
+          this.DataAudit = data.vList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 入库修改
+    UpdateIn (str, resolve, reject) {
+      this.InStorageDate.forEach((item) => {
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+      })
+      this.$http(`${str === 'saved' ? FILTRATION_API.FILTER_IN_UPDATE_API : FILTRATION_API.FILTER_IN_SAVE_API}`, 'POST', this.InStorageDate).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('杀菌入库' + data.msg)
+          }
+        }
+      })
+    },
     addIn () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {}
@@ -104,7 +140,11 @@ export default {
     updateRow (row) {}
   },
   computed: {},
-  components: {}
+  components: {
+    AuditLog: resolve => {
+      require(['@/views/components/AuditLog'], resolve)
+    }
+  }
 }
 </script>
 
