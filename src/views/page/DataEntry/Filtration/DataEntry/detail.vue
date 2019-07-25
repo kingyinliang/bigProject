@@ -2,7 +2,7 @@
   <div>
     <div class="main">
       <el-card class="searchCards searchCard">
-        <el-row>
+        <el-row type="flex">
           <el-col>
             <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
               <el-form-item label="车间：">
@@ -30,6 +30,9 @@
                 <p class="input_bottom">{{formHeader.changed}}</p>
               </el-form-item>
             </el-form>
+          </el-col>
+          <el-col style="max-width: 173px">
+            <div style="padding-top: 0px;float: right;font-size: 14px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>订单状态：{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
           </el-col>
         </el-row>
         <el-row style="text-align:right;">
@@ -110,6 +113,7 @@ export default {
     return {
       formHeader: {},
       isRedact: false,
+      orderStatus: '',
       activeName: '4'
     }
   },
@@ -125,6 +129,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.list[0]
+          this.orderStatus = data.list[0].orderStatus
           this.$refs.instorage.getList()
           this.$refs.instorage.GetholderList(this.formHeader.workShopName)
         } else {
@@ -143,7 +148,7 @@ export default {
     },
     // 修改表头
     updateHead (str, resolve, reject) {
-      this.formHeader.status = str
+      this.formHeader.orderStatus = str
       this.formHeader.countOutput = this.$refs.instorage.countOutputNum
       this.$http(`${FILTRATION_API.FILTER_HOME_UPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
