@@ -366,7 +366,9 @@ export default {
   .inStorage_card_left_btn{
     width: 100%;
     margin-top: 10px;
-    border-radius: 0px 0px 6px 6px;
+    border-radius: 0px 0px 6px 6px!important;
+  }
+  .inStorage_card_left_btn:hover{
     color: white!important;
     background: #1890FF!important;
   }

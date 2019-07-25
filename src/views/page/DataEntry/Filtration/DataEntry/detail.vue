@@ -76,13 +76,13 @@
           <span slot="label" class="spanview">
             <el-button>物料领用</el-button>
           </span>
-          <Material ref="material" :isRedact="isRedact"></Material>
+          <!--<Material ref="material" :isRedact="isRedact"></Material>-->
         </el-tab-pane>
         <el-tab-pane name="5">
           <span slot="label" class="spanview">
             <el-button>生产入库</el-button>
           </span>
-          <in-storage ref="instorage" :isRedact="isRedact"></in-storage>
+          <in-storage ref="instorage" :isRedact="isRedact" :formHeader="formHeader"></in-storage>
         </el-tab-pane>
         <el-tab-pane name="6">
           <span slot="label" class="spanview">
@@ -126,6 +126,7 @@ export default {
         if (data.code === 0) {
           this.formHeader = data.list[0]
           this.$refs.instorage.getList()
+          this.$refs.instorage.GetholderList(this.formHeader.workShopName)
         } else {
           this.$message.error(data.msg)
         }
@@ -171,7 +172,10 @@ export default {
         let net102 = new Promise((resolve, reject) => {
           that.$refs.craft.SubmitMaterial(str, resolve)
         })
-        Promise.all([net100, net101]).then(function () {
+        let inSubmit = new Promise((resolve, reject) => {
+          that.$refs.instorage.UpdateIn(str, resolve, reject)
+        })
+        Promise.all([net100, net101, inSubmit]).then(function () {
           Promise.all([net102]).then(function () {
             that.$message.success('提交成功')
             that.GetOrderList()
@@ -183,7 +187,10 @@ export default {
           that.$message.error('网络请求失败，请刷新重试')
         })
       } else {
-        Promise.all([net103, net100, net101]).then(function () {
+        let inSave = new Promise((resolve, reject) => {
+          that.$refs.instorage.UpdateIn(str, resolve, reject)
+        })
+        Promise.all([net103, net100, net101, inSave]).then(function () {
           that.$message.success('保存成功')
           that.GetOrderList()
           that.isRedact = false
