@@ -57,7 +57,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="满罐时间：">
-          <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy.MM.dd" placeholder="选择" v-model="dataForm.inKjmDate" style="width: 190px"></el-date-picker>
+          <el-date-picker type="date" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="dataForm.fullDate" style="width: 190px"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="dataForm.remark" placeholder="请输入"></el-input>
@@ -149,7 +149,7 @@ export default {
         }
       })
     },
-    // 添加确认
+    // 添加和修改确认
     addIn () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
@@ -176,6 +176,7 @@ export default {
         }
       })
     },
+    // 半成品罐下拉
     PotinTankAmount (id) {
       // this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
       // this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
@@ -190,6 +191,7 @@ export default {
       //   this.PotObject.batch = false
       // }
     },
+    // 入罐
     showDialog () {
       this.visible = true
       this.dataForm = {
@@ -205,6 +207,7 @@ export default {
         remark: '',
         delFlag: '0',
         holderName: '',
+        fullDate: '',
         created: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         orderId: this.formHeader.orderId
       }
@@ -217,6 +220,7 @@ export default {
         return ''
       }
     },
+    // 删除
     delRow (row) {
       row.delFlag = '1'
     },

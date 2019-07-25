@@ -113,7 +113,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="60">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -192,7 +192,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="60">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -303,7 +303,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="60">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL !== '1' && scope.row.isZ !== '1' && scope.row.isS !== '1'))" @click="dellistbomS(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -481,6 +481,17 @@ export default {
       item.outputUnit = this.ratio.basicUnit
       item.outputUnitName = this.ratio.basicUnitName
     },
+    isSt (item) {
+      if (item.isL === '0') {
+        item.isL = '1'
+      }
+      if (item.isZ === '0') {
+        item.isZ = '1'
+      }
+      if (item.isS === '0') {
+        item.isS = '1'
+      }
+    },
     // 入库提交
     submitIn (id, str, resolve, reject) {
       let types = ''
@@ -491,6 +502,7 @@ export default {
       }
       this.InDate.forEach((item) => {
         this.SetUnit(item)
+        this.isSt(item)
         item.orderId = id
         if (item.status) {
           if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }

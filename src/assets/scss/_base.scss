@@ -528,13 +528,24 @@ img {
     }
     &_btn{
       background: #F7F9FA;
-      text-align: center;
-      color: #333333;
-      font-size: 14px;
-      padding: 14px 0 10px 0;
+      //text-align: center;
+      //color: #333333;
+      //font-size: 14px;
+      //padding: 14px 0 10px 0;
       &_item{
-        cursor: pointer;
-        border-right: 1px solid #E8E8E8;
+        flex:1;
+        text-align:center;
+        line-height:40px;
+        font-size:12px;
+        font-weight:500;
+        color:rgba(0,0,0,0.65);
+        &:hover{
+          color:#fff;
+          background:#1890FF;
+          cursor:pointer
+        }
+        //cursor: pointer;
+        //border-right: 1px solid #E8E8E8;
       }
     }
   }

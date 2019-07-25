@@ -76,7 +76,7 @@
           <span slot="label" class="spanview">
             <el-button>物料领用</el-button>
           </span>
-          <!--<Material ref="material" :isRedact="isRedact"></Material>-->
+          <Material ref="material" :isRedact="isRedact"></Material>
         </el-tab-pane>
         <el-tab-pane name="5">
           <span slot="label" class="spanview">

@@ -102,7 +102,9 @@
             <!--</div>-->
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('1', item)">发料</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item">
+              <p @click="toRouter('1', item)">发料</p>
+            </el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('2', item)">判定</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3', item)">入库</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item)">清洗</p></el-col>
