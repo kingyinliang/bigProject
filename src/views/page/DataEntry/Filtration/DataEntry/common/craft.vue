@@ -139,6 +139,7 @@
 </template>
 
 <script>
+import { dateFormat } from '@/net/validate'
 import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
@@ -231,7 +232,9 @@ export default {
         materialName: item.materialName,
         materialUnit: item.materialUnit,
         materialSupplier: item.materialSupplier,
-        materialType: item.materialType
+        materialType: item.materialType,
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
       }
       this.dialogVisible = true
     },
@@ -414,20 +417,21 @@ export default {
     // 提交验证
     Readyrules () {
       let ty = true
-      if (this.techList.length === 0) {
+      let i = 0
+      this.techList.map((item) => {
+        if (item.delFlag === '0') {
+          i = 1
+        }
+      })
+      if (i === 0) {
         ty = false
-        this.$message.error('请录入数据')
-        return false
-      }
-      if (this.supMaterialList.length === 0) {
-        ty = false
-        this.$message.error('辅料领用物料不能为空')
+        this.$message.error('请录入工艺控制数据')
         return false
       }
       for (let item of this.supMaterialList) {
         if (item.filterAidAmount === '' || !item.filterAidAmount || item.batch === '' || !item.batch) {
           ty = false
-          this.$message.error('辅料领用必填不能为空')
+          this.$message.error('辅料领用必填项不能为空')
           return false
         }
       }

@@ -56,7 +56,11 @@
         <el-col>
           <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="newDataList" border header-row-class-name="tableHead">
             <el-table-column type="selection" :selectable="CheckBoxInit" width="35"></el-table-column>
-            <el-table-column label="状态" width="70" prop="guan"></el-table-column>
+            <el-table-column label="状态" width="70">
+              <template slot-scope="scope">
+                {{scope.row.guan === '已开罐' ? '已开罐' : '未开罐'}}
+              </template>
+            </el-table-column>
             <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
             <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">

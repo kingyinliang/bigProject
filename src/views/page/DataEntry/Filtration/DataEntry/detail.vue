@@ -70,7 +70,7 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          <!-- <exc-record ref="excrecord" :isRedact="isRedact"></exc-record> -->
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
@@ -88,7 +88,7 @@
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+          <!-- <text-record ref="textrecord" :isRedact="isRedact"></text-record> -->
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -110,13 +110,12 @@ export default {
     return {
       formHeader: {},
       isRedact: false,
-      activeName: '4'
+      activeName: '1'
     }
   },
   mounted () {
     headanimation(this.$)
     this.GetOrder()
-    this.GetOrderList()
   },
   methods: {
     GetOrder () {
@@ -127,19 +126,21 @@ export default {
           this.formHeader = data.list[0]
           this.$refs.instorage.getList()
           this.$refs.instorage.GetholderList(this.formHeader.workShopName)
+          let params = {
+            orderId: this.formHeader.orderId,
+            deptId: this.formHeader.productLine,
+            factory: this.formHeader.factory,
+            workShop: this.formHeader.workShop,
+            orderNo: this.formHeader.orderNo
+          }
+          this.$refs.craft.GetList(params)
+          this.$refs.equworkinghours.GetList(params)
+          this.$refs.material.GetList(params)
+          this.$refs.material.GetHolderList(params)
         } else {
           this.$message.error(data.msg)
         }
       })
-    },
-    // 数据拉取
-    GetOrderList () {
-      let params = {
-        orderId: '123123',
-        deptId: '44640E0D9FFF49238C233439C2D2D2F8'
-      }
-      this.$refs.craft.GetList(params)
-      this.$refs.equworkinghours.GetList(params)
     },
     // 保存 or 提交
     SubmitForm () {
@@ -147,6 +148,9 @@ export default {
         return false
       }
       if (!this.$refs.craft.Readyrules()) {
+        return false
+      }
+      if (!this.$refs.material.Readyrules()) {
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -160,13 +164,16 @@ export default {
     savedOrSubmitForm (str) {
       let that = this
       let net103 = new Promise((resolve, reject) => {
-        that.$refs.equworkinghours.SaveEquWorking(str, resolve)
+        that.$refs.equworkinghours.SaveEquWorking(resolve, reject)
       })
       let net100 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveTech(str, resolve)
       })
       let net101 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveMaterial(str, resolve)
+      })
+      let net104 = new Promise((resolve, reject) => {
+        that.$refs.material.SaveMaterial(str, resolve)
       })
       if (str === 'submit') {
         let net102 = new Promise((resolve, reject) => {
@@ -183,8 +190,6 @@ export default {
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
           })
-        }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
         })
       } else {
         let inSave = new Promise((resolve, reject) => {

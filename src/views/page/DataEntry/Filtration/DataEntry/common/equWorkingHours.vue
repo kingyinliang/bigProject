@@ -35,11 +35,11 @@
         <el-table-column label="结束时间" prop="endTime" width="150" show-overflow-tooltip></el-table-column>
         <el-table-column label="时长(H)" prop="timeLength"></el-table-column>
         <el-table-column label="备注" prop="remark"></el-table-column>
-        <el-table-column label="操作时间" prop="orderStatus" width="150" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作人" prop="orderStatus" width="150" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="orderStatus" width="50" fixed="right">
+        <el-table-column label="操作时间" prop="changed" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作人" prop="changer" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="small" :disabled="!isRedact"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="small" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { dateFormat } from '@/net/validate'
 import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
@@ -109,7 +110,7 @@ export default {
       let ty = true
       let i = 0
       this.dataList.map((item) => {
-        if (item.delFlag === 0) {
+        if (item.delFlag === '0') {
           i = 1
         }
       })
@@ -125,7 +126,7 @@ export default {
         orderId: this.orderId,
         deviceName: item.deviceName,
         content: content,
-        status: 'save',
+        status: 'saved',
         filterMachineId: item.deviceId,
         startTime: '',
         endTime: '',
@@ -137,6 +138,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.workInfo.timeLength = ((new Date(this.workInfo.endTime) - new Date(this.workInfo.startTime)) / 3600000).toFixed(2)
+          this.workInfo.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+          this.workInfo.changer = this.$store.state.user.realName + `(${this.$store.state.user.name})`
           this.dataList.push(this.workInfo)
           this.dialogVisible = false
         } else {
@@ -145,8 +148,10 @@ export default {
       })
     },
     EditInfo (row) {
-      this.dialogVisible = true
-      this.workInfo = Object.assign({}, row)
+      if (this.isRedact === true && (row.status !== 'checked' && row.status !== 'submit')) {
+        this.dialogVisible = true
+        this.workInfo = Object.assign({}, row)
+      }
     },
     DelRow (row) {
       row.delFlag = 1
