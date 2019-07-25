@@ -11,7 +11,9 @@
                   请点击下方操作按钮，<br>进行相应操作
                 </div>
               </el-col>
-              <el-col :span="14"></el-col>
+              <el-col :span="14">
+                <img src="@/assets/img/Filtration.png" alt="" style="width:92%; margin-top:19px;">
+              </el-col>
             </el-row>
             <el-row class="footer">
               <el-col :span="8">

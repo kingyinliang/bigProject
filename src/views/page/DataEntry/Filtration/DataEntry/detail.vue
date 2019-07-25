@@ -70,7 +70,7 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <!-- <exc-record ref="excrecord" :isRedact="isRedact"></exc-record> -->
+          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
@@ -88,7 +88,7 @@
           <span slot="label" class="spanview">
             <el-button>文本记录</el-button>
           </span>
-          <!-- <text-record ref="textrecord" :isRedact="isRedact"></text-record> -->
+          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -137,6 +137,11 @@ export default {
           this.$refs.equworkinghours.GetList(params)
           this.$refs.material.GetList(params)
           this.$refs.material.GetHolderList(params)
+          console.log(this.formHeader)
+          this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
+          this.$refs.excrecord.getDataList(this.formHeader.factory)
+          this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
+          this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
           this.$message.error(data.msg)
         }
@@ -163,29 +168,35 @@ export default {
     },
     savedOrSubmitForm (str) {
       let that = this
-      let net103 = new Promise((resolve, reject) => {
+      let net101 = new Promise((resolve, reject) => {
         that.$refs.equworkinghours.SaveEquWorking(resolve, reject)
       })
-      let net100 = new Promise((resolve, reject) => {
+      let net102 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveTech(str, resolve)
       })
-      let net101 = new Promise((resolve, reject) => {
+      let net103 = new Promise((resolve, reject) => {
         that.$refs.craft.SaveMaterial(str, resolve)
       })
       let net104 = new Promise((resolve, reject) => {
         that.$refs.material.SaveMaterial(str, resolve)
       })
+      let excSaveNet = new Promise((resolve, reject) => {
+        that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
+      })
+      let textSaveNet = new Promise((resolve, reject) => {
+        that.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
+      })
       if (str === 'submit') {
-        let net102 = new Promise((resolve, reject) => {
+        let net201 = new Promise((resolve, reject) => {
           that.$refs.craft.SubmitMaterial(str, resolve)
         })
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net100, net101, inSubmit]).then(function () {
-          Promise.all([net102]).then(function () {
+        Promise.all([net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
+          Promise.all([net201]).then(function () {
             that.$message.success('提交成功')
-            that.GetOrderList()
+            that.GetOrder()
             that.isRedact = false
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
@@ -195,12 +206,12 @@ export default {
         let inSave = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
-        Promise.all([net103, net100, net101, inSave]).then(function () {
+        Promise.all([net101, net102, net103, net104, inSave, excSaveNet, textSaveNet]).then(function () {
           that.$message.success('保存成功')
-          that.GetOrderList()
+          that.GetOrder()
           that.isRedact = false
-        }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+        }).catch(function (reason) {
+          that.$message.error('网络请求失败，请刷新重试' + reason)
         })
       }
     }
