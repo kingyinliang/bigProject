@@ -179,11 +179,22 @@ export default {
     SaveMaterial (resolve, reject) {
       this.dataList.map((item) => {
         item.orderId = this.orderId
-        if (resolve === 'submit' && item.status !== 'checked') {
+        if (resolve === 'saved' && item.status === 'nopass') {
+          item.status = 'saved'
+        } else if (resolve === 'submit' && item.status !== 'checked') {
           item.status = 'submit'
         }
+        // if (resolve === 'submit' && item.status !== 'checked') {
+        //   item.status = 'submit'
+        // }
       })
-      this.$http(`${FILTRATION_API.FILTER_MATERIAL_SAVE}`, 'POST', this.dataList).then(({data}) => {
+      let url = ''
+      if (resolve === 'submit') {
+        url = FILTRATION_API.FILTER_MATERIAL_SUBMIT
+      } else {
+        url = FILTRATION_API.FILTER_MATERIAL_SAVE
+      }
+      this.$http(url, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {} else {
           this.$message.error(data.msg)
         }

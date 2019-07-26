@@ -9,11 +9,11 @@ export default {
   name: 'App',
   mounted () {
     // if (this.$route.meta.title) document.title = this.$route.meta.title
-    if (self === top) {
-      document.documentElement.style.visibility = 'visible'
-    } else {
-      alert('在iframe中,请检查链接')
-    }
+    // if (self === top) {
+    //   document.documentElement.style.visibility = 'visible'
+    // } else {
+    //   alert('在iframe中,请检查链接')
+    // }
   }
 }
 </script>
@@ -21,7 +21,7 @@ export default {
 <style>
 @import "assets/css/base.css";
 @import "assets/icon/iconfont.css";
-  html{
+  /* html{
     visibility: hidden;
-  }
+  } */
 </style>

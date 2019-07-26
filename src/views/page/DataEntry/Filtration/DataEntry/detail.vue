@@ -209,7 +209,7 @@ export default {
         that.$refs.craft.SaveMaterial(str, resolve)
       })
       let net104 = new Promise((resolve, reject) => {
-        that.$refs.material.SaveMaterial(str, resolve)
+        that.$refs.material.SaveMaterial('saved', resolve)
       })
       let excSaveNet = new Promise((resolve, reject) => {
         that.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
@@ -221,11 +221,14 @@ export default {
         let net201 = new Promise((resolve, reject) => {
           that.$refs.craft.SubmitMaterial(str, resolve)
         })
+        let net202 = new Promise((resolve, reject) => {
+          that.$refs.material.SaveMaterial(str, resolve)
+        })
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
         Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
-          Promise.all([net201]).then(function () {
+          Promise.all([net201, net202]).then(function () {
             that.$message.success('提交成功')
             that.GetOrder()
             that.isRedact = false

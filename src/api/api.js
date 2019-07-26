@@ -1510,5 +1510,6 @@ export const FILTRATION_API = {
    */
   FILTER_MATERIAL_HOLDERLIST: HOST + '/filter/material/holderList',
   FILTER_MATERIAL_LIST: HOST + '/filter/material/list',
-  FILTER_MATERIAL_SAVE: HOST + '/filter/material/save'
+  FILTER_MATERIAL_SAVE: HOST + '/filter/material/save',
+  FILTER_MATERIAL_SUBMIT: HOST + '/filter/material/submit'
 }

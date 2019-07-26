@@ -322,9 +322,11 @@ export default {
       })
     },
     EditTechInfo (row) {
-      this.dialogVisible = true
-      row.xiu = 1
-      this.techInfo = Object.assign({}, row)
+      if (this.isRedact && !this.soleStatus) {
+        this.dialogVisible = true
+        row.xiu = 1
+        this.techInfo = Object.assign({}, row)
+      }
     },
     SplitData (row, index) {
       this.supMaterialList.splice(index + 1, 0, {
