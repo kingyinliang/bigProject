@@ -61,7 +61,7 @@
           </el-table-column>
           <el-table-column label="发酵罐">
             <template slot-scope="scope">
-              {{scope.row.order.holderNo}}
+              {{scope.row.order.holderName}}
             </template>
           </el-table-column>
           <el-table-column label="订单号" width="130">
@@ -121,7 +121,7 @@
           </el-table-column>
           <el-table-column label="发酵罐">
             <template slot-scope="scope">
-              {{scope.row.order.holderNo}}
+              {{scope.row.order.holderName}}
             </template>
           </el-table-column>
           <el-table-column label="订单号" width="130">

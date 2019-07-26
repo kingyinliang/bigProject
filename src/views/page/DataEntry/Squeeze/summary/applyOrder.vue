@@ -6,13 +6,18 @@
     </el-row>
     <el-table ref="table1" :data="fumet" header-row-class-name="tableHead" @row-dblclick="GetLog" @selection-change="handleSelectionChange" border tooltip-effect="dark">
       <el-table-column type="selection" :selectable='checkboxApply' width="34"></el-table-column>
+      <el-table-column label="状态" width='95'>
+        <template slot-scope="scope">
+          <span :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#67C23A' : ''}">{{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>原汁罐号</span></template>
         <template slot-scope="scope">{{scope.row.potNoName}}</template>
       </el-table-column>
       <el-table-column label="是否混合罐" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
             <el-option label="正常" value="正常"></el-option>
             <el-option label="共用混合" value="共用混合"></el-option>
             <el-option label="单用混合" value="单用混合"></el-option>
@@ -21,7 +26,7 @@
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" size="small">
+          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
             <el-option
               v-for="item in SerchSapList"
               :key="item.code+' '+item.value"
@@ -39,7 +44,7 @@
       <el-table-column label="生产订单" width="140" prop="orderNo"></el-table-column>
       <el-table-column label="操作" width="50" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" :disabled="!isRedact" @click="backIn(scope.row)">退回</el-button>
+          <el-button type="text" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" @click="backIn(scope.row)">退回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +89,7 @@ export default {
       })
       this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$emit('GetFunet')
+          this.$emit('GetList')
         } else {
           this.$message.error(data.msg)
         }
@@ -104,6 +109,8 @@ export default {
     backIn (row) {
       this.$http(`${SQU_API.SUM_ORDER_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
+          this.$message.success('退回成功')
+          this.$emit('GetFunet')
         } else {
           this.$message.error(data.msg)
         }

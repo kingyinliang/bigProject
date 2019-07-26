@@ -6,6 +6,11 @@
   </el-row>
   <el-table ref="table1" header-row-class-name="tableHead" @row-dblclick="GetLog"  :data="SumDate" :row-class-name="RowDelFlag">
     <el-table-column label="原汁信息">
+      <el-table-column label="状态" width='95'>
+        <template slot-scope="scope">
+          <span :style="{'color': scope.row.material.childStatus === 'noPass'? 'red' : scope.row.material.childStatus === 'checked'? '#67C23A' : ''}">{{scope.row.material.childStatus === 'noPass'? '审核不通过':scope.row.material.childStatus === 'saved'? '已保存':scope.row.material.childStatus === 'submit' ? '已提交' : scope.row.material.childStatus === 'checked'? '通过':scope.row.material.childStatus === '已同步' ? '未录入' : '未录入'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="110">
         <template slot="header"><i class="reqI">*</i><span>原汁罐号</span></template>
         <template slot-scope="scope">{{scope.row.fumet.potNoName}}</template>
@@ -23,14 +28,14 @@
     </el-table-column>
     <el-table-column label="操作" width="80">
       <template slot-scope="scope">
-        <el-button v-if="scope.row.fumet.fullPort !== '正常'" type="text" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="splitDate(scope.row.fumet, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+        <el-button v-if="scope.row.fumet.fullPort !== '正常'" type="text" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" @click="splitDate(scope.row.fumet, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
       </template>
     </el-table-column>
     <el-table-column label="酱醪领用">
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>发酵罐号</span></template>
         <template slot-scope="scope">
-          <el-select @change="PotChange(scope.row)" v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" size="small">
+          <el-select @change="PotChange(scope.row)" v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" size="small">
             <el-option v-for="item in potList" :key="item.holderId" :label="item.holderName" :value="item.holderId"></el-option>
           </el-select>
         </template>
@@ -50,7 +55,7 @@
       </el-table-column>
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>当日用量</span></template>
-        <template slot-scope="scope"><el-input v-model="scope.row.material.childUsedAmount" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))"></el-input></template>
+        <template slot-scope="scope"><el-input v-model="scope.row.material.childUsedAmount" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))"></el-input></template>
       </el-table-column>
       <el-table-column label="单位" width="50">
         <template slot-scope="scope">{{scope.row.material.childUnit = 'L'}}</template>
@@ -71,7 +76,7 @@
     </el-table-column>
     <el-table-column label="操作" fixed="right" width="50">
       <template slot-scope="scope">
-        <el-button type="danger"  icon="el-icon-delete" circle size="small" v-if="dangerIf(scope.row)" :disabled="!(isRedact && (scope.row.material.status !== 'submit' && scope.row.material.status !== 'checked'))" @click="dellist(scope.row)"></el-button>
+        <el-button type="danger"  icon="el-icon-delete" circle size="small" v-if="dangerIf(scope.row)" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" @click="dellist(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -123,7 +128,7 @@ export default {
             if (item.childPotNo && item.childUsedAmount) {
               this.sumAmount1[item.childPotNo] ? this.sumAmount1[item.childPotNo] += item.childUsedAmount * 1 : this.sumAmount1[item.childPotNo] = item.childUsedAmount * 1
             }
-            if (item.status === 'noPass') {
+            if (item.childStatus === 'noPass') {
               no = no + 1
             } else if (item.childStatus === 'submit') {
               sub = sub + 1
@@ -171,7 +176,7 @@ export default {
     updateMaterial (str, resolve, reject, st = false) {
       let tmp = []
       this.SumDate.forEach((item, index) => {
-        if (item.status) {
+        if (item.childStatus) {
           if (item.material.childStatus === 'saved') { item.material.childStatus = str } else if (item.material.childStatus === 'noPass' && str === 'submit') { item.material.childStatus = str }
         } else {
           item.material.childStatus = str

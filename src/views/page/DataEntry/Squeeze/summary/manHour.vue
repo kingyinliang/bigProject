@@ -4,6 +4,11 @@
     <el-button type="primary" style="float: right" size="small" :disabled="!isRedact" @click="GetTime">获取工时</el-button>
   </el-row>
   <el-table ref="table1" header-row-class-name="tableHead" @row-dblclick="GetLog" :data="timeDate" tooltip-effect="dark">
+    <el-table-column label="状态" width='95'>
+      <template slot-scope="scope">
+        <span :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#67C23A' : ''}">{{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="生产订单" width="120" prop="orderNo"></el-table-column>
     <el-table-column label="工序" width="120" prop="processIdName"></el-table-column>
     <el-table-column label="生产品项" prop="ssssss" :show-overflow-tooltip="true">
@@ -13,12 +18,12 @@
     <el-table-column label="准备工时" width="120" prop="confActivity1"></el-table-column>
     <el-table-column label="人工工时" width="120" prop="confActivity3"></el-table-column>
     <el-table-column label="机器工时" width="120" prop="confActivity2">
-      <template slot-scope="scope"><el-input v-model="scope.row.confActivity2" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input></template>
+      <template slot-scope="scope"><el-input v-model="scope.row.confActivity2" size="small" placeholder="手工录入" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')"></el-input></template>
     </el-table-column>
     <el-table-column label="单位" width="50" prop="confActiUnit1"></el-table-column>
     <el-table-column label="操作" width="50" fixed="right">
       <template slot-scope="scope">
-        <el-button type="text" :disabled="!isRedact" @click="BackTime(scope.row)">退回</el-button>
+        <el-button type="text" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" @click="BackTime(scope.row)">退回</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -108,6 +113,8 @@ export default {
     BackTime (row) {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
+          this.$message.success('退回成功')
+          this.$emit('GetFunet')
         } else {
           this.$message.error(data.msg)
         }
