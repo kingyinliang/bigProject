@@ -125,6 +125,8 @@ export default {
     },
     ShowDialog (item, content) {
       this.workInfo = {
+        id: '',
+        uid: this.uuid(),
         orderId: this.orderId,
         deviceName: item.deviceName,
         content: content,
@@ -142,7 +144,20 @@ export default {
           this.workInfo.timeLength = ((new Date(this.workInfo.endTime) - new Date(this.workInfo.startTime)) / 3600000).toFixed(2)
           this.workInfo.changed = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
           this.workInfo.changer = this.$store.state.user.realName + `(${this.$store.state.user.name})`
-          this.dataList.push(this.workInfo)
+          this.workInfo.remark = this.workInfo.remark
+          let currentRecord = []
+          if (this.workInfo.hasOwnProperty('uid')) {
+            // 新增行
+            currentRecord = this.dataList.filter(data => data.uid === this.workInfo.uid)
+          } else {
+            // 原有行
+            currentRecord = this.dataList.filter(data => data.id === this.workInfo.id)
+          }
+          if (currentRecord && currentRecord.length > 0) {
+            Object.assign(currentRecord[0], this.workInfo)
+          } else {
+            this.dataList.push(this.workInfo)
+          }
           this.dialogVisible = false
         } else {
           return false

@@ -56,7 +56,7 @@
         <el-col>
           <el-table ref="multipleTable" @selection-change="handleSelectionChange" :data="newDataList" border header-row-class-name="tableHead">
             <el-table-column type="selection" :selectable="CheckBoxInit" width="35"></el-table-column>
-            <el-table-column label="状态" width="70">
+            <el-table-column label="状态" width="65">
               <template slot-scope="scope">
                 {{scope.row.guan === '已开罐' ? '已开罐' : '未开罐'}}
               </template>
@@ -67,7 +67,7 @@
                 {{scope.row.materialCode}}{{scope.row.materialName}}
               </template>
             </el-table-column>
-            <el-table-column label="酱醪类别" prop="halfName"></el-table-column>
+            <el-table-column label="酱醪类别" prop="halfName" show-overflow-tooltip></el-table-column>
             <el-table-column label="发酵天数/天" prop="matureDays" width="100"></el-table-column>
             <el-table-column label="酱醪状态" prop="state"></el-table-column>
             <el-table-column label="数量" prop="inAmount" width="100"></el-table-column>

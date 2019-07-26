@@ -142,7 +142,6 @@ export default {
           this.$refs.equworkinghours.GetList(params)
           this.$refs.material.GetList(params)
           this.$refs.material.GetHolderList(params)
-          console.log(this.formHeader)
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
@@ -184,7 +183,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.savedOrSubmitForm('submit')
+        this.formHeader.countOutput = this.$refs.instorage.countOutputNum
+        let params = [this.formHeader, this.$refs.equworkinghours.dataList]
+        this.$http(`${FILTRATION_API.FILTER_EQUWORKINGHOURS_SUBMIT}`, 'POST', params).then(({data}) => {
+          if (data.code === 0) {
+            this.savedOrSubmitForm('submit')
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     },
     savedOrSubmitForm (str) {
