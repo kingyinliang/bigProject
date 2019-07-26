@@ -134,7 +134,7 @@ export default {
         filterMachineId: item.deviceId,
         startTime: '',
         endTime: '',
-        delFlag: 0
+        delFlag: '0'
       }
       this.dialogVisible = true
     },
