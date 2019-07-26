@@ -229,10 +229,10 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="75">
+              width="120">
               <template slot-scope="scope">
-                <el-button type="primary" round size="mini" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
-                <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && (scope.row.interfaceReturnStatus === '1' || scope.row.interfaceReturnStatus === null) && isAuth('verify:material:resetMaterial')">反审</el-button>
+                <el-button class="ra_btn" type="primary" round size="mini" @click="redact(scope.row)" v-if="!((scope.row.status === 'checked' && scope.row.interfaceReturnStatus === '1') || scope.row.status === 'noPass') && isAuth('verify:material:update')">{{ scope.row.redact? '保存' : '编辑'}}</el-button>
+                <el-button class="ra_btn" type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && (scope.row.interfaceReturnStatus === '1' || scope.row.interfaceReturnStatus === null) && isAuth('verify:material:resetMaterial')">反审</el-button>
               </template>
             </el-table-column>
           </el-table>

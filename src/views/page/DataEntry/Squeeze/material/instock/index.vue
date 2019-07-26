@@ -75,9 +75,9 @@
           <el-col :span="19">
             <el-row  style="margin-top:20px">
               <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
-                <el-table-column label="状态" width='80'>
+                <el-table-column label="状态" width='95'>
                   <template slot-scope="scope">
-                    {{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}
+                    <span :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#67C23A' : ''}">{{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="日期" width='100'>
@@ -167,6 +167,9 @@
             <el-form-item label="起始数：" required>
               <el-input  type='number' v-model.number="startForm.startAmount" style='width:220px'/>
             </el-form-item>
+            <el-form-item label="单位：" required>
+              {{startForm.unit = 'L'}}
+            </el-form-item>
             <el-form-item label="混合罐类型：" required>
               <el-select v-model="startForm.mixType" placeholder="请选择" filterable style="width:220px" >
                 <el-option label="正常" value="正常"></el-option>
@@ -201,6 +204,9 @@
             </el-form-item>
             <el-form-item label="结束数：" required>
               <el-input  type='number' v-model.number="endForm.endAmount" style='width:220px'/>
+            </el-form-item>
+            <el-form-item label="单位：" required>
+              {{endForm.unit = 'L'}}
             </el-form-item>
             <el-form-item label="是否满罐：">
               <el-select v-model="endForm.fullPot" placeholder="请选择" filterable style="width:220px" >
@@ -319,6 +325,7 @@ export default class Index extends Vue {
     potNo: '',
     potName: '',
     batch: '',
+    unit: 'L',
     startAmount: 0,
     mixType: '',
     changed: '',
@@ -328,6 +335,7 @@ export default class Index extends Vue {
     potNo: '',
     potName: '',
     batch: '',
+    unit: 'L',
     endAmount: 0,
     fullPot: '',
     fullPotAmount: 0,
@@ -458,6 +466,7 @@ export default class Index extends Vue {
       potNo: '',
       potName: '',
       batch: '',
+      unit: '',
       startAmount: 0,
       mixType: '正常',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
@@ -474,6 +483,7 @@ export default class Index extends Vue {
         workShop: this.params.workshopId,
         productLine: this.params.productLineId,
         batch: this.startForm.batch,
+        unit: this.startForm.unit,
         inDate: this.startForm.inDate,
         potNo: this.startForm.potNo,
         potName: this.startForm.potName,
@@ -494,6 +504,7 @@ export default class Index extends Vue {
       potNo: startData.potNo,
       potName: startData.potName,
       batch: startData.batch,
+      unit: startData.unit,
       endAmount: startData.endAmount ? startData.endAmount : 0,
       fullPot: startData.fullPot ? startData.fullPot : '0',
       fullPotAmount: startData.fullPotAmount ? startData.fullPotAmount : 0,
@@ -514,6 +525,7 @@ export default class Index extends Vue {
           inAmount: this.endForm.endAmount - startData.startAmount,
           remark: this.endForm.remark,
           fullPot: this.endForm.fullPot,
+          fullunitPot: this.endForm.unit,
           fullPotAmount: this.endForm.fullPotAmount,
           fulPotDate: this.endForm.fulPotDate,
           changed: this.endForm.changed,
@@ -540,7 +552,7 @@ export default class Index extends Vue {
     if (this.endForm.endAmount.toString() === '') {
       this.$message.error('结束数不能为空')
       return false
-    } else if (this.endForm.fullPot === '1' && this.endForm.fullPotAmount.toString() === '') {
+    } else if (this.endForm.fullPot === '1' && (this.endForm.fullPotAmount.toString() === '' || this.endForm.fullPotAmount.toString() === '0')) {
       this.$message.error('满罐数量不能为空')
       return false
     } else if (this.endForm.fullPot === '1' && this.endForm.fulPotDate === '') {

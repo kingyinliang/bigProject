@@ -183,6 +183,9 @@
             <el-form-item label="暂存量(L)：" >
               <el-input  type='number' v-model.number="startForm.storageAmount" style='width:220px'/>
             </el-form-item>
+            <el-form-item label="单位：" required>
+              {{startForm.unit = 'L'}}
+            </el-form-item>
             <el-form-item label="对应布浆线：">
               <label>{{startForm.productLineName}}</label>
             </el-form-item>
@@ -219,6 +222,9 @@
             </el-form-item>
             <el-form-item label="对应布浆线：">
               <label>{{endForm.productLineName}}</label>
+            </el-form-item>
+            <el-form-item label="单位：" required>
+              {{endForm.unit = 'L'}}
             </el-form-item>
             <el-form-item label="备注：" >
               <el-input v-model.trim="endForm.remark" style='width:220px'/>
@@ -321,6 +327,7 @@ export default class Index extends Vue {
     fermentPotName: '',
     orderId: '',
     batch: '',
+    unit: 'L',
     remainAmount: 0,
     remainAmountUnit: 'L',
     startAmount: 0,
@@ -337,6 +344,7 @@ export default class Index extends Vue {
     fermentPotName: '',
     orderId: '',
     batch: '',
+    unit: 'L',
     remainAmount: 0,
     endAmount: 0,
     productLine: '',
@@ -471,6 +479,7 @@ export default class Index extends Vue {
       fermentPotName: '',
       orderId: '',
       batch: '',
+      unit: '',
       remainAmount: 0,
       remainAmountUnit: 'L',
       startAmount: 0,
@@ -498,6 +507,7 @@ export default class Index extends Vue {
         fermentPotNo: this.startForm.fermentPotNo,
         // 额外信息
         orderId: this.startForm.orderId,
+        unit: this.startForm.unit,
         batch: this.startForm.batch,
         remainAmount: this.startForm.remainAmount,
         // 额外信息
@@ -506,7 +516,6 @@ export default class Index extends Vue {
         endAmount: null,
         amount: null,
         storageAmount: this.startForm.storageAmount,
-        unit: null,
         // operated: null,
         // operator: null,
         remark: null,
@@ -532,6 +541,7 @@ export default class Index extends Vue {
         fermentPotName: startData.fermentPotName,
         orderId: startData.orderId,
         batch: startData.batch,
+        unit: startData.unit,
         remainAmount: startData.remainAmount,
         endAmount: startData.endAmount ? startData.endAmount : 0,
         productLine: startData.productLine,

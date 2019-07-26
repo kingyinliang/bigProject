@@ -63,7 +63,7 @@
             <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
           </el-tooltip>
         </span>
-        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"></apply-order>
+        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"  @GetList="GetList"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -79,7 +79,7 @@
             <el-button :style="{'color': statusArr[2].status === 'noPass'? 'red' : ''}" style="font-size: 14px">工时计算</el-button>
           </el-tooltip>
         </span>
-        <man-hour ref="manhour" :isRedact="isRedact" :formHeader="formHeader"></man-hour>
+        <man-hour ref="manhour" :isRedact="isRedact" :formHeader="formHeader" @GetList="GetList"></man-hour>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -141,6 +141,7 @@ export default {
         this.$message.error('请选择生产日期')
         return
       }
+      this.isRedact = false
       this.$refs.materielref.getPot(this.formHeader)
       this.getMaterial(this.formHeader.factory)
       this.getMaterialM(this.formHeader.factory)
@@ -152,7 +153,11 @@ export default {
         if (data.code === 0) {
           this.isSerch = false
           data.orderList.forEach((item, index) => {
-            item.material = item.materialCode + ' ' + item.materialName
+            if (!item.materialCode) {
+              item.material = ''
+            } else {
+              item.material = item.materialCode + ' ' + item.materialName
+            }
           })
           this.orderS = GetStatus(data.orderList)
           this.orderFumet = data.orderList
