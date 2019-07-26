@@ -127,7 +127,7 @@ export default {
         uid: this.uuid(),
         unit: '方',
         status: 'saved',
-        delFlag: 0,
+        delFlag: '0',
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
       }
