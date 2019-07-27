@@ -127,7 +127,8 @@ export default {
         factory: '',
         workShop: '',
         holderId: '',
-        orderId: ''
+        orderId: '',
+        orderNo: ''
       },
       pages: {
         currPage: 1,

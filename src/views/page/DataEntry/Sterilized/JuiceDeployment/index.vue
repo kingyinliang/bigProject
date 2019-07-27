@@ -163,7 +163,8 @@ export default {
     return {
       formHeader: {
         factory: '',
-        workShop: ''
+        workShop: '',
+        orderNo: ''
       },
       pages: {
         currentTotal: 0, // 总条数
