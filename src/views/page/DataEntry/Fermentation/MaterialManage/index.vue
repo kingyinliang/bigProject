@@ -15,9 +15,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="发料物料：" prop="holderId">
-          <el-select v-model="formHeader.ferMaterialCode" placeholder="请选择" filterable style="width: 160px">
+          <el-select v-model="formHeader.ferMaterialCode" placeholder="请选择" filterable style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
-            <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.materialCode" :label="sole.materialCode+ ' ' + sole.materialName"></el-option>
+            <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.matnr" :label="sole.matnr+ ' ' + sole.material_name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="订单状态：">
@@ -157,19 +157,20 @@ export default {
       this.formHeader.workShop = ''
       this.formHeader.ferMaterialCode = ''
       this.Getdeptbyid(n)
-      this.GetMaterial(n)
+      // this.GetMaterial(n)
     },
     'formHeader.workShop' (n, o) {
       this.formHeader.holderIds = []
       this.formHeader.ferOrderNos = []
       this.HolderList(n)
       this.GetOrderList(n)
+      this.GetMaterial(n)
     }
   },
   mounted () {
     this.Getdeptcode()
     this.Getdeptbyid(this.formHeader.factory)
-    this.GetMaterial(this.formHeader.factory)
+    // this.GetMaterial(this.formHeader.factory)
     this.HolderList(this.formHeader.workShop)
     this.GetOrderList(this.formHeader.workShop)
     if (this.formHeader.factory) {
@@ -350,9 +351,9 @@ export default {
     // 获取物料
     GetMaterial (n) {
       if (n) {
-        this.$http(`${BASICDATA_API.MATERIAL_LIST}`, 'POST', {
-          factory: n,
-          materialTypeCode: 'ZHAL'
+        this.$http(`${FERMENTATION_API.SHOOT_MATERIAL_LIST}`, 'POST', {
+          factory: this.formHeader.factory,
+          workShop: this.formHeader.workShop
         }, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.material = data.list

@@ -54,22 +54,22 @@
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="0" label="未判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态">
+          <el-table-column label="状态" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : '正常'}}
             </template>
           </el-table-column>
-          <el-table-column label="发酵罐">
+          <el-table-column label="发酵罐" show-overflow-tooltip width="120">
             <template slot-scope="scope">
               {{scope.row.order.holderName}}
             </template>
           </el-table-column>
-          <el-table-column label="订单号" width="130">
+          <el-table-column label="订单号" width="130" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.order.ferOrderNo}}
             </template>
           </el-table-column>
-          <el-table-column label="物料" width="230">
+          <el-table-column label="物料" width="220" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.order.ferMaterialCode}}{{scope.row.order.ferMaterialName}}
             </template>
@@ -84,7 +84,7 @@
               {{scope.row.order.ferUnit}}
             </template>
           </el-table-column>
-          <el-table-column label="满灌日期" width="180">
+          <el-table-column label="满灌日期" width="170">
             <template slot-scope="scope">
               {{scope.row.order.fullDate}}
             </template>
@@ -95,7 +95,7 @@
             </template>
           </el-table-column>
           <el-table-column label="物料类别"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">判定</el-button>
             </template>

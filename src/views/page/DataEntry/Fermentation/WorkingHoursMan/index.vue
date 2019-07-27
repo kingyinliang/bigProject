@@ -30,7 +30,7 @@
               <el-input v-model="form.orderNo" style="width:170px"></el-input>
             </el-form-item>
             <el-form-item label="订单日期：">
-              <el-date-picker v-model="form.startDate" type="date" placeholder="选择日期" style="width:170px"></el-date-picker> - <el-date-picker v-model="form.endDate" type="date" placeholder="选择日期" style="width:170px"></el-date-picker>
+              <el-date-picker v-model="form.startDate" type="date" placeholder="选择日期" style="width:170px" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker> - <el-date-picker v-model="form.endDate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" format="yyyy-MM-dd" style="width:170px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -90,12 +90,12 @@
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="150">
@@ -161,12 +161,12 @@
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.startDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.endDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">
@@ -232,12 +232,12 @@
           <el-table-column label="单位" :show-overflow-tooltip="true" prop="humanTimesUnit" width="50"></el-table-column>
           <el-table-column label="执行开始日期" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.startDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.startDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="执行结束日期" prop="amount" width="150">
             <template slot-scope="scope">
-              <el-date-picker type="date" v-model="scope.row.endDate" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
+              <el-date-picker type="date" v-model="scope.row.endDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期" :disabled="GetCheck(scope.row)" size="small" style="width:140px;"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="部分/完全报工" :show-overflow-tooltip="true" width="130">

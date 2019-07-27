@@ -1353,6 +1353,7 @@ export const FERMENTATION_API = {
   SHOOT_DEL_API: HOST + '/fer/shoot/delete',
   SHOOT_UPDATE_API: HOST + '/fer/shoot/update',
   SHOOT_SUBMIT_API: HOST + '/fer/shoot/submit',
+  SHOOT_MATERIAL_LIST: HOST + '/all/dropDown/getFerMaterial',
   /**
    * 发酵罐管理
    */
