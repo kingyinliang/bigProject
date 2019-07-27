@@ -350,10 +350,10 @@ export default class Index extends Vue {
       this.$message.error('请选择酱醪')
       return false
     }
-    if (!this.formHeader.halfType) {
-      this.$message.error('请选择半成品类别')
-      return false
-    }
+    // if (!this.formHeader.halfType) {
+    //   this.$message.error('请选择半成品类别')
+    //   return false
+    // }
     if (!this.formHeader.amount) {
       this.$message.error('请填写申请数量')
       return false
