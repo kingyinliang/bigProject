@@ -12,7 +12,7 @@
             <template slot="header"><i class="reqI">*</i><span>布浆机</span></template>
             <template slot-scope="scope">{{scope.row.pulpMachineName}}</template>
           </el-table-column>
-          <el-table-column width="180px">
+          <el-table-column width="180px" show-overflow-tooltip>
             <template slot="header"><i class="reqI">*</i><span>气垫小车号</span></template>
             <template slot-scope="scope">{{scope.row.hovercraftName}}</template>
           </el-table-column>
@@ -30,6 +30,7 @@
             <template slot="header"><i class="reqI">*</i><span>布浆量</span></template>
             <template slot-scope="scope">{{scope.row.pulpAmount}}</template>
           </el-table-column>
+          <el-table-column prop="unit" label="单位"></el-table-column>
           <el-table-column show-overflow-tooltip width="100px">
             <template slot="header">布号</template>
             <template slot-scope="scope">{{scope.row.clothNo}}</template>
@@ -38,7 +39,6 @@
             <template slot="header"><i class="reqI">*</i><span>酱醪分类</span></template>
             <template slot-scope="scope">{{scope.row.sauceClass}}</template>
           </el-table-column>
-          <el-table-column prop="unit" label="单位"></el-table-column>
           <el-table-column width="160px">
             <template slot="header"><i class="reqI">*</i><span>布浆自淋时间(MIN)</span></template>
             <template slot-scope="scope">{{scope.row.selfDrenchTime}}</template>
@@ -101,12 +101,12 @@
         </el-form-item>
         <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
-            <el-option :label="item.deviceNo + item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
+            <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
-            <el-option :label="item.deviceNo + item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
+            <el-option :label="item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="布浆张数" :label-width="formLabelWidth" prop="pulpNum">
@@ -120,6 +120,9 @@
         </el-form-item>
         <el-form-item label="布浆量" :label-width="formLabelWidth" prop="pulpAmount">
           <el-input v-model="sauce.pulpAmount"></el-input>
+        </el-form-item>
+        <el-form-item label="单位" :label-width="formLabelWidth">
+          L
         </el-form-item>
         <el-form-item label="自重自淋时间" :label-width="formLabelWidth" prop="selfDrenchTime">
           <el-input v-model="sauce.selfDrenchTime"></el-input>
@@ -322,7 +325,7 @@ export default {
             currentRecord = this.materialList.filter(data => data.id === this.sauce.id)
           }
           let pulpName = this.pulpMachineList.find(item => item.deviceId === this.sauce.pulpMachine).deviceName
-          let hovercraName = this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceNo + this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
+          let hovercraName = this.hovercraftAll.find(item => item.deviceId === this.sauce.hovercraftNo).deviceName
           this.sauce = {
             id: this.sauce.id,
             uid: this.sauce.uid,
