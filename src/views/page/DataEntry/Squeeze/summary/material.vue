@@ -37,6 +37,7 @@
         <template slot-scope="scope">
           <el-select @change="PotChange(scope.row)" v-model="scope.row.material.childPotNo" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" size="small">
             <el-option v-for="item in potList" :key="item.holderId" :label="item.holderName" :value="item.holderId"></el-option>
+            <el-option :key="scope.row.material.childPotNo" :label="scope.row.material.holderName" :value="scope.row.material.childPotNo" :disabled="true" v-if="potSelect(scope.row.material)"></el-option>
           </el-select>
         </template>
       </el-table-column>
@@ -367,6 +368,19 @@ export default {
     }
   },
   computed: {
+    potSelect: function () {
+      return function (row) {
+        if (row.childPotNo) {
+          if (this.potList.filter(item => item.holderId === row.childPotNo).length === 0) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          return false
+        }
+      }
+    },
     dangerIf: function () {
       return function (row) {
         let s = 0

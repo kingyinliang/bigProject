@@ -233,10 +233,10 @@ export function GetStatus (arr) {
   })
   if (no > 0) {
     status = 'noPass'
-  } else if (sub > 0) {
-    status = 'submit'
   } else if (sav > 0) {
     status = 'saved'
+  } else if (sub > 0) {
+    status = 'submit'
   } else if (che > 0) {
     status = 'checked'
   }

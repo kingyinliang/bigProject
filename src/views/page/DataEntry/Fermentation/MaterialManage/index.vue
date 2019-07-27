@@ -20,7 +20,7 @@
             <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.matnr" :label="sole.matnr+ ' ' + sole.material_name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="订单状态：">
+        <el-form-item label="状态：">
           <el-select v-model="formHeader.approveStatus" placeholder="请选择" style="width: 160px">
             <el-option label="请选择"  value=""></el-option>
             <el-option label="未录入"  value="1"></el-option>
