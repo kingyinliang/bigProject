@@ -35,7 +35,7 @@
               <div class="dataList_item_body_text">
                 <el-form :inline="true" size="small">
                   <el-form-item label="订单编号：">
-                    <el-select v-model="item.selectOrderId" placeholder="请选择" style="width: 150px" @change="OrderChange($event, item)" value-key="orderId">
+                    <el-select class="orderSelect" v-model="item.selectOrderId" placeholder="请选择" style="width: 150px" @change="OrderChange($event, item)" value-key="orderId">
                       <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1.orderId"></el-option>
                     </el-select>
                   </el-form-item>
@@ -207,6 +207,11 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .el-select-dropdown__wrap{
+    max-height: 200px;
+  }
+</style>
 <style lang="scss" scoped>
   .dataList {
     margin-top: 10px;

@@ -238,7 +238,7 @@ export default {
     countOutputNum: function () {
       let num = 0
       this.InStorageDate.forEach((item) => {
-        num = num + (item.delFlag === '0' ? item.inAmount : 0)
+        num = num + (item.delFlag === '0' ? item.inAmount * 1 : 0)
       })
       return num
     }
