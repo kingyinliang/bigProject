@@ -31,7 +31,7 @@
             总计: <span>{{item.num}}</span> 罐
           </p>
           <div class="topBox_boxItem_popover" v-if="index === 2 || index === 3">
-            <p class=""><i class="dot" style="background: #1890FF"></i>味达美<span style="float: right">{{item.wdm}} 罐</span></p>
+            <p class=""><i class="dot" style="background: #1890FF"></i>味极鲜<span style="float: right">{{item.wdm}} 罐</span></p>
             <p class=""><i class="dot" style="background: #FFBF00"></i>六月鲜<span style="float: right">{{item.lyx}} 罐</span></p>
             <i class="topBox_boxItem_popover_ar"></i>
           </div>

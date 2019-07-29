@@ -463,23 +463,24 @@ export default {
         item.sampleUnitName = this.ratio.basicUnitName
         item.outputUnit = this.ratio.basicUnit
         item.outputUnitName = this.ratio.basicUnitName
-      } else {}
-      item.manPackingUnit = this.ratio.basicUnit
-      item.manPackingUnitName = this.ratio.basicUnitName
-      item.aiPackingUnit = this.ratio.basicUnit
-      item.aiPackingUnitName = this.ratio.basicUnitName
-      item.aiShelvesUnit = this.ratio.productUnit
-      item.aiShelvesUnitName = this.ratio.productUnitName
-      item.aiSolidUnit = this.ratio.productUnit
-      item.aiSolidUnitName = this.ratio.productUnitName
-      item.manSolidUnit = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnit : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit))
-      item.manSolidUnitName = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnitName : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName))
-      item.badUnit = this.ratio.basicUnit
-      item.badUnitName = this.ratio.basicUnitName
-      item.sampleUnit = this.ratio.basicUnit
-      item.sampleUnitName = this.ratio.basicUnitName
-      item.outputUnit = this.ratio.basicUnit
-      item.outputUnitName = this.ratio.basicUnitName
+      } else {
+        item.manPackingUnit = this.ratio.basicUnit
+        item.manPackingUnitName = this.ratio.basicUnitName
+        item.aiPackingUnit = this.ratio.basicUnit
+        item.aiPackingUnitName = this.ratio.basicUnitName
+        item.aiShelvesUnit = this.ratio.productUnit
+        item.aiShelvesUnitName = this.ratio.productUnitName
+        item.aiSolidUnit = this.ratio.productUnit
+        item.aiSolidUnitName = this.ratio.productUnitName
+        item.manSolidUnit = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnit : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnit : (this.ratio.productUnit ? this.ratio.productUnit : this.ratio.basicUnit))
+        item.manSolidUnitName = this.order.properties && this.order.properties !== '二合一&礼盒产线' ? this.ratio.productUnitName : (this.order.workShopName === '组装车间2（礼盒）' ? this.ratio.basicUnitName : (this.ratio.productUnitName ? this.ratio.productUnitName : this.ratio.basicUnitName))
+        item.badUnit = this.ratio.basicUnit
+        item.badUnitName = this.ratio.basicUnitName
+        item.sampleUnit = this.ratio.basicUnit
+        item.sampleUnitName = this.ratio.basicUnitName
+        item.outputUnit = this.ratio.basicUnit
+        item.outputUnitName = this.ratio.basicUnitName
+      }
     },
     isSt (item) {
       if (item.isL === '0') {

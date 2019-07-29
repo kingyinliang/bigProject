@@ -44,7 +44,6 @@
             <div class="normal_bottom">
               <el-form-item label="订单号：" class="width50b">
                 <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)" style="width:150px">
-                  <el-option label=""  value=""></el-option>
                   <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                 </el-select>
               </el-form-item>
@@ -129,9 +128,13 @@ export default {
     },
     // 跳转
     go (item) {
+      if (!item.orderNo) {
+        this.$message.error('请选择订单号')
+        return
+      }
       this.$store.state.common.orderNo = item.orderNo
       this.$store.state.common.orderId = item.orderIdList[item.orderNo]
-      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-EnterData-dataEntryIndex')
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Filtration-DataEntry-detail')
       setTimeout(() => {
         this.$router.push({ name: `DataEntry-Filtration-DataEntry-detail` })
       }, 100)

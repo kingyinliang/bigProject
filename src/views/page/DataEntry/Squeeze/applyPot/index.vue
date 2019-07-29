@@ -124,6 +124,11 @@
                   {{scope.row.applyNo}}
                 </template>
               </el-table-column>
+              <el-table-column label="状态" width="80">
+                <template slot-scope="scope">
+                  {{scope.row.confirmFlag === '1'? '已确认' : scope.row.stauts === 'saved'? '已保存' : scope.row.stauts === 'submit' ? '已提交' : ''}}
+                </template>
+              </el-table-column>
               <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
                 <template slot-scope="scope">
                   {{scope.row.holderName}}
@@ -197,6 +202,7 @@ export default class Index extends Vue {
   materialList = []
   totalList = []
   detailList = []
+  dataList = []
   searched: boolean = false
   currPage: number = 1
   pageSize: number = 5
@@ -299,7 +305,9 @@ export default class Index extends Vue {
     let queryParams = {
       factory: this.params.factoryId,
       workShop: this.params.workshopId,
-      productDate: this.params.orderDate ? this.params.orderDate : ''
+      productDate: this.params.orderDate ? this.params.orderDate : '',
+      currPage: this.currPage + '',
+      pageSize: this.pageSize + ''
     }
     this.retrieveOrderList(queryParams)
   }
@@ -308,7 +316,9 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${SQU_API.POT_APPLY_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.totalList = res.data.page.list
-        this.totalCount = this.totalList.length
+        this.dataList = res.data.page.list
+        this.totalCount = res.data.page.totalCount
+        // this.totalCount = this.totalList.length
       } else {
         this.$message.error(res.data.msg)
       }
@@ -328,14 +338,16 @@ export default class Index extends Vue {
   handleSizeChange (val: number) {
     this.pageSize = val
     this.currPage = 1
+    this.getOrderList()
   }
   // 跳转页数
   handleCurrentChange (val: number) {
     this.currPage = val
+    this.getOrderList()
   }
-  get dataList () {
-    return this.totalList.slice((this.currPage - 1) * this.pageSize, this.currPage * this.pageSize)
-  }
+  // get dataList () {
+  //   return this.totalList.slice((this.currPage - 1) * this.pageSize, this.currPage * this.pageSize)
+  // }
   @Watch('params', {deep: true})
   onChangeValue (newVal: string, oldVal: string) {
     this.searched = false
