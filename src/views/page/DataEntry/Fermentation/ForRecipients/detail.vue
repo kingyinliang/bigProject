@@ -29,13 +29,13 @@
         <el-col :span="22">
           <el-form :inline="true" :model="searchform" size="small">
             <el-form-item label="罐号">
-              <el-select v-model="searchform.holder" @change="Search()">
+              <el-select v-model="searchform.holder" filterable @change="Search()">
                 <el-option value="">请选择</el-option>
                 <el-option v-for="(item, index) of holderList" :key="index" :value="item" :label="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="类别">
-              <el-select v-model="searchform.types" @change="Search()">
+              <el-select v-model="searchform.types" filterable @change="Search()">
                 <el-option value="">请选择</el-option>
                 <el-option v-for="(item, index) of typesList" :key="index" :value="item" :label="item"></el-option>
               </el-select>
