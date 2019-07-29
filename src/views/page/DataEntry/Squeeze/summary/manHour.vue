@@ -109,12 +109,13 @@ export default {
         }
       })
     },
+    timeRul () {},
     // 退回工时
     BackTime (row) {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('退回成功')
-          this.$emit('GetFunet')
+          this.$emit('GetList')
         } else {
           this.$message.error(data.msg)
         }
