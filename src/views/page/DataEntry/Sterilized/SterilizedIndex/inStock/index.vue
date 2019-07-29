@@ -365,7 +365,7 @@ export default {
 <style lang="scss">
   .inStorage_card_left_btn{
     width: 100%;
-    margin-top: 10px;
+    margin-top: 10px!important;
     border-radius: 0px 0px 6px 6px!important;
   }
   .inStorage_card_left_btn:hover{

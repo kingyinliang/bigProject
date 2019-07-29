@@ -44,7 +44,8 @@
             <el-form-item label="升温开始时间：" prop="upStartTime">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.upStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 180px"></el-date-picker>
             </el-form-item>
-            <el-card class="searchCard  newCard" style="padding: 8px 4px">
+            <!--<el-card class="searchCard  newCard" style="padding: 8px 4px">-->
+            <div style="padding: 8px 12px">
               <el-form-item label="冷却开始时间：" prop="coolingStartTime">
                 <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
               </el-form-item>
@@ -87,7 +88,8 @@
                   </template>
                 </el-table-column>
               </el-table>
-            </el-card>
+            </div>
+            <!--</el-card>-->
           </el-form>
           <auditLog :tableData="DataAudit"></auditLog>
         </el-tab-pane>
