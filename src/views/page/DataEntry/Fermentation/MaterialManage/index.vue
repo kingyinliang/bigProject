@@ -15,7 +15,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="发料物料：" prop="holderId">
-          <el-select v-model="formHeader.ferMaterialCode" placeholder="请选择" filterable style="width: 180px">
+          <el-select v-model="formHeader.ferMaterialCode" placeholder="请选择" filterable style="width: 160px">
             <el-option label="请选择"  value=""></el-option>
             <el-option v-for="(sole, index) in this.material" :key="index" :value="sole.matnr" :label="sole.matnr+ ' ' + sole.material_name"></el-option>
           </el-select>
@@ -35,7 +35,7 @@
             <el-option v-for="(sole, index) in OrderList" :key="index" :value="sole.ferOrderNo" :label="sole.ferOrderNo"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="罐号：" prop="holderId" label-width="70px">
+        <el-form-item label="罐号：" prop="holderId" label-width="82px">
           <el-select v-model="formHeader.holderIds" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
             <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>

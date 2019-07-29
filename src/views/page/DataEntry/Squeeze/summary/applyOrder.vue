@@ -110,7 +110,7 @@ export default {
       this.$http(`${SQU_API.SUM_ORDER_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('退回成功')
-          this.$emit('GetFunet')
+          this.$emit('GetList')
         } else {
           this.$message.error(data.msg)
         }
