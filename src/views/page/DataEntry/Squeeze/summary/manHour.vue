@@ -109,13 +109,23 @@ export default {
         }
       })
     },
-    timeRul () {},
+    timeRul () {
+      let ty = true
+      this.timeDate.forEach(item => {
+        if (item.confActivity2 === '0' || !item.confActivity2) {
+          ty = false
+          this.$message.error('机器工时未填写')
+          return false
+        }
+      })
+      return ty
+    },
     // 退回工时
     BackTime (row) {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('退回成功')
-          this.$emit('GetList')
+          this.GetTime()
         } else {
           this.$message.error(data.msg)
         }
