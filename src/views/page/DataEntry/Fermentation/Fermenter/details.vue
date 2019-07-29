@@ -47,7 +47,7 @@
             <el-form-item label="是否成熟：">
               <p class="el-input">{{formData.matureFlag === '0' ? '成熟' : formData.matureFlag === '1' ? '未成熟' : ''}}</p>
             </el-form-item>
-            <el-form-item label="订单选择：" class="noneBorder">
+            <el-form-item label="状态：" class="noneBorder">
               <el-radio-group v-model="formData.frozenStatus" :disabled="true">
                 <el-radio label="1">正常</el-radio>
                 <el-radio label="0">冻结</el-radio>
