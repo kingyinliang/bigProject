@@ -74,7 +74,7 @@
           </el-col>
           <el-col :span="19">
             <el-row  style="margin-top:20px">
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
+              <el-table header-row-class-name="tableHead" :row-class-name="rowDelFlag" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
                 <el-table-column label="状态" width='95'>
                   <template slot-scope="scope">
                     <span :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#67C23A' : ''}">{{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}</span>
@@ -143,6 +143,11 @@
                 <el-table-column label="备注" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
                     {{scope.row.remark}}
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width='50' fixed="right">
+                  <template slot-scope="scope">
+                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -370,6 +375,16 @@ export default class Index extends Vue {
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
+  }
+  delRow (row) {
+    row.delFlag = '1'
+  }
+  rowDelFlag ({row, rowIndex}) {
+    if (row.delFlag === '1') {
+      return 'rowDel'
+    } else {
+      return ''
+    }
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs

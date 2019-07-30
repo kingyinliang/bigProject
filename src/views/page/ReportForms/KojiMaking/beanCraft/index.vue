@@ -22,14 +22,25 @@
                 <el-option v-for="sole in houseList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="制曲日期：">
-              <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
-            </el-form-item>
+            <!--<el-form-item label="制曲日期：">-->
+              <!--<el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>-->
+            <!--</el-form-item>-->
             <el-form-item label="发酵罐：">
               <el-select v-model="plantList.inPotNoID" filterable >
                 <el-option label="请选择"  value=""></el-option>
                 <el-option v-for="sole in inPotList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="制曲日期：" style="width: 400px" label-width="85px">
+              <el-row style="width: 300px">
+                <el-col :span="12">
+                  <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                  <span>-</span>
+                </el-col>
+                <el-col :span="12">
+                  <el-date-picker v-model="plantList.commitDateTwo" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </el-col>
@@ -97,7 +108,8 @@ export default {
         workShop: '',
         houseNoID: '',
         inPotNoID: '',
-        inKjmDate: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0

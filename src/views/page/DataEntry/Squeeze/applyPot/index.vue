@@ -56,6 +56,11 @@
                    {{scope.row.applyNo}}
                 </template>
               </el-table-column>
+              <el-table-column label="状态" width="80">
+                <template slot-scope="scope">
+                  {{scope.row.confirmFlag === '1'? '已确认' : scope.row.status === 'saved'? '已保存' : scope.row.status === 'submit' ? '已提交' : ''}}
+                </template>
+              </el-table-column>
               <el-table-column label="物料" :show-overflow-tooltip="true"  width="180">
                 <template slot-scope="scope">
                   {{scope.row.materialCode + ' ' + scope.row.materialName}}
@@ -122,11 +127,6 @@
               <el-table-column label="申请编码" width="140">
                 <template slot-scope="scope">
                   {{scope.row.applyNo}}
-                </template>
-              </el-table-column>
-              <el-table-column label="状态" width="80">
-                <template slot-scope="scope">
-                  {{scope.row.confirmFlag === '1'? '已确认' : scope.row.stauts === 'saved'? '已保存' : scope.row.stauts === 'submit' ? '已提交' : ''}}
                 </template>
               </el-table-column>
               <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
@@ -249,6 +249,9 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
+        if (!this.params.factoryId) {
+          this.params.factoryId = res.data.typeList[0].deptId
+        }
       } else {
         this.$message.error(res.data.msg)
       }
