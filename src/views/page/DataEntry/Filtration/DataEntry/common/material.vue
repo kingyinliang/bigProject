@@ -125,6 +125,7 @@ export default {
       this.receive = {
         id: '',
         uid: this.uuid(),
+        receiveAmount: '',
         unit: '方',
         status: 'saved',
         delFlag: '0',
@@ -145,7 +146,7 @@ export default {
             currentRecord = this.dataList.filter(data => data.id === this.receive.id)
           }
           if (currentRecord && currentRecord.length > 0) {
-            Object.assign(currentRecord[0], this.receive)
+            Object.assign(currentRecord[0], JSON.parse(JSON.stringify(this.receive)))
           } else {
             this.dataList.push(this.receive)
           }
