@@ -257,7 +257,7 @@ export default {
         this.$message.error('请勾选罐号')
         return false
       } else {
-        if (this.formHeader.AMOUNT < (this.formHeader.isNum + this.multipleSelection.length)) {
+        if (this.formHeader.AMOUNT < (this.multipleSelection.length)) {
           this.$message.error('勾选开罐数量不能大于申请数')
           return false
         }

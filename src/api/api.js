@@ -1077,7 +1077,9 @@ export const KJM_API = {
   DOULOOKZHUSAVE_API: HOST + '/kjm/guard/tech/update', // 工艺 主表
   DOULOOKKANQUSAVE_API: HOST + '/kjm/guard/record/update', // 工艺 看曲记录
   DOULOOKGANGUANSAVE_API: HOST + '/kjm/guard/feel/update', // 工艺 感官
-  DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态
+  DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态,
+  IOT_LIST: HOST + '/iot/tu/list',
+  IOT_TIME_INFO: HOST + '/iot/tu/timeList',
 
   /**
    * @property {string} KJMAKINGHEAD_API 车间审核表头
