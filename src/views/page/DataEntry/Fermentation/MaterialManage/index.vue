@@ -30,6 +30,11 @@
             <el-option label="审核不通过"  value="noPass"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="订单类型：">
+          <el-select v-model="formHeader.orderType" placeholder="请选择" style="width: 160px">
+            <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="订单编号：">
           <el-select v-model="formHeader.ferOrderNos" placeholder="请选择" multiple filterable default-first-op style="width: 160px">
             <el-option v-for="(sole, index) in OrderList" :key="index" :value="sole.ferOrderNo" :label="sole.ferOrderNo"></el-option>
@@ -131,7 +136,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -149,7 +154,8 @@ export default {
       multipleSelection: [],
       currPage: 1,
       pageSize: 20,
-      totalCount: 0
+      totalCount: 0,
+      orderTypeList: []
     }
   },
   watch: {
@@ -157,6 +163,7 @@ export default {
       this.formHeader.workShop = ''
       this.formHeader.ferMaterialCode = ''
       this.Getdeptbyid(n)
+      this.getDictList(n)
       // this.GetMaterial(n)
     },
     'formHeader.workShop' (n, o) {
@@ -178,6 +185,19 @@ export default {
     }
   },
   methods: {
+    getDictList (factory) {
+      // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
+      let params = {types: ['order_type'], factory}
+      this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.orderTypeList = data.dicList[0].prolist
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
+    },
     // 查询
     GetDataList () {
       this.$http(`${FERMENTATION_API.SHOOT_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
