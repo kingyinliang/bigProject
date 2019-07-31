@@ -32,6 +32,7 @@
         </el-form-item>
         <el-form-item label="订单类型：">
           <el-select v-model="formHeader.orderType" placeholder="请选择" style="width: 160px">
+            <el-option label="请选择"  value=""></el-option>
             <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
           </el-select>
         </el-form-item>
