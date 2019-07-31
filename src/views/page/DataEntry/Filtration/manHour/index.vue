@@ -43,12 +43,12 @@
         </el-row>
         <el-row style="text-align:right" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="GetTimeList" v-if="isAuth('ste:timeSheet:list')">查询</el-button>
+            <el-button type="primary" size="small" @click="GetTimeList" v-if="isAuth('filter:timeSheet:list')">查询</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="searchCard && headList.status !== 'submit' && headList.status !== 'checked' && isAuth('ste:timeSheet:update')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact && searchCard" style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('ste:timeSheet:update')">保存</el-button>
-            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('ste:timeSheet:update')">提交</el-button>
+            <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('filter:timeSheet:update')">保存</el-button>
+            <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('filter:timeSheet:update')">提交</el-button>
           </template>
         </el-row>
         <div class="toggleSearchBottom">
