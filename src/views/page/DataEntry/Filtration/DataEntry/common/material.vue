@@ -4,7 +4,7 @@
       <div style="width: 158px" class="inStorage_card_left">
         <p>半成品罐</p>
         <div style="text-align: center;padding: 0 20px"><img src="@/assets/img/ferPot.png" alt="" style="width: 92px;height: 190px"></div>
-        <el-button type="text" class="button" size="small" :disabled="!isRedact" @click="ShowDialog()">入罐</el-button>
+        <el-button type="text" class="button" size="small" :disabled="!isRedact" @click="ShowDialog()">领用</el-button>
       </div>
       <div style="flex: 1">
         <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="updateRow" :row-class-name="rowDelFlag">
