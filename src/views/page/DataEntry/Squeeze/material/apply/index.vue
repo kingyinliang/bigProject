@@ -88,7 +88,7 @@
               </div> -->
             </el-row>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord">
+              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" :row-class-name="rowDelFlag" @row-dblclick="modifyRecord">
                 <el-table-column type="index" label="序号" width="55"></el-table-column>
                 <el-table-column label="布浆线" :show-overflow-tooltip="true" >
                   <template slot-scope="scope" width="120">
@@ -153,6 +153,11 @@
                 <el-table-column label="操作人" width='140'>
                   <template slot-scope="scope">
                     {{scope.row.changer}}
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width='50' fixed="right">
+                  <template slot-scope="scope">
+                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -407,6 +412,17 @@ export default class Index extends Vue {
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
+  delRow (row) {
+    row.delFlag = '1'
+  }
+  rowDelFlag ({row, rowIndex}) {
+    if (row.delFlag === '1') {
+      return 'rowDel'
+    } else {
+      return ''
+    }
+  }
+
   get mainTabs () {
     return this.$store.state.common.mainTabs
   }
@@ -570,6 +586,7 @@ export default class Index extends Vue {
         changed: this.endForm.changed,
         changer: this.endForm.changer})
     }
+    this.save()
     this.dialogFormVisible2 = false
   }
   startValidate () {
