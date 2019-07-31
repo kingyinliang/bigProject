@@ -61,7 +61,7 @@ export default {
       })
     },
     test () {
-      this.$http(`${KJM_API.IOT_LIST}`, 'POST', {}).then(({data}) => {
+      this.$http(`${KJM_API.IOT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.timeInfo = data.timeList
           this.titleList = []
@@ -87,7 +87,7 @@ export default {
     initChartLine () {
       var option = {
         'title': {
-          'text': '看区折线图堆叠',
+          'text': '看区折线图',
           'subtext': '制曲时间：' + this.timeInfo[0] + 'H ' + this.timeInfo[1] + 'M ' + this.timeInfo[2] + 'S',
           'subtextStyle': { // 副标题内容的样式
             color: '#4EAAFF', // 绿色
@@ -142,22 +142,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .mod-demo-echarts {
-    > .el-alert {
-      margin-bottom: 10px;
-    }
-    > .el-row {
-      margin-top: -10px;
-      margin-bottom: -10px;
-      .el-col {
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-    }
-    .chart-box {
-      min-height: 400px;
-    }
-  }
-</style>
