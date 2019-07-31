@@ -80,7 +80,7 @@
 
 <script>
 import {BASICDATA_API, FILTRATION_API} from '@/api/api'
-import {dateFormat} from '@/net/validate'
+import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
   data () {
@@ -91,6 +91,7 @@ export default {
       PotList: [],
       InStorageDate: [],
       DataAudit: [],
+      instorageState: '',
       dataRule: {
         holderId: [
           { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
@@ -123,10 +124,13 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InStorageDate = data.list
-          this.DataAudit = data.vList
+          this.instorageState = GetStatus(this.InStorageDate)
+          this.DataAudit = data.vrlist
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setInstorageState', this.instorageState)
       })
     },
     // 入库修改
