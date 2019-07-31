@@ -37,12 +37,12 @@
       </el-row>
       <el-row style="text-align:right" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="GetList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('mid:prsOrder:orderList')">查询</el-button>
+          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('mid:prsOrder:updateOrder')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('mid:prsOrder:updateOrder')">保存</el-button>
+          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('mid:prsOrder:updateOrder')">提交</el-button>
         </template>
       </el-row>
       <div class="toggleSearchBottom">
@@ -163,7 +163,7 @@ export default {
           this.orderFumet = data.orderList
           this.orderAudit = data.orderAudit
           this.fumet = data.orderList
-          if (data.orderList) {
+          if (data.orderList.length !== 0) {
             this.formHeader.changed = data.orderList[0].changed
             this.formHeader.changer = data.orderList[0].changer
           }
