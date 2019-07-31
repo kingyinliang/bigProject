@@ -142,3 +142,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .mod-demo-echarts {
+    .chart-box {
+      min-height: 400px;
+    }
+  }
+</style>
