@@ -484,6 +484,7 @@ export default class Index extends Vue {
           changer: this.modifyForm.changer
         })
       }
+      this.save()
       this.dialogFormVisible3 = false
     }
   }
