@@ -33,7 +33,7 @@
     </el-card>
     <el-dialog width="400px" title="入罐开始" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="addIn()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
-        <el-form-item label="半成品罐号：" prop="holderId">
+        <el-form-item label="成品罐号：" prop="holderId">
           <el-select v-model="dataForm.holderId" filterable placeholder="请选择" @change="PotinTankAmount" style="width: 100%">
             <el-option :label="item.holderName" v-for="(item, index) in PotList" :key="index" :value="item.holderId"></el-option>
           </el-select>
@@ -80,7 +80,7 @@
 
 <script>
 import {BASICDATA_API, FILTRATION_API} from '@/api/api'
-import {dateFormat} from '@/net/validate'
+import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
   data () {
@@ -91,6 +91,7 @@ export default {
       PotList: [],
       InStorageDate: [],
       DataAudit: [],
+      instorageState: '',
       dataRule: {
         holderId: [
           { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
@@ -123,10 +124,13 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InStorageDate = data.list
-          this.DataAudit = data.vList
+          this.instorageState = GetStatus(this.InStorageDate)
+          this.DataAudit = data.vrlist
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setInstorageState', this.instorageState)
       })
     },
     // 入库修改

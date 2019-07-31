@@ -795,12 +795,18 @@ export default class Index extends Vue {
     //     this.$message.success('提交失败')
     //   }
     // })
-    let that = this
-    this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
-      that.$message.success(result.msg)
-      that.getOrderList()
-    }).catch((result : { code: number, msg: string }) => {
-      that.$message.error(result.msg)
+    this.$confirm('确认提交, 是否继续?', '提交', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      let that = this
+      this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
+        that.$message.success(result.msg)
+        that.getOrderList()
+      }).catch((result : { code: number, msg: string }) => {
+        that.$message.error(result.msg)
+      })
     })
   }
   @Watch('params', {deep: true})

@@ -83,9 +83,11 @@
         </el-tab-pane>
         <el-tab-pane name="5">
           <span slot="label" class="spanview">
-            <el-button>生产入库</el-button>
+            <el-tooltip class="item" effect="dark" :content="instorageState === 'noPass'? '不通过':instorageState === 'saved'? '已保存':instorageState === 'submit' ? '已提交' : instorageState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': instorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
+            </el-tooltip>
           </span>
-          <in-storage ref="instorage" :isRedact="isRedact" :formHeader="formHeader"></in-storage>
+          <in-storage ref="instorage" :isRedact="isRedact" :formHeader="formHeader" @setInstorageState="setInstorageState"></in-storage>
         </el-tab-pane>
         <el-tab-pane name="6">
           <span slot="label" class="spanview">
@@ -114,6 +116,7 @@ export default {
       formHeader: {},
       isRedact: false,
       orderStatus: '',
+      instorageState: '',
       activeName: '1'
     }
   },
@@ -122,6 +125,10 @@ export default {
     this.GetOrder()
   },
   methods: {
+    setInstorageState (status) {
+      this.instorageState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.activeName) - 1])
+    },
     GetOrder () {
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', {
         orderNo: this.$store.state.common.orderNo
