@@ -616,10 +616,15 @@ export default class Index extends Vue {
       if (!this.validateTime()) {
         return
       }
-      Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
-        that.$message.success('提交成功')
-        that.getList()
-      })
+      if (this.realInAmount === 0 || !this.realInAmount) {
+        that.$message.error('请确认实际入库数')
+        return false
+      } else {
+        Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
+          that.$message.success('提交成功')
+          that.getList()
+        })
+      }
     })
   }
 
