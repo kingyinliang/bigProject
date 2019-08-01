@@ -178,6 +178,7 @@ export default {
   mounted () {
     this.Getdeptcode()
     this.Getdeptbyid(this.formHeader.factory)
+    this.getDictList(this.formHeader.factory)
     // this.GetMaterial(this.formHeader.factory)
     this.HolderList(this.formHeader.workShop)
     this.GetOrderList(this.formHeader.workShop)

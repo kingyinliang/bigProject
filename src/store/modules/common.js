@@ -162,6 +162,7 @@ export default {
         ferOrderNos: [],
         holderIds: [],
         approveStatus: '',
+        orderType: '',
         productDateOne: '',
         productDateTwo: ''
       },
