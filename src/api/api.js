@@ -1507,6 +1507,7 @@ export const FILTRATION_API = {
    */
   FILTER_EQUWORKINGHOURS_LIST: HOST + '/filter/machine/machineList',
   FILTER_EQUWORKINGHOURS_SAVE: HOST + '/filter/machine/machineUpdate',
+  FILTER_EQUWORKINGHOURS_SUBMITONE: HOST + '/filter/machine/machineSubmit',
   FILTER_EQUWORKINGHOURS_SUBMIT: HOST + '/filter/timeSheet/enterPageSubmit',
   /**
    *  物料领用

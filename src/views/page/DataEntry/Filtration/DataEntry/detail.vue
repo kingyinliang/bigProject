@@ -56,18 +56,22 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
-      <el-tabs ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs">
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
-            <el-button>设备工时</el-button>
+            <el-tooltip class="item" effect="dark" :content="EquState === 'noPass'? '不通过':EquState === 'saved'? '已保存':EquState === 'submit' ? '已提交' : EquState === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': EquState === 'noPass'? 'red' : ''}">设备工时</el-button>
+            </el-tooltip>
           </span>
-          <Equ-workinghours ref="equworkinghours" :isRedact="isRedact"></Equ-workinghours>
+          <Equ-workinghours ref="equworkinghours" :isRedact="isRedact" @setEquState="setEquState"></Equ-workinghours>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">
-            <el-button>工艺控制</el-button>
+            <el-tooltip class="item" effect="dark" :content="caftStatus === 'noPass'? '不通过':caftStatus === 'saved'? '已保存':caftStatus === 'submit' ? '已提交' : caftStatus === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': caftStatus === 'noPass'? 'red' : ''}">工艺控制</el-button>
+            </el-tooltip>
           </span>
-          <Craft ref="craft" :isRedact="isRedact"></Craft>
+          <Craft ref="craft" :isRedact="isRedact" @setCraftStatus="setCraftStatus"></Craft>
         </el-tab-pane>
         <el-tab-pane name="3">
           <span slot="label" class="spanview">
@@ -77,9 +81,11 @@
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
-            <el-button>物料领用</el-button>
+            <el-tooltip class="item" effect="dark" :content="materialStatus === 'noPass'? '不通过':materialStatus === 'saved'? '已保存':materialStatus === 'submit' ? '已提交' : materialStatus === 'checked'? '通过':'未录入'" placement="top-start">
+              <el-button :style="{'color': materialStatus === 'noPass'? 'red' : ''}">物料领用</el-button>
+            </el-tooltip>
           </span>
-          <Material ref="material" :isRedact="isRedact"></Material>
+          <Material ref="material" :isRedact="isRedact" @setMaterialStatus="setMaterialStatus"></Material>
         </el-tab-pane>
         <el-tab-pane name="5">
           <span slot="label" class="spanview">
@@ -117,6 +123,9 @@ export default {
       isRedact: false,
       orderStatus: '',
       instorageState: '',
+      EquState: '',
+      caftStatus: '',
+      materialStatus: '',
       activeName: '1'
     }
   },
@@ -124,10 +133,30 @@ export default {
     headanimation(this.$)
     this.GetOrder()
   },
+  watch: {
+    'instorageState' () {
+      console.log('status:' + this.instorageState)
+    }
+  },
   methods: {
+    tabClick (val) {
+      this.$refs.tabs.setCurrentName(val.name)
+    },
     setInstorageState (status) {
       this.instorageState = status
-      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.activeName) - 1])
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    setEquState (status) {
+      this.EquState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    setCraftStatus (status) {
+      this.caftStatus = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    setMaterialStatus (status) {
+      this.materialStatus = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     GetOrder () {
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', {
@@ -234,8 +263,11 @@ export default {
         let inSubmit = new Promise((resolve, reject) => {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
+        let net203 = new Promise((resolve, reject) => {
+          that.$refs.equworkinghours.SubmitEquWorking(str, resolve, reject)
+        })
         Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
-          Promise.all([net201, net202]).then(function () {
+          Promise.all([net201, net202, net203]).then(function () {
             that.$message.success('提交成功')
             that.GetOrder()
             that.isRedact = false
