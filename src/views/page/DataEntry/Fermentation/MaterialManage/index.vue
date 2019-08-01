@@ -334,6 +334,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          if (!this.formHeader.factory && data.typeList.length > 0) {
+            this.formHeader.factory = data.typeList[0].deptId
+          }
         } else {
           this.$message.error(data.msg)
         }

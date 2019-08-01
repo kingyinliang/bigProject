@@ -52,7 +52,11 @@ export default {
   methods: {
     // 获取工时列表
     GetTimeList (formHeader, resolve, reject) {
-      this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', formHeader).then(({data}) => {
+      this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', {
+        factory: formHeader.factory,
+        productDate: formHeader.productDate,
+        workShop: formHeader.workShop
+      }).then(({data}) => {
         if (data.code === 0) {
           this.timeDate = data.timeList
           this.timeS = GetStatus(data.timeList)
