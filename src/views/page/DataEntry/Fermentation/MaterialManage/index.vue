@@ -163,6 +163,7 @@ export default {
     'formHeader.factory' (n, o) {
       this.formHeader.workShop = ''
       this.formHeader.ferMaterialCode = ''
+      this.formHeader.orderType = ''
       this.Getdeptbyid(n)
       this.getDictList(n)
       // this.GetMaterial(n)
@@ -188,7 +189,6 @@ export default {
   },
   methods: {
     getDictList (factory) {
-      this.formHeader.orderType = ''
       // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
       let params = {types: ['order_type'], factory}
       this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
