@@ -516,6 +516,7 @@ export default class Index extends Vue {
       let resultData = {
         // "id": "1",
         // "status": "saved",
+        acqDate: this.params.applyDate + ' 00:00:00',
         recordId: uuid,
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
@@ -531,7 +532,7 @@ export default class Index extends Vue {
         remainAmountUnit: this.startForm.remainAmountUnit,
         startAmount: this.startForm.startAmount,
         endAmount: null,
-        amount: null,
+        amount: 0,
         storageAmount: this.startForm.storageAmount,
         // operated: null,
         // operator: null,
@@ -761,7 +762,7 @@ export default class Index extends Vue {
       factory: this.params.factoryId,
       workShop: this.params.workshopId,
       productLine: this.params.productLineId,
-      created: this.params.applyDate
+      acqDate: this.params.applyDate
     }
     // let params = {
     //   factory: '1',
