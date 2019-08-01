@@ -622,6 +622,10 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
+        if (!this.params.factoryId && res.data.typeList.length > 0) {
+          this.params.factoryId = res.data.typeList[0].deptId
+          this.params.factoryName = res.data.typeList[0].deptName
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -634,6 +638,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
+          if (!this.params.workshopId && res.data.typeList.length > 0) {
+            this.params.workshopId = res.data.typeList[0].deptId
+            this.params.workshopName = res.data.typeList[0].deptName
+          }
         } else {
           this.$message.error(res.data.msg)
         }
@@ -647,6 +655,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
+          if (!this.params.productLineId && data.childList.length > 0) {
+            this.params.productLineId = data.childList[0].deptId
+            this.params.productLineName = data.childList[0].deptName
+          }
         } else {
           this.$message.error(data.msg)
         }

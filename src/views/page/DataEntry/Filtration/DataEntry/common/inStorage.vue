@@ -21,7 +21,7 @@
           <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
+              <el-button type="danger" circle icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -156,6 +156,12 @@ export default {
     },
     // 添加和修改确认
     addIn () {
+      if (this.dataForm.isFull === '1') {
+        if (!this.dataForm.fullDate) {
+          this.$message.error('满罐时间必填')
+          return
+        }
+      }
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName

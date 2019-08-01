@@ -116,7 +116,11 @@ export default {
   methods: {
     // 获取酱醪领用
     getMaterialList (formHeader, resolve, reject) {
-      this.$http(`${SQU_API.SUM_MATERIAL_LIST_API}`, 'POST', formHeader).then(({data}) => {
+      this.$http(`${SQU_API.SUM_MATERIAL_LIST_API}`, 'POST', {
+        factory: formHeader.factory,
+        productDate: formHeader.productDate,
+        workShop: formHeader.workShop
+      }).then(({data}) => {
         if (data.code === 0) {
           this.materialDate = data.maList
           this.MaterialAudit = data.MaterialAudit
