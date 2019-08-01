@@ -21,7 +21,7 @@
           <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
+              <el-button type="danger" circle icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -33,7 +33,7 @@
     </el-card>
     <el-dialog width="400px" title="入罐开始" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="addIn()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
-        <el-form-item label="半成品罐号：" prop="holderId">
+        <el-form-item label="成品罐号：" prop="holderId">
           <el-select v-model="dataForm.holderId" filterable placeholder="请选择" @change="PotinTankAmount" style="width: 100%">
             <el-option :label="item.holderName" v-for="(item, index) in PotList" :key="index" :value="item.holderId"></el-option>
           </el-select>
@@ -80,7 +80,7 @@
 
 <script>
 import {BASICDATA_API, FILTRATION_API} from '@/api/api'
-import {dateFormat} from '@/net/validate'
+import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
   data () {
@@ -91,6 +91,7 @@ export default {
       PotList: [],
       InStorageDate: [],
       DataAudit: [],
+      instorageState: '',
       dataRule: {
         holderId: [
           { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
@@ -123,10 +124,13 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InStorageDate = data.list
-          this.DataAudit = data.vList
+          this.instorageState = GetStatus(this.InStorageDate)
+          this.DataAudit = data.vrlist
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setInstorageState', this.instorageState)
       })
     },
     // 入库修改
@@ -152,6 +156,12 @@ export default {
     },
     // 添加和修改确认
     addIn () {
+      if (this.dataForm.isFull === '1') {
+        if (!this.dataForm.fullDate) {
+          this.$message.error('满罐时间必填')
+          return
+        }
+      }
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName

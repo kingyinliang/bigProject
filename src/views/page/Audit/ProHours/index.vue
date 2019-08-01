@@ -374,7 +374,7 @@ export default {
           if (data.code === 0) {
             this.visibleRe = false
             this.ReText = ''
-            this.this.reData = {}
+            this.reData = {}
             this.GetAuditList()
             this.$message.success('操作成功')
           } else {

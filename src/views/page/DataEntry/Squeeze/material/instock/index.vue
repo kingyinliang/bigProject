@@ -74,7 +74,7 @@
           </el-col>
           <el-col :span="19">
             <el-row  style="margin-top:20px">
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
+              <el-table header-row-class-name="tableHead" :row-class-name="rowDelFlag" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord" ref='table'>
                 <el-table-column label="状态" width='95'>
                   <template slot-scope="scope">
                     <span :style="{'color': scope.row.status === 'noPass'? 'red' : scope.row.status === 'checked'? '#67C23A' : ''}">{{scope.row.status === 'noPass'? '审核不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':scope.row.status === '已同步' ? '未录入' : '未录入'}}</span>
@@ -143,6 +143,11 @@
                 <el-table-column label="备注" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
                     {{scope.row.remark}}
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width='50' fixed="right">
+                  <template slot-scope="scope">
+                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -370,6 +375,16 @@ export default class Index extends Vue {
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
+  }
+  delRow (row) {
+    row.delFlag = '1'
+  }
+  rowDelFlag ({row, rowIndex}) {
+    if (row.delFlag === '1') {
+      return 'rowDel'
+    } else {
+      return ''
+    }
   }
   get mainTabs () {
     return this.$store.state.common.mainTabs
@@ -607,6 +622,10 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
+        if (!this.params.factoryId && res.data.typeList.length > 0) {
+          this.params.factoryId = res.data.typeList[0].deptId
+          this.params.factoryName = res.data.typeList[0].deptName
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -619,6 +638,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
+          if (!this.params.workshopId && res.data.typeList.length > 0) {
+            this.params.workshopId = res.data.typeList[0].deptId
+            this.params.workshopName = res.data.typeList[0].deptName
+          }
         } else {
           this.$message.error(res.data.msg)
         }
@@ -632,6 +655,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
+          if (!this.params.productLineId && data.childList.length > 0) {
+            this.params.productLineId = data.childList[0].deptId
+            this.params.productLineName = data.childList[0].deptName
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -780,12 +807,18 @@ export default class Index extends Vue {
     //     this.$message.success('提交失败')
     //   }
     // })
-    let that = this
-    this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
-      that.$message.success(result.msg)
-      that.getOrderList()
-    }).catch((result : { code: number, msg: string }) => {
-      that.$message.error(result.msg)
+    this.$confirm('确认提交, 是否继续?', '提交', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      let that = this
+      this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
+        that.$message.success(result.msg)
+        that.getOrderList()
+      }).catch((result : { code: number, msg: string }) => {
+        that.$message.error(result.msg)
+      })
     })
   }
   @Watch('params', {deep: true})

@@ -145,6 +145,7 @@ export default {
       holderList: [],
       // 订单号多选
       orderList: [],
+      orderType: '',
       // 状态
       status: ''
     },

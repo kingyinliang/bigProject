@@ -4,7 +4,7 @@
       <div style="width: 158px" class="inStorage_card_left">
         <p>半成品罐</p>
         <div style="text-align: center;padding: 0 20px"><img src="@/assets/img/ferPot.png" alt="" style="width: 92px;height: 190px"></div>
-        <el-button type="text" class="button" size="small" :disabled="!isRedact" @click="ShowDialog()">入罐</el-button>
+        <el-button type="text" class="button" size="small" :disabled="!isRedact" @click="ShowDialog()">领用</el-button>
       </div>
       <div style="flex: 1">
         <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="updateRow" :row-class-name="rowDelFlag">
@@ -31,11 +31,11 @@
     <el-card style="margin-top: 25px">
       <audit-log :tableData="readAudit"></audit-log>
     </el-card>
-    <el-dialog :visible.sync="dialogVisible" width="450px" custom-class='dialog__class'>
+    <el-dialog :visible.sync="dialogVisible" :close-on-click-modal="false" width="450px" custom-class='dialog__class' @keyup.enter.native="SaveDialog('receive')">
       <div slot="title" style="line-hight:59px">领用</div>
       <el-form :model="receive" size="small" label-width="160px" :rules="receiveRules" ref="receive">
         <el-form-item label="半成品罐号" prop="holderId">
-          <el-select v-model="receive.holderId" filterable>
+          <el-select v-model="receive.holderId" filterable ref="mySelect">
             <el-option v-for="(item, index) in holderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
         </el-form-item>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { dateFormat } from '@/net/validate'
+import { dateFormat, GetStatus } from '@/net/validate'
 import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'material',
@@ -107,9 +107,12 @@ export default {
         if (data.code === 0) {
           this.dataList = data.list
           this.readAudit = data.verify
+          this.materialStatus = GetStatus(data.list)
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setMaterialStatus', this.materialStatus)
       })
     },
     GetHolderList (params) {
@@ -125,6 +128,7 @@ export default {
       this.receive = {
         id: '',
         uid: this.uuid(),
+        receiveAmount: '',
         unit: '方',
         status: 'saved',
         delFlag: '0',
@@ -134,6 +138,7 @@ export default {
       this.dialogVisible = true
     },
     SaveDialog (formName) {
+      this.$refs.mySelect.handleClose()
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let currentRecord = []
@@ -145,7 +150,7 @@ export default {
             currentRecord = this.dataList.filter(data => data.id === this.receive.id)
           }
           if (currentRecord && currentRecord.length > 0) {
-            Object.assign(currentRecord[0], this.receive)
+            Object.assign(currentRecord[0], JSON.parse(JSON.stringify(this.receive)))
           } else {
             this.dataList.push(this.receive)
           }
@@ -208,7 +213,13 @@ export default {
       })
     },
     DelRow (row) {
-      row.delFlag = 1
+      this.$confirm('此操作将删除这条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = 1
+      })
     },
     rowDelFlag ({row, rowIndex}) {
       if (row.delFlag === 1) {

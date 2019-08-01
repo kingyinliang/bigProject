@@ -95,10 +95,22 @@ export default {
   },
   methods: {
     GetOrderList () {
+      if (this.formHeader.factory === '') {
+        this.$message.error('请选择工厂')
+        return
+      }
+      if (this.formHeader.workShop === '') {
+        this.$message.error('请选择车间')
+        return
+      }
+      if (this.formHeader.productDate === '') {
+        this.$message.error('请选择生产时间')
+        return
+      }
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataList = orderList(data.list)
-          console.log(this.dataList)
+          console.log(this.dataList[0].img.length)
         } else {
           this.$message.error(data.msg)
         }

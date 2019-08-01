@@ -4,7 +4,7 @@
       <el-card class="searchCard newCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="50px">
+            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="80px">
               <el-form-item label="工厂：" label-width="80px">
                 <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
                   <el-option label="请选择" value=""></el-option>
@@ -17,7 +17,7 @@
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="罐号：" >
+              <el-form-item label="罐号：" label-width="80px">
                 <el-select v-model="params.holderList" class="selectwpx" style="width: 140px" filterable multiple @change="changeOptions('pot')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
@@ -47,6 +47,12 @@
                   <el-option label="已提交" value="submit"></el-option>
                   <el-option label="审核不通过" value="noPass"></el-option>
                   <el-option label="已审核" value="checked"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="订单类型：" label-width="80px">
+                <el-select v-model="params.orderType" placeholder="请选择" style="width: 140px" @change="changeOptions('orderType')">
+                  <el-option label="请选择"  value=""></el-option>
+                  <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -192,7 +198,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {headanimation} from '@/net/validate'
 import AuditLog from '@/views/components/AuditLog.vue'
@@ -209,6 +215,7 @@ export default class Index extends Vue {
   workshopList = []
   potList = []
   orderDataList = []
+  orderTypeList = []
   materialList = []
   dataList = []
   selectedList = []
@@ -261,6 +268,10 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
+        if (!this.params.factoryId && res.data.typeList.length > 0) {
+          this.params.factoryId = res.data.typeList[0].deptId
+          this.params.factoryName = res.data.typeList[0].deptName
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -278,6 +289,20 @@ export default class Index extends Vue {
         }
       })
     }
+  }
+  getDictList (factory) {
+    this.params.orderType = ''
+    // CM_material 发料物料 CM_material_prd 生产物料 PW_FEVOR  生产调度员
+    let params = {types: ['order_type'], factory}
+    Vue.prototype.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+      if (data.code === 0) {
+        this.orderTypeList = data.dicList[0].prolist
+      } else {
+        this.$message.error(data.msg)
+      }
+    }).catch((error) => {
+      console.log('catch data::', error)
+    })
   }
   // 发酵罐
   getFermentPot (fid: string, wid: string) {
@@ -354,6 +379,7 @@ export default class Index extends Vue {
       orderList: this.params.orderList,
       holderList: this.params.holderList,
       status: this.params.status,
+      orderType: this.params.orderType,
       pageSize: this.pageSize + '',
       currPage: this.currPage + ''
     }
@@ -480,6 +506,7 @@ export default class Index extends Vue {
     this.getWorkshop(newVal)
     this.getFermentPot(newVal, this.params.workshopId)
     this.getOrderDataList(newVal, this.params.workshopId)
+    this.getDictList(newVal)
   }
   @Watch('params.workshopId')
   onWorkshopValue (newVal: string, oldVal: string) {

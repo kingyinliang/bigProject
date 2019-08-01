@@ -88,7 +88,7 @@
               </div> -->
             </el-row>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" @row-dblclick="modifyRecord">
+              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" :row-class-name="rowDelFlag" @row-dblclick="modifyRecord">
                 <el-table-column type="index" label="序号" width="55"></el-table-column>
                 <el-table-column label="布浆线" :show-overflow-tooltip="true" >
                   <template slot-scope="scope" width="120">
@@ -153,6 +153,11 @@
                 <el-table-column label="操作人" width='140'>
                   <template slot-scope="scope">
                     {{scope.row.changer}}
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width='50' fixed="right">
+                  <template slot-scope="scope">
+                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -407,6 +412,17 @@ export default class Index extends Vue {
   isAuth (key) {
     return Vue.prototype.isAuth(key)
   }
+  delRow (row) {
+    row.delFlag = '1'
+  }
+  rowDelFlag ({row, rowIndex}) {
+    if (row.delFlag === '1') {
+      return 'rowDel'
+    } else {
+      return ''
+    }
+  }
+
   get mainTabs () {
     return this.$store.state.common.mainTabs
   }
@@ -468,6 +484,7 @@ export default class Index extends Vue {
           changer: this.modifyForm.changer
         })
       }
+      this.save()
       this.dialogFormVisible3 = false
     }
   }
@@ -499,6 +516,7 @@ export default class Index extends Vue {
       let resultData = {
         // "id": "1",
         // "status": "saved",
+        acqDate: this.params.applyDate + ' 00:00:00',
         recordId: uuid,
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
@@ -514,7 +532,7 @@ export default class Index extends Vue {
         remainAmountUnit: this.startForm.remainAmountUnit,
         startAmount: this.startForm.startAmount,
         endAmount: null,
-        amount: null,
+        amount: 0,
         storageAmount: this.startForm.storageAmount,
         // operated: null,
         // operator: null,
@@ -570,6 +588,7 @@ export default class Index extends Vue {
         changed: this.endForm.changed,
         changer: this.endForm.changer})
     }
+    this.save()
     this.dialogFormVisible2 = false
   }
   startValidate () {
@@ -631,10 +650,10 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
-        // if (!this.params.factoryId && res.data.typeList.length > 0) {
-        //   this.params.factoryId = res.data.typeList[0].deptId
-        //   this.params.factoryName = res.data.typeList[0].deptName
-        // }
+        if (!this.params.factoryId && res.data.typeList.length > 0) {
+          this.params.factoryId = res.data.typeList[0].deptId
+          this.params.factoryName = res.data.typeList[0].deptName
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -647,10 +666,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '压榨'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
-          // if (!this.params.workshopId && res.data.typeList.length > 0) {
-          //   this.params.workshopId = res.data.typeList[0].deptId
-          //   this.params.workshopName = res.data.typeList[0].deptName
-          // }
+          if (!this.params.workshopId && res.data.typeList.length > 0) {
+            this.params.workshopId = res.data.typeList[0].deptId
+            this.params.workshopName = res.data.typeList[0].deptName
+          }
         } else {
           this.$message.error(res.data.msg)
         }
@@ -664,6 +683,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: wid, deptType: 'proLine'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.productlineList = data.childList
+          if (!this.params.productLineId && data.childList.length > 0) {
+            this.params.productLineId = data.childList[0].deptId
+            this.params.productLineName = data.childList[0].deptName
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -739,7 +762,7 @@ export default class Index extends Vue {
       factory: this.params.factoryId,
       workShop: this.params.workshopId,
       productLine: this.params.productLineId,
-      created: this.params.applyDate
+      acqDate: this.params.applyDate
     }
     // let params = {
     //   factory: '1',

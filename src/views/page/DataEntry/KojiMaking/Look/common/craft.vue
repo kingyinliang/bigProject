@@ -24,6 +24,10 @@
         <span class="iconfont">&#xe606;</span> 看曲记录<el-button type="text" class="readyshiftBtn" name="lookar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="lookarBox">
+        <iframe src="#/lookEcharts" style="width:100%; height:460px" name="iframe_a" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+        <!-- <iframe src="https://search-iot-m4krkhtzni6xjktkbymymhix5a.cn-north-1.es.amazonaws.com.cn/_plugin/kibana/app/kibana#/visualize/edit/e6382af0-adb4-11e9-8b6e-1f733cf01d7e?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A10000)%2Ctime%3A(from%3A'2019-07-23T14%3A52%3A42.616Z'%2Cmode%3Aabsolute%2Cto%3A'2019-07-26T14%3A12%3A20.186Z'))" style="width:100%;height:600px" name="iframe_a" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe> -->
+      </div>
+      <div style="margin-top:5px">
         <el-row style="line-height: 32px; margin-bottom:10px">
           <el-col :span="5">第（<el-input size="small" v-model="tech.guardProcess" style="width:80px; padding:0;" class="guard-form-input">{{tech.guardProcess}}</el-input>）套程序</el-col>
           <el-col :span="15">

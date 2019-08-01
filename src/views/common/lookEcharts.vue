@@ -1,60 +1,27 @@
 <template>
   <div class="mod-demo-echarts">
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <div id="J_chartLineBox" class="chart-box"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div id="J_chartLineBox" class="chart-box"></div>
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-import { BASICDATA_API } from '@/api/api'
-import { dateFormat } from '@/net/validate'
+import { KJM_API } from '@/api/api'
+// import { dateFormat } from '@/net/validate'
 export default {
   data () {
     return {
       chartLine: null,
       time: '',
-      dataListA: [
-        {
-          'name': '邮件营销',
-          'type': 'line',
-          'stack': '总量',
-          'data': [ 120, 132, 101, 134, 90, 230, 210 ]
-        },
-        {
-          'name': '联盟广告',
-          'type': 'line',
-          'stack': '总量',
-          'data': [ 220, 182, 191, 234, 290, 330, 310 ]
-        },
-        {
-          'name': '视频广告',
-          'type': 'line',
-          'stack': '总量',
-          'data': [ 150, 232, 201, 154, 190, 330, 410 ]
-        },
-        {
-          'name': '直接访问',
-          'type': 'line',
-          'stack': '总量',
-          'data': [ 320, 332, 301, 334, 390, 330, 320 ]
-        },
-        {
-          'name': '搜索引擎',
-          'type': 'line',
-          'stack': '总量',
-          'data': [ 820, 932, 901, 934, 1290, 1330, 1320 ]
-        }
-      ]
+      timeInfo: [],
+      titleList: [],
+      dataList: [],
+      dataTime: [ '周一', '周二', '周三', '周四', '周五', '周六', '周日' ]
     }
   },
   mounted () {
-    this.initChartLine()
+    // this.initChartLine()
+    this.testInit()
     this.test()
     this.autoPlay()
   },
@@ -65,37 +32,82 @@ export default {
     }
   },
   methods: {
-    test () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+    autoPlay () {
+      this.time = setInterval(() => {
+        this.test()
+      }, 10000)
+    },
+    testInit () {
+      this.$http(`${KJM_API.IOT_LIST}`, 'POST', {}).then(({data}) => {
         if (data.code === 0) {
-          console.log(dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'))
+          this.timeInfo = data.timeList
+          this.titleList = []
+          this.dataList = []
+          data.list.map((item) => {
+            this.dataTime = item.time
+            let itemA = {
+              name: item.name,
+              type: 'line',
+              // stack: '总量',
+              data: item.data
+            }
+            this.titleList.push(item.name)
+            this.dataList.push(itemA)
+          })
+          this.initChartLine()
         } else {
           this.$message.error(data.msg)
         }
       })
     },
-    autoPlay () {
-      this.time = setInterval(() => {
-        this.test()
-      }, 8000)
+    test () {
+      this.$http(`${KJM_API.IOT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.timeInfo = data.timeList
+          this.titleList = []
+          this.dataList = []
+          data.list.map((item) => {
+            this.dataTime = item.time
+            let itemA = {
+              name: item.name,
+              type: 'line',
+              // stack: '总量',
+              data: item.data
+            }
+            this.titleList.push(item.name)
+            this.dataList.push(itemA)
+          })
+          this.initChartLine()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 折线图
     initChartLine () {
       var option = {
         'title': {
-          'text': '看区折线图堆叠'
+          'text': '看区折线图',
+          'subtext': '制曲时间：' + this.timeInfo[0] + 'H ' + this.timeInfo[1] + 'M ' + this.timeInfo[2] + 'S',
+          'subtextStyle': { // 副标题内容的样式
+            color: '#4EAAFF', // 绿色
+            fontStyle: 'normal', // 主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+            fontWeight: 'lighter', // 可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+            fontFamily: 'san-serif', // 主题文字字体，默认微软雅黑
+            fontSize: 16 // 主题文字字体大小，默认为12px
+          }
         },
         'tooltip': {
-          'trigger': 'axis'
-          // 'axisPointer': {
-          //   'type': 'cross',
-          //   'label': {
-          //     'backgroundColor': '#6a7985'
-          //   }
-          // }
+          'trigger': 'axis',
+          'axisPointer': {
+            'type': 'cross',
+            'label': {
+              'backgroundColor': '#6a7985'
+            }
+          }
         },
         'legend': {
-          'data': [ '邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎' ]
+          'data': this.titleList
         },
         'grid': {
           'left': '3%',
@@ -111,12 +123,15 @@ export default {
         'xAxis': {
           'type': 'category',
           'boundaryGap': false,
-          'data': [ '周一', '周二', '周三', '周四', '周五', '周六', '周日' ]
+          'data': this.dataTime
         },
         'yAxis': {
-          'type': 'value'
+          'type': 'value',
+          axisLabel: {
+            formatter: '{value} °C'
+          }
         },
-        'series': this.dataListA
+        'series': this.dataList
       }
       this.chartLine = echarts.init(document.getElementById('J_chartLineBox'))
       this.chartLine.setOption(option)
@@ -130,17 +145,6 @@ export default {
 
 <style lang="scss">
   .mod-demo-echarts {
-    > .el-alert {
-      margin-bottom: 10px;
-    }
-    > .el-row {
-      margin-top: -10px;
-      margin-bottom: -10px;
-      .el-col {
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-    }
     .chart-box {
       min-height: 400px;
     }

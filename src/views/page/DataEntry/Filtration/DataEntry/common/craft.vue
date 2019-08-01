@@ -102,9 +102,9 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog :visible.sync="dialogVisible" width="450px" custom-class='dialog__class'>
+    <el-dialog :visible.sync="dialogVisible" :close-on-click-modal="false" width="450px" custom-class='dialog__class'>
       <div slot="title" style="line-hight:59px">{{this.techInfo.deviceName}}</div>
-      <el-form :model="techInfo" size="small" label-width="160px" :rules="techInforules" ref="techInfo">
+      <el-form :model="techInfo" size="small" label-width="160px" :rules="techInforules" ref="techInfo" @keyup.enter.native="SaveDialog('techInfo')">
         <el-form-item label="过滤前温度(℃)：" prop="filterBefTem">
           <el-input v-model="techInfo.filterBefTem" style="width:220px"></el-input>
         </el-form-item>
@@ -182,7 +182,8 @@ export default {
       filterAidMaterialList: [],
       filterAidModelList: [],
       filterAidVenderList: [],
-      soleStatus: false
+      soleStatus: false,
+      craftStatus: ''
     }
   },
   props: ['isRedact'],
@@ -203,6 +204,7 @@ export default {
             item.uid = item.id
           })
           if (this.techList.length > 0) {
+            this.craftStatus = this.techList[0].status
             if (this.techList[0].status === 'submit') {
               this.soleStatus = true
             }
@@ -210,6 +212,8 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setCraftStatus', this.craftStatus)
       })
       // 过滤机详细信息
       this.$http(`${FILTRATION_API.FILTER_CRAFT_MATERIALIST}`, 'POST').then(({data}) => {
@@ -237,6 +241,7 @@ export default {
         filterBefTem: '',
         filterEndPre: '',
         delFlag: '0',
+        status: '',
         materialCode: item.materialCode,
         materialName: item.materialName,
         materialUnit: item.materialUnit,
@@ -345,21 +350,30 @@ export default {
     },
     // 辅料删除
     DelMaterial (row) {
-      let sum = 0
-      for (let item of this.supMaterialList) {
-        if (row.filterMachineId === item.filterMachineId) {
-          sum = sum + 1
+      this.$confirm('此操作将删除这条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let sum = 0
+        for (let item of this.supMaterialList) {
+          if (row.filterMachineId === item.filterMachineId) {
+            sum = sum + 1
+          }
         }
-      }
-      if (sum > 1) {
-        this.supMaterialList.splice(this.supMaterialList.indexOf(row), 1)
-        return false
-      } else {
-        this.$message.error('最后一条禁止删除')
-        return false
-      }
+        if (sum > 1) {
+          this.supMaterialList.splice(this.supMaterialList.indexOf(row), 1)
+          return false
+        } else {
+          this.$message.error('最后一条禁止删除')
+          return false
+        }
+      })
     },
     SaveTech (resolve, reject) {
+      this.techList.map((item) => {
+        item.status = 'saved'
+      })
       this.$http(`${FILTRATION_API.FILTER_CRAFT_TECHSAVE}`, 'POST', this.techList).then(({data}) => {
         if (data.code === 0) {
         } else {
@@ -393,8 +407,14 @@ export default {
       })
     },
     DelRow (row) {
-      row.delFlag = 1
-      this.SupMaterDel(row)
+      this.$confirm('此操作将删除这条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = 1
+        this.SupMaterDel(row)
+      })
     },
     rowDelFlag ({row, rowIndex}) {
       if (row.delFlag === 1) {

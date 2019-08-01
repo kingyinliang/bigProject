@@ -49,7 +49,7 @@
     <el-card>
       <audit-log :tableData="recordList"></audit-log>
     </el-card>
-    <el-dialog :visible.sync="dialogVisible" width="400px" custom-class='dialog__class'>
+    <el-dialog :visible.sync="dialogVisible" width="400px" :close-on-click-modal="false" custom-class='dialog__class' @keyup.enter.native="SaveDialog('workInfo')">
       <div slot="title" style="line-hight:59px">{{this.workInfo.deviceName}}</div>
       <el-form :model="workInfo" size="small" label-width="110px" :rules="workInforules" ref="workInfo">
         <el-form-item label="工作内容：">{{this.workInfo.content}}</el-form-item>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { dateFormat } from '@/net/validate'
+import { dateFormat, GetStatus } from '@/net/validate'
 import { FILTRATION_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
@@ -91,7 +91,8 @@ export default {
         endTime: [
           { required: true, message: '请选择结束时间', trigger: 'change' }
         ]
-      }
+      },
+      equStatus: ''
     }
   },
   props: ['isRedact'],
@@ -102,10 +103,13 @@ export default {
         if (data.code === 0) {
           this.filterList = data.listInfo.filterList
           this.dataList = data.listInfo.machineList
+          this.equStatus = GetStatus(data.listInfo.machineList)
           this.recordList = data.listInfo.record
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setEquState', this.equStatus)
       })
     },
     Readyrules () {
@@ -171,7 +175,13 @@ export default {
       }
     },
     DelRow (row) {
-      row.delFlag = 1
+      this.$confirm('此操作将删除这条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = 1
+      })
     },
     rowDelFlag ({row, rowIndex}) {
       if (row.delFlag === 1) {
@@ -182,6 +192,20 @@ export default {
     },
     SaveEquWorking (resolve, reject) {
       this.$http(`${FILTRATION_API.FILTER_EQUWORKINGHOURS_SAVE}`, 'POST', this.dataList).then(({data}) => {
+        if (data.code === 0) {} else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    SubmitEquWorking (resolve, reject) {
+      this.$http(`${FILTRATION_API.FILTER_EQUWORKINGHOURS_SUBMITONE}`, 'POST', {'orderId': this.orderId}).then(({data}) => {
         if (data.code === 0) {} else {
           this.$message.error(data.msg)
         }
