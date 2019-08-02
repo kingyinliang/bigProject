@@ -67,6 +67,7 @@
               </el-tooltip>
             </span>
             <el-row>
+              <el-button type="primary" style="float: right" size="small" @click="GetTime">获取工时</el-button>
               <el-table header-row-class-name="tableHead" :data="workHourList"  border tooltip-effect="dark" >
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="工序" width="140">
@@ -361,6 +362,16 @@ export default class Index extends Vue {
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
+  }
+  GetTime () {
+    Vue.prototype.$http(`${KJM_API.GETKJMAKINGCHECKTIME_API}`, 'POST', [this.formHeader]).then(({data}) => {
+      if (data.code === 0) {
+        this.$message.success('成功')
+        this.getList()
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
   }
   getList () {
     // 全部页签页返回数据之后强制刷新tabs

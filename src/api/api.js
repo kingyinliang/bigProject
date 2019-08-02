@@ -1090,6 +1090,7 @@ export const KJM_API = {
    * @property {string} KJMAKINGCHECKTIME_API 车间审核工时列表
    */
   KJMAKINGCHECKTIME_API: HOST + '/sys/midTimeSheet/list',
+  GETKJMAKINGCHECKTIME_API: HOST + '/kjm/timeSheet/obtainKjmTime',
   /**
    * @property {string} KJMAKINGCHECKTIMEBACK_API 车间审核工时回退
    */

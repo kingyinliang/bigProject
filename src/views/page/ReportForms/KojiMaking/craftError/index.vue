@@ -22,14 +22,14 @@
                 <el-option v-for="sole in houseList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="制曲日期：">
-              <el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>
-            </el-form-item>
             <el-form-item label="发酵罐：">
               <el-select v-model="plantList.inPotNoID" filterable>
                 <el-option label="请选择" value=""></el-option>
                 <el-option v-for="sole in inPotList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="制曲日期：">
+              <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:150px"></el-date-picker>
             </el-form-item>
           </el-form>
         </el-col>
@@ -78,7 +78,8 @@ export default {
         workShop: '',
         houseNoID: '',
         inPotNoID: '',
-        inKjmDate: '',
+        commitDateOne: '',
+        commitDateTwo: '',
         currPage: 1,
         pageSize: 10,
         totalCount: 0
