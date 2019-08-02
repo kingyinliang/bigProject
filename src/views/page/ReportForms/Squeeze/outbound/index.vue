@@ -159,10 +159,10 @@ export default class Index extends Vue {
   }
   // button 权限
   isQueryAuth () {
-    return true
+    return Vue.prototype.isAuth('report:formh:prsMaterialList')
   }
   isExcelAuth () {
-    return true
+    return Vue.prototype.isAuth('report:formh:exportPrsMaterialList')
   }
   // 切换表头选项
   changeOptions (flag: string) {
