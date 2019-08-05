@@ -23,7 +23,7 @@
       </el-col>
       <el-col style="width: 340px">
         <el-row class="rowButton">
-          <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
+          <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right" v-if="isAuth('filter:order:list')">查询</el-button>
         </el-row>
       </el-col>
     </el-row>
@@ -39,7 +39,7 @@
               <div style="float: left;font-size: 14px;font-weight: normal;line-height: 60px">
                 <span class="points" :style="{'background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : item.orderStatus === 'submit'? '#1890ff' : item.orderStatus === 'saved'? '#1890ff' : '#7ED321'}"></span>订单状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
               </div>
-              <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white" v-if="isAuth('wht:order:list') || isAuth('sys:whtPwMaterial:list')">数据录入</el-button>
+              <el-button @click="go(item)" type="primary" size="small" style="float: right; margin-top: 14px;background-color: #1890FF;color: white" v-if="isAuth('filter:instorage:list')">数据录入</el-button>
             </div>
             <div class="normal_bottom">
               <el-form-item label="订单号：" class="width50b">

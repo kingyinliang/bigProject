@@ -13,8 +13,9 @@
           <el-table-column label="成品罐号" width="95" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="成品批次" width="95" prop="batch" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="入罐数量" width="90" prop="inAmount" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="满罐数量" width="90" prop="fullAmount" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="是否满罐" width="90" prop="isFull" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.isFull==='1'?'是':'否'}}</template></el-table-column>
+          <el-table-column label="满罐时间" width="90" prop="fullDate" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="罐内库存" width="80" prop="holderRemaining" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作时间" width="100" prop="changed" :show-overflow-tooltip="true"></el-table-column>
