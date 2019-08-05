@@ -5,7 +5,6 @@
         <el-form :model="plantList" size="small" class="marbottom" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
           <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
-              <el-option label="" value=""></el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
