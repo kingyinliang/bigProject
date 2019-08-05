@@ -234,7 +234,13 @@ export default {
     },
     // 删除
     delRow (row) {
-      row.delFlag = '1'
+      this.$confirm('此操作将删除这条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     updateRow (row) {
       if ((row.status === '' || row.status === 'saved' || row.status === 'noPass') && this.isRedact) {

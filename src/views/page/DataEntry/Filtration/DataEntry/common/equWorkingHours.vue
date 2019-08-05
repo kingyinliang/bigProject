@@ -41,7 +41,7 @@
         <el-table-column label="操作人" prop="changer" width="150" show-overflow-tooltip></el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="small" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="mini" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'"></el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -14,7 +14,7 @@
           <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="生产罐号：">
+      <el-form-item label="半成品罐：">
         <el-select v-model="formHeader.holderId" filterable>
           <el-option value=''>请选择</el-option>
           <el-option v-for="(item, index) in HolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
