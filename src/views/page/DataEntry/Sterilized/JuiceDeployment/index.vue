@@ -46,7 +46,11 @@
       <el-card>
         <el-table :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="ShowDetail" border header-row-class-name="tableHead">
           <el-table-column type="selection" width="35" :selectable="CheckBoxInit"></el-table-column>
-          <el-table-column label="状态" width="90" prop="status" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="状态" width="90" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <span :style="{'color' : scope.row.status === '审核不通过' ? 'red' : scope.row.status === '审核通过' ? '#7ED321' : ''}">{{scope.row.status}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="调配单号" prop="orderNo" width="130"></el-table-column>
           <el-table-column label="生产车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="调配单日期" prop="allocateDate" width="130" :show-overflow-tooltip="true"></el-table-column>
