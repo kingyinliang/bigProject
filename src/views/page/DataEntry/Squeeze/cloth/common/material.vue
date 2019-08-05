@@ -50,7 +50,7 @@
           <el-table-column prop="potTwo" label="发酵罐号2" width="150px"></el-table-column>
           <el-table-column prop="remark" label="操作" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!isRedact" circle size="small" @click="delrow(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" :disabled="!isRedact" circle size="mini" @click="delrow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -86,7 +86,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!isRedact" circle size="small" @click="delrow(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" :disabled="!isRedact" circle size="mini" @click="delrow(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -99,7 +99,7 @@
             <el-option :label="item.deviceName" v-for="(item, index) in pulpMachineList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.hovercraftNo">
+        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.id">
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
