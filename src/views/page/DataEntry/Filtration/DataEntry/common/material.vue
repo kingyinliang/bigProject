@@ -22,7 +22,7 @@
           <el-table-column label="操作人" width="150" prop="changer" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="orderStatus" width="50">
             <template slot-scope="scope">
-              <el-button type="danger" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="small"></el-button>
+              <el-button type="danger" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>

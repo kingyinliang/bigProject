@@ -38,7 +38,7 @@
         <el-table-column label="操作人" show-overflow-tooltip width="100" prop="changer"></el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact || soleStatus " size="small"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact || soleStatus " size="mini"></el-button>
           </template>
         </el-table-column>
       </el-table>
