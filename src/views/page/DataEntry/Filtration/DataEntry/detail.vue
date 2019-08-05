@@ -38,7 +38,7 @@
         <el-row style="text-align:right;">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Filtration-DataEntry-index'})">返回</el-button>
-            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked'">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
