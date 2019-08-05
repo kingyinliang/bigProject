@@ -83,7 +83,8 @@ export default {
       },
       holderList: [],
       dataList: [],
-      readAudit: []
+      readAudit: [],
+      repertory: []
     }
   },
   props: ['isRedact'],
@@ -95,7 +96,7 @@ export default {
         this.receive.materialCode = holderInfo.materialCode
         this.receive.materialName = holderInfo.materialName
         this.receive.materialcn = holderInfo.materialCode + holderInfo.materialName
-        this.receive.receiveAmount = holderInfo.amount
+        this.receive.receiveAmount = holderInfo.amount / 1000
         this.receive.holderName = holderInfo.holderName
       }
     }
@@ -181,7 +182,35 @@ export default {
       }
       return ty
     },
+    ReadyRepertoryRules () {
+      let ty = true
+      this.dataList.map((item) => {
+        // 领用数 库存比较
+        if (!this.repertory.find(items => items.holderId === item.holderId)) {
+          this.repertory.push({
+            holderId: item.holderId,
+            holderName: item.holderName,
+            holderAmount: this.holderList.find((itemss) => itemss.holderId === item.holderId).amount
+          })
+        }
+      })
+      for (let item of this.repertory) {
+        let total = 0
+        this.dataList.map((items) => {
+          if (item.holderId === items.holderId) {
+            total = Number(total) + Number(items.receiveAmount)
+          }
+        })
+        if (total * 1000 > item.holderAmount) {
+          ty = false
+          this.$message.error(item.holderName + '罐领用数超过库存，请重新调整')
+          return false
+        }
+      }
+      return ty
+    },
     SaveMaterial (resolve, reject) {
+      this.repertory = []
       this.dataList.map((item) => {
         item.orderId = this.orderId
         if (resolve === 'saved' && item.status === 'nopass') {
