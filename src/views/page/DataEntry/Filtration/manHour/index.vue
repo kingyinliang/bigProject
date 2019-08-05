@@ -26,6 +26,12 @@
                   <el-option :label="item.deptName" v-for="(item, index) in deptId" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="产量状态：">
+                <el-select v-model="formHeader.ouPutStatus" placeholder="请选择" style="width: 180px">
+                  <el-option label="正常生产"  value="0"></el-option>
+                  <el-option label="有出勤，无产量"  value="1"></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="提交人员：">
                 <p class="el-input" style="width: 180px">{{headList.changer}}</p>
               </el-form-item>
@@ -154,6 +160,7 @@ export default {
       },
       headList: {},
       formHeader: {
+        ouPutStatus: '0',
         status: '',
         factory: '',
         workShop: '',
@@ -224,6 +231,7 @@ export default {
       this.isRedact = false
       this.uid = ''
       this.$http(`${FILTRATION_API.FILTER_MANHOUR_LIST_API}`, 'POST', {
+        ouPutStatus: this.formHeader.ouPutStatus,
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
         inKjmDate: this.formHeader.inKjmDate,

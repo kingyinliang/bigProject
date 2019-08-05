@@ -219,7 +219,7 @@
       </el-table-column>
       <el-table-column label="正常品" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isZ === '0')"></el-input>
+          <el-input v-model="scope.row.aiShelves" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isL === '0')"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="90">

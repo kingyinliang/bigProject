@@ -132,7 +132,7 @@
         <el-table-column label="物料" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>物料</span></template>
           <template slot-scope="scope">
-            <el-select v-model="scope.row.materialCode" placeholder="请选择" size="mini" style="width: 180px">
+            <el-select v-model="scope.row.materialCode" placeholder="请选择" size="mini" style="width: 180px" @change="selectMaterial(scope.row)" :disabled="!isRedact || scope.row.supStatus === '已确认'">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.materialCode + ' ' + item.materialName" v-for="(item, index) in Materails" :key="index" :value="item.materialCode"></el-option>
             </el-select>
@@ -147,7 +147,7 @@
         <el-table-column label="单位" width="100" prop="unit" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>单位</span></template>
           <template slot-scope="scope">
-            <el-select v-model="scope.row.unit" placeholder="请选择" size="mini">
+            <el-select v-model="scope.row.unit" placeholder="请选择" size="mini" :disabled="!isRedact || scope.row.supStatus === '已确认'">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.value" v-for="(item, index) in Unit" :key="index" :value="item.code"></el-option>
             </el-select>
@@ -259,6 +259,9 @@ export default {
         this.SupDate = row.steSupMaterialBean.resultList = []
       }
     },
+    selectMaterial (row) {
+      row.materialName = (this.Materails.filter(it => it.materialCode === row.materialCode)[0]).materialName
+    },
     // 保存
     SavedOr (str) {
       if (this.multipleSelection.length === 0) {
@@ -275,7 +278,7 @@ export default {
           item1.supStatus = str
           item1.planAmount = item.planOutPut
           item1.orderId = item.orderId
-          item1.materialName = (this.Materails.filter(it => it.materialCode === item1.materialCode)[0]).materialName
+          // item1.materialName = (this.Materails.filter(it => it.materialCode === item1.materialCode)[0]).materialName
         })
       })
       this.$http(`${STERILIZED_API.STE_SUP_SAVED_API}`, 'POST', this.multipleSelection).then(({data}) => {
@@ -319,7 +322,7 @@ export default {
           item1.supStatus = str
           item1.planAmount = item.planOutPut
           item1.orderId = item.orderId
-          item1.materialName = (this.Materails.filter(it => it.code === item1.materialCode)[0]).materialName
+          // item1.materialName = (this.Materails.filter(it => it.code === item1.materialCode)[0]).materialName
         })
       })
       this.$http(`${STERILIZED_API.STE_SUP_PUSH_API}`, 'POST', this.multipleSelection).then(({data}) => {
