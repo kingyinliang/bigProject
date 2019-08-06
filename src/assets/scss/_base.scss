@@ -544,6 +544,13 @@ img {
           background:#1890FF;
           cursor:pointer
         }
+        &_bor{
+          float: left;
+          margin-top: 14px;
+          background: #cccccc;
+          width: 1px;
+          height: 12px;
+        }
         //cursor: pointer;
         //border-right: 1px solid #E8E8E8;
       }
