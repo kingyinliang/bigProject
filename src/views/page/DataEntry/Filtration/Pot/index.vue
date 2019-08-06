@@ -60,7 +60,7 @@
 
 <script>
 import {getFactory, getWorkshop, dateFormat} from '@/net/validate'
-import {FERMENTATION_API} from '@/api/api'
+// import {FERMENTATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {

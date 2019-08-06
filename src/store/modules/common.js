@@ -214,6 +214,12 @@ export default {
       workShop: '',
       orderId: '',
       productDate: ''
+    },
+    /**
+     * 吹瓶车间
+    */
+    bottle: {
+      orderNo: ''
     }
   },
   mutations: {
@@ -362,6 +368,9 @@ export default {
     },
     updateSterilized (state, params) {
       state.Sterilized = params
+    },
+    updateBottle (state, params) {
+      state.Bottle = params
     }
   }
 }

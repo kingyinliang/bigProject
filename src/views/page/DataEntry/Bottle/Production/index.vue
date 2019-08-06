@@ -1,3 +1,244 @@
 <template>
-  <div>首页</div>
+  <div class="main">
+    <el-card>
+      <el-form :model="formHeader" :inline="true" size="small">
+        <el-form-item label="工厂：">
+          <el-select v-model="formHeader.factory" class="width150px">
+            <el-option v-for="(item, index) in factoryList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="车间：">
+          <el-select v-model="formHeader.workShop" class="width150px">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) in workshopList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="生产日期：">
+          <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="生产订单：">
+          <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
+        </el-form-item>
+        <el-button type="primary" size="small" @click="GetList" class="floatr">查询</el-button>
+      </el-form>
+    </el-card>
+    <el-row :gutter="20" style="margin-top:15px">
+      <el-col :span="8" v-for="(item, index) in dataList" :key="index" style="margin-bottom:15px">
+        <div class="sole">
+          <div class="top">
+            <div>产线：{{item.productLineName}}</div>
+            <div class="status">
+              <span class="points" :style="{'margin-top':'8px','background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : item.orderStatus === 'submit'? '#1890ff' : item.orderStatus === 'saved'? '#1890ff' : '#7ED321'}"></span>&nbsp;状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
+            </div>
+          </div>
+          <div class="content">
+            <div class="img"><img src="@/assets/img/bottle.png" style="width:100%"></div>
+            <div class="right">
+              <div class="lines">订单号：<span>{{item.orderNo}}</span></div>
+              <div class="lines">
+                <div style="float:left">品项：</div>
+                <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="top-start">
+                  <div style="float:left; width:135px; color:rgba(0, 0, 0, 0.65);overflow: hidden; text-overflow:ellipsis; white-space:nowrap;">{{item.materialCode}}{{item.materialName}}</div>
+                </el-tooltip>
+              </div>
+              <div class="lines">计划产量：<span>{{item.planOutput}} {{item.outputUnit}}</span></div>
+              <div class="lines">实时产量：<span>{{item.realOutput}} {{item.realOutput ? item.outputUnit : ''}}</span></div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
+            <div class="bottom-split"></div>
+            <div class="bottom-item" @click="GoDetail(2, item)">工艺数据</div>
+            <div class="bottom-split"></div>
+            <div class="bottom-item" @click="GoDetail(3, item)">质量检测</div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
+
+<script>
+import { BASICDATA_API, BOTTLE_API } from '@/api/api'
+import {dateFormat} from '@/net/validate'
+export default {
+  name: 'bottleName',
+  data () {
+    return {
+      formHeader: {
+        factory: '',
+        workShop: '',
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd'),
+        orderNo: ''
+      },
+      factoryList: [],
+      workshopList: [],
+      dataList: [],
+      orderStatus: ''
+    }
+  },
+  mounted () {
+    this.GetFactoryList()
+  },
+  watch: {
+    'formHeader.factory' (n, o) {
+      this.GetWorkshopList(n)
+    }
+  },
+  methods: {
+    // 获取工厂
+    GetFactoryList () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+        if (data.code === 0) {
+          this.factoryList = data.typeList
+          this.formHeader.factory = data.typeList[0].deptId
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取车间
+    GetWorkshopList (id) {
+      this.formHeader.workShop = ''
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '吹瓶'}).then(({data}) => {
+          if (data.code === 0) {
+            this.workshopList = data.typeList
+            if (data.typeList.length > 0) {
+              this.formHeader.workShop = data.typeList[0].deptId
+            }
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.workshopList = []
+      }
+    },
+    GetList () {
+      if (this.formHeader.factory === '') {
+        this.$message.error('请选择工厂')
+        return false
+      }
+      if (this.formHeader.workShop === '') {
+        this.$message.error('请选择车间')
+        return false
+      }
+      this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.indexInfo
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    GoDetail (num, item) {
+      let url
+      switch (num) {
+        case 1:
+          url = 'DataEntry-Bottle-Production-detail'
+          break
+        case 2:
+          url = 'DataEntry-Bottle-craft'
+          break
+        case 3:
+          url = 'DataEntry-Bottle-qualityTest'
+          break
+      }
+      this.Bottle = {
+        orderNo: item.orderNo
+      }
+      this.mainTabs = this.mainTabs.filter(item => item.name !== url)
+      setTimeout(() => {
+        this.$router.push({ name: url })
+      }, 100)
+    }
+  },
+  computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    },
+    Bottle: {
+      get () {
+        return this.$store.state.common.Bottle
+      },
+      set (val) {
+        this.$store.commit('common/updateBottle', val)
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less">
+.sole {
+  height:222px;
+  background:rgba(255,255,255,1);
+  border-radius:2px;
+  border:1px solid rgba(232,232,232,1);
+  .top {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 10px;
+    align-items: center;
+    .status {
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+  .content {
+    height: 140px;
+    padding: 10px;
+    .img {
+      float:left;
+      width: 160px;
+      height: 110px;
+    }
+    .right {
+      float: left;
+      margin-left: 10px;
+      height: 120px;
+      .lines{
+        color:rgba(0,0,0,0.45);
+        line-height: 26px;
+        font-size:14px;
+        span{
+          color: rgba(0,0,0,0.65);
+        }
+      }
+      // display: flex;
+    }
+  }
+  .bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 40px;
+    background:rgba(247,249,250,1);
+    align-items: center;
+    .bottom-item {
+      text-align: center;
+      flex: 1;
+      font-size: 14px;
+      line-height: 40px;
+      &:hover{
+        color:#fff;
+        background:#1890FF;
+        cursor:pointer
+      }
+    }
+    .bottom-split {
+      width:1px;
+      height:16px;
+      background:rgba(232,232,232,1);
+    }
+  }
+}
+</style>
