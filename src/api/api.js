@@ -1497,6 +1497,10 @@ export const FILTRATION_API = {
   FILTER_MANHOUR_UPDATE_API: HOST + '/filter/timeSheet/update',
   FILTER_MANHOUR_SAVE_API: HOST + '/filter/timeSheet/submit',
   /**
+   *  过滤罐区
+   */
+  FILTER_POT_LIST_API: HOST + '/filter/holder/list',
+  /**
    *  工艺控制
    */
   FILTER_CRAFT_LIST: HOST + '/filter/tech/techList',
