@@ -38,7 +38,7 @@
             </el-radio-group>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary" :disabled="true" size="small" style="float: right">读取数据</el-button>
+            <el-button type="primary" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" @click="ReadRow" size="small" style="float: right">读取数据</el-button>
             <el-button type="primary" :disabled="!(isRedact && this.tech.status !== 'submit' && this.tech.status !== 'checked')" @click="addline" size="small" style="float: right; margin-right:10px"> + 新增</el-button>
           </el-col>
         </el-row>
@@ -146,10 +146,37 @@
           </el-table-column>
           <el-table-column label="品温探头温度">
             <el-table-column label="">
-            <template slot="header">
-              <i class="reqI">*</i>
-              <span>上</span>
-            </template>
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>外上</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempOutsideUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>外中</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempOutsideMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>外下</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempOutsideDown" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="">
+              <template slot="header">
+                <i class="reqI">*</i>
+                <span>内上</span>
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.productTempUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
               </template>
@@ -157,7 +184,7 @@
             <el-table-column label="">
               <template slot="header">
                 <i class="reqI">*</i>
-                <span>中</span>
+                <span>内中</span>
               </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.productTempMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
@@ -166,7 +193,7 @@
             <el-table-column label="">
               <template slot="header">
                 <i class="reqI">*</i>
-                <span>下</span>
+                <span>内下</span>
               </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.productTempDown" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
@@ -406,7 +433,7 @@ export default {
       }
       for (let items of this.lookList) {
         if (items.delFlag === '0') {
-          if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempUp === '' || items.productTempMid === '' || items.productTempDown === '' || items.thermometerOut === '' || items.thermometerInner === '') {
+          if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempUp === '' || items.productTempMid === '' || items.productTempDown === '' || items.thermometerOut === '' || items.thermometerInner === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '') {
           // if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
             ty = false
             this.$message.error('看曲记录必填项未填')
@@ -448,6 +475,9 @@ export default {
         productTempUp: '',
         productTempMid: '',
         productTempDown: '',
+        productTempOutsideUp: '',
+        productTempOutsideMid: '',
+        productTempOutsideDown: '',
         thermometerOut: '',
         thermometerInner: '',
         remark: '',
@@ -563,6 +593,20 @@ export default {
         this.$message.error(error)
       }).finally(() => {
         this.$emit('setApplyCraftState', this.tech.status)
+      })
+    },
+    ReadRow () {
+      this.$http(`${KJM_API.IOT_READ}`, 'POST', {orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+        if (data.code === 0) {
+          data.recordList.map((item) => {
+            this.lookList.push(item)
+          })
+          this.$nextTick(function () {
+            this.$refs.recordTable.bodyWrapper.scrollTop = this.$refs.recordTable.bodyWrapper.scrollHeight
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
       })
     }
   },

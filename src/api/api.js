@@ -1080,6 +1080,7 @@ export const KJM_API = {
   DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态,
   IOT_LIST: HOST + '/iot/tu/list',
   IOT_TIME_INFO: HOST + '/iot/tu/timeList',
+  IOT_READ: HOST + '/iot/tu/readData',
 
   /**
    * @property {string} KJMAKINGHEAD_API 车间审核表头
@@ -1517,4 +1518,11 @@ export const FILTRATION_API = {
   FILTER_MATERIAL_LIST: HOST + '/filter/material/list',
   FILTER_MATERIAL_SAVE: HOST + '/filter/material/save',
   FILTER_MATERIAL_SUBMIT: HOST + '/filter/material/submit'
+}
+/**
+ *  吹瓶api
+ */
+export const BOTTLE_API = {
+  // 生产数据首页
+  BOTTLE_INDEX_LIST: HOST + '/bottle/workShop/indexList'
 }
