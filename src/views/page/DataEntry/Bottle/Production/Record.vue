@@ -3,34 +3,34 @@
     <el-button type="primary" @click="AddRecord" size="small" :disabled="!(isRedact)" style="float: right;margin-bottom: 5px">新增</el-button>
     <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="RecordList" border tooltip-effect="dark" >
       <el-table-column type="index" label="序号" width="55"></el-table-column>
-      <el-table-column label="时间" :show-overflow-tooltip="true" prop="kjmWorkShopName">
+      <el-table-column label="时间" prop="kjmWorkShopName">
         <template slot-scope="scope">
-          <el-date-picker size="mini" type="date" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="scope.row.productDate"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" :disabled="!isRedact" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="scope.row.date"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="瓶胚批号" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.bad" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.embryoBatch" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="瓶胚数量 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.bad" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.embryoAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60">
-        <template slot-scope="scope">
-          个
-        </template>
+        <template slot-scope="scope">{{scope.row.unit = '个'}}</template>
       </el-table-column>
       <el-table-column label="供应商" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="150">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.bad" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-select v-model="scope.row.supplier" placeholder="请选择" size="mini" :disabled="!isRedact">
+            <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Supplier" :key="index"></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.bad" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60" fixed="right">
@@ -39,15 +39,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <p style="font-size: 14px;line-height: 32px">合计数量：{{sumNum}}个</p>
   </div>
 </template>
 
 <script>
+import { BOTTLE_API, SYSTEMSETUP_API } from '@/api/api'
 export default {
   name: 'Record',
   data () {
     return {
-      RecordList: []
+      RecordList: [],
+      Supplier: []
     }
   },
   props: {
@@ -59,8 +62,65 @@ export default {
   mounted () {
   },
   methods: {
+    // 获取投胚记录
+    getDataList () {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_RECORD_LIST}`, 'POST', {
+        orderId: this.$store.state.common.bottle.ProOrderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.RecordList = data.embryoRecordList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取供应商
+    GetSupplier (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'supplier_bottle'}).then(({data}) => {
+        if (data.code === 0) {
+          this.Supplier = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 保存提交
+    SaveOrSubmitData (str, resolve, reject) {
+      this.RecordList.forEach((item) => {
+        item.sumEmbryoAmount = this.sumNum
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+      })
+      this.$http(`${str === 'saved' ? BOTTLE_API.BOTTLE_PRO_RECORD_SAVE : BOTTLE_API.BOTTLE_PRO_RECORD_SUBMIT}`, 'POST', this.RecordList).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('投胚记录' + data.msg)
+          }
+        }
+      })
+    },
+    // 新增
     AddRecord () {
-      this.RecordList.push({})
+      this.RecordList.push({
+        date: '',
+        delFlag: '0',
+        embryoAmount: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].embryoAmount : '',
+        embryoBatch: '',
+        id: '',
+        orderId: this.$store.state.common.bottle.ProOrderId,
+        remark: '',
+        status: '',
+        sumEmbryoAmount: '',
+        supplier: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].supplier : '',
+        unit: ''
+      })
     },
     delRecord (row) {
       row.delFlag = '1'
@@ -74,7 +134,17 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    sumNum: function () {
+      let num = 0
+      this.RecordList.forEach(item => {
+        if (item.delFlag !== '1') {
+          num += item.embryoAmount * 1
+        }
+      })
+      return num
+    }
+  },
   components: {}
 }
 </script>

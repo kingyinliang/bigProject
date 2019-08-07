@@ -1528,5 +1528,17 @@ export const FILTRATION_API = {
  */
 export const BOTTLE_API = {
   // 生产数据首页
-  BOTTLE_INDEX_LIST: HOST + '/bottle/workShop/indexList'
+  BOTTLE_INDEX_LIST: HOST + '/bottle/workShop/indexList',
+  // 数据录入
+  BOTTLE_PRO_HEAD: HOST + '/bottle/workShop/headInfo',
+  BOTTLE_PRO_HEAD_UPDATE: HOST + '/bottle/workShop/headUpdate',
+  BOTTLE_PRO_RECORD_LIST: HOST + '/bottle/workShop/embryoRecordList',
+  BOTTLE_PRO_RECORD_SAVE: HOST + '/bottle/workShop/embryoRecordSave',
+  BOTTLE_PRO_RECORD_SUBMIT: HOST + '/bottle/workShop/embryoRecordSubmit',
+  BOTTLE_PRO_IN_LIST: HOST + '/bottle/inStorage/list',
+  BOTTLE_PRO_IN_SAVE: HOST + '/inStorage/mySaveOrUpdate',
+  BOTTLE_PRO_IN_SUBMIT: HOST + '/bottle/inStorage/submit',
+  BOTTLE_PRO_MATERIAL_LIST: HOST + '/bottle/material/list',
+  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/material/mySaveOrUpdate',
+  BOTTLE_PRO_MATERIAL_SUBMIT: HOST + '/bottle/material/submit'
 }

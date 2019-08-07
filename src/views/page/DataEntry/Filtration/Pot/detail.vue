@@ -18,13 +18,13 @@
               <p class="el-input">{{formData.workShopName ? formData.workShopName : ''}}</p>
             </el-form-item>
             <el-form-item label="当前库存：">
-              <p class="el-input">{{formData.ferOrderNo}}</p>
+              <p class="el-input">{{formData.amount}}</p>
             </el-form-item>
             <el-form-item label="容量：">
-              <p class="el-input">{{formData.holderStatus === '2'? '未入库' : formData.holderStatus === '3' ? '已入库' : ''}}</p>
+              <p class="el-input">{{formData.holderHold}}</p>
             </el-form-item>
             <el-form-item label="当前物料：">
-              <p class="el-input">{{(formData.ferMaterialCode? formData.ferMaterialCode: '') + ' ' + (formData.ferMaterialName? formData.ferMaterialName : '')}}</p>
+              <p class="el-input">{{(formData.materialCode? formData.materialCode: '') + ' ' + (formData.materialName? formData.materialName : '')}}</p>
             </el-form-item>
           </el-form>
         </el-col>
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import {FILTRATION_API} from '@/api/api'
 export default {
   name: 'detail',
   data () {
@@ -87,8 +88,21 @@ export default {
     }
   },
   mounted () {
+    this.GetDataList()
   },
-  methods: {},
+  methods: {
+    GetDataList () {
+      this.$http(`${FILTRATION_API.FILTER_POT_LIST_API}`, 'POST', {
+        factory: this.$store.state.common.filtrationPot.factory,
+        workShop: this.$store.state.common.filtrationPot.workShop,
+        holderId: this.$store.state.common.filtrationPot.holderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.formData = data.list[0]
+        }
+      })
+    }
+  },
   computed: {},
   components: {}
 }

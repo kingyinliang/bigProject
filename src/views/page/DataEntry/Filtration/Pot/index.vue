@@ -126,6 +126,9 @@ export default {
       })
     },
     godetails (item) {
+      this.$store.state.common.filtrationPot.factory = item.factory
+      this.$store.state.common.filtrationPot.workShop = item.workShop
+      this.$store.state.common.filtrationPot.holderId = item.holderId
       this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Filtration-Pot-detail')
       let that = this
       setTimeout(function () {

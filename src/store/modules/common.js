@@ -215,11 +215,17 @@ export default {
       orderId: '',
       productDate: ''
     },
+    filtrationPot: {
+      factory: '',
+      workShop: '',
+      holderId: ''
+    },
     /**
      * 吹瓶车间
     */
     bottle: {
-      orderNo: ''
+      orderNo: '',
+      ProOrderId: ''
     }
   },
   mutations: {

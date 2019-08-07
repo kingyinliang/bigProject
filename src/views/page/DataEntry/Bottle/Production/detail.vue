@@ -65,6 +65,7 @@ import ReadyTimes from './ReadyTimes'
 import Record from './Record'
 import Material from './Material'
 import InStorage from './InStorage'
+import { BOTTLE_API } from '@/api/api'
 export default {
   name: 'detail',
   data () {
@@ -76,10 +77,49 @@ export default {
     }
   },
   mounted () {
+    this.getHead()
   },
   methods: {
     tabClick (val) {
       this.$refs.tabs.setCurrentName(val.name)
+    },
+    // 获取表头
+    getHead () {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {
+        orderId: this.$store.state.common.bottle.ProOrderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.formHeader = data.headInfo
+          this.orderStatus = data.headInfo.orderStatus
+          this.$refs.record.GetSupplier(this.formHeader.factory) // 投胚记录供应商
+          this.$refs.instorage.GetProductShift(this.formHeader.factory) // 入库生产班次
+          if (this.formHeader.orderStatus) {
+            this.$refs.record.getDataList()
+            this.$refs.instorage.getDataList()
+          }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 修改表头
+    UpdateHead (str, resolve, reject) {
+      if (this.formHeader.orderStatus) {
+        if (this.formHeader.orderStatus === 'saved') { this.formHeader.orderStatus = str } else if (this.formHeader.orderStatus === 'noPass' && str === 'submit') { this.formHeader.orderStatus = str }
+      } else {
+        this.formHeader.orderStatus = str
+      }
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', this.formHeader).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('表头修改' + data.msg)
+          }
+        }
+      })
     },
     // 保存提交
     SubmitForm () {
@@ -92,6 +132,24 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
+      let updateHead = new Promise((resolve, reject) => {
+        this.UpdateHead(str, resolve, reject)
+      })
+      let updateRecord = new Promise((resolve, reject) => {
+        this.$refs.record.SaveOrSubmitData(str, resolve, reject)
+      })
+      let updateIn = new Promise((resolve, reject) => {
+        this.$refs.instorage.SaveOrSubmitData(str, resolve, reject)
+      })
+      if (str === 'saved') {
+        let savedNet = Promise.all([updateHead, updateRecord, updateIn])
+        savedNet.then(() => {
+          this.$message.success('保存成功')
+          this.getHead()
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      }
     }
   },
   computed: {},

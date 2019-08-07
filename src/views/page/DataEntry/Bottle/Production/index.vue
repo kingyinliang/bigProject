@@ -134,6 +134,8 @@ export default {
     },
     GoDetail (num, item) {
       let url
+      this.$store.state.common.bottle.ProOrderId = item.orderId
+      // this.$store.state.common.bottle.ProOrderId = '123'
       switch (num) {
         case 1:
           url = 'DataEntry-Bottle-Production-detail'

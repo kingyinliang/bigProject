@@ -4,13 +4,13 @@
       <p class="el-input">{{formHeader.workShopName || ''}}</p>
     </el-form-item>
     <el-form-item label="产线：">
-      <p class="el-input">{{formHeader.panName || ''}}</p>
+      <p class="el-input">{{formHeader.productLineName || ''}}</p>
     </el-form-item>
     <el-form-item label="订单号：">
       <p class="el-input">{{formHeader.orderNo || ''}}</p>
     </el-form-item>
     <el-form-item label="订单日期：">
-      <p class="el-input">{{formHeader.panName || ''}}</p>
+      <p class="el-input">{{formHeader.orderDate || ''}}</p>
     </el-form-item>
     <el-form-item label="生产品项：">
       <p class="el-input">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
