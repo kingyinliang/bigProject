@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column label="单位" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60">
-        <template slot-scope="scope">{{scope.row.unitName === '个'}}</template>
+        <template slot-scope="scope">{{scope.row.unitName = '个'}}</template>
       </el-table-column>
       <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="120">
         <template slot-scope="scope">
@@ -86,7 +86,7 @@ export default {
     },
     // 生产班次下拉
     ChangeProductShift (row) {
-      row.classesName = this.productShift.filter(item => item.code === row.classes)[0].classesName
+      row.classesName = this.productShift.filter(item => item.code === row.classes)[0].value
     },
     // 保存提交
     SaveOrSubmitData (str, resolve, reject) {

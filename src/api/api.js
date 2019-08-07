@@ -1536,7 +1536,7 @@ export const BOTTLE_API = {
   BOTTLE_PRO_RECORD_SAVE: HOST + '/bottle/workShop/embryoRecordSave',
   BOTTLE_PRO_RECORD_SUBMIT: HOST + '/bottle/workShop/embryoRecordSubmit',
   BOTTLE_PRO_IN_LIST: HOST + '/bottle/inStorage/list',
-  BOTTLE_PRO_IN_SAVE: HOST + '/inStorage/mySaveOrUpdate',
+  BOTTLE_PRO_IN_SAVE: HOST + '/bottle/inStorage/mySaveOrUpdate',
   BOTTLE_PRO_IN_SUBMIT: HOST + '/bottle/inStorage/submit',
   BOTTLE_PRO_MATERIAL_LIST: HOST + '/bottle/material/list',
   BOTTLE_PRO_MATERIAL_SAVE: HOST + '/material/mySaveOrUpdate',

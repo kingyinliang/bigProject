@@ -96,6 +96,7 @@ export default {
           if (this.formHeader.orderStatus) {
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
+            this.$refs.material.getDataList()
           }
         } else {
           this.$message.error(data.msg)
@@ -109,6 +110,7 @@ export default {
       } else {
         this.formHeader.orderStatus = str
       }
+      this.formHeader.realOutput = this.$refs.instorage.sumNum
       this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {

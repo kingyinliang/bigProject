@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { BOTTLE_API } from '@/api/api'
 export default {
   name: 'Material',
   data () {
@@ -71,7 +72,43 @@ export default {
   mounted () {
   },
   methods: {
+    // 获取物料领用
+    getDataList () {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_MATERIAL_LIST}`, 'POST', {
+        orderId: this.$store.state.common.bottle.ProOrderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.MaterialList = data.list
+          this.MaterialAudit = data.vrList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 保存提交
+    SaveOrSubmitData (str, resolve, reject) {
+      this.MaterialList.forEach((item) => {
+        if (item.status) {
+          if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+        } else {
+          item.status = str
+        }
+      })
+      this.$http(`${str === 'saved' ? BOTTLE_API.BOTTLE_PRO_MATERIAL_SAVE : BOTTLE_API.BOTTLE_PRO_MATERIAL_SUBMIT}`, 'POST', this.MaterialList).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('物料领用' + data.msg)
+          }
+        }
+      })
+    },
+    // 拆分
     splitDate (row, index) {},
+    // 删除
     delMaterial (row) {
       row.delFlag = '1'
     },
