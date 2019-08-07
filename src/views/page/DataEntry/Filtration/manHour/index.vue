@@ -27,7 +27,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="产量状态：">
-                <el-select v-model="formHeader.ouPutStatus" placeholder="请选择" style="width: 180px">
+                <el-select v-model="formHeader.outputStatus" placeholder="请选择" style="width: 180px" @change="cleanS">
                   <el-option label="正常生产"  value="0"></el-option>
                   <el-option label="有出勤，无产量"  value="1"></el-option>
                 </el-select>
@@ -160,7 +160,7 @@ export default {
       },
       headList: {},
       formHeader: {
-        ouPutStatus: '0',
+        outputStatus: '0',
         status: '',
         factory: '',
         workShop: '',
@@ -220,6 +220,9 @@ export default {
     this.Getdeptcode()
   },
   methods: {
+    cleanS () {
+      this.searchCard = false
+    },
     // 查询
     GetTimeList () {
       if (this.formHeader.factory === '' || this.formHeader.workShop === '' || this.formHeader.inKjmDate === '' || this.formHeader.deptId === '') {
@@ -231,7 +234,7 @@ export default {
       this.isRedact = false
       this.uid = ''
       this.$http(`${FILTRATION_API.FILTER_MANHOUR_LIST_API}`, 'POST', {
-        ouPutStatus: this.formHeader.ouPutStatus,
+        outputStatus: this.formHeader.outputStatus,
         deptId: this.formHeader.deptId,
         factory: this.formHeader.factory,
         inKjmDate: this.formHeader.inKjmDate,
@@ -325,7 +328,7 @@ export default {
     },
     // 提交
     manHourSubmit (str, resolve, reject) {
-      if (this.headList.deptName === '过滤' || this.headList.deptName === '过滤工序') {
+      if ((this.headList.deptName === '过滤' || this.headList.deptName === '过滤工序') && this.headList.outputStatus === '0') {
         this.$http(`${FILTRATION_API.FILTER_MANHOUR_SAVE_API}`, 'POST', [this.readyTimeDate, this.$refs.workerref.GetUser(), this.headList]).then(({data}) => {
           if (data.code === 0) {
             if (resolve) {
