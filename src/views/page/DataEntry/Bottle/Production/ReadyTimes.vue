@@ -93,6 +93,27 @@
       </el-row>
     </el-card>
     <auditLog :tableData="TimeAudit"></auditLog>
+    <el-dialog width="400px" title="吹瓶" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="Confirmed()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
+        <el-form-item label="班次：">
+          <el-select size="mini" v-model="dataForm.classes" placeholder="请选择" :disabled="!(isRedact)">
+            <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工作内容：">
+          <el-input v-model="dataForm.batch" placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item label="开始时间：">
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.date"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间：">
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.date"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input v-model="dataForm.remark" placeholder="手工录入" size="mini"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -101,6 +122,7 @@ export default {
   name: 'readyTimes',
   data () {
     return {
+      visible: false,
       readyTimeDate: {
         id: '',
         status: '',
@@ -119,18 +141,25 @@ export default {
         nightChangeAfter: ''
       },
       dataList: [],
-      TimeAudit: []
+      TimeAudit: [],
+      dataForm: {},
+      dataRule: {}
     }
   },
   props: {
     isRedact: {
       type: Boolean,
       default () { return false }
+    },
+    productShift: {
+      type: Array
     }
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    Confirmed () {}
+  },
   computed: {},
   components: {
     AuditLog: resolve => {

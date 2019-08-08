@@ -31,7 +31,7 @@
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">人员</span>
-        <worker ref="workerref" :isRedact="isRedact" :order="formHeader"></worker>
+        <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance"></worker>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">投胚记录</span>
@@ -43,7 +43,7 @@
       </el-tab-pane>
       <el-tab-pane name="5">
         <span slot="label" class="spanview">生产入库</span>
-        <in-storage ref="instorage" :isRedact="isRedact"></in-storage>
+        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift"></in-storage>
       </el-tab-pane>
       <el-tab-pane name="6">
         <span slot="label" class="spanview">物料领用</span>
@@ -74,7 +74,9 @@ export default {
       orderStatus: '',
       activeName: '1',
       formHeader: {},
-      Supplier: []
+      Supplier: [],
+      productShift: [],
+      Attendance: []
     }
   },
   mounted () {
@@ -94,20 +96,34 @@ export default {
           this.formHeader = data.headInfo
           this.orderStatus = data.headInfo.orderStatus
           this.GetSupplier(this.formHeader.factory) // 供应商
-          this.$refs.instorage.GetProductShift(this.formHeader.factory) // 入库生产班次
+          this.GetProductShift(this.formHeader.factory) // 生产班次
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
           this.$refs.workerref.GetTeam(false, this.formHeader.factory)
           this.$refs.workerref.getTree(this.formHeader.factory)
           this.$refs.workerref.GetProductShift(this.formHeader.factory)
+          this.$refs.workerref.GetMaterails(this.formHeader.productLine)
           if (this.formHeader.orderStatus) {
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
             this.$refs.material.getDataList()
-            this.$refs.workerref.GetUserList(this.formHeader.orderId)
+            this.GetUser()
             this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
             this.$refs.textrecord.GetText(this.formHeader.orderId)
           }
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取人员
+    GetUser () {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_USER_LIST}`, 'POST', {
+        orderId: this.$store.state.common.bottle.ProOrderId
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.$refs.workerref.GetTimeUserList(data.listuser)
+          this.Attendance = data.list
         } else {
           this.$message.error(data.msg)
         }
@@ -169,7 +185,10 @@ export default {
         this.$refs.material.SaveOrSubmitData(str, resolve, reject)
       })
       let updateUser = new Promise((resolve, reject) => {
-        this.$refs.workerref.UpdateUser(str, resolve, reject)
+        this.$refs.workerref.BottleUpdateUser(str, resolve, reject)
+      })
+      let updateUserAtt = new Promise((resolve, reject) => {
+        this.$refs.workerref.BottleUpdateAtt(str, resolve, reject)
       })
       let updateExc = new Promise((resolve, reject) => {
         this.$refs.excrecord.saveOrSubmitExc(this.formHeader.orderId, str, resolve, reject)
@@ -177,15 +196,25 @@ export default {
       let updateText = new Promise((resolve, reject) => {
         this.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
       })
-      if (str === 'saved') {
-        let savedNet = Promise.all([updateHead, updateRecord, updateIn, updateMaterial, updateUser, updateExc, updateText])
-        savedNet.then(() => {
-          this.$message.success('保存成功')
-          this.getHead()
-        }).catch((err) => {
-          this.$message.error(err)
-        })
-      }
+      // if (str === 'saved') {
+      let savedNet = Promise.all([updateHead, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
+      savedNet.then(() => {
+        this.$message.success('操作成功')
+        this.getHead()
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+      // }
+    },
+    // 获取生产班次
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
+        if (data.code === 0) {
+          this.productShift = data.dicList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     },
     // 获取供应商
     GetSupplier (factory) {

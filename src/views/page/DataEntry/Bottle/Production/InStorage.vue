@@ -42,20 +42,22 @@
 </template>
 
 <script>
-import { BOTTLE_API, SYSTEMSETUP_API } from '@/api/api'
+import { BOTTLE_API } from '@/api/api'
 export default {
   name: 'InStorage',
   data () {
     return {
       InDataList: [],
-      InAudit: [],
-      productShift: []
+      InAudit: []
     }
   },
   props: {
     isRedact: {
       type: Boolean,
       default () { return false }
+    },
+    productShift: {
+      type: Array
     }
   },
   mounted () {
@@ -69,16 +71,6 @@ export default {
         if (data.code === 0) {
           this.InDataList = data.list
           this.InAudit = data.vrList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取生产班次
-    GetProductShift (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
-        if (data.code === 0) {
-          this.productShift = data.dicList
         } else {
           this.$message.error(data.msg)
         }

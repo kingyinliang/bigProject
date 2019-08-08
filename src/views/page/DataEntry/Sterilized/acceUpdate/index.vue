@@ -126,7 +126,7 @@
         <h3 style="line-height: 32px;float: left">增补料记录</h3>
         <el-button type="primary" icon="el-icon-plus" circle size="mini" :disabled="!isRedact" style="float: right" @click="addSup()"></el-button>
       </div>
-      <el-table header-row-class-name="tableHead" :data="SupDate" border tooltip-effect="dark">
+      <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="SupDate" border tooltip-effect="dark">
         <el-table-column type="index" width="55" label="序号"></el-table-column>
         <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="物料" :show-overflow-tooltip="true">
@@ -404,6 +404,14 @@ export default {
     // 删除
     del (row) {
       row.delFlag = '1'
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     },
     // 物料字典
     GetMaterails (factory, id) {
