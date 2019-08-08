@@ -1539,6 +1539,16 @@ export const BOTTLE_API = {
   BOTTLE_PRO_IN_SAVE: HOST + '/bottle/inStorage/mySaveOrUpdate',
   BOTTLE_PRO_IN_SUBMIT: HOST + '/bottle/inStorage/submit',
   BOTTLE_PRO_MATERIAL_LIST: HOST + '/bottle/material/list',
-  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/bottle/material/mySaveOrUpdate',
-  BOTTLE_PRO_MATERIAL_SUBMIT: HOST + '/bottle/material/submit'
+  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/material/mySaveOrUpdate',
+  BOTTLE_PRO_MATERIAL_SUBMIT: HOST + '/bottle/material/submit',
+  // 工艺数据
+  BOTTLE_CRAFT_PRODUCT_LIST: HOST + '/bottle/workShop/techProductParameterList',
+  BOTTLE_CRAFT_WARMING_LIST: HOST + '/bottle/workShop/techTempParameterList',
+  BOTTLE_CRAFT_EQUIPMENT_LIST: HOST + '/bottle/workShop/techMachineList',
+  BOTTLE_CRAFT_PRODUCT_SAVE: HOST + '/bottle/workShop/techProductParameterSave',
+  BOTTLE_CRAFT_WARMING_SAVE: HOST + '/bottle/workShop/techTempParameterSave',
+  BOTTLE_CRAFT_EQUIPMENT_SAVE: HOST + '/bottle/workShop/techMachineSave',
+  // 质检
+  BOTTLE_QUALITY_LIST: HOST + '/bottle/workShop/qualityInspectionList',
+  BOTTLE_QUALITY_SAVE: HOST + '/bottle/workShop/qualityInspectionSave'
 }

@@ -134,6 +134,8 @@ export default {
     },
     GoDetail (num, item) {
       let url
+      this.$store.state.common.bottle.ProOrderId = item.orderId
+      // this.$store.state.common.bottle.ProOrderId = '123'
       switch (num) {
         case 1:
           url = 'DataEntry-Bottle-Production-detail'
@@ -223,6 +225,7 @@ export default {
     height: 40px;
     background:rgba(247,249,250,1);
     align-items: center;
+    width: 100%;
     .bottom-item {
       text-align: center;
       flex: 1;
