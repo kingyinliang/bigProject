@@ -523,7 +523,8 @@ export default class Index extends Vue {
       endAmount: startData.endAmount ? startData.endAmount : 0,
       fullPot: startData.fullPot ? startData.fullPot : '0',
       fullPotAmount: startData.fullPotAmount ? startData.fullPotAmount : 0,
-      fulPotDate: startData.fulPotDate ? startData.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      fulPotDate: '',
+      // fulPotDate: startData.fulPotDate ? startData.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
       remark: startData.remark ? startData.remark : '',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
       changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
