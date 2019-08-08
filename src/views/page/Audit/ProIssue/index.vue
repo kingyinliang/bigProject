@@ -6,32 +6,29 @@
           <el-row type="flex">
             <el-col>
               <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
-                <el-form-item label="工厂：">
-                  <el-select v-model="plantList.factory" placeholder="请选择">
+                <el-form-item label="生产工厂：">
+                  <el-select v-model="plantList.factory" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="车间：">
-                  <el-select v-model="plantList.workShop" placeholder="请选择">
+                <el-form-item label="生产车间：">
+                  <el-select v-model="plantList.workShop" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="产线：">
-                  <el-select v-model="plantList.productLine" placeholder="产线">
+                <el-form-item label="生产产线：">
+                  <el-select v-model="plantList.productLine" placeholder="产线" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="订单号：">
-                  <el-input v-model="plantList.orderNo" placeholder="订单号"></el-input>
-                </el-form-item>
-                <el-form-item label="生产日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate"></el-date-picker>
+                  <el-input v-model="plantList.orderNo" placeholder="订单号" style="width: 160px"></el-input>
                 </el-form-item>
                 <el-form-item label="订单状态：">
-                  <el-select v-model="plantList.status" placeholder="请选择">
+                  <el-select v-model="plantList.status" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option label="未审核"  value="submit"></el-option>
                     <el-option label="审核通过"  value="checked"></el-option>
@@ -39,14 +36,23 @@
                     <el-option label="接口失败"  value="0"></el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="订单类型：">
+                  <el-select v-model="plantList.orderType" placeholder="请选择" style="width: 160px">
+                    <el-option label="请选择"  value=""></el-option>
+                    <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="过账日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate" style="width: 160px"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="生产日期：">
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate" style="width: 160px"></el-date-picker>
+                </el-form-item>
                 <el-row>
-                  <el-form-item label="过账日期：">
-                    <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate"></el-date-picker>
-                  </el-form-item>
                   <el-form-item label="抬头文本：">
-                    <el-input v-model="plantList.headerTxt" placeholder="抬头文本"></el-input>
+                    <el-input v-model="plantList.headerTxt" placeholder="抬头文本" style="width: 160px"></el-input>
                   </el-form-item>
-                  <el-form-item style="margin-left: 67px;">
+                  <el-form-item style="margin-left: 67px;float: right">
                     <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:material:list')">查询</el-button>
                     <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('verify:material:update')">审核通过</el-button>
                     <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
@@ -293,6 +299,7 @@ export default {
       productline: [],
       Text: '',
       MoveReas: [],
+      orderTypeList: [],
       plantList: {
         orderNo: '',
         factory: '',
@@ -301,6 +308,7 @@ export default {
         productDate: new Date(new Date() - 24 * 60 * 60 * 1000).getFullYear().toString() + '-' + ((new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1) >= 10 ? (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1).toString() : '0' + (new Date(new Date() - 24 * 60 * 60 * 1000).getMonth() + 1)) + '-' + (new Date(new Date() - 24 * 60 * 60 * 1000).getDate() >= 10 ? new Date(new Date() - 24 * 60 * 60 * 1000).getDate().toString() : ('0' + new Date(new Date() - 24 * 60 * 60 * 1000).getDate())),
         pstngDate: new Date().getFullYear().toString() + '-' + ((new Date().getMonth() + 1) >= 10 ? (new Date().getMonth() + 1).toString() : '0' + (new Date().getMonth() + 1)) + '-' + (new Date().getDate() >= 10 ? new Date().getDate().toString() : ('0' + new Date().getDate())),
         headerTxt: '',
+        orderType: '',
         status: '',
         currPage: 1,
         pageSize: 10,
@@ -312,7 +320,9 @@ export default {
   },
   watch: {
     'plantList.factory' (n, o) {
+      this.plantList.orderType = ''
       this.Getdeptbyid(n)
+      this.getDictList(n)
     },
     'plantList.workShop' (n, o) {
       this.GetParentline(n)
@@ -326,6 +336,18 @@ export default {
     headanimation(this.$)
   },
   methods: {
+    getDictList (factory) {
+      let params = {types: ['order_type'], factory}
+      this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.orderTypeList = data.dicList[0].prolist
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
+    },
     // 获取列表
     GetAuditList (st) {
       if (st) {
@@ -393,6 +415,7 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          this.plantList.factory = data.typeList[0].deptId
         } else {
           this.$message.error(data.msg)
         }
@@ -582,9 +605,6 @@ export default {
   .topforms{
     .el-date-editor.el-input{
       width: auto;
-    }
-    input{
-      width: 240px!important;
     }
     .formtextarea{
       .el-form-item__content{

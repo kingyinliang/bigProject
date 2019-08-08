@@ -65,10 +65,10 @@
           <el-input v-model="dataForm.remark" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="操作人：">
-          {{$store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
+          {{dataForm.changer = $store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
         </el-form-item>
         <el-form-item label="操作时间：">
-          {{dataForm.created}}
+          {{dataForm.changed}}
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -220,7 +220,7 @@ export default {
         delFlag: '0',
         holderName: '',
         fullDate: '',
-        created: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        changer: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         orderId: this.formHeader.orderId
       }
     },

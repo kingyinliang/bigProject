@@ -44,19 +44,21 @@
 </template>
 
 <script>
-import { BOTTLE_API, SYSTEMSETUP_API } from '@/api/api'
+import { BOTTLE_API } from '@/api/api'
 export default {
   name: 'Record',
   data () {
     return {
-      RecordList: [],
-      Supplier: []
+      RecordList: []
     }
   },
   props: {
     isRedact: {
       type: Boolean,
       default () { return false }
+    },
+    Supplier: {
+      type: Array
     }
   },
   mounted () {
@@ -69,16 +71,6 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.RecordList = data.embryoRecordList
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
-    },
-    // 获取供应商
-    GetSupplier (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'supplier_bottle'}).then(({data}) => {
-        if (data.code === 0) {
-          this.Supplier = data.dicList
         } else {
           this.$message.error(data.msg)
         }
