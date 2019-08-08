@@ -4,7 +4,7 @@
       <el-card class="searchCards searchCard newCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="formHeader" :inline="true" size="small" label-width="85px" >
+            <el-form :model="formHeader" :inline="true" size="small" label-width="85px" class="marbottom">
               <el-form-item label="车间：">
                 <p class="input_bottom">{{formHeader.workShopName}}</p>
               </el-form-item>
