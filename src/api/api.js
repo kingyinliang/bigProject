@@ -849,7 +849,12 @@ export const REP_API = {
    * 出油率
    */
   SQUEEZEOILERLIST_API: HOST + '/report/formPress/oilYieldList',
-  REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield'
+  REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield',
+  /**
+   *  二合一报表
+   */
+  TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
+  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList'
 }
 /*
 *炒麦api
