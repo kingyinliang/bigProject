@@ -225,6 +225,7 @@ export default {
     height: 40px;
     background:rgba(247,249,250,1);
     align-items: center;
+    width: 100%;
     .bottom-item {
       text-align: center;
       flex: 1;

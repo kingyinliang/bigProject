@@ -165,7 +165,7 @@
           </el-col>
         </el-row>
       </div>
-      <el-dialog :visible.sync="dialogFormVisible" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>{{startForm.deviceName}}开始</span>
         </div>
@@ -207,7 +207,7 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveStart()">保存</el-button>
         </div>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>{{endForm.deviceName}}结束</span>
         </div>
@@ -247,7 +247,7 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveEnd()">保存</el-button>
         </div>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>入罐修改</span>
         </div>

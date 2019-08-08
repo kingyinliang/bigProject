@@ -1,30 +1,32 @@
 <template>
   <div class="main">
-    <el-card class="searchCards">
+    <el-card class="searchCards newCard">
       <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
         <el-form-item label="车间：" label-width="60px">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.workShopName}}</p>
         </el-form-item>
         <el-form-item label="产线：">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.productLineName}}</p>
         </el-form-item>
         <el-form-item label="生产日期：">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.productDate}}</p>
         </el-form-item>
         <el-form-item label="订单号：">
           <p class="bottom">{{formHeader.orderNo}}</p>
         </el-form-item>
         <el-form-item label="品项：" label-width="60px">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <el-tooltip class="item" effect="dark" :content="formHeader.materialCode + formHeader.materialName" placement="top-start">
+            <p class="bottom">{{formHeader.materialCode}} {{formHeader.materialName}}</p>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="计划产量：">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.planOutput}}</p>
         </el-form-item>
         <el-form-item label="提交人员：">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.changer}}</p>
         </el-form-item>
         <el-form-item label="提交时间：">
-          <p class="bottom">{{formHeader.orderNo}}</p>
+          <p class="bottom">{{formHeader.changed}}</p>
         </el-form-item>
       </el-form>
       <el-row style="text-align:right">
@@ -34,136 +36,378 @@
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" >保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm" >提交</el-button>
+          <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button>
         </template>
       </el-row>
     </el-card>
-    <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" style="margin-top:15px">
-      <el-tab-pane name="1" label="产品参数">
-        <el-row>
-          <el-col style="float:right">
-            <el-button type="primary" :disabled="!isRedact" @click="AddRow" size="small" style="float:right">新增</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">
-          <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="参数" show-overflow-tooltip width="85" prop="canshu"></el-table-column>
-          <el-table-column label="时间" width="140" prop="time"></el-table-column>
-          <el-table-column label="1#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="2#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="3#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="4#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="5#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="6#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="7#" width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="8#" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="9#" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="10#" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="11#" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="12#" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.one" size="small"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column width="50" fixed="right">
-            <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" size="mini"></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane name="2" label="设备数据">
-      </el-tab-pane>
-      <el-tab-pane name="3" label="加温参数">
-      </el-tab-pane>
-    </el-tabs>
+    <el-card class="secondcard">
+      <el-row>
+        <el-col style="float:right">
+          <el-button type="primary" :disabled="!isRedact" @click="AddRow" size="small" style="float:right">新增</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">
+        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column label="参数" show-overflow-tooltip width="85" prop="parameter"></el-table-column>
+        <el-table-column label="时间" width="200" prop="date">
+          <template slot-scope="scope">
+            <el-date-picker type="date" v-model="scope.row.date" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" placeholder="请选择日期" style="width:180px"></el-date-picker>
+          </template>
+        </el-table-column>
+        <el-table-column label="1#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.oneWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.oneWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="2#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.twoWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.twoWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="3#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.threeWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.threeWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="4#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.fourWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.fourWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="5#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.fiveWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.fiveWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="6#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.sixWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.sixWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="7#" width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.sevenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.sevenWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="8#" show-overflow-tooltip width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.eightWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.eightWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="9#" show-overflow-tooltip width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.nineWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.nineWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="10#" show-overflow-tooltip width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.tenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.tenWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="11#" show-overflow-tooltip width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.elevenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.elevenWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="12#" show-overflow-tooltip width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.twelveWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+              <el-option value="合格">合格</el-option>
+              <el-option value="不合格">不合格</el-option>
+            </el-select>
+            <el-input v-model="scope.row.twelveWell" size="small" v-else></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column width="50" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pages.currPage"
+        :page-sizes="[8, 16]"
+        :page-size="pages.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pages.totalCount">
+      </el-pagination>
+    </el-card>
+    <el-card class="secondcard">
+      <div style="font-weight:bold;">异常事项</div>
+      <el-input type="textarea" v-model="Textareas" :disabled="!isRedact" style="width:100%; margin:10px 0;"></el-input>
+    </el-card>
   </div>
 </template>
 
 <script>
 import {dateFormat} from '@/net/validate'
+import { BOTTLE_API } from '@/api/api'
 export default {
   name: 'qualityTest',
   data () {
     return {
       formHeader: {
-        orderNo: this.$store.state.common.Bottle.orderNo
+        orderNo: this.$store.state.common.Bottle.orderNo,
+        materialCode: '',
+        materialName: ''
+      },
+      pages: {
+        currPage: 1,
+        pageSize: 8,
+        totalCount: 0
       },
       isRedact: false,
-      activeName: '1',
-      dataList: []
+      dataList: [],
+      orderId: this.$store.state.common.bottle.ProOrderId,
+      Textareas: ''
     }
   },
+  mounted () {
+    this.GetHeader()
+  },
   methods: {
+    GetHeader () {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+        if (data.code === 0) {
+          this.formHeader = data.headInfo
+          this.GetList()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    GetList () {
+      this.pages.orderId = this.orderId
+      this.$http(`${BOTTLE_API.BOTTLE_QUALITY_LIST}`, 'POST', this.pages).then(({data}) => {
+        if (data.code === 0) {
+          this.dataList = data.qualityInspectionList.list
+          this.pages.currPage = data.qualityInspectionList.currPage
+          this.pages.pageSize = data.qualityInspectionList.pageSize
+          this.pages.totalCount = data.qualityInspectionList.totalCount
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     AddRow () {
       if (this.dataList.length === 0) {
         this.dataList.push({
-          canshu: '拉伸角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
-          one: ''
+          id: '',
+          parameter: '外观',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
         }, {
-          canshu: '预吹角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+          id: '',
+          parameter: '瓶高(mm)',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
         }, {
-          canshu: '主吹角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+          id: '',
+          parameter: '瓶口内径(mm)',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
         }, {
-          canshu: '回收角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+          id: '',
+          parameter: '重量(g)',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
         }, {
-          canshu: '排气角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+          id: '',
+          parameter: '满口容量(ml)',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
+        }, {
+          id: '',
+          parameter: '密封性能',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
+        }, {
+          id: '',
+          parameter: '跌落性能',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
+        }, {
+          id: '',
+          parameter: '垂直度',
+          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          oneWell: '',
+          twoWell: '',
+          threeWell: '',
+          fourWell: '',
+          fiveWell: '',
+          sixWell: '',
+          sevenWell: '',
+          eightWell: '',
+          nineWell: '',
+          tenWell: '',
+          elevenWell: '',
+          twelveWell: ''
         })
       } else {
-        console.log('test')
+        let NewList = this.dataList.slice((this.dataList.length) - 8)
+        NewList.map((item) => {
+          this.dataList.push({
+            id: '',
+            parameter: item.parameter,
+            date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+            oneWell: item.oneWell,
+            twoWell: item.twoWell,
+            threeWell: item.threeWell,
+            fourWell: item.fourWell,
+            fiveWell: item.fiveWell,
+            sixWell: item.sixWell,
+            sevenWell: item.sevenWell,
+            eightWell: item.eightWell,
+            nineWell: item.nineWell,
+            tenWell: item.tenWell,
+            elevenWell: item.elevenWell,
+            twelveWell: item.twelveWell
+          })
+        })
       }
     },
-    tabClick () {
-
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    },
+    savedOrSubmitForm (str) {
+      this.dataList.map(item => {
+        item.status = str
+        item.orderId = this.orderId
+      })
+      this.$http(`${BOTTLE_API.BOTTLE_QUALITY_SAVE}`, 'POST', this.dataList).then(({data}) => {
+        if (data.code === 0) {
+          this.$message.success('保存成功')
+          this.GetHeader()
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     }
   }
 }
@@ -173,5 +417,6 @@ export default {
 .bottom {
   border-bottom: 1px solid #D8D8D8;
   width: 150px;
+  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 </style>

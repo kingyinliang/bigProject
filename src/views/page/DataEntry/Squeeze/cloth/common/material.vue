@@ -92,7 +92,8 @@
         </el-table>
       </div>
     </el-card>
-    <el-dialog title="熟酱醪领用" :visible.sync="dialogFormVisibleMai" width="450px">
+    <el-dialog :close-on-click-modal="false" custom-class='dialog__class' :visible.sync="dialogFormVisibleMai" width="450px">
+      <div slot="title" style="line-hight:59px">熟酱醪领用</div>
       <el-form :model="sauce" size="small" :rules="saucerule" ref="saucesbu">
         <el-form-item label="布浆机" :label-width="formLabelWidth" prop="pulpMachine">
           <el-select v-model="sauce.pulpMachine" filterable placeholder="请选择" style="width:310px">
