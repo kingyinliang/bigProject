@@ -106,7 +106,7 @@ export default {
           if (this.formHeader.orderStatus) {
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
-            this.$refs.material.getDataList()
+            this.$refs.material.getDataList(this.formHeader.orderNo)
             this.GetUser()
             this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
             this.$refs.textrecord.GetText(this.formHeader.orderId)
