@@ -5,18 +5,18 @@
       <el-table-column type="index" label="序号" width="55"></el-table-column>
       <el-table-column label="白/中/夜班" :show-overflow-tooltip="true" prop="kjmWorkShopName">
         <template slot-scope="scope">
-          <el-select size="mini" v-model="scope.row.classes" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @change="ChangeProductShift(scope.row)">
+          <el-select style="width: 100%" size="mini" v-model="scope.row.classes" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @change="ChangeProductShift(scope.row)">
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="生产批次" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
+      <el-table-column label="生产批次" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="190">
         <template slot="header"><i class="reqI">*</i><span>生产批次</span></template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.batch" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="本班生产 " :show-overflow-tooltip="true" prop="production" width="140">
+      <el-table-column label="本班生产 " :show-overflow-tooltip="true" prop="production" width="190">
         <template slot="header"><i class="reqI">*</i><span>本班生产</span></template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.production" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
@@ -25,7 +25,7 @@
       <el-table-column label="单位" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60">
         <template slot-scope="scope">{{scope.row.unitName = '个'}}</template>
       </el-table-column>
-      <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="120">
+      <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="190">
         <template slot-scope="scope">
           <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>

@@ -19,7 +19,7 @@
       <p class="input_bottom">{{formHeader.planOutput || ''}}</p>
     </el-form-item>
     <el-form-item label="生产日期：">
-      <el-date-picker size="small" type="date" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 145px"></el-date-picker>
+      <el-date-picker size="mini" type="date" :disabled="!isRedact" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 145px"></el-date-picker>
     </el-form-item>
     <el-form-item label="提交人员：">
       <p class="input_bottom">{{formHeader.changer || ''}}</p>

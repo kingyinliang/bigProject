@@ -76,18 +76,18 @@
             </el-row>
           </div>
         </el-col>
-        <el-col>
+        <el-col style="max-width: 942px">
           <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" @row-dblclick="updateRow" :data="dataList" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55"></el-table-column>
-            <el-table-column label="班次" :show-overflow-tooltip="true" prop="classesName" width="80"></el-table-column>
-            <el-table-column label="工作内容" :show-overflow-tooltip="true" prop="content"></el-table-column>
-            <el-table-column label="开始时间" :show-overflow-tooltip="true" prop="startDate" width="100"></el-table-column>
-            <el-table-column label="结束时间" :show-overflow-tooltip="true" prop="endDate" width="100"></el-table-column>
+            <el-table-column label="班次" :show-overflow-tooltip="true" prop="classesName" width="70"></el-table-column>
+            <el-table-column label="工作内容" :show-overflow-tooltip="true" prop="content" width="110"></el-table-column>
+            <el-table-column label="开始时间" :show-overflow-tooltip="true" prop="startDate" width="130"></el-table-column>
+            <el-table-column label="结束时间" :show-overflow-tooltip="true" prop="endDate" width="130"></el-table-column>
             <el-table-column label="时长" :show-overflow-tooltip="true" prop="dateLength" width="80"></el-table-column>
-            <el-table-column label="备注" :show-overflow-tooltip="true" prop="remark" width="80"></el-table-column>
-            <el-table-column label="操作时间" :show-overflow-tooltip="true" prop="changed" width="80"></el-table-column>
-            <el-table-column label="操作人" :show-overflow-tooltip="true" prop="changer" width="80"></el-table-column>
-            <el-table-column label="操作" :show-overflow-tooltip="true" width="80">
+            <el-table-column label="备注" :show-overflow-tooltip="true" prop="remark" width="100"></el-table-column>
+            <el-table-column label="操作时间" :show-overflow-tooltip="true" prop="changed" width="105"></el-table-column>
+            <el-table-column label="操作人" :show-overflow-tooltip="true" prop="changer" width="105"></el-table-column>
+            <el-table-column label="操作" :show-overflow-tooltip="true" width="60" fixed="right">
               <template slot-scope="scope">
                 <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delData(scope.row)"></el-button>
               </template>
