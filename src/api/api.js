@@ -1537,6 +1537,10 @@ export const BOTTLE_API = {
   // 数据录入
   BOTTLE_PRO_HEAD: HOST + '/bottle/workShop/headInfo',
   BOTTLE_PRO_HEAD_UPDATE: HOST + '/bottle/workShop/headUpdate',
+  BOTTLE_PRO_READYTIME_LIST: HOST + '/bottle/ready/list',
+  BOTTLE_PRO_READY_UPDATE: HOST + '/bottle/ready/mySaveOrUpdate',
+  BOTTLE_PRO_DEVICE_UPDATE: HOST + '/bottle/ready/bottleMachineUpdate',
+  BOTTLE_PRO_READYTIME_SUBMIT: HOST + '/bottle/ready/submit',
   BOTTLE_PRO_RECORD_LIST: HOST + '/bottle/workShop/embryoRecordList',
   BOTTLE_PRO_RECORD_SAVE: HOST + '/bottle/workShop/embryoRecordSave',
   BOTTLE_PRO_RECORD_SUBMIT: HOST + '/bottle/workShop/embryoRecordSubmit',
@@ -1548,7 +1552,7 @@ export const BOTTLE_API = {
   BOTTLE_PRO_IN_SAVE: HOST + '/bottle/inStorage/mySaveOrUpdate',
   BOTTLE_PRO_IN_SUBMIT: HOST + '/bottle/inStorage/submit',
   BOTTLE_PRO_MATERIAL_LIST: HOST + '/bottle/material/list',
-  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/material/mySaveOrUpdate',
+  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/bottle/material/mySaveOrUpdate',
   BOTTLE_PRO_MATERIAL_SUBMIT: HOST + '/bottle/material/submit',
   // 工艺数据
   BOTTLE_CRAFT_PRODUCT_LIST: HOST + '/bottle/workShop/techProductParameterList',

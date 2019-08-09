@@ -27,7 +27,7 @@
     <el-tabs  @tab-click='tabClick' ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
       <el-tab-pane name="1">
         <span slot="label" class="spanview">准备时间</span>
-        <ready-times ref="readytimes" :isRedact="isRedact"></ready-times>
+        <ready-times ref="readytimes" :isRedact="isRedact" :formHeader="formHeader" :productShift="productShift"></ready-times>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">人员</span>
@@ -104,6 +104,7 @@ export default {
           this.$refs.workerref.GetProductShift(this.formHeader.factory)
           this.$refs.workerref.GetMaterails(this.formHeader.productLine)
           if (this.formHeader.orderStatus) {
+            this.$refs.readytimes.getDataList()
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
             this.$refs.material.getDataList(this.formHeader.orderNo)
@@ -136,6 +137,10 @@ export default {
       } else {
         this.formHeader.orderStatus = str
       }
+      this.formHeader.countOutput = this.$refs.instorage.sumNum
+      this.formHeader.countMan = this.$refs.workerref.countMan
+      this.formHeader.expAllDate = this.$refs.excrecord.ExcNum
+      this.formHeader.germs = this.$refs.excrecord.GermsNum
       this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -150,6 +155,9 @@ export default {
     },
     // 保存提交
     SubmitForm () {
+      if (!this.$refs.readytimes.dataRul()) {
+        return false
+      }
       if (!this.$refs.instorage.dataRul()) {
         return false
       }
@@ -174,6 +182,12 @@ export default {
       let updateHead = new Promise((resolve, reject) => {
         this.UpdateHead(str, resolve, reject)
       })
+      let updateReady = new Promise((resolve, reject) => {
+        this.$refs.readytimes.UpdateReady(str, resolve, reject)
+      })
+      let updateDevice = new Promise((resolve, reject) => {
+        this.$refs.readytimes.UpdateDevice(str, resolve, reject)
+      })
       let updateRecord = new Promise((resolve, reject) => {
         this.$refs.record.SaveOrSubmitData(str, resolve, reject)
       })
@@ -195,15 +209,52 @@ export default {
       let updateText = new Promise((resolve, reject) => {
         this.$refs.textrecord.UpdateText(this.formHeader, str, resolve, reject)
       })
-      // if (str === 'saved') {
-      let savedNet = Promise.all([updateHead, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
-      savedNet.then(() => {
-        this.$message.success('操作成功')
-        this.getHead()
-      }).catch((err) => {
-        this.$message.error(err)
+      if (str === 'saved') {
+        let savedNet = Promise.all([updateHead, updateReady, updateDevice, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
+        savedNet.then(() => {
+          this.$message.success('操作成功')
+          this.getHead()
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      } else {
+        let savedNet = Promise.all([updateReady, updateDevice])
+        savedNet.then(() => {
+          let SubmitTime = new Promise((resolve, reject) => {
+            this.ProHours(resolve, reject)
+          })
+          let SubmitNet = Promise.all([updateHead, SubmitTime, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
+          SubmitNet.then(() => {
+            this.$message.success('操作成功')
+            this.getHead()
+          }).catch((err) => {
+            this.$message.error(err)
+          })
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      }
+    },
+    // 工时提交
+    ProHours (resolve, reject) {
+      let data = [this.$refs.readytimes.readyTimeDate, this.$refs.readytimes.dataList, this.$refs.workerref.WorkerDate, {
+        orderId: this.formHeader.orderId,
+        countOutput: this.$refs.instorage.sumNum + '',
+        countOutputUnit: 'EA',
+        productDate: this.formHeader.productDate
+      }]
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_READYTIME_SUBMIT}`, 'POST', data).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          this.$message.error(data.msg)
+          if (reject) {
+            reject('工时提交' + data.msg)
+          }
+        }
       })
-      // }
     },
     // 获取生产班次
     GetProductShift (factory) {

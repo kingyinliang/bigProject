@@ -5,17 +5,17 @@
       <el-table-column type="index" label="序号" width="55"></el-table-column>
       <el-table-column label="时间" prop="kjmWorkShopName">
         <template slot-scope="scope">
-          <el-date-picker size="mini" type="datetime" :disabled="!isRedact" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="scope.row.date"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" :disabled="!isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="scope.row.date"></el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="瓶胚批号" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.embryoBatch" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.embryoBatch" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="瓶胚数量 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.embryoAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.embryoAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60">
@@ -23,14 +23,14 @@
       </el-table-column>
       <el-table-column label="供应商" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="150">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.supplier" placeholder="请选择" size="mini" :disabled="!isRedact">
+          <el-select v-model="scope.row.supplier" placeholder="请选择" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Supplier" :key="index"></el-option>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60" fixed="right">

@@ -7,47 +7,47 @@
       <el-table-column label="需求用量" :show-overflow-tooltip="true" prop="needAmount" width="80"></el-table-column>
       <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="80">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.isSplit === '0'" :disabled="!(isRedact)" @click="splitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+          <el-button type="text" v-if="scope.row.isSplit === '0'" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="splitDate(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
         </template>
       </el-table-column>
       <el-table-column label="批次 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot="header"><i class="reqI">*</i><span>批次</span></template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.batch" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="生产使用量 " :show-overflow-tooltip="true" width="140">
         <template slot="header"><i class="reqI">*</i><span>生产使用量</span></template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.productUseAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.productUseAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="本班损耗 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="100">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.classLoss" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.classLoss" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="不合格数 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="100">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.belowGradeAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.belowGradeAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="供应商 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot="header"><i class="reqI">*</i><span>供应商</span></template>
         <template slot-scope="scope">
-          <el-select v-model="scope.row.supplier" placeholder="请选择" size="mini" :disabled="!isRedact">
+          <el-select v-model="scope.row.supplier" placeholder="请选择" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Supplier" :key="index"></el-option>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column label="备注" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="120">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact)"></el-input>
+          <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60" fixed="right">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact)" @click="delMaterial(scope.row)" v-if="scope.row.isSplit === '1'"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delMaterial(scope.row)" v-if="scope.row.isSplit === '1'"></el-button>
         </template>
       </el-table-column>
     </el-table>
