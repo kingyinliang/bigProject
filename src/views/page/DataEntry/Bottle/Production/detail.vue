@@ -26,11 +26,19 @@
     </el-card>
     <el-tabs  @tab-click='tabClick' ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
       <el-tab-pane name="1">
-        <span slot="label" class="spanview">准备时间</span>
-        <ready-times ref="readytimes" :isRedact="isRedact" :formHeader="formHeader" :productShift="productShift"></ready-times>
+        <span slot="label" class="spanview">
+          <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">准备时间</el-button>
+          </el-tooltip>
+        </span>
+        <ready-times ref="readytimes" :isRedact="isRedact" :formHeader="formHeader" :productShift="productShift" @SetReadyStatus="SetReadyStatus"></ready-times>
       </el-tab-pane>
       <el-tab-pane name="2">
-        <span slot="label" class="spanview">人员</span>
+        <span slot="label" class="spanview">
+          <el-tooltip class="item" effect="dark" :content="readyState === 'noPass'? '不通过':readyState === 'saved'? '已保存':readyState === 'submit' ? '已提交' : readyState === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">人员</el-button>
+          </el-tooltip>
+        </span>
         <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance"></worker>
       </el-tab-pane>
       <el-tab-pane name="3">
@@ -42,12 +50,20 @@
         <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
       </el-tab-pane>
       <el-tab-pane name="5">
-        <span slot="label" class="spanview">生产入库</span>
-        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift"></in-storage>
+        <span slot="label" class="spanview">
+          <el-tooltip class="item" effect="dark" :content="inStorageState === 'noPass'? '不通过':inStorageState === 'saved'? '已保存':inStorageState === 'submit' ? '已提交' : inStorageState === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
+          </el-tooltip>
+        </span>
+        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift" @setInStorageState='setInStorageState'></in-storage>
       </el-tab-pane>
       <el-tab-pane name="6">
-        <span slot="label" class="spanview">物料领用</span>
-        <material ref="material" :isRedact="isRedact" :Supplier="Supplier"></material>
+        <span slot="label" class="spanview">
+          <el-tooltip class="item" effect="dark"  :content="applyMaterielState === 'noPass'? '不通过':applyMaterielState === 'saved'? '已保存':applyMaterielState === 'submit' ? '已提交' : applyMaterielState === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': applyMaterielState === 'noPass'? 'red' : ''}">物料领用</el-button>
+          </el-tooltip>
+        </span>
+        <material ref="material" :isRedact="isRedact" :Supplier="Supplier" @setApplyMaterielState='setApplyMaterielState'></material>
       </el-tab-pane>
       <el-tab-pane name="7">
         <span slot="label" class="spanview">文本记录</span>
@@ -74,6 +90,9 @@ export default {
       orderStatus: '',
       activeName: '1',
       formHeader: {},
+      readyState: '',
+      inStorageState: '',
+      applyMaterielState: '',
       Supplier: [],
       productShift: [],
       Attendance: []
@@ -85,6 +104,23 @@ export default {
   methods: {
     tabClick (val) {
       this.$refs.tabs.setCurrentName(val.name)
+    },
+    // 准备时间状态
+    SetReadyStatus (status) {
+      this.readyState = status
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    // 入库状态
+    setInStorageState (status) {
+      this.inStorageState = status
+      // 强制刷新tabs
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    // 物料状态
+    setApplyMaterielState (status) {
+      this.applyMaterielState = status
+      // 强制刷新tabs
+      this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
     // 获取表头
     getHead () {
@@ -189,7 +225,7 @@ export default {
         this.$refs.readytimes.UpdateDevice(str, resolve, reject)
       })
       let updateRecord = new Promise((resolve, reject) => {
-        this.$refs.record.SaveOrSubmitData(str, resolve, reject)
+        this.$refs.record.SaveData(str, resolve, reject)
       })
       let updateIn = new Promise((resolve, reject) => {
         this.$refs.instorage.SaveOrSubmitData(str, resolve, reject)
@@ -218,12 +254,15 @@ export default {
           this.$message.error(err)
         })
       } else {
-        let savedNet = Promise.all([updateReady, updateDevice])
+        let savedNet = Promise.all([updateReady, updateDevice, updateRecord])
         savedNet.then(() => {
+          let SubmitRecord = new Promise((resolve, reject) => {
+            this.$refs.record.SubmitData(str, resolve, reject)
+          })
           let SubmitTime = new Promise((resolve, reject) => {
             this.ProHours(resolve, reject)
           })
-          let SubmitNet = Promise.all([updateHead, SubmitTime, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
+          let SubmitNet = Promise.all([updateHead, SubmitTime, SubmitRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
           SubmitNet.then(() => {
             this.$message.success('操作成功')
             this.getHead()

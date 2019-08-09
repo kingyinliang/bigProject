@@ -77,7 +77,7 @@ export default {
       })
     },
     // 保存提交
-    SaveOrSubmitData (str, resolve, reject) {
+    SaveData (str, resolve, reject) {
       this.RecordList.forEach((item) => {
         item.sumEmbryoAmount = this.sumNum
         if (item.status) {
@@ -86,7 +86,23 @@ export default {
           item.status = str
         }
       })
-      this.$http(`${str === 'saved' ? BOTTLE_API.BOTTLE_PRO_RECORD_SAVE : BOTTLE_API.BOTTLE_PRO_RECORD_SUBMIT}`, 'POST', this.RecordList).then(({data}) => {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_RECORD_SAVE}`, 'POST', this.RecordList).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('投胚记录' + data.msg)
+          }
+        }
+      })
+    },
+    // 保存提交
+    SubmitData (str, resolve, reject) {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_RECORD_SUBMIT}`, 'POST', {
+        orderId: this.$store.state.common.bottle.ProOrderId
+      }).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')

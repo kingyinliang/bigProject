@@ -57,6 +57,7 @@
 
 <script>
 import { BOTTLE_API } from '@/api/api'
+import { GetStatus } from '@/net/validate'
 export default {
   name: 'Material',
   data () {
@@ -79,6 +80,7 @@ export default {
   methods: {
     // 获取物料领用
     getDataList (orderNo) {
+      let status = ''
       this.$http(`${BOTTLE_API.BOTTLE_PRO_MATERIAL_LIST}`, 'POST', {
         orderId: this.$store.state.common.bottle.ProOrderId,
         orderNo: orderNo
@@ -86,9 +88,12 @@ export default {
         if (data.code === 0) {
           this.MaterialList = data.list
           this.MaterialAudit = data.vrList
+          status = GetStatus(this.MaterialList)
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setApplyMaterielState', status)
       })
     },
     // 保存提交

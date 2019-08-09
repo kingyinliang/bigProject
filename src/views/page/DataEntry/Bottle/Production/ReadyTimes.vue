@@ -192,17 +192,22 @@ export default {
   methods: {
     // 获取准备工时列表
     getDataList () {
+      let status = ''
       this.$http(`${BOTTLE_API.BOTTLE_PRO_READYTIME_LIST}`, 'POST', {
         order_id: this.$store.state.common.bottle.ProOrderId
       }).then(({data}) => {
         if (data.code === 0) {
           if (data.listTime.length > 0) {
             this.readyTimeDate = data.listTime[0]
+            status = data.listTime[0].status
           }
           this.dataList = data.listMachine
+          this.TimeAudit = data.vrList
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('SetReadyStatus', status)
       })
     },
     // 弹窗确认

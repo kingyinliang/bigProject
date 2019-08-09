@@ -381,7 +381,7 @@ export default {
     },
     // 获取组织结构树
     getTree (factory) {
-      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}).then(({data}) => {
+      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}, false, false, false).then(({data}) => {
       // this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
           this.OrgTree = data.deptList

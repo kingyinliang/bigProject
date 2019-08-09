@@ -43,6 +43,7 @@
 
 <script>
 import { BOTTLE_API } from '@/api/api'
+import { GetStatus } from '@/net/validate'
 export default {
   name: 'InStorage',
   data () {
@@ -65,15 +66,19 @@ export default {
   methods: {
     // 获取生产入库
     getDataList () {
+      let status = ''
       this.$http(`${BOTTLE_API.BOTTLE_PRO_IN_LIST}`, 'POST', {
         orderId: this.$store.state.common.bottle.ProOrderId
       }).then(({data}) => {
         if (data.code === 0) {
           this.InDataList = data.list
           this.InAudit = data.vrList
+          status = GetStatus(this.InDataList)
         } else {
           this.$message.error(data.msg)
         }
+      }).finally(() => {
+        this.$emit('setInStorageState', status)
       })
     },
     // 生产班次下拉
