@@ -78,13 +78,13 @@
           <el-table-column label="订单结束日期" width="110" prop="commitDate"></el-table-column>
           <el-table-column label="调配罐号" width="110" prop="holderName"></el-table-column>
           <el-table-column label="BL原汁量" width="110" prop="amount"></el-table-column>
-          <el-table-column width="160" prop="orderDate">
+          <el-table-column width="160" prop="productDate">
             <template slot="header">
               <i class="reqI">*</i>
               <span>生产日期</span>
             </template>
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.orderDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" :disabled="ReturnStatus(scope.row)" size="small" type="date" placeholder="请选择" style="width:140px"></el-date-picker>
+              <el-date-picker v-model="scope.row.productDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" :disabled="ReturnStatus(scope.row)" size="small" type="date" placeholder="请选择" style="width:140px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column width="140">
@@ -258,7 +258,7 @@ export default {
         return false
       } else {
         for (let item of this.multipleSelection) {
-          if (!item.orderDate || !item.panId) {
+          if (!item.productDate || !item.panId) {
             this.$message.error('生产日期与锅号为必填项')
             return false
           }

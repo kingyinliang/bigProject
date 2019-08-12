@@ -214,6 +214,18 @@ export default {
       workShop: '',
       orderId: '',
       productDate: ''
+    },
+    filtrationPot: {
+      factory: '',
+      workShop: '',
+      holderId: ''
+    },
+    /**
+     * 吹瓶车间
+    */
+    bottle: {
+      orderNo: '',
+      ProOrderId: ''
     }
   },
   mutations: {
@@ -362,6 +374,9 @@ export default {
     },
     updateSterilized (state, params) {
       state.Sterilized = params
+    },
+    updateBottle (state, params) {
+      state.Bottle = params
     }
   }
 }

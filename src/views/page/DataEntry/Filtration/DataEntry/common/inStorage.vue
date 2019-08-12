@@ -20,7 +20,7 @@
           <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作时间" width="100" prop="changed" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
+          <el-table-column label="操作" width="50" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-button type="danger" circle icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"></el-button>
             </template>
@@ -65,10 +65,10 @@
           <el-input v-model="dataForm.remark" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="操作人：">
-          {{$store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
+          {{dataForm.changer = $store.state.user.realName + '（' + this.$store.state.user.name + '）'}}
         </el-form-item>
         <el-form-item label="操作时间：">
-          {{dataForm.created}}
+          {{dataForm.changed}}
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -220,7 +220,7 @@ export default {
         delFlag: '0',
         holderName: '',
         fullDate: '',
-        created: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         orderId: this.formHeader.orderId
       }
     },

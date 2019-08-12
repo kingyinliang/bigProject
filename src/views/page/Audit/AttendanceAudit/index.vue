@@ -7,37 +7,37 @@
             <el-col>
               <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetAuditList()" @submit.native.prevent>
                 <el-form-item label="工厂：">
-                  <el-select v-model="plantList.factory" placeholder="请选择">
+                  <el-select v-model="plantList.factory" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="车间：">
-                  <el-select v-model="plantList.workShop" placeholder="请选择">
+                  <el-select v-model="plantList.workShop" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="产线：">
-                  <el-select v-model="plantList.productLine" placeholder="产线">
+                  <el-select v-model="plantList.productLine" placeholder="产线" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate" style="width: 160px"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="考勤类型：">
-                  <el-select v-model="plantList.kqlx" placeholder="请选择" size="small">
+                  <el-select v-model="plantList.kqlx" placeholder="请选择" size="small" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in ARtype" :key="index"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="人员：">
-                  <el-input v-model="plantList.userId" placeholder="请输入"></el-input>
+                  <el-input v-model="plantList.userId" placeholder="请输入" style="width: 160px"></el-input>
                 </el-form-item>
                 <el-form-item label="审核状态：">
-                  <el-select v-model="plantList.status" placeholder="请选择">
+                  <el-select v-model="plantList.status" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
                     <el-option label="未审核"  value="submit"></el-option>
                     <el-option label="审核通过"  value="checked"></el-option>
@@ -483,9 +483,6 @@ export default {
   .topforms{
     .el-date-editor.el-input{
       width: auto;
-    }
-    input{
-      width: 240px!important;
     }
   }
 </style>

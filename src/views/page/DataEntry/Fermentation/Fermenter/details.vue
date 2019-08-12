@@ -93,7 +93,7 @@
           <el-table header-row-class-name="tableHead" :data="dataListUse" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexUseMethod"></el-table-column>
             <el-table-column label="领用日期" :show-overflow-tooltip="true" prop="useDate" width="160"></el-table-column>
-            <el-table-column label="领用车间" :show-overflow-tooltip="true" prop="useWorkShop" width="160"></el-table-column>
+            <el-table-column label="领用车间" :show-overflow-tooltip="true" prop="useWorkShopName" width="160"></el-table-column>
             <el-table-column label="领用量(方)" :show-overflow-tooltip="true" prop="useAmount" width="150"></el-table-column>
             <el-table-column label="批次" :show-overflow-tooltip="true" prop="batch" width="140"></el-table-column>
             <el-table-column label="原汁罐" :show-overflow-tooltip="true" prop="oriHolder"></el-table-column>

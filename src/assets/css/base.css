@@ -111,11 +111,17 @@ td{
 }
 /* 按钮样式  add 20190702  end  */
 .secondcard{
-  margin-top:15px
+  margin-top:5px
+}
+.floatr {
+  float: right;
 }
 .width150px{
   width:150px
 }
 .width180px {
   width:180px
+}
+.points {
+  width:5px; height:5px;float:left; background:#1890FF; border-radius:50%; margin-right: 3px
 }

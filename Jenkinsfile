@@ -1,4 +1,4 @@
-@Library('shared-pipeline-library') _
+@Library('ops-pipeline-library') _
 VueCI {
   //Jenkins Slave Node
   jenkins_node = 'ecs-agent-vuejs'

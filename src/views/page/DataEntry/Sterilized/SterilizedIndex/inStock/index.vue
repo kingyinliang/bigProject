@@ -135,7 +135,7 @@ export default {
       DataAudit: [],
       dataRule: {
         holderId: [
-          { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
+          { required: true, message: '成品罐号不能为空', trigger: 'blur' }
         ],
         batch: [
           { required: true, message: '批次不能为空', trigger: 'blur' },
