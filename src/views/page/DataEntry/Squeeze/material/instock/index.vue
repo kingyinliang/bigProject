@@ -437,7 +437,8 @@ export default class Index extends Vue {
       mixType: row.mixType ? row.mixType : '正常',
       fullPot: row.fullPot ? row.fullPot : '0',
       fullPotAmount: row.fullPotAmount ? row.fullPotAmount : 0,
-      fulPotDate: row.fulPotDate ? row.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      // fulPotDate: row.fulPotDate ? row.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      fulPotDate: row.fulPotDate ? row.fulPotDate : '',
       remark: row.remark ? row.remark : '',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
       changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
