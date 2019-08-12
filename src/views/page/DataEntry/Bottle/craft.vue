@@ -22,10 +22,10 @@
         <el-form-item label="计划产量：">
           <p class="bottom">{{formHeader.planOutput}}</p>
         </el-form-item>
-        <el-form-item label="提交人员：">
+        <el-form-item label="保存人员：">
           <p class="bottom">{{formHeader.changer}}</p>
         </el-form-item>
-        <el-form-item label="提交时间：">
+        <el-form-item label="保存时间：">
           <p class="bottom">{{formHeader.changed}}</p>
         </el-form-item>
       </el-form>
