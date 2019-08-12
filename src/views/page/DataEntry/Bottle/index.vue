@@ -26,7 +26,7 @@
       <el-col :span="8" v-for="(item, index) in dataList" :key="index" style="margin-bottom:15px">
         <div class="sole">
           <div class="top">
-            <div>产线：{{item.productLineName}}</div>
+            <div>产线：{{item.name}}</div>
             <div class="status">
               <span class="points" :style="{'margin-top':'8px','background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : item.orderStatus === 'submit'? '#1890ff' : item.orderStatus === 'saved'? '#1890ff' : '#7ED321'}"></span>&nbsp;状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
             </div>
@@ -34,7 +34,11 @@
           <div class="content">
             <div class="img"><img src="@/assets/img/bottle.png" style="width:100%"></div>
             <div class="right">
-              <div class="lines">订单号：<span>{{item.orderNo}}</span></div>
+              <div class="lines">订单号：
+                <el-select v-model="item.orderNo" @change="changeOrder($event, item)" size="mini" style="width:130px;">
+                  <el-option v-for="(items, index) in item.orderList" :key="index" :value="items.orderNo" :label="items.orderNo"></el-option>
+                </el-select>
+              </div>
               <div class="lines">
                 <div style="float:left">品项：</div>
                 <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="top-start">
@@ -74,6 +78,7 @@ export default {
       factoryList: [],
       workshopList: [],
       dataList: [],
+      AllList: [],
       orderStatus: ''
     }
   },
@@ -126,7 +131,26 @@ export default {
       }
       this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
-          this.dataList = data.indexInfo
+          this.AllList = data.indexInfo
+          data.indexInfo.map((item) => {
+            let Search = this.dataList.find(items => items.name === item.productLineName)
+            if (!Search) {
+              this.dataList.push({
+                name: item.productLineName,
+                orderList: [item],
+                orderStatus: item.orderStatus,
+                materialCode: item.materialCode,
+                materialName: item.materialName,
+                planOutput: item.planOutput,
+                outputUnit: item.outputUnit,
+                realOutput: item.realOutput,
+                orderId: item.orderId,
+                orderNo: item.orderNo
+              })
+            } else {
+              Search.orderList.push(item)
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }
@@ -154,6 +178,17 @@ export default {
       setTimeout(() => {
         this.$router.push({ name: url })
       }, 100)
+    },
+    changeOrder (event, item) {
+      let sole = this.AllList.find(items => items.orderNo === event)
+      item.orderStatus = sole.orderStatus
+      item.materialCode = sole.materialCode
+      item.materialName = sole.materialName
+      item.planOutput = sole.planOutput
+      item.outputUnit = sole.outputUnit
+      item.realOutput = sole.realOutput
+      item.orderId = sole.orderId
+      item.orderNo = sole.orderNo
     }
   },
   computed: {
@@ -205,14 +240,15 @@ export default {
     }
     .right {
       float: left;
-      margin-left: 10px;
+      margin-left: 8px;
       height: 120px;
       .lines{
         color:rgba(0,0,0,0.45);
         line-height: 26px;
-        font-size:14px;
+        font-size:12px;
         span{
           color: rgba(0,0,0,0.65);
+          font-size: 12px
         }
       }
       // display: flex;
