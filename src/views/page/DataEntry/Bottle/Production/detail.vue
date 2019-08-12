@@ -169,7 +169,7 @@ export default {
     // 修改表头
     UpdateHead (str, resolve, reject) {
       if (this.formHeader.orderStatus) {
-        if (this.formHeader.orderStatus === 'saved') { this.formHeader.orderStatus = str } else if (this.formHeader.orderStatus === 'noPass' && str === 'submit') { this.formHeader.orderStatus = str }
+        if (this.formHeader.orderStatus === 'saved' || this.formHeader.orderStatus === '已同步') { this.formHeader.orderStatus = str } else if (this.formHeader.orderStatus === 'noPass' && str === 'submit') { this.formHeader.orderStatus = str }
       } else {
         this.formHeader.orderStatus = str
       }
