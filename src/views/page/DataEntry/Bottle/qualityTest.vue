@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中">
     <el-card class="searchCards newCard">
       <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
         <el-form-item label="车间：" label-width="60px">
@@ -36,7 +36,7 @@
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" >保存</el-button>
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button>
+          <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
         </template>
       </el-row>
     </el-card>
@@ -46,125 +46,125 @@
           <el-button type="primary" :disabled="!isRedact" @click="AddRow" size="small" style="float:right">新增</el-button>
         </el-col>
       </el-row>
-      <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">
+      <el-table :data="dataList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column label="参数" show-overflow-tooltip width="85" prop="parameter"></el-table-column>
         <el-table-column label="时间" width="200" prop="date">
           <template slot-scope="scope">
-            <el-date-picker type="date" v-model="scope.row.date" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" placeholder="请选择日期" style="width:180px"></el-date-picker>
+            <el-date-picker type="date" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" placeholder="请选择日期" style="width:180px"></el-date-picker>
           </template>
         </el-table-column>
         <el-table-column label="1#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.oneWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.oneWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.oneWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.oneWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="2#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.twoWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.twoWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.twoWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.twoWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="3#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.threeWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.threeWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.threeWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.threeWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="4#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.fourWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.fourWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.fourWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.fourWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="5#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.fiveWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.fiveWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.fiveWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.fiveWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="6#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.sixWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.sixWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.sixWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.sixWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="7#" width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.sevenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.sevenWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.sevenWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.sevenWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="8#" show-overflow-tooltip width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.eightWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.eightWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.eightWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.eightWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="9#" show-overflow-tooltip width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.nineWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.nineWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.nineWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.nineWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="10#" show-overflow-tooltip width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.tenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.tenWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.tenWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.tenWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="11#" show-overflow-tooltip width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.elevenWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.elevenWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.elevenWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.elevenWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column label="12#" show-overflow-tooltip width="100">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.twelveWell" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
+            <el-select v-model="scope.row.twelveWell" :disabled="!isRedact" size="small" v-if="scope.row.parameter === '外观' || scope.row.parameter === '密封性能' || scope.row.parameter === '跌落性能'">
               <el-option value="合格">合格</el-option>
               <el-option value="不合格">不合格</el-option>
             </el-select>
-            <el-input v-model="scope.row.twelveWell" size="small" v-else></el-input>
+            <el-input v-model="scope.row.twelveWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -172,9 +172,8 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pages.currPage"
-        :page-sizes="[8, 16]"
         :page-size="pages.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, jumper"
         :total="pages.totalCount">
       </el-pagination>
     </el-card>
@@ -192,6 +191,7 @@ export default {
   name: 'qualityTest',
   data () {
     return {
+      loading: false,
       formHeader: {
         orderNo: this.$store.state.common.Bottle.orderNo,
         materialCode: '',
@@ -227,6 +227,9 @@ export default {
       this.$http(`${BOTTLE_API.BOTTLE_QUALITY_LIST}`, 'POST', this.pages).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.qualityInspectionList.list
+          if (this.dataList.length !== 0) {
+            this.Textareas = this.dataList[0].abnormal
+          }
           this.pages.currPage = data.qualityInspectionList.currPage
           this.pages.pageSize = data.qualityInspectionList.pageSize
           this.pages.totalCount = data.qualityInspectionList.totalCount
@@ -236,11 +239,13 @@ export default {
       })
     },
     AddRow () {
-      if (this.dataList.length === 0) {
+      let NewList = this.dataList.slice((this.dataList.length) - 8)
+      let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+      if (NewList.length === 0) {
         this.dataList.push({
           id: '',
           parameter: '外观',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -252,11 +257,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '瓶高(mm)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -268,11 +274,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '瓶口内径(mm)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -284,11 +291,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '重量(g)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -300,11 +308,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '满口容量(ml)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -316,11 +325,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '密封性能',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -332,11 +342,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '跌落性能',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -348,11 +359,12 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         }, {
           id: '',
           parameter: '垂直度',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -364,15 +376,15 @@ export default {
           nineWell: '',
           tenWell: '',
           elevenWell: '',
-          twelveWell: ''
+          twelveWell: '',
+          delFlag: '0'
         })
       } else {
-        let NewList = this.dataList.slice((this.dataList.length) - 8)
         NewList.map((item) => {
           this.dataList.push({
             id: '',
             parameter: item.parameter,
-            date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+            date: dateNow,
             oneWell: item.oneWell,
             twoWell: item.twoWell,
             threeWell: item.threeWell,
@@ -384,30 +396,56 @@ export default {
             nineWell: item.nineWell,
             tenWell: item.tenWell,
             elevenWell: item.elevenWell,
-            twelveWell: item.twelveWell
+            twelveWell: item.twelveWell,
+            delFlag: '0'
           })
         })
       }
+      // this.loading = false
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.pages.currPage = val
+      this.GetList()
     },
     savedOrSubmitForm (str) {
       this.dataList.map(item => {
         item.status = str
         item.orderId = this.orderId
+        item.abnormal = this.Textareas
       })
       this.$http(`${BOTTLE_API.BOTTLE_QUALITY_SAVE}`, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('保存成功')
+          this.pages.currPage = 1
+          this.isRedact = false
           this.GetHeader()
         } else {
           this.$message.error(data.msg)
         }
       })
+    },
+    DelRow (row, index) {
+      this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let is = index
+        while (is < index + 8) {
+          this.dataList[is].delFlag = '1'
+          is++
+        }
+      })
+    },
+    rowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     }
   }
 }
