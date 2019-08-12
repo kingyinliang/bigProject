@@ -36,7 +36,7 @@
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" >保存</el-button>
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button>
+          <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
         </template>
       </el-row>
     </el-card>
@@ -164,7 +164,7 @@
         </el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -239,12 +239,13 @@ export default {
       })
     },
     AddRow () {
-      this.loading = true
-      if (this.dataList.length === 0) {
+      let NewList = this.dataList.slice((this.dataList.length) - 8)
+      let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
+      if (NewList.length === 0) {
         this.dataList.push({
           id: '',
           parameter: '外观',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -261,7 +262,7 @@ export default {
         }, {
           id: '',
           parameter: '瓶高(mm)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -278,7 +279,7 @@ export default {
         }, {
           id: '',
           parameter: '瓶口内径(mm)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -295,7 +296,7 @@ export default {
         }, {
           id: '',
           parameter: '重量(g)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -312,7 +313,7 @@ export default {
         }, {
           id: '',
           parameter: '满口容量(ml)',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -329,7 +330,7 @@ export default {
         }, {
           id: '',
           parameter: '密封性能',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -346,7 +347,7 @@ export default {
         }, {
           id: '',
           parameter: '跌落性能',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -363,7 +364,7 @@ export default {
         }, {
           id: '',
           parameter: '垂直度',
-          date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          date: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -379,12 +380,11 @@ export default {
           delFlag: '0'
         })
       } else {
-        let NewList = this.dataList.slice((this.dataList.length) - 8)
         NewList.map((item) => {
           this.dataList.push({
             id: '',
             parameter: item.parameter,
-            date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+            date: dateNow,
             oneWell: item.oneWell,
             twoWell: item.twoWell,
             threeWell: item.threeWell,
@@ -401,7 +401,7 @@ export default {
           })
         })
       }
-      this.loading = false
+      // this.loading = false
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -427,19 +427,17 @@ export default {
         }
       })
     },
-    DelRow (keys) {
+    DelRow (row, index) {
       this.$confirm('正在执行删除操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let i = 1
-        this.dataList.map((item, index) => {
-          if (index >= keys && i < 9) {
-            item.delFlag = '1'
-            i = i + 1
-          }
-        })
+        let is = index
+        while (is < index + 8) {
+          this.dataList[is].delFlag = '1'
+          is++
+        }
       })
     },
     rowDelFlag ({row, rowIndex}) {

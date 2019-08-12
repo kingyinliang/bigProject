@@ -143,7 +143,7 @@
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="电压V" width="100">
+          <el-table-column label="电压V" >
             <template slot-scope="scope">
               <el-input v-model="scope.row.voltage" :disabled="!isRedact" size="small"></el-input>
             </template>
@@ -163,12 +163,12 @@
               <el-input v-model="scope.row.lowPressure" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="冷水机1进水温度(°C)">
+          <el-table-column label="冷水机1进水温度(°C)" width="160">
             <template slot-scope="scope">
               <el-input v-model="scope.row.oneInletWaterTemp" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="冷水机2进水温度(°C)">
+          <el-table-column label="冷水机2进水温度(°C)" width="160">
             <template slot-scope="scope">
               <el-input v-model="scope.row.twoInletWaterTemp" :disabled="!isRedact" size="small"></el-input>
             </template>
@@ -355,11 +355,12 @@ export default {
     },
     AddProductRow () {
       let productList = this.productList.filter(item => { return item.delFlag === '0' })
+      let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
       if (productList.length === 0) {
         this.productList.push({
           id: '',
           parameter: '拉伸角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          time: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -376,7 +377,7 @@ export default {
         }, {
           id: '',
           parameter: '预吹角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          time: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -393,7 +394,7 @@ export default {
         }, {
           id: '',
           parameter: '主吹角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          time: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -410,7 +411,7 @@ export default {
         }, {
           id: '',
           parameter: '回收角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          time: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -427,7 +428,7 @@ export default {
         }, {
           id: '',
           parameter: '排气角度',
-          time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+          time: dateNow,
           oneWell: '',
           twoWell: '',
           threeWell: '',
@@ -448,7 +449,7 @@ export default {
           this.productList.push({
             id: '',
             parameter: item.parameter,
-            time: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
+            time: dateNow,
             oneWell: item.oneWell,
             twoWell: item.twoWell,
             threeWell: item.threeWell,
@@ -508,16 +509,22 @@ export default {
     },
     // 删除
     DelRow (row, index = null) {
-      if (index === null) {
-        row.delFlag = '1'
-      } else {
-        // 一次删5条
-        let is = index
-        while (is < index + 5) {
-          this.productList[is].delFlag = '1'
-          is++
+      this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (index === null) {
+          row.delFlag = '1'
+        } else {
+          // 一次删5条
+          let is = index
+          while (is < index + 5) {
+            this.productList[is].delFlag = '1'
+            is++
+          }
         }
-      }
+      })
     },
     //  RowDelFlag
     rowDelFlag ({row, rowIndex}) {
