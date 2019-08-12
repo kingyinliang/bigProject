@@ -390,7 +390,7 @@ export default class Index extends Vue {
           // 未录入的入库数默认等于订单数/ 不带出批次
           if (e.status !== 'checked' && e.status !== 'submit' && e.status !== 'saved' && e.status !== 'noPass') {
             e.inAmount = e.orderAmount
-            e.batch = ''
+            // e.batch = ''
           }
         })
         this.totalCount = res.data.page.totalCount
