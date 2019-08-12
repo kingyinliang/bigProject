@@ -26,7 +26,7 @@
           <el-card class="dataList_item">
             <h3 class="dataList_item_tit">
               {{item.holderName}}
-              <span class="dataList_item_tit_right"><i class="dataList_item_tit_dian" :style="{'color': item.selectOrder.orderStatus === 'noPass'? 'red': item.selectOrder.orderStatus === 'checked'? '#67C23A' : ''}" v-if="item.selectOrder.orderStatus"></i>{{item.selectOrder.orderStatus === 'submit'? '已提交' : item.selectOrder.orderStatus === 'checked' ? '审核通过' : item.selectOrder.orderStatus === 'noPass'?  '审核不通过' : item.selectOrder.orderStatus === 'saved'? '已保存' : item.selectOrder.orderStatus === '已同步' ? '未录入' : item.selectOrder.orderStatus}}</span>
+              <span class="dataList_item_tit_right" :style="{'color': item.selectOrder.orderStatus === 'noPass'? 'red': item.selectOrder.orderStatus === 'checked'? '#67C23A' : ''}"><i class="dataList_item_tit_dian" :style="{'background': item.selectOrder.orderStatus === 'noPass'? 'red': item.selectOrder.orderStatus === 'checked'? '#67C23A' : ''}" v-if="item.selectOrder.orderStatus"></i>{{item.selectOrder.orderStatus === 'submit'? '已提交' : item.selectOrder.orderStatus === 'checked' ? '审核通过' : item.selectOrder.orderStatus === 'noPass'?  '审核不通过' : item.selectOrder.orderStatus === 'saved'? '已保存' : item.selectOrder.orderStatus === '已同步' ? '未录入' : item.selectOrder.orderStatus}}</span>
             </h3>
             <div class="dataList_item_body">
               <div class="dataList_item_body_ptobox">

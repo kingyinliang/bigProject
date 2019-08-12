@@ -849,7 +849,12 @@ export const REP_API = {
    * 出油率
    */
   SQUEEZEOILERLIST_API: HOST + '/report/formPress/oilYieldList',
-  REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield'
+  REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield',
+  /**
+   *  二合一报表
+   */
+  TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
+  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList'
 }
 /*
 *炒麦api
@@ -1080,6 +1085,7 @@ export const KJM_API = {
   DOULOOKSTATUS_API: HOST + '/kjm/guard/tech/updateStatus', // 工艺 状态,
   IOT_LIST: HOST + '/iot/tu/list',
   IOT_TIME_INFO: HOST + '/iot/tu/timeList',
+  IOT_READ: HOST + '/iot/tu/readData',
 
   /**
    * @property {string} KJMAKINGHEAD_API 车间审核表头
@@ -1496,6 +1502,10 @@ export const FILTRATION_API = {
   FILTER_MANHOUR_UPDATE_API: HOST + '/filter/timeSheet/update',
   FILTER_MANHOUR_SAVE_API: HOST + '/filter/timeSheet/submit',
   /**
+   *  过滤罐区
+   */
+  FILTER_POT_LIST_API: HOST + '/filter/holder/list',
+  /**
    *  工艺控制
    */
   FILTER_CRAFT_LIST: HOST + '/filter/tech/techList',
@@ -1517,4 +1527,41 @@ export const FILTRATION_API = {
   FILTER_MATERIAL_LIST: HOST + '/filter/material/list',
   FILTER_MATERIAL_SAVE: HOST + '/filter/material/save',
   FILTER_MATERIAL_SUBMIT: HOST + '/filter/material/submit'
+}
+/**
+ *  吹瓶api
+ */
+export const BOTTLE_API = {
+  // 生产数据首页
+  BOTTLE_INDEX_LIST: HOST + '/bottle/workShop/indexList',
+  // 数据录入
+  BOTTLE_PRO_HEAD: HOST + '/bottle/workShop/headInfo',
+  BOTTLE_PRO_HEAD_UPDATE: HOST + '/bottle/workShop/headUpdate',
+  BOTTLE_PRO_READYTIME_LIST: HOST + '/bottle/ready/list',
+  BOTTLE_PRO_READY_UPDATE: HOST + '/bottle/ready/mySaveOrUpdate',
+  BOTTLE_PRO_DEVICE_UPDATE: HOST + '/bottle/ready/bottleMachineUpdate',
+  BOTTLE_PRO_READYTIME_SUBMIT: HOST + '/bottle/ready/submit',
+  BOTTLE_PRO_RECORD_LIST: HOST + '/bottle/workShop/embryoRecordList',
+  BOTTLE_PRO_RECORD_SAVE: HOST + '/bottle/workShop/embryoRecordSave',
+  BOTTLE_PRO_RECORD_SUBMIT: HOST + '/bottle/workShop/embryoRecordSubmit',
+  BOTTLE_PRO_USER_LIST: HOST + '/bottle/attendance/list',
+  BOTTLE_PRO_USERMATERIAL_LIST: HOST + '/bottle/attendance/materialList',
+  BOTTLE_PRO_USER_UPDATE: HOST + '/bottle/attendance/updateUser',
+  BOTTLE_PRO_ATTEND_UPDATE: HOST + '/bottle/attendance/mySaveOrUpdate',
+  BOTTLE_PRO_IN_LIST: HOST + '/bottle/inStorage/list',
+  BOTTLE_PRO_IN_SAVE: HOST + '/bottle/inStorage/mySaveOrUpdate',
+  BOTTLE_PRO_IN_SUBMIT: HOST + '/bottle/inStorage/submit',
+  BOTTLE_PRO_MATERIAL_LIST: HOST + '/bottle/material/list',
+  BOTTLE_PRO_MATERIAL_SAVE: HOST + '/bottle/material/mySaveOrUpdate',
+  BOTTLE_PRO_MATERIAL_SUBMIT: HOST + '/bottle/material/submit',
+  // 工艺数据
+  BOTTLE_CRAFT_PRODUCT_LIST: HOST + '/bottle/workShop/techProductParameterList',
+  BOTTLE_CRAFT_WARMING_LIST: HOST + '/bottle/workShop/techTempParameterList',
+  BOTTLE_CRAFT_EQUIPMENT_LIST: HOST + '/bottle/workShop/techMachineList',
+  BOTTLE_CRAFT_PRODUCT_SAVE: HOST + '/bottle/workShop/techProductParameterSave',
+  BOTTLE_CRAFT_WARMING_SAVE: HOST + '/bottle/workShop/techTempParameterSave',
+  BOTTLE_CRAFT_EQUIPMENT_SAVE: HOST + '/bottle/workShop/techMachineSave',
+  // 质检
+  BOTTLE_QUALITY_LIST: HOST + '/bottle/workShop/qualityInspectionList',
+  BOTTLE_QUALITY_SAVE: HOST + '/bottle/workShop/qualityInspectionSave'
 }

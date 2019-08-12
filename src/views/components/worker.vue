@@ -85,6 +85,47 @@
       </el-table-column>
     </el-table>
     <p style="font-size: 14px;line-height: 62px">实际作业人数：{{countMan}}</p>
+    <div v-if="Attendance">
+      <h3 style="line-height: 32px;font-size: 16px">产量考勤分配</h3>
+      <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="Attendance" border tooltip-effect="dark">
+        <el-table-column label="班组" width="60">
+          <template slot-scope="scope">{{scope.row.itemName}}</template>
+        </el-table-column>
+        <el-table-column label="白/中/夜班" width="120">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.classes" placeholder="请选择" size="mini" :disabled="!isRedact">
+              <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="包装品项">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.materialCode" filterable placeholder="请选择" size="mini" style="width: 180px" @change="selectMaterial(scope.row)" :disabled="!isRedact">
+              <el-option label="请选择"  value=""></el-option>
+              <el-option :label="item.materialCode + ' ' + item.materialName" v-for="(item, index) in Materails" :key="index" :value="item.materialCode"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="60">
+          <template slot-scope="scope">{{scope.row.unitName}}</template>
+        </el-table-column>
+        <el-table-column label="数量" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.amount" size="mini" :disabled="!isRedact"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="120">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.remark" size="mini" :disabled="!isRedact"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="60">
+          <template slot-scope="scope">
+            <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!isRedact" @click="scope.row.delFlag = '1'"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <audit-log :tableData="UserAudit"></audit-log>
     <official-worker v-if="officialWorkerStatus" ref="officialWorker" @changeUser="changeUser"></official-worker>
     <loaned-personnel v-if="loanedPersonnelStatus" ref="loanedPersonnel" @changeUser="changeUser" :OrgTree="OrgTree" :arrList="arrList"></loaned-personnel>
@@ -93,7 +134,7 @@
 </template>
 
 <script>
-import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API } from '@/api/api'
+import { PACKAGING_API, SYSTEMSETUP_API, BASICDATA_API, BOTTLE_API } from '@/api/api'
 import { toDate } from '@/net/validate'
 import OfficialWorker from './officialWorker'
 import LoanedPersonnel from './loanedPersonnel'
@@ -108,6 +149,7 @@ export default {
       Team: [],
       OrgTree: [],
       arrList: [],
+      Materails: [],
       row: {},
       officialWorkerStatus: false,
       loanedPersonnelStatus: false,
@@ -116,7 +158,8 @@ export default {
   },
   props: {
     isRedact: {},
-    order: {}
+    order: {},
+    Attendance: {}
   },
   watch: {
     'order.factory' (n, o) {
@@ -147,6 +190,29 @@ export default {
     // 返回人员列表
     GetUser () {
       return this.WorkerDate
+    },
+    // 获取物料下拉
+    GetMaterails (id) {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_USERMATERIAL_LIST}`, 'POST', {
+        productLine: id
+      }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.Materails = data.result
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    selectMaterial (row) {
+      row.materialName = (this.Materails.filter(it => it.materialCode === row.materialCode)[0]).materialName
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     },
     // 人员保存
     TimeUserSave () {},
@@ -196,6 +262,64 @@ export default {
           }
         }
       }
+    },
+    BottleUpdateUser (str, resolve) {
+      if (this.WorkerDate.length > 0) {
+        this.WorkerDate.forEach((item) => {
+          if (item.status) {
+            if (item.status === 'saved') { item.status = str } else if (item.status === 'noPass' && str === 'submit') { item.status = str }
+          } else {
+            item.status = str
+          }
+        })
+        this.$http(`${BOTTLE_API.BOTTLE_PRO_USER_UPDATE}`, 'POST', this.WorkerDate).then(({data}) => {
+          if (data.code === 0) {
+          } else {
+            this.$message.error('修改人员' + data.msg)
+          }
+          if (resolve) {
+            resolve('resolve')
+          }
+        })
+      } else {
+        if (this.order.orderId) {
+          this.$http(`${BOTTLE_API.BOTTLE_PRO_USER_UPDATE}`, 'POST', [{
+            status: '',
+            orderId: this.order.orderId,
+            classType: '',
+            deptId: '',
+            userType: '',
+            userId: [],
+            startDate: '',
+            dinner: '60',
+            endDate: '',
+            remark: ''
+          }]).then(({data}) => {
+            if (data.code === 0) {
+            } else {
+              this.$message.error('修改人员' + data.msg)
+            }
+            if (resolve) {
+              resolve('resolve')
+            }
+          })
+        } else {
+          if (resolve) {
+            resolve('resolve')
+          }
+        }
+      }
+    },
+    BottleUpdateAtt (str, resolve) {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_ATTEND_UPDATE}`, 'POST', this.Attendance).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error('修改人员考勤分配' + data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      })
     },
     // 校验
     userrul () {
@@ -257,7 +381,7 @@ export default {
     },
     // 获取组织结构树
     getTree (factory) {
-      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}).then(({data}) => {
+      this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {flag: factory}, false, false, false).then(({data}) => {
       // this.$http(`${BASICDATA_API.ORGSTRUCTURE_API}`, 'GET', {}).then(({data}) => {
         if (data.code === 0) {
           this.OrgTree = data.deptList

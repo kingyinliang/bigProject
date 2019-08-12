@@ -172,9 +172,9 @@ export default {
       if (this.formHeader.workShop) {
         let presure
         if (this.formHeader.pressure === 1) {
-          presure = '预压'
+          presure = '预压机'
         } else {
-          presure = '终压'
+          presure = '终压机'
         }
         this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
           param: presure,

@@ -4,7 +4,7 @@
       <el-card class="searchCards searchCard newCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="formHeader" :inline="true" size="small" label-width="85px" >
+            <el-form :model="formHeader" :inline="true" size="small" label-width="85px" class="marbottom">
               <el-form-item label="车间：">
                 <p class="input_bottom">{{formHeader.workShopName}}</p>
               </el-form-item>
@@ -214,6 +214,9 @@ export default {
       if (!this.$refs.material.Readyrules()) {
         return false
       }
+      if (!this.$refs.material.ReadyRepertoryRules()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -231,6 +234,9 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
+      if (!this.$refs.material.ReadyRepertoryRules()) {
+        return false
+      }
       let that = this
       let net101 = new Promise((resolve, reject) => {
         that.$refs.equworkinghours.SaveEquWorking(resolve, reject)

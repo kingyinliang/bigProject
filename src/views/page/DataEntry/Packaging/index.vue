@@ -40,7 +40,6 @@
                 <div class="itemForm">
                     <el-form-item label="订单号：" style="margin-bottom: 10px;">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)">
-                        <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
                     </el-form-item>

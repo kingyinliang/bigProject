@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 15px">
     <el-card class="searchCard  newCard">
-      <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
+      <el-form :inline="true" :model="formHeader" size="small" label-width="82px">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
             <el-option label="请选择"  value=""></el-option>

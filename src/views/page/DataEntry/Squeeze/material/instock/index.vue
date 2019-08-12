@@ -155,7 +155,7 @@
           </el-col>
         </el-row>
       </div>
-      <el-dialog :visible.sync="dialogFormVisible" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>入罐开始</span>
         </div>
@@ -195,7 +195,7 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveStart()">保存</el-button>
         </div>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible2" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>入罐结束</span>
         </div>
@@ -241,7 +241,7 @@
           <el-button type="primary" size="small" style="background-color: #1890FF;color: #FFFFFF;border-color: #1890FF;" @click="saveEnd()">保存</el-button>
         </div>
       </el-dialog>
-      <el-dialog :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
+      <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible3" width="500px" custom-class='dialog__class'>
         <div slot="title" class='title'>
           <span>入罐修改</span>
         </div>
@@ -437,7 +437,8 @@ export default class Index extends Vue {
       mixType: row.mixType ? row.mixType : '正常',
       fullPot: row.fullPot ? row.fullPot : '0',
       fullPotAmount: row.fullPotAmount ? row.fullPotAmount : 0,
-      fulPotDate: row.fulPotDate ? row.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      // fulPotDate: row.fulPotDate ? row.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      fulPotDate: row.fulPotDate ? row.fulPotDate : '',
       remark: row.remark ? row.remark : '',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
       changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
@@ -523,7 +524,8 @@ export default class Index extends Vue {
       endAmount: startData.endAmount ? startData.endAmount : 0,
       fullPot: startData.fullPot ? startData.fullPot : '0',
       fullPotAmount: startData.fullPotAmount ? startData.fullPotAmount : 0,
-      fulPotDate: startData.fulPotDate ? startData.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
+      fulPotDate: '',
+      // fulPotDate: startData.fulPotDate ? startData.fulPotDate : dateFormat(new Date(), 'yyyy-MM-dd'),
       remark: startData.remark ? startData.remark : '',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
       changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`

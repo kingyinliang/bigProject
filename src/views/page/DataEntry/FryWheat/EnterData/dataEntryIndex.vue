@@ -198,6 +198,21 @@ export default {
     },
     // 保存 or 提交
     SubmitForm () {
+      if (!this.$refs.readytime.Readyrul()) {
+        return false
+      }
+      if (!this.$refs.workerref.userrul()) {
+        return false
+      }
+      if (!this.$refs.excrecord.excrul()) {
+        return false
+      }
+      if (!this.$refs.instock.validate()) {
+        return false
+      }
+      if (!this.$refs.applymateriel.validate()) {
+        return false
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

@@ -11,7 +11,7 @@ body {
   background-color: #fff;
 }
 .main{
-  padding: 15px;
+  padding: 5px 10px;
 }
 .topTitle{
   width: 100%;
@@ -486,7 +486,7 @@ img {
   .spanview{
     .el-button{
       background-color: inherit!important;
-      font-size: 16px;
+      font-size: 14px;
       padding: 0;
       border: none;
     }
@@ -585,4 +585,20 @@ img {
 }
 .ra_btn{
   padding: 7px!important;
+}
+.searchCard {
+  .el-button--primary,.el-button--primary:focus{
+    color: #000000;
+    background-color: #FFFFFF;
+    border-color: #D9D9D9;
+  }
+  .el-button--primary:hover{
+    background-color: #1890FF;
+    color: #FFFFFF
+  }
+  .el-button--primary:first-child{
+    background-color: #1890FF;
+    color: #FFFFFF;
+    border-color: #1890FF;
+  }
 }

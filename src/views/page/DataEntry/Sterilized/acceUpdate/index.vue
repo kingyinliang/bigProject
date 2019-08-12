@@ -57,12 +57,12 @@
         <el-table-column type="selection" :selectable="CheckBoxOrder" width="40"></el-table-column>
         <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="辅料状态" width="80" prop="supStatus" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="订单号" width="80" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="杀菌锅" width="80" prop="panName" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="订单号" width="120" prop="orderNo" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="杀菌锅" width="100" prop="panName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
         <el-table-column label="订单量" width="80" prop="planOutPut" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="单位" width="80" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="杀菌状态" width="110" prop="steStatus" :show-overflow-tooltip="true">
+        <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="杀菌状态" width="120" prop="steStatus" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>杀菌状态</span></template>
           <template slot-scope="scope">
             <el-select v-model="scope.row.steStatus" placeholder="请选择" size="mini" :disabled="!isRedact || scope.row.supStatus === '已确认'">
@@ -71,7 +71,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="状态备注" width="80" prop="steStatusRemake" :show-overflow-tooltip="true">
+        <el-table-column label="状态备注" width="100" prop="steStatusRemake" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <el-input v-model="scope.row.steStatusRemake" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
           </template>
@@ -108,7 +108,7 @@
         </el-table-column>
         <el-table-column label="调整后需求数量" width="120" prop="unit" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.adjustAmount" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
+            <el-input v-model="scope.row.adjustAmount" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'" placeholder="请输入" size="mini"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
@@ -116,7 +116,7 @@
         <el-table-column label="领用数量" width="100" prop="receiveAmount" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="备注" width="100">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.remark" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
+            <el-input v-model="scope.row.remark" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'" placeholder="请输入" size="mini"></el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -126,7 +126,7 @@
         <h3 style="line-height: 32px;float: left">增补料记录</h3>
         <el-button type="primary" icon="el-icon-plus" circle size="mini" :disabled="!isRedact" style="float: right" @click="addSup()"></el-button>
       </div>
-      <el-table header-row-class-name="tableHead" :data="SupDate" border tooltip-effect="dark">
+      <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="SupDate" border tooltip-effect="dark">
         <el-table-column type="index" width="55" label="序号"></el-table-column>
         <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="物料" :show-overflow-tooltip="true">
@@ -404,6 +404,14 @@ export default {
     // 删除
     del (row) {
       row.delFlag = '1'
+    },
+    //  RowDelFlag
+    RowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
+      }
     },
     // 物料字典
     GetMaterails (factory, id) {
