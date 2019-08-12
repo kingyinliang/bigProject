@@ -55,6 +55,11 @@
           </el-table-column>
           <el-table-column label="布浆线" prop="deptName"></el-table-column>
           <el-table-column label="布浆结束时间" prop="pulpEndDate"></el-table-column>
+          <el-table-column label="自淋结束时间" prop="drenchEndDate" width="200">
+            <template slot-scope="scope">
+              <el-date-picker v-model="scope.row.drenchEndDate" type="datetime" @input="changedDranch(scope.row)" placeholder="选择日期" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" size="small" style="width:175px" :disabled="!isRedact"></el-date-picker>
+            </template>
+          </el-table-column>
           <el-table-column label="自淋时间(H)" prop="drenchTime"></el-table-column>
           <el-table-column label="挪笼操作员" :show-overflow-tooltip="true">
             <template slot="header"><i class="reqI">*</i><span>挪笼操作员</span></template>
@@ -95,7 +100,7 @@
 
 <script>
 import { BASICDATA_API, SYSTEMSETUP_API, SQU_API } from '@/api/api'
-import { headanimation, setUserList } from '@/net/validate'
+import { headanimation, setUserList, dateFormat } from '@/net/validate'
 export default {
   name: 'water',
   data () {
@@ -203,7 +208,10 @@ export default {
         if (data.code === 0) {
           this.waterList = data.drechinfo
           this.waterList.map((item) => {
-            this.$set(item, 'drenchTime', ((new Date() - new Date(item.pulpEndDate)) / (3600000)).toFixed(2))
+            if (!item.drenchTime || item.drenchTime === '') {
+              this.$set(item, 'drenchTime', ((new Date() - new Date(item.pulpEndDate)) / (3600000)).toFixed(2))
+            }
+            item.drenchEndDate = item.drenchEndDate ? item.drenchEndDate : dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
           })
         } else {
           this.$message.error(data.msg)
@@ -283,6 +291,9 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    changedDranch (row) {
+      row.drenchTime = ((new Date(row.drenchEndDate) - new Date(row.pulpEndDate)) / 3600000).toFixed(2)
     }
   }
 }
