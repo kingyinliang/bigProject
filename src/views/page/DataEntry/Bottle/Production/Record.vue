@@ -4,16 +4,19 @@
     <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="RecordList" border tooltip-effect="dark" >
       <el-table-column type="index" label="序号" width="55"></el-table-column>
       <el-table-column label="时间" prop="kjmWorkShopName">
+        <template slot="header"><i class="reqI">*</i><span>时间</span></template>
         <template slot-scope="scope">
           <el-date-picker style="width: 100%" size="mini" type="datetime" :disabled="!isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked')" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="scope.row.date"></el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="瓶胚批号" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="180">
+      <el-table-column label="瓶胚批号" :show-overflow-tooltip="true" width="180">
+        <template slot="header"><i class="reqI">*</i><span>瓶胚批号</span></template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.embryoBatch" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="瓶胚数量 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="180">
+      <el-table-column label="瓶胚数量 " :show-overflow-tooltip="true" width="180">
+        <template slot="header"><i class="reqI">*</i><span>瓶胚数量</span></template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.embryoAmount" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
@@ -114,6 +117,23 @@ export default {
         }
       })
     },
+    // 校验
+    dataRul () {
+      let ty = true
+      this.RecordList.forEach((item) => {
+        if (!(item.date && item.embryoBatch && item.embryoAmount)) {
+          ty = false
+          this.$message.error('投胚记录必填项未填')
+          return false
+        }
+        if (item.embryoBatch.length !== 10) {
+          ty = false
+          this.$message.error('投胚记录批次十位')
+          return false
+        }
+      })
+      return ty
+    },
     // 新增
     AddRecord () {
       this.RecordList.push({
@@ -126,7 +146,7 @@ export default {
         remark: '',
         status: '',
         sumEmbryoAmount: '',
-        supplier: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].supplier : '',
+        supplier: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].supplier : this.Supplier.length > 0 ? this.Supplier[0].code : '',
         unit: ''
       })
     },

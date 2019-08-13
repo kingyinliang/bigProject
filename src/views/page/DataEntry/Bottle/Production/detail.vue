@@ -39,7 +39,7 @@
             <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">人员</el-button>
           </el-tooltip>
         </span>
-        <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance"></worker>
+        <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance" :att="true"></worker>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">投胚记录</span>
@@ -194,16 +194,19 @@ export default {
       if (!this.$refs.readytimes.dataRul()) {
         return false
       }
+      if (!this.$refs.workerref.userrul()) {
+        return false
+      }
+      if (!this.$refs.record.dataRul()) {
+        return false
+      }
+      if (!this.$refs.excrecord.excrul()) {
+        return false
+      }
       if (!this.$refs.instorage.dataRul()) {
         return false
       }
       if (!this.$refs.material.dataRul()) {
-        return false
-      }
-      if (!this.$refs.workerref.userrul()) {
-        return false
-      }
-      if (!this.$refs.excrecord.excrul()) {
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {

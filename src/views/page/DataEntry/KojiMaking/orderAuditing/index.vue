@@ -67,7 +67,7 @@
               </el-tooltip>
             </span>
             <el-row>
-              <el-button type="primary" style="float: right" size="small" @click="GetTime">获取工时</el-button>
+              <el-button type="primary" style="float: right" size="small" @click="GetTime" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked'">获取工时</el-button>
               <el-table header-row-class-name="tableHead" :data="workHourList"  border tooltip-effect="dark" >
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="工序" width="140">
@@ -335,6 +335,7 @@ export default class Index extends Vue {
     // 实际入库值
     realInAmount: 0
   }
+  newForHeader = []
   workHourList: WorkHour[] = []
   workHourAuditList = []
   inStockList: InStock[] = []
@@ -364,7 +365,7 @@ export default class Index extends Vue {
     return Vue.prototype.isAuth(key)
   }
   GetTime () {
-    Vue.prototype.$http(`${KJM_API.GETKJMAKINGCHECKTIME_API}`, 'POST', [this.formHeader]).then(({data}) => {
+    Vue.prototype.$http(`${KJM_API.GETKJMAKINGCHECKTIME_API}`, 'POST', this.newForHeader).then(({data}) => {
       if (data.code === 0) {
         this.$message.success('成功')
         this.getList()
@@ -399,6 +400,7 @@ export default class Index extends Vue {
     await Vue.prototype.$http(`${KJM_API.KJMAKINGHEAD_API}`, 'POST', {orderId}).then(res => {
       if (res.data.code === 0 && res.data.list && res.data.list.length > 0) {
         let item = res.data.list[0]
+        this.newForHeader = res.data.list
         Object.assign(this.formHeader, item)
       } else {
         this.$message.error(res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg)
