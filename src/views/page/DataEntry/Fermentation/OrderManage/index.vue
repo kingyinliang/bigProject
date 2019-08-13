@@ -186,9 +186,11 @@
                     {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
-                <el-table-column label="订单类型" width="100">
+                <el-table-column label="订单类型" width="120">
                   <template slot-scope="scope">
-                    {{scope.row.ferOrderType}}
+                    <el-select v-model="scope.row.ferOrderType" placeholder="请选择" size="mini" style="width: 100px" :disabled="true">
+                      <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
+                    </el-select>
                   </template>
                 </el-table-column>
                 <el-table-column label="开始日期" width="100">
