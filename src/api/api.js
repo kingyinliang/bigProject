@@ -550,7 +550,8 @@ export const PACKAGING_API = {
   /**
    * @property {string} PKGSAVEFORMIN_API 包装车间提交物料 半成品
    */
-  PKGSAVEFORMS_API: HOST + '/verify/material/save/semi'
+  PKGSAVEFORMS_API: HOST + '/verify/material/save/semi',
+  PKGSAVEMATERIALHOLDER_API: HOST + '/all/dropDown/getPkgHolder' // 物料领用罐
 }
 /*
 *机维组api

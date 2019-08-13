@@ -117,7 +117,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, 1, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -175,7 +175,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,2)" :disabled="!isRedact" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -275,7 +275,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,3)" :disabled="!isRedact" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -508,20 +508,28 @@ export default {
     tabClick () {
     },
     // 删除
-    DelRow (row, index = null) {
+    DelRow (row, type, index = null) {
       this.$confirm('正在执行删除操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (index === null) {
-          row.delFlag = '1'
-        } else {
+        if (type === 1) {
           // 一次删5条
           let is = index
           while (is < index + 5) {
             this.productList[is].delFlag = '1'
             is++
+          }
+        } else {
+          if (row.id === '') {
+            if (type === 2) {
+              this.equipmentList.splice(this.equipmentList.indexOf(row), 1)
+            } else {
+              this.warmingList.splice(this.warmingList.indexOf(row), 1)
+            }
+          } else {
+            row.delFlag = '1'
           }
         }
       })
