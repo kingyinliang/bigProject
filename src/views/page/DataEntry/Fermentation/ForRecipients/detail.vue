@@ -61,7 +61,7 @@
                 {{scope.row.guan === '已开罐' ? '已开罐' : '未开罐'}}
               </template>
             </el-table-column>
-            <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
+            <el-table-column label="罐号" prop="holderNo" show-overflow-tooltip width="70"></el-table-column>
             <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.materialCode}}{{scope.row.materialName}}
@@ -71,10 +71,14 @@
             <el-table-column label="发酵天数/天" prop="matureDays" width="100"></el-table-column>
             <el-table-column label="酱醪状态" prop="state"></el-table-column>
             <el-table-column label="数量" prop="inAmount" width="100"></el-table-column>
-            <el-table-column label="单位" prop="inUnit" width="70"></el-table-column>
-            <el-table-column label="入库日期" prop="created" show-overflow-tooltip width="150"></el-table-column>
-            <el-table-column label="批次" prop="batch" width="120"></el-table-column>
-            <el-table-column label="备注" prop="remark"></el-table-column>
+            <el-table-column label="单位" prop="inUnit" width="60"></el-table-column>
+            <el-table-column label="入库日期" prop="created" show-overflow-tooltip width="100"></el-table-column>
+            <el-table-column label="批次" prop="batch" width="110"></el-table-column>
+            <el-table-column label="备注" prop="remark">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" :disabled="isRedact || scope.row.guan === '已开罐'" size="small"></el-input>
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
       </el-row>

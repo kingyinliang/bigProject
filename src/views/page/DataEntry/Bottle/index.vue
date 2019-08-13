@@ -50,11 +50,17 @@
             </el-col>
           </el-row>
           <div class="bottom">
-            <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
+            <el-tooltip class="item" effect="dark" :content="item.orderStatus === 'submit' ? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus" placement="top-start">
+              <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
+            </el-tooltip>
             <div class="bottom-split"></div>
-            <div class="bottom-item" @click="GoDetail(2, item)">工艺数据</div>
+            <el-tooltip class="item" effect="dark" :content="item.craftDataStatus" placement="top-start">
+              <div class="bottom-item" @click="GoDetail(2, item)">工艺数据</div>
+            </el-tooltip>
             <div class="bottom-split"></div>
-            <div class="bottom-item" @click="GoDetail(3, item)">质量检测</div>
+            <el-tooltip class="item" effect="dark" :content="item.qualityStatus" placement="top-start">
+              <div class="bottom-item" @click="GoDetail(3, item)">质量检测</div>
+            </el-tooltip>
           </div>
         </div>
       </el-col>
@@ -132,6 +138,7 @@ export default {
       this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.AllList = data.indexInfo
+          this.dataList = []
           data.indexInfo.map((item) => {
             let Search = this.dataList.find(items => items.name === item.productLineName)
             if (!Search) {
@@ -145,7 +152,9 @@ export default {
                 outputUnit: item.outputUnit,
                 realOutput: item.realOutput,
                 orderId: item.orderId,
-                orderNo: item.orderNo
+                orderNo: item.orderNo,
+                craftDataStatus: item.craftDataStatus,
+                qualityStatus: item.qualityStatus
               })
             } else {
               Search.orderList.push(item)
@@ -189,6 +198,8 @@ export default {
       item.realOutput = sole.realOutput
       item.orderId = sole.orderId
       item.orderNo = sole.orderNo
+      item.craftDataStatus = sole.craftDataStatus
+      item.qualityStatus = sole.qualityStatus
     }
   },
   computed: {

@@ -19,7 +19,6 @@ module.exports = {
         }
       }
     },
-
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
     host: '10.22.7.68', // can be overwritten by process.env.HOST
