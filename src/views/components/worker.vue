@@ -236,8 +236,8 @@ export default {
             classes: '',
             materialCode: '',
             materialName: '',
-            unit: '',
-            unitName: '',
+            unit: 'CAR',
+            unitName: '箱',
             amount: '',
             remark: '',
             delFlag: '0'
