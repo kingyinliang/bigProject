@@ -34,7 +34,11 @@
     <el-dialog :visible.sync="dialogVisible" :close-on-click-modal="false" width="450px" custom-class='dialog__class' @keyup.enter.native="SaveDialog('receive')">
       <div slot="title" style="line-hight:59px">领用</div>
       <el-form :model="receive" size="small" label-width="160px" :rules="receiveRules" ref="receive">
-        <el-form-item label="半成品罐号" prop="holderId">
+        <el-form-item label="半成品罐号" v-if="receive.id" prop="holderId">
+          <el-input v-model="receive.holderId" :disabled="true" style="display:none"></el-input>
+          <el-select v-model="receive.holderName" :disabled="true" ref="mySelect"></el-select>
+        </el-form-item>
+        <el-form-item label="半成品罐号" prop="holderId" v-else>
           <el-select v-model="receive.holderId" filterable ref="mySelect">
             <el-option v-for="(item, index) in holderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
@@ -83,6 +87,7 @@ export default {
       },
       holderList: [],
       dataList: [],
+      dataAList: [],
       readAudit: [],
       repertory: []
     }
@@ -107,6 +112,7 @@ export default {
       this.$http(`${FILTRATION_API.FILTER_MATERIAL_LIST}`, 'POST', params).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.list
+          this.dataAList = JSON.parse(JSON.stringify(data.list))
           this.readAudit = data.verify
           this.materialStatus = GetStatus(data.list)
         } else {
@@ -187,10 +193,20 @@ export default {
       this.dataList.map((item) => {
         // 领用数 库存比较
         if (!this.repertory.find(items => items.holderId === item.holderId)) {
+          let soleAmount = 0
+          if (this.holderList.find((itemss) => itemss.holderId === item.holderId)) {
+            soleAmount = this.holderList.find((itemss) => itemss.holderId === item.holderId).amount
+          } else {
+            this.dataAList.map(itema => {
+              if (itema.delFlag === '0' && itema.holderId === item.holderId) {
+                soleAmount = Number(soleAmount) + (Number(itema.receiveAmount) * 1000)
+              }
+            })
+          }
           this.repertory.push({
             holderId: item.holderId,
             holderName: item.holderName,
-            holderAmount: this.holderList.find((itemss) => itemss.holderId === item.holderId).amount
+            holderAmount: soleAmount
           })
         }
       })
