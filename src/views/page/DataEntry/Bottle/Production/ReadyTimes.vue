@@ -108,10 +108,10 @@
           {{dataForm.content}}
         </el-form-item>
         <el-form-item label="开始时间：" prop="startDate">
-          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.startDate" style="width: 160px"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="dataForm.startDate" style="width: 160px"></el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间：">
-          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.endDate" style="width: 160px"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="dataForm.endDate" style="width: 160px"></el-date-picker>
         </el-form-item>
         <el-form-item label="时长：">
           {{dataForm.dateLength = mistiming(dataForm.endDate, dataForm.startDate)}}

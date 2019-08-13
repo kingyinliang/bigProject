@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column label="班组/工序" width="100">
         <template slot-scope="scope">
-          <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" :disabled="!isRedact">
+          <el-select filterable v-model="scope.row.deptId" placeholder="请选择" size="small" :disabled="!isRedact" @change="SelectDept(scope.row)">
             <el-option :label="iteam.deptName" :value="iteam.deptId" v-for="(iteam, index) in Team" :key="index"></el-option>
           </el-select>
         </template>
@@ -85,13 +85,13 @@
       </el-table-column>
     </el-table>
     <p style="font-size: 14px;line-height: 62px">实际作业人数：{{countMan}}</p>
-    <div v-if="Attendance">
+    <div v-if="att">
       <h3 style="line-height: 32px;font-size: 16px">产量考勤分配</h3>
       <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="Attendance" border tooltip-effect="dark">
         <el-table-column label="班组" width="60">
           <template slot-scope="scope">{{scope.row.itemName}}</template>
         </el-table-column>
-        <el-table-column label="白/中/夜班" width="120">
+        <el-table-column label="白/中/夜班" width="140">
           <template slot-scope="scope">
             <el-select v-model="scope.row.classes" placeholder="请选择" size="mini" :disabled="!isRedact">
               <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
@@ -100,7 +100,7 @@
         </el-table-column>
         <el-table-column label="包装品项">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.materialCode" filterable placeholder="请选择" size="mini" style="width: 180px" @change="selectMaterial(scope.row)" :disabled="!isRedact">
+            <el-select v-model="scope.row.materialCode" filterable placeholder="请选择" size="mini" style="width: 100%" @change="selectMaterial(scope.row)" :disabled="!isRedact">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.materialCode + ' ' + item.materialName" v-for="(item, index) in Materails" :key="index" :value="item.materialCode"></el-option>
             </el-select>
@@ -109,12 +109,12 @@
         <el-table-column label="单位" width="60">
           <template slot-scope="scope">{{scope.row.unitName}}</template>
         </el-table-column>
-        <el-table-column label="数量" width="120">
+        <el-table-column label="数量" width="140">
           <template slot-scope="scope">
             <el-input v-model="scope.row.amount" size="mini" :disabled="!isRedact"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="备注" width="120">
+        <el-table-column label="备注" width="140">
           <template slot-scope="scope">
             <el-input v-model="scope.row.remark" size="mini" :disabled="!isRedact"></el-input>
           </template>
@@ -159,6 +159,7 @@ export default {
   props: {
     isRedact: {},
     order: {},
+    att: {},
     Attendance: {}
   },
   watch: {
@@ -190,6 +191,59 @@ export default {
     // 返回人员列表
     GetUser () {
       return this.WorkerDate
+    },
+    // 班组修改
+    SelectDept (row) {
+      if (this.att) {
+        this.SetAtt(row.deptId)
+      }
+    },
+    SetAtt (id) {
+      // if (this.Attendance.filter(item => item.delFlag === '0' && item.team === id).length > 0) {
+      // } else {
+      //   this.Attendance.push({
+      //     id: '',
+      //     orderId: this.order.orderId,
+      //     team: id,
+      //     itemName: this.Team.filter(item => item.deptId === id)[0].deptName,
+      //     classes: '',
+      //     materialCode: '',
+      //     materialName: '',
+      //     unit: '',
+      //     amount: '',
+      //     remark: '',
+      //     delFlag: '0'
+      //   })
+      // }
+      let tmpobj = {}
+      this.WorkerDate.forEach(item => {
+        if (item.deptId && !tmpobj[item.deptId]) {
+          tmpobj[item.deptId] = item.deptId
+        }
+      })
+      this.Attendance.forEach(item => {
+        if (!tmpobj[item.team]) {
+          item.delFlag = '1'
+        }
+      })
+      Reflect.ownKeys(tmpobj).forEach((key) => {
+        if (this.Attendance.filter(item => item.delFlag === '0' && item.team === key).length > 0) {} else {
+          this.Attendance.push({
+            id: '',
+            orderId: this.order.orderId,
+            team: key,
+            itemName: this.Team.filter(item => item.deptId === key)[0].deptName,
+            classes: '',
+            materialCode: '',
+            materialName: '',
+            unit: '',
+            unitName: '',
+            amount: '',
+            remark: '',
+            delFlag: '0'
+          })
+        }
+      })
     },
     // 获取物料下拉
     GetMaterails (id) {
@@ -430,6 +484,9 @@ export default {
     // 人员删除
     delUser (row) {
       this.WorkerDate.splice(this.WorkerDate.indexOf(row), 1)
+      if (this.att) {
+        this.SetAtt(row.deptId)
+      }
     },
     // 新增人员
     AddWorkerDate (form) {

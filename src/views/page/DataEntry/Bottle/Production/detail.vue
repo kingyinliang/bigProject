@@ -39,7 +39,7 @@
             <el-button :style="{'color': readyState === 'noPass'? 'red' : ''}">人员</el-button>
           </el-tooltip>
         </span>
-        <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance"></worker>
+        <worker ref="workerref" :isRedact="isRedact" :order="formHeader" :Attendance="Attendance" :att="true"></worker>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">投胚记录</span>
