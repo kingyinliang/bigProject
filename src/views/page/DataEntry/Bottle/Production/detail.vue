@@ -194,16 +194,19 @@ export default {
       if (!this.$refs.readytimes.dataRul()) {
         return false
       }
+      if (!this.$refs.workerref.userrul()) {
+        return false
+      }
+      if (!this.$refs.record.dataRul()) {
+        return false
+      }
+      if (!this.$refs.excrecord.excrul()) {
+        return false
+      }
       if (!this.$refs.instorage.dataRul()) {
         return false
       }
       if (!this.$refs.material.dataRul()) {
-        return false
-      }
-      if (!this.$refs.workerref.userrul()) {
-        return false
-      }
-      if (!this.$refs.excrecord.excrul()) {
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
