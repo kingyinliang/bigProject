@@ -86,6 +86,13 @@
                     {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
+                <el-table-column label="订单类型" width="120">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.ferOrderType" placeholder="请选择" size="mini" style="width: 100px">
+                      <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
                 <el-table-column label="开始日期" width="100">
                   <template slot-scope="scope">
                     {{scope.row.startDate}}
@@ -179,6 +186,11 @@
                     {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
+                <el-table-column label="订单类型" width="100">
+                  <template slot-scope="scope">
+                    {{scope.row.ferOrderType}}
+                  </template>
+                </el-table-column>
                 <el-table-column label="开始日期" width="100">
                   <template slot-scope="scope">
                     {{scope.row.startDate}}
@@ -245,7 +257,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {dateFormat, headanimation} from '@/net/validate'
 @Component({
@@ -257,6 +269,7 @@ export default class Index extends Vue {
   // 将common中的参数复制一份到本地
   params = JSON.parse(JSON.stringify(this.$store.state.common.FerOrderManage))
   factoryList = []
+  orderTypeList = []
   workshopList = []
   potList = []
   materialList = []
@@ -278,6 +291,7 @@ export default class Index extends Vue {
     this.params.endDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
+    this.getDictList(this.params.factoryId)
     this.getMaterialList(this.params.factoryId)
     this.getFermentPot(this.params.factoryId, this.params.workshopId)
   }
@@ -305,7 +319,18 @@ export default class Index extends Vue {
       this.params.materialName = item ? item.materialName : ''
     }
   }
-
+  getDictList (factory) {
+    let params = {types: ['order_type'], factory}
+    Vue.prototype.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+      if (data.code === 0) {
+        this.orderTypeList = data.dicList[0].prolist
+      } else {
+        this.$message.error(data.msg)
+      }
+    }).catch((error) => {
+      console.log('catch data::', error)
+    })
+  }
   // 改变每页条数
   handleSizeChange (val: number) {
     this.pageSize = val
@@ -333,6 +358,9 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, `POST`, {}, false, false, false).then((res) => {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
+        if (!this.params.factoryId) {
+          this.params.factoryId = res.data.typeList[0].deptId
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -505,6 +533,7 @@ export default class Index extends Vue {
     this.params.materialCode = ''
     this.params.materialName = ''
     this.getWorkshop(newVal)
+    this.getDictList(newVal)
     this.getMaterialList(newVal)
     this.getFermentPot(newVal, this.params.workshopId)
   }
