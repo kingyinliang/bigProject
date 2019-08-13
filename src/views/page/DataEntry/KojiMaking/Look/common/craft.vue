@@ -293,298 +293,298 @@
 </template>
 
 <script>
-  import { Readyanimation } from '@/net/validate'
-  import { SYSTEMSETUP_API, KJM_API } from '@/api/api'
-  export default {
-    name: 'craft',
-    data () {
-      return {
-        statuss: 'saved',
-        userList: [],
-        tech: {
-          id: this.uuid(32, 62),
-          orderHouseId: '',
-          addOrupdate: '0',
-          status: '',
-          inCheck: '',
-          inCheckMan: '',
-          inStartTime: '',
-          inEndTime: '',
-          guardProcess: '',
-          processType: '',
-          overStartWeight: '',
-          overEndWeight: '',
-          overWeight: '',
-          outStartWeight: '',
-          outEndWeight: '',
-          outWeight: '',
-          guardException: ''
-        },
-        lookList: [],
-        assessList: [{feelName: '一翻', id: ''}, {feelName: '二翻', id: ''}, {feelName: '出曲', id: ''}],
-        Ulist: [
-          {value: 'U1', label: 'U1'},
-          {value: 'U2', label: 'U2'},
-          {value: 'U3', label: 'U3'},
-          {value: 'U4', label: 'U4'},
-          {value: 'U5', label: 'U5'}
-        ],
-        Slist: [
-          {value: 'S1', label: 'S1'},
-          {value: 'S2', label: 'S2'},
-          {value: 'S3', label: 'S3'},
-          {value: 'S4', label: 'S4'},
-          {value: 'S5', label: 'S5'}
-        ],
-        Alist: [
-          {value: 'A1', label: 'A1'},
-          {value: 'A2', label: 'A2'},
-          {value: 'A3', label: 'A3'},
-          {value: 'A4', label: 'A4'},
-          {value: 'A5', label: 'A5'}
-        ]
+import { Readyanimation } from '@/net/validate'
+import { SYSTEMSETUP_API, KJM_API } from '@/api/api'
+export default {
+  name: 'craft',
+  data () {
+    return {
+      statuss: 'saved',
+      userList: [],
+      tech: {
+        id: this.uuid(32, 62),
+        orderHouseId: '',
+        addOrupdate: '0',
+        status: '',
+        inCheck: '',
+        inCheckMan: '',
+        inStartTime: '',
+        inEndTime: '',
+        guardProcess: '',
+        processType: '',
+        overStartWeight: '',
+        overEndWeight: '',
+        overWeight: '',
+        outStartWeight: '',
+        outEndWeight: '',
+        outWeight: '',
+        guardException: ''
+      },
+      lookList: [],
+      assessList: [{feelName: '一翻', id: ''}, {feelName: '二翻', id: ''}, {feelName: '出曲', id: ''}],
+      Ulist: [
+        {value: 'U1', label: 'U1'},
+        {value: 'U2', label: 'U2'},
+        {value: 'U3', label: 'U3'},
+        {value: 'U4', label: 'U4'},
+        {value: 'U5', label: 'U5'}
+      ],
+      Slist: [
+        {value: 'S1', label: 'S1'},
+        {value: 'S2', label: 'S2'},
+        {value: 'S3', label: 'S3'},
+        {value: 'S4', label: 'S4'},
+        {value: 'S5', label: 'S5'}
+      ],
+      Alist: [
+        {value: 'A1', label: 'A1'},
+        {value: 'A2', label: 'A2'},
+        {value: 'A3', label: 'A3'},
+        {value: 'A4', label: 'A4'},
+        {value: 'A5', label: 'A5'}
+      ]
+    }
+  },
+  props: ['isRedact', 'formHeader', 'submitStatus'],
+  mounted () {
+    Readyanimation(this.$)
+  },
+  watch: {
+    'formHeader.workShop' () {
+      this.checkList()
+    },
+    'overcha': function () {
+      this.tech.overWeight = this.overcha
+    },
+    'outcha': function () {
+      this.tech.outWeight = this.outcha
+    }
+  },
+  methods: {
+    // 检查人
+    checkList () {
+      this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
+        deptId: this.formHeader.workShop, // this.formHeader.workShop, // 工序id
+        currPage: '1',
+        pageSize: '100'
+      }).then(({data}) => {
+        if (data.code === 0) {
+          this.userList = data.page.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    Readyrules () {
+      let ty = true
+      if (!this.tech.inCheck || this.tech.inCheck === '') {
+        ty = false
+        this.$message.error('入曲检查必填')
+        return false
       }
-    },
-    props: ['isRedact', 'formHeader', 'submitStatus'],
-    mounted () {
-      Readyanimation(this.$)
-    },
-    watch: {
-      'formHeader.workShop' () {
-        this.checkList()
-      },
-      'overcha': function () {
-        this.tech.overWeight = this.overcha
-      },
-      'outcha': function () {
-        this.tech.outWeight = this.outcha
+      if (!this.tech.inCheckMan || this.tech.inCheckMan === '') {
+        ty = false
+        this.$message.error('检查人必填')
+        return false
       }
-    },
-    methods: {
-      // 检查人
-      checkList () {
-        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {
-          deptId: this.formHeader.workShop, // this.formHeader.workShop, // 工序id
-          currPage: '1',
-          pageSize: '100'
-        }).then(({data}) => {
-          if (data.code === 0) {
-            this.userList = data.page.list
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      },
-      Readyrules () {
-        let ty = true
-        if (!this.tech.inCheck || this.tech.inCheck === '') {
-          ty = false
-          this.$message.error('入曲检查必填')
-          return false
-        }
-        if (!this.tech.inCheckMan || this.tech.inCheckMan === '') {
-          ty = false
-          this.$message.error('检查人必填')
-          return false
-        }
-        if (!this.tech.inStartTime || this.tech.inStartTime === '') {
-          ty = false
-          this.$message.error('入曲开始时间为必填')
-          return false
-        }
-        if (!this.tech.inEndTime || this.tech.inEndTime === '') {
-          ty = false
-          this.$message.error('入曲结束时间为必填')
-          return false
-        }
-        if (this.lookList.length === 0) {
-          ty = false
-          this.$message.error('看曲记录未填')
-          return false
-        }
-        for (let items of this.lookList) {
-          if (items.delFlag === '0') {
-            if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempUp === '' || items.productTempMid === '' || items.productTempDown === '' || items.thermometerOut === '' || items.thermometerInner === '') {
-              // if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
-              ty = false
-              this.$message.error('看曲记录必填项未填')
-              return false
-            }
-          }
-        }
-        if (!this.tech.overStartWeight || !this.tech.overEndWeight || !this.tech.outStartWeight || !this.tech.outEndWeight || this.tech.overStartWeight === '' || this.tech.overEndWeight === '' || this.tech.outStartWeight === '' || this.tech.outEndWeight === '') {
-          ty = false
-          this.$message.error('加水量记录全必填')
-          return false
-        }
-        if (this.tech.overWeight < 0 || this.tech.outWeight < 0) {
-          ty = false
-          this.$message.error('加水量不能为负数')
-          return false
-        }
-        this.assessList.map((item) => {
-          if (item.codeU === undefined || item.codeS === undefined || item.codeA === undefined) {
+      if (!this.tech.inStartTime || this.tech.inStartTime === '') {
+        ty = false
+        this.$message.error('入曲开始时间为必填')
+        return false
+      }
+      if (!this.tech.inEndTime || this.tech.inEndTime === '') {
+        ty = false
+        this.$message.error('入曲结束时间为必填')
+        return false
+      }
+      if (this.lookList.length === 0) {
+        ty = false
+        this.$message.error('看曲记录未填')
+        return false
+      }
+      for (let items of this.lookList) {
+        if (items.delFlag === '0') {
+          if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempUp === '' || items.productTempMid === '' || items.productTempDown === '' || items.thermometerOut === '' || items.thermometerInner === '') {
+            // if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
             ty = false
-            this.$message.error('感官评价记录必须全选')
+            this.$message.error('看曲记录必填项未填')
             return false
           }
-        })
-        return ty
-      },
-      addline () {
-        this.lookList.push({
-          id: '',
-          guardTechId: this.tech.id,
-          guardTime: '',
-          windTemp: '',
-          productTemp: '',
-          windSpeed: '',
-          windInFlag: '',
-          forceOutFlag: '',
-          jiashiFlag: '',
-          jiareFlag: '',
-          productTempUp: '',
-          productTempMid: '',
-          productTempDown: '',
-          thermometerOut: '',
-          thermometerInner: '',
-          remark: '',
-          delFlag: '0',
-          changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
-          unit: 'R/MIN'
-        })
-        this.$nextTick(function () {
-          this.$refs.recordTable.bodyWrapper.scrollTop = this.$refs.recordTable.bodyWrapper.scrollHeight
-        })
-      },
-      delrow (row) {
-        row.delFlag = '1'
-      },
-      rowDelFlag ({row, rowIndex}) {
-        if (row.delFlag === '1') {
-          return 'rowDel'
-        } else {
-          return ''
         }
-      },
-      savestauts (resolve, reject) {
-        if (this.submitStatus === 'submit') {
-          this.statuss = 'submit'
+      }
+      if (!this.tech.overStartWeight || !this.tech.overEndWeight || !this.tech.outStartWeight || !this.tech.outEndWeight || this.tech.overStartWeight === '' || this.tech.overEndWeight === '' || this.tech.outStartWeight === '' || this.tech.outEndWeight === '') {
+        ty = false
+        this.$message.error('加水量记录全必填')
+        return false
+      }
+      if (this.tech.overWeight < 0 || this.tech.outWeight < 0) {
+        ty = false
+        this.$message.error('加水量不能为负数')
+        return false
+      }
+      this.assessList.map((item) => {
+        if (item.codeU === undefined || item.codeS === undefined || item.codeA === undefined) {
+          ty = false
+          this.$message.error('感官评价记录必须全选')
+          return false
         }
-        this.$http(`${KJM_API.DOULOOKSTATUS_API}`, 'POST', {status: this.statuss, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch(() => {
-          if (resolve) {
-            reject('reject')
-          }
-        })
-      },
-      savesmain (resolve, reject) {
-        if (this.submitStatus === 'submit') {
-          this.tech.status = 'submit'
-        } else {
-          this.tech.status = 'saved'
-        }
-        this.tech.orderHouseId = this.formHeader.orderHouseId
-        this.$http(`${KJM_API.DOULOOKZHUSAVE_API}`, 'POST', this.tech).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch(() => {
-          if (resolve) {
-            reject('reject')
-          }
-        })
-      },
-      savesecond (resolve, reject) {
-        this.$http(`${KJM_API.DOULOOKKANQUSAVE_API}`, 'POST', this.lookList).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch(() => {
-          if (resolve) {
-            reject('reject')
-          }
-        })
-      },
-      savefeel (resolve, reject) {
-        this.assessList.map((item) => {
-          this.$set(item, 'guardTechId', this.tech.id)
-          if (item.codeU === undefined) {
-            this.$set(item, 'codeU', '')
-          }
-          if (item.codeS === undefined) {
-            this.$set(item, 'codeS', '')
-          }
-          if (item.codeA === undefined) {
-            this.$set(item, 'codeA', '')
-          }
-        })
-        this.$http(`${KJM_API.DOULOOKGANGUANSAVE_API}`, 'POST', this.assessList).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-          if (resolve) {
-            resolve('resolve')
-          }
-        }).catch(() => {
-          if (resolve) {
-            reject('reject')
-          }
-        })
-      },
-      getList (formHeader) {
-        this.$http(`${KJM_API.DOULOOKLIST_API}`, 'POST', {orderHouseId: formHeader.orderHouseId}).then(({data}) => {
-          if (data.code === 0) {
-            this.tech = data.techList[0]
-            this.assessList = data.feelList
-            this.lookList = data.recordList
-          } else {
-            this.$message.error(data.msg)
-          }
-        }).catch((error) => {
-          this.$message.error(error)
-        }).finally(() => {
-          this.$emit('setApplyCraftState', this.tech.status)
-        })
+      })
+      return ty
+    },
+    addline () {
+      this.lookList.push({
+        id: '',
+        guardTechId: this.tech.id,
+        guardTime: '',
+        windTemp: '',
+        productTemp: '',
+        windSpeed: '',
+        windInFlag: '',
+        forceOutFlag: '',
+        jiashiFlag: '',
+        jiareFlag: '',
+        productTempUp: '',
+        productTempMid: '',
+        productTempDown: '',
+        thermometerOut: '',
+        thermometerInner: '',
+        remark: '',
+        delFlag: '0',
+        changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+        unit: 'R/MIN'
+      })
+      this.$nextTick(function () {
+        this.$refs.recordTable.bodyWrapper.scrollTop = this.$refs.recordTable.bodyWrapper.scrollHeight
+      })
+    },
+    delrow (row) {
+      row.delFlag = '1'
+    },
+    rowDelFlag ({row, rowIndex}) {
+      if (row.delFlag === '1') {
+        return 'rowDel'
+      } else {
+        return ''
       }
     },
-    computed: {
-      timecha: function () {
-        if (!this.tech.inEndTime || !this.tech.inStartTime) {
-          return 0
+    savestauts (resolve, reject) {
+      if (this.submitStatus === 'submit') {
+        this.statuss = 'submit'
+      }
+      this.$http(`${KJM_API.DOULOOKSTATUS_API}`, 'POST', {status: this.statuss, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
+        if (data.code === 0) {
         } else {
-          return (new Date(this.tech.inEndTime) - new Date(this.tech.inStartTime)) / 60000
+          this.$message.error(data.msg)
         }
-      },
-      overcha: function () {
-        return (this.tech.overEndWeight - this.tech.overStartWeight).toFixed(3)
-      },
-      outcha: function () {
-        return (this.tech.outEndWeight - this.tech.outStartWeight).toFixed(3)
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    savesmain (resolve, reject) {
+      if (this.submitStatus === 'submit') {
+        this.tech.status = 'submit'
+      } else {
+        this.tech.status = 'saved'
+      }
+      this.tech.orderHouseId = this.formHeader.orderHouseId
+      this.$http(`${KJM_API.DOULOOKZHUSAVE_API}`, 'POST', this.tech).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    savesecond (resolve, reject) {
+      this.$http(`${KJM_API.DOULOOKKANQUSAVE_API}`, 'POST', this.lookList).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    savefeel (resolve, reject) {
+      this.assessList.map((item) => {
+        this.$set(item, 'guardTechId', this.tech.id)
+        if (item.codeU === undefined) {
+          this.$set(item, 'codeU', '')
+        }
+        if (item.codeS === undefined) {
+          this.$set(item, 'codeS', '')
+        }
+        if (item.codeA === undefined) {
+          this.$set(item, 'codeA', '')
+        }
+      })
+      this.$http(`${KJM_API.DOULOOKGANGUANSAVE_API}`, 'POST', this.assessList).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    getList (formHeader) {
+      this.$http(`${KJM_API.DOULOOKLIST_API}`, 'POST', {orderHouseId: formHeader.orderHouseId}).then(({data}) => {
+        if (data.code === 0) {
+          this.tech = data.techList[0]
+          this.assessList = data.feelList
+          this.lookList = data.recordList
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        this.$message.error(error)
+      }).finally(() => {
+        this.$emit('setApplyCraftState', this.tech.status)
+      })
+    }
+  },
+  computed: {
+    timecha: function () {
+      if (!this.tech.inEndTime || !this.tech.inStartTime) {
+        return 0
+      } else {
+        return (new Date(this.tech.inEndTime) - new Date(this.tech.inStartTime)) / 60000
       }
     },
-    components: {
-      AbnRecord: resolve => {
-        require(['@/views/components/abnRecord'], resolve)
-      }
+    overcha: function () {
+      return (this.tech.overEndWeight - this.tech.overStartWeight).toFixed(3)
+    },
+    outcha: function () {
+      return (this.tech.outEndWeight - this.tech.outStartWeight).toFixed(3)
+    }
+  },
+  components: {
+    AbnRecord: resolve => {
+      require(['@/views/components/abnRecord'], resolve)
     }
   }
+}
 </script>
 
 <style>
