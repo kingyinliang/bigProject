@@ -31,24 +31,24 @@
               <span class="points" :style="{'margin-top':'8px','background': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : item.orderStatus === 'submit'? '#1890ff' : item.orderStatus === 'saved'? '#1890ff' : '#7ED321'}"></span>&nbsp;状态：<i :style="{'color': item.orderStatus === 'noPass'? 'red': item.orderStatus === 'checked'? '#67C23A' : ''}">{{item.orderStatus === 'submit'? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus}}</i>
             </div>
           </div>
-          <div class="content">
-            <div class="img"><img src="@/assets/img/bottle.png" style="width:100%"></div>
-            <div class="right">
+          <el-row class="content" :gutter="20">
+            <el-col class="img" :span="10"><img src="@/assets/img/bottle.png" style="width:95%"></el-col>
+            <el-col class="right" :span="14">
               <div class="lines">订单号：
-                <el-select v-model="item.orderNo" @change="changeOrder($event, item)" size="mini" style="width:130px;">
+                <el-select v-model="item.orderNo" @change="changeOrder($event, item)" size="mini" style="width:140px;">
                   <el-option v-for="(items, index) in item.orderList" :key="index" :value="items.orderNo" :label="items.orderNo"></el-option>
                 </el-select>
               </div>
               <div class="lines">
                 <div style="float:left">品项：</div>
                 <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="top-start">
-                  <div style="float:left; width:135px; color:rgba(0, 0, 0, 0.65);overflow: hidden; text-overflow:ellipsis; white-space:nowrap;">{{item.materialCode}}{{item.materialName}}</div>
+                  <div style="float:left; width:140px; color:rgba(0, 0, 0, 0.65);overflow: hidden; text-overflow:ellipsis; white-space:nowrap;">{{item.materialCode}}{{item.materialName}}</div>
                 </el-tooltip>
               </div>
               <div class="lines">计划产量：<span>{{item.planOutput}} {{item.outputUnit}}</span></div>
               <div class="lines">实时产量：<span>{{item.realOutput}} {{item.realOutput ? item.outputUnit : ''}}</span></div>
-            </div>
-          </div>
+            </el-col>
+          </el-row>
           <div class="bottom">
             <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
             <div class="bottom-split"></div>
@@ -214,7 +214,7 @@ export default {
 
 <style lang="less">
 .sole {
-  height:222px;
+  height:212px;
   background:rgba(255,255,255,1);
   border-radius:2px;
   border:1px solid rgba(232,232,232,1);
@@ -231,21 +231,20 @@ export default {
     }
   }
   .content {
-    height: 140px;
-    padding: 10px;
+    height: 130px;
+    padding: 10px 10px 0 10px;
     .img {
-      float:left;
-      width: 160px;
       height: 110px;
+      text-align: center;
+      margin-top: 10px;
     }
     .right {
-      float: left;
-      margin-left: 8px;
       height: 120px;
       .lines{
         color:rgba(0,0,0,0.45);
         line-height: 26px;
         font-size:12px;
+        overflow: hidden;
         span{
           color: rgba(0,0,0,0.65);
           font-size: 12px

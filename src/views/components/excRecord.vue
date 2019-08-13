@@ -15,7 +15,7 @@
           <span>异常情况</span>
         </template>
         <template slot-scope="scope">
-          <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small">
+          <el-select v-model="scope.row.expCode" placeholder="请选择" :disabled="!isRedact" size="small" @change="selectExpCode(scope.row)">
             <el-option :label="item.value" v-for="(item, index) in stoppageType" :key="index" :value="item.code"></el-option>
           </el-select>
         </template>
@@ -123,6 +123,22 @@ export default {
     order: {}
   },
   methods: {
+    selectExpCode (row) {
+      if (row.expCode === '001' || row.expCode === '002') {
+        row.materialShort = ''
+        row.energy = ''
+      } else if (row.expCode === '003' || row.expCode === '004') {
+        row.deviceId = ''
+        row.energy = ''
+      } else if (row.expCode === '005') {
+        row.deviceId = ''
+        row.materialShort = ''
+      } else {
+        row.deviceId = ''
+        row.materialShort = ''
+        row.energy = ''
+      }
+    },
     // 保存or提交
     saveOrSubmitExc (id, str, resolve, reject) {
       if (this.ExcDate.length > 0) {

@@ -108,10 +108,10 @@
           {{dataForm.content}}
         </el-form-item>
         <el-form-item label="开始时间：" prop="startDate">
-          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.startDate" style="width: 160px"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="dataForm.startDate" style="width: 160px"></el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间：">
-          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd  HH:mm:ss" format="yyyy-MM-dd  HH:mm" v-model="dataForm.endDate" style="width: 160px"></el-date-picker>
+          <el-date-picker size="mini" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="dataForm.endDate" style="width: 160px"></el-date-picker>
         </el-form-item>
         <el-form-item label="时长：">
           {{dataForm.dateLength = mistiming(dataForm.endDate, dataForm.startDate)}}
@@ -212,6 +212,10 @@ export default {
     },
     // 弹窗确认
     Confirmed () {
+      // if (this.dataForm.dateLength * 1 > 0) {} else {
+      //   this.$message.error('时长必须大于0')
+      //   return false
+      // }
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           if (this.isUpdate) {
@@ -346,6 +350,18 @@ export default {
           return false
         }
       }
+      this.dataList.forEach((item) => {
+        if (!(item.classes && item.content && item.startDate)) {
+          ty = false
+          this.$message.error('设备时间必填项未填')
+          return false
+        }
+        if (item.dateLength * 1 <= 0) {
+          ty = false
+          this.$message.error('设备时间工时不大于0')
+          return false
+        }
+      })
       return ty
     },
     delData (row) {
