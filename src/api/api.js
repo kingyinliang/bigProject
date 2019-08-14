@@ -1133,7 +1133,11 @@ export const KJM_API = {
   /**
    * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
    */
-  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核表头提交
+   */
+  KJMAKINGCHECKHEADSUBMIT_API: HOST + '/kjm/order/submitToFerVer'
 }
 
 /**

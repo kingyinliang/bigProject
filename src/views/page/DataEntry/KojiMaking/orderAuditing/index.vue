@@ -634,8 +634,10 @@ export default class Index extends Vue {
         return false
       } else {
         Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
-          that.$message.success('提交成功')
-          that.getList()
+          Promise.all([that.headSubmit()]).then((result) => {
+            that.$message.success('提交成功')
+            that.getList()
+          })
         })
       }
     })
@@ -675,6 +677,22 @@ export default class Index extends Vue {
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
       if (res.data.code !== 0) {
         this.$message.error('报工工时提交失败：' + res.data.msg)
+      }
+    }).catch(err => {
+      console.log('catch data::', err)
+    })
+    return ''
+  }
+  async headSubmit () {
+    await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKHEADSUBMIT_API}`, 'POST', {
+      orderId: this.formHeader.orderId,
+      orderHouseId: this.inStockList[0].orderHouseId,
+      countOutPut: this.inStockList[0].countOutput,
+      realInAmount: this.inStockList[0].realInAmount,
+      countOutputUnit: 'L'
+    }).then(res => {
+      if (res.data.code !== 0) {
+        this.$message.error('表头提交失败：' + res.data.msg)
       }
     }).catch(err => {
       console.log('catch data::', err)
