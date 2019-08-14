@@ -41,7 +41,7 @@
               </div>
               <div class="lines">
                 <div style="float:left">品项：</div>
-                <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="top-start">
+                <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="bottom-start">
                   <div style="float:left; width:140px; color:rgba(0, 0, 0, 0.65);overflow: hidden; text-overflow:ellipsis; white-space:nowrap;">{{item.materialCode}}{{item.materialName}}</div>
                 </el-tooltip>
               </div>
