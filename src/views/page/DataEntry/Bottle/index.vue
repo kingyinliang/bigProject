@@ -35,7 +35,7 @@
             <el-col class="img" :span="10"><img src="@/assets/img/bottle.png" style="width:95%"></el-col>
             <el-col class="right" :span="14">
               <div class="lines">订单号：
-                <el-select v-model="item.orderNo" @change="changeOrder($event, item)" size="mini" style="width:140px;">
+                <el-select v-model="item.orderNo" filterable @change="changeOrder($event, item)" size="mini" style="width:140px;">
                   <el-option v-for="(items, index) in item.orderList" :key="index" :value="items.orderNo" :label="items.orderNo"></el-option>
                 </el-select>
               </div>
