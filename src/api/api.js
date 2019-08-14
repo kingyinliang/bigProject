@@ -257,7 +257,6 @@ export const BASICDATA_API = {
    *  根据类型查容器号
    */
   DROPDOWN_HOLDER_LIST: HOST + '/all/dropDown/getFilterHolder'
-
 }
 /*
 *系统设置api
@@ -865,7 +864,8 @@ export const REP_API = {
    *  二合一报表
    */
   TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
-  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList'
+  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList',
+  REP_ADJUST_LIST_API: HOST + '/ver/adjust/exportList'
 }
 /*
 *炒麦api
@@ -1143,11 +1143,7 @@ export const KJM_API = {
   /**
    * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
    */
-  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit',
-  /**
-   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核表头提交
-   */
-  KJMAKINGCHECKHEADSUBMIT_API: HOST + '/kjm/order/submitToFerVer'
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
 }
 
 /**

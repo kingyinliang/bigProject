@@ -43,9 +43,9 @@
       </el-form>
       <el-row>
         <el-col style="text-align:right">
-          <el-button type="primary" @click="GetList()" size="small">查询</el-button>
-          <el-button type="primary" @click="SubmitInfo()" size="small">调整</el-button>
-          <el-button type="primary" @click="ExportExcel(true)" size="small">导出</el-button>
+          <el-button type="primary" @click="GetList()" v-if="isAuth('ver:adjust:list')" size="small">查询</el-button>
+          <el-button type="primary" @click="SubmitInfo()" v-if="isAuth('ver:adjust:adjust')" size="small">调整</el-button>
+          <el-button type="primary" @click="ExportExcel(true)" v-if="isAuth('ver:adjust:exportList')" size="small">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -316,7 +316,7 @@ export default {
     },
     ExportExcel () {
       let that = this
-      exportFile(`${REP_API.REPPWFRYOUT_API}`, 'PW小麦报表', that)
+      exportFile(`${REP_API.REP_ADJUST_LIST_API}`, '调整明细', that)
     }
   },
   computed: {
