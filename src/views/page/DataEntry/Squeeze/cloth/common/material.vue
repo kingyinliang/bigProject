@@ -514,7 +514,7 @@ export default {
     selectUser (row) {
       if (this.isRedact) {
         this.row = row
-        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {deptId: this.formHeader.workShop}).then(({data}) => {
+        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {deptId: this.formHeader.workShop, pageSize: '9999', currPage: '1'}).then(({data}) => {
           if (data.code === 0) {
             this.userlist = setUserList(data.page.list)
             if (this.row.man) {

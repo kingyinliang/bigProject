@@ -14,6 +14,11 @@
             <el-form-item label="申请人员："><p class="bottomline">{{formHeader.CREATOR}}</p></el-form-item>
             <el-form-item label="申请时间："><p class="bottomline" style="width:212px;">{{formHeader.CREATED}}</p></el-form-item>
             <el-form-item label="状态："><p class="bottomline">{{formHeader.CONFIRM_FLAG === '1' ? '已确认' : '未确认'}}</p></el-form-item>
+            <el-form-item label="备注：">
+              <el-tooltip class="item" effect="dark" :content="formHeader.REMARK" placement="top">
+                <p class="bottomline">{{formHeader.REMARK}}</p>
+              </el-tooltip>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -310,5 +315,8 @@ export default {
 </script>
 
 <style lang="less">
-.bottomline {border-bottom: 1px solid #D8D8D8; width:152px; overflow:hidden; height:32px;}
+.bottomline {
+  border-bottom: 1px solid #D8D8D8; width:152px; overflow:hidden; height:32px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 </style>
