@@ -17,7 +17,7 @@
           <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="生产订单：">
-          <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
+          <el-input v-model.trim="formHeader.orderNo" style="width:150px"></el-input>
         </el-form-item>
         <el-button type="primary" size="small" @click="GetList" class="floatr">查询</el-button>
       </el-form>
