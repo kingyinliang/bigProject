@@ -41,6 +41,20 @@
       <el-table-column label="单位" width="50" prop="unit"></el-table-column>
       <el-table-column label="满罐日期" width="140" prop="fullPotDate"></el-table-column>
       <el-table-column label="原汁批次" width="140" prop="batch"></el-table-column>
+      <el-table-column label="订单类型" width="120">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.orderType" placeholder="请选择" size="mini" style="width: 100px">
+            <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="生产版本" width="120">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.proVersion" placeholder="请选择" size="mini" style="width: 100px">
+            <el-option v-for="(item, index) in VersionList" :label="item.value"  :value="item.code" :key="index"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <el-table-column label="生产订单" width="140" prop="orderNo"></el-table-column>
       <el-table-column label="操作" width="50" fixed="right">
         <template slot-scope="scope">
@@ -65,6 +79,14 @@ export default {
   },
   props: {
     isRedact: '',
+    VersionList: {
+      type: Array,
+      default () { return [] }
+    },
+    orderTypeList: {
+      type: Array,
+      default () { return [] }
+    },
     fumet: {
       type: Array,
       default () { return [] }
