@@ -31,7 +31,7 @@
       </el-form>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-Production-index'})">返回</el-button>
+          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -552,7 +552,10 @@ export default {
       let net2 = new Promise((resolve, reject) => {
         this.Savewarming(str, resolve, reject)
       })
-      Promise.all([net0, net1, net2]).then(() => {
+      let net3 = new Promise((resolve, reject) => {
+        this.SaveHeader(str, resolve, reject)
+      })
+      Promise.all([net0, net1, net2, net3]).then(() => {
         this.$message.success('保存成功')
         this.pages.currPage = 1
         this.GetHeader()
@@ -608,6 +611,19 @@ export default {
         } else {
           if (reject) {
             reject('加温参数' + data.msg)
+          }
+        }
+      })
+    },
+    SaveHeader (str, resolve, reject) {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('头部数据' + data.msg)
           }
         }
       })

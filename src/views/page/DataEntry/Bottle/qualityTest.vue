@@ -31,7 +31,7 @@
       </el-form>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-Production-index'})">返回</el-button>
+          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -418,10 +418,16 @@ export default {
       })
       this.$http(`${BOTTLE_API.BOTTLE_QUALITY_SAVE}`, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('保存成功')
-          this.pages.currPage = 1
-          this.isRedact = false
-          this.GetHeader()
+          this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+            if (data.code === 0) {
+              this.$message.success('保存成功')
+              this.pages.currPage = 1
+              this.isRedact = false
+              this.GetHeader()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         } else {
           this.$message.error(data.msg)
         }
