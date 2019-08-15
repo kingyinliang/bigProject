@@ -126,7 +126,8 @@ export default {
     getHead () {
       this.isRedact = false
       this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {
-        orderId: this.$store.state.common.bottle.ProOrderId
+        orderId: this.$store.state.common.bottle.ProOrderId,
+        type: 'production'
       }).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.headInfo
