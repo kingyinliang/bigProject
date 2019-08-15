@@ -17,7 +17,7 @@
           <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="生产订单：">
-          <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
+          <el-input v-model.trim="formHeader.orderNo" style="width:150px"></el-input>
         </el-form-item>
         <el-button type="primary" size="small" @click="GetList" class="floatr">查询</el-button>
       </el-form>
@@ -51,15 +51,15 @@
           </el-row>
           <div class="bottom">
             <el-tooltip class="item" effect="dark" :content="item.orderStatus === 'submit' ? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus" placement="top-start">
-              <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
+              <el-button :disabled="!isAuth('bottle:inStorage:list')" class="bottom-item" @click="GoDetail(1, item)">生产数据</el-button>
             </el-tooltip>
             <div class="bottom-split"></div>
             <el-tooltip class="item" effect="dark" :content="item.craftDataStatus" placement="top-start">
-              <div class="bottom-item" @click="GoDetail(2, item)">工艺数据</div>
+              <el-button :disabled="!isAuth('bottle:workshop:techProductParameterList')" class="bottom-item" @click="GoDetail(2, item)">工艺数据</el-button>
             </el-tooltip>
             <div class="bottom-split"></div>
             <el-tooltip class="item" effect="dark" :content="item.qualityStatus" placement="top-start">
-              <div class="bottom-item" @click="GoDetail(3, item)">质量检测</div>
+              <el-button :disabled="!isAuth('bottle:workshop:qualityInspectionList')" class="bottom-item" @click="GoDetail(3, item)">质量检测</el-button>
             </el-tooltip>
           </div>
         </div>
@@ -277,10 +277,18 @@ export default {
       flex: 1;
       font-size: 14px;
       line-height: 40px;
+      background: #f7f9fa;
+      border-radius: 0;
+      border:none; height:40px; padding:0;
       &:hover{
         color:#fff;
         background:#1890FF;
-        cursor:pointer
+      }
+      &.is-disabled{
+        color: #606266
+      }
+      &.is-disabled:hover{
+        color: #fff
       }
     }
     .bottom-split {

@@ -32,10 +32,10 @@
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" class="button" v-if="isAuth('bottle:workshop:techProductParameterSave')" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" >保存</el-button>
+          <el-button type="primary" size="small" v-if="isAuth('bottle:workshop:techProductParameterSave')" @click="savedOrSubmitForm('saved')" >保存</el-button>
           <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
         </template>
       </el-row>
@@ -616,7 +616,7 @@ export default {
       })
     },
     SaveHeader (str, resolve, reject) {
-      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId, type: 'craft'}).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
             resolve('resolve')

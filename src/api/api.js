@@ -252,7 +252,11 @@ export const BASICDATA_API = {
   STERILIZEMATERIALRATIOLIST: HOST + '/ste/mid/list',
   STERILIZEMATERIALRATIOSAVE_API: HOST + '/ste/mid/save',
   STERILIZEMATERIALRATIOUPDATE_API: HOST + '/ste/mid/update',
-  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete'
+  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete',
+  /**
+   *  根据类型查容器号
+   */
+  DROPDOWN_HOLDER_LIST: HOST + '/all/dropDown/getFilterHolder'
 }
 /*
 *系统设置api
@@ -630,7 +634,12 @@ export const AUDIT_API = {
   /**
    * @property {string} AUDIT_ISSUE_RESET_API 生产发料反审
    */
-  AUDIT_ISSUE_RESET_API: HOST + '/verify/material/resetMaterial'
+  AUDIT_ISSUE_RESET_API: HOST + '/verify/material/resetMaterial',
+  /**
+   * 调整明细
+  */
+  AUDIT_ADJUST_LIST: HOST + '/ver/adjust/list',
+  AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust'
 }
 /*
 *考勤api
@@ -855,7 +864,8 @@ export const REP_API = {
    *  二合一报表
    */
   TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
-  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList'
+  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList',
+  REP_ADJUST_LIST_API: HOST + '/ver/adjust/exportList'
 }
 /*
 *炒麦api
@@ -1133,11 +1143,7 @@ export const KJM_API = {
   /**
    * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
    */
-  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit',
-  /**
-   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核表头提交
-   */
-  KJMAKINGCHECKHEADSUBMIT_API: HOST + '/kjm/order/submitToFerVer'
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
 }
 
 /**
