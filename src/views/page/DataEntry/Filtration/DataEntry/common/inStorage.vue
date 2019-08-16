@@ -53,7 +53,6 @@
         </el-form-item>
         <el-form-item label="是否满罐：" prop="isFull">
           <el-select v-model="dataForm.isFull" filterable placeholder="请选择" style="width: 100%">
-            <el-option label="请选择" value=""></el-option>
             <el-option label="是" value="1"></el-option>
             <el-option label="否" value="0"></el-option>
           </el-select>
@@ -193,9 +192,9 @@ export default {
     },
     // 半成品罐下拉
     PotinTankAmount (id) {
-      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.holderRemaining = this.PotList.filter(item => item.holderId === id)[0].amount
       this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
-      if (this.dataForm.inTankAmount) {
+      if (this.dataForm.holderRemaining) {
         this.PotObject.inTankAmount = true
       } else {
         this.PotObject.inTankAmount = false
@@ -212,6 +211,7 @@ export default {
       this.dataForm = {
         id: '',
         status: '',
+        isFull: '0',
         serialNumber: '',
         holderId: '',
         batch: '',
