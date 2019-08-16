@@ -122,6 +122,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '二合一'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshopList = data.typeList
+            if (data.typeList.length > 0) {
+              this.formHeader.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$message.error(data.msg)
           }

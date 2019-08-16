@@ -382,7 +382,7 @@ export default {
         // let NewList = productList.slice((productList.length - 5))
         let NewList = productList.slice(0, 6)
         NewList.map((item, index) => {
-          if (index < 6) {
+          if (index < 5) {
             this.productList.splice(index, 0, {
               id: '',
               parameter: item.parameter,
