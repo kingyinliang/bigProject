@@ -639,7 +639,8 @@ export const AUDIT_API = {
    * 调整明细
   */
   AUDIT_ADJUST_LIST: HOST + '/ver/adjust/list',
-  AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust'
+  AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust',
+  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial'
 }
 /*
 *考勤api
@@ -1488,6 +1489,7 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTLIST: HOST + '/ste/semi/list',
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
+  SEMIFINISHEDPRODUCTZCSAVE: HOST + '/ste/semi/dumpSemiMaterial',
   SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/semi/oneselfHolderList',
   SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',

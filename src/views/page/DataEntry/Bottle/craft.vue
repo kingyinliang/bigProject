@@ -138,7 +138,7 @@
         </el-row>
         <el-table :data="equipmentList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -188,7 +188,7 @@
         </el-row>
         <el-table :data="warmingList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -306,7 +306,8 @@ export default {
       orderId: this.$store.state.common.bottle.ProOrderId,
       productList: [],
       equipmentList: [],
-      warmingList: []
+      warmingList: [],
+      paramList: ['拉伸角度', '预吹角度', '主吹角度', '回收角度', '排气角度']
     }
   },
   mounted () {
@@ -357,113 +358,50 @@ export default {
       let productList = this.productList.filter(item => { return item.delFlag === '0' })
       let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
       if (productList.length === 0) {
-        this.productList.push({
-          id: '',
-          parameter: '拉伸角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '预吹角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '主吹角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '回收角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '排气角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        })
-      } else {
-        let NewList = productList.slice((productList.length - 5))
-        NewList.map((item) => {
+        this.paramList.map(item => {
           this.productList.push({
             id: '',
-            parameter: item.parameter,
+            parameter: item,
             time: dateNow,
-            oneWell: item.oneWell,
-            twoWell: item.twoWell,
-            threeWell: item.threeWell,
-            fourWell: item.fourWell,
-            fiveWell: item.fiveWell,
-            sixWell: item.sixWell,
-            sevenWell: item.sevenWell,
-            eightWell: item.eightWell,
-            nineWell: item.nineWell,
-            tenWell: item.tenWell,
-            elevenWell: item.elevenWell,
-            twelveWell: item.twelveWell,
+            oneWell: '',
+            twoWell: '',
+            threeWell: '',
+            fourWell: '',
+            fiveWell: '',
+            sixWell: '',
+            sevenWell: '',
+            eightWell: '',
+            nineWell: '',
+            tenWell: '',
+            elevenWell: '',
+            twelveWell: '',
             delFlag: '0'
           })
+        })
+      } else {
+        // let NewList = productList.slice((productList.length - 5))
+        let NewList = productList.slice(0, 6)
+        NewList.map((item, index) => {
+          if (index < 5) {
+            this.productList.splice(index, 0, {
+              id: '',
+              parameter: item.parameter,
+              time: dateNow,
+              oneWell: item.oneWell,
+              twoWell: item.twoWell,
+              threeWell: item.threeWell,
+              fourWell: item.fourWell,
+              fiveWell: item.fiveWell,
+              sixWell: item.sixWell,
+              sevenWell: item.sevenWell,
+              eightWell: item.eightWell,
+              nineWell: item.nineWell,
+              tenWell: item.tenWell,
+              elevenWell: item.elevenWell,
+              twelveWell: item.twelveWell,
+              delFlag: '0'
+            })
+          }
         })
       }
     },
@@ -552,10 +490,10 @@ export default {
       let net2 = new Promise((resolve, reject) => {
         this.Savewarming(str, resolve, reject)
       })
-      let net3 = new Promise((resolve, reject) => {
-        this.SaveHeader(str, resolve, reject)
-      })
-      Promise.all([net0, net1, net2, net3]).then(() => {
+      // let net3 = new Promise((resolve, reject) => {
+      //   this.SaveHeader(str, resolve, reject)
+      // })
+      Promise.all([net0, net1, net2]).then(() => {
         this.$message.success('保存成功')
         this.pages.currPage = 1
         this.GetHeader()
