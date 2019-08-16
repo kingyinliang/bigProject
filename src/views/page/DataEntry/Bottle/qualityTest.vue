@@ -23,10 +23,10 @@
           <p class="bottom">{{formHeader.planOutput}}</p>
         </el-form-item>
         <el-form-item label="保存人员：">
-          <p class="bottom">{{formHeader.changer}}</p>
+          <p class="bottom">&nbsp;{{formHeader.changer}}</p>
         </el-form-item>
         <el-form-item label="保存时间：">
-          <p class="bottom">{{formHeader.changed}}</p>
+          <p class="bottom">&nbsp;{{formHeader.changed}}</p>
         </el-form-item>
       </el-form>
       <el-row style="text-align:right">
@@ -213,7 +213,7 @@ export default {
   },
   methods: {
     GetHeader () {
-      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {orderId: this.orderId, type: 'quality'}).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.headInfo
           this.GetList()
