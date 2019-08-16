@@ -1516,6 +1516,11 @@ export const FILTRATION_API = {
    *  过滤罐区
    */
   FILTER_POT_LIST_API: HOST + '/filter/holder/list',
+  FILTER_POT_DETAIL_API: HOST + '/filter/holder/detailsList',
+  FILTER_POT_CLEAN_API: HOST + '/filter/holder/cleanProHolder',
+  FILTER_INHOLDERTYPE_LIST_API: HOST + '/all/dropDown/getJBSHolder',
+  FILTER_HOLDER_LIST_API: HOST + '/all/dropDown/getFilterHolder',
+  FILTER_JBS_API: HOST + '/filter/holder/jbsOut',
   /**
    *  工艺控制
    */
