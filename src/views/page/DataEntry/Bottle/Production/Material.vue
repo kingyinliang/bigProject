@@ -13,7 +13,7 @@
       <el-table-column label="批次 " :show-overflow-tooltip="true" prop="kjmWorkShopName" width="140">
         <template slot="header"><i class="reqI">*</i><span>批次</span></template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.batch" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.batch" placeholder="手工录入" size="mini" maxlength='10' :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="生产使用量 " :show-overflow-tooltip="true" width="140">

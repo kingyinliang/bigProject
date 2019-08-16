@@ -136,10 +136,10 @@ export default {
           this.GetProductShift(this.formHeader.factory) // 生产班次
           this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
           this.$refs.excrecord.getDataList(this.formHeader.factory)
-          this.$refs.workerref.GetTeam(false, this.formHeader.factory)
+          this.$refs.workerref.GetTeam(this.formHeader.workShop, this.formHeader.factory)
           this.$refs.workerref.getTree(this.formHeader.factory)
           this.$refs.workerref.GetProductShift(this.formHeader.factory)
-          this.$refs.workerref.GetMaterails(this.formHeader.productLine)
+          this.$refs.workerref.GetMaterails(this.formHeader.productLine, this.formHeader.productDate)
           if (this.formHeader.orderStatus) {
             this.$refs.readytimes.getDataList()
             this.$refs.record.getDataList()
@@ -160,7 +160,7 @@ export default {
         orderId: this.$store.state.common.bottle.ProOrderId
       }).then(({data}) => {
         if (data.code === 0) {
-          this.$refs.workerref.GetTimeUserList(data.listuser)
+          this.$refs.workerref.GetTimeUserList(data.listuser, data.vrList)
           this.Attendance = data.list
         } else {
           this.$message.error(data.msg)

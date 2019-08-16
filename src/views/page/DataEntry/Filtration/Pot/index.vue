@@ -62,28 +62,27 @@
         <el-form-item label="领用罐号：" prop="receiveHolderId">
           <p>{{JBSdataForm.holderName}}</p>
         </el-form-item>
-        <el-form-item label="物料：">
+        <el-form-item label="物料：" prop="materialCode">
           <p>{{JBSdataForm.materialCode + ' ' + JBSdataForm.materialName}}</p>
         </el-form-item>
-        <el-form-item label="批次：">
+        <el-form-item label="批次：" prop="batch">
           <p>{{JBSdataForm.batch}}</p>
         </el-form-item>
-        <el-form-item label="领用量：">
+        <el-form-item label="领用量：" prop="receiveAmount">
           <el-input v-model="JBSdataForm.receiveAmount" size="small" placeholder="手工录入"></el-input>
         </el-form-item>
-        <el-form-item label="打入罐类别：">
-          <el-select v-model="JBSdataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType">
+        <el-form-item label="打入罐类别：" prop="inHolderType">
+          <el-select v-model="JBSdataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType(JBSdataForm.inHolderType)">
             <el-option v-for="(sole, index) in InHolderType" :key="index" :value="sole.code" :label="sole.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="打入罐号：">
-          <el-select v-model="JBSdataForm.inHolderId" filterable placeholder="请选择" @change="GetHolderType">
+        <el-form-item label="打入罐号：" prop="inHolderId">
+          <el-select v-model="JBSdataForm.inHolderId" filterable placeholder="请选择">
             <el-option v-for="(sole, index) in Holder" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否满罐：">
           <el-select v-model="JBSdataForm.isFull" filterable placeholder="请选择" style="width: 100%">
-            <el-option label="请选择" value=""></el-option>
             <el-option label="是" value="1"></el-option>
             <el-option label="否" value="0"></el-option>
           </el-select>
@@ -92,10 +91,10 @@
           <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="JBSdataForm.fullDate" placeholder="请选择日期" style="width: 190px"></el-date-picker>
         </el-form-item>
         <el-form-item label="操作时间：">
-          <p></p>
+          <p>{{JBSdataForm.changed}}</p>
         </el-form-item>
         <el-form-item label="操作人：">
-          <p></p>
+          <p>{{JBSdataForm.changer = $store.state.user.realName + '（' + this.$store.state.user.name + '）'}}</p>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -105,8 +104,43 @@
     </el-dialog>
     <el-dialog width="400px" title="转储" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="TurnSaveVisible">
       <el-form :model="TurnSavedataForm" :rules="TurnSavedataRule" ref="TurnSavedataForm" @keyup.enter.native="TurnSave()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
-        <el-form-item label="罐号：">
-          <p>{{TurnSavedataForm.holderNo}}</p>
+        <el-form-item label="领用罐号：" prop="receiveHolderId">
+          <p>{{TurnSavedataForm.holderName}}</p>
+        </el-form-item>
+        <el-form-item label="物料：" prop="materialCode">
+          <p>{{TurnSavedataForm.materialCode + ' ' + TurnSavedataForm.materialName}}</p>
+        </el-form-item>
+        <el-form-item label="批次：" prop="batch">
+          <p>{{TurnSavedataForm.batch}}</p>
+        </el-form-item>
+        <el-form-item label="领用量：" prop="receiveAmount">
+          <el-input v-model="TurnSavedataForm.receiveAmount" size="small" placeholder="手工录入"></el-input>
+        </el-form-item>
+        <el-form-item label="打入罐类别：" prop="inHolderType">
+          <el-select v-model="TurnSavedataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType(TurnSavedataForm.inHolderType)">
+            <!--<el-option v-for="(sole, index) in InHolderType" :key="index" :value="sole.code" :label="sole.name"></el-option>-->
+            <el-option value="007" label="成品罐"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="打入罐号：" prop="inHolderId">
+          <el-select v-model="TurnSavedataForm.inHolderId" filterable placeholder="请选择">
+            <el-option v-for="(sole, index) in Holder" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否满罐：">
+          <el-select v-model="TurnSavedataForm.isFull" filterable placeholder="请选择" style="width: 100%">
+            <el-option label="是" value="1"></el-option>
+            <el-option label="否" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="满罐日期：">
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" v-model="TurnSavedataForm.fullDate" placeholder="请选择日期" style="width: 190px"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="操作时间：">
+          <p>{{TurnSavedataForm.changed}}</p>
+        </el-form-item>
+        <el-form-item label="操作人：">
+          <p>{{TurnSavedataForm.changer = $store.state.user.realName + '（' + this.$store.state.user.name + '）'}}</p>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -118,7 +152,7 @@
 </template>
 
 <script>
-import {getFactory, getWorkshop} from '@/net/validate'
+import {getFactory, getWorkshop, dateFormat} from '@/net/validate'
 import {FILTRATION_API, BASICDATA_API} from '@/api/api'
 export default {
   name: 'index',
@@ -141,11 +175,45 @@ export default {
       JBSdataForm: {},
       JBSdataRule: {
         receiveHolderId: [
-          { required: true, message: '半成品罐号不能为空', trigger: 'blur' }
+          { required: true, message: '领用罐号不能为空', trigger: 'blur' }
+        ],
+        materialCode: [
+          { required: true, message: '物料不能为空', trigger: 'blur' }
+        ],
+        batch: [
+          { required: true, message: '批次不能为空', trigger: 'blur' }
+        ],
+        receiveAmount: [
+          { required: true, message: '领用量不能为空', trigger: 'blur' }
+        ],
+        inHolderType: [
+          { required: true, message: '打入罐类别不能为空', trigger: 'blur' }
+        ],
+        inHolderId: [
+          { required: true, message: '打入罐号不能为空', trigger: 'blur' }
         ]
       },
       TurnSavedataForm: {},
-      TurnSavedataRule: {}
+      TurnSavedataRule: {
+        receiveHolderId: [
+          { required: true, message: '领用罐号不能为空', trigger: 'blur' }
+        ],
+        materialCode: [
+          { required: true, message: '物料不能为空', trigger: 'blur' }
+        ],
+        batch: [
+          { required: true, message: '批次不能为空', trigger: 'blur' }
+        ],
+        receiveAmount: [
+          { required: true, message: '领用量不能为空', trigger: 'blur' }
+        ],
+        inHolderType: [
+          { required: true, message: '打入罐类别不能为空', trigger: 'blur' }
+        ],
+        inHolderId: [
+          { required: true, message: '打入罐号不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   watch: {
@@ -209,6 +277,7 @@ export default {
     // JBS弹窗
     JBSdialog (item) {
       this.JBSVisible = true
+      this.Holder = []
       this.JBSdataForm = {
         factory: this.formHeader.factory,
         workShop: this.formHeader.workShop,
@@ -221,31 +290,81 @@ export default {
         unit: '',
         inHolderType: '',
         inHolderId: '',
-        isFull: '',
+        isFull: '0',
         fullDate: '',
-        remark: ''
+        remark: '',
+        changer: '',
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
       }
     },
     // 转储弹窗
-    TurnSavedialog () {
+    TurnSavedialog (item) {
       this.TurnSaveVisible = true
+      this.Holder = []
+      this.TurnSavedataForm = {
+        receiveHolderId: item.holderId,
+        holderName: item.holderName,
+        materialCode: item.materialCode,
+        materialName: item.materialName,
+        batch: item.batch,
+        receiveAmount: '',
+        unit: '',
+        inHolderType: '',
+        inHolderId: '',
+        isFull: '0',
+        fullDate: '',
+        remark: '',
+        changer: '',
+        changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+      }
     },
     // JBS确认
     JBS () {
-      this.$http(`${FILTRATION_API.FILTER_JBS_API}`, 'POST', this.JBSdataForm).then(({data}) => {
-        if (data.code === 0) {
-          this.$message.success('操作成功')
-          this.GetDataList()
-        } else {
-          this.$message.error(data.msg)
+      if (this.JBSdataForm.isFull === '1') {
+        if (!this.JBSdataForm.fullDate) {
+          this.$message.error('满罐时间必填')
+          return
+        }
+      }
+      this.$refs.JBSdataForm.validate((valid) => {
+        if (valid) {
+          this.$http(`${FILTRATION_API.FILTER_JBS_API}`, 'POST', this.JBSdataForm).then(({data}) => {
+            if (data.code === 0) {
+              this.JBSVisible = false
+              this.$message.success('操作成功')
+              this.GetDataList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         }
       })
     },
     // 转储确认
-    TurnSave () {},
+    TurnSave () {
+      if (this.TurnSavedataForm.isFull === '1') {
+        if (!this.TurnSavedataForm.fullDate) {
+          this.$message.error('满罐时间必填')
+          return
+        }
+      }
+      this.$refs.TurnSavedataForm.validate((valid) => {
+        if (valid) {
+          this.$http(`${FILTRATION_API.FILTER_TURNSAVE_API}`, 'POST', this.TurnSavedataForm).then(({data}) => {
+            if (data.code === 0) {
+              this.TurnSaveVisible = false
+              this.$message.success('操作成功')
+              this.GetDataList()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }
+      })
+    },
     // 获取罐号
-    GetHolderType () {
-      this.$http(`${FILTRATION_API.FILTER_HOLDER_LIST_API}`, 'POST', {factory: this.formHeader.factory, holderType: this.JBSdataForm.inHolderType}, false, false, false).then(({data}) => {
+    GetHolderType (holderType) {
+      this.$http(`${FILTRATION_API.FILTER_HOLDER_LIST_API}`, 'POST', {factory: this.formHeader.factory, holderType: holderType}, false, false, false).then(({data}) => {
         this.Holder = data.list
       })
     },

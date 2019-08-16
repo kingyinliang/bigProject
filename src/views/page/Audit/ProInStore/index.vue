@@ -45,19 +45,11 @@
                 <el-form-item label="生产日期：">
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.prodDate" style="width: 160px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="过账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate" style="width: 160px"></el-date-picker>
+                <el-form-item style="float: right">
+                  <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
+                  <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyInStorage:auditing')">审核通过</el-button>
+                  <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyInStorage:auditing')">审核不通过</el-button>
                 </el-form-item>
-                <el-row>
-                  <el-form-item label="抬头文本：">
-                    <el-input v-model="plantList.headerTxt" placeholder="抬头文本" style="width: 160px"></el-input>
-                  </el-form-item>
-                  <el-form-item style="margin-left: 67px;float: right">
-                    <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('sys:verifyInStorage:list')">查询</el-button>
-                    <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyInStorage:auditing')">审核通过</el-button>
-                    <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyInStorage:auditing')">审核不通过</el-button>
-                  </el-form-item>
-                </el-row>
               </el-form>
             </el-col>
           </el-row>
@@ -71,6 +63,14 @@
           <div class="toggleSearchTop">
               <i class="el-icon-caret-bottom"></i>
           </div>
+          <el-form :model="plantList" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
+            <el-form-item label="过账日期：" prop="pstngDate">
+              <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.pstngDate" style="width: 160px"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="抬头文本：">
+              <el-input v-model="plantList.headerTxt" placeholder="抬头文本" style="width: 160px"></el-input>
+            </el-form-item>
+          </el-form>
           <el-table
             ref="table1"
             v-loading="dataListLoading"
@@ -292,6 +292,11 @@ export default {
       productline: [],
       orderTypeList: [],
       Text: '',
+      plantListRule: {
+        pstngDate: [
+          { required: true, message: '过账日期不能为空', trigger: 'blur' }
+        ]
+      },
       plantList: {
         orderNo: '',
         factory: '',

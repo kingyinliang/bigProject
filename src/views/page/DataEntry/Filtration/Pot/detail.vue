@@ -55,7 +55,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane name="2">
-          <span slot="label" class="spanview">当前领用信息</span>
+          <span slot="label" class="spanview">历史数据</span>
           <el-table header-row-class-name="tableHead" :data="dataListRe" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexOrderMethod"></el-table-column>
             <el-table-column label="成品罐号" :show-overflow-tooltip="true" prop="holderNo" width="80"></el-table-column>

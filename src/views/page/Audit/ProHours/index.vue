@@ -39,9 +39,6 @@
                 <el-form-item label="生产日期：">
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate" style="width: 160px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="记账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate" style="width: 160px"></el-date-picker>
-                </el-form-item>
                 <el-form-item style="margin-left: 67px;float: right">
                   <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:time:update')">审核通过</el-button>
@@ -60,6 +57,11 @@
           <div class="toggleSearchTop">
               <i class="el-icon-caret-bottom"></i>
           </div>
+          <el-form :model="plantList" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
+            <el-form-item label="记账日期：" prop="postgDate">
+              <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate" style="width: 160px"></el-date-picker>
+            </el-form-item>
+          </el-form>
           <el-table
             ref="table1"
             v-loading="dataListLoading"
@@ -286,6 +288,11 @@ export default {
       Text: '',
       ReText: '',
       reData: {},
+      plantListRule: {
+        postgDate: [
+          { required: true, message: '记账日期不能为空', trigger: 'blur' }
+        ]
+      },
       plantList: {
         orderNo: '',
         factory: '',

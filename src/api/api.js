@@ -1521,6 +1521,7 @@ export const FILTRATION_API = {
   FILTER_INHOLDERTYPE_LIST_API: HOST + '/all/dropDown/getJBSHolder',
   FILTER_HOLDER_LIST_API: HOST + '/all/dropDown/getFilterHolder',
   FILTER_JBS_API: HOST + '/filter/holder/jbsOut',
+  FILTER_TURNSAVE_API: HOST + '/filter/holder/dumpMaterial',
   /**
    *  工艺控制
    */
