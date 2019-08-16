@@ -138,7 +138,7 @@
         </el-row>
         <el-table :data="equipmentList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -188,7 +188,7 @@
         </el-row>
         <el-table :data="warmingList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -552,10 +552,10 @@ export default {
       let net2 = new Promise((resolve, reject) => {
         this.Savewarming(str, resolve, reject)
       })
-      let net3 = new Promise((resolve, reject) => {
-        this.SaveHeader(str, resolve, reject)
-      })
-      Promise.all([net0, net1, net2, net3]).then(() => {
+      // let net3 = new Promise((resolve, reject) => {
+      //   this.SaveHeader(str, resolve, reject)
+      // })
+      Promise.all([net0, net1, net2]).then(() => {
         this.$message.success('保存成功')
         this.pages.currPage = 1
         this.GetHeader()

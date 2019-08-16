@@ -51,7 +51,7 @@
         <el-table-column label="参数" show-overflow-tooltip width="85" prop="parameter"></el-table-column>
         <el-table-column label="时间" width="200" prop="date">
           <template slot-scope="scope">
-            <el-date-picker type="date" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" placeholder="请选择日期" style="width:180px"></el-date-picker>
+            <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" placeholder="请选择日期" style="width:180px"></el-date-picker>
           </template>
         </el-table-column>
         <el-table-column label="1#" width="100">
@@ -205,7 +205,8 @@ export default {
       isRedact: false,
       dataList: [],
       orderId: this.$store.state.common.bottle.ProOrderId,
-      Textareas: ''
+      Textareas: '',
+      paramList: ['外观', '瓶高(mm)', '瓶口内径(mm)', '重量(g)', '满口容量(ml)', '密封性能', '跌落性能', '垂直度']
     }
   },
   mounted () {
@@ -239,167 +240,58 @@ export default {
       })
     },
     AddRow () {
-      let NewList = this.dataList.slice((this.dataList.length) - 8)
+      let dataList = this.dataList.filter(item => { return item.delFlag === '0' })
       let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
-      if (NewList.length === 0) {
-        this.dataList.push({
-          id: '',
-          parameter: '外观',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '瓶高(mm)',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '瓶口内径(mm)',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '重量(g)',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '满口容量(ml)',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '密封性能',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '跌落性能',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '垂直度',
-          date: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        })
-      } else {
-        NewList.map((item) => {
+      if (dataList.length === 0) {
+        this.paramList.map(item => {
+          let argument = ''
+          if (item === '外观' || item === '密封性能' || item === '跌落性能') {
+            argument = '合格'
+          }
           this.dataList.push({
             id: '',
-            parameter: item.parameter,
+            parameter: item,
             date: dateNow,
-            oneWell: item.oneWell,
-            twoWell: item.twoWell,
-            threeWell: item.threeWell,
-            fourWell: item.fourWell,
-            fiveWell: item.fiveWell,
-            sixWell: item.sixWell,
-            sevenWell: item.sevenWell,
-            eightWell: item.eightWell,
-            nineWell: item.nineWell,
-            tenWell: item.tenWell,
-            elevenWell: item.elevenWell,
-            twelveWell: item.twelveWell,
+            oneWell: argument,
+            twoWell: argument,
+            threeWell: argument,
+            fourWell: argument,
+            fiveWell: argument,
+            sixWell: argument,
+            sevenWell: argument,
+            eightWell: argument,
+            nineWell: argument,
+            tenWell: argument,
+            elevenWell: argument,
+            twelveWell: argument,
             delFlag: '0'
           })
         })
+      } else {
+        let NewList = dataList.slice(0, 9)
+        NewList.map((item, index) => {
+          if (index < 8) {
+            this.dataList.splice(index, 0, {
+              id: '',
+              parameter: item.parameter,
+              date: dateNow,
+              oneWell: item.oneWell,
+              twoWell: item.twoWell,
+              threeWell: item.threeWell,
+              fourWell: item.fourWell,
+              fiveWell: item.fiveWell,
+              sixWell: item.sixWell,
+              sevenWell: item.sevenWell,
+              eightWell: item.eightWell,
+              nineWell: item.nineWell,
+              tenWell: item.tenWell,
+              elevenWell: item.elevenWell,
+              twelveWell: item.twelveWell,
+              delFlag: '0'
+            })
+          }
+        })
+        console.log(this.dataList)
       }
       // this.loading = false
     },
@@ -418,16 +310,14 @@ export default {
       })
       this.$http(`${BOTTLE_API.BOTTLE_QUALITY_SAVE}`, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {
-          this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId, type: 'quality'}).then(({data}) => {
-            if (data.code === 0) {
-              this.$message.success('保存成功')
-              this.pages.currPage = 1
-              this.isRedact = false
-              this.GetHeader()
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
+          if (data.code === 0) {
+            this.$message.success('保存成功')
+            this.pages.currPage = 1
+            this.isRedact = false
+            this.GetHeader()
+          } else {
+            this.$message.error(data.msg)
+          }
         } else {
           this.$message.error(data.msg)
         }

@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="容器号：">
-          <el-select v-model="formHeader.holderNo" filterable class="width180px">
+          <el-select v-model="formHeader.holderId" filterable class="width180px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in holderNoList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
@@ -29,6 +29,7 @@
         <el-form-item label="物料：" label-width="60px">
           <el-select v-model="formHeader.materialCode" filterable class="width180px">
             <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) in materialList" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="订单：">
@@ -105,7 +106,7 @@
           <el-button>已调整</el-button>
         </span>
         <el-table :data="dataList" ref="multipleTable3" header-row-class-name="tableHead" border tooltip-effect="dark">
-          <el-table-column label="订单号" prop="orderNo"></el-table-column>
+          <el-table-column label="订单号" width="100" prop="orderNo"></el-table-column>
           <el-table-column label="容器类型" prop="holderTypeName" show-overflow-tooltip></el-table-column>
           <el-table-column label="容器号" prop="holderNo" show-overflow-tooltip></el-table-column>
           <el-table-column label="物料" width="190" show-overflow-tooltip>
@@ -151,7 +152,7 @@ export default {
         factory: '',
         workShop: '',
         holderType: '',
-        holderNo: ''
+        holderId: ''
       },
       holderTypeList: [{
         name: '成品罐',
@@ -162,6 +163,7 @@ export default {
       }],
       moveTypeList: ['清罐', 'JBS出库', '调整'],
       holderNoList: [],
+      materialList: [],
       pages: {
         currentPage: 1,
         pageSize: 10,
@@ -178,6 +180,7 @@ export default {
   mounted () {
     this.GetFactoryList()
     this.GetPageCurrenList()
+    this.GetMaterialList()
   },
   watch: {
     'formHeader.factory' (n, o) {
@@ -185,7 +188,7 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.formHeader.holderType = ''
-      this.formHeader.holderNo = ''
+      this.formHeader.holderId = ''
       this.formHeader.holderNoList = []
     },
     'formHeader.holderType' (n, o) {
@@ -210,7 +213,7 @@ export default {
     GetWorkshopList (id) {
       this.formHeader.workShop = ''
       this.formHeader.holderType = ''
-      this.formHeader.holderNo = ''
+      this.formHeader.holderId = ''
       this.formHeader.holderNoList = []
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '杀菌 过滤'}, false, false, false).then(({data}) => {
@@ -229,7 +232,7 @@ export default {
     },
     // 容器号
     GetHolderList (id) {
-      this.formHeader.holderNo = ''
+      this.formHeader.holderId = ''
       this.formHeader.holderNoList = []
       let param = {
         factory: this.formHeader.factory,
@@ -238,6 +241,16 @@ export default {
       this.$http(`${BASICDATA_API.DROPDOWN_HOLDER_LIST}`, 'POST', param, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.holderNoList = data.list
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 物料
+    GetMaterialList () {
+      this.$http(`${AUDIT_API.AUDIT_ADJUST_MATERIAL}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.materialList = data.list
         } else {
           this.$message.error(data.msg)
         }
@@ -316,6 +329,7 @@ export default {
     },
     ExportExcel () {
       let that = this
+      that.plantList = that.formHeader
       exportFile(`${REP_API.REP_ADJUST_LIST_API}`, '调整明细', that)
     }
   },
@@ -325,7 +339,7 @@ export default {
       this.dataListAll.map(item => {
         num = num + item.amount
       })
-      return num
+      return num.toFixed(3)
     }
   }
 }

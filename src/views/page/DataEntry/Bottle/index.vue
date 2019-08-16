@@ -135,6 +135,10 @@ export default {
         this.$message.error('请选择车间')
         return false
       }
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或生产订单请选填一项')
+        return false
+      }
       this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.AllList = data.indexInfo
