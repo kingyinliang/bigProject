@@ -217,7 +217,7 @@ export default {
                 sav = sav + 1
               }
               item.useUsage = item.useUsage ? item.useUsage : '转他用'
-              if (item.delFlag === '0') {
+              if (item.delFlag === '0' && item.holderId) {
                 this.distinctListbomS.push(item.holderId)
               }
             })
@@ -358,13 +358,13 @@ export default {
       this.listbomS.map(item => {
         if (item.holderType === '006' && item.delFlag === '0') {
           let sole = ''
-          if (item.id === '') {
-            sole = this.repertory.find(items => items.holderId === item.potNo)
-            holderId = item.potNo
-          } else {
-            sole = this.repertory.find(items => items.holderId === item.holderId)
-            holderId = item.holderId
-          }
+          // if (item.id === '') {
+          sole = this.repertory.find(items => items.holderId === item.potNo)
+          holderId = item.potNo
+          // } else {
+          //   sole = this.repertory.find(items => items.holderId === item.holderId)
+          //   holderId = item.holderId
+          // }
           if (sole) {
             sole.total = Number(sole.total) + Number(item.productUseNum)
           } else {
