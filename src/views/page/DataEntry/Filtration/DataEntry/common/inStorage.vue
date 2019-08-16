@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, FILTRATION_API} from '@/api/api'
+import {FILTRATION_API} from '@/api/api'
 import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
@@ -179,10 +179,13 @@ export default {
       })
     },
     // 获取半成品罐
-    GetholderList (workShopName) {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '007', pageSize: 9999, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+    GetholderList (factory, workShop) {
+      this.$http(`${FILTRATION_API.FILTER_IN_POT_API}`, 'POST', {
+        factory: factory,
+        workShop: workShop
+      }, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.PotList = data.page.list
+          this.PotList = data.holderList
         } else {
           this.$message.error(data.msg)
         }
@@ -190,18 +193,18 @@ export default {
     },
     // 半成品罐下拉
     PotinTankAmount (id) {
-      // this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
-      // this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
-      // if (this.dataForm.inTankAmount) {
-      //   this.PotObject.inTankAmount = true
-      // } else {
-      //   this.PotObject.inTankAmount = false
-      // }
-      // if (this.dataForm.batch) {
-      //   this.PotObject.batch = true
-      // } else {
-      //   this.PotObject.batch = false
-      // }
+      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
+      if (this.dataForm.inTankAmount) {
+        this.PotObject.inTankAmount = true
+      } else {
+        this.PotObject.inTankAmount = false
+      }
+      if (this.dataForm.batch) {
+        this.PotObject.batch = true
+      } else {
+        this.PotObject.batch = false
+      }
     },
     // 入罐
     showDialog () {
@@ -248,6 +251,7 @@ export default {
         this.isUpdate = true
         this.dataForm = JSON.parse(JSON.stringify(row))
         this.rowData = row
+        this.PotinTankAmount(this.dataForm.holderId)
       }
     }
   },

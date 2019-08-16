@@ -1509,6 +1509,7 @@ export const FILTRATION_API = {
   FILTER_IN_LIST_API: HOST + '/filter/instorage/list',
   FILTER_IN_UPDATE_API: HOST + '/filter/instorage/mySaveOrUpdate',
   FILTER_IN_SAVE_API: HOST + '/filter/instorage/submit',
+  FILTER_IN_POT_API: HOST + '/filter/instorage/holderList',
   FILTER_MANHOUR_LIST_API: HOST + '/filter/timeSheet/list',
   FILTER_MANHOUR_UPDATE_API: HOST + '/filter/timeSheet/update',
   FILTER_MANHOUR_SAVE_API: HOST + '/filter/timeSheet/submit',
