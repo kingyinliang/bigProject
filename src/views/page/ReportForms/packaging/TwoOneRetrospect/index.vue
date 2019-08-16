@@ -119,7 +119,7 @@ export default {
       this.formHeader.workShop = ''
       this.formHeader.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '二合一'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshopList = data.typeList
           } else {
