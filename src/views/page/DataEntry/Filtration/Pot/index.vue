@@ -255,11 +255,12 @@ export default {
     },
     // 清罐
     clearPot (item) {
+      if (item.holderStatus === '0') {
+        this.$message.error('该罐暂不可进行清罐操作')
+        return false
+      }
       if (item.holderStatus !== '4') {
         this.$message.error('未领用完不能清洗')
-        return false
-      } else if (item.holderStatus === '0') {
-        this.$message.error('该罐暂不可进行清罐操作')
         return false
       }
       this.$confirm('清罐后，账务将清零，请确认实物已空！', '清罐确认', {
