@@ -12,19 +12,23 @@
         <el-col>
           <el-form :inline="true" size="small" label-width="84px" class="topforms topformsde">
             <el-form-item label="生产工厂：">
-              <p class="el-input">{{formData.factoryName ? formData.factoryName : ''}}</p>
+              <el-tooltip class="item" effect="dark" :content="formData.factoryName ? formData.factoryName : ''" placement="top">
+                <p class="el-input">{{formData.factoryName ? formData.factoryName : ''}}</p>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="生产车间：">
               <p class="el-input">{{formData.workShopName ? formData.workShopName : ''}}</p>
             </el-form-item>
             <el-form-item label="当前库存：">
-              <p class="el-input">{{formData.amount}}</p>
+              <p class="el-input">{{formData.amount + formData.unit}}</p>
             </el-form-item>
             <el-form-item label="容量：">
-              <p class="el-input">{{formData.holderHold}}</p>
+              <p class="el-input">{{formData.holderHold + formData.unit}}</p>
             </el-form-item>
             <el-form-item label="当前物料：">
-              <p class="el-input">{{(formData.materialCode? formData.materialCode: '') + ' ' + (formData.materialName? formData.materialName : '')}}</p>
+              <el-tooltip class="item" effect="dark" :content="(formData.materialCode? formData.materialCode: '') + ' ' + (formData.materialName? formData.materialName : '')" placement="top">
+                <p class="el-input">{{(formData.materialCode? formData.materialCode: '') + ' ' + (formData.materialName? formData.materialName : '')}}</p>
+              </el-tooltip>
             </el-form-item>
           </el-form>
         </el-col>

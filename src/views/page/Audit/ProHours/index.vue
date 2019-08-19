@@ -2,7 +2,7 @@
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
       <div class="main">
-        <el-card class="searchCard">
+        <el-card class="searchCard switching">
           <el-row type="flex">
             <el-col>
               <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetAuditList()" @submit.native.prevent>
@@ -604,6 +604,9 @@ export default {
 
 <style lang="scss">
   .searchCard { margin-bottom: 0; }
+  .switching .el-card__body{
+    padding-bottom: 0px;
+  }
   .searchCard, .tableCard {
     position: relative;
     .toggleSearchTop {

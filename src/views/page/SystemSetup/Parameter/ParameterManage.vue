@@ -15,8 +15,8 @@
           </el-select>
           <el-button type="primary" @click="getdictList">查询</el-button>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
+        <el-row type="flex" :gutter="10">
+          <el-col style="width: 400px">
             <el-card>
               <div slot="header" class="clearfix">
                 <div slot="header" class="clearfix">
@@ -32,21 +32,10 @@
                   @row-click="setTypeDetail"
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
-                  <el-table-column
-                    type="index"
-                    width="55"
-                    label="序号">
-                  </el-table-column>
-                  <el-table-column
-                    :show-overflow-tooltip=true
-                    label="参数类型编码">
-                    <template slot-scope="scope">{{ scope.row.type }}</template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    :show-overflow-tooltip=true
-                    label="参数类型名称">
-                  </el-table-column>
+                  <el-table-column type="index" width="50" label="序号"></el-table-column>
+                  <el-table-column :show-overflow-tooltip=true label="工厂" prop="factoryName" width="80"></el-table-column>
+                  <el-table-column prop="type" :show-overflow-tooltip=true label="参数类型编码" width="110"></el-table-column>
+                  <el-table-column prop="name" :show-overflow-tooltip=true label="参数类型名称" width="110"></el-table-column>
                   <!--<el-table-column-->
                     <!--label="操作"-->
                     <!--width="80">-->
@@ -56,48 +45,21 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="16">
+          <el-col>
             <el-card>
               <div slot="header" class="clearfix">
                 <span style="float: left;line-height: 40px">参数</span>
                 <el-button type="text" icon="el-icon-plus" style="display: inline-block;float: right; padding: 12px;" @click="addorupdate('param',false,true)" v-if="isAuth('sys:dict:save')"></el-button>
               </div>
               <div>
-                <el-table
-                  ref="table1"
-                  header-row-class-name="tableHead"
-                  :data="parameter"
-                  border
-                  tooltip-effect="dark"
-                  style="width: 100%;margin-bottom: 20px">
-                  <el-table-column
-                    type="index"
-                    width="55"
-                    label="序号">
-                  </el-table-column>
-                  <el-table-column
-                    prop="type"
-                    :show-overflow-tooltip=true
-                    label="参数类型编码">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    :show-overflow-tooltip=true
-                    label="参数类型名称">
-                  </el-table-column>
-                  <el-table-column
-                    prop="code"
-                    :show-overflow-tooltip=true
-                    label="参数编码">
-                  </el-table-column>
-                  <el-table-column
-                    prop="value"
-                    :show-overflow-tooltip=true
-                    label="参数名称">
-                  </el-table-column>
-                  <el-table-column
-                    width="96"
-                    label="操作">
+                <el-table ref="table1" header-row-class-name="tableHead" :data="parameter" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+                  <el-table-column type="index" width="50" label="序号"></el-table-column>
+                  <el-table-column :show-overflow-tooltip=true label="工厂" prop="factoryName" width="100"></el-table-column>
+                  <el-table-column prop="type" :show-overflow-tooltip=true label="参数类型编码"></el-table-column>
+                  <el-table-column prop="name" :show-overflow-tooltip=true label="参数类型名称"></el-table-column>
+                  <el-table-column prop="code" :show-overflow-tooltip=true label="参数编码"></el-table-column>
+                  <el-table-column prop="value" :show-overflow-tooltip=true label="参数名称"></el-table-column>
+                  <el-table-column width="96" label="操作">
                     <template slot-scope="scope">
                       <el-button type="text" @click="remove(scope.row)" v-if="isAuth('sys:dict:delete')">删除</el-button>
                       <el-button type="text" @click="addorupdate('param', scope.row)" v-if="isAuth('sys:dict:update')">编辑</el-button>

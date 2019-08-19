@@ -149,7 +149,7 @@ export default {
           }
         } else {
           if (reject) {
-            reject('杀菌入库' + data.msg)
+            reject('过滤入库' + data.msg)
           }
         }
       })

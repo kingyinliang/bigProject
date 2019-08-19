@@ -355,6 +355,10 @@ export const SYSTEMSETUP_API = {
    */
   ROLEUSER_API: HOST + '/sys/role/listUser',
   /**
+   * @property {string} USERDEL_API 人员分配角色
+   */
+  USER_UPDATE_ROLE_API: HOST + '/sys/role/updateRole',
+  /**
    * @property {string} LISTMENU_API 功能分配
    */
   LISTMENU_API: HOST + '/sys/role/listMenu',

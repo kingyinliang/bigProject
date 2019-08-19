@@ -574,6 +574,9 @@ export default {
 
 <style lang="scss">
   .searchCard { margin-bottom: 0; }
+  .searchCard .el-card__body{
+    padding-bottom: 0px;
+  }
   .searchCard, .tableCard {
     position: relative;
     .toggleSearchTop {
