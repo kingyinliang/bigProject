@@ -499,6 +499,12 @@ export default class Index extends Vue {
       this.$message.error('请选择要申请的订单')
       return
     }
+    for (let item of this.selectedList) {
+      if (item.kjmAmount <= 0) {
+        this.$message.error(item.holdName + ' 订单量需大于0')
+        return false
+      }
+    }
     this.$confirm('确认申请订单，是否继续?', '申请确认', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',

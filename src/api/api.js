@@ -1491,7 +1491,6 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
   SEMIFINISHEDPRODUCTZCSAVE: HOST + '/ste/semi/dumpSemiMaterial',
   SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/semi/oneselfHolderList',
-  SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
   /**
    *  调配列表
