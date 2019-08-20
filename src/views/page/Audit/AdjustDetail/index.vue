@@ -58,7 +58,7 @@
         <el-table :data="dataList" ref="multipleTable1" :row-key="GetRowKeys" @selection-change="handleSelectionChange" header-row-class-name="tableHead" border>
           <el-table-column type="selection" :reserve-selection="true" width="34" fixed="left"></el-table-column>
           <el-table-column label="容器类型" prop="holderTypeName" show-overflow-tooltip></el-table-column>
-          <el-table-column label="容器号" prop="holderNo" show-overflow-tooltip></el-table-column>
+          <el-table-column label="容器号" prop="holderName" width="100" show-overflow-tooltip></el-table-column>
           <el-table-column label="物料" width="190" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.materialCode}} {{scope.row.materialName}}
@@ -69,7 +69,7 @@
           <el-table-column label="移动数量" prop="amount" show-overflow-tooltip></el-table-column>
           <el-table-column label="移动类型" prop="moveType" show-overflow-tooltip></el-table-column>
           <el-table-column label="打入罐类型" width="100" prop="inHolderTypeName" show-overflow-tooltip></el-table-column>
-          <el-table-column label="打入罐罐号" width="100" prop="inHolderNo" show-overflow-tooltip></el-table-column>
+          <el-table-column label="打入罐罐号" width="100" prop="inHolderName" show-overflow-tooltip></el-table-column>
           <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
           <el-table-column label="备注" prop="remark" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作时间" width="170" prop="changed" show-overflow-tooltip></el-table-column>
@@ -83,7 +83,7 @@
         <el-table :data="dataList" ref="multipleTable2" header-row-class-name="tableHead" @selection-change="handleSelectionChange" border tooltip-effect="dark">
           <el-table-column type="selection" :reserve-selection="true" width="34" fixed="left"></el-table-column>
           <el-table-column label="容器类型" prop="holderTypeName" show-overflow-tooltip></el-table-column>
-          <el-table-column label="容器号" prop="holderNo" show-overflow-tooltip></el-table-column>
+          <el-table-column label="容器号" width="100" prop="holderName" show-overflow-tooltip></el-table-column>
           <el-table-column label="物料" width="190" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.materialCode}} {{scope.row.materialName}}
@@ -94,7 +94,7 @@
           <el-table-column label="移动数量" prop="amount" show-overflow-tooltip></el-table-column>
           <el-table-column label="移动类型" prop="moveType" show-overflow-tooltip></el-table-column>
           <el-table-column label="打入罐类型" width="100" prop="inHolderTypeName" show-overflow-tooltip></el-table-column>
-          <el-table-column label="打入罐罐号" width="100" prop="inHolderNo" show-overflow-tooltip></el-table-column>
+          <el-table-column label="打入罐罐号" width="100" prop="inHolderName" show-overflow-tooltip></el-table-column>
           <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
           <el-table-column label="备注" prop="remark" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作时间" width="170" prop="changed" show-overflow-tooltip></el-table-column>
@@ -106,9 +106,9 @@
           <el-button>已调整</el-button>
         </span>
         <el-table :data="dataList" ref="multipleTable3" header-row-class-name="tableHead" border tooltip-effect="dark">
-          <el-table-column label="订单号" width="100" prop="orderNo"></el-table-column>
+          <el-table-column label="订单号" width="120" prop="orderNo"></el-table-column>
           <el-table-column label="容器类型" prop="holderTypeName" show-overflow-tooltip></el-table-column>
-          <el-table-column label="容器号" prop="holderNo" show-overflow-tooltip></el-table-column>
+          <el-table-column label="容器号" width="100" prop="holderName" show-overflow-tooltip></el-table-column>
           <el-table-column label="物料" width="190" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.materialCode}} {{scope.row.materialName}}
