@@ -14,6 +14,11 @@
             <el-form-item label="申请人员："><p class="bottomline">{{formHeader.CREATOR}}</p></el-form-item>
             <el-form-item label="申请时间："><p class="bottomline" style="width:212px;">{{formHeader.CREATED}}</p></el-form-item>
             <el-form-item label="状态："><p class="bottomline">{{formHeader.CONFIRM_FLAG === '1' ? '已确认' : '未确认'}}</p></el-form-item>
+            <el-form-item label="备注：">
+              <el-tooltip class="item" effect="dark" :content="formHeader.REMARK" placement="top">
+                <p class="bottomline">{{formHeader.REMARK}}</p>
+              </el-tooltip>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -61,7 +66,7 @@
                 {{scope.row.guan === '已开罐' ? '已开罐' : '未开罐'}}
               </template>
             </el-table-column>
-            <el-table-column label="罐号" prop="holderNo" width="80"></el-table-column>
+            <el-table-column label="罐号" prop="holderNo" show-overflow-tooltip width="70"></el-table-column>
             <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.materialCode}}{{scope.row.materialName}}
@@ -71,10 +76,14 @@
             <el-table-column label="发酵天数/天" prop="matureDays" width="100"></el-table-column>
             <el-table-column label="酱醪状态" prop="state"></el-table-column>
             <el-table-column label="数量" prop="inAmount" width="100"></el-table-column>
-            <el-table-column label="单位" prop="inUnit" width="70"></el-table-column>
-            <el-table-column label="入库日期" prop="created" show-overflow-tooltip width="150"></el-table-column>
-            <el-table-column label="批次" prop="batch" width="120"></el-table-column>
-            <el-table-column label="备注" prop="remark"></el-table-column>
+            <el-table-column label="单位" prop="inUnit" width="60"></el-table-column>
+            <el-table-column label="入库日期" prop="created" show-overflow-tooltip width="100"></el-table-column>
+            <el-table-column label="批次" prop="batch" width="110"></el-table-column>
+            <el-table-column label="备注" prop="remark">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" :disabled="isRedact || scope.row.guan === '已开罐'" size="small"></el-input>
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -306,5 +315,8 @@ export default {
 </script>
 
 <style lang="less">
-.bottomline {border-bottom: 1px solid #D8D8D8; width:152px; overflow:hidden; height:32px;}
+.bottomline {
+  border-bottom: 1px solid #D8D8D8; width:152px; overflow:hidden; height:32px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 </style>

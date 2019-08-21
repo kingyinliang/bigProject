@@ -166,7 +166,7 @@ export default {
           this.formHeader = data.list[0]
           this.orderStatus = data.list[0].orderStatus
           this.$refs.instorage.getList()
-          this.$refs.instorage.GetholderList(this.formHeader.workShopName)
+          this.$refs.instorage.GetholderList(this.formHeader.factory, this.formHeader.workShop)
           let params = {
             orderId: this.formHeader.orderId,
             deptId: this.formHeader.productLine,

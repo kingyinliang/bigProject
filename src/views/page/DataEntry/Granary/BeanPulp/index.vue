@@ -34,7 +34,7 @@
               <div style="display: flex">
                 <div class="Card_item_img">
                   <div class="Card_item_img_box">
-                    <div class="Card_item_img_box_bg" :style="{height: `${sumBatch(item.stocks) / (item.holderHold*1)}%`}"></div>
+                    <div class="Card_item_img_box_bg" :style="{height: `${Math.min(sumBatch(item.stocks) / (item.holderHold*1), 100)}%`}"></div>
                   </div>
                   <img src="@/assets/img/granary.png" alt="">
                 </div>

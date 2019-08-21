@@ -97,8 +97,8 @@
         </el-table-column>
         <el-table-column label="产出数" width="120">
           <template slot-scope="scope">
-            <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
-            <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1) }}</span>
+            <span  v-if="order.workShopName === '包装三车间'">{{ scope.row.output = (scope.row.manPacking*1 + scope.row.aiPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiSolid*1*(ratio.ratio*1) + scope.row.sample*1).toFixed(2) * 1 }}</span>
+            <span v-else>{{scope.row.ratio}}{{ scope.row.output = (scope.row.manPacking*1 + scope.row.manSolid*1*(ratio.ratio*1) + scope.row.aiShelves*1*(ratio.ratio*1) + scope.row.sample*1).toFixed(2) * 1 }}</span>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="60">
@@ -168,7 +168,7 @@
           </template>
         </el-table-column>
         <el-table-column label="产出数" width="90">
-          <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1)) }}</template>
+          <template slot-scope="scope">{{ order.workShopName === '组装车间2（礼盒）'?(scope.row.output = (scope.row.manSolid*1 + scope.row.sample*1)):(scope.row.output = (scope.row.manSolid*1*(ratio.ratio*1) + scope.row.sample*1).toFixed(2) * 1) }}</template>
         </el-table-column>
         <el-table-column label="单位" width="50">
           <template slot-scope="scope">
@@ -288,7 +288,7 @@
       </el-table-column>
       <el-table-column label="产出数" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.output = (scope.row.aiShelves*1*(scope.row.aiShelvesUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manSolid*1*(scope.row.manSolidUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manPacking*1*(scope.row.manPackingUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.sample*1*(scope.row.sampleUnit === ratio.productUnit?ratio.ratio*1:1)) }}</span>
+          <span>{{ scope.row.output = (scope.row.aiShelves*1*(scope.row.aiShelvesUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manSolid*1*(scope.row.manSolidUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.manPacking*1*(scope.row.manPackingUnit === ratio.productUnit?ratio.ratio*1:1) + scope.row.sample*1*(scope.row.sampleUnit === ratio.productUnit?ratio.ratio*1:1)).toFixed(2) * 1 }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单位" width="60">

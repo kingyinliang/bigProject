@@ -63,7 +63,7 @@
             <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
           </el-tooltip>
         </span>
-        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" @GetFunet="GetFunet"  @GetList="GetList"></apply-order>
+        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" :VersionList="VersionList" :orderTypeList="orderTypeList" @GetFunet="GetFunet"  @GetList="GetList"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -103,6 +103,8 @@ export default {
       orderS: '',
       factory: [],
       workshop: [],
+      orderTypeList: [],
+      VersionList: [],
       formHeader: {
         factory: '',
         workShop: '',
@@ -118,6 +120,8 @@ export default {
   },
   watch: {
     'formHeader.factory' (n, o) {
+      this.getDictList(n)
+      this.getVersionList(n)
       this.Getdeptbyid(n)
     }
   },
@@ -270,6 +274,30 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      })
+    },
+    getDictList (factory) {
+      let params = {types: ['order_type'], factory}
+      this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.orderTypeList = data.dicList[0].prolist
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
+    },
+    getVersionList (factory) {
+      let params = {types: ['yzpro_version'], factory}
+      this.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.VersionList = data.dicList[0].prolist
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
       })
     },
     // 获取工厂

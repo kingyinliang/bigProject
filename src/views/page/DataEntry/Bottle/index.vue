@@ -17,7 +17,7 @@
           <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="生产订单：">
-          <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
+          <el-input v-model.trim="formHeader.orderNo" style="width:150px"></el-input>
         </el-form-item>
         <el-button type="primary" size="small" @click="GetList" class="floatr">查询</el-button>
       </el-form>
@@ -35,13 +35,13 @@
             <el-col class="img" :span="10"><img src="@/assets/img/bottle.png" style="width:95%"></el-col>
             <el-col class="right" :span="14">
               <div class="lines">订单号：
-                <el-select v-model="item.orderNo" @change="changeOrder($event, item)" size="mini" style="width:140px;">
+                <el-select v-model="item.orderNo" filterable @change="changeOrder($event, item)" size="mini" style="width:140px;">
                   <el-option v-for="(items, index) in item.orderList" :key="index" :value="items.orderNo" :label="items.orderNo"></el-option>
                 </el-select>
               </div>
               <div class="lines">
                 <div style="float:left">品项：</div>
-                <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="top-start">
+                <el-tooltip class="item" effect="dark" :content="item.materialCode + item.materialName" placement="bottom-start">
                   <div style="float:left; width:140px; color:rgba(0, 0, 0, 0.65);overflow: hidden; text-overflow:ellipsis; white-space:nowrap;">{{item.materialCode}}{{item.materialName}}</div>
                 </el-tooltip>
               </div>
@@ -50,11 +50,17 @@
             </el-col>
           </el-row>
           <div class="bottom">
-            <div class="bottom-item" @click="GoDetail(1, item)">生产数据</div>
+            <el-tooltip class="item" effect="dark" :content="item.orderStatus === 'submit' ? '已提交' : item.orderStatus === 'checked' ? '审核通过' : item.orderStatus === 'noPass'?  '审核不通过' : item.orderStatus === 'saved'? '已保存' : item.orderStatus === '已同步' ? '未录入' : item.orderStatus" placement="top-start">
+              <el-button :disabled="!isAuth('bottle:inStorage:list')" class="bottom-item" @click="GoDetail(1, item)">生产数据</el-button>
+            </el-tooltip>
             <div class="bottom-split"></div>
-            <div class="bottom-item" @click="GoDetail(2, item)">工艺数据</div>
+            <el-tooltip class="item" effect="dark" :content="item.craftDataStatus" placement="top-start">
+              <el-button :disabled="!isAuth('bottle:workshop:techProductParameterList')" class="bottom-item" @click="GoDetail(2, item)">工艺数据</el-button>
+            </el-tooltip>
             <div class="bottom-split"></div>
-            <div class="bottom-item" @click="GoDetail(3, item)">质量检测</div>
+            <el-tooltip class="item" effect="dark" :content="item.qualityStatus" placement="top-start">
+              <el-button :disabled="!isAuth('bottle:workshop:qualityInspectionList')" class="bottom-item" @click="GoDetail(3, item)">质量检测</el-button>
+            </el-tooltip>
           </div>
         </div>
       </el-col>
@@ -129,9 +135,14 @@ export default {
         this.$message.error('请选择车间')
         return false
       }
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或生产订单请选填一项')
+        return false
+      }
       this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.AllList = data.indexInfo
+          this.dataList = []
           data.indexInfo.map((item) => {
             let Search = this.dataList.find(items => items.name === item.productLineName)
             if (!Search) {
@@ -145,7 +156,9 @@ export default {
                 outputUnit: item.outputUnit,
                 realOutput: item.realOutput,
                 orderId: item.orderId,
-                orderNo: item.orderNo
+                orderNo: item.orderNo,
+                craftDataStatus: item.craftDataStatus,
+                qualityStatus: item.qualityStatus
               })
             } else {
               Search.orderList.push(item)
@@ -189,6 +202,8 @@ export default {
       item.realOutput = sole.realOutput
       item.orderId = sole.orderId
       item.orderNo = sole.orderNo
+      item.craftDataStatus = sole.craftDataStatus
+      item.qualityStatus = sole.qualityStatus
     }
   },
   computed: {
@@ -266,10 +281,18 @@ export default {
       flex: 1;
       font-size: 14px;
       line-height: 40px;
+      background: #f7f9fa;
+      border-radius: 0;
+      border:none; height:40px; padding:0;
       &:hover{
         color:#fff;
         background:#1890FF;
-        cursor:pointer
+      }
+      &.is-disabled{
+        color: #606266
+      }
+      &.is-disabled:hover{
+        color: #fff
       }
     }
     .bottom-split {
