@@ -158,6 +158,10 @@ export const BASICDATA_API = {
    */
   LOCATIONADD_API: HOST + '/sys/sto/save',
   /**
+   * @property {string} LOCATIONADD_API 库位修改
+   */
+  LOCATIONEDIT_API: HOST + '/sys/sto/stoUpdate',
+  /**
    * @property {string} LOCATIONDEL_API 库位删除
    */
   LOCATIONDEL_API: HOST + '/sys/sto/delete',
