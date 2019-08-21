@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
+          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small" @change="setProVersion(scope.row)">
             <el-option
               v-for="item in SerchSapList"
               :key="item.code+' '+item.value"
@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column label="生产版本" width="120">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.proVersion" placeholder="请选择" size="mini" style="width: 100px">
+          <el-select v-model="scope.row.proVersion" placeholder="请选择" size="mini" style="width: 100px" :disabled="true">
             <el-option v-for="(item, index) in VersionList" :label="item.value"  :value="item.code" :key="index"></el-option>
           </el-select>
         </template>
@@ -116,6 +116,17 @@ export default {
           this.$message.error(data.msg)
         }
       })
+    },
+    setProVersion (row) {
+      if (row.material.substring(0, row.material.indexOf(' ')) === 'SS04010003') {
+        if (row.workShopName.indexOf('压榨一') !== -1) {
+          row.proVersion = '01'
+        } else if (row.workShopName.indexOf('压榨二') !== -1) {
+          row.proVersion = '02'
+        }
+      } else {
+        row.proVersion = ''
+      }
     },
     // 日志
     GetLog (row) {
