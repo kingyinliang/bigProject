@@ -23,19 +23,19 @@
           <p class="bottom">{{formHeader.planOutput}}</p>
         </el-form-item>
         <el-form-item label="保存人员：">
-          <p class="bottom">{{formHeader.changer}}</p>
+          <p class="bottom">&nbsp;{{formHeader.changer}}</p>
         </el-form-item>
         <el-form-item label="保存时间：">
-          <p class="bottom">{{formHeader.changed}}</p>
+          <p class="bottom">&nbsp;{{formHeader.changed}}</p>
         </el-form-item>
       </el-form>
       <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-Production-index'})">返回</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
+          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
+          <el-button type="primary" class="button" v-if="isAuth('bottle:workshop:techProductParameterSave')" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" >保存</el-button>
+          <el-button type="primary" size="small" v-if="isAuth('bottle:workshop:techProductParameterSave')" @click="savedOrSubmitForm('saved')" >保存</el-button>
           <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
         </template>
       </el-row>
@@ -117,7 +117,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, 1, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -138,7 +138,7 @@
         </el-row>
         <el-table :data="equipmentList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -175,7 +175,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,2)" :disabled="!isRedact" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -188,7 +188,7 @@
         </el-row>
         <el-table :data="warmingList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" show-overflow-tooltip width="200">
+          <el-table-column label="时间" width="200">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -275,7 +275,7 @@
           </el-table-column>
           <el-table-column width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,3)" :disabled="!isRedact" size="mini"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -306,7 +306,8 @@ export default {
       orderId: this.$store.state.common.bottle.ProOrderId,
       productList: [],
       equipmentList: [],
-      warmingList: []
+      warmingList: [],
+      paramList: ['拉伸角度', '预吹角度', '主吹角度', '回收角度', '排气角度']
     }
   },
   mounted () {
@@ -314,7 +315,7 @@ export default {
   },
   methods: {
     GetHeader () {
-      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {orderId: this.orderId}).then(({data}) => {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD}`, 'POST', {orderId: this.orderId, type: 'craft'}).then(({data}) => {
         if (data.code === 0) {
           this.formHeader = data.headInfo
           this.GetProductList()
@@ -357,113 +358,50 @@ export default {
       let productList = this.productList.filter(item => { return item.delFlag === '0' })
       let dateNow = dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
       if (productList.length === 0) {
-        this.productList.push({
-          id: '',
-          parameter: '拉伸角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '预吹角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '主吹角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '回收角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        }, {
-          id: '',
-          parameter: '排气角度',
-          time: dateNow,
-          oneWell: '',
-          twoWell: '',
-          threeWell: '',
-          fourWell: '',
-          fiveWell: '',
-          sixWell: '',
-          sevenWell: '',
-          eightWell: '',
-          nineWell: '',
-          tenWell: '',
-          elevenWell: '',
-          twelveWell: '',
-          delFlag: '0'
-        })
-      } else {
-        let NewList = productList.slice((productList.length - 5))
-        NewList.map((item) => {
+        this.paramList.map(item => {
           this.productList.push({
             id: '',
-            parameter: item.parameter,
+            parameter: item,
             time: dateNow,
-            oneWell: item.oneWell,
-            twoWell: item.twoWell,
-            threeWell: item.threeWell,
-            fourWell: item.fourWell,
-            fiveWell: item.fiveWell,
-            sixWell: item.sixWell,
-            sevenWell: item.sevenWell,
-            eightWell: item.eightWell,
-            nineWell: item.nineWell,
-            tenWell: item.tenWell,
-            elevenWell: item.elevenWell,
-            twelveWell: item.twelveWell,
+            oneWell: '',
+            twoWell: '',
+            threeWell: '',
+            fourWell: '',
+            fiveWell: '',
+            sixWell: '',
+            sevenWell: '',
+            eightWell: '',
+            nineWell: '',
+            tenWell: '',
+            elevenWell: '',
+            twelveWell: '',
             delFlag: '0'
           })
+        })
+      } else {
+        // let NewList = productList.slice((productList.length - 5))
+        let NewList = productList.slice(0, 6)
+        NewList.map((item, index) => {
+          if (index < 5) {
+            this.productList.splice(index, 0, {
+              id: '',
+              parameter: item.parameter,
+              time: dateNow,
+              oneWell: item.oneWell,
+              twoWell: item.twoWell,
+              threeWell: item.threeWell,
+              fourWell: item.fourWell,
+              fiveWell: item.fiveWell,
+              sixWell: item.sixWell,
+              sevenWell: item.sevenWell,
+              eightWell: item.eightWell,
+              nineWell: item.nineWell,
+              tenWell: item.tenWell,
+              elevenWell: item.elevenWell,
+              twelveWell: item.twelveWell,
+              delFlag: '0'
+            })
+          }
         })
       }
     },
@@ -508,20 +446,28 @@ export default {
     tabClick () {
     },
     // 删除
-    DelRow (row, index = null) {
+    DelRow (row, type, index = null) {
       this.$confirm('正在执行删除操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (index === null) {
-          row.delFlag = '1'
-        } else {
+        if (type === 1) {
           // 一次删5条
           let is = index
           while (is < index + 5) {
             this.productList[is].delFlag = '1'
             is++
+          }
+        } else {
+          if (row.id === '') {
+            if (type === 2) {
+              this.equipmentList.splice(this.equipmentList.indexOf(row), 1)
+            } else {
+              this.warmingList.splice(this.warmingList.indexOf(row), 1)
+            }
+          } else {
+            row.delFlag = '1'
           }
         }
       })
@@ -544,6 +490,9 @@ export default {
       let net2 = new Promise((resolve, reject) => {
         this.Savewarming(str, resolve, reject)
       })
+      // let net3 = new Promise((resolve, reject) => {
+      //   this.SaveHeader(str, resolve, reject)
+      // })
       Promise.all([net0, net1, net2]).then(() => {
         this.$message.success('保存成功')
         this.pages.currPage = 1
@@ -600,6 +549,19 @@ export default {
         } else {
           if (reject) {
             reject('加温参数' + data.msg)
+          }
+        }
+      })
+    },
+    SaveHeader (str, resolve, reject) {
+      this.$http(`${BOTTLE_API.BOTTLE_PRO_HEAD_UPDATE}`, 'POST', {orderId: this.orderId, type: 'craft'}).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('头部数据' + data.msg)
           }
         }
       })

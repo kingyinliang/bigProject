@@ -236,6 +236,7 @@ export default class Index extends Vue {
     this.getOrderDataList(this.params.factoryId, this.params.workshopId)
     if (this.params.factoryId) {
       this.getOrderList()
+      this.getDictList(this.params.factoryId)
     }
   }
   isAuth (key) {

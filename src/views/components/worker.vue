@@ -173,8 +173,9 @@ export default {
   },
   methods: {
     // 人员列表
-    GetTimeUserList (list) {
+    GetTimeUserList (list, list2) {
       this.WorkerDate = list
+      this.UserAudit = list2
     },
     GetUserList (id) {
       this.$http(`${PACKAGING_API.PKGUSERLIST_API}`, 'POST', {
@@ -246,9 +247,10 @@ export default {
       })
     },
     // 获取物料下拉
-    GetMaterails (id) {
+    GetMaterails (id, pDate) {
       this.$http(`${BOTTLE_API.BOTTLE_PRO_USERMATERIAL_LIST}`, 'POST', {
-        productLine: id
+        productLine: id,
+        productDate: pDate
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.Materails = data.result

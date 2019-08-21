@@ -18,12 +18,12 @@
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="布浆线：">
-                  <el-select v-model="params.productLineId" style="width:150px" @change="changeOptions('productline')" >
-                    <el-option label="请选择" value=""></el-option>
-                    <el-option v-for="sole in productlineList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
-                  </el-select>
-                </el-form-item>
+                <!--<el-form-item label="布浆线：">-->
+                  <!--<el-select v-model="params.productLineId" style="width:150px" @change="changeOptions('productline')" >-->
+                    <!--<el-option label="请选择" value=""></el-option>-->
+                    <!--<el-option v-for="sole in productlineList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>-->
+                  <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item label="入罐日期：" >
                   <el-date-picker type="date" v-model="params.applyDate" value-format="yyyy-MM-dd" style="width:150px"></el-date-picker>
                 </el-form-item>
@@ -370,7 +370,7 @@ export default class Index extends Vue {
     this.params.applyDate = dateFormat(new Date(), 'yyyy-MM-dd')
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
-    this.getProductLine(this.params.workshopId)
+    // this.getProductLine(this.params.workshopId)
     this.getPot(this.params.workshopName)
   }
   isAuth (key) {
@@ -702,10 +702,10 @@ export default class Index extends Vue {
       this.$message.error('请选择车间')
       return
     }
-    if (this.params.productLineId === '') {
-      this.$message.error('请选择布浆线')
-      return
-    }
+    // if (this.params.productLineId === '') {
+    //   this.$message.error('请选择布浆线')
+    //   return
+    // }
     if (this.params.applyDate === null || this.params.applyDate === '') {
       this.$message.error('请选择入罐日期')
       return
@@ -838,7 +838,7 @@ export default class Index extends Vue {
   onChangeWorkshop (newVal: string, oldVal: string) {
     this.params.productLineId = ''
     this.params.productLineName = ''
-    this.getProductLine(newVal)
+    // this.getProductLine(newVal)
     this.getPot(this.params.workshopName)
   }
 }

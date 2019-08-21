@@ -129,32 +129,37 @@
                   {{scope.row.applyNo}}
                 </template>
               </el-table-column>
-              <el-table-column label="罐号" :show-overflow-tooltip="true" width="160">
+              <el-table-column label="罐号" :show-overflow-tooltip="true" width="130">
                 <template slot-scope="scope">
                   {{scope.row.holderName}}
                 </template>
               </el-table-column>
-              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="140">
+              <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.ferDays}}
                 </template>
               </el-table-column>
-              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="140">
+              <el-table-column label="半成品类别" :show-overflow-tooltip="true" width="130">
                 <template slot-scope="scope">
                   {{scope.row.halfType}}
                 </template>
               </el-table-column>
-              <el-table-column label="批次" width="140">
+              <el-table-column label="批次" width="110">
                 <template slot-scope="scope">
                   {{scope.row.batch}}
                 </template>
               </el-table-column>
-              <el-table-column label="确认人员" width="160">
+              <el-table-column label="备注" :show-overflow-tooltip="true" width="140">
+                <template slot-scope="scope">
+                  {{scope.row.remark}}
+                </template>
+              </el-table-column>
+              <el-table-column label="确认人员" width="150">
                 <template slot-scope="scope">
                   {{scope.row.changer}}
                 </template>
               </el-table-column>
-              <el-table-column label="确认时间" >
+              <el-table-column label="确认时间" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                    {{scope.row.changed}}
                 </template>

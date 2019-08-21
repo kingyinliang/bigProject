@@ -2,7 +2,7 @@
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
       <div class="main">
-        <el-card class="searchCard">
+        <el-card class="searchCard switching">
           <el-row type="flex">
             <el-col>
               <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms" @keyup.enter.native="GetAuditList()" @submit.native.prevent>
@@ -39,9 +39,6 @@
                 <el-form-item label="生产日期：">
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate" style="width: 160px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="记账日期：">
-                  <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate" style="width: 160px"></el-date-picker>
-                </el-form-item>
                 <el-form-item style="margin-left: 67px;float: right">
                   <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:time:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="subAutio" v-if="isAuth('verify:time:update')">审核通过</el-button>
@@ -60,6 +57,11 @@
           <div class="toggleSearchTop">
               <i class="el-icon-caret-bottom"></i>
           </div>
+          <el-form :model="plantList" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
+            <el-form-item label="记账日期：" prop="postgDate">
+              <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate" style="width: 160px"></el-date-picker>
+            </el-form-item>
+          </el-form>
           <el-table
             ref="table1"
             v-loading="dataListLoading"
@@ -258,6 +260,7 @@
         :visible.sync="visibleSterilized">
         <el-radio v-model="backType" label="0">人工工时退回</el-radio>
         <el-radio v-model="backType" label="1">机器工时退回</el-radio>
+        <el-radio v-model="backType" label="2">全部退回</el-radio>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visibleSterilized = false">取消</el-button>
           <el-button type="primary" @click="repulseAutioSterilized()">确定</el-button>
@@ -286,6 +289,11 @@ export default {
       Text: '',
       ReText: '',
       reData: {},
+      plantListRule: {
+        postgDate: [
+          { required: true, message: '记账日期不能为空', trigger: 'blur' }
+        ]
+      },
       plantList: {
         orderNo: '',
         factory: '',
@@ -597,6 +605,9 @@ export default {
 
 <style lang="scss">
   .searchCard { margin-bottom: 0; }
+  .switching .el-card__body{
+    padding-bottom: 0px;
+  }
   .searchCard, .tableCard {
     position: relative;
     .toggleSearchTop {

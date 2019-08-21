@@ -44,10 +44,13 @@
               <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
           </div>
-          <el-row class="dataList_item_btn">
-            <el-col :span="12" class="dataList_item_btn_item"><el-button :disabled="!isAuth('ste:gn:save') || item.holderStatus === '0'" @click="GnProp(item)" style='border:none; background:none; padding:0px;'>GN搅罐</el-button></el-col>
+          <el-row class="bottom">
+            <el-button class="bottom-item" :disabled="!isAuth('ste:gn:save') || item.holderStatus === '0'" @click="GnProp(item)" style='border:none; padding:0px;'>GN搅罐</el-button>
+            <div class="bottom-split"></div>
             <!-- <el-col :span="12" class="dataList_item_btn_item"><p @click="GnProp(item)">GN搅罐</p></el-col> -->
-            <el-col :span="12" class="dataList_item_btn_item"><el-button :disabled="!isAuth('ste:gn:save') || item.holderStatus === '0'" @click="JsbProp(item)" style='border:none; background:none; padding:0px;'>JBS出库</el-button></el-col>
+            <el-button class="bottom-item" :disabled="!isAuth('ste:gn:save') || item.holderStatus === '0'" @click="JsbProp(item)" style='border:none; padding:0px;'>JBS出库</el-button>
+            <div class="bottom-split"></div>
+            <el-button class="bottom-item" :disabled="!isAuth('ste:gn:save') || item.holderStatus === '0'" @click="ZcProp(item)" style='border:none; padding:0px;'>转储</el-button>
           </el-row>
         </el-card>
       </el-col>
@@ -95,19 +98,28 @@
     <div>
       <el-form size="small" :model="formJsb" :rules="Jsbrulestar" ref="Jsbstar" label-width="150px">
         <el-form-item label="领用罐号：">{{formJsb.holderName}}</el-form-item>
+        <el-form-item label="物料：">{{formJsb.materialCode}} {{formJsb.materialName}}</el-form-item>
         <el-form-item label="批次：">{{formJsb.batch}}</el-form-item>
         <el-form-item label="领用量（L）：" prop="receiveAmount">
           <el-input v-model="formJsb.receiveAmount" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
-          <el-select v-model="formJsb.inHolderType">
-            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.code + ` ${item.value}`"></el-option>
+          <el-select v-model="formJsb.inHolderType" filterable>
+            <el-option v-for="(item, index) in typeList" :key="index" :value="item.code" :label="item.code + ` ${item.name}`"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
           <el-select filterable v-model="formJsb.inHolderId">
             <el-option v-for="(item, index) in thrwHolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="是否满灌：">
+          <el-select filterable v-model="formJsb.isFull">
+            <el-option v-for="(item, index) in isFullList" :key="index" :value="item.value" :label="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="满灌时间：">
+          <el-date-picker v-model="formJsb.fullDate" type="datetime" placeholder="请选择" style="width:200px" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="formJsb.remark" style="width:200px"></el-input>
@@ -119,11 +131,49 @@
       <el-button type="primary" @click="JsbSave('Jsbstar')" size="small">确定</el-button>
     </span>
   </el-dialog>
+  <el-dialog :visible.sync="ZcDialogTableVisible" width="500px" custom-class='dialog__class'>
+    <div slot="title" style="line-hight:59px">转储</div>
+    <div>
+      <el-form size="small" :model="formZc" :rules="Zcrulestar" ref="Zcstar" label-width="150px">
+        <el-form-item label="领用罐号：">{{formZc.holderName}}</el-form-item>
+        <el-form-item label="物料：">{{formZc.materialCode}} {{formZc.materialName}}</el-form-item>
+        <el-form-item label="批次：">{{formZc.batch}}</el-form-item>
+        <el-form-item label="领用量（L）：" prop="receiveAmount">
+          <el-input v-model="formZc.receiveAmount" style="width:200px"></el-input>
+        </el-form-item>
+        <el-form-item label="打入罐类别：" prop="inHolderType">
+          <el-select v-model="formZc.inHolderType" filterable>
+            <el-option v-for="(item, index) in typeZcList" :key="index" :value="item.code" :label="item.code + ` ${item.name}`"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="打入罐号：" prop="inHolderId">
+          <el-select filterable v-model="formZc.inHolderId">
+            <el-option v-for="(item, index) in thrwHolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否满灌：">
+          <el-select filterable v-model="formZc.isFull">
+            <el-option v-for="(item, index) in isFullList" :key="index" :value="item.value" :label="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="满灌时间：">
+          <el-date-picker v-model="formZc.fullDate" type="datetime" placeholder="请选择" style="width:200px" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input v-model="formZc.remark" style="width:200px"></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="ZcDialogTableVisible = false" size="small">取消</el-button>
+      <el-button type="primary" @click="ZcSave('Zcstar')" size="small">确定</el-button>
+    </span>
+  </el-dialog>
 </div>
 </template>
 
 <script>
-import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API, FILTRATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -164,12 +214,36 @@ export default {
           { required: true, message: '请填写打入罐号', trigger: 'blur' }
         ]
       },
+      ZcDialogTableVisible: false,
+      formZc: {},
+      Zcrulestar: {
+        receiveAmount: [
+          { required: true, message: '请填写领用量', trigger: 'blur' }
+        ],
+        inHolderType: [
+          { required: true, message: '请选择打入罐类别', trigger: 'blur' }
+        ],
+        inHolderId: [
+          { required: true, message: '请填写打入罐号', trigger: 'blur' }
+        ]
+      },
       fastS: false,
       factory: [],
       workshop: [],
       typeList: [],
       thrwHolderList: [],
-      PeopleList: []
+      PeopleList: [],
+      isFullList: [{
+        name: '是',
+        value: '1'
+      }, {
+        name: '否',
+        value: '0'
+      }],
+      typeZcList: [{
+        code: '007',
+        name: '成品罐'
+      }]
     }
   },
   watch: {
@@ -182,7 +256,10 @@ export default {
       this.GetPeople(n)
     },
     'formJsb.inHolderType' (n, o) {
-      this.ThrowHolder(n)
+      this.getPot(n)
+    },
+    'formZc.inHolderType' (n, o) {
+      this.getPot(n)
     }
   },
   mounted () {
@@ -224,24 +301,6 @@ export default {
         this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHOLDER}`, 'POST', {factory: this.formHeader.factory, workShop: id}).then(({data}) => {
           if (data.code === 0) {
             this.HolderList = data.halfList
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      }
-    },
-    // 打入罐
-    ThrowHolder (id) {
-      this.thrwHolderList = []
-      if (id) {
-        let params = {
-          factory: this.formHeader.factory,
-          workShop: this.formHeader.workShop,
-          code: id
-        }
-        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params).then(({data}) => {
-          if (data.code === 0) {
-            this.thrwHolderList = data.list
           } else {
             this.$message.error(data.msg)
           }
@@ -311,16 +370,30 @@ export default {
         }
       })
     },
+    // 打入罐类别
+    GetInHolderType (id) {
+      this.$http(`${FILTRATION_API.FILTER_INHOLDERTYPE_LIST_API}`, 'POST', {factory: this.formHeader.factory}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.typeList = data.list
+        } else {
+          this.message.error(data.msg)
+        }
+      })
+    },
+    // 罐下拉
+    getPot (id) {
+      this.$http(`${BASICDATA_API.DROPDOWN_HOLDER_LIST}`, 'POST', { factory: this.formHeader.factory, holderType: id }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.thrwHolderList = data.list
+        } else {
+          this.message.error(data.msg)
+        }
+      })
+    },
     JsbProp (row) {
       if (row.holderStatus === '1') {
         this.typeList = []
-        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTYPE}`, 'POST').then(({data}) => {
-          if (data.code === 0) {
-            this.typeList = data.list
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+        this.GetInHolderType()
         this.formJsb = {
           amount: row.amount,
           holderId: row.holderId,
@@ -332,9 +405,33 @@ export default {
           receiveAmount: '',
           inHolderType: '',
           inHolderId: '',
+          isFull: '0',
+          fullDate: '',
           remark: ''
         }
         this.JsbDialogTableVisible = true
+      }
+    },
+    ZcProp (row) {
+      if (row.holderStatus === '1') {
+        this.typeList = []
+        this.GetInHolderType()
+        this.formZc = {
+          amount: row.amount,
+          holderId: row.holderId,
+          holderName: row.holderName,
+          receiveHolderId: row.holderId,
+          materialName: row.materialName,
+          materialCode: row.materialCode,
+          batch: row.batch,
+          receiveAmount: '',
+          inHolderType: '',
+          inHolderId: '',
+          isFull: '0',
+          fullDate: '',
+          remark: ''
+        }
+        this.ZcDialogTableVisible = true
       }
     },
     JsbSave (formName) {
@@ -344,10 +441,42 @@ export default {
             this.$message.error('领用量不能大于库存')
             return false
           }
+          if (this.formJsb.isFull === '1' && (this.formJsb.fullDate === '' || !this.formJsb.fullDate)) {
+            this.$message.error('满灌时请选择满罐时间')
+            return false
+          }
+          this.formJsb.factory = this.formHeader.factory
+          this.formJsb.workShop = this.formHeader.workShop
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTJSBSAVE}`, 'POST', this.formJsb).then(({data}) => {
             if (data.code === 0) {
               this.$message.success('保存成功')
               this.JsbDialogTableVisible = false
+              this.GetList()
+              this.$refs[formName].resetFields()
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    ZcSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.formZc.receiveAmount > this.formZc.amount) {
+            this.$message.error('领用量不能大于库存')
+            return false
+          }
+          if (this.formZc.isFull === '1' && (this.formZc.fullDate === '' || !this.formZc.fullDate)) {
+            this.$message.error('满灌时请选择满罐时间')
+            return false
+          }
+          this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTZCSAVE}`, 'POST', this.formZc).then(({data}) => {
+            if (data.code === 0) {
+              this.$message.success('保存成功')
+              this.ZcDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()
             } else {
@@ -387,105 +516,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ferCard{
-  .el-card__body{
-    padding: 7px;
-  }
-  .cardTit{
-    font-size: 16px;
-    color: black;
-    font-weight: 400;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #E9E9E9;
-    .gotop{
-      float: right;
-      color: #1890FF;
-      font-size: 14px;
-      cursor: pointer;
-      i{
-        :before{
-          color: #1890FF;
-        }
-      }
-    }
-  }
-}
-.topBox{
-  width: 1160px;
-  padding: 25px 25px 10px 25px;
-  margin: auto;
-  &_boxItem{
-    position: relative;
-    cursor: pointer;
-    width: 131px;
-    float: left;
-    &_bar{
-      width: 115px;
-      height: 2px;
-      margin: 15px 8px 0 8px;
-      background: #f2f2f2;
-      &_box{
-        height: 2px;
-      }
-    }
-    &_tit{
-      color: black;
-      font-size: 16px;
-      margin-top: 10px;
-      text-align: center;
-      line-height: 32px;
-    }
-    &_detail{
-      font-size: 14px;
-      text-align: center;
-      color: #666666;
-      span{
-        color: black;
-      }
-    }
-    &_popover{
-      display: none;
-      top: -60px;
-      min-width: 150px;
-      min-height: 52px;
-      padding: 10px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-      line-height: 18px;
-      position: absolute;
-      z-index: 999999;
-      background: white;
-      box-shadow: 0 2px 12px 0 rgba(0,0,0,.3);
-      .dot{
-        width: 6px;
-        height: 6px;
-        float: left;
-        margin: 4px 5px 0 0;
-        border-radius: 50%;
-      }
-      &_ar{
-        position: absolute;
-        bottom: -12px;
-        width: 0;
-        height: 0;
-        border-width: 6px;
-        border-style: solid;
-        border-color:#ffffff transparent transparent transparent;
-      }
-    }
-  }
-  &_circle{
-    width: 32px;
-    height: 32px;
-    float: left;
-    line-height: 32px;
-    text-align: center;
-    color: white;
-    border-radius: 50%;
-    background: #999999;
-    transition: all .5s;
-  }
-}
 .dataList{
   margin-top: 10px;
   &_item{
@@ -578,6 +608,39 @@ export default {
         padding: 5px 4px;
         border-radius: 4px;
         border: 1px solid #1890FF;
+      }
+    }
+    .bottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      height: 40px;
+      background:rgba(247,249,250,1);
+      align-items: center;
+      width: 100%;
+      .bottom-item {
+        text-align: center;
+        flex: 1;
+        font-size: 14px;
+        line-height: 40px;
+        background: #f7f9fa;
+        border-radius: 0;
+        border:none; height:40px; padding:0;
+        &:hover{
+          color:#fff;
+          background:#1890FF;
+        }
+        &.is-disabled{
+          color: #606266
+        }
+        &.is-disabled:hover{
+          color: #fff
+        }
+      }
+      .bottom-split {
+        width:1px;
+        height:16px;
+        background:rgba(232,232,232,1);
       }
     }
   }
