@@ -260,6 +260,7 @@
         :visible.sync="visibleSterilized">
         <el-radio v-model="backType" label="0">人工工时退回</el-radio>
         <el-radio v-model="backType" label="1">机器工时退回</el-radio>
+        <el-radio v-model="backType" label="2">全部退回</el-radio>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visibleSterilized = false">取消</el-button>
           <el-button type="primary" @click="repulseAutioSterilized()">确定</el-button>

@@ -3,7 +3,7 @@
     <div class="main">
       <el-card>
         <el-row>
-          <el-form :inline="true" :model="dataForm" size="small" label-width="68px" class="topforms2">
+          <el-form :inline="true" :model="dataForm" size="small" label-width="68px" >
             <el-form-item>
               <el-input placeholder="用户名" v-model="dataForm.workNum" class="input-with-select">
                 <el-select v-model="dataForm.isPermis" slot="prepend" placeholder="请选择" style="width: 90px">

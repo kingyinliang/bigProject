@@ -702,10 +702,10 @@ export default class Index extends Vue {
       this.$message.error('请选择车间')
       return
     }
-    if (this.params.productLineId === '') {
-      this.$message.error('请选择布浆线')
-      return
-    }
+    // if (this.params.productLineId === '') {
+    //   this.$message.error('请选择布浆线')
+    //   return
+    // }
     if (this.params.applyDate === null || this.params.applyDate === '') {
       this.$message.error('请选择入罐日期')
       return
