@@ -451,6 +451,19 @@ export default {
       })
       this.$http(`${SQU_API.CLOTHMATERIALSAVE_API}`, 'POST', this.materialList).then(({data}) => {
         if (data.code === 0) {
+          if (this.formHeader.clickstatus === 'submit') {
+            this.multipleSelection.map((item) => {
+              this.$set(item, 'processId', this.formHeader.id)
+              this.$set(item, 'productLine', this.formHeader.productLine)
+              this.$set(item, 'status', this.formHeader.clickstatus)
+            })
+            this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
+              if (data.code === 0) {
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }
         } else {
           this.$message.error(data.msg)
         }
@@ -462,19 +475,6 @@ export default {
           reject('reject')
         }
       })
-      if (this.formHeader.clickstatus === 'submit') {
-        this.multipleSelection.map((item) => {
-          this.$set(item, 'processId', this.formHeader.id)
-          this.$set(item, 'productLine', this.formHeader.productLine)
-          this.$set(item, 'status', this.formHeader.clickstatus)
-        })
-        this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
-          if (data.code === 0) {
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      }
     },
     savepeople (resolve, reject) {
       this.peopleList.map((item) => {
@@ -514,7 +514,7 @@ export default {
     selectUser (row) {
       if (this.isRedact) {
         this.row = row
-        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {deptId: this.formHeader.workShop}).then(({data}) => {
+        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {deptId: this.formHeader.workShop, pageSize: '9999', currPage: '1'}).then(({data}) => {
           if (data.code === 0) {
             this.userlist = setUserList(data.page.list)
             if (this.row.man) {

@@ -158,6 +158,10 @@ export const BASICDATA_API = {
    */
   LOCATIONADD_API: HOST + '/sys/sto/save',
   /**
+   * @property {string} LOCATIONADD_API 库位修改
+   */
+  LOCATIONEDIT_API: HOST + '/sys/sto/stoUpdate',
+  /**
    * @property {string} LOCATIONDEL_API 库位删除
    */
   LOCATIONDEL_API: HOST + '/sys/sto/delete',
@@ -252,7 +256,11 @@ export const BASICDATA_API = {
   STERILIZEMATERIALRATIOLIST: HOST + '/ste/mid/list',
   STERILIZEMATERIALRATIOSAVE_API: HOST + '/ste/mid/save',
   STERILIZEMATERIALRATIOUPDATE_API: HOST + '/ste/mid/update',
-  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete'
+  STERILIZEMATERIALRATIODELETE_API: HOST + '/ste/mid/delete',
+  /**
+   *  根据类型查容器号
+   */
+  DROPDOWN_HOLDER_LIST: HOST + '/all/dropDown/getFilterHolder'
 }
 /*
 *系统设置api
@@ -350,6 +358,10 @@ export const SYSTEMSETUP_API = {
    * @property {string} ROLEUSER_API 人员分配
    */
   ROLEUSER_API: HOST + '/sys/role/listUser',
+  /**
+   * @property {string} USERDEL_API 人员分配角色
+   */
+  USER_UPDATE_ROLE_API: HOST + '/sys/role/updateRole',
   /**
    * @property {string} LISTMENU_API 功能分配
    */
@@ -550,7 +562,8 @@ export const PACKAGING_API = {
   /**
    * @property {string} PKGSAVEFORMIN_API 包装车间提交物料 半成品
    */
-  PKGSAVEFORMS_API: HOST + '/verify/material/save/semi'
+  PKGSAVEFORMS_API: HOST + '/verify/material/save/semi',
+  PKGSAVEMATERIALHOLDER_API: HOST + '/all/dropDown/getPkgHolder' // 物料领用罐
 }
 /*
 *机维组api
@@ -629,7 +642,13 @@ export const AUDIT_API = {
   /**
    * @property {string} AUDIT_ISSUE_RESET_API 生产发料反审
    */
-  AUDIT_ISSUE_RESET_API: HOST + '/verify/material/resetMaterial'
+  AUDIT_ISSUE_RESET_API: HOST + '/verify/material/resetMaterial',
+  /**
+   * 调整明细
+  */
+  AUDIT_ADJUST_LIST: HOST + '/ver/adjust/list',
+  AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust',
+  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial'
 }
 /*
 *考勤api
@@ -854,7 +873,8 @@ export const REP_API = {
    *  二合一报表
    */
   TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
-  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList'
+  REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList',
+  REP_ADJUST_LIST_API: HOST + '/ver/adjust/exportList'
 }
 /*
 *炒麦api
@@ -1132,7 +1152,11 @@ export const KJM_API = {
   /**
    * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核物料领用提交
    */
-  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit'
+  KJMAKINGCHECKMATERIALESUBMIT_API: HOST + '/sys/midMaterial/submit',
+  /**
+   * @property {string} KJMAKINGCHECKMATERIALESUBMIT_API 车间审核表头提交
+   */
+  KJMAKINGCHECKHEADSUBMIT_API: HOST + '/kjm/order/submitToFerVer'
 }
 
 /**
@@ -1477,8 +1501,8 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTLIST: HOST + '/ste/semi/list',
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
+  SEMIFINISHEDPRODUCTZCSAVE: HOST + '/ste/semi/dumpSemiMaterial',
   SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/semi/oneselfHolderList',
-  SEMIFINISHEDPRODUCTYPE: HOST + '/ste/semi/type',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
   /**
    *  调配列表
@@ -1498,6 +1522,7 @@ export const FILTRATION_API = {
   FILTER_IN_LIST_API: HOST + '/filter/instorage/list',
   FILTER_IN_UPDATE_API: HOST + '/filter/instorage/mySaveOrUpdate',
   FILTER_IN_SAVE_API: HOST + '/filter/instorage/submit',
+  FILTER_IN_POT_API: HOST + '/filter/instorage/holderList',
   FILTER_MANHOUR_LIST_API: HOST + '/filter/timeSheet/list',
   FILTER_MANHOUR_UPDATE_API: HOST + '/filter/timeSheet/update',
   FILTER_MANHOUR_SAVE_API: HOST + '/filter/timeSheet/submit',
@@ -1505,6 +1530,12 @@ export const FILTRATION_API = {
    *  过滤罐区
    */
   FILTER_POT_LIST_API: HOST + '/filter/holder/list',
+  FILTER_POT_DETAIL_API: HOST + '/filter/holder/detailsList',
+  FILTER_POT_CLEAN_API: HOST + '/filter/holder/cleanProHolder',
+  FILTER_INHOLDERTYPE_LIST_API: HOST + '/all/dropDown/getJBSHolder',
+  FILTER_HOLDER_LIST_API: HOST + '/all/dropDown/getFilterHolder',
+  FILTER_JBS_API: HOST + '/filter/holder/jbsOut',
+  FILTER_TURNSAVE_API: HOST + '/filter/holder/dumpMaterial',
   /**
    *  工艺控制
    */

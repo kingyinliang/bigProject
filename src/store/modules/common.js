@@ -215,11 +215,7 @@ export default {
       orderId: '',
       productDate: ''
     },
-    filtrationPot: {
-      factory: '',
-      workShop: '',
-      holderId: ''
-    },
+    filtrationPot: {},
     /**
      * 吹瓶车间
     */

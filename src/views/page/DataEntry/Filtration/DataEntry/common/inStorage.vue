@@ -53,7 +53,6 @@
         </el-form-item>
         <el-form-item label="是否满罐：" prop="isFull">
           <el-select v-model="dataForm.isFull" filterable placeholder="请选择" style="width: 100%">
-            <el-option label="请选择" value=""></el-option>
             <el-option label="是" value="1"></el-option>
             <el-option label="否" value="0"></el-option>
           </el-select>
@@ -80,7 +79,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, FILTRATION_API} from '@/api/api'
+import {FILTRATION_API} from '@/api/api'
 import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'inStorage',
@@ -150,7 +149,7 @@ export default {
           }
         } else {
           if (reject) {
-            reject('杀菌入库' + data.msg)
+            reject('过滤入库' + data.msg)
           }
         }
       })
@@ -179,10 +178,13 @@ export default {
       })
     },
     // 获取半成品罐
-    GetholderList (workShopName) {
-      this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {currPage: 1, holder_type: '007', pageSize: 9999, type: 'holder_type', workShopName: workShopName}, false, false, false).then(({data}) => {
+    GetholderList (factory, workShop) {
+      this.$http(`${FILTRATION_API.FILTER_IN_POT_API}`, 'POST', {
+        factory: factory,
+        workShop: workShop
+      }, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.PotList = data.page.list
+          this.PotList = data.holderList
         } else {
           this.$message.error(data.msg)
         }
@@ -190,18 +192,18 @@ export default {
     },
     // 半成品罐下拉
     PotinTankAmount (id) {
-      // this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
-      // this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
-      // if (this.dataForm.inTankAmount) {
-      //   this.PotObject.inTankAmount = true
-      // } else {
-      //   this.PotObject.inTankAmount = false
-      // }
-      // if (this.dataForm.batch) {
-      //   this.PotObject.batch = true
-      // } else {
-      //   this.PotObject.batch = false
-      // }
+      this.dataForm.holderRemaining = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
+      if (this.dataForm.holderRemaining) {
+        this.PotObject.inTankAmount = true
+      } else {
+        this.PotObject.inTankAmount = false
+      }
+      if (this.dataForm.batch) {
+        this.PotObject.batch = true
+      } else {
+        this.PotObject.batch = false
+      }
     },
     // 入罐
     showDialog () {
@@ -209,6 +211,7 @@ export default {
       this.dataForm = {
         id: '',
         status: '',
+        isFull: '0',
         serialNumber: '',
         holderId: '',
         batch: '',
@@ -248,6 +251,7 @@ export default {
         this.isUpdate = true
         this.dataForm = JSON.parse(JSON.stringify(row))
         this.rowData = row
+        this.PotinTankAmount(this.dataForm.holderId)
       }
     }
   },

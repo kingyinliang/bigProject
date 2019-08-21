@@ -158,7 +158,7 @@ export default {
       row.batch = this.PotList.filter(items => items.holderId === row.hloderId)[0].batch
     },
     delRow (row) {
-      if (this.MaterialDate.filter(item => item.delFlag === '0').length === 1) {
+      if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
         this.$message.error('最后一条了哦，不能再删了')
       } else {
         row.delFlag = '1'

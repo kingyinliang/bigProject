@@ -219,7 +219,7 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请选择要删除的用户')
       } else {
-        this.$confirm('确认删除用户, 是否继续?', '删除用户', {
+        this.$confirm('删除用户同时删除该用户所有权限，是否继续?', '删除用户', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
