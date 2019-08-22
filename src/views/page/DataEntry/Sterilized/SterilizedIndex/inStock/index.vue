@@ -209,7 +209,13 @@ export default {
     addIn () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName
+          this.PotList.forEach(item => {
+            if (item.holderId === this.dataForm.holderId) {
+              this.dataForm.holderName = item.holderName
+              item.amount = this.dataForm.inTankAmount
+              item.batch = this.dataForm.batch
+            }
+          })
           if (this.isUpdate) {
             Reflect.ownKeys(this.dataForm).forEach((key) => {
               this.rowData[key] = this.dataForm[key]

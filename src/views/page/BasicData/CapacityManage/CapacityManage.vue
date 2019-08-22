@@ -76,6 +76,8 @@
                   width="80"
                   :show-overflow-tooltip="true">
                 </el-table-column>
+                <el-table-column prop="effecStartDate" label="有效开始日期" width="110" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column prop="effecEndDate" label="有效结束日期" width="110" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column
                   prop="changer"
                   label="操作人"

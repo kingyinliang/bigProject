@@ -59,7 +59,6 @@
                 <div class="normal_bottom">
                     <el-form-item label="订单号：" class="width50b">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)" style="width:150px">
-                        <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
                     </el-form-item>
@@ -263,6 +262,9 @@ export default {
       this.plantList.productDate = this.PkgproductDate
     }
     this.GetfactoryList()
+    if (this.FWfactoryid) {
+      this.Getworkshop(this.FWfactoryid)
+    }
     this.getTree()
   },
   methods: {
@@ -322,7 +324,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
-            if (!this.plantList.factoryid) {
+            if (!this.plantList.workshopid && res.data.typeList.length) {
               this.plantList.workshopid = res.data.typeList[0].deptId
             }
           } else {
@@ -384,6 +386,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.FryWheatList = orderList(data.list)
+          console.log(this.FryWheatList)
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
