@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <el-card>
+    <el-card class="newCard">
       <el-form :model="formHeader" :inline="true" size="small">
         <el-form-item label="工厂：">
           <el-select v-model="formHeader.factory" class="width150px">

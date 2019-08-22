@@ -116,6 +116,12 @@
         :visible.sync="visible">
         <div class="formdata">
           <el-form :model="form" size="small" label-width="110px" class="orderdialog">
+            <el-form-item label="工厂：">
+              <el-select v-model="form.factory" placeholder="请选择">
+                <el-option label=""  value="">请选择</el-option>
+                <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="生产订单：">
               <el-input v-model="form.orderNo" placeholder="手工录入"></el-input>
             </el-form-item>
@@ -172,15 +178,27 @@ export default {
         commitDateOne: ''
       },
       sapOrderlist: [],
+      factory: [],
       currPage: 1,
       pageSize: 10,
       totalCount: 1
     }
   },
   mounted () {
+    this.Getdeptcode()
     this.GetOrderList()
   },
   methods: {
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 获取订单管理
     GetOrderList () {
       this.form.currPage = JSON.stringify(this.currPage)

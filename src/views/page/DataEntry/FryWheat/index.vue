@@ -4,40 +4,43 @@
       <el-card class="newCard" style="min-height: 480px">
         <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="42px">
-              <el-form-item label="工厂：">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form-item label="生产工厂：">
                 <el-select v-model="plantList.factoryid" class="selectwpx" style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：">
-                <el-select v-model="plantList.workshopid" class="selectwpx" style="width: 140px">
+              <el-form-item label="生产车间：">
+                <el-select v-model="plantList.workshopid" class="selectwpx" style="width:130px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="生产日期：" label-width="70px">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
+              <el-form-item label="生产日期：">
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width:135px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="生产状态：" label-width="70px">
-                <el-select v-model="plantList.status" class="selectwpx" style="width: 140px">
+              <el-form-item label="订单：" label-width="45px">
+                <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>
+              </el-form-item>
+              <el-form-item label="生产状态：">
+                <el-select v-model="plantList.status" class="selectwpx" style="width:140px">
                   <el-option label="正常生产" value="normal"></el-option>
                   <el-option label="无生产" value="abnormal" v-if="isAuth('wht:user:listUser')"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width: 340px">
-            <el-row class="rowButton">
-              <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
+          <el-col style="width:342px;">
+            <el-row class="rowButton" style="margin-top:39px; text-align:right;">
+              <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
               <template v-if="type === 'abnormal'">
-                <el-button v-if="isdisabled === true && isAuth('wht:user:updateUser')" type="primary" size="small" @click="isdisabledFn" style="float: right">编辑</el-button>
-                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn" style="float: right">返回</el-button>
+                <el-button v-if="isdisabled === true && isAuth('wht:user:updateUser')" type="primary" size="small" @click="isdisabledFn" >编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
               </template>
               <template v-if="type === 'abnormal' && isdisabled === false">
-                <el-button type="primary" size="small" @click="AddPeople" style="float: right">新增</el-button>
-                <el-button type="primary" size="small" @click="save" style="float: right">保存</el-button>
+                <el-button type="primary" size="small" @click="AddPeople" >新增</el-button>
+                <el-button type="primary" size="small" @click="save">保存</el-button>
               </template>
             </el-row>
           </el-col>
@@ -382,11 +385,10 @@ export default {
       this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
         productDate: this.plantList.productDate.replace(/-/g, ''),
-        orderNo: ''
+        orderNo: this.plantList.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
           this.FryWheatList = orderList(data.list)
-          console.log(this.FryWheatList)
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid

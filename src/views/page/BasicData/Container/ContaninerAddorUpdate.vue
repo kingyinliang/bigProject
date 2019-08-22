@@ -5,18 +5,18 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
+      <el-form :model="dataForm" :rules="dataRule" size="small" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="100px">
         <el-form-item label="容器类型：" prop="holderType">
           <el-select v-model="dataForm.holderType" placeholder="请选择" style="width: 100%">
-            <el-option label=""  value=""></el-option>
+            <el-option label=""  value="">请选择</el-option>
             <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="容器号：" prop="holderNo">
-          <el-input v-model="dataForm.holderNo" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.holderNo" placeholder="手动输入" clearable></el-input>
         </el-form-item>
         <el-form-item label="容器描述：" prop="holderName">
-          <el-input v-model="dataForm.holderName" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.holderName" placeholder="手动输入" clearable></el-input>
         </el-form-item>
         <el-form-item label="容器量：">
           <el-input type="number" v-model="dataForm.holderHold" placeholder="手动输入" min="0"></el-input>
@@ -25,17 +25,17 @@
           <el-input type="number" v-model="dataForm.holderPatch" placeholder="手动输入" min="0"></el-input>
         </el-form-item>
         <el-form-item label="物理区域：">
-          <el-input v-model="dataForm.holderArea" placeholder="手动输入"></el-input>
+          <el-input v-model="dataForm.holderArea" placeholder="手动输入" clearable></el-input>
         </el-form-item>
         <el-form-item label="归属工厂：" prop="factory">
           <el-select  v-model="dataForm.factory" placeholder="请选择" style="width: 100%">
-            <el-option label=""  value=""></el-option>
+            <el-option label=""  value="">请选择</el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="归属车间：" prop="deptId">
           <el-select v-model="dataForm.deptId" placeholder="请选择" style="width: 100%">
-            <el-option label=""  value=""></el-option>
+            <el-option label=""  value="">请选择</el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>

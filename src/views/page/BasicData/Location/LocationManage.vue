@@ -31,7 +31,8 @@
             :data="list"
             border
             tooltip-effect="dark"
-            style="width: 100%;margin-bottom: 20px">
+            style="width: 100%;margin-bottom: 20px"
+            @row-dblclick="EditRow">
             <el-table-column
               type="selection"
               width="34">
@@ -85,6 +86,11 @@
               width="84"
               label="发料/入库">
             </el-table-column>
+            <el-table-column width="84" label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" size="small" @click="EditRow(scope.row)" :disabled="isdisabled">编辑</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-row>
         <el-row >
@@ -105,15 +111,21 @@
       :close-on-click-modal="false"
       :visible.sync="visible1">
       <el-form :model="form" size="small" label-width="110px" class="locationdialog">
+        <el-form-item label="工厂：">
+          <el-select v-model="form.factory" placeholder="请选择">
+            <el-option label=""  value="">请选择</el-option>
+            <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="车间：" prop="orderNo1">
           <el-select v-model="form.deptId" placeholder="请选择">
-            <el-option label=""  value=""></el-option>
+            <el-option label=""  value="">请选择</el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="物料类型：" prop="orderNo2">
           <el-select v-model="form.materialTypeCode" placeholder="请选择">
-            <el-option label=""  value=""></el-option>
+            <el-option label=""  value="">请选择</el-option>
             <el-option :label="item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
@@ -149,6 +161,7 @@ export default {
       list: [],
       multipleSelection: [],
       sapList: [],
+      factory: [],
       workshop: [],
       SerchSapList: [],
       currPage: 1,
@@ -156,15 +169,21 @@ export default {
       totalCount: 0
     }
   },
+  watch: {
+    'form.factory' (n, o) {
+      this.Getdeptbyid(n)
+    }
+  },
   mounted () {
+    this.Getdeptcode()
     this.GetLocationList()
-    this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
-      if (data.code === 0) {
-        this.workshop = data.typeList
-      } else {
-        this.$message.error(data.msg)
-      }
-    })
+    // this.$http(`${BASICDATA_API.FINDORG_API}?code=workshop`, 'POST').then(({data}) => {
+    //   if (data.code === 0) {
+    //     this.workshop = data.typeList
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // })
     this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'material_type'}).then(({data}) => {
       if (data.code === 0) {
         this.sapList = data.dicList
@@ -181,6 +200,31 @@ export default {
     // })
   },
   methods: {
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
+    // 获取车间
+    Getdeptbyid (id) {
+      this.form.deptId = ''
+      if (id) {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.workshop = data.typeList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      } else {
+        this.workshop = []
+      }
+    },
     // 序号
     indexMethod (index) {
       return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
@@ -238,6 +282,13 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs.locationAdd.init()
+      })
+    },
+    // 修改库位
+    EditRow (row) {
+      this.visible = true
+      this.$nextTick(() => {
+        this.$refs.locationAdd.EditRowInfo(row)
       })
     },
     // 表格选中

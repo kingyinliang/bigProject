@@ -5,21 +5,24 @@
         <el-card class="newCard">
           <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
-                <el-form-item label="工厂：">
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px">
+                <el-form-item label="生产工厂：">
                   <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="车间：">
-                  <el-select v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
+                <el-form-item label="生产车间：">
+                  <el-select v-model="params.workshopId" class="selectwpx" style="width:130px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="制曲日期：" label-width="70px">
-                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.zqDate" value-format="yyyy-MM-dd" style="width:135px"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="订单：" label-width="45px">
+                  <el-input type="text" v-model="params.orderNo" clearable style="width:140px"></el-input>
                 </el-form-item>
                 <el-form-item label="生产状态：" label-width="70px">
                   <el-select v-model="params.productStatus" class="selectwpx" style="width:140px">
@@ -29,16 +32,16 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <el-col style="width:340px">
-              <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isMyAuth">查询</el-button>
+            <el-col style="width:342px">
+              <el-row class="rowButton" style="margin-top:39px; text-align:right;">
+                <el-button type="primary" size="small" @click="getOrderList()" v-if="isMyAuth">查询</el-button>
                 <template v-if="params.productStatus === 'abnormal'">
-                  <el-button v-if="searched && disabled && isAuth('kjm:user:updateUser')" type="primary" size="small" @click="setDisabled(false)" style="float:right">编辑</el-button>
-                  <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)" style="float:right">返回</el-button>
+                  <el-button v-if="searched && disabled && isAuth('kjm:user:updateUser')" type="primary" size="small" @click="setDisabled(false)">编辑</el-button>
+                  <el-button v-if="!disabled" type="primary" size="small" @click="setDisabled(true)">返回</el-button>
                 </template>
                 <template v-if="params.productStatus === 'abnormal' && !disabled  && isAuth('kjm:user:updateUser')">
-                  <el-button type="primary" size="small" @click="addPeople" style="float:right">新增</el-button>
-                  <el-button type="primary" size="small" @click="save" style="float:right">保存</el-button>
+                  <el-button type="primary" size="small" @click="addPeople">新增</el-button>
+                  <el-button type="primary" size="small" @click="save">保存</el-button>
                 </template>
               </el-row>
             </el-col>
@@ -371,7 +374,7 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '制曲'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
-          if (!this.params.factoryId) {
+          if (res.data.typeList.length !== 0) {
             this.params.workshopId = res.data.typeList[0].deptId
           }
         } else {
@@ -448,7 +451,8 @@ export default class Index extends Vue {
       let params = {
         factory: this.params.factoryId,
         workShop: this.params.workshopId,
-        inKjmDate: this.params.zqDate
+        inKjmDate: this.params.zqDate,
+        orderNo: this.params.orderNo
       }
       this.retrieveOrderList(params)
     } else if (this.params.productStatus === 'abnormal') {
