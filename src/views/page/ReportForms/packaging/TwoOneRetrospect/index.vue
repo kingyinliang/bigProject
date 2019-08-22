@@ -34,8 +34,8 @@
           </el-form>
         </el-col>
         <el-col :span="4" style="text-align:right; margin-top:50px;">
-          <el-button type="primary" @click="GetList(true)" size="small">查询</el-button>
-          <el-button type="primary" @click="ExportExcel(true)" size="small">导出</el-button>
+          <el-button type="primary" @click="GetList(true)" v-if="isAuth('report:formh:pkgOneAndTwoList')" size="small">查询</el-button>
+          <el-button type="primary" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportPkgOneAndTwoList')" size="small">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
