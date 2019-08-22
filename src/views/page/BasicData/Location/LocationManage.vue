@@ -86,6 +86,11 @@
               width="84"
               label="发料/入库">
             </el-table-column>
+            <el-table-column width="84" label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" size="small" @click="EditRow(scope.row)" :disabled="isdisabled">编辑</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-row>
         <el-row >
