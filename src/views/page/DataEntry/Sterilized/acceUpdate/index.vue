@@ -39,7 +39,7 @@
         <el-col style="width: 250px">
           <el-row>
             <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:supMaterialQQA:orderList')">查询</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:supMaterialQQA:orderList')">{{isRedact?'取消':'编辑'}}</el-button>
+            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
           </el-row>
           <el-row style="margin-top: 15px" v-if="isRedact ">
             <el-button type="primary" size="small" @click="SavedOr('已保存')" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">保存</el-button>

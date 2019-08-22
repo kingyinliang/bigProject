@@ -19,7 +19,7 @@
         <el-form-item label="生产订单：">
           <el-input v-model.trim="formHeader.orderNo" style="width:150px"></el-input>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetList" class="floatr">查询</el-button>
+        <el-button type="primary" size="small" @click="GetList" v-if="isAuth('bottle:workshop:indexList')" class="floatr">查询</el-button>
       </el-form>
     </el-card>
     <el-row :gutter="20" style="margin-top:15px">
