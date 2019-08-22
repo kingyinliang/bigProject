@@ -19,6 +19,9 @@
           <el-form-item label="生产日期：" label-width="70px">
             <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
           </el-form-item>
+          <el-form-item label="订单：">
+            <el-input type="text" v-model="formHeader.orderNo" clearable ></el-input>
+          </el-form-item>
         </el-form>
       </el-col>
       <el-col style="width: 340px">
@@ -77,7 +80,8 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        productDate: ''
+        productDate: '',
+        orderNo: ''
       },
       factory: [],
       workshop: [],

@@ -2,7 +2,7 @@
   <!--<el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">-->
   <el-col>
     <div class="main">
-      <el-card class="searchCard" style="margin: 0">
+      <el-card class="searchCard newCard" style="margin: 0">
         <el-row type="flex">
           <el-col>
             <form-header :formHeader="formHeader" :isRedact="isRedact" :pro="true" ref="formheader"></form-header>

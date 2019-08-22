@@ -479,7 +479,7 @@ img {
   background-color: #e8e8e8;
 }
 .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-  //margin-bottom: 12px;
+  margin-bottom: 7px!important;
 }
 .el-form-item--small .el-form-item__content, .el-form-item--small .el-form-item__label{
   height: 32px;
@@ -497,4 +497,7 @@ img {
   background-color: #1890FF;
   color: #FFFFFF;
   border-color: #1890FF;
+}
+.el-input__inner{
+  padding: 0 10px!important;
 }
