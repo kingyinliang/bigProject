@@ -20,7 +20,7 @@
             <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('ste:order:list')">查询</el-button>
+        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('filter:holder:list')">查询</el-button>
       </el-form>
     </el-card>
     <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
@@ -33,7 +33,7 @@
               <span style="color: #333333;font-weight: normal;font-size: 14px">
                 -{{item.holderStatus === '0' ? '空罐' : item.holderStatus === '1' ? '入库中' : item.holderStatus === '2' ? '满罐' : item.holderStatus === '3' ? '领用中' : item.holderStatus === '4' ? '领用完' : ''}}
               </span>
-              <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
+              <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('filter:holder:list')">详情>></span>
             </h3>
             <div class="dataList_item_pot clearfix">
               <div class="dataList_item_pot_box">
@@ -255,6 +255,10 @@ export default {
     },
     // 清罐
     clearPot (item) {
+      if (!this.isAuth('filter:holder:cleanProHolder')) {
+        this.$message.error('无权限操作')
+        return false
+      }
       if (item.holderStatus === '0') {
         this.$message.error('该罐暂不可进行清罐操作')
         return false
@@ -280,6 +284,10 @@ export default {
     },
     // JBS弹窗
     JBSdialog (item) {
+      if (!this.isAuth('filter:holder:jbsOut')) {
+        this.$message.error('无权限操作')
+        return false
+      }
       this.JBSVisible = true
       this.Holder = []
       this.JBSdataForm = {
@@ -303,6 +311,10 @@ export default {
     },
     // 转储弹窗
     TurnSavedialog (item) {
+      if (!this.isAuth('filter:holder:dumpMaterial')) {
+        this.$message.error('无权限操作')
+        return false
+      }
       this.TurnSaveVisible = true
       this.Holder = []
       this.TurnSavedataForm = {

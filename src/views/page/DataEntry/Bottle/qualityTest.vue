@@ -1,7 +1,7 @@
 <template>
   <div class="main" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中">
     <el-card class="searchCards newCard">
-      <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
+      <el-form :model="formHeader" :inline="true" size="small" label-width="85px" class="marbottom">
         <el-form-item label="车间：" label-width="60px">
           <p class="bottom">{{formHeader.workShopName}}</p>
         </el-form-item>
