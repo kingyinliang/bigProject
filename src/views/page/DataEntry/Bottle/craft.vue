@@ -145,12 +145,12 @@
           </el-table-column>
           <el-table-column label="电压V" >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.voltage" :disabled="!isRedact" size="small"></el-input>
+              <el-input type="text" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model.number="scope.row.voltage" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="电流A" width="100">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.current" :disabled="!isRedact" size="small"></el-input>
+              <el-input onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model.number="scope.row.current" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="高压气压力Mpa" width="140">
@@ -193,7 +193,7 @@
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column label="前1" width="140">
+          <el-table-column label="前1" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.beforeOne" :disabled="!isRedact" size="small"></el-input>
             </template>
@@ -245,7 +245,7 @@
           </el-table-column>
           <el-table-column label="后3" show-overflow-tooltip :disabled="!isRedact" width="100">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.afterThree" size="small"></el-input>
+              <el-input v-model="scope.row.afterThree" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="后4" show-overflow-tooltip width="100">
@@ -407,39 +407,39 @@ export default {
     },
     AddEquipmentRow () {
       let NewequipmentList = this.equipmentList.filter(item => { return item.delFlag === '0' })
-      this.equipmentList.push({
+      this.equipmentList.unshift({
         id: '',
         date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
-        voltage: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].voltage : '',
-        current: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].current : '',
-        highPressure: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].highPressure : '',
-        lowPressure: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].lowPressure : '',
-        oneInletWaterTemp: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].oneInletWaterTemp : '',
-        twoInletWaterTemp: NewequipmentList.length > 0 ? NewequipmentList[(NewequipmentList.length - 1)].twoInletWaterTemp : '',
+        voltage: NewequipmentList.length > 0 ? NewequipmentList[0].voltage : '',
+        current: NewequipmentList.length > 0 ? NewequipmentList[0].current : '',
+        highPressure: NewequipmentList.length > 0 ? NewequipmentList[0].highPressure : '',
+        lowPressure: NewequipmentList.length > 0 ? NewequipmentList[0].lowPressure : '',
+        oneInletWaterTemp: NewequipmentList.length > 0 ? NewequipmentList[0].oneInletWaterTemp : '',
+        twoInletWaterTemp: NewequipmentList.length > 0 ? NewequipmentList[0].twoInletWaterTemp : '',
         delFlag: '0'
       })
     },
     AddWarmingRow () {
       let NewarmingList = this.warmingList.filter(item => { return item.delFlag === '0' })
-      this.warmingList.push({
+      this.warmingList.unshift({
         id: '',
         date: dateFormat(new Date(), 'yyyy-MM-dd hh:mm'),
-        beforeOne: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeOne : '',
-        beforeTwo: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeTwo : '',
-        beforeThree: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeThree : '',
-        beforeFour: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeFour : '',
-        beforeFive: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeFive : '',
-        beforeSix: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeSix : '',
-        beforeSevev: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeSevev : '',
-        beforeEight: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].beforeEight : '',
-        afterOne: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterOne : '',
-        afterTwo: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterTwo : '',
-        afterThree: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterThree : '',
-        afterFour: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterFour : '',
-        afterFive: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterFive : '',
-        afterSix: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterSix : '',
-        afterSeven: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterSeven : '',
-        afterEight: NewarmingList.length > 0 ? NewarmingList[(NewarmingList.length - 1)].afterEight : '',
+        beforeOne: NewarmingList.length > 0 ? NewarmingList[0].beforeOne : '',
+        beforeTwo: NewarmingList.length > 0 ? NewarmingList[0].beforeTwo : '',
+        beforeThree: NewarmingList.length > 0 ? NewarmingList[0].beforeThree : '',
+        beforeFour: NewarmingList.length > 0 ? NewarmingList[0].beforeFour : '',
+        beforeFive: NewarmingList.length > 0 ? NewarmingList[0].beforeFive : '',
+        beforeSix: NewarmingList.length > 0 ? NewarmingList[0].beforeSix : '',
+        beforeSevev: NewarmingList.length > 0 ? NewarmingList[0].beforeSevev : '',
+        beforeEight: NewarmingList.length > 0 ? NewarmingList[0].beforeEight : '',
+        afterOne: NewarmingList.length > 0 ? NewarmingList[0].afterOne : '',
+        afterTwo: NewarmingList.length > 0 ? NewarmingList[0].afterTwo : '',
+        afterThree: NewarmingList.length > 0 ? NewarmingList[0].afterThree : '',
+        afterFour: NewarmingList.length > 0 ? NewarmingList[0].afterFour : '',
+        afterFive: NewarmingList.length > 0 ? NewarmingList[0].afterFive : '',
+        afterSix: NewarmingList.length > 0 ? NewarmingList[0].afterSix : '',
+        afterSeven: NewarmingList.length > 0 ? NewarmingList[0].afterSeven : '',
+        afterEight: NewarmingList.length > 0 ? NewarmingList[0].afterEight : '',
         delFlag: '0'
       })
     },

@@ -107,9 +107,9 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      if (this.formHeader.productDate === '') {
-        this.$message.error('请选择生产时间')
-        return
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或生产订单请选填一项')
+        return false
       }
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {

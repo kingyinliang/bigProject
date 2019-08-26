@@ -230,7 +230,8 @@ export default {
         currPage: 1,
         pageSize: 2,
         totalCount: 0,
-        orderId: ''
+        orderId: '',
+        orderNo: ''
       },
       factory: '',
       workshop: '',
@@ -409,9 +410,9 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      if (this.plantList.productDate == null) {
-        this.$message.error('请选择生产时间')
-        return
+      if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
+        this.$message.error('生产日期或订单请选填一项')
+        return false
       }
       this.lodingStatus = true
       if (this.plantList.status === 'normal') { // 正常生产
