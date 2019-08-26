@@ -77,7 +77,7 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          <exc-record ref="excrecord" :isRedact="isRedact" :order="formHeader"></exc-record>
         </el-tab-pane>
         <el-tab-pane name="4">
           <span slot="label" class="spanview">
@@ -215,6 +215,10 @@ export default {
         return false
       }
       if (!this.$refs.material.ReadyRepertoryRules()) {
+        return false
+      }
+      if (!this.$refs.instorage.countOutputNum) {
+        this.$message.error('入库数未0，不能提交')
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {

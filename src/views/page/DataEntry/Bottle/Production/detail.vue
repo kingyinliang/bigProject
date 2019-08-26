@@ -12,8 +12,9 @@
               <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
             </div>
           </el-row>
-          <el-row style="text-align:right;position: absolute;bottom: 10px;right: 0">
+          <el-row style="text-align:right;position: absolute;bottom: 10px;right: 0;width: 300px">
             <template style="float:right; margin-left: 10px;">
+              <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
               <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('bottle:inStorage:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
             </template>
             <template v-if="isRedact" style="float:right; margin-left: 10px;">

@@ -51,7 +51,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="计划产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.planOutput || '') + ' ' + (item.outputUnit || '')}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.planOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
               <el-form-item label="品项：" class="width50b">
                 <el-tooltip class="item" effect="dark" :content="(item.materialCode || '') + ' ' + (item.materialName || '')" placement="top">
@@ -59,7 +59,7 @@
                 </el-tooltip>
               </el-form-item>
               <el-form-item label="实际产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.realOutput || '') + ' ' + (item.outputUnit || '')}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.realOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
             </div>
           </el-form>

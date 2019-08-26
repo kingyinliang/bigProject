@@ -240,7 +240,7 @@ export default {
     },
     // 组织架构参数下拉
     getDictList () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'dept_type'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'dept_type'}).then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {

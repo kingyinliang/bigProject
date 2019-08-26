@@ -149,7 +149,7 @@ export default {
     },
     // 物料
     spa (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'material_type'}, false, false, false).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'material_type'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.sapList = data.dicList
         } else {

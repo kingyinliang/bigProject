@@ -111,7 +111,7 @@ export default {
     },
     // 大类下拉
     GetLargeClass () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'category'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'category'}).then(({data}) => {
         if (data.code === 0) {
           this.largeClass = data.dicList
         } else {
@@ -121,7 +121,7 @@ export default {
     },
     // 单位下拉
     GetUnit () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'spe_unit'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'spe_unit'}).then(({data}) => {
         if (data.code === 0) {
           this.Unit = data.dicList
         } else {
