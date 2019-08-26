@@ -135,6 +135,10 @@ export default {
     // 获取列表
     GetOrderList () {
       if (this.plantList.workShop) {
+        if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
+          this.$message.error('日期或订单请选填一项')
+          return false
+        }
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
           factory: this.plantList.factoryid,
           workShop: this.plantList.workShop,

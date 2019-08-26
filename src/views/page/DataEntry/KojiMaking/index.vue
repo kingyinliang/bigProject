@@ -435,9 +435,9 @@ export default class Index extends Vue {
       this.$message.error('请选择车间')
       return
     }
-    if (this.params.zqDate === null || this.params.zqDate === '') {
-      this.$message.error('请选择制曲时间')
-      return
+    if ((this.params.zqDate === '' || !this.params.zqDate) && this.params.orderNo === '') {
+      this.$message.error('制曲日期或订单请选填一项')
+      return false
     }
     if (this.params.productStatus === '') {
       this.$message.error('请选择生产状态')

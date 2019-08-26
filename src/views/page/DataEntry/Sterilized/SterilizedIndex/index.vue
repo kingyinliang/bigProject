@@ -111,9 +111,13 @@ export default {
   },
   methods: {
     GetDataList () {
-      if (!this.formHeader.productDate || !this.formHeader.factory || !this.formHeader.workShop) {
-        this.$message.error('请选择查询条件')
+      if (!this.formHeader.factory || !this.formHeader.workShop) {
+        this.$message.error('请选择工厂与车间')
         return
+      }
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或订单请选填一项')
+        return false
       }
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
