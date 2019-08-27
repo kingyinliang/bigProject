@@ -660,7 +660,7 @@ export default {
     },
     // 获取考勤类型
     GetARtype (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'KQ_type'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'KQ_type'}).then(({data}) => {
         if (data.code === 0) {
           this.ARtype = data.dicList
         } else {

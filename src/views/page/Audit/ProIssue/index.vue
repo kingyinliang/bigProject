@@ -407,7 +407,7 @@ export default {
     },
     // 获取移动原因
     GetMoveReas (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'move_reas'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'move_reas'}).then(({data}) => {
         if (data.code === 0) {
           this.MoveReas = data.dicList
         } else {

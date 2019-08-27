@@ -200,10 +200,10 @@ export default {
     },
     // 获取考勤类型
     GetARtype (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'other_time'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'other_time'}).then(({data}) => {
         if (data.code === 0) {
           this.ARtype = data.dicList
-          this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'normal_time'}).then(({data}) => {
+          this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'normal_time'}).then(({data}) => {
             if (data.code === 0) {
               this.ARtype = this.ARtype.concat(data.dicList)
             } else {

@@ -196,7 +196,7 @@ export default {
     },
     // 容器参数下拉
     getDictList (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'holder_type'}, false, false, false).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'holder_type'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
