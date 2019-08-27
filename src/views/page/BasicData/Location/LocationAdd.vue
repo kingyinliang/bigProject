@@ -175,16 +175,17 @@ export default {
             }
             this.$http(url, 'POST', this.formatDate).then(({data}) => {
               if (data.code === 0) {
+                this.submitType = true
+                this.visible = false
                 this.$message({
                   message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.submitType = true
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
+                  type: 'success'
+                  // duration: 1,
+                  // onClose: () => {
+                  //   this.$emit('refreshDataList')
+                  // }
                 })
+                this.$emit('refreshDataList')
               } else {
                 this.submitType = true
                 this.$message.error(data.msg)
