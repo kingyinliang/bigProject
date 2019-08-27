@@ -178,7 +178,7 @@
           label="操作"
           width="75">
           <template slot-scope="scope">
-            <el-button type="warning" :disabled="!isAuth('sys:verifyLTK:resetLTK')" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked'">反审</el-button>
+            <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && isAuth('sys:verifyLTK:resetLTK')">反审</el-button>
           </template>
         </el-table-column>
       </el-table>
