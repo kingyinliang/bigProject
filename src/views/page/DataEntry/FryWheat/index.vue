@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width:135px"></el-date-picker>
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyyMMdd" style="width:135px"></el-date-picker>
               </el-form-item>
               <el-form-item label="订单：" label-width="45px">
                 <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>
@@ -194,7 +194,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="plantList.currPage"
-              :page-sizes="[2, 3, 4]"
+              :page-sizes="[10, 15, 20]"
               :page-size="plantList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="plantList.totalCount">
@@ -228,7 +228,7 @@ export default {
         productDate: '',
         status: 'normal',
         currPage: 1,
-        pageSize: 2,
+        pageSize: 10,
         totalCount: 0,
         orderId: '',
         orderNo: ''
@@ -277,7 +277,7 @@ export default {
       this.FWfactoryid = this.factoryid
       if (item.productLineName === '炒麦') {
         // 存储炒麦的state
-        this.FWproductDate = this.productDate.replace(/-/g, '')
+        this.FWproductDate = this.productDate
         this.FWorderNo = item.orderNo
         this.FWproductLine = item.productLine
         this.FWproductLineName = item.productLineName
@@ -298,7 +298,7 @@ export default {
           orderId: '',
           productLine: item.productLine,
           productLineName: item.productLineName,
-          productDate: this.productDate.replace(/-/g, '')
+          productDate: this.productDate
         }
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-PwWheat-dataEntryIndex')
         this.PWorder = order
@@ -382,10 +382,10 @@ export default {
         }
       })
     },
-    GetorderList () {
+    GetorderLists () {
       this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
-        productDate: this.plantList.productDate.replace(/-/g, ''),
+        productDate: this.plantList.productDate,
         orderNo: this.plantList.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
@@ -393,7 +393,7 @@ export default {
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
-          this.FWproductDate = this.plantList.productDate.replace(/-/g, '')
+          this.FWproductDate = this.plantList.productDate
         } else {
           this.$message.error(data.msg)
         }
@@ -429,7 +429,7 @@ export default {
         if (gFWfactoryName) {
           this.FWfactoryName = gFWfactoryName
         }
-        this.GetorderList()
+        this.GetorderLists()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
         this.addRowStatus = 0
@@ -458,7 +458,7 @@ export default {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
-          productDate: this.productDate.replace(/-/g, ''),
+          productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {

@@ -6,12 +6,6 @@
           <el-row style="float: right">
             <el-form :inline="true" :model="form" size="small" label-width="68px" class="topforms2" @keyup.enter.native="GetList(true)" @submit.native.prevent>
               <el-form-item>
-                <el-select v-model="form.factory" placeholder="请选择工厂">
-                  <el-option label=""  value="">请选择</el-option>
-                  <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item>
                 <el-input v-model="form.materialCode" placeholder="物料" suffix-icon="el-icon-search"></el-input>
               </el-form-item>
               <el-form-item>
@@ -43,6 +37,9 @@
               :index="indexMethod"
               width="55">
             </el-table-column>
+            <el-table-column
+              label="工厂"
+              :show-overflow-tooltip="true" prop="factoryName"></el-table-column>
             <el-table-column
               label="物料"
               :show-overflow-tooltip="true">
