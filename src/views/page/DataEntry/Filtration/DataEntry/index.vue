@@ -59,7 +59,7 @@
                 </el-tooltip>
               </el-form-item>
               <el-form-item label="实际产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.realOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.countOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
             </div>
           </el-form>

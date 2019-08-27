@@ -35,10 +35,10 @@
           <el-input v-model="dataForm.standardOfMan" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="有效开始日期：" prop="effecStartDate">
-          <el-date-picker type="datetime"  v-model="dataForm.effecStartDate" placeholder="选择" style="width: 100%"></el-date-picker>
+          <el-date-picker type="date"  v-model="dataForm.effecStartDate" placeholder="选择" style="width: 100%"></el-date-picker>
         </el-form-item>
         <el-form-item label="有效结束日期：" prop="effecEndDate">
-          <el-date-picker type="datetime"  v-model="dataForm.effecEndDate" placeholder="选择" style="width: 100%"></el-date-picker>
+          <el-date-picker type="date"  v-model="dataForm.effecEndDate" placeholder="选择" style="width: 100%"></el-date-picker>
         </el-form-item>
         <el-form-item label="维护人：" v-if="CapacityId">
           <el-input v-model="dataForm.changer" placeholder="手动输入" disabled></el-input>
@@ -71,7 +71,7 @@ export default {
         basicCapacity: 0,
         basicCapacityUnit: '',
         effecStartDate: '',
-        effecEndDate: '',
+        effecEndDate: '2019-08-21 00:00:00',
         changer: '',
         changed: ''
       },
@@ -124,6 +124,7 @@ export default {
         this.CapacityId = ''
         this.dataForm = {}
         this.dataForm.deptId = deptId
+        this.dataForm.effecEndDate = '9999-12-31 00:00:00'
       }
       this.visible = true
     },
