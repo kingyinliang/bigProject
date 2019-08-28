@@ -264,9 +264,6 @@ export default {
     savedOrSubmitForm (str) {
       if (str === 'submit') {
       }
-      let net0 = new Promise((resolve, reject) => {
-        this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
-      })
       let net1 = new Promise((resolve, reject) => {
         this.Stesave.excUpdate(this, 'In', resolve, reject)
       })
@@ -277,18 +274,30 @@ export default {
         this.UpdateIn(str, resolve, reject)
       })
       if (str === 'submit') {
-        let submitNet = Promise.all([net0, net1, net2, net3])
+        let submitNet = Promise.all([net1, net2, net3])
         submitNet.then(() => {
-          this.$message.success('提交成功')
-          this.GetOrderHead()
+          let net0 = new Promise((resolve, reject) => {
+            this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
+          })
+          net0.then(() => {
+            this.$message.success('提交成功')
+            this.GetOrderHead()
+          }).catch((err) => {
+            this.$message.error(err)
+          })
         }).catch((err) => {
           this.$message.error(err)
         })
       } else {
-        let savedNet = Promise.all([net0, net1, net2, net3])
+        let savedNet = Promise.all([net1, net2, net3])
         savedNet.then(() => {
-          this.$message.success('保存成功')
-          this.GetOrderHead()
+          let net0 = new Promise((resolve, reject) => {
+            this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
+          })
+          net0.then(() => {
+            this.$message.success('保存成功')
+            this.GetOrderHead()
+          })
         }).catch((err) => {
           this.$message.error(err)
         })
