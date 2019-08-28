@@ -6,26 +6,26 @@
       class="locationdialog1">
       <div style="width: 400px;margin: auto">
         <el-form ref="addLo" :model="formatDate" :rules="dataRule" size="small" label-width="110px" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent>
-          <el-form-item label="工厂：" prop="deptId">
-            <el-select v-model="formatDate.factory" placeholder="请选择">
-              <el-option label=""  value=""></el-option>
+          <el-form-item label="工厂：" prop="factory">
+            <el-select v-model="formatDate.factory" @change="ChangeFactory">
+              <el-option label=""  value="">请选择</el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="车间：" prop="deptId">
-            <el-select v-model="formatDate.deptId" placeholder="请选择">
-              <el-option label=""  value=""></el-option>
+            <el-select v-model="formatDate.deptId">
+              <el-option label=""  value="">请选择</el-option>
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="物料类型：" prop="materialType">
-            <el-select v-model="formatDate.materialType" placeholder="请选择">
-              <el-option label=""  value=""></el-option>
-              <el-option :label="item.code + ' ' + item.value" v-for="(item, index) in sapList" :key="index" :value="item.code + ' ' + item.value"></el-option>
+          <el-form-item label="物料类型：" prop="materialTypeCode">
+            <el-select v-model="formatDate.materialTypeCode">
+              <el-option label=""  value="">请选择</el-option>
+              <el-option :label="item.code + ' ' + item.value" v-for="(item, index) in sapList" :key="index" :value="item.code"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="物料编码：">
-            <el-input v-model="formatDate.materialCode" placeholder="手工录入"></el-input>
+            <el-input v-model="formatDate.materialCode" placeholder="手工录入" maxlength="10"></el-input>
             <!--<el-select v-model="formatDate.material" filterable placeholder="请选择">-->
               <!--<el-option-->
                 <!--v-for="item in SerchSapList"-->
@@ -80,10 +80,13 @@ export default {
       },
       submitType: true,
       dataRule: {
+        factory: [
+          { required: true, message: '工厂不能为空', trigger: 'blur' }
+        ],
         deptId: [
           { required: true, message: '车间不能为空', trigger: 'blur' }
         ],
-        materialType: [
+        materialTypeCode: [
           { required: true, message: '物料类型不能为空', trigger: 'blur' }
         ],
         storageLocation: [
@@ -96,10 +99,10 @@ export default {
     }
   },
   watch: {
-    'formatDate.factory' (n, o) {
-      this.Getdeptbyid(n)
-      this.spa(n)
-    }
+    // 'formatDate.factory' (n, o) {
+    //   this.Getdeptbyid(n)
+    //   this.spa(n)
+    // }
   },
   props: {
     // SerchSapList: {}
@@ -108,9 +111,22 @@ export default {
     this.Getdeptcode()
   },
   methods: {
+    init () {
+      this.Getdeptbyid()
+      this.formatDate = {
+        factory: '',
+        deptId: '',
+        storageLocation: '',
+        materialType: '',
+        materialCode: '',
+        isSample: '0',
+        materialOperation: ''
+      }
+      this.visible = true
+    },
     // 获取工厂
     Getdeptcode () {
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
@@ -122,7 +138,7 @@ export default {
     Getdeptbyid (id) {
       this.formatDate.deptId = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -131,12 +147,9 @@ export default {
         })
       }
     },
-    init () {
-      this.Getdeptbyid()
-      this.visible = true
-    },
+    // 物料
     spa (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'material_type'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'material_type'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.sapList = data.dicList
         } else {
@@ -144,7 +157,7 @@ export default {
         }
       })
     },
-    // 新增
+    // 保存
     dataFormSubmit () {
       if (this.formatDate.materialCode && this.formatDate.materialCode.length !== 10) {
         this.$message.error('物料编码为10位非必填')
@@ -154,20 +167,25 @@ export default {
         this.submitType = false
         this.$refs.addLo.validate((valid) => {
           if (valid) {
-            this.formatDate.materialTypeCode = this.formatDate.materialType.substring(0, this.formatDate.materialType.indexOf(' '))
-            this.formatDate.materialTypeName = this.formatDate.materialType.substring(this.formatDate.materialType.indexOf(' ') + 1)
-            this.$http(`${BASICDATA_API.LOCATIONADD_API}`, 'POST', this.formatDate).then(({data}) => {
+            this.formatDate.materialTypeCode = this.formatDate.materialTypeCode
+            this.formatDate.materialTypeName = this.sapList.find(item => item.code === this.formatDate.materialTypeCode).value
+            let url = `${BASICDATA_API.LOCATIONADD_API}`
+            if (this.formatDate.id) {
+              url = `${BASICDATA_API.LOCATIONEDIT_API}`
+            }
+            this.$http(url, 'POST', this.formatDate).then(({data}) => {
               if (data.code === 0) {
+                this.submitType = true
+                this.visible = false
                 this.$message({
                   message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.submitType = true
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
+                  type: 'success'
+                  // duration: 1,
+                  // onClose: () => {
+                  //   this.$emit('refreshDataList')
+                  // }
                 })
+                this.$emit('refreshDataList')
               } else {
                 this.submitType = true
                 this.$message.error(data.msg)
@@ -179,6 +197,16 @@ export default {
           }
         })
       }
+    },
+    ChangeFactory (n) {
+      this.Getdeptbyid(n)
+      this.spa(n)
+    },
+    EditRowInfo (row) {
+      this.Getdeptbyid(row.factory)
+      this.spa(row.factory)
+      this.formatDate = JSON.parse(JSON.stringify(row))
+      this.visible = true
     }
   },
   computed: {},

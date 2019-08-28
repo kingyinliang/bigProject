@@ -344,7 +344,7 @@ export default {
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
           this.$message.success('保存成功')
-          this.SearchList()
+          // this.SearchList()
           this.dialogTableVisible = false
         } else {
           this.$message.error(data.msg)

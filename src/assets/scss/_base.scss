@@ -602,3 +602,16 @@ img {
     border-color: #1890FF;
   }
 }
+.marbottom{
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    margin-bottom: 8px!important;
+  }
+  .input_bottom{
+    width: 145px!important;
+    border-bottom: 1px solid #d8d8d8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 32px;
+  }
+}

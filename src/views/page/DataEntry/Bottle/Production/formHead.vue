@@ -1,5 +1,5 @@
 <template>
-  <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="marbottom">
+  <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
     <el-form-item label="生产车间：">
       <p class="input_bottom">{{formHeader.workShopName || ''}}</p>
     </el-form-item>

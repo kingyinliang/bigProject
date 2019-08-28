@@ -13,26 +13,28 @@
             <el-col>
               <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()" @submit.native.prevent>
                 <el-form-item label="归属工厂：" >
-                  <el-select v-model="form.factoryId" placeholder="请选择">
+                  <el-select v-model="form.factory" placeholder="请选择">
+                    <el-option label=""  value="">请选择</el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in factoryList" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="归属车间：">
-                  <el-select v-model="form.deptId" placeholder="请选择">
+                  <el-select v-model="form.dept_id" placeholder="请选择">
+                    <el-option label=""  value="">请选择</el-option>
                     <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="容器类型：">
-                  <el-select v-model="form.holderType" placeholder="请选择">
-                    <el-option label=""  value=""></el-option>
+                  <el-select v-model="form.holder_type" placeholder="请选择">
+                    <el-option label=""  value="">请选择</el-option>
                     <el-option :label="item.value" v-for="(item, index) in dictList" :key="index" :value="item.code"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="容器号：">
-                  <el-input v-model="form.holderNo" placeholder="手动输入"></el-input>
+                  <el-input v-model="form.holder_no" placeholder="手动输入" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="容器量：">
-                  <el-input v-model="form.holderHold" placeholder="手动输入"></el-input>
+                  <el-input v-model="form.holder_hold" placeholder="手动输入" clearable></el-input>
                 </el-form-item>
               </el-form>
             </el-col>
@@ -124,11 +126,11 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="currPage"
+              :current-page="form.currPage"
               :page-sizes="[10, 15, 20]"
-              :page-size="pageSize"
+              :page-size="form.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount">
+              :total="form.totalCount">
             </el-pagination>
           </el-row>
         </el-card>
@@ -145,12 +147,22 @@ export default {
   data () {
     return {
       visible: false,
-      form: {},
+      form: {
+        type: 'holder_type',
+        factory: '',
+        deptId: '',
+        holderType: '',
+        holderNo: '',
+        holderHold: '',
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0
+      },
       factoryList: [],
       workshop: [],
-      currPage: 1,
-      pageSize: 10,
-      totalCount: 0,
+      // currPage: 1,
+      // pageSize: 10,
+      // totalCount: 0,
       multipleSelection: [],
       dictList: [],
       list: []
@@ -165,24 +177,17 @@ export default {
   methods: {
     // 序号
     indexMethod (index) {
-      return index + 1 + (this.currPage * 1 - 1) * (this.pageSize * 1)
+      return index + 1 + (this.form.currPage * 1 - 1) * (this.form.pageSize * 1)
     },
     // 获取容器列表
-    GetContainerList (obj) {
-      if (!obj) {
-        obj = {
-          type: 'holder_type',
-          pageSize: this.pageSize,
-          currPage: this.currPage
-        }
-      }
-      this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', obj).then(({data}) => {
+    GetContainerList () {
+      this.$http(`${BASICDATA_API.CONTAINERLIST1_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.multipleSelection = []
           this.list = data.page.list
-          this.currPage = data.page.currPage
-          this.pageSize = data.page.pageSize
-          this.totalCount = data.page.totalCount
+          this.form.currPage = data.page.currPage
+          this.form.pageSize = data.page.pageSize
+          this.form.totalCount = data.page.totalCount
         } else {
           this.$message.error(data.msg)
         }
@@ -191,7 +196,7 @@ export default {
     },
     // 容器参数下拉
     getDictList (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'holder_type'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'holder_type'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
@@ -211,8 +216,8 @@ export default {
     // 获取归属车间,根据工厂ID
     Getdeptcode (factoryId) {
       if (factoryId) {
-        this.$set(this.form, 'deptId', '')
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}).then(({data}) => {
+        this.$set(this.form, 'dept_id', '')
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: factoryId}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
@@ -231,18 +236,9 @@ export default {
     // 查询
     qurery (st) {
       if (st) {
-        this.currPage = 1
+        this.form.currPage = 1
       }
-      this.GetContainerList({
-        type: 'holder_type',
-        pageSize: this.pageSize,
-        currPage: this.currPage,
-        holder_type: this.form.holderType,
-        holder_no: this.form.holderNo,
-        holder_hold: this.form.holderHold,
-        factory: this.form.factoryId,
-        dept_id: this.form.deptId
-      })
+      this.GetContainerList(this.form)
     },
     // 编辑
     addOrupdate (id) {
@@ -283,33 +279,17 @@ export default {
     },
     // 改变每页条数
     handleSizeChange (val) {
-      this.GetContainerList({
-        type: 'holder_type',
-        pageSize: val,
-        currPage: '1',
-        holder_type: this.form.holderType,
-        holder_no: this.form.holderNo,
-        holder_hold: this.form.holderHold,
-        factory: this.form.factoryId,
-        dept_id: this.form.deptId
-      })
+      this.form.pageSize = val
+      this.GetContainerList(this.form)
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.GetContainerList({
-        type: 'holder_type',
-        holder_type: this.form.holderType,
-        holder_no: this.form.holderNo,
-        holder_hold: this.form.holderHold,
-        dept_id: this.form.deptId,
-        pageSize: this.pageSize,
-        factory: this.form.factoryId,
-        currPage: val
-      })
+      this.form.currPage = val
+      this.GetContainerList(this.form)
     }
   },
   watch: {
-    'form.factoryId' (n) {
+    'form.factory' (n) {
       this.Getdeptcode(n)
       this.getDictList(n)
     }

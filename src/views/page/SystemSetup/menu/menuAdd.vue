@@ -94,7 +94,7 @@ export default {
         'factory-icon-test', 'factory-baozhuang', 'factory-filter',
         'factory-chechuangjiqiren', 'factory-qiyaguanjianhua', 'factory-chaohuo',
         'factory-guanquguanli', 'factory-air-compressor', 'factory-shajun',
-        'factory-guolv'
+        'factory-guolv', 'factory-chuiping', 'factory-yuanshui'
       ],
       visible: false,
       type: true,

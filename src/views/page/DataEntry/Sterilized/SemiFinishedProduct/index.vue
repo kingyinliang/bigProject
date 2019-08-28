@@ -23,16 +23,18 @@
       <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:semi:list')" style="float: right" >查询</el-button>
     </el-form>
   </el-card>
-  <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
+  <el-card class="searchCard  newCard ferCard" style="margin-top:5px; padding:0px !important;"  v-show="fastS">
     <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>半成品罐列表</h3>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
-      <el-col :span="6" v-for="(item, index) in DataList" :key="index">
+      <el-col :span="4" v-for="(item, index) in DataList" :key="index">
         <el-card class="dataList_item">
-          <h3 class="dataList_item_tit">{{item.holderName}} - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '非空罐' : '空罐'}}</span></h3>
-          <div class="dataList_item_pot clearfix">
+          <h3 class="dataList_item_tit">{{item.holderNo}} - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '非空罐' : '空罐'}}</span></h3>
+          <div class="dataList_item_pot clearfix" style="position:relative;">
             <div class="dataList_item_pot_box">
-              <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end;">
-                <div v-if="item.holderStatus === '1'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`"><p>{{(item.amount / 1000).toFixed(3)}}方</p></div>
+              <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end; position:relative;">
+                <div v-if="item.holderStatus === '1'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`">
+                  <!-- <p>{{(item.amount / 1000).toFixed(3)}}方</p> -->
+                </div>
                 <div v-else class="dataList_item_pot_box_item1" :style="`height:0%`"><p></p></div>
               </div>
             </div>
@@ -547,7 +549,7 @@ export default {
       &_box{
         overflow: hidden;
         padding: 25px 9px 9px 9px;
-        color: white;
+        // color: white;
         float: left;
         display: flex;
         flex-wrap: wrap;
@@ -598,16 +600,17 @@ export default {
       }
       &_detail{
         max-width: 112px;
+        position: absolute;
         height: auto;
         float: left;
-        margin-top: 25px;
-        margin-left: 10px;
+        margin-top: 75px;
+        // margin-left: 10px;
         color: #333333;
         font-size: 14px;
         line-height: 18px;
-        padding: 5px 4px;
+        // padding: 5px 4px;
         border-radius: 4px;
-        border: 1px solid #1890FF;
+        // border: 1px solid #1890FF;
       }
     }
     .bottom {

@@ -193,13 +193,14 @@ export default {
         }
         tmp.push(item.material)
       })
-      Object.keys(this.sumAmount2).forEach((key) => {
-        if (this.potList.filter(it => it.holderId === key).length !== 0) {
-          if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) === this.potList.filter(it => it.holderId === key)[0].sumAmount) {
-            this.$http(`${SQU_API.SUM_POT_STATUS_API}`, 'POST', {holderId: key}).then(({data}) => {})
-          }
-        }
-      })
+      // console.log(this.sumAmount2)
+      // Object.keys(this.sumAmount2).forEach((key) => {
+      //   if (this.potList.filter(it => it.holderId === key).length !== 0) {
+      //     if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) === this.potList.filter(it => it.holderId === key)[0].sumAmount) {
+      //       this.$http(`${SQU_API.SUM_POT_STATUS_API}`, 'POST', {holderId: key}).then(({data}) => {})
+      //     }
+      //   }
+      // })
       this.$http(`${st === false ? SQU_API.SUM_MATERIAL_UPDATE_API : SQU_API.SUM_MATERIAL_SUBMIT_API}`, 'POST', tmp).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
@@ -224,12 +225,14 @@ export default {
       this.sumAmount2 = {}
       let ty = true
       this.SumDate.forEach((item) => {
-        if (!item.material.childPotNo && !item.material.childUsedAmount) {
-          ty = false
-          this.$message.error('物料领用必填项未填写')
-          return false
-        } else {
-          this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
+        if (item.delFlag !== '1') {
+          if (!item.material.childPotNo && !item.material.childUsedAmount) {
+            ty = false
+            this.$message.error('物料领用必填项未填写')
+            return false
+          } else {
+            this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
+          }
         }
       })
       Object.keys(this.sumAmount2).forEach((key) => {

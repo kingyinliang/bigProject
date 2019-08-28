@@ -16,7 +16,7 @@
           <el-button type="primary" @click="getdictList">查询</el-button>
         </el-row>
         <el-row type="flex" :gutter="10">
-          <el-col style="width: 400px">
+          <el-col :span="8" style="min-width: 400px">
             <el-card>
               <div slot="header" class="clearfix">
                 <div slot="header" class="clearfix">
@@ -33,7 +33,7 @@
                   tooltip-effect="dark"
                   style="width: 100%;margin-bottom: 20px">
                   <el-table-column type="index" width="50" label="序号"></el-table-column>
-                  <el-table-column :show-overflow-tooltip=true label="工厂" prop="factoryName" width="80"></el-table-column>
+                  <el-table-column :show-overflow-tooltip=true label="工厂" prop="factoryName"></el-table-column>
                   <el-table-column prop="type" :show-overflow-tooltip=true label="参数类型编码" width="110"></el-table-column>
                   <el-table-column prop="name" :show-overflow-tooltip=true label="参数类型名称" width="110"></el-table-column>
                   <!--<el-table-column-->
@@ -45,7 +45,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col>
+          <el-col :span="16">
             <el-card>
               <div slot="header" class="clearfix">
                 <span style="float: left;line-height: 40px">参数</span>

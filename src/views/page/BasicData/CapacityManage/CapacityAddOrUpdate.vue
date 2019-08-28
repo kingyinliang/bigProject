@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <div>
-      <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px">
+      <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="125px" size="small">
         <el-form-item label="物料：" prop="material">
           <el-select v-model="dataForm.material" filterable placeholder="请选择" v-if="!CapacityId">
             <el-option
@@ -33,6 +33,12 @@
         </el-form-item>
         <el-form-item label="标配人力：" prop="standardOfMan">
           <el-input v-model="dataForm.standardOfMan" placeholder="手动输入"></el-input>
+        </el-form-item>
+        <el-form-item label="有效开始日期：" prop="effecStartDate">
+          <el-date-picker type="date"  v-model="dataForm.effecStartDate" value-format="yyyy-MM-dd" placeholder="选择" style="width: 100%"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="有效结束日期：" prop="effecEndDate">
+          <el-date-picker type="date"  v-model="dataForm.effecEndDate" value-format="yyyy-MM-dd" placeholder="选择" style="width: 100%"></el-date-picker>
         </el-form-item>
         <el-form-item label="维护人：" v-if="CapacityId">
           <el-input v-model="dataForm.changer" placeholder="手动输入" disabled></el-input>
@@ -64,6 +70,8 @@ export default {
         standardOfMan: '',
         basicCapacity: 0,
         basicCapacityUnit: '',
+        effecStartDate: '',
+        effecEndDate: '2019-08-21 00:00:00',
         changer: '',
         changed: ''
       },
@@ -79,6 +87,12 @@ export default {
         ],
         basicCapacityUnit: [
           { required: true, message: '单位不能为空', trigger: 'blur' }
+        ],
+        effecStartDate: [
+          { required: true, message: '有效开始日期不能为空', trigger: 'blur' }
+        ],
+        effecEndDate: [
+          { required: true, message: '有效结束日期不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -92,7 +106,7 @@ export default {
   methods: {
     // 获取单位下拉
     GetUnit () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'UNIT'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'UNIT'}).then(({data}) => {
         if (data.code === 0) {
           this.Unit = data.dicList
         } else {
@@ -108,7 +122,9 @@ export default {
         this.dataForm.material = data.materialCode + ' ' + data.materialName
       } else {
         this.CapacityId = ''
-        this.dataForm = {}
+        this.dataForm = {
+          effecEndDate: '9999-12-31'
+        }
         this.dataForm.deptId = deptId
       }
       this.visible = true

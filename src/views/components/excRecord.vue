@@ -244,7 +244,7 @@ export default {
     },
     // 获取异常情况
     GetstoppageType (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'stoppage_type'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'stoppage_type'}).then(({data}) => {
         if (data.code === 0) {
           this.stoppageType = data.dicList
         } else {
@@ -269,7 +269,7 @@ export default {
     },
     // 获取物料分类简称
     GetmaterialShort (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'MATERIAL_SHORT'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'MATERIAL_SHORT'}).then(({data}) => {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
@@ -279,7 +279,7 @@ export default {
     },
     // 获取能源下拉
     Getenery (factory) {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'ENERGY'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'ENERGY'}).then(({data}) => {
         if (data.code === 0) {
           this.enery = data.dicList
         } else {

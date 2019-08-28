@@ -19,6 +19,9 @@
           <el-form-item label="生产日期：" label-width="70px">
             <el-date-picker type="date" v-model="formHeader.productDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
           </el-form-item>
+          <el-form-item label="订单：">
+            <el-input type="text" v-model="formHeader.orderNo" clearable ></el-input>
+          </el-form-item>
         </el-form>
       </el-col>
       <el-col style="width: 340px">
@@ -48,7 +51,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="计划产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.planOutput || '') + ' ' + (item.outputUnit || '')}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.planOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
               <el-form-item label="品项：" class="width50b">
                 <el-tooltip class="item" effect="dark" :content="(item.materialCode || '') + ' ' + (item.materialName || '')" placement="top">
@@ -56,7 +59,7 @@
                 </el-tooltip>
               </el-form-item>
               <el-form-item label="实际产量：" class="width50b">
-                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.realOutput || '') + ' ' + (item.outputUnit || '')}}</div>
+                <div style="width:152px; border-bottom:1px solid #ccc">&nbsp;{{(item.countOutput || '0') + ' ' + (item.outputUnit || '')}}</div>
               </el-form-item>
             </div>
           </el-form>
@@ -77,7 +80,8 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        productDate: ''
+        productDate: '',
+        orderNo: ''
       },
       factory: [],
       workshop: [],
@@ -103,9 +107,9 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      if (this.formHeader.productDate === '') {
-        this.$message.error('请选择生产时间')
-        return
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或生产订单请选填一项')
+        return false
       }
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {

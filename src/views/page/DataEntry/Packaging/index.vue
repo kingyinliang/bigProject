@@ -2,19 +2,23 @@
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <div class="main">
       <el-card class="newCard">
-        <el-form :model="plantList" size="small" class="marbottom" :inline="true" label-position="left" label-width="55px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
+        <el-form :model="plantList" size="small" class="marbottom" :inline="true" label-position="left" label-width="45px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
           <el-form-item label="工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
+              <el-option value="">请选择</el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="车间：">
-            <el-select v-model="plantList.workShop" placeholder="请选择" @change="setworkShopname">
+            <el-select v-model="plantList.workShop" placeholder="请选择" @change="setworkShopname" class="width140px">
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="时间：">
-            <el-date-picker type="date" placeholder="选择" v-model="plantList.productDate" value-format="yyyyMMdd"></el-date-picker>
+          <el-form-item label="日期：">
+            <el-date-picker type="date" placeholder="选择" v-model="plantList.productDate" value-format="yyyyMMdd" style="width:140px"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="订单：">
+            <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="GetOrderList()">查询</el-button>
@@ -131,11 +135,15 @@ export default {
     // 获取列表
     GetOrderList () {
       if (this.plantList.workShop) {
+        if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
+          this.$message.error('日期或订单请选填一项')
+          return false
+        }
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
           factory: this.plantList.factoryid,
           workShop: this.plantList.workShop,
           productDate: this.plantList.productDate,
-          orderNo: ''
+          orderNo: this.plantList.orderNo
         }).then(({data}) => {
           if (data.code === 0) {
             this.Pkgfactoryid = this.plantList.factoryid
