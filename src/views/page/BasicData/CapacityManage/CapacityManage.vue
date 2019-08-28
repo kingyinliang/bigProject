@@ -78,12 +78,12 @@
                 </el-table-column>
                 <el-table-column prop="effecStartDate" label="有效开始日期" width="110" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
-                    {{scope.row.effecStartDate.slice(0, scope.row.effecStartDate.indexOf(' '))}}
+                    {{scope.row.effecStartDate}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="effecEndDate" label="有效结束日期" width="110" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
-                    {{scope.row.effecEndDate.slice(0, scope.row.effecEndDate.indexOf(' '))}}
+                    {{scope.row.effecEndDate}}
                   </template>
                 </el-table-column>
                 <el-table-column
