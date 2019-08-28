@@ -35,9 +35,8 @@
             <div style="padding-top: 0px;float: right;font-size: 14px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>订单状态：{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right;">
+        <el-row style="text-align:right;position: absolute;bottom: 10px;right: 7px;">
           <template style="float:right; margin-left: 10px;">
-            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Filtration-DataEntry-index'})">返回</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' &&  isAuth('filter:instorage:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
           <template v-if="isRedact" style="float:right; margin-left: 10px;">
