@@ -234,7 +234,7 @@ export default {
             type: 'warning'
           }).then(() => {})
         } else {
-          this.$confirm('删除用户同时删除该用户所有权限，是否继续?', '删除用户', {
+          this.$confirm('此用户无权限，是否删除?', '删除用户', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
