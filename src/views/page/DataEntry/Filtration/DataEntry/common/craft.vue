@@ -123,13 +123,13 @@
           <el-input v-model="techInfo.backPreNum" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="助滤剂预涂量(kg)：" prop="filterAidBef">
-          <el-input v-model="techInfo.filterAidBef" style="width:220px"></el-input>
+          <el-input min="0" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model="techInfo.filterAidBef" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="助滤剂添加量(kg)：" prop="filterAidAdd">
-          <el-input type="number" v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
+          <el-input min="0" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input type="number" v-model="techInfo.remark" style="width:220px"></el-input>
+          <el-input v-model="techInfo.remark" style="width:220px"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -173,6 +173,12 @@ export default {
         ],
         filterAidAdd: [
           {required: true, message: '必填', trigger: 'blur'}
+          // {validator: (rule, value, callback) => {
+          //   if (value < 0) {
+          //     return callback(new Error('不能为负数'))
+          //   }
+          // },
+          // trigger: 'blur' }
         ]
       },
       supMaterialList: [],

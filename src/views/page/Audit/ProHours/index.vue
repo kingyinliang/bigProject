@@ -493,7 +493,7 @@ export default {
         this.$message.error('请选择订单')
         return false
       }
-      if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0) {
+      if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0 || this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('过滤') === 0) {
         this.visibleSterilized = true
       } else {
         this.visible = true

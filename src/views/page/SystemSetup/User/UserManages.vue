@@ -200,7 +200,7 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = []
       val.forEach((item, index) => {
-        this.multipleSelection.push(item.userId)
+        this.multipleSelection.push(item)
       })
     },
     // 新增  修改
@@ -219,29 +219,45 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请选择要删除的用户')
       } else {
-        this.$confirm('删除用户同时删除该用户所有权限，是否继续?', '删除用户', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-              this.multipleSelection = []
-              this.getList()
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        let roleName = []
+        let userId = []
+        this.multipleSelection.forEach(item => {
+          if (item.roleName) {
+            roleName.push(item.roleName)
+          }
+          userId.push(item.userId)
         })
+        if (roleName.length) {
+          this.$confirm(`有 ${roleName.join(',')}权限，不能删除，请联系IT`, '删除用户', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {})
+        } else {
+          this.$confirm('此用户无权限，是否删除?', '删除用户', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http(`${SYSTEMSETUP_API.USERDEL_API}`, 'POST', userId).then(({data}) => {
+              if (data.code === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                this.multipleSelection = []
+                this.getList()
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+        }
       }
     },
     // 改变每页条数

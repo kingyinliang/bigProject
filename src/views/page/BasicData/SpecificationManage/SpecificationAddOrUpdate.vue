@@ -5,6 +5,12 @@
     :visible.sync="visible">
     <div>
       <el-form :model="dataForm" status-icon :rules="dataRule" ref="dataForm"  @keyup.enter.native="dataFormSubmit()" label-width="100px" size="small">
+        <el-form-item label="工厂：">
+          <el-select v-model="dataForm.factory">
+            <el-option label=""  value="">请选择</el-option>
+            <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="物料：" prop="material">
           <el-select v-model="dataForm.material" filterable placeholder="请选择" style="width: 100%" @change="setBrand" v-if="!SpecificationId">
             <el-option
@@ -69,7 +75,9 @@ export default {
       SpecificationId: '',
       largeClass: [],
       Unit: [],
+      factory: [],
       dataForm: {
+        factory: '',
         material: '',
         brand: '',
         largeClass: '',
@@ -101,17 +109,28 @@ export default {
     SerchSapList: {}
   },
   mounted () {
+    this.Getdeptcode()
     this.GetLargeClass()
     this.GetUnit()
   },
   methods: {
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     // 设置品牌
     setBrand (val) {
       this.dataForm.brand = val.split(' ')[2]
     },
     // 大类下拉
     GetLargeClass () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'category'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'category'}).then(({data}) => {
         if (data.code === 0) {
           this.largeClass = data.dicList
         } else {
@@ -121,7 +140,7 @@ export default {
     },
     // 单位下拉
     GetUnit () {
-      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: '', type: 'spe_unit'}).then(({data}) => {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'spe_unit'}).then(({data}) => {
         if (data.code === 0) {
           this.Unit = data.dicList
         } else {
@@ -157,16 +176,17 @@ export default {
           this.dataForm.brand = this.dataForm.material.split(' ')[2]
           this.$http(`${!this.SpecificationId ? BASICDATA_API.SPECSAVE_API : BASICDATA_API.SPECUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
             if (data.code === 0) {
+              this.submitType = true
+              this.visible = false
               this.$message({
                 message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.submitType = true
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
+                type: 'success'
+                // duration: 1500,
+                // onClose: () => {
+                //   this.$emit('refreshDataList')
+                // }
               })
+              this.$emit('refreshDataList')
             } else {
               this.submitType = true
               this.$message.error(data.msg)

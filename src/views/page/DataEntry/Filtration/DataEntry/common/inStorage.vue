@@ -58,7 +58,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="满罐时间：">
-          <el-date-picker type="date" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="dataForm.fullDate" style="width: 190px"></el-date-picker>
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="dataForm.fullDate" style="width: 190px"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="dataForm.remark" placeholder="请输入"></el-input>
@@ -164,7 +164,13 @@ export default {
       }
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          this.dataForm.holderName = (this.PotList.filter(item => item.holderId === this.dataForm.holderId))[0].holderName
+          this.PotList.forEach(item => {
+            if (item.holderId === this.dataForm.holderId) {
+              this.dataForm.holderName = item.holderName
+              item.amount = this.dataForm.holderRemaining
+              item.batch = this.dataForm.batch
+            }
+          })
           if (this.isUpdate) {
             Reflect.ownKeys(this.dataForm).forEach((key) => {
               this.rowData[key] = this.dataForm[key]

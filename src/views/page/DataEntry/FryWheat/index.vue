@@ -4,40 +4,43 @@
       <el-card class="newCard" style="min-height: 480px">
         <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="42px">
-              <el-form-item label="工厂：">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form-item label="生产工厂：">
                 <el-select v-model="plantList.factoryid" class="selectwpx" style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：">
-                <el-select v-model="plantList.workshopid" class="selectwpx" style="width: 140px">
+              <el-form-item label="生产车间：">
+                <el-select v-model="plantList.workshopid" class="selectwpx" style="width:130px">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="生产日期：" label-width="70px">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
+              <el-form-item label="生产日期：">
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyyMMdd" style="width:135px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="生产状态：" label-width="70px">
-                <el-select v-model="plantList.status" class="selectwpx" style="width: 140px">
+              <el-form-item label="订单：" label-width="45px">
+                <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>
+              </el-form-item>
+              <el-form-item label="生产状态：">
+                <el-select v-model="plantList.status" class="selectwpx" style="width:140px">
                   <el-option label="正常生产" value="normal"></el-option>
                   <el-option label="无生产" value="abnormal" v-if="isAuth('wht:user:listUser')"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="width: 340px">
-            <el-row class="rowButton">
-              <el-button type="primary" size="small" @click="GetOrderList(true)" style="float: right">查询</el-button>
+          <el-col style="width:342px;">
+            <el-row class="rowButton" style="margin-top:39px; text-align:right;">
+              <el-button type="primary" size="small" @click="GetOrderList(true)">查询</el-button>
               <template v-if="type === 'abnormal'">
-                <el-button v-if="isdisabled === true && isAuth('wht:user:updateUser')" type="primary" size="small" @click="isdisabledFn" style="float: right">编辑</el-button>
-                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn" style="float: right">返回</el-button>
+                <el-button v-if="isdisabled === true && isAuth('wht:user:updateUser')" type="primary" size="small" @click="isdisabledFn" >编辑</el-button>
+                <el-button v-if="isdisabled === false" type="primary" size="small" @click="disabledFn">返回</el-button>
               </template>
               <template v-if="type === 'abnormal' && isdisabled === false">
-                <el-button type="primary" size="small" @click="AddPeople" style="float: right">新增</el-button>
-                <el-button type="primary" size="small" @click="save" style="float: right">保存</el-button>
+                <el-button type="primary" size="small" @click="AddPeople" >新增</el-button>
+                <el-button type="primary" size="small" @click="save">保存</el-button>
               </template>
             </el-row>
           </el-col>
@@ -59,7 +62,6 @@
                 <div class="normal_bottom">
                     <el-form-item label="订单号：" class="width50b">
                       <el-select v-model="item.orderNo" placeholder="请选择" :change="orderchange(item)" style="width:150px">
-                        <el-option label=""  value=""></el-option>
                         <el-option :label="item" v-for="(item, index) in item.order_arr" :key="index" :value="item"></el-option>
                       </el-select>
                     </el-form-item>
@@ -192,7 +194,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="plantList.currPage"
-              :page-sizes="[2, 3, 4]"
+              :page-sizes="[10, 15, 20]"
               :page-size="plantList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="plantList.totalCount">
@@ -226,9 +228,10 @@ export default {
         productDate: '',
         status: 'normal',
         currPage: 1,
-        pageSize: 2,
+        pageSize: 10,
         totalCount: 0,
-        orderId: ''
+        orderId: '',
+        orderNo: ''
       },
       factory: '',
       workshop: '',
@@ -263,6 +266,9 @@ export default {
       this.plantList.productDate = this.PkgproductDate
     }
     this.GetfactoryList()
+    if (this.FWfactoryid) {
+      this.Getworkshop(this.FWfactoryid)
+    }
     this.getTree()
   },
   methods: {
@@ -271,7 +277,7 @@ export default {
       this.FWfactoryid = this.factoryid
       if (item.productLineName === '炒麦') {
         // 存储炒麦的state
-        this.FWproductDate = this.productDate.replace(/-/g, '')
+        this.FWproductDate = this.productDate
         this.FWorderNo = item.orderNo
         this.FWproductLine = item.productLine
         this.FWproductLineName = item.productLineName
@@ -292,7 +298,7 @@ export default {
           orderId: '',
           productLine: item.productLine,
           productLineName: item.productLineName,
-          productDate: this.productDate.replace(/-/g, '')
+          productDate: this.productDate
         }
         this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-FryWheat-PwWheat-dataEntryIndex')
         this.PWorder = order
@@ -322,7 +328,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
           if (res.data.code === 0) {
             this.workshop = res.data.typeList
-            if (!this.plantList.factoryid) {
+            if (!this.plantList.workshopid && res.data.typeList.length) {
               this.plantList.workshopid = res.data.typeList[0].deptId
             }
           } else {
@@ -376,18 +382,18 @@ export default {
         }
       })
     },
-    GetorderList () {
+    GetorderLists () {
       this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
         workShop: this.plantList.workshopid,
-        productDate: this.plantList.productDate.replace(/-/g, ''),
-        orderNo: ''
+        productDate: this.plantList.productDate,
+        orderNo: this.plantList.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
           this.FryWheatList = orderList(data.list)
           this.workShop = this.plantList.workshopid
           this.productDate = this.plantList.productDate
           this.factoryid = this.plantList.factoryid
-          this.FWproductDate = this.plantList.productDate.replace(/-/g, '')
+          this.FWproductDate = this.plantList.productDate
         } else {
           this.$message.error(data.msg)
         }
@@ -404,9 +410,9 @@ export default {
         this.$message.error('请选择车间')
         return
       }
-      if (this.plantList.productDate == null) {
-        this.$message.error('请选择生产时间')
-        return
+      if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
+        this.$message.error('生产日期或订单请选填一项')
+        return false
       }
       this.lodingStatus = true
       if (this.plantList.status === 'normal') { // 正常生产
@@ -423,7 +429,7 @@ export default {
         if (gFWfactoryName) {
           this.FWfactoryName = gFWfactoryName
         }
-        this.GetorderList()
+        this.GetorderLists()
       } else if (this.plantList.status === 'abnormal') {
         // 无生产
         this.addRowStatus = 0
@@ -452,7 +458,7 @@ export default {
       if (row.orderNo && row.orderNo !== row.orderNo2) {
         this.$http(`${WHT_API.CINDEXORDERLIST_API}`, 'POST', {
           workShop: this.workShop,
-          productDate: this.productDate.replace(/-/g, ''),
+          productDate: this.productDate,
           orderNo: row.orderNo
         }).then(({data}) => {
           if (data.code === 0) {

@@ -45,7 +45,7 @@
               <el-date-picker type="date" placeholder="选择" v-model="plantList.productdate" value-format="yyyy-MM-dd" style="width: 160px"></el-date-picker>
             </el-form-item>
             <el-form-item style="margin-left: 85px;">
-              <el-button type="primary" size="small" @click="GetLtkList(true)">查询</el-button>
+              <el-button type="primary" size="small" v-if="isAuth('sys:verifyLTK:list')" @click="GetLtkList(true)">查询</el-button>
               <el-button type="primary" size="small" @click="doPrint">导出</el-button>
               <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('sys:verifyLTK:auditing')">审核通过</el-button>
               <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('sys:verifyLTK:auditing')">审核不通过</el-button>
@@ -178,7 +178,7 @@
           label="操作"
           width="75">
           <template slot-scope="scope">
-            <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked'">反审</el-button>
+            <el-button type="warning" round size="mini" @click="ResetD(scope.row)" v-if="scope.row.status === 'checked' && isAuth('sys:verifyLTK:resetLTK')">反审</el-button>
           </template>
         </el-table-column>
       </el-table>

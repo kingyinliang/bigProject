@@ -3,15 +3,33 @@
   <el-card class="searchCard  newCard ferCard">
     <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
       <el-form-item label="生产工厂：">
-        <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
+        <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="生产车间：">
-        <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 160px">
+        <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="罐号：" label-width="50px">
+        <el-select v-model="formHeader.holderNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 140px">
+          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="类别：" label-width="50px">
+        <el-select v-model="formHeader.halfType" placeholder="请选择" style="width: 140px">
+          <el-option label="请选择"  value=""></el-option>
+          <el-option :label="item.value" v-for="(item, index) in halfList" :key="index" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="状态：" label-width="50px">
+        <el-select v-model="formHeader.holderStatus" placeholder="请选择" style="width: 140px">
+          <el-option label="请选择"  value=""></el-option>
+          <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code" v-if="item.code !== '2' && item.code !== '3'"></el-option>
+          <el-option label="发酵中" v-for="(item, index) in holderStatusList" :key="index" value="2,3" v-if="item.code === '2'"></el-option>
         </el-select>
       </el-form-item>
       <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
@@ -43,29 +61,6 @@
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
     <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表</h3>
-    <el-row>
-    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
-      <el-form-item label="罐号：">
-        <el-select v-model="formHeader.holderNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 160px">
-          <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="类别：">
-        <el-select v-model="formHeader.halfType" placeholder="请选择" style="width: 160px">
-          <el-option label="请选择"  value=""></el-option>
-          <el-option :label="item.value" v-for="(item, index) in halfList" :key="index" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="状态：">
-        <el-select v-model="formHeader.holderStatus" placeholder="请选择" style="width: 160px">
-          <el-option label="请选择"  value=""></el-option>
-          <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code" v-if="item.code !== '2' && item.code !== '3'"></el-option>
-          <el-option label="发酵中" v-for="(item, index) in holderStatusList" :key="index" value="2,3" v-if="item.code === '2'"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
-    </el-form>
-    </el-row>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="4" v-for="(item, index) in dataList" :key="index">
         <el-card class="dataList_item">

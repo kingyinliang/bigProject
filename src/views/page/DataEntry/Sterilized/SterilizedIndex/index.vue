@@ -1,21 +1,24 @@
 <template>
   <div style="padding: 5px 10px">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="75px" class="topform marbottom">
-        <el-form-item label="生产工厂：">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="45px" class="topform marbottom">
+        <el-form-item label="工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="生产车间：">
+        <el-form-item label="车间：">
           <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="生产日期：">
+        <el-form-item label="生产日期：" label-width="70px">
           <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="订单：">
+          <el-input type="text" v-model="formHeader.orderNo" clearable ></el-input>
         </el-form-item>
         <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('ste:order:list')">查询</el-button>
       </el-form>
@@ -88,7 +91,8 @@ export default {
         holderType: '014',
         factory: '',
         workShop: '',
-        productDate: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        orderNo: ''
       },
       factory: [],
       workshop: [],
@@ -107,9 +111,13 @@ export default {
   },
   methods: {
     GetDataList () {
-      if (!this.formHeader.productDate || !this.formHeader.factory || !this.formHeader.workShop) {
-        this.$message.error('请选择查询条件')
+      if (!this.formHeader.factory || !this.formHeader.workShop) {
+        this.$message.error('请选择工厂与车间')
         return
+      }
+      if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
+        this.$message.error('生产日期或订单请选填一项')
+        return false
       }
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {

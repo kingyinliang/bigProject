@@ -38,6 +38,9 @@
               width="55">
             </el-table-column>
             <el-table-column
+              label="工厂"
+              :show-overflow-tooltip="true" prop="factoryName"></el-table-column>
+            <el-table-column
               label="物料"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
@@ -115,6 +118,12 @@
       :visible.sync="visible1">
       <div class="formdata">
         <el-form :model="form" size="small" label-width="110px" class="orderdialog" @keyup.enter.native="GetList(true)">
+          <el-form-item label="工厂：">
+            <el-select v-model="form.factory">
+              <el-option label=""  value="">请选择</el-option>
+              <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="物料：">
             <el-input v-model="form.materialCode" placeholder="手工录入"></el-input>
           </el-form-item>
@@ -148,9 +157,11 @@ export default {
       SerchSapList: [],
       SpecificationList: [],
       multipleSelection: [],
+      factory: [],
       visible: false,
       visible1: false,
       form: {
+        factory: '',
         brand: '',
         materialCode: '',
         boxSpec: '',
@@ -162,6 +173,7 @@ export default {
     }
   },
   mounted () {
+    this.Getdeptcode()
     this.GetList()
     // 物料下拉
     this.$http(`${BASICDATA_API.FINDSAP_API}`, 'POST', {params: ''}, false, false, false).then(({data}) => {
@@ -173,12 +185,23 @@ export default {
     })
   },
   methods: {
+    // 获取工厂
+    Getdeptcode () {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.factory = data.typeList
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     GetList (st) {
       this.lodingS = true
       if (st) {
         this.currPage = 1
       }
       this.$http(`${BASICDATA_API.SPECLIST_API}`, 'POST', {
+        factory: this.form.factory,
         brand: this.form.brand,
         materialCode: this.form.materialCode,
         boxSpec: this.form.boxSpec,
