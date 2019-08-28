@@ -193,14 +193,14 @@ export default {
         }
         tmp.push(item.material)
       })
-      console.log(this.sumAmount2)
-      Object.keys(this.sumAmount2).forEach((key) => {
-        if (this.potList.filter(it => it.holderId === key).length !== 0) {
-          if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) === this.potList.filter(it => it.holderId === key)[0].sumAmount) {
-            this.$http(`${SQU_API.SUM_POT_STATUS_API}`, 'POST', {holderId: key}).then(({data}) => {})
-          }
-        }
-      })
+      // console.log(this.sumAmount2)
+      // Object.keys(this.sumAmount2).forEach((key) => {
+      //   if (this.potList.filter(it => it.holderId === key).length !== 0) {
+      //     if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) === this.potList.filter(it => it.holderId === key)[0].sumAmount) {
+      //       this.$http(`${SQU_API.SUM_POT_STATUS_API}`, 'POST', {holderId: key}).then(({data}) => {})
+      //     }
+      //   }
+      // })
       this.$http(`${st === false ? SQU_API.SUM_MATERIAL_UPDATE_API : SQU_API.SUM_MATERIAL_SUBMIT_API}`, 'POST', tmp).then(({data}) => {
         if (data.code === 0) {
           if (resolve) {
