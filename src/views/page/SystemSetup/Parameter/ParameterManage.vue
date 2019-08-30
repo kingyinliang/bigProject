@@ -1,11 +1,5 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <!--<div class="topTitle">-->
-      <!--<el-breadcrumb separator="/">-->
-        <!--<el-breadcrumb-item>系统设置</el-breadcrumb-item>-->
-        <!--<el-breadcrumb-item>参数管理</el-breadcrumb-item>-->
-      <!--</el-breadcrumb>-->
-    <!--</div>-->
     <div class="main mainHeader">
       <el-card>
         <el-row style="margin-bottom:10px;">
@@ -13,6 +7,7 @@
             <el-option label="请选择" value="" ></el-option>
             <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
           </el-select>
+          <el-input v-model="searchType" placeholder="请输入" suffix-icon="el-icon-search" style="width: 200px"></el-input>
           <el-button type="primary" @click="getdictList">查询</el-button>
         </el-row>
         <el-row type="flex" :gutter="10">
@@ -42,6 +37,15 @@
                     <!--<template slot-scope="scope"><el-button type="text" @click="remove(scope.$index,parameterType)">删除</el-button></template>-->
                   <!--</el-table-column>-->
                 </el-table>
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currPage"
+                  :page-sizes="[10, 15, 20]"
+                  :page-size="pageSize"
+                  layout="total, prev, pager, next, jumper"
+                  :total="totalCount">
+                </el-pagination>
               </div>
             </el-card>
           </el-col>
@@ -89,7 +93,11 @@ export default {
       parameter: [],
       adds: {},
       factoryList: [],
-      factory: ''
+      factory: '',
+      searchType: '',
+      totalCount: 1,
+      currPage: 1,
+      pageSize: 10
     }
   },
   mounted () {
@@ -100,10 +108,17 @@ export default {
     // 获取类型
     getdictList () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERTYPE_API}`, 'POST', {
-        factory: this.factory
+        factory: this.factory,
+        type: this.searchType,
+        totalCount: this.totalCount + '',
+        currPage: this.currPage + '',
+        pageSize: this.pageSize + ''
       }).then(({data}) => {
         if (data.code === 0) {
-          this.parameterType = data.list
+          this.parameterType = data.list.list
+          this.totalCount = data.list.totalCount
+          this.currPage = data.list.currPage
+          this.pageSize = data.list.pageSize
         } else {
           this.$message.error(data.msg)
         }
@@ -173,6 +188,16 @@ export default {
           this.$message.error(res.data.msg)
         }
       })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.getdictList()
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.currPage = val
+      this.getdictList()
     }
   },
   computed: {},
