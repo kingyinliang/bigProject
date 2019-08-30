@@ -1,6 +1,5 @@
 <template>
   <main class="site-content" :class="{ 'site-content--tabs': $route.meta.isTab }">
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <!-- 主入口标签页 s -->
     <el-tabs
       v-if="$route.meta.isTab"
@@ -43,11 +42,18 @@
     </el-tabs>
     <!-- 主入口标签页 e -->
     <!--<el-card v-else :body-style="siteContentViewHeight">-->
-      <keep-alive v-else>
+    <transition
+      v-else
+      name="custom-classes-transition"
+      enter-active-class="animated rollIn"
+      leave-active-class="animated rollOut"
+    >
+      <keep-alive>
         <div :body-style="siteContentViewHeight">
             <router-view/>
         </div>
       </keep-alive>
+    </transition>
     <!--</el-card>-->
     <div class="footer">
       <p>Copyright @ 2018 烟台欣和企业食品有限公司版权所有</p>
@@ -184,5 +190,44 @@ export default {
       color: rgba(0, 0, 0, 0.45);
       margin: 0 10px;
     }
+  }
+
+  @keyframes rollIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(-100%, 0, 0) rotate(-0deg);
+      transform: translate3d(-100%, 0, 0) rotate(-0deg)
+    }
+    to {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none
+    }
+  }
+
+  .rollIn {
+    -webkit-animation-name: rollIn;
+    animation-name: rollIn
+  }
+  .animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+  }
+
+  .animated.infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite
+  }
+
+  .animated.hinge {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s
+  }
+
+  .animated.bounceIn, .animated.bounceOut, .animated.flipOutX, .animated.flipOutY {
+    -webkit-animation-duration: .75s;
+    animation-duration: .75s
   }
 </style>

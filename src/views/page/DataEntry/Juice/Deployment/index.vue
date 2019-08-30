@@ -121,6 +121,11 @@
             </el-select>
           </template>
         </el-table-column>
+        <el-table-column label="类别" :show-overflow-tooltip="true" width="80" >
+          <template slot-scope="scope">
+            {{scope.row.category}}
+          </template>
+        </el-table-column>
         <el-table-column width="120">
           <template slot="header">
             <i class="reqI">*</i> 实际领料

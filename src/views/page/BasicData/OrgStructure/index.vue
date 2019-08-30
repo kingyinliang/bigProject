@@ -57,6 +57,10 @@
                       <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
                     </el-select>
                   </el-form-item>
+                  <el-form-item label="成本中心：" v-if="OrgDetail.deptType === 'proLine'">
+                    <span v-if="update">{{OrgDetail.costCenter}}</span>
+                    <el-input v-model="OrgDetail.costCenter" auto-complete="off" v-else></el-input>
+                  </el-form-item>
                   <el-form-item label="产线图片：" v-if="OrgDetail.deptType === 'proLine'">
                     <img :src="'data:image/gif;base64,'+ OrgDetail.img" alt="" v-if="update" class="pkgImg">
                     <el-upload
@@ -119,7 +123,7 @@
                 <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="成本中心：">
+            <el-form-item label="成本中心：" v-if="addDep.deptType== 'proLine'">
               <el-input v-model="addDep.costCenter" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="产线图片：" v-if="addDep.deptType== 'proLine'">

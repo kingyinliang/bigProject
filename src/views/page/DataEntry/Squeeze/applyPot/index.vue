@@ -94,9 +94,10 @@
                <el-table-column
                   fixed="right"
                   label="操作"
-                  width="80">
+                  width="90">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="small" @click="pushPage(scope.row.id)" v-if="isAuth('fer:openHolder:list')" >详情</el-button>
+                    <el-button type="text" size="small" @click="pushPage(scope.row.id)" v-if="isAuth('fer:openHolder:list')" >详情</el-button>
+                    <el-button type="text" size="small" @click="deleteRow(scope.row.id)" v-if="isAuth('fer:openHolder:delete') && scope.row.status === 'saved'">删除</el-button>
                   </template>
                 </el-table-column>
             </el-table>
@@ -238,6 +239,16 @@ export default class Index extends Vue {
     setTimeout(function () {
       that.$router.push({name})
     }, 100)
+  }
+  deleteRow (id) {
+    Vue.prototype.$http(`${SQU_API.POT_APPLY_DEL_API}`, `POST`, [id]).then(({data}) => {
+      if (data.code === 0) {
+        this.$message.success('删除成功')
+        this.getOrderList()
+      } else {
+        this.$message.error(data.msg)
+      }
+    })
   }
   changeOptions (flag: string) {
     if (flag === 'factory') {
