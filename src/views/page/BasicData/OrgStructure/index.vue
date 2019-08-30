@@ -119,6 +119,9 @@
                 <el-option label="二合一&礼盒产线" value="二合一&礼盒产线"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="成本中心：">
+              <el-input v-model="addDep.costCenter" auto-complete="off"></el-input>
+            </el-form-item>
             <el-form-item label="产线图片：" v-if="addDep.deptType== 'proLine'">
               <el-upload
                 :action="FILE_API"

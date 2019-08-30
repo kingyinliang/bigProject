@@ -1,5 +1,6 @@
 <template>
   <main class="site-content" :class="{ 'site-content--tabs': $route.meta.isTab }">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <!-- 主入口标签页 s -->
     <el-tabs
       v-if="$route.meta.isTab"
@@ -27,9 +28,16 @@
             :src="item.iframeUrl"
             width="100%" height="100%" frameborder="0" scrolling="yes">
           </iframe>
-          <keep-alive v-else>
-            <router-view v-if="item.name === mainTabsActiveName"/>
-          </keep-alive>
+        <transition
+          v-else
+          name="custom-classes-transition"
+          enter-active-class="animated rollIn"
+          leave-active-class="animated rollOut"
+        >
+            <keep-alive>
+              <router-view v-if="item.name === mainTabsActiveName"/>
+            </keep-alive>
+          </transition>
         <!--</el-card>-->
       </el-tab-pane>
     </el-tabs>
