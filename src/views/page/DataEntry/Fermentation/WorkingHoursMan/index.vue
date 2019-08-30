@@ -441,6 +441,13 @@ export default {
               return false
             }
           }
+          this.multipleSelection.map(item => {
+            if (item.reportType === '') {
+              item.reportType = 'part'
+            } else {
+              item.reportType = 'all'
+            }
+          })
           msg = '提交'
           url = FERMENTATION_API.WORKINGHOURSMANSUBMIT_API
         } else {
