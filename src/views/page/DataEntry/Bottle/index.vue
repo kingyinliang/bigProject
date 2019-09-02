@@ -4,6 +4,7 @@
       <el-form :model="formHeader" :inline="true" size="small">
         <el-form-item label="工厂：">
           <el-select v-model="formHeader.factory" class="width150px">
+            <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in factoryList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
           </el-select>
         </el-form-item>
@@ -229,7 +230,6 @@ export default {
 
 <style lang="less">
 .sole {
-  height:212px;
   background:rgba(255,255,255,1);
   border-radius:2px;
   border:1px solid rgba(232,232,232,1);
@@ -246,10 +246,8 @@ export default {
     }
   }
   .content {
-    height: 130px;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
     .img {
-      height: 110px;
       text-align: center;
       margin-top: 10px;
     }
