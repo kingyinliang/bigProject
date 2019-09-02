@@ -104,7 +104,8 @@ export default {
         productLine: this.$store.state.common.PWorder.productLine,
         productLineName: this.$store.state.common.PWorder.productLineName,
         // yyyy-MM-dd
-        productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
+        // productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
+        productDate: this.$store.state.common.PWorder.productDate
       },
       activeName: '1',
       // save / submit 是否可用

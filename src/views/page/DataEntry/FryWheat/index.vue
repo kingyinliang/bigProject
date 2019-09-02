@@ -18,7 +18,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="生产日期：">
-                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyyMMdd" style="width:135px"></el-date-picker>
+                <el-date-picker type="date" v-model="plantList.productDate" value-format="yyyy-MM-dd" style="width:135px"></el-date-picker>
               </el-form-item>
               <el-form-item label="订单：" label-width="45px">
                 <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>

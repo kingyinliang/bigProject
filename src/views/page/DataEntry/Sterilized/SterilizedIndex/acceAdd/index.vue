@@ -50,7 +50,7 @@
               <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10"  size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="领用数量" width="100">
@@ -92,7 +92,7 @@
               <el-table-column width="100">
                 <template slot="header"><i class="reqI">*</i><span>批次</span></template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10" size="mini"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="领用数量" width="100">
@@ -360,9 +360,6 @@ export default {
       })
     },
     savedOrSubmitForm (str) {
-      let net0 = new Promise((resolve, reject) => {
-        this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
-      })
       let net1 = new Promise((resolve, reject) => {
         this.Stesave.excUpdate(this, 'AddSup', resolve, reject)
       })
@@ -373,18 +370,32 @@ export default {
         this.UpdateSup(str, resolve, reject)
       })
       if (str === 'submit') {
-        let submitNet = Promise.all([net0, net1, net2, net3])
+        let submitNet = Promise.all([net1, net2, net3])
         submitNet.then(() => {
-          this.$message.success('提交成功')
-          this.GetOrderHead()
+          let net0 = new Promise((resolve, reject) => {
+            this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
+          })
+          Promise.all([net0]).then(() => {
+            this.$message.success('提交成功')
+            this.GetOrderHead()
+          }).catch((err) => {
+            this.$message.error(err)
+          })
         }).catch((err) => {
           this.$message.error(err)
         })
       } else {
-        let savedNet = Promise.all([net0, net1, net2, net3])
+        let savedNet = Promise.all([net1, net2, net3])
         savedNet.then(() => {
-          this.$message.success('保存成功')
-          this.GetOrderHead()
+          let net0 = new Promise((resolve, reject) => {
+            this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
+          })
+          Promise.all([net0]).then(() => {
+            this.$message.success('保存成功')
+            this.GetOrderHead()
+          }).catch((err) => {
+            this.$message.error(err)
+          })
         }).catch((err) => {
           this.$message.error(err)
         })
