@@ -124,7 +124,7 @@ export default {
       return ty
     },
     AddIn () {
-      this.InDataList.push({
+      this.InDataList.splice(0, 0, {
         id: '',
         orderId: this.$store.state.common.bottle.ProOrderId,
         serialNumber: '',
