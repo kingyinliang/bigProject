@@ -530,6 +530,11 @@ export default {
       let ty = true
       this.instatus = 0
       let obj = {}
+      if (this.InDate.filter(item => item.delFlag !== '1').length === 0) {
+        ty = false
+        this.$message.error('生产入库没有数据')
+        return false
+      }
       this.InDate.forEach((item) => {
         if (item.delFlag !== '1') {
           item.aiShelves = item.aiShelves + ''

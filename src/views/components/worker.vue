@@ -91,6 +91,9 @@
         <el-table-column label="班组" width="60">
           <template slot-scope="scope">{{scope.row.itemName}}</template>
         </el-table-column>
+        <el-table-column label="班组人数" width="80">
+          <template slot-scope="scope">{{scope.row.teamNum}}</template>
+        </el-table-column>
         <el-table-column label="白/中/夜班" width="140">
           <template slot-scope="scope">
             <el-select v-model="scope.row.classes" placeholder="请选择" size="mini" :disabled="!isRedact">
@@ -195,31 +198,18 @@ export default {
     },
     // 班组修改
     SelectDept (row) {
+      row.userId = []
       if (this.att) {
         this.SetAtt(row.deptId)
       }
     },
     SetAtt (id) {
-      // if (this.Attendance.filter(item => item.delFlag === '0' && item.team === id).length > 0) {
-      // } else {
-      //   this.Attendance.push({
-      //     id: '',
-      //     orderId: this.order.orderId,
-      //     team: id,
-      //     itemName: this.Team.filter(item => item.deptId === id)[0].deptName,
-      //     classes: '',
-      //     materialCode: '',
-      //     materialName: '',
-      //     unit: '',
-      //     amount: '',
-      //     remark: '',
-      //     delFlag: '0'
-      //   })
-      // }
       let tmpobj = {}
       this.WorkerDate.forEach(item => {
         if (item.deptId && !tmpobj[item.deptId]) {
-          tmpobj[item.deptId] = item.deptId
+          tmpobj[item.deptId] = item.userId
+        } else if (tmpobj[item.deptId]) {
+          tmpobj[item.deptId] = tmpobj[item.deptId].concat(item.userId)
         }
       })
       this.Attendance.forEach(item => {
@@ -228,9 +218,12 @@ export default {
         }
       })
       Reflect.ownKeys(tmpobj).forEach((key) => {
-        if (this.Attendance.filter(item => item.delFlag === '0' && item.team === key).length > 0) {} else {
+        if (this.Attendance.filter(item => item.delFlag === '0' && item.team === key).length > 0) {
+          this.Attendance.filter(item => item.delFlag === '0' && item.team === key)[0].teamNum = tmpobj[key].length
+        } else {
           this.Attendance.push({
             id: '',
+            teamNum: tmpobj[key].length,
             orderId: this.order.orderId,
             team: key,
             itemName: this.Team.filter(item => item.deptId === key)[0].deptName,
@@ -434,6 +427,9 @@ export default {
     // 人员属性下拉
     userTypesele (row) {
       row.userId = []
+      if (this.att) {
+        this.SetAtt()
+      }
     },
     // 获取组织结构树
     getTree (factory) {
@@ -479,6 +475,9 @@ export default {
     // 员工确认
     changeUser (userId) {
       this.row.userId = userId
+      if (this.att) {
+        this.SetAtt()
+      }
       this.officialWorkerStatus = false
       this.loanedPersonnelStatus = false
       this.temporaryWorkerStatus = false

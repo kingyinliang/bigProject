@@ -6,7 +6,7 @@
     <div style="height: 330px;overflow: auto">
       <el-form :model="dataForm" :rules="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="125px">
         <el-form-item label="工厂：">
-          <span v-if="!type">{{dataForm.deptName}}</span>
+          <span v-if="!type">{{dataForm.factoryName}}</span>
           <el-select v-model="dataForm.factory"  v-if="type" @change="changeFactory">
             <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
           </el-select>
@@ -49,7 +49,7 @@ export default {
         // 工厂ID
         factory: '',
         // 工厂Name
-        deptName: '',
+        factoryName: '',
         type: '',
         name: '',
         code: '',

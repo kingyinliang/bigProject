@@ -104,7 +104,7 @@ export default {
         productLine: this.$store.state.common.PWorder.productLine,
         productLineName: this.$store.state.common.PWorder.productLineName,
         // yyyy-MM-dd
-        // productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 3)}-${this.$store.state.common.PWorder.productDate.substring(3, 5)}-${this.$store.state.common.PWorder.productDate.substring(5, 7)}`
+        // productDate: `${this.$store.state.common.PWorder.productDate.substring(0, 4)}-${this.$store.state.common.PWorder.productDate.substring(4, 6)}-${this.$store.state.common.PWorder.productDate.substring(6, 8)}`
         productDate: this.$store.state.common.PWorder.productDate
       },
       activeName: '1',
@@ -268,7 +268,7 @@ export default {
     },
     updateProductDate: function (dataStr) {
       if (dataStr) {
-        let data = dataStr // .replace(/-/g, '')
+        let data = dataStr.replace(/-/g, '')
         this.productDate = data
         // 更新common store
         this.PWproductDate = data

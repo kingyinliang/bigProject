@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <el-card class="searchCard">
+    <el-card class="searchCard newCard">
       <el-row>
         <el-col>
           <el-form :inline="true" :model="form" size="small" label-width="85px">
@@ -14,13 +14,13 @@
                 <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="罐号：">
+            <el-form-item label="罐号：" label-width="50px">
               <el-select v-model="form.holderId" clearable filterable class="width170px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) of holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="状态：">
+            <el-form-item label="状态：" label-width="50px">
               <el-select v-model="form.status" clearable class="width170px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in statusList" :key="index" :value="item.value" :label="item.name"></el-option>
@@ -32,10 +32,21 @@
             <el-form-item label="订单日期：">
               <el-date-picker v-model="form.startDate" type="date" placeholder="选择日期" style="width:170px" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker> - <el-date-picker v-model="form.endDate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" format="yyyy-MM-dd" style="width:170px"></el-date-picker>
             </el-form-item>
+            <el-form-item style="float:right">
+              <template style="float:right; margin-left: 10px;">
+                <el-button type="primary" size="small" @click="SearchList(true)" v-if="isAuth('fer:report:selectReports')">查询</el-button>
+                <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
+              </template>
+              <template v-if="isRedact" style="float:right; margin-left: 10px;">
+                <el-button type="primary" size="small" @click="SaveForm()">保存</el-button>
+                <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
+              </template>
+              <template style="float:right; margin-left: 10px;"><el-button type="primary" @click="DataSynchronism()" v-if="isAuth('fer:report:workingSaveAndSubmit')" size="small">报工同步</el-button></template>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <el-row style="text-align:right">
+      <!-- <el-row style="text-align:right">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="SearchList(true)" v-if="isAuth('fer:report:selectReports')">查询</el-button>
           <el-button type="primary" class="button" size="small" v-if="isAuth('fer:report:workingSaveAndSubmit')" @click="isRedact = !isRedact">{{isRedact?'取消':'编辑'}}</el-button>
@@ -45,7 +56,7 @@
           <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
         </template>
         <template style="float:right; margin-left: 10px;"><el-button type="primary" @click="DataSynchronism()" v-if="isAuth('fer:report:workingSaveAndSubmit')" size="small">报工同步</el-button></template>
-      </el-row>
+      </el-row> -->
     </el-card>
     <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
       <el-tab-pane name="noMatureReport" label="未成熟">
@@ -120,7 +131,7 @@
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="maturedReport" label="已成熟">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
@@ -191,7 +202,7 @@
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="rework" label="返工订单">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
@@ -441,6 +452,13 @@ export default {
               return false
             }
           }
+          this.multipleSelection.map(item => {
+            if (item.reportType === '') {
+              item.reportType = 'part'
+            } else {
+              item.reportType = 'all'
+            }
+          })
           msg = '提交'
           url = FERMENTATION_API.WORKINGHOURSMANSUBMIT_API
         } else {
