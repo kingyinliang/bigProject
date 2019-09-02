@@ -120,7 +120,7 @@
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="maturedReport" label="已成熟">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
@@ -191,7 +191,7 @@
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="rework" label="返工订单">
-        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange">
+        <el-table :data="dataList" border header-row-class-name="tableHead" @selection-change="handleSelectionChange" @row-dblclick="editRow">
           <el-table-column type="selection" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" :show-overflow-tooltip="true" width="100">
             <template slot-scope="scope">
