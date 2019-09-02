@@ -138,7 +138,7 @@
         </el-row>
         <el-table :data="equipmentList" :row-class-name="rowDelFlag" border header-row-class-name="tableHead" style="margin-top:10px">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column label="时间" width="200">
+          <el-table-column label="时间">
             <template slot-scope="scope">
               <el-date-picker type="datetime" v-model="scope.row.date" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="width:180px" placeholder="请选择日期" size="small"></el-date-picker>
             </template>
@@ -148,17 +148,17 @@
               <el-input type="text" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model.number="scope.row.voltage" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="电流A" width="100">
+          <el-table-column label="电流A">
             <template slot-scope="scope">
               <el-input onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model.number="scope.row.current" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="高压气压力Mpa" width="140">
+          <el-table-column label="高压气压力Mpa">
             <template slot-scope="scope">
               <el-input v-model="scope.row.highPressure" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="低压气压力Mpa" width="140">
+          <el-table-column label="低压气压力Mpa">
             <template slot-scope="scope">
               <el-input v-model="scope.row.lowPressure" :disabled="!isRedact" size="small"></el-input>
             </template>
