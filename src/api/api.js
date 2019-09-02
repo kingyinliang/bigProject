@@ -1168,6 +1168,10 @@ export const SQU_API = {
    */
   POT_APPLY_LIST_API: HOST + '/fer/openHolder/list',
   /**
+   * 开罐申请删除
+   */
+  POT_APPLY_DEL_API: HOST + '/fer/openHolder/delete',
+  /**
    * 申请详情
    */
   POT_APPLY_DETAIL_API: HOST + '/fer/openHolderDEtail/list',
