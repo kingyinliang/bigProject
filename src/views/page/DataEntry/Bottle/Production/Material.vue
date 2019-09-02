@@ -136,7 +136,8 @@ export default {
     },
     // 拆分
     splitDate (row, index) {
-      this.MaterialList.splice(index + 1, 0, {
+      // this.MaterialList.splice(index + 1, 0, {
+      this.MaterialList.push({
         isSplit: '1',
         orderId: this.$store.state.common.bottle.ProOrderId,
         status: '',

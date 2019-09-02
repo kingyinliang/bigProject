@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="AddRecord" size="small" :disabled="!(isRedact)" style="float: right;margin-bottom: 5px">新增</el-button>
-    <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="RecordList" border tooltip-effect="dark" >
+    <el-table header-row-class-name="tableHead" :row-class-name="RowDelFlag" :data="RecordList.filter(item => item.delFlag === '0').slice((currPage-1)*pageSize,currPage*pageSize)" border tooltip-effect="dark" >
       <el-table-column type="index" label="序号" width="55"></el-table-column>
       <el-table-column label="时间" prop="kjmWorkShopName">
         <template slot="header"><i class="reqI">*</i><span>时间</span></template>
@@ -42,6 +42,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currPage"
+      :page-sizes="[10, 15, 20]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalCount">
+    </el-pagination>
     <p style="font-size: 14px;line-height: 32px">合计数量：{{sumNum}}个</p>
   </div>
 </template>
@@ -52,7 +61,10 @@ export default {
   name: 'Record',
   data () {
     return {
-      RecordList: []
+      RecordList: [],
+      currPage: 1,
+      pageSize: 10,
+      totalCount: 1
     }
   },
   props: {
@@ -131,7 +143,7 @@ export default {
     },
     // 新增
     AddRecord () {
-      this.RecordList.push({
+      this.RecordList.splice(0, 0, {
         date: '',
         delFlag: '0',
         embryoAmount: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].embryoAmount : '',
@@ -144,9 +156,12 @@ export default {
         supplier: this.RecordList.length > 0 ? this.RecordList[this.RecordList.length - 1].supplier : this.Supplier.length > 0 ? this.Supplier[0].code : '',
         unit: ''
       })
+      this.currPage = 1
+      this.totalCount = this.RecordList.filter(item => item.delFlag === '0').length
     },
     delRecord (row) {
       row.delFlag = '1'
+      this.totalCount = this.RecordList.filter(item => item.delFlag === '0').length
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
@@ -155,6 +170,14 @@ export default {
       } else {
         return ''
       }
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.pageSize = val
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.currPage = val
     }
   },
   computed: {
