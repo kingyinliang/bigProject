@@ -275,7 +275,10 @@ export default {
         let net203 = new Promise((resolve, reject) => {
           that.$refs.equworkinghours.SubmitEquWorking(str, resolve, reject)
         })
-        Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet]).then(function () {
+        let aidSubmit = new Promise((resolve, reject) => {
+          that.$refs.craft.aidSubmit(str, this.formHeader.workShop, resolve, reject)
+        })
+        Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet, aidSubmit]).then(function () {
           Promise.all([net201, net202, net203]).then(function () {
             that.$message.success('提交成功')
             that.GetOrder()

@@ -142,7 +142,7 @@
 
 <script>
 import { dateFormat } from '@/net/validate'
-import { FILTRATION_API } from '@/api/api'
+import { FILTRATION_API, AUDIT_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
   data () {
@@ -399,6 +399,25 @@ export default {
         item.materialName = this.filterAidMaterialList.find(items => items.CODE === item.materialCode).VALUE
       })
       this.$http(`${FILTRATION_API.FILTER_CRAFT_MATERIALSAVE}`, 'POST', [{orderId: this.orderId, materialInfo: this.supMaterialList}]).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$message.error(data.msg)
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    aidSubmit (str, id, resolve, reject) {
+      this.supMaterialList.map((item) => {
+        item.materialName = this.filterAidMaterialList.find(items => items.CODE === item.materialCode).VALUE
+        item.workShop = id
+      })
+      this.$http(`${AUDIT_API.AUDIT_AID_SUBMIT}`, 'POST', [{orderId: this.orderId, materialInfo: this.supMaterialList}]).then(({data}) => {
         if (data.code === 0) {
         } else {
           this.$message.error(data.msg)
