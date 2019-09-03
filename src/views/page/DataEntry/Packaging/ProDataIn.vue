@@ -187,7 +187,9 @@ export default {
         this.$refs.workerref.getTree(this.formHeader.factory)
         this.$refs.workerref.GetProductShift(this.formHeader.factory)
         this.$refs.instorage.GetProductShift(this.formHeader.factory)
-        this.$refs.germs.GetProductShift(this.formHeader.factory)
+        if (this.formHeader.properties !== '二合一&礼盒产线') {
+          this.$refs.germs.GetProductShift(this.formHeader.factory)
+        }
         if (this.orderStatus !== '已同步') {
           this.$refs.readytimes.Getpkgready(this.formHeader.orderId)
           this.$refs.workerref.GetUserList(this.formHeader.orderId)

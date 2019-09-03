@@ -322,16 +322,18 @@ export default class Index extends Vue {
     }
   }
   getDictList (factory) {
-    let params = {types: ['order_type'], factory}
-    Vue.prototype.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
-      if (data.code === 0) {
-        this.orderTypeList = data.dicList[0].prolist
-      } else {
-        this.$message.error(data.msg)
-      }
-    }).catch((error) => {
-      console.log('catch data::', error)
-    })
+    if (factory) {
+      let params = {types: ['order_type'], factory}
+      Vue.prototype.$http(`${SYSTEMSETUP_API.PARAMETERSLIST_API}`, 'POST', params).then(({data}) => {
+        if (data.code === 0) {
+          this.orderTypeList = data.dicList[0].prolist
+        } else {
+          this.$message.error(data.msg)
+        }
+      }).catch((error) => {
+        console.log('catch data::', error)
+      })
+    }
   }
   // 改变每页条数
   handleSizeChange (val: number) {
