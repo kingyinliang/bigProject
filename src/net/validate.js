@@ -1,4 +1,4 @@
-import {BASICDATA_API, STERILIZED_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 // import Vue from "vue/types/index";
 /**
  * 邮箱
@@ -318,7 +318,7 @@ export function getFactory (Vue) {
   })
 }
 /**
- * 获取工厂
+ * 获取车间
  */
 export function getWorkshop (Vue, id, workshopName) {
   if (id) {
@@ -336,6 +336,37 @@ export function getWorkshop (Vue, id, workshopName) {
       }
     })
   }
+}
+/**
+ * 获取产线
+ */
+export function getParentline (Vue, id) {
+  if (id) {
+    Vue.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {
+      parentId: id
+    }, false, false, false).then(({data}) => {
+      if (data.code === 0) {
+        Vue.productline = data.childList
+        if (data.childList.length) {
+          Vue.formHeader.productline = data.childList[0].deptId
+        }
+      } else {
+        Vue.$message.error(data.msg)
+      }
+    })
+  }
+}
+/**
+ * 获取状态
+ */
+export function getStatus (Vue) {
+  Vue.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'status_type'}).then(({data}) => {
+    if (data.code === 0) {
+      Vue.Status = data.dicList
+    } else {
+      Vue.$message.error(data.msg)
+    }
+  })
 }
 export class Stesave {
   constructor (formHeader) {

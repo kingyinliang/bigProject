@@ -41,6 +41,11 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column label="类别" width="80">
+        <template slot-scope="scope">
+          {{scope.row.material.category}}
+        </template>
+      </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
           {{scope.row.material.childMaterial}}
@@ -109,6 +114,16 @@ export default {
     SerchSapList: {
       type: Array,
       default () { return [] }
+    }
+  },
+  watch: {
+    'fumet': {
+      handler (n, o) {
+        for (let i = 0; i < this.SumDate.length; i++) {
+          this.PotChange(this.SumDate[i])
+        }
+      },
+      deep: true
     }
   },
   mounted () {
@@ -216,9 +231,23 @@ export default {
     },
     PotChange (row) {
       let pot = this.potList.filter(it => it.holderId === row.material.childPotNo)[0]
-      row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
-      row.material.childBatch = pot.batch
-      row.material.childFullPotAmount = pot.sumAmount
+      console.log(pot)
+      if (pot) {
+        row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
+        row.material.childBatch = pot.batch
+        row.material.childFullPotAmount = pot.sumAmount
+        if (row.fumet.fullPort === '正常') {
+          row.material.category = pot.halfName
+        } else {
+          row.material.category = '味极鲜'
+        }
+      } else {
+        if (row.fumet.fullPort === '正常') {
+          row.material.category = ''
+        } else {
+          row.material.category = '味极鲜'
+        }
+      }
     },
     // 校验
     materialRul () {

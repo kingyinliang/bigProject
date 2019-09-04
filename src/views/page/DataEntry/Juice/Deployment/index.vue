@@ -186,6 +186,7 @@ export default {
       dataList: [],
       dialogTableVisible: false,
       ItemList: [],
+      materialName: '',
       multipleSelection: [],
       holderList: [],
       lineStatus: '',
@@ -290,6 +291,7 @@ export default {
     },
     ShowDetail (row) {
       // row.id = 'C57A2AE171024496AD26B0BEE8B0ACAD'
+      this.materialName = row.materialName
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMS}`, 'POST', {orderNo: row.id, factory: this.formHeader.factory}).then(({data}) => {
         if (data.code === 0) {
           this.ItemList = data.info
@@ -341,6 +343,12 @@ export default {
           this.$message.error('原汁物料需选择罐号')
           return false
         }
+        // if (/六月鲜/g.test(this.materialName)) {
+        //   if (/味极鲜/g.test(item.category)) {
+        //     this.$message.error('领用原汁与生产物料不匹配！无法保存，无法操作')
+        //     return false
+        //   }
+        // }
       }
       if (new Set(batchList).size !== batchList.length) {
         this.$message.error('批次不能重复')
@@ -363,7 +371,7 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请勾选数据')
       } else {
-        this.multipleSelection.map((item) => {
+        this.multipleSelection.forEach((item) => {
           item.status = '已调配'
         })
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
