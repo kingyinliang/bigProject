@@ -648,7 +648,15 @@ export const AUDIT_API = {
   */
   AUDIT_ADJUST_LIST: HOST + '/ver/adjust/list',
   AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust',
-  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial'
+  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial',
+  /**
+   * 助滤剂审核
+   */
+  AUDIT_AID_LIST: HOST + '/ver/aid/list',
+  AUDIT_AID_UPDATE: HOST + '/ver/aid/update',
+  AUDIT_AID_AUDIT: HOST + '/ver/aid/audit',
+  AUDIT_AID_RESET: HOST + '/ver/aid/resetVerifyAid',
+  AUDIT_AID_SUBMIT: HOST + '/ver/aid/submitAid'
 }
 /*
 *考勤api

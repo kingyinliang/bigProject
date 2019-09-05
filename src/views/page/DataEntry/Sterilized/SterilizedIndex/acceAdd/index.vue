@@ -265,7 +265,7 @@ export default {
         if (data.code === 0) {
           this.visible = false
           this.$message.success('操作成功')
-          this.GetOrderHead()
+          // this.GetOrderHead()
         } else {
           this.$message.error(data.msg)
         }
