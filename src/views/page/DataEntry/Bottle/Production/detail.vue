@@ -144,7 +144,7 @@ export default {
             this.$refs.readytimes.getDataList()
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
-            this.$refs.material.getDataList(this.formHeader.orderNo)
+            this.$refs.material.getDataList(this.formHeader)
             this.GetUser()
             this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
             this.$refs.textrecord.GetText(this.formHeader.orderId)

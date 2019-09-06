@@ -79,11 +79,12 @@ export default {
   },
   methods: {
     // 获取物料领用
-    getDataList (orderNo) {
+    getDataList (formHeader) {
       let status = ''
       this.$http(`${BOTTLE_API.BOTTLE_PRO_MATERIAL_LIST}`, 'POST', {
         orderId: this.$store.state.common.bottle.ProOrderId,
-        orderNo: orderNo
+        status: formHeader.orderStatus,
+        orderNo: formHeader.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
           this.MaterialList = data.list
