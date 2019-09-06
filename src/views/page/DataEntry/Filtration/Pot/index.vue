@@ -256,15 +256,15 @@ export default {
     // 清罐
     clearPot (item) {
       if (!this.isAuth('filter:holder:cleanProHolder')) {
-        this.$message.error('无权限操作')
+        this.$notify.error({title: '错误', message: '无权限操作'})
         return false
       }
       if (item.holderStatus === '0') {
-        this.$message.error('该罐暂不可进行清罐操作')
+        this.$notify.error({title: '错误', message: '该罐暂不可进行清罐操作'})
         return false
       }
       if (item.holderStatus !== '4') {
-        this.$message.error('未领用完不能清洗')
+        this.$notify.error({title: '错误', message: '未领用完不能清洗'})
         return false
       }
       this.$confirm('清罐后，账务将清零，请确认实物已空！', '清罐确认', {
@@ -274,7 +274,7 @@ export default {
       }).then(() => {
         this.$http(`${FILTRATION_API.FILTER_POT_CLEAN_API}`, 'POST', item).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'});
             this.GetDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
@@ -285,7 +285,7 @@ export default {
     // JBS弹窗
     JBSdialog (item) {
       if (!this.isAuth('filter:holder:jbsOut')) {
-        this.$message.error('无权限操作')
+        this.$notify.error({title: '错误', message: '无权限操作'})
         return false
       }
       this.JBSVisible = true
@@ -312,7 +312,7 @@ export default {
     // 转储弹窗
     TurnSavedialog (item) {
       if (!this.isAuth('filter:holder:dumpMaterial')) {
-        this.$message.error('无权限操作')
+        this.$notify.error({title: '错误', message: '无权限操作'})
         return false
       }
       this.TurnSaveVisible = true
@@ -338,7 +338,7 @@ export default {
     JBS () {
       if (this.JBSdataForm.isFull === '1') {
         if (!this.JBSdataForm.fullDate) {
-          this.$message.error('满罐时间必填')
+          this.$notify.error({title: '错误', message: '满罐时间必填'})
           return
         }
       }
@@ -347,7 +347,7 @@ export default {
           this.$http(`${FILTRATION_API.FILTER_JBS_API}`, 'POST', this.JBSdataForm).then(({data}) => {
             if (data.code === 0) {
               this.JBSVisible = false
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'});
               this.GetDataList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -360,7 +360,7 @@ export default {
     TurnSave () {
       if (this.TurnSavedataForm.isFull === '1') {
         if (!this.TurnSavedataForm.fullDate) {
-          this.$message.error('满罐时间必填')
+          this.$notify.error({title: '错误', message: '满罐时间必填'})
           return
         }
       }
@@ -369,7 +369,7 @@ export default {
           this.$http(`${FILTRATION_API.FILTER_TURNSAVE_API}`, 'POST', this.TurnSavedataForm).then(({data}) => {
             if (data.code === 0) {
               this.TurnSaveVisible = false
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'});
               this.GetDataList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})

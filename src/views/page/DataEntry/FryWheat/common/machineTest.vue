@@ -105,7 +105,7 @@ export default {
       this.machineTest.forEach((item, index) => {
         if (!item.cokingRate || !item.expandRate || !item.piecesRate) {
           ty = false
-          this.$message.error('必填项未填')
+          this.$notify.error({title: '错误', message: '必填项未填'})
           return false
         }
       })
@@ -117,7 +117,7 @@ export default {
       }
       this.$http(`${WHT_API.MACHINETESTUPDATE_API}`, 'POST', this.machineTest).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('保存成功')
+          this.$notify({title: '成功', message: '保存成功', type: 'success'});
           this.visible = false
         } else {
           this.$notify.error({title: '错误', message: data.msg})

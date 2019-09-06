@@ -428,19 +428,19 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     if (this.params.workshopId === '') {
-      this.$message.error('请选择车间')
+      this.$notify.error({title: '错误', message: '请选择车间'})
       return
     }
     if ((this.params.zqDate === '' || !this.params.zqDate) && this.params.orderNo === '') {
-      this.$message.error('制曲日期或订单请选填一项')
+      this.$notify.error({title: '错误', message: '制曲日期或订单请选填一项'})
       return false
     }
     if (this.params.productStatus === '') {
-      this.$message.error('请选择生产状态')
+      this.$notify.error({title: '错误', message: '请选择生产状态'})
       return
     }
     // 保存选项值到common store
@@ -540,14 +540,14 @@ export default class Index extends Vue {
           officialWorker.init(row.deptId, row.userId)
         })
       } else {
-        this.$message.error('请选择工序')
+        this.$notify.error({title: '错误', message: '请选择工序'})
       }
     } else if (row.userType === EMPType.TEMP) {
       this.$nextTick(() => {
         temporaryWorker.init(row)
       })
     } else {
-      this.$message.error('请选择人员属性')
+      this.$notify.error({title: '错误', message: '请选择人员属性'})
     }
   }
   // 员工确认
@@ -568,7 +568,7 @@ export default class Index extends Vue {
   }
   save () {
     if (!this.datalist || this.datalist.length === 0) {
-      this.$message.error('请先新增数据')
+      this.$notify.error({title: '错误', message: '请先新增数据'})
       return
     }
     this.$confirm('确认保存，是否继续?', '提示', {
@@ -578,31 +578,31 @@ export default class Index extends Vue {
     }).then(() => {
       for (let item of this.datalist) {
         if (!item.classType) {
-          this.$message.error('班次不能为空')
+          this.$notify.error({title: '错误', message: '班次不能为空'})
           return
         }
         if (!item.deptId || item.deptId === '') {
-          this.$message.error('工序不能为空')
+          this.$notify.error({title: '错误', message: '工序不能为空'})
           return
         }
         if (!item.userType) {
-          this.$message.error('人员属性不能为空')
+          this.$notify.error({title: '错误', message: '人员属性不能为空'})
           return
         }
         if (!item.userId || item.userId.length === 0) {
-          this.$message.error('作业人员不能为空')
+          this.$notify.error({title: '错误', message: '作业人员不能为空'})
           return
         }
         if (!item.startDate || item.startDate === '') {
-          this.$message.error('开始时间不能为空')
+          this.$notify.error({title: '错误', message: '开始时间不能为空'})
           return
         }
         if (!item.dinner || item.dinner === '') {
-          this.$message.error('用餐时间不能为空')
+          this.$notify.error({title: '错误', message: '用餐时间不能为空'})
           return
         }
         if (!item.endDate || item.endDate === '') {
-          this.$message.error('结束时间不能为空')
+          this.$notify.error({title: '错误', message: '结束时间不能为空'})
           return
         }
       }
@@ -616,7 +616,7 @@ export default class Index extends Vue {
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(err => {
-        this.$message.error('保存失败，' + err)
+        this.$notify.error({title: '错误', message: '保存失败，' + err})
       })
     })
   }
@@ -643,7 +643,7 @@ export default class Index extends Vue {
       flag = this.isAuth('sys:kjmOutMaterial:list')
     }
     if (!flag) {
-      this.$message.error('无权限查看' + page)
+      this.$notify.error({title: '错误', message: '无权限查看' + page})
       return
     }
     this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)

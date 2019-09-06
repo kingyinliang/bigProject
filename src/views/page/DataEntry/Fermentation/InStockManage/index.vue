@@ -342,11 +342,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择车间')
+    //   this.$notify.error({title: '错误', message: '请选择车间'})
     //   return
     // }
     // if (this.params.potId === '') {
@@ -451,20 +451,20 @@ export default class Index extends Vue {
   }
   validate () {
     if (!this.selectedList || this.selectedList.length === 0) {
-      this.$message.error('请选择要入库的订单')
+      this.$notify.error({title: '错误', message: '请选择要入库的订单'})
       return false
     }
     for (let item of this.selectedList) {
       if (!item.inAmount || item.inAmount === '') {
-        this.$message.error('入库数不能为空')
+        this.$notify.error({title: '错误', message: '请选择要入库的订单'})
         return false
       }
       if (item.batch === null || item.batch === '') {
-        this.$message.error('批次不能为空')
+        this.$notify.error({title: '错误', message: '批次不能为空'})
         return false
       }
       if (item.batch.length !== 10) {
-        this.$message.error('批次长度为10')
+        this.$notify.error({title: '错误', message: '批次长度为10'})
         return false
       }
     }

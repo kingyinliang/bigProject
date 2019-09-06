@@ -250,7 +250,7 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的容器')
+        this.$notify.error({title: '错误', message: '请选择要删除的容器'})
       } else {
         this.$confirm('确认删除容器, 是否继续?', '删除容器', {
           confirmButtonText: '确定',

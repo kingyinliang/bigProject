@@ -238,7 +238,7 @@ export default {
           str === 'addSup' ? this.addSupOverData = data : this.SupOverData = data
           this.visible = true
         } else {
-          this.$message.error('请选择数据')
+          this.$notify.error({title: '错误', message: '请选择数据'})
         }
       }
     },
@@ -264,7 +264,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
-          this.$message.success('操作成功')
+          this.$notify({title: '成功', message: '操作成功', type: 'success'});
           // this.GetOrderHead()
         } else {
           this.$notify.error({title: '错误', message: data.msg})
@@ -376,13 +376,13 @@ export default {
             this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
           })
           Promise.all([net0]).then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'});
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -391,13 +391,13 @@ export default {
             this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
           })
           Promise.all([net0]).then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'});
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },
@@ -409,23 +409,23 @@ export default {
         if (item.delFlag === '0') {
           if (!item.batch) {
             ty = false
-            this.$message.error('批次必填')
+            this.$notify.error({title: '错误', message: '批次必填'})
             return false
           }
           if (item.batch.length !== 10) {
             ty = false
-            this.$message.error('批次长度限制10位')
+            this.$notify.error({title: '错误', message: '批次长度限制10位'})
             return false
           }
           if (!item.receiveAmount) {
             ty = false
-            this.$message.error('领用数量必填')
+            this.$notify.error({title: '错误', message: '领用数量必填'})
             return false
           }
           if (!st) {
             if (item.supStatus !== '已确认') {
               ty = false
-              this.$message.error('品保未确认')
+              this.$notify.error({title: '错误', message: '品保未确认'})
               return false
             }
           }
@@ -445,13 +445,13 @@ export default {
             console.log(sum)
             if (sum !== item.adjustAmount * 1) {
               ty = false
-              this.$message.error('领用数量不等于需求数量')
+              this.$notify.error({title: '错误', message: '领用数量不等于需求数量'})
             }
           } else if (data1 === 'SupDate') {
             console.log(sum)
             if (sum !== item.addAmount * 1) {
               ty = false
-              this.$message.error('领用数量不等于添加数量')
+              this.$notify.error({title: '错误', message: '领用数量不等于添加数量'})
             }
           }
         }

@@ -108,7 +108,7 @@ export default {
     // 批量删除
     delList () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的类别')
+        this.$notify.error({title: '错误', message: '请选择要删除的类别'})
       } else {
         this.$confirm('确认删除类别, 是否继续?', '删除类别', {
           confirmButtonText: '确定',

@@ -341,60 +341,60 @@ export default {
       let ty = true
       if (this.craftfrom.preheatDate === '' || !this.craftfrom.preheatDate) {
         ty = false
-        this.$message.error('预热开始时间不能为空')
+        this.$notify.error({title: '错误', message: '预热开始时间不能为空'})
         return false
       }
       if (this.craftfrom.unloadingStartDate === '' || !this.craftfrom.unloadingStartDate) {
         ty = false
-        this.$message.error('下料开始时间不能为空')
+        this.$notify.error({title: '错误', message: '下料开始时间不能为空'})
         return false
       }
       if (!this.craftfrom.unloadingEndDate || this.craftfrom.unloadingEndDate === '') {
         ty = false
-        this.$message.error('下料结束时间不能为空')
+        this.$notify.error({title: '错误', message: '下料结束时间不能为空'})
         return false
       }
       if (!this.craftfrom.frequenceRunWater || !this.craftfrom.realRate || !this.craftfrom.weightRunWater || !this.craftfrom.speedRunWater || !this.craftfrom.oncePreheatFrequency || !this.craftfrom.secondPreheatFrequency || !this.craftfrom.secondPreheatTemp || !this.craftfrom.unloadingSpeed || this.craftfrom.frequenceRunWater === '' || this.craftfrom.realRate === '' || this.craftfrom.weightRunWater === '' || this.craftfrom.speedRunWater === '' || this.craftfrom.oncePreheatFrequency === '' || this.craftfrom.secondPreheatFrequency === '' || this.craftfrom.secondPreheatTemp === '' || this.craftfrom.unloadingSpeed === '') {
         ty = false
-        this.$message.error('煮豆润水参数不能为空')
+        this.$notify.error({title: '错误', message: '煮豆润水参数不能为空'})
         return false
       }
       if (this.lishuiList.length === 0) {
         ty = false
-        this.$message.error('煮豆润水过程监控数据记录未填')
+        this.$notify.error({title: '错误', message: '煮豆润水过程监控数据记录未填'})
         return false
       }
       for (let items of this.lishuiList) {
         if (items.delFlag === '0') {
           if (!items.guardDate || items.guardDate === '' || !items.runWaterTemp || items.runWaterTemp === '' || !items.preheatTemp || items.preheatTemp === '' || !items.unloadingWeight || items.unloadingWeight === '' || !items.runWaterSpeed || items.runWaterSpeed === '') {
             ty = false
-            this.$message.error('煮豆润水过程监控数据必填项不能为空')
+            this.$notify.error({title: '错误', message: '煮豆润水过程监控数据必填项不能为空'})
             return false
           }
         }
       }
       if (this.craftfrom.cookingFrequency === '' || this.craftfrom.upFrequency === '' || this.craftfrom.downFrequency === '' || !this.craftfrom.cookingFrequency || !this.craftfrom.upFrequency || !this.craftfrom.downFrequency) {
         ty = false
-        this.$message.error('连续蒸煮参数不能为空')
+        this.$notify.error({title: '错误', message: '连续蒸煮参数不能为空'})
         return false
       }
       for (let items of this.zhengzhuList) {
         if (items.delFlag === '0') {
           if (!items.guardTime || items.guardTime === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.downCooling || items.downCooling === '') {
             ty = false
-            this.$message.error('连续蒸煮监控数据必填项不能为空')
+            this.$notify.error({title: '错误', message: '连续蒸煮监控数据必填项不能为空'})
             return false
           }
         }
       }
       if (this.zhengzhuList.length === 0) {
         ty = false
-        this.$message.error('过程监控数据记录未填')
+        this.$notify.error({title: '错误', message: '过程监控数据记录未填'})
         return false
       }
       if (this.hunheList.length === 0) {
         ty = false
-        this.$message.error('混合入曲控制未填')
+        this.$notify.error({title: '错误', message: '混合入曲控制未填'})
         return false
       }
       this.hunheList.forEach((item) => {
@@ -406,7 +406,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$message.error('混合入曲控制必填项未填')
+        this.$notify.error({title: '错误', message: '混合入曲控制必填项未填'})
         return false
       }
       return ty
@@ -545,7 +545,7 @@ export default {
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
-        this.$message.error(error)
+        this.$notify.error({title: '错误', message: error})
       }).finally(() => {
         this.$emit('setApplyCraftState', this.craftfrom.status)
       })

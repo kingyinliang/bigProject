@@ -206,7 +206,7 @@ export default class Index extends Vue {
   }
   getDataList () {
     // if (this.params.factoryId === '') {
-    //   this.$message.error('请选择生产工厂')
+    //   this.$notify.error({title: '错误', message: '请选择生产工厂'})
     //   return
     // }
     // if (this.params.workshopId === '') {

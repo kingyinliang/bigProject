@@ -158,7 +158,7 @@ export default {
     addIn () {
       if (this.dataForm.isFull === '1') {
         if (!this.dataForm.fullDate) {
-          this.$message.error('满罐时间必填')
+          this.$notify.error({title: '错误', message: '满罐时间必填'})
           return
         }
       }

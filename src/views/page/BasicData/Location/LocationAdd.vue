@@ -160,7 +160,7 @@ export default {
     // 保存
     dataFormSubmit () {
       if (this.formatDate.materialCode && this.formatDate.materialCode.length !== 10) {
-        this.$message.error('物料编码为10位非必填')
+        this.$notify.error({title: '错误', message: '物料编码为10位非必填'})
         return false
       }
       if (this.submitType) {

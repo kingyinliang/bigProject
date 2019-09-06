@@ -434,7 +434,7 @@ export default {
         this.$http(`${PACKAGING_API.PKGINUPDATE_API}`, 'POST', this.InDate).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error('生产入库' + data.msg)
+            this.$notify.error({title: '错误', message: '生产入库' + data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -532,7 +532,7 @@ export default {
       let obj = {}
       if (this.InDate.filter(item => item.delFlag !== '1').length === 0) {
         ty = false
-        this.$message.error('生产入库没有数据')
+        this.$notify.error({title: '错误', message: '生产入库没有数据'})
         return false
       }
       this.InDate.forEach((item) => {
@@ -545,23 +545,23 @@ export default {
           // }
           if (!item.output) {
             ty = false
-            this.$message.error('生产入库产出数不能为空或0')
+            this.$notify.error({title: '错误', message: '生产入库产出数不能为空或0'})
             return false
           }
           if (!item.classType) {
             ty = false
-            this.$message.error('生产入库班次不能为空')
+            this.$notify.error({title: '错误', message: '生产入库班次不能为空'})
             return false
           }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false
-              this.$message.error('生产入库请录入10位批次号')
+              this.$notify.error({title: '错误', message: '生产入库请录入10位批次号'})
               return false
             }
           } else {
             ty = false
-            this.$message.error('生产入库批次项未填')
+            this.$notify.error({title: '错误', message: '生产入库批次项未填'})
             return false
           }
           if (item.aiShelves !== '' && item.aiShelves !== '0') {
@@ -657,7 +657,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InVlist = data.vlist
-          this.$message.success('刷新成功')
+          this.$notify({title: '成功', message: '刷新成功', type: 'success'});
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

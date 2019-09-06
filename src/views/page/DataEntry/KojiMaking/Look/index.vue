@@ -146,7 +146,7 @@ export default {
       this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -209,7 +209,7 @@ export default {
           that.$refs.craft.savefeel(resolve, reject)
         })
         Promise.all([net1, net2, net3, excSaveNet, textSaveNet, net101]).then(function () {
-          that.$message.success(that.succmessage)
+          that.$notify({title: '成功', message: that.succmessage, type: 'success'})
           that.GetheadList()
           that.isRedact = false
         }).catch(() => {

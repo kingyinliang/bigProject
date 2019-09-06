@@ -326,11 +326,11 @@ export default {
     // 获取列表
     GetAuditList (st) {
       if (!this.plantList.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       if (!this.plantList.workShop) {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       if (st) {
@@ -382,12 +382,12 @@ export default {
             this.ReText = ''
             this.reData = {}
             this.GetAuditList()
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'});
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
         }).catch(() => {
-          this.$message.error('网络错误')
+          this.$notify.error({title: '错误', message: '网络错误'})
           this.lodingStatus1 = false
         })
       })
@@ -461,7 +461,7 @@ export default {
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus1 = false
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'});
             row.redact = false
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
@@ -470,7 +470,7 @@ export default {
           }
           this.GetAuditList()
         }).catch(() => {
-          this.$message.error('网络错误')
+          this.$notify.error({title: '错误', message: '网络错误'})
           this.lodingStatus1 = false
         })
       }
@@ -482,15 +482,15 @@ export default {
     // 审核拒绝
     repulseAutios () {
       if (this.plantList.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       if (this.plantList.workShop === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return false
       }
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return false
       }
       if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0 || this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('过滤') === 0) {
@@ -499,7 +499,7 @@ export default {
         this.visible = true
       }
       // if (this.multipleSelection.length <= 0) {
-      //   this.$message.error('请选择订单')
+      //   this.$notify.error({title: '错误', message: '请选择订单'})
       // } else {
       //   this.visible = true
       // }
@@ -510,7 +510,7 @@ export default {
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
-        this.$message.error('请填写不通过原因')
+        this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
         this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
           confirmButtonText: '确定',
@@ -530,12 +530,12 @@ export default {
               this.visible = false
               this.Text = ''
               this.GetAuditList()
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'});
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }
           }).catch(() => {
-            this.$message.error('网络错误')
+            this.$notify.error({title: '错误', message: '网络错误'})
             this.lodingStatus1 = false
           })
         })
@@ -544,14 +544,14 @@ export default {
     // 审核通过
     subAutio () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         let st = false
         if (this.workshop.find(item => item.deptId === this.plantList.workShop).deptName.indexOf('杀菌') === 0) {
           this.multipleSelection.forEach((item) => {
             if (item.confActivity2 * 1 > 0) {} else {
               st = true
-              this.$message.error('机器工时必须大于0')
+              this.$notify.error({title: '错误', message: '机器工时必须大于0'})
               return false
             }
           })
@@ -573,7 +573,7 @@ export default {
           this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.lodingStatus1 = false
             if (data.code === 0) {
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'});
               this.GetAuditList()
               if (data) {}
             } else {
@@ -581,7 +581,7 @@ export default {
               this.$notify.error({title: '错误', message: data.msg})
             }
           }).catch(() => {
-            this.$message.error('网络错误')
+            this.$notify.error({title: '错误', message: '网络错误'})
             this.lodingStatus1 = false
           })
         })

@@ -113,11 +113,11 @@ export default {
   methods: {
     GetDataList () {
       if (!this.formHeader.factory || !this.formHeader.workShop) {
-        this.$message.error('请选择工厂与车间')
+        this.$notify.error({title: '错误', message: '请选择工厂与车间'})
         return
       }
       if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
-        this.$message.error('生产日期或订单请选填一项')
+        this.$notify.error({title: '错误', message: '生产日期或订单请选填一项'})
         return false
       }
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
@@ -154,17 +154,17 @@ export default {
     toRouter (str, item) {
       let url
       if (!item.orderId) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       if (str === '1') {
         let st = this.Materails.filter(items => items.code === item.materialCode)
         if (st.length === 0) {
-          this.$message.error('非特殊物料，不能跳转')
+          this.$notify.error({title: '错误', message: '非特殊物料，不能跳转'})
           return
         }
         if (!this.isAuth('ste:semiMaterial:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.seiOrderId = item.orderId
@@ -173,7 +173,7 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
         if (!this.isAuth('ste:supMaterial:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.acceOrderId = item.orderId
@@ -182,14 +182,14 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'
       } else if (str === '3') {
         if (!this.isAuth('ste:tec:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.craftOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-craftControl-index'
       } else if (str === '4') {
         if (!this.isAuth('ste:inStorage:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.inOrderId = item.orderId

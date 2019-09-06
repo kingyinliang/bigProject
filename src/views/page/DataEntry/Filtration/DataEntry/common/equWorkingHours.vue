@@ -122,7 +122,7 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$message.error('请录入设备工时数据')
+        this.$notify.error({title: '错误', message: '请录入设备工时数据'})
         return false
       }
       return ty

@@ -151,7 +151,7 @@ export default {
               }
             } else {
               this.type = true
-              this.$message.error('人员工号和虚拟工号必须添加一个')
+              this.$notify.error({title: '错误', message: '人员工号和虚拟工号必须添加一个'})
             }
           }
         }

@@ -94,7 +94,7 @@ export default {
     // 获取列表
     GetOrderList () {
       if (!this.plantList.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}?deptId=${this.plantList.workshop}&flag=012`, 'GET', {}).then(({data}) => {
@@ -111,7 +111,7 @@ export default {
     // 去详请
     goBeanPulpDetail (item) {
       if (!isAuth('gra:material:list')) {
-        this.$message.error('您无权限查看详情')
+        this.$notify.error({title: '错误', message: '您无权限查看详情'})
         return
       }
       this.BeanPulp = {

@@ -112,12 +112,12 @@ export default {
       this.InDataList.forEach((item) => {
         if (!(item.production && item.batch)) {
           ty = false
-          this.$message.error('生产入库必填项未填')
+          this.$notify.error({title: '错误', message: '生产入库必填项未填'})
           return false
         }
         if (item.batch.length !== 10) {
           ty = false
-          this.$message.error('生产入库批次十位')
+          this.$notify.error({title: '错误', message: '生产入库批次十位'})
           return false
         }
       })

@@ -93,7 +93,7 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPLIST_API 获取物料同步状态
    */
-  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_MATERIAL',
+  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState',
   /**
    * @property {string} SAPDETAIL_API 物料详情
    */
@@ -180,7 +180,7 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPORDERUPDATE_API 获取同步订单状态
    */
-  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_ORDER',
+  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState',
   /**
    * @property {string} CAPALIST_API 产能列表
    */
@@ -228,7 +228,7 @@ export const BASICDATA_API = {
   /**
    * 原料入库记录同步状态
    */
-  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_INSTORAGE',
+  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState',
   /**
    * 豆粕 + 小麦 罐
    */
@@ -778,7 +778,7 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出 获取状态
    *  */
-  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState',
   /**
    *  包装车间 - 产量总工时、导出
    */
@@ -1410,7 +1410,8 @@ export const FERMENTATION_API = {
   /*
    * 订单申请
    */
-  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrderThread',
+  ORDER_APPLY_STATUS_API: HOST + '/fer/order/applyFerOrderThread',
   /**
    * 报工管理
    */

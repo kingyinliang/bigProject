@@ -270,7 +270,7 @@ export default {
     // 查询
     SearchList () {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSEARCHLIST}`, 'POST', this.formHeader).then(({data}) => {
@@ -328,19 +328,19 @@ export default {
         batchList.push(item.batch)
         item.ID = this.ID
         if (!item.receiveAmount || item.receiveAmount === '') {
-          this.$message.error('请填写实际领料')
+          this.$notify.error({title: '错误', message: '请填写实际领料'})
           return false
         }
         if (!item.batch || item.batch === '') {
-          this.$message.error('请填写批次')
+          this.$notify.error({title: '错误', message: '请填写批次'})
           return false
         }
         if (item.batch.length !== 10) {
-          this.$message.error('批次应为10位')
+          this.$notify.error({title: '错误', message: '批次应为10位'})
           return false
         }
         if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
-          this.$message.error('原汁物料需选择罐号')
+          this.$notify.error({title: '错误', message: '原汁物料需选择罐号'})
           return false
         }
         // if (/六月鲜/g.test(this.materialName)) {
@@ -351,12 +351,12 @@ export default {
         // }
       }
       if (new Set(batchList).size !== batchList.length) {
-        this.$message.error('批次不能重复')
+        this.$notify.error({title: '错误', message: '批次不能重复'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('保存成功')
+          this.$notify({title: '成功', message: '保存成功', type: 'success'});
           // this.SearchList()
           this.dialogTableVisible = false
         } else {
@@ -369,14 +369,14 @@ export default {
     },
     SavedForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
       } else {
         this.multipleSelection.forEach((item) => {
           item.status = '已调配'
         })
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'});
             this.isRedact = false
             this.SearchList()
           } else {
@@ -387,16 +387,16 @@ export default {
     },
     SubmitForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
         return false
       }
       for (let item of this.multipleSelection) {
         if (item.isUpdate === false) {
-          this.$message.error('请先保存调配列表（调配单：' + item.orderNo + '）')
+          this.$notify.error({title: '错误', message: '请先保存调配列表（调配单：' + item.orderNo + '）'})
           return false
         }
         if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
-          this.$message.error('请填写必填项')
+          this.$notify.error({title: '错误', message: '请填写必填项'})
           return false
         }
       }
@@ -409,7 +409,7 @@ export default {
           if (data.code === 0) {
             this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
-                this.$message.success('提交成功')
+                this.$notify({title: '成功', message: '提交成功', type: 'success'});
                 this.isRedact = false
                 this.SearchList()
               } else {

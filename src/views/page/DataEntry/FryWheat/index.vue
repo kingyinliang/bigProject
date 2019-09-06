@@ -289,7 +289,7 @@ export default {
             that.$router.push({ name: `DataEntry-FryWheat-EnterData-dataEntryIndex` })
           }, 100)
         } else {
-          this.$message.error('请选择订单号')
+          this.$notify.error({title: '错误', message: '请选择订单号'})
         }
       } else {
         // 存储脱皮的state
@@ -403,15 +403,15 @@ export default {
     // 查询
     GetOrderList (st) {
       if (this.plantList.factoryid === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       if (this.plantList.workshopid === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
-        this.$message.error('生产日期或订单请选填一项')
+        this.$notify.error({title: '错误', message: '生产日期或订单请选填一项'})
         return false
       }
       this.lodingStatus = true
@@ -448,7 +448,7 @@ export default {
           this.lodingStatus = false
         })
       } else {
-        this.$message.error('请选择生产状态')
+        this.$notify.error({title: '错误', message: '请选择生产状态'})
         return
       }
       this.type = this.plantList.status
@@ -486,7 +486,7 @@ export default {
     // 新增人员
     AddPeople () {
       if (this.plantList.workshopid === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       // if (this.addRowStatus === 0) {
@@ -535,14 +535,14 @@ export default {
             this.$refs.officialWorker.init(row.deptId, row.userId)
           })
         } else {
-          this.$message.error('请选择工序')
+          this.$notify.error({title: '错误', message: '请选择工序'})
         }
       } else if (row.userType === '临时工') {
         this.$nextTick(() => {
           this.$refs.temporaryWorker.init(row)
         })
       } else {
-        this.$message.error('请选择人员属性')
+        this.$notify.error({title: '错误', message: '请选择人员属性'})
       }
     },
     // 员工确认
@@ -564,7 +564,7 @@ export default {
         }).then(() => {
           this.datalist.map((item) => {
             if (item.classType === undefined || item.deptId === undefined || item.userType === undefined || item.userId === undefined || item.startDate === undefined || item.endDate === undefined || item.dinner === undefined) {
-              this.$message.error('除备注外其他选项必填')
+              this.$notify.error({title: '错误', message: '除备注外其他选项必填'})
               this.abnorsave = false
               return false
             } else {
@@ -582,7 +582,7 @@ export default {
             this.lodingStatus = true
             this.$http(`${WHT_API.CINDEXUPDATEUSER}`, 'POST', this.datalist).then(({data}) => {
               if (data.code === 0) {
-                // this.$message.success('操作成功')
+                // this.$notify({title: '成功', message: '操作成功', type: 'success'});
                 this.$message({
                   type: 'success',
                   message: '保存成功'

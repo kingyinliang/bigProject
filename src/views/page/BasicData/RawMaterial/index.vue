@@ -181,17 +181,17 @@ export default {
       })
     },
     GetDataSynchronismStatus () {
-      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISMSTASUS_API}`, 'GET').then(({data}) => {
+      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISMSTASUS_API}`, 'GET', {asyncType: 'ASYNC_SAP_INSTORAGE'}).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
               this.loading = false
               clearInterval(this.orderTime)
-              this.$message.error('同步失败')
+              this.$notify.error({title: '错误', message: '同步失败'})
             } else if (data.asyncRecord.asyncStatus === '1') {
               this.loading = false
               clearInterval(this.orderTime)
-              this.$message.success('同步成功')
+              this.$notify({title: '成功', message: '同步成功', type: 'success'});
               this.GetList()
             }
           }

@@ -138,7 +138,7 @@ export default {
       this.RecordList.forEach((item) => {
         if (!(item.date && item.embryoBatch && item.embryoAmount)) {
           ty = false
-          this.$message.error('投胚记录必填项未填')
+          this.$notify.error({title: '错误', message: '投胚记录必填项未填'})
           return false
         }
       })

@@ -311,11 +311,11 @@ export default {
     },
     GetList (st) {
       if (!this.formHeader.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       if (!this.formHeader.workShop) {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return false
       }
       if (st) {
@@ -359,7 +359,7 @@ export default {
         if (valid) {
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTGNSAVE}`, 'POST', this.formGn).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('保存成功')
+              this.$notify({title: '成功', message: '保存成功', type: 'success'});
               this.GnDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()
@@ -440,18 +440,18 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.formJsb.receiveAmount > this.formJsb.amount) {
-            this.$message.error('领用量不能大于库存')
+            this.$notify.error({title: '错误', message: '领用量不能大于库存'})
             return false
           }
           if (this.formJsb.isFull === '1' && (this.formJsb.fullDate === '' || !this.formJsb.fullDate)) {
-            this.$message.error('满灌时请选择满罐时间')
+            this.$notify.error({title: '错误', message: '满灌时请选择满罐时间'})
             return false
           }
           this.formJsb.factory = this.formHeader.factory
           this.formJsb.workShop = this.formHeader.workShop
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTJSBSAVE}`, 'POST', this.formJsb).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('保存成功')
+              this.$notify({title: '成功', message: '保存成功', type: 'success'});
               this.JsbDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()
@@ -468,16 +468,16 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.formZc.receiveAmount > this.formZc.amount) {
-            this.$message.error('领用量不能大于库存')
+            this.$notify.error({title: '错误', message: '领用量不能大于库存'})
             return false
           }
           if (this.formZc.isFull === '1' && (this.formZc.fullDate === '' || !this.formZc.fullDate)) {
-            this.$message.error('满灌时请选择满罐时间')
+            this.$notify.error({title: '错误', message: '满灌时请选择满罐时间'})
             return false
           }
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTZCSAVE}`, 'POST', this.formZc).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('保存成功')
+              this.$notify({title: '成功', message: '保存成功', type: 'success'});
               this.ZcDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()

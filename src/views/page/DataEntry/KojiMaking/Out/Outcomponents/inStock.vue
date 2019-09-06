@@ -214,27 +214,27 @@ export default {
       this.InStock.forEach((item) => {
         if (item.sauceWeight && item.batch) {} else {
           ty = false
-          this.$message.error('生产入库必填项未填')
+          this.$notify.error({title: '错误', message: '生产入库必填项未填'})
           return false
         }
         if (item.pulpWeight) {} else {
           ty = false
-          this.$message.error('生产入库豆粕量未填')
+          this.$notify.error({title: '错误', message: '生产入库豆粕量未填'})
           return false
         }
         if (item.wheatWeight) {} else {
           ty = false
-          this.$message.error('生产入库麦粉量未填')
+          this.$notify.error({title: '错误', message: '生产入库麦粉量未填'})
           return false
         }
         if (item.saltWaterWeight) {} else {
           ty = false
-          this.$message.error('生产入库盐水量未填')
+          this.$notify.error({title: '错误', message: '生产入库盐水量未填'})
           return false
         }
         if (item.batch.length < 10) {
           ty = false
-          this.$message.error('生产入库批次必须为10位')
+          this.$notify.error({title: '错误', message: '生产入库批次必须为10位'})
           return false
         }
       })

@@ -102,7 +102,7 @@ export default {
     // 申请订单
     ApplyOrder () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       this.multipleSelection.forEach((item, index) => {
@@ -145,7 +145,7 @@ export default {
     backIn (row) {
       this.$http(`${SQU_API.SUM_ORDER_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('退回成功')
+          this.$notify({title: '成功', message: '退回成功', type: 'success'});
           this.$emit('GetList')
         } else {
           this.$notify.error({title: '错误', message: data.msg})

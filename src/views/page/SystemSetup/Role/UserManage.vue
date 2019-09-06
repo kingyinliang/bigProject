@@ -79,7 +79,7 @@ export default {
           }
         })
       } else {
-        this.$message.error('请分配人员')
+        this.$notify.error({title: '错误', message: '请分配人员'})
       }
     }
   },

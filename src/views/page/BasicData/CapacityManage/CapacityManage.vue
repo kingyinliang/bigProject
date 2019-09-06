@@ -214,13 +214,13 @@ export default {
           this.$refs.capaaddupdate.init(this.deptId, data)
         })
       } else {
-        this.$message.error('请先选择部门')
+        this.$notify.error({title: '错误', message: '请先选择部门'})
       }
     },
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的产能')
+        this.$notify.error({title: '错误', message: '请选择要删除的产能'})
       } else {
         this.$confirm('确认删除该物料产能, 是否继续?', '删除产能', {
           confirmButtonText: '确定',

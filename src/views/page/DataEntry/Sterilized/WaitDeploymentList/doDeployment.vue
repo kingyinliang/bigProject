@@ -259,7 +259,7 @@ export default {
     // 新增订单
     SaveOderNo () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选订单')
+        this.$notify.error({title: '错误', message: '请勾选订单'})
       } else {
         let materialCode
         let dispatchMan
@@ -272,11 +272,11 @@ export default {
         }
         for (let item of this.multipleSelection) {
           if (materialCode !== item.materialCode) {
-            this.$message.error('物料冲突，请重新选择订单！')
+            this.$notify.error({title: '错误', message: '物料冲突，请重新选择订单！'})
             return false
           }
           if (dispatchMan !== item.dispatchMan) {
-            this.$message.error('调度人员冲突，请重新选择订单！')
+            this.$notify.error({title: '错误', message: '调度人员冲突，请重新选择订单！'})
             return false
           }
         }
@@ -303,7 +303,7 @@ export default {
     },
     SaveOrderNo () {
       if (this.orderList.length === 0) {
-        this.$message.error('请添加订单')
+        this.$notify.error({title: '错误', message: '请添加订单'})
       } else {
         let params = {
           factory: this.$store.state.common.Sterilized.factoryId,
@@ -325,7 +325,7 @@ export default {
             })
             this.$http(`${STERILIZED_API.DODEPLOYMENTLISTSAVE}`, 'POST', this.orderList).then(({data}) => {
               if (data.code === 0) {
-                this.$message.success('保存成功')
+                this.$notify({title: '成功', message: '保存成功', type: 'success'});
                 this.GetInfoList(this.allocateId)
                 this.isRedact = false
                 this.Sterilized = {
@@ -349,7 +349,7 @@ export default {
         type: 'warning'
       }).then(() => {
         if (this.orderList.length === 0) {
-          this.$message.error('请添加订单')
+          this.$notify.error({title: '错误', message: '请添加订单'})
           return false
         }
         if (this.allocateId === '') {
@@ -377,7 +377,7 @@ export default {
                   let params = [this.formHeaders]
                   this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
                     if (data.code === 0) {
-                      this.$message.success('生成成功')
+                      this.$notify({title: '成功', message: '生成成功', type: 'success'});
                       this.GetInfoList(this.allocateId)
                       this.isRedact = false
                       this.Sterilized = {
@@ -409,7 +409,7 @@ export default {
               let params = [this.formHeaders]
               this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
                 if (data.code === 0) {
-                  this.$message.success('生成成功')
+                  this.$notify({title: '成功', message: '生成成功', type: 'success'});
                   this.isRedact = false
                   this.GetInfoList(this.allocateId)
                 } else {
