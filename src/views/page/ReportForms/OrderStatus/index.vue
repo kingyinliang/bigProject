@@ -47,8 +47,8 @@
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" @click="ExportExcel(true)" style="float: right" v-if="isAuth('report:form:exportShopAttM')">导出</el-button>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right;margin-right: 10px" v-if="isAuth('ste:order:list')">查询</el-button>
+        <el-button type="primary" size="small" @click="ExportExcel(true)" style="float: right" v-if="isAuth('report:formh:getAllStatusList')">导出</el-button>
+        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right;margin-right: 10px" v-if="isAuth('report:formh:getAllStatusList')">查询</el-button>
         </el-form>
     </el-card>
     <el-card class="tableCard">
