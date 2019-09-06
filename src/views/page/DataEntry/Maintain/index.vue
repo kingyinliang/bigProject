@@ -338,7 +338,7 @@ export default {
       } else {
         if (row.different !== 0 || row.orgnDifferent) {
           if (!row.differentInfo) {
-            this.$message.error('差异说明必填')
+            this.$notify.error({title: '错误', message: '差异说明必填'})
             return false
           }
         }
@@ -346,7 +346,7 @@ export default {
         row.status = ''
         this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.noMaintainList.splice(this.noMaintainList.length, 0, {})
             this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
@@ -360,7 +360,7 @@ export default {
     save () {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
-          this.$message.error('差异说明必填')
+          this.$notify.error({title: '错误', message: '差异说明必填'})
           return false
         }
         this.$confirm('确认保存, 是否继续?', '保存', {
@@ -370,7 +370,7 @@ export default {
         }).then(() => {
           this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', this.MaintainList).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('保存成功')
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.GetMaintainList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -379,18 +379,18 @@ export default {
           this.GetMaintainList()
         })
       } else {
-        this.$message.error('请勾选后保存')
+        this.$notify.error({title: '错误', message: '请勾选后保存'})
       }
     },
     // 提交
     submit () {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
-          this.$message.error('差异说明必填')
+          this.$notify.error({title: '错误', message: '差异说明必填'})
           return false
         }
         if (!this.getverify1()) {
-          this.$message.error('车间入库数与机维组确认数不一致，请重新录入数据！')
+          this.$notify.error({title: '错误', message: '车间入库数与机维组确认数不一致，请重新录入数据！'})
           return false
         }
         this.$confirm('确认提交, 是否继续?', '提交', {
@@ -400,7 +400,7 @@ export default {
         }).then(() => {
           this.$http(`${MAINTAIN_API.MAINTAINSUB_API}`, 'POST', this.MaintainList).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('提交成功')
+              this.$notify({title: '成功', message: '提交成功', type: 'success'})
               this.GetMaintainList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -408,7 +408,7 @@ export default {
           })
         })
       } else {
-        this.$message.error('请勾选后保存')
+        this.$notify.error({title: '错误', message: '请勾选后保存'})
       }
     },
     // 改变每页条数

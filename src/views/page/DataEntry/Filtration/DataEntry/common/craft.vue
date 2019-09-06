@@ -374,7 +374,7 @@ export default {
           this.supMaterialList.splice(this.supMaterialList.indexOf(row), 1)
           return false
         } else {
-          this.$message.error('最后一条禁止删除')
+          this.$notify.error({title: '错误', message: '最后一条禁止删除'})
           return false
         }
       })
@@ -492,13 +492,13 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$message.error('请录入工艺控制数据')
+        this.$notify.error({title: '错误', message: '请录入工艺控制数据'})
         return false
       }
       for (let item of this.supMaterialList) {
         if (item.filterAidAmount === '' || !item.filterAidAmount || item.batch === '' || !item.batch) {
           ty = false
-          this.$message.error('工艺控制中辅料领用必填项不能为空')
+          this.$notify.error({title: '错误', message: '工艺控制中辅料领用必填项不能为空'})
           return false
         }
       }
@@ -530,7 +530,7 @@ export default {
       for (let item of SupMaTotal) {
         if (item.sum !== techTotal.find((items) => items.id === item.id).sum) {
           ty = false
-          this.$message.error(item.deviceName + ' 剂用量不相等')
+          this.$notify.error({title: '错误', message: item.deviceName + ' 剂用量不相等'})
           return false
         }
       }

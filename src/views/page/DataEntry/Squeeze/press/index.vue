@@ -174,23 +174,23 @@ export default {
     },
     SearchList () {
       if (!this.formHeader.factory || this.formHeader.factory === '') {
-        this.$message.error('请选择生产工厂')
+        this.$notify.error({title: '错误', message: '请选择生产工厂'})
         return false
       }
       if (!this.formHeader.workShop || this.formHeader.workShop === '') {
-        this.$message.error('请选择生产车间')
+        this.$notify.error({title: '错误', message: '请选择生产车间'})
         return false
       }
       if (!this.formHeader.productLine || this.formHeader.productLine === '') {
-        this.$message.error('请选择布浆线')
+        this.$notify.error({title: '错误', message: '请选择布浆线'})
         return false
       }
       if (!this.formHeader.pressure || this.formHeader.pressure === '') {
-        this.$message.error('请选择工序')
+        this.$notify.error({title: '错误', message: '请选择工序'})
         return false
       }
       if (!this.formHeader.productDate || this.formHeader.productDate === '') {
-        this.$message.error('请选择生产日期')
+        this.$notify.error({title: '错误', message: '请选择生产日期'})
         return false
       }
       this.contentshow = true
@@ -243,7 +243,7 @@ export default {
         })
       }
       Promise.all([net3, excSaveNet, textSaveNet]).then(function () {
-        that.$message.success(that.succmessage)
+        that.$notify({title: '成功', message: that.succmessage, type: 'success'})
         that.SearchList()
         that.isRedact = false
       }).catch(() => {

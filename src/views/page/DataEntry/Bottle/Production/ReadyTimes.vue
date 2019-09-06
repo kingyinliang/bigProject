@@ -328,37 +328,37 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$message.error('准备时间白班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$message.error('准备时间中班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$message.error('准备时间夜班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$message.error('准备时间多班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
           return false
         }
       }
       this.dataList.forEach((item) => {
         if (!(item.classes && item.content && item.startDate)) {
           ty = false
-          this.$message.error('设备时间必填项未填')
+          this.$notify.error({title: '错误', message: '设备时间必填项未填'})
           return false
         }
         if (item.dateLength * 1 <= 0) {
           ty = false
-          this.$message.error('设备时间工时不大于0')
+          this.$notify.error({title: '错误', message: '设备时间工时不大于0'})
           return false
         }
       })

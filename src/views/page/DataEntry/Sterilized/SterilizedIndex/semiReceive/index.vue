@@ -159,7 +159,7 @@ export default {
     },
     delRow (row) {
       if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
-        this.$message.error('最后一条了哦，不能再删了')
+        this.$notify.error({title: '错误', message: '最后一条了哦，不能再删了'})
       } else {
         row.delFlag = '1'
       }
@@ -225,13 +225,13 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -240,13 +240,13 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },
@@ -256,17 +256,17 @@ export default {
       this.MaterialDate.forEach((item) => {
         if (!item.hloderId) {
           ty = false
-          this.$message.error('罐号未填')
+          this.$notify.error({title: '错误', message: '罐号未填'})
           return false
         }
         if (!item.batch) {
           ty = false
-          this.$message.error('批次未填')
+          this.$notify.error({title: '错误', message: '批次未填'})
           return false
         }
         if (!item.receiveAmount) {
           ty = false
-          this.$message.error('实际领料未填')
+          this.$notify.error({title: '错误', message: '实际领料未填'})
           return false
         }
       })

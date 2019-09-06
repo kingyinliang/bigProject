@@ -63,7 +63,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error('修改文本' + data.msg)
+          this.$notify.error({title: '错误', message: '修改文本' + data.msg})
           if (reject) {
             reject('修改文本' + data.msg)
           }

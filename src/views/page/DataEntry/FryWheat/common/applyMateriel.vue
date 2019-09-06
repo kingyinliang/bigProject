@@ -195,33 +195,33 @@ export default {
     },
     validate () {
       if (this.materielDataList === undefined || this.materielDataList.length === 0) {
-        this.$message.error('物料领用未录入数据')
+        this.$notify.error({title: '错误', message: '物料领用未录入数据'})
         return false
       }
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.materialCode == null || item.materialCode.trim() === '') {
-            this.$message.error('物料不能为空')
+            this.$notify.error({title: '错误', message: '物料不能为空'})
             return false
           }
           if (item.deviceId == null || item.deviceId === '') {
-            this.$message.error('粮仓不能为空')
+            this.$notify.error({title: '错误', message: '粮仓不能为空'})
             return false
           }
           if (item.batch == null || item.batch.trim() === '') {
-            this.$message.error('物料批次不能为空')
+            this.$notify.error({title: '错误', message: '物料批次不能为空'})
             return false
           }
           if (item.batch.trim().length > 10) {
-            this.$message.error('物料批次长度不能超过10')
+            this.$notify.error({title: '错误', message: '物料批次长度不能超过10'})
             return false
           }
           if (item.wheatWeight === '') {
-            this.$message.error('小麦领用数不能为空')
+            this.$notify.error({title: '错误', message: '小麦领用数不能为空'})
             return false
           }
           if (item.wheatWeight <= 0) {
-            this.$message.error('小麦领用数必须大于0')
+            this.$notify.error({title: '错误', message: '小麦领用数必须大于0'})
             return false
           }
         }
@@ -315,7 +315,7 @@ export default {
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
-        this.$message.error(error)
+        this.$notify.error({title: '错误', message: error})
       }).finally(() => {
         this.$emit('setApplyMaterielState', inState)
       })
@@ -451,7 +451,7 @@ export default {
           let abc
           abc = this.cang.currentQuantity + this.materielDataListArray.find((items) => items.batch === this.cang.batch).quantotal
           if ((this.cang.wheatWeight + total) > abc) {
-            this.$message.error('领用数大于该批次剩余量')
+            this.$notify.error({title: '错误', message: '领用数大于该批次剩余量'})
             return false
           }
           if (currentRecord && currentRecord.length > 0) {

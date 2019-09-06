@@ -123,12 +123,12 @@ export default {
       this.MaterialList.forEach((item) => {
         if (!(item.batch && item.productUseAmount && item.supplier)) {
           ty = false
-          this.$message.error('物料领用必填项未填')
+          this.$notify.error({title: '错误', message: '物料领用必填项未填'})
           return false
         }
         if (item.batch.length !== 10) {
           ty = false
-          this.$message.error('物料领用批次十位')
+          this.$notify.error({title: '错误', message: '物料领用批次十位'})
           return false
         }
       })

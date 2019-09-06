@@ -294,7 +294,7 @@ export default {
     },
     SubmitInfo () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选调整数据')
+        this.$notify.error({title: '错误', message: '请勾选调整数据'})
         return false
       }
       let startStatus
@@ -320,7 +320,7 @@ export default {
       })
       this.$http(`${AUDIT_API.AUDIT_ADJUST_SUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('调整成功')
+          this.$notify({title: '成功', message: '调整成功', type: 'success'})
           this.GetList()
         } else {
           this.$notify.error({title: '错误', message: data.msg})

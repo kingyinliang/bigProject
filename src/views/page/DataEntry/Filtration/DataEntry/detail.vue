@@ -217,7 +217,7 @@ export default {
         return false
       }
       if (!this.$refs.instorage.countOutputNum) {
-        this.$message.error('入库数未0，不能提交')
+        this.$notify.error({title: '错误', message: '入库数未0，不能提交'})
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
@@ -280,7 +280,7 @@ export default {
         })
         Promise.all([headUpdate, net101, net102, net103, net104, inSubmit, excSaveNet, textSaveNet, aidSubmit]).then(function () {
           Promise.all([net201, net202, net203]).then(function () {
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
             that.GetOrder()
             that.isRedact = false
           }).catch(() => {
@@ -292,7 +292,7 @@ export default {
           that.$refs.instorage.UpdateIn(str, resolve, reject)
         })
         Promise.all([headUpdate, net101, net102, net103, net104, inSave, excSaveNet, textSaveNet]).then(function () {
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
           that.GetOrder()
           that.isRedact = false
         }).catch(function (reason) {

@@ -644,7 +644,7 @@ export default {
       let ty = true
       if (this.materialList.length === 0) {
         ty = false
-        this.$message.error('请填写种曲')
+        this.$notify.error({title: '错误', message: '请填写种曲'})
         return false
       }
       this.materialList.forEach((item) => {
@@ -656,7 +656,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$message.error('种曲必填项未填')
+        this.$notify.error({title: '错误', message: '种曲必填项未填'})
         return false
       }
       this.materialList.forEach((item) => {
@@ -668,7 +668,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$message.error('种曲批次长度应为10位')
+        this.$notify.error({title: '错误', message: '种曲批次长度应为10位'})
         return false
       }
       // if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
@@ -677,7 +677,7 @@ export default {
       // }
       if (this.wheatList.length === 0) {
         ty = false
-        this.$message.error('请填写小麦粉数据')
+        this.$notify.error({title: '错误', message: '请填写小麦粉数据'})
         return false
       }
       // if (!this.soyliang || this.soyliang === 0 || this.soyliang.trim() === '') {
@@ -686,7 +686,7 @@ export default {
       // }
       if (this.soyList.length === 0) {
         ty = false
-        this.$message.error('请填写豆粕数据')
+        this.$notify.error({title: '错误', message: '请填写豆粕数据'})
         return false
       }
       return ty
@@ -848,7 +848,7 @@ export default {
         }
         this.dialogFormVisibleMai = true
       } else {
-        this.$message.error('请结束后开始')
+        this.$notify.error({title: '错误', message: '请结束后开始'})
       }
     },
     endwheat (row) {
@@ -894,7 +894,7 @@ export default {
         }
         this.dialogFormVisibleMai2 = true
       } else {
-        this.$message.error('请先领用')
+        this.$notify.error({title: '错误', message: '请先领用'})
       }
     },
     // 小麦领用修改
@@ -983,7 +983,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.rusoylnum <= 0) {
-            this.$message.error('领用数必须大于0')
+            this.$notify.error({title: '错误', message: '领用数必须大于0'})
           } else {
             let soyUsedTotal = 0
             var obj = {}
@@ -1005,7 +1005,7 @@ export default {
                 }
               })
               if (soyUsedTotal + (this.rusoy.endWeight - this.rusoy.startWeight) > this.PulpCangBatchList.find(item => item.batch === this.rusoy.batch).currentQuantity) {
-                this.$message.error('领用数不能大于剩余量')
+                this.$notify.error({title: '错误', message: '领用数不能大于剩余量'})
                 return false
               }
             }
@@ -1090,7 +1090,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.chusoylnum <= 0) {
-            this.$message.error('领用数必须大于0')
+            this.$notify.error({title: '错误', message: '领用数必须大于0'})
           } else {
             this.dialogFormVisibleDouChu = false
             let currentRecord = []
@@ -1329,7 +1329,7 @@ export default {
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
-        this.$message.error(error)
+        this.$notify.error({title: '错误', message: error})
       }).finally(() => {
         this.$emit('setApplyMaterielState', inState)
       })

@@ -157,7 +157,7 @@ export default {
   methods: {
     GetList (st) {
       if (!this.plantList.productDate) {
-        this.$message.error('请选择月份')
+        this.$notify.error({title: '错误', message: '请选择月份'})
         return false
       }
       this.lodingS = true
@@ -179,7 +179,7 @@ export default {
     },
     ExportExcel () {
       if (!this.plantList.productDate) {
-        this.$message.error('请选择月份')
+        this.$notify.error({title: '错误', message: '请选择月份'})
         return false
       }
       this.lodingS = true
@@ -197,17 +197,17 @@ export default {
       // exportFile(`${REP_API.REPOUTFORWORKOUTPUT_API}`, '车间出勤汇总报表', that)
     },
     GetExportExcel () {
-      this.$http(`${REP_API.GETREPOUTFORWORKOUTPUT_API}`, 'GET').then(({data}) => {
+      this.$http(`${REP_API.GETREPOUTFORWORKOUTPUT_API}`, 'GET', {asyncType: 'ASYNC_TYPE_EXPORT_SHOP_ATTM'}).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
               this.lodingS = false
               clearInterval(this.ExportTime)
-              this.$message.error('导出失败')
+              this.$notify.error({title: '错误', message: '导出失败'})
             } else if (data.asyncRecord.asyncStatus === '1') {
               this.lodingS = false
               clearInterval(this.ExportTime)
-              this.$message.success('导出成功')
+              this.$notify({title: '成功', message: '导出成功', type: 'success'})
               let elink = document.createElement('a')
               elink.download = `车间出勤汇总报表${getNewDate()}.xlsx`
               elink.style.display = 'none'

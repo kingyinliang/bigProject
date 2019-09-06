@@ -760,7 +760,7 @@ export default {
     // 新增
     addAR () {
       if (this.plantList.workShop === '') {
-        this.$message.error('请选择车间后新增')
+        this.$notify.error({title: '错误', message: '请选择车间后新增'})
       } else {
         this.tableLoding = true
         if (this.clearStatus) {
@@ -831,7 +831,7 @@ export default {
     // 删除
     delDate () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的考勤')
+        this.$notify.error({title: '错误', message: '请选择要删除的考勤'})
       } else {
         this.$confirm('确认删除考勤, 是否继续?', '删除', {
           confirmButtonText: '确定',
@@ -864,7 +864,7 @@ export default {
         this.plantList.currPage = 1
       }
       if (!this.plantList.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
       }
       this.lodingS = true
       this.$http(`${AR_API.ARLIST_API}`, 'POST', this.plantList).then(({data}) => {
@@ -888,10 +888,10 @@ export default {
         if (row.workShop) {
           this.GetUserforteam(row.deptId)
         } else {
-          this.$message.error('请选择班组')
+          this.$notify.error({title: '错误', message: '请选择班组'})
         }
       } else {
-        this.$message.error('请选择人员属性')
+        this.$notify.error({title: '错误', message: '请选择人员属性'})
       }
     },
     // 反写选中人
@@ -1058,7 +1058,7 @@ export default {
       if (row.redactStatus) {
         this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.tableLoding = false
             this.GetList(true)
           } else {
@@ -1098,7 +1098,7 @@ export default {
       let st = true
       data.forEach((item, index) => {
         if (item.kqdl && item.kqlx && item.userType && item.userId.length !== 0 && item.classType && (item.timedTime || item.timedTime === 0)) {} else {
-          this.$message.error('考勤必填项未填写')
+          this.$notify.error({title: '错误', message: '考勤必填项未填写'})
           st = false
           return false
         }
@@ -1108,7 +1108,7 @@ export default {
     // 保存
     saveAtt (st) {
       if (this.clearStatus && this.multipleSelection.length <= 0) {
-        this.$message.error('请选择考勤')
+        this.$notify.error({title: '错误', message: '请选择考勤'})
         return false
       }
       this.$confirm(`确认${st === 'saved' ? '保存' : '提交'}, 是否继续?`, `${st === 'saved' ? '保存' : '提交'}`, {
@@ -1126,7 +1126,7 @@ export default {
           this.lodingS = true
           this.$http(`${AR_API.ARADD_API}`, 'POST', this.saveData).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -1154,7 +1154,7 @@ export default {
     // updata
     subAutio (st) {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择考勤')
+        this.$notify.error({title: '错误', message: '请选择考勤'})
       } else {
         if (st === 'submit') {
           if (!this.datarul(this.multipleSelection)) {
@@ -1167,7 +1167,7 @@ export default {
         })
         this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.GetList(true)
           } else {
             this.$notify.error({title: '错误', message: data.msg})

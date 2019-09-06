@@ -214,7 +214,7 @@ export default {
     addIn () {
       if (this.dataForm.isFull === '1') {
         if (!this.dataForm.fullDate) {
-          this.$message.error('满罐时间必填')
+          this.$notify.error({title: '错误', message: '满罐时间必填'})
           return
         }
       }
@@ -291,13 +291,13 @@ export default {
             this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -306,11 +306,11 @@ export default {
             this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },

@@ -100,15 +100,15 @@ export default {
   methods: {
     GetOrderList () {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       if (this.formHeader.workShop === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
-        this.$message.error('生产日期或生产订单请选填一项')
+        this.$notify.error({title: '错误', message: '生产日期或生产订单请选填一项'})
         return false
       }
       this.$http(`${FILTRATION_API.FILTER_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
@@ -145,7 +145,7 @@ export default {
     // 跳转
     go (item) {
       if (!item.orderNo) {
-        this.$message.error('请选择订单号')
+        this.$notify.error({title: '错误', message: '请选择订单号'})
         return
       }
       this.$store.state.common.orderNo = item.orderNo

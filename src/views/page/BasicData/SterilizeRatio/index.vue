@@ -138,7 +138,7 @@ export default {
     // 查询
     GetList (st) {
       if (!this.formHeader.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIOLIST}`, 'POST', this.formHeader).then(({data}) => {
@@ -174,7 +174,7 @@ export default {
           }
           this.$http(this.postUrl, 'POST', this.formAdd).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success(msgText)
+              this.$notify({title: '成功', message: msgText, type: 'success'})
               this.dialogVisibleAdd = false
               this.$refs[formName].resetFields()
               this.GetList()
@@ -197,7 +197,7 @@ export default {
     },
     DeleteInfo () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
         return false
       }
       this.$confirm('确认要删除数据吗?', '提示', {
@@ -207,7 +207,7 @@ export default {
       }).then(() => {
         this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIODELETE_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('删除成功')
+            this.$notify({title: '成功', message: '删除成功', type: 'success'})
             this.GetList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})

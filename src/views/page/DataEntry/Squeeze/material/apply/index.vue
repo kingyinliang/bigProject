@@ -573,7 +573,7 @@ export default class Index extends Vue {
   }
   saveEnd () {
     if (this.endForm.endAmount.toString() === '') {
-      this.$message.error('结束数不能为空')
+      this.$notify.error({title: '错误', message: '结束数不能为空'})
       return false
     }
     this.availableMap.set(this.endForm.deviceId, '0')
@@ -593,29 +593,29 @@ export default class Index extends Vue {
   }
   startValidate () {
     if (this.startForm.fermentPotNo === '') {
-      this.$message.error('领用发酵罐不能为空')
+      this.$notify.error({title: '错误', message: '领用发酵罐不能为空'})
       return false
     } else if (this.startForm.batch.length !== 10) {
-      this.$message.error('批次长度必须为10')
+      this.$notify.error({title: '错误', message: '批次长度必须为10'})
       return false
     } else if (this.startForm.startAmount.toString() === '') {
-      this.$message.error('起始数不能为空')
+      this.$notify.error({title: '错误', message: '起始数不能为空'})
       return false
     }
     return true
   }
   modifyValidate () {
     if (this.modifyForm.fermentPotNo === '') {
-      this.$message.error('领用发酵罐不能为空')
+      this.$notify.error({title: '错误', message: '领用发酵罐不能为空'})
       return false
     } else if (this.modifyForm.batch.length !== 10) {
-      this.$message.error('批次长度必须为10')
+      this.$notify.error({title: '错误', message: '批次长度必须为10'})
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
-      this.$message.error('起始数不能为空')
+      this.$notify.error({title: '错误', message: '起始数不能为空'})
       return false
     } else if (this.modifyForm.endAmount.toString() === '') {
-      this.$message.error('结束数不能为空')
+      this.$notify.error({title: '错误', message: '结束数不能为空'})
       return false
     }
     return true
@@ -740,19 +740,19 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     if (this.params.workshopId === '') {
-      this.$message.error('请选择车间')
+      this.$notify.error({title: '错误', message: '请选择车间'})
       return
     }
     if (this.params.productLineId === '') {
-      this.$message.error('请选择布浆线')
+      this.$notify.error({title: '错误', message: '请选择布浆线'})
       return
     }
     if (this.params.applyDate === null || this.params.applyDate === '') {
-      this.$message.error('请选择领用日期')
+      this.$notify.error({title: '错误', message: '请选择领用日期'})
       return
     }
     // 保存选项值到common store
@@ -792,28 +792,28 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
-        this.$message.success('保存成功')
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
-      this.$message.error('保存失败: ' + err)
+      this.$notify.error({title: '错误', message: '保存失败' + err})
     })
   }
   submit () {
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
-        this.$message.success('提交成功')
+        this.$notify({title: '成功', message: '提交成功', type: 'success'})
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
-      this.$message.error('提交失败: ' + err)
+      this.$notify.error({title: '错误', message: '提交失败' + err})
     })
   }
   @Watch('params', {deep: true})

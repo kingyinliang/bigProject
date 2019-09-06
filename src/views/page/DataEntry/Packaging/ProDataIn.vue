@@ -161,7 +161,7 @@ export default {
             this.ratio.productUnitName = data.sme.productUnitName
             this.ratio.basicUnitName = data.sme.basicUnitName
           } else {
-            this.$message.error('比例获取失败')
+            this.$notify.error({title: '错误', message: '比例获取失败'})
           }
         } else {
           this.$notify.error({title: '错误', message: data.msg})
@@ -229,7 +229,7 @@ export default {
           if (reject) {
             reject('保存表头' + data.msg)
           }
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
         }
       })
     },
@@ -258,7 +258,7 @@ export default {
           that.isRedact = false
           that.visible = false
           that.GetOrderList()
-          that.$message.success('提交成功')
+          that.$notify({title: '成功', message: '提交成功', type: 'success'})
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')
           that.isRedact = false
@@ -335,7 +335,7 @@ export default {
             that.isRedact = false
             that.visible = false
             that.GetOrderList()
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
           }).catch(() => {
             that.$message.error('网络请求失败，请刷新重试')
             that.isRedact = false
@@ -359,7 +359,7 @@ export default {
         net11.then(function () {
           that.isRedact = false
           that.GetOrderList()
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
           that.visible = false
         }).catch(() => {
           that.$message.error('网络请求失败，请刷新重试')

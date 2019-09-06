@@ -169,7 +169,7 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     this.searched = true
@@ -202,7 +202,7 @@ export default class Index extends Vue {
   }
   goDetail (holderId, holderName) {
     if (!this.isAuth('gra:material:list')) {
-      this.$message.error('您无权限查看详情')
+      this.$notify.error({title: '错误', message: '您无权限查看详情'})
       return
     }
     let p = Object.assign({}, this.params, {holderId, holderName})

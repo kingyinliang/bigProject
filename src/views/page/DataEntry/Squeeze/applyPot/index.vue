@@ -243,7 +243,7 @@ export default class Index extends Vue {
   deleteRow (id) {
     Vue.prototype.$http(`${SQU_API.POT_APPLY_DEL_API}`, `POST`, [id]).then(({data}) => {
       if (data.code === 0) {
-        this.$message.success('删除成功')
+        this.$notify({title: '成功', message: '删除成功', type: 'success'})
         this.getOrderList()
       } else {
         this.$notify.error({title: '错误', message: data.msg})
@@ -312,11 +312,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择车间')
+    //   this.$notify.error({title: '错误', message: '请选择车间'})
     //   return
     // }
     // if (this.params.orderDate === '') {

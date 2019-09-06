@@ -261,27 +261,27 @@ export default {
           if (item === '酱油') {
             if (!this.crafData.sauceTemp) {
               ty = false
-              this.$message.error('酱油温度必填')
+              this.$notify.error({title: '错误', message: '酱油温度必填'})
             }
           } else if (item === '热水') {
             if (!this.crafData.hotTemp) {
               ty = false
-              this.$message.error('热水温度必填')
+              this.$notify.error({title: '错误', message: '热水温度必填'})
             }
           }
         })
       } else {
         ty = false
-        this.$message.error('原汁换热介质必填')
+        this.$notify.error({title: '错误', message: '原汁换热介质必填'})
       }
       this.crafData.result.forEach((item) => {
         if (!item.temp) {
           ty = false
-          this.$message.error('屏显温度必填')
+          this.$notify.error({title: '错误', message: '屏显温度必填'})
         }
         if (!item.created) {
           ty = false
-          this.$message.error('记录时间必填')
+          this.$notify.error({title: '错误', message: '记录时间必填'})
         }
       })
       return ty
@@ -328,13 +328,13 @@ export default {
             this.Stesave.orderUpdate(this, 'techStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -343,13 +343,13 @@ export default {
             this.Stesave.orderUpdate(this, 'techStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },

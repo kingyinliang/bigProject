@@ -419,12 +419,12 @@ export default class Index extends Vue {
   }
   saveAdjust () {
     if (this.adjustForm.QUANTITY.toString() === '') {
-      this.$message.error('调整数量不能为空')
+      this.$notify.error({title: '错误', message: '调整数量不能为空'})
       return false
     }
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
       if (res.data.code === 0) {
-        this.$message.success('保存成功')
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.retrieveDataList()
         this.retrieveAdjustList()
       } else {

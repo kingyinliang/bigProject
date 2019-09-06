@@ -200,7 +200,7 @@ export default {
     },
     GetList () {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTLISTTP}`, 'POST', this.formHeader).then(({data}) => {
@@ -258,7 +258,7 @@ export default {
     },
     CreateOrder () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
         return false
       }
       this.$confirm('确认生成调配单吗?', '提示', {
@@ -268,7 +268,7 @@ export default {
       }).then(() => {
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('生成成功')
+            this.$notify({title: '成功', message: '生成成功', type: 'success'})
             this.GetList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})

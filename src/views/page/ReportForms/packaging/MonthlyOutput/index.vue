@@ -240,7 +240,7 @@ export default {
   methods: {
     GetList (st) {
       if (!this.plantList.productDate) {
-        this.$message.error('请选择月份')
+        this.$notify.error({title: '错误', message: '请选择月份'})
         return false
       }
       this.lodingS = true
@@ -269,7 +269,7 @@ export default {
     },
     ExportExcel () {
       if (!this.plantList.productDate) {
-        this.$message.error('请选择月份')
+        this.$notify.error({title: '错误', message: '请选择月份'})
         return false
       }
       let that = this

@@ -82,11 +82,11 @@ export default {
   methods: {
     getOrderList () {
       if (this.params.factoryId === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       if (this.params.workShop === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       this.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', this.params).then(({data}) => {
@@ -120,7 +120,7 @@ export default {
         flag = this.isAuth('sys:kjmOutMaterial:list')
       }
       if (!flag) {
-        this.$message.error('无权限查看' + page)
+        this.$notify.error({title: '错误', message: '无权限查看' + page})
         return
       }
       this.$store.commit('common/updateZQParamsOrderNo', item.orderNo)

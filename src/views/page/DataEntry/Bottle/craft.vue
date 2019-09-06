@@ -494,12 +494,12 @@ export default {
       //   this.SaveHeader(str, resolve, reject)
       // })
       Promise.all([net0, net1, net2]).then(() => {
-        this.$message.success('保存成功')
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.pages.currPage = 1
         this.GetHeader()
         this.isRedact = false
       }).catch((err) => {
-        this.$message.error(err)
+        this.$notify.error({title: '错误', message: err})
       })
     },
     SaveProduct (str, resolve, reject) {

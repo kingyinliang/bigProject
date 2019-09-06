@@ -87,7 +87,7 @@ export default {
         this.$http(`${PACKAGING_API.PKGGERMSUPDATE_API}`, 'POST', this.GermsDate).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error('修改待杀菌数量' + data.msg)
+            this.$notify.error({title: '错误', message: '修改待杀菌数量' + data.msg})
           }
           if (resolve) {
             resolve('resolve')
