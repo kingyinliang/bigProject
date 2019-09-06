@@ -128,7 +128,7 @@ export default {
     BackTime (row) {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
-          this.$notify({title: '成功', message: '退回成功', type: 'success'});
+          this.$notify({title: '成功', message: '退回成功', type: 'success'})
           this.GetTime()
         } else {
           this.$notify.error({title: '错误', message: data.msg})

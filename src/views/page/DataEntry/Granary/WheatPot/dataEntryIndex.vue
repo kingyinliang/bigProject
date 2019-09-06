@@ -424,7 +424,7 @@ export default class Index extends Vue {
     }
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '保存成功', type: 'success'});
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.retrieveDataList()
         this.retrieveAdjustList()
       } else {

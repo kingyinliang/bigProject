@@ -283,7 +283,7 @@ export default {
       })
       this.$http(`${STERILIZED_API.STE_SUP_SAVED_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$notify({title: '成功', message: '操作成功', type: 'success'});
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetDataList()
         } else {
           this.$notify.error({title: '错误', message: data.msg})
@@ -327,7 +327,7 @@ export default {
       })
       this.$http(`${STERILIZED_API.STE_SUP_PUSH_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$notify({title: '成功', message: '操作成功', type: 'success'});
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetDataList()
         } else {
           this.$notify.error({title: '错误', message: data.msg})

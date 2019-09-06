@@ -268,7 +268,7 @@ export default {
       }).then(() => {
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATETP}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '生成成功', type: 'success'});
+            this.$notify({title: '成功', message: '生成成功', type: 'success'})
             this.GetList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})

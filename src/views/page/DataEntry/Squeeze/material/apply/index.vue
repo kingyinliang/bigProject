@@ -792,7 +792,7 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'submit' && item.status !== 'checked') { item.status = 'saved' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '保存成功', type: 'success'});
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
@@ -806,7 +806,7 @@ export default class Index extends Vue {
     this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
     Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '提交成功', type: 'success'});
+        this.$notify({title: '成功', message: '提交成功', type: 'success'})
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {

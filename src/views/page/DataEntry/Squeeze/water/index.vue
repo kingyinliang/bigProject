@@ -269,7 +269,7 @@ export default {
         this.$http(`${configurl}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.SearchList()
-            this.$notify({title: '成功', message: this.succmessage, type: 'success'});
+            this.$notify({title: '成功', message: this.succmessage, type: 'success'})
             this.isRedact = false
           } else {
             this.$notify.error({title: '错误', message: data.msg})
@@ -281,7 +281,7 @@ export default {
         this.$http(`${configurl}`, 'POST', this.waterList).then(({data}) => {
           if (data.code === 0) {
             this.SearchList()
-            this.$notify({title: '成功', message: this.succmessage, type: 'success'});
+            this.$notify({title: '成功', message: this.succmessage, type: 'success'})
             this.isRedact = false
           } else {
             this.$notify.error({title: '错误', message: data.msg})

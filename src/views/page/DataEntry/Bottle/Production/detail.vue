@@ -252,7 +252,7 @@ export default {
       if (str === 'saved') {
         let savedNet = Promise.all([updateHead, updateReady, updateDevice, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
         savedNet.then(() => {
-          this.$notify({title: '成功', message: '操作成功', type: 'success'});
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.getHead()
         }).catch((err) => {
           this.$notify.error({title: '错误', message: err})
@@ -268,7 +268,7 @@ export default {
           })
           let SubmitNet = Promise.all([updateHead, SubmitTime, SubmitRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
           SubmitNet.then(() => {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.getHead()
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})

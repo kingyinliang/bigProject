@@ -56,8 +56,8 @@
                   <!--<img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">-->
                 </el-form>
               </div>
-              <!--<img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">-->
-              <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img">
+              <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">
+              <!--<img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img">-->
             </div>
             <el-row class="dataList_item_btn">
               <el-col :span="6" class="dataList_item_btn_item">

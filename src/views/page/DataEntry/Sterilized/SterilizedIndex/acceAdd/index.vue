@@ -264,7 +264,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
-          this.$notify({title: '成功', message: '操作成功', type: 'success'});
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           // this.GetOrderHead()
         } else {
           this.$notify.error({title: '错误', message: data.msg})
@@ -376,7 +376,7 @@ export default {
             this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
           })
           Promise.all([net0]).then(() => {
-            this.$notify({title: '成功', message: '提交成功', type: 'success'});
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})
@@ -391,7 +391,7 @@ export default {
             this.Stesave.orderUpdate(this, 'supmStatus', str, resolve, reject)
           })
           Promise.all([net0]).then(() => {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'});
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})

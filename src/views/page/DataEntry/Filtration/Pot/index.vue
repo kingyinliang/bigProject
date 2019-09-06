@@ -274,7 +274,7 @@ export default {
       }).then(() => {
         this.$http(`${FILTRATION_API.FILTER_POT_CLEAN_API}`, 'POST', item).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.GetDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
@@ -347,7 +347,7 @@ export default {
           this.$http(`${FILTRATION_API.FILTER_JBS_API}`, 'POST', this.JBSdataForm).then(({data}) => {
             if (data.code === 0) {
               this.JBSVisible = false
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetDataList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -369,7 +369,7 @@ export default {
           this.$http(`${FILTRATION_API.FILTER_TURNSAVE_API}`, 'POST', this.TurnSavedataForm).then(({data}) => {
             if (data.code === 0) {
               this.TurnSaveVisible = false
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetDataList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})

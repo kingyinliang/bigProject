@@ -359,7 +359,7 @@ export default {
         if (valid) {
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTGNSAVE}`, 'POST', this.formGn).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'});
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.GnDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()
@@ -451,7 +451,7 @@ export default {
           this.formJsb.workShop = this.formHeader.workShop
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTJSBSAVE}`, 'POST', this.formJsb).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'});
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.JsbDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()
@@ -477,7 +477,7 @@ export default {
           }
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTZCSAVE}`, 'POST', this.formZc).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'});
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.ZcDialogTableVisible = false
               this.GetList()
               this.$refs[formName].resetFields()

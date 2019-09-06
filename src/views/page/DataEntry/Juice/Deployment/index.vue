@@ -356,7 +356,7 @@ export default {
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
-          this.$notify({title: '成功', message: '保存成功', type: 'success'});
+          this.$notify({title: '成功', message: '保存成功', type: 'success'})
           // this.SearchList()
           this.dialogTableVisible = false
         } else {
@@ -376,7 +376,7 @@ export default {
         })
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'});
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.isRedact = false
             this.SearchList()
           } else {
@@ -409,7 +409,7 @@ export default {
           if (data.code === 0) {
             this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
-                this.$notify({title: '成功', message: '提交成功', type: 'success'});
+                this.$notify({title: '成功', message: '提交成功', type: 'success'})
                 this.isRedact = false
                 this.SearchList()
               } else {

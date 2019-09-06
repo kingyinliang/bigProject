@@ -207,7 +207,7 @@ export default {
       }).then(() => {
         this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIODELETE_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '删除成功', type: 'success'});
+            this.$notify({title: '成功', message: '删除成功', type: 'success'})
             this.GetList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})

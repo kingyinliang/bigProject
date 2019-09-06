@@ -389,7 +389,7 @@ export default {
             this.ReText = ''
             this.reData = {}
             this.GetAuditList()
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -469,7 +469,7 @@ export default {
         this.$http(`${AUDIT_API.INUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus = false
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
@@ -510,7 +510,7 @@ export default {
             this.lodingStatus = false
             if (data.code === 0) {
               this.visible = false
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -543,7 +543,7 @@ export default {
             this.plantList.headerTxt = ''
             this.lodingStatus1 = false
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
             } else {
               this.GetAuditList()

@@ -325,7 +325,7 @@ export default {
             })
             this.$http(`${STERILIZED_API.DODEPLOYMENTLISTSAVE}`, 'POST', this.orderList).then(({data}) => {
               if (data.code === 0) {
-                this.$notify({title: '成功', message: '保存成功', type: 'success'});
+                this.$notify({title: '成功', message: '保存成功', type: 'success'})
                 this.GetInfoList(this.allocateId)
                 this.isRedact = false
                 this.Sterilized = {
@@ -377,7 +377,7 @@ export default {
                   let params = [this.formHeaders]
                   this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
                     if (data.code === 0) {
-                      this.$notify({title: '成功', message: '生成成功', type: 'success'});
+                      this.$notify({title: '成功', message: '生成成功', type: 'success'})
                       this.GetInfoList(this.allocateId)
                       this.isRedact = false
                       this.Sterilized = {
@@ -409,7 +409,7 @@ export default {
               let params = [this.formHeaders]
               this.$http(`${STERILIZED_API.JUICEDEPLOYMENTCREATE}`, 'POST', params).then(({data}) => {
                 if (data.code === 0) {
-                  this.$notify({title: '成功', message: '生成成功', type: 'success'});
+                  this.$notify({title: '成功', message: '生成成功', type: 'success'})
                   this.isRedact = false
                   this.GetInfoList(this.allocateId)
                 } else {

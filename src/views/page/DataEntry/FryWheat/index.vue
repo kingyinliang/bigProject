@@ -582,7 +582,7 @@ export default {
             this.lodingStatus = true
             this.$http(`${WHT_API.CINDEXUPDATEUSER}`, 'POST', this.datalist).then(({data}) => {
               if (data.code === 0) {
-                // this.$notify({title: '成功', message: '操作成功', type: 'success'});
+                // this.$notify({title: '成功', message: '操作成功', type: 'success'})
                 this.$message({
                   type: 'success',
                   message: '保存成功'

@@ -320,7 +320,7 @@ export default {
             this.ReText = ''
             this.reData = {}
             this.GetLtkList()
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -406,7 +406,7 @@ export default {
           this.$http(`${LTK_API.LTKAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
               this.visible = false
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetLtkList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -431,7 +431,7 @@ export default {
           })
           this.$http(`${LTK_API.LTKAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetLtkList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})

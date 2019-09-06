@@ -1058,7 +1058,7 @@ export default {
       if (row.redactStatus) {
         this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.tableLoding = false
             this.GetList(true)
           } else {
@@ -1126,7 +1126,7 @@ export default {
           this.lodingS = true
           this.$http(`${AR_API.ARADD_API}`, 'POST', this.saveData).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -1167,7 +1167,7 @@ export default {
         })
         this.$http(`${AR_API.ARSUBORUP_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.GetList(true)
           } else {
             this.$notify.error({title: '错误', message: data.msg})

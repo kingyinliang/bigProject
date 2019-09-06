@@ -346,7 +346,7 @@ export default {
         row.status = ''
         this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', [row]).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.noMaintainList.splice(this.noMaintainList.length, 0, {})
             this.noMaintainList.splice(this.noMaintainList.length - 1, 1)
@@ -370,7 +370,7 @@ export default {
         }).then(() => {
           this.$http(`${MAINTAIN_API.MAINTAINSAVE_API}`, 'POST', this.MaintainList).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'});
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.GetMaintainList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})
@@ -400,7 +400,7 @@ export default {
         }).then(() => {
           this.$http(`${MAINTAIN_API.MAINTAINSUB_API}`, 'POST', this.MaintainList).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '提交成功', type: 'success'});
+              this.$notify({title: '成功', message: '提交成功', type: 'success'})
               this.GetMaintainList()
             } else {
               this.$notify.error({title: '错误', message: data.msg})

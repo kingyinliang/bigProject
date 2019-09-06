@@ -311,7 +311,7 @@ export default {
       this.$http(`${BOTTLE_API.BOTTLE_QUALITY_SAVE}`, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'});
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.pages.currPage = 1
             this.isRedact = false
             this.GetHeader()

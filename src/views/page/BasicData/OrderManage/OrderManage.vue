@@ -240,7 +240,7 @@ export default {
             } else if (data.asyncRecord.asyncStatus === '1') {
               this.loading = false
               clearInterval(this.orderTime)
-              this.$notify({title: '成功', message: '同步成功', type: 'success'});
+              this.$notify({title: '成功', message: '同步成功', type: 'success'})
               this.GetOrderList()
             }
           }

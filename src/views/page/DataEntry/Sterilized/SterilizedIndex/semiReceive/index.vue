@@ -225,7 +225,7 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$notify({title: '成功', message: '提交成功', type: 'success'});
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})
@@ -240,7 +240,7 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'});
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})

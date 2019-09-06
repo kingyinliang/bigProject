@@ -657,7 +657,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.InVlist = data.vlist
-          this.$notify({title: '成功', message: '刷新成功', type: 'success'});
+          this.$notify({title: '成功', message: '刷新成功', type: 'success'})
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

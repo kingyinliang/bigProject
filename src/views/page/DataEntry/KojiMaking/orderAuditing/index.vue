@@ -367,7 +367,7 @@ export default class Index extends Vue {
   GetTime () {
     Vue.prototype.$http(`${KJM_API.GETKJMAKINGCHECKTIME_API}`, 'POST', this.newForHeader).then(({data}) => {
       if (data.code === 0) {
-        this.$notify({title: '成功', message: '成功', type: 'success'});
+        this.$notify({title: '成功', message: '成功', type: 'success'})
         this.getList()
       } else {
         this.$notify.error({title: '错误', message: data.msg})
@@ -585,7 +585,7 @@ export default class Index extends Vue {
     let params = Object.assign({}, row, {workShop: this.formHeader.workShop, inKjmDate: this.formHeader.inKjmDate})
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '数据回退成功', type: 'success'});
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})
@@ -597,7 +597,7 @@ export default class Index extends Vue {
   storageGoBack (row) {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '数据回退成功', type: 'success'});
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})
@@ -609,7 +609,7 @@ export default class Index extends Vue {
   materialGoBack (row) {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '数据回退成功', type: 'success'});
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})

@@ -494,7 +494,7 @@ export default {
       //   this.SaveHeader(str, resolve, reject)
       // })
       Promise.all([net0, net1, net2]).then(() => {
-        this.$notify({title: '成功', message: '保存成功', type: 'success'});
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.pages.currPage = 1
         this.GetHeader()
         this.isRedact = false

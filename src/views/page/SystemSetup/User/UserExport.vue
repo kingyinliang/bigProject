@@ -156,7 +156,7 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
-          this.$notify({title: '成功', message: '操作成功', type: 'success'});
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetList()
         } else {
           this.$notify.error({title: '错误', message: data.msg})

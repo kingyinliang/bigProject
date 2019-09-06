@@ -368,7 +368,7 @@ export default {
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus1 = false
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
@@ -411,7 +411,7 @@ export default {
               this.visible = false
               this.Text = ''
               this.GetAuditList()
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }
@@ -437,7 +437,7 @@ export default {
           this.$http(`${AR_API.ARAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.lodingStatus1 = false
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'});
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
               if (data) {}
             } else {

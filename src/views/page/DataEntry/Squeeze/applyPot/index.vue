@@ -243,7 +243,7 @@ export default class Index extends Vue {
   deleteRow (id) {
     Vue.prototype.$http(`${SQU_API.POT_APPLY_DEL_API}`, `POST`, [id]).then(({data}) => {
       if (data.code === 0) {
-        this.$notify({title: '成功', message: '删除成功', type: 'success'});
+        this.$notify({title: '成功', message: '删除成功', type: 'success'})
         this.getOrderList()
       } else {
         this.$notify.error({title: '错误', message: data.msg})

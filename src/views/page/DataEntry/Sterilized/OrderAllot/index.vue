@@ -272,7 +272,7 @@ export default {
         })
         this.$http(`${STERILIZED_API.ORDERALLOTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'});
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.isRedact = false
             this.GetList()
           } else {

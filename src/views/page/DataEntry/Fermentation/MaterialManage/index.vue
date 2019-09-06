@@ -268,7 +268,7 @@ export default {
           if (data.code === 0) {
             this.$http(`${FERMENTATION_API.SHOOT_SUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
-                this.$notify({title: '成功', message: '操作成功', type: 'success'});
+                this.$notify({title: '成功', message: '操作成功', type: 'success'})
                 this.GetDataList()
               } else {
                 this.$notify.error({title: '错误', message: data.msg})
@@ -281,7 +281,7 @@ export default {
       } else {
         this.$http(`${FERMENTATION_API.SHOOT_UPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '操作成功', type: 'success'});
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.GetDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
@@ -307,7 +307,7 @@ export default {
       } else {
         this.$http(`${FERMENTATION_API.SHOOT_DEL_API}`, 'POST', {id: row.id}).then(({data}) => {
           if (data.code === 0) {
-            this.$notify({title: '成功', message: '删除成功', type: 'success'});
+            this.$notify({title: '成功', message: '删除成功', type: 'success'})
             this.GetDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})

@@ -516,7 +516,7 @@ export default {
     DataSynchronism () {
       this.$http(`${FERMENTATION_API.WORKINGHOURTONGBU_API}`, 'GET').then(({data}) => {
         if (data.code === 0) {
-          this.$notify({title: '成功', message: '同步成功', type: 'success'});
+          this.$notify({title: '成功', message: '同步成功', type: 'success'})
         } else {
           this.$notify.error({title: '错误', message: '同步失败'})
         }
