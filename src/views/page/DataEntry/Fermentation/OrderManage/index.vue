@@ -539,6 +539,7 @@ export default class Index extends Vue {
           } else if (data.asyncRecord.asyncStatus === '1') {
             this.lodingS = false
             clearInterval(this.ExportTime)
+            this.getOrderList()
             this.$notify({title: '成功', message: '申请成功', type: 'success'})
           }
         }
