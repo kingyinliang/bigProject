@@ -116,7 +116,7 @@ export default {
           this.dataList = orderList(data.list)
           console.log(this.dataList[0].img.length)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -137,7 +137,7 @@ export default {
             row.realOutput = data.list[0].realOutput
             row.plan = data.list[0].plan
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

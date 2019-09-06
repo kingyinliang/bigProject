@@ -240,7 +240,7 @@ export default {
           this.fastS = true
           this.dataList = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -277,7 +277,7 @@ export default {
             this.$message.success('操作成功')
             this.GetDataList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -350,7 +350,7 @@ export default {
               this.$message.success('操作成功')
               this.GetDataList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }
@@ -372,7 +372,7 @@ export default {
               this.$message.success('操作成功')
               this.GetDataList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }

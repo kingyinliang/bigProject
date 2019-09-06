@@ -216,7 +216,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -233,7 +233,7 @@ export default {
               this.formHeader.workShop = ''
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -246,7 +246,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -262,7 +262,7 @@ export default {
           if (data.code === 0) {
             this.thrwHolderList = data.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -285,7 +285,7 @@ export default {
           this.pages.currentPage = 1
           this.dataList = this.dataListAll.slice((this.pages.currentPage - 1) * this.pages.pageSize, this.pages.currentPage * this.pages.pageSize)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -304,7 +304,7 @@ export default {
           this.lineStatus = row.status
           this.ID = row.id
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -360,7 +360,7 @@ export default {
           // this.SearchList()
           this.dialogTableVisible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -380,7 +380,7 @@ export default {
             this.isRedact = false
             this.SearchList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -413,11 +413,11 @@ export default {
                 this.isRedact = false
                 this.SearchList()
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

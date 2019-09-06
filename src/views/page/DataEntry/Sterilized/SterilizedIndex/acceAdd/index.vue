@@ -197,7 +197,7 @@ export default {
             this.supStatus = false
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -267,7 +267,7 @@ export default {
           this.$message.success('操作成功')
           // this.GetOrderHead()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -487,7 +487,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

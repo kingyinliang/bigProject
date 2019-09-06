@@ -362,7 +362,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.formData = res.data.data
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -379,7 +379,7 @@ export default class Index extends Vue {
         this.dataTotalCount = this.totalDataList.length
         this.dataList = this.totalDataList.slice(0, this.dataPageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -396,7 +396,7 @@ export default class Index extends Vue {
         this.adjustTotalCount = this.totalAdjustList.length
         this.adjustList = this.totalAdjustList.slice(0, this.adjustPageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -413,7 +413,7 @@ export default class Index extends Vue {
         this.totalCount = this.totalList.length
         this.applyList = this.totalList.slice(0, this.pageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -428,7 +428,7 @@ export default class Index extends Vue {
         this.retrieveDataList()
         this.retrieveAdjustList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
     this.dialogFormVisible2 = false

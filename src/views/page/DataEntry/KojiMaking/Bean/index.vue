@@ -344,7 +344,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -356,7 +356,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -369,7 +369,7 @@ export default class Index extends Vue {
         if (data.code === 0) {
           this.processesList = data.childList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -424,7 +424,7 @@ export default class Index extends Vue {
           this.totalList = res.data.infoUser
           this.datalist = res.data.infoUser.slice(0, this.pageSize)
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       }).catch(err => {
         console.log('catch data::', err)
@@ -441,7 +441,7 @@ export default class Index extends Vue {
         }
         this.sortOrderList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -504,7 +504,7 @@ export default class Index extends Vue {
               message: '删除成功'
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -602,7 +602,7 @@ export default class Index extends Vue {
             message: '保存成功'
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(err => {
         this.$message.error('保存失败，' + err)
@@ -618,7 +618,7 @@ export default class Index extends Vue {
         this.OrgTree = data.deptList
         this.arrList = [this.OrgTree[0].children[0].deptId]
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
   }

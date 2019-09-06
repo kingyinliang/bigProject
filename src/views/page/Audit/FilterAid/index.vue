@@ -190,7 +190,7 @@ export default {
           this.formHeader.pageSize = data.page.pageSize
           this.formHeader.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -210,7 +210,7 @@ export default {
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.GetAuditList()
         }).catch(() => {
@@ -246,7 +246,7 @@ export default {
               this.$message.success('操作成功')
               this.GetAuditList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           }).catch(() => {
             this.$message.error('网络错误')
@@ -275,7 +275,7 @@ export default {
               this.$message.success('操作成功')
               this.GetAuditList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
               this.GetAuditList()
             }
           }).catch(() => {
@@ -307,7 +307,7 @@ export default {
             this.GetAuditList()
             this.$message.success('操作成功')
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -318,7 +318,7 @@ export default {
         if (data.code === 0) {
           this.MoveReas = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

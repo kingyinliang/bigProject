@@ -170,7 +170,7 @@ export default {
           this.InStorageDate = data.list
           this.DataAudit = data.vList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -257,7 +257,7 @@ export default {
         if (data.code === 0) {
           this.PotList = data.halfList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -368,7 +368,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

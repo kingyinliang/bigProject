@@ -195,7 +195,7 @@ export default {
         if (data.code === 0) {
           this.orderTypeList = data.dicList[0].prolist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -211,7 +211,7 @@ export default {
           this.Audit = []
           this.$store.commit('common/updateFermentationM', this.formHeader)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -221,7 +221,7 @@ export default {
         if (data.code === 0) {
           this.Audit = data.verList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -271,11 +271,11 @@ export default {
                 this.$message.success('操作成功')
                 this.GetDataList()
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -284,7 +284,7 @@ export default {
             this.$message.success('操作成功')
             this.GetDataList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -310,7 +310,7 @@ export default {
             this.$message.success('删除成功')
             this.GetDataList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -339,7 +339,7 @@ export default {
             this.formHeader.factory = data.typeList[0].deptId
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -350,7 +350,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -384,7 +384,7 @@ export default {
           if (data.code === 0) {
             this.material = data.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

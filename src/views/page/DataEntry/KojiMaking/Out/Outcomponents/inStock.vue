@@ -119,7 +119,7 @@ export default {
             this.ThreeNum = data.list[0]
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -138,7 +138,7 @@ export default {
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -205,7 +205,7 @@ export default {
             }]
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -264,7 +264,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('生产入库' + data.msg)
           }

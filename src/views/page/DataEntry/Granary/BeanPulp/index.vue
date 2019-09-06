@@ -104,7 +104,7 @@ export default {
           }
           this.DataList = data.data.holders
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -130,7 +130,7 @@ export default {
           this.factory = data.typeList
           this.plantList.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -145,7 +145,7 @@ export default {
               this.plantList.workshop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

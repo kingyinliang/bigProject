@@ -269,7 +269,7 @@ export default {
           }
           this.inKjmBatch = data.inKjmBatch
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -336,7 +336,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('提交' + data.msg)
           }
@@ -358,7 +358,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('表头保存' + data.msg)
           }
@@ -391,7 +391,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('准备时间保存' + data.msg)
           }
@@ -438,7 +438,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -452,7 +452,7 @@ export default {
             this.workshop = data.typeList
             this.formHeader.workShop = data.typeList[0].deptId
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -466,7 +466,7 @@ export default {
             this.deptId = data.childList
             this.formHeader.deptId = data.childList[0].deptId
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

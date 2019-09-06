@@ -145,7 +145,7 @@ export default {
         if (data.code === 0) {
           this.RoleList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -159,7 +159,7 @@ export default {
           this.$message.success('操作成功')
           this.GetList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -175,7 +175,7 @@ export default {
             this.$message.success('重置成功')
             this.GetList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -199,7 +199,7 @@ export default {
           this.UserListArr = data.page
           this.dataPro(this.currPage)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

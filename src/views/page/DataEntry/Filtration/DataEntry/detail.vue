@@ -182,7 +182,7 @@ export default {
           this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
           this.$refs.textrecord.GetText(this.formHeader.orderId)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -231,7 +231,7 @@ export default {
           if (data.code === 0) {
             this.savedOrSubmitForm('submit')
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

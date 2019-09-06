@@ -120,7 +120,7 @@ export default {
           this.totalCount = data.page.totalCount
           this.currPage = data.page.currPage
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -140,7 +140,7 @@ export default {
           }, 4000)
         } else {
           this.loading = false
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -162,7 +162,7 @@ export default {
         } else {
           this.loading = false
           clearInterval(this.sapTime)
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
         this.loading = false

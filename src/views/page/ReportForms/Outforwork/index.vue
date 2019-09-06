@@ -172,7 +172,7 @@ export default {
           this.plantList.totalCount = data.page.totalCount
           this.month = this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).split('')[0] === '0' ? this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1).slice(1) : this.plantList.productDate.substring(this.plantList.productDate.indexOf('-') + 1)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })
@@ -190,7 +190,7 @@ export default {
           }, 4000)
         } else {
           this.lodingS = false
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       // let that = this
@@ -220,7 +220,7 @@ export default {
         } else {
           this.lodingS = false
           clearInterval(this.ExportTime)
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
         this.lodingS = false

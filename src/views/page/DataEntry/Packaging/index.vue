@@ -113,7 +113,7 @@ export default {
             this.plantList.factoryid = data.typeList[0].deptId
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -127,7 +127,7 @@ export default {
               this.plantList.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -154,7 +154,7 @@ export default {
             this.productDate = this.plantList.productDate
             this.factoryid = this.plantList.factoryid
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -181,7 +181,7 @@ export default {
             row.realOutput = data.list[0].realOutput
             row.plan = data.list[0].plan
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

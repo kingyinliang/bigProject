@@ -86,8 +86,11 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.RecordList = data.embryoRecordList
+          this.currPage = 1
+          this.pageSize = 10
+          this.totalCount = data.embryoRecordList.length
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

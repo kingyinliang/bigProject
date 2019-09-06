@@ -168,7 +168,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -180,7 +180,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -198,7 +198,7 @@ export default class Index extends Vue {
     //   if (res.data.code === 0) {
     //     this.$message.error('导出成功')
     //   } else {
-    //     this.$message.error(res.data.msg)
+    //     this.$notify.error({title: '错误', message: res.data.msg})
     //   }
     // }).catch(err => {
     //   console.log('catch data::', err)
@@ -239,7 +239,7 @@ export default class Index extends Vue {
         this.dataList = res.data.page.list
         this.totalCount = res.data.page.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.error(err)

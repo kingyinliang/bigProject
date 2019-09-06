@@ -294,7 +294,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })
@@ -322,7 +322,7 @@ export default {
             this.GetLtkList()
             this.$message.success('操作成功')
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         }).catch(() => {
           this.$message.error('网络错误')
@@ -336,7 +336,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -349,7 +349,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -362,7 +362,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -409,7 +409,7 @@ export default {
               this.$message.success('操作成功')
               this.GetLtkList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -434,7 +434,7 @@ export default {
               this.$message.success('操作成功')
               this.GetLtkList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })

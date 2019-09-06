@@ -195,7 +195,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -212,7 +212,7 @@ export default {
           this.currPage = data.page.currPage
           this.visible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -247,7 +247,7 @@ export default {
         } else {
           this.loading = false
           clearInterval(this.orderTime)
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
         this.loading = false

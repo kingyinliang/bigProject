@@ -141,7 +141,7 @@ export default {
           this.factory = data.typeList
           this.form.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -159,7 +159,7 @@ export default {
               }
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -172,7 +172,7 @@ export default {
         if (data.code === 0) {
           this.MaterialType = data.productsInfo
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

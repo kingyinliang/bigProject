@@ -629,7 +629,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -645,7 +645,7 @@ export default class Index extends Vue {
             this.params.workshopName = res.data.typeList[0].deptName
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -662,7 +662,7 @@ export default class Index extends Vue {
             this.params.productLineName = data.childList[0].deptName
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -682,7 +682,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.potList = res.data.page.list
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -726,7 +726,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.dataList = res.data.list
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }

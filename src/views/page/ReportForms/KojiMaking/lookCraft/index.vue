@@ -143,7 +143,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -155,7 +155,7 @@ export default {
           if (data.code === 0) {
             this.workShop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -168,7 +168,7 @@ export default {
           if (data.code === 0) {
             this.inPotList = data.page.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -181,7 +181,7 @@ export default {
           if (data.code === 0) {
             this.houseList = data.page.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -197,7 +197,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })

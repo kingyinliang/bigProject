@@ -90,7 +90,7 @@ export default {
           this.MaterialAudit = data.vrList
           status = GetStatus(this.MaterialList)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setApplyMaterielState', status)

@@ -354,7 +354,7 @@ export default {
           this.factory = data.typeList
           this.form.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -372,7 +372,7 @@ export default {
               }
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -385,7 +385,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -408,7 +408,7 @@ export default {
           this.form.totalCount = data.data.totalCount
           this.LogList = []
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -473,7 +473,7 @@ export default {
             this.form.currPage = 1
             this.LogList = []
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -495,7 +495,7 @@ export default {
         if (data.code === 0) {
           this.LogList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -504,7 +504,7 @@ export default {
         if (data.code === 0) {
           this.LogList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

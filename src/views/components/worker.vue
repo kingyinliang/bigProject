@@ -188,7 +188,7 @@ export default {
           this.WorkerDate = data.listForm
           this.UserAudit = data.listApproval
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.Materails = data.result
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -393,7 +393,7 @@ export default {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -404,14 +404,14 @@ export default {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
         // this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
         //   if (data.code === 0) {
         //     this.Team = data.childList
         //   } else {
-        //     this.$message.error(data.msg)
+        //     this.$notify.error({title: '错误', message: data.msg})
         //   }
         // })
       } else {
@@ -419,7 +419,7 @@ export default {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -439,7 +439,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

@@ -107,7 +107,7 @@ export default {
         if (data.code === 0) {
           this.GermsDate = data.listForm
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -117,7 +117,7 @@ export default {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

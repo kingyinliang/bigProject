@@ -317,7 +317,7 @@ export default {
             this.plantList.factoryid = res.data.typeList[0].deptId
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -332,7 +332,7 @@ export default {
               this.plantList.workshopid = res.data.typeList[0].deptId
             }
           } else {
-            this.$message.error(res.data.msg)
+            this.$notify.error({title: '错误', message: res.data.msg})
           }
         })
       } else {
@@ -347,7 +347,7 @@ export default {
       //     if (data.code === 0) {
       //       this.processesList = data.childList
       //     } else {
-      //       this.$message.error(data.msg)
+      //       this.$notify.error({title: '错误', message: data.msg})
       //     }
       //   })
       // } else {
@@ -358,7 +358,7 @@ export default {
           if (data.code === 0) {
             this.processesList = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -366,7 +366,7 @@ export default {
           if (data.code === 0) {
             this.processesList = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -378,7 +378,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -395,7 +395,7 @@ export default {
           this.factoryid = this.plantList.factoryid
           this.FWproductDate = this.plantList.productDate
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingStatus = false
       })
@@ -443,7 +443,7 @@ export default {
             // this.datalist = res.data.infoUser
             this.plantList.totalCount = res.data.infoUser.length
           } else {
-            this.$message.error(res.data.msg)
+            this.$notify.error({title: '错误', message: res.data.msg})
           }
           this.lodingStatus = false
         })
@@ -472,7 +472,7 @@ export default {
             row.realOutput = data.list[0].realOutput
             row.plan = data.list[0].plan
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -514,7 +514,7 @@ export default {
                 message: '删除成功'
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -589,7 +589,7 @@ export default {
                 })
                 this.GetOrderList(true)
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
               this.lodingStatus = false
             })

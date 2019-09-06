@@ -105,7 +105,7 @@ export default {
           this.factoryList = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -120,7 +120,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -166,7 +166,7 @@ export default {
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

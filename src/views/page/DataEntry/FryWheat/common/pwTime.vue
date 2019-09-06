@@ -112,7 +112,7 @@ export default {
               }]
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         }).finally(() => {
           this.$emit('SetReadyStatus', status)
@@ -139,7 +139,7 @@ export default {
       this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate[0]).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

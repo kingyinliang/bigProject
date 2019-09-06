@@ -238,7 +238,7 @@ export default {
       if (data.code === 0) {
         this.SerchSapList = data.list
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
     headanimation(this.$)
@@ -263,7 +263,7 @@ export default {
           this.plantList.pageSize = JSON.stringify(data.page.pageSize)
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })

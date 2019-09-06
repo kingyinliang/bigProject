@@ -127,7 +127,7 @@ export default {
           this.instorageState = GetStatus(this.InStorageDate)
           this.DataAudit = data.vrlist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setInstorageState', this.instorageState)
@@ -192,7 +192,7 @@ export default {
         if (data.code === 0) {
           this.PotList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

@@ -164,7 +164,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -181,7 +181,7 @@ export default {
               this.formHeader.workShop = ''
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -194,7 +194,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -211,7 +211,7 @@ export default {
           this.pages.totalCount = this.dataListAll.length
           this.orderInfoList = []
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -242,7 +242,7 @@ export default {
         if (data.code === 0) {
           this.orderInfoList = data.allocateInfo.orderInfo
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -271,7 +271,7 @@ export default {
             this.$message.success('生成成功')
             this.GetList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

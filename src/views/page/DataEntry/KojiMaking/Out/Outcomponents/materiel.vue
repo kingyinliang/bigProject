@@ -120,7 +120,7 @@ export default {
           }
           this.$emit('GetMaterielStatus', this.Materielstatus)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -157,7 +157,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('原料领用' + data.msg)
           }
@@ -170,7 +170,7 @@ export default {
         if (data.code === 0) {
           this.brine = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -187,7 +187,7 @@ export default {
         if (data.code === 0) {
           this.brineTankNo = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

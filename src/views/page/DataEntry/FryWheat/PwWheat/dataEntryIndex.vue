@@ -252,7 +252,7 @@ export default {
       }]).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

@@ -418,7 +418,7 @@ export default {
       this.$http(`${KJM_API.DOUGONGYIZHUSAVE_API}`, 'POST', this.craftfrom).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -433,7 +433,7 @@ export default {
       this.$http(`${KJM_API.DOUGONGYIRUISAVE_API}`, 'POST', this.lishuiList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -449,7 +449,7 @@ export default {
       this.$http(`${KJM_API.DOUGONGYIZHENGSAVE_API}`, 'POST', this.zhengzhuList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -465,7 +465,7 @@ export default {
       this.$http(`${KJM_API.DOUGONGYIHUNSAVE_API}`, 'POST', this.hunheList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -542,7 +542,7 @@ export default {
           // this.wheatList = data.wheatList
           // this.soyList = data.pulpList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         this.$message.error(error)

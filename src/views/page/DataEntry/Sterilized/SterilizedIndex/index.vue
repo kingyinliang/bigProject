@@ -125,13 +125,6 @@ export default {
           this.GetMaterails(this.formHeader.factory)
           // this.dataList = data.list
           this.dataList = data.list
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
-          this.dataList.push(data.list[0])
           this.dataList.forEach((item, index) => {
             if (item.steList.length === 1) {
               item.selectOrder = item.steList[0]
@@ -141,7 +134,7 @@ export default {
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -154,7 +147,7 @@ export default {
         if (data.code === 0) {
           this.Materails = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

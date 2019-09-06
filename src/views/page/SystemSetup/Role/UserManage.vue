@@ -51,7 +51,7 @@ export default {
           this.userlist = transfer(data.list).res
           this.selctId = transfer(data.list).selcedid
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = true
       })
@@ -75,7 +75,7 @@ export default {
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {

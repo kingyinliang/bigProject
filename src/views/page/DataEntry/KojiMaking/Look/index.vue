@@ -138,7 +138,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },

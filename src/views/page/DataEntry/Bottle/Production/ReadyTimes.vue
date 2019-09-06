@@ -204,7 +204,7 @@ export default {
           this.dataList = data.listMachine
           this.TimeAudit = data.vrList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('SetReadyStatus', status)
@@ -290,7 +290,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (resolve) {
             reject('修改准备时间' + data.msg)
           }
@@ -312,7 +312,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('修改设备时间' + data.msg)
           }

@@ -84,7 +84,7 @@ export default {
           if (data.code === 0) {
             this.dataForm = data.user
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -125,7 +125,7 @@ export default {
                     })
                   } else {
                     this.type = true
-                    this.$message.error(data.msg)
+                    this.$notify.error({title: '错误', message: data.msg})
                   }
                 })
               } else {
@@ -145,7 +145,7 @@ export default {
                     })
                   } else {
                     this.type = true
-                    this.$message.error(data.msg)
+                    this.$notify.error({title: '错误', message: data.msg})
                   }
                 })
               }

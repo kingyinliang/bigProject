@@ -159,7 +159,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -191,7 +191,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
       })
@@ -248,7 +248,7 @@ export default {
                 this.multipleSelection = []
                 this.getList()
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           }).catch(() => {

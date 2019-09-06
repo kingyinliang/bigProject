@@ -130,7 +130,7 @@ export default {
             this.dataForm.deptId = data.sysHolder.deptId
             this.Getdeptcode(data.sysHolder.factory, data.sysHolder.deptId)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.visible = true
         })
@@ -147,7 +147,7 @@ export default {
         if (res.data.code === 0) {
           this.factoryList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -167,7 +167,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -178,7 +178,7 @@ export default {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -202,7 +202,7 @@ export default {
                   })
                 } else {
                   this.submitType = true
-                  this.$message.error(data.msg)
+                  this.$notify.error({title: '错误', message: data.msg})
                 }
               })
             } else {
@@ -220,7 +220,7 @@ export default {
                   })
                 } else {
                   this.submitType = true
-                  this.$message.error(data.msg)
+                  this.$notify.error({title: '错误', message: data.msg})
                 }
               })
             }

@@ -172,7 +172,7 @@ export function exportFile (url, fileName, vue) {
       elink.click()
       document.body.removeChild(elink)
     } else {
-      vue.$message.error(data.msg)
+      vue.$notify.error({title: '错误', message: data.msg})
     }
   })
 }
@@ -313,7 +313,7 @@ export function getFactory (Vue) {
       Vue.factory = data.typeList
       Vue.formHeader.factory = data.typeList[0].deptId
     } else {
-      Vue.$message.error(data.msg)
+      Vue.$notify.error({title: '错误', message: data.msg})
     }
   })
 }
@@ -332,7 +332,7 @@ export function getWorkshop (Vue, id, workshopName) {
           Vue.formHeader.workShop = data.typeList[0].deptId
         }
       } else {
-        Vue.$message.error(data.msg)
+        Vue.$notify.error({title: '错误', message: data.msg})
       }
     })
   }
@@ -351,7 +351,7 @@ export function getParentline (Vue, id) {
           Vue.formHeader.productline = data.childList[0].deptId
         }
       } else {
-        Vue.$message.error(data.msg)
+        Vue.$notify.error({title: '错误', message: data.msg})
       }
     })
   }
@@ -364,7 +364,7 @@ export function getStatus (Vue) {
     if (data.code === 0) {
       Vue.Status = data.dicList
     } else {
-      Vue.$message.error(data.msg)
+      Vue.$notify.error({title: '错误', message: data.msg})
     }
   })
 }

@@ -116,7 +116,7 @@ export default {
           this.readAudit = data.verify
           this.materialStatus = GetStatus(data.list)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setMaterialStatus', this.materialStatus)
@@ -127,7 +127,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -246,7 +246,7 @@ export default {
       }
       this.$http(url, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {} else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

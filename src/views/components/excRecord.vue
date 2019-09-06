@@ -193,7 +193,7 @@ export default {
         if (data.code === 0) {
           this.ExcDate = data.listForm
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.stoppageType = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -263,7 +263,7 @@ export default {
         if (data.code === 0) {
           this.equipmentType = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -273,7 +273,7 @@ export default {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -283,7 +283,7 @@ export default {
         if (data.code === 0) {
           this.enery = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

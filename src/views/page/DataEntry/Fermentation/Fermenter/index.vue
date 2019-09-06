@@ -359,7 +359,7 @@ export default {
           this.topBox[3].wdm = data.overView.wdmSixMonthCount
           this.topBox[3].lyx = data.overView.lyxSixMonthCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -370,7 +370,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -384,7 +384,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -402,7 +402,7 @@ export default {
           if (data.code === 0) {
             this.halfList = data.halfList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -414,7 +414,7 @@ export default {
           if (data.code === 0) {
             this.holderStatusList = data.statusList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -483,7 +483,7 @@ export default {
           this.dialogData.holderStatus = '0'
           this.visible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

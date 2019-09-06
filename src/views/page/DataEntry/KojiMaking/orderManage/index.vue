@@ -417,7 +417,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -429,7 +429,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -458,7 +458,7 @@ export default class Index extends Vue {
           this.continueList = data.page.list
         }
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     }).catch((error) => {
       console.log('catch data::', error)
@@ -502,7 +502,7 @@ export default class Index extends Vue {
           this.orderList.push(order)
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -586,7 +586,7 @@ export default class Index extends Vue {
         this.getOrderList()
         this.retrieveDetail(this.splitDetailList[0].orderId)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -623,7 +623,7 @@ export default class Index extends Vue {
           this.orderDetailList.push(detail)
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -662,7 +662,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.retrieveDetail(this.selectedDetailList[0].orderId)
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       }).catch(err => {
         console.log('catch data::', err)
@@ -705,7 +705,7 @@ export default class Index extends Vue {
         this.dialogFormVisible2 = false
         this.retrieveDetail(this.detailForm.orderId)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)

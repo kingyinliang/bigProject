@@ -255,7 +255,7 @@ export default {
             }
             this.$emit('GetlistbomStatus', this.Sapstatus)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -298,12 +298,12 @@ export default {
       this.$http(`${PACKAGING_API.PKGSAVEFORMP_API}`, 'POST', this.listbomP).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.$http(`${PACKAGING_API.PKGSAVEFORMS_API}`, 'POST', this.listbomS).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -398,7 +398,7 @@ export default {
         if (data.code === 0) {
           this.finHolder = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       // 半成品罐
@@ -413,7 +413,7 @@ export default {
         if (data.code === 0) {
           this.semiHolder = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     */
@@ -421,7 +421,7 @@ export default {
         if (data.code === 0) {
           this.semiHolder = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

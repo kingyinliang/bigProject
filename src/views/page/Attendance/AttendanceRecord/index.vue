@@ -633,7 +633,7 @@ export default {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -651,7 +651,7 @@ export default {
           this.datalist.splice(this.datalist.length, 0, {})
           this.datalist.splice(this.datalist.length - 1, 1)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (callback) {
           callback(null, 'one')
@@ -664,7 +664,7 @@ export default {
         if (data.code === 0) {
           this.ARtype = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -674,7 +674,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -687,7 +687,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -702,7 +702,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -716,7 +716,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -728,7 +728,7 @@ export default {
         if (data.code === 0) {
           this.auditLogList = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -819,11 +819,11 @@ export default {
                   that.tableLoding = false
                 })
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -847,7 +847,7 @@ export default {
               this.multipleSelection = []
               this.GetList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -874,7 +874,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })
@@ -932,7 +932,7 @@ export default {
           }
           this.visible = true
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -967,7 +967,7 @@ export default {
           this.userlist = data.page.list
           this.tree1Status = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -1062,7 +1062,7 @@ export default {
             this.tableLoding = false
             this.GetList(true)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.lodingS = false
         })
@@ -1129,7 +1129,7 @@ export default {
               this.$message.success('操作成功')
               this.GetList(true)
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
             this.lodingS = false
           })
@@ -1170,7 +1170,7 @@ export default {
             this.$message.success('操作成功')
             this.GetList(true)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.lodingS = false
         })

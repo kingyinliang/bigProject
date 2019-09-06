@@ -274,7 +274,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -286,7 +286,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -299,7 +299,7 @@ export default class Index extends Vue {
       if (data.code === 0) {
         this.orderTypeList = data.dicList[0].prolist
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     }).catch((error) => {
       console.log('catch data::', error)
@@ -316,7 +316,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -332,7 +332,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -396,7 +396,7 @@ export default class Index extends Vue {
         })
         this.totalCount = res.data.page.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -422,7 +422,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.retrieveOrderList()
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -443,7 +443,7 @@ export default class Index extends Vue {
           if (res.data.code === 0) {
             this.retrieveOrderList()
           } else {
-            this.$message.error(res.data.msg)
+            this.$notify.error({title: '错误', message: res.data.msg})
           }
         })
       })
@@ -476,7 +476,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.readAudit = res.data.list
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }

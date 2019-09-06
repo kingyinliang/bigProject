@@ -151,7 +151,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -167,7 +167,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -183,7 +183,7 @@ export default {
             this.productline = data.childList
             this.formHeader.productLine = data.childList[0].deptId
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -214,7 +214,7 @@ export default {
             item.drenchEndDate = item.drenchEndDate ? item.drenchEndDate : dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -229,7 +229,7 @@ export default {
             }
             this.visible = true
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -272,7 +272,7 @@ export default {
             this.$message.success(this.succmessage)
             this.isRedact = false
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -284,7 +284,7 @@ export default {
             this.$message.success(this.succmessage)
             this.isRedact = false
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

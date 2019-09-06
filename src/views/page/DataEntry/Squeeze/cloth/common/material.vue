@@ -222,7 +222,7 @@ export default {
         if (data.code === 0) {
           this.sauceClassList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.pulpMachineList = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -264,7 +264,7 @@ export default {
         if (data.code === 0) {
           this.hovercraftList = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
@@ -276,7 +276,7 @@ export default {
         if (data.code === 0) {
           this.hovercraftAll = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -380,7 +380,7 @@ export default {
           this.materialList = data.propulp
           this.peopleList = data.propulpMan
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -427,7 +427,7 @@ export default {
       this.$http(`${SQU_API.CLOTHFORMHEADER_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -460,12 +460,12 @@ export default {
             this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -483,7 +483,7 @@ export default {
       this.$http(`${SQU_API.CLOTHMATERIALMAN_API}`, 'POST', this.peopleList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -522,7 +522,7 @@ export default {
             }
             this.visible = true
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

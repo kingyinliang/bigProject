@@ -180,7 +180,7 @@ export default {
       if (data.code === 0) {
         this.SerchSapList = data.list
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
   },
@@ -191,7 +191,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -215,7 +215,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
         this.lodingS = false
@@ -248,7 +248,7 @@ export default {
               this.multipleSelection = []
               this.GetList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }).catch(() => {

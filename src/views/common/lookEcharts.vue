@@ -59,7 +59,7 @@ export default {
           })
           this.initChartLine()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -134,7 +134,7 @@ export default {
           let option = this.GetOption()
           this.chartLine.setOption(option)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

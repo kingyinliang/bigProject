@@ -275,7 +275,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -290,7 +290,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -304,7 +304,7 @@ export default {
           if (data.code === 0) {
             this.HolderList = data.halfList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -327,7 +327,7 @@ export default {
           this.formHeader.totalCount = data.list.totalCount
           this.fastS = true
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -364,7 +364,7 @@ export default {
               this.GetList()
               this.$refs[formName].resetFields()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
@@ -456,7 +456,7 @@ export default {
               this.GetList()
               this.$refs[formName].resetFields()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
@@ -482,7 +482,7 @@ export default {
               this.GetList()
               this.$refs[formName].resetFields()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
@@ -497,7 +497,7 @@ export default {
           if (data.code === 0) {
             this.PeopleList = data.page.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

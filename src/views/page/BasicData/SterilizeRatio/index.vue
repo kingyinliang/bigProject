@@ -118,7 +118,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -130,7 +130,7 @@ export default {
           if (data.code === 0) {
             this.materialList = data.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -145,7 +145,7 @@ export default {
         if (data.code === 0) {
           this.dataList = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -179,7 +179,7 @@ export default {
               this.$refs[formName].resetFields()
               this.GetList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
@@ -210,7 +210,7 @@ export default {
             this.$message.success('删除成功')
             this.GetList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

@@ -182,7 +182,7 @@ export default {
             this.crafData.hotMedium = this.crafData.hotMedium.split(',')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -375,7 +375,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

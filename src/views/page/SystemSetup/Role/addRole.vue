@@ -69,7 +69,7 @@ export default {
             })
           } else {
             this.type = true
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

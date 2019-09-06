@@ -152,7 +152,7 @@ export default {
         this.$http(WHT_API.APPLYMATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -179,7 +179,7 @@ export default {
         this.$http(`${WHT_API.APPLYMATERIELSUBMIT_API}`, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -246,7 +246,7 @@ export default {
         if (data.code === 0) {
           this.wheatContainerList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -259,7 +259,7 @@ export default {
         if (data.code === 0) {
           this.materialDictList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -312,7 +312,7 @@ export default {
             inState = 'checked'
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         this.$message.error(error)
@@ -391,7 +391,7 @@ export default {
             })
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

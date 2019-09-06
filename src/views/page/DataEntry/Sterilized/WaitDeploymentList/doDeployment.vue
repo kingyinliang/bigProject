@@ -201,7 +201,7 @@ export default {
           })
           // this.GetorderNo(this.orderArray)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -219,7 +219,7 @@ export default {
         if (data.code === 0) {
           this.orderList = data.orderInfo.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -238,7 +238,7 @@ export default {
           this.pagesForm.totalCount = this.orderPropAllList.length
           this.dialogTableVisible = true
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -333,11 +333,11 @@ export default {
                   orderNo: this.allocateId
                 }
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -385,15 +385,15 @@ export default {
                         orderNo: this.allocateId
                       }
                     } else {
-                      this.$message.error(data.msg)
+                      this.$notify.error({title: '错误', message: data.msg})
                     }
                   })
                 } else {
-                  this.$message.error(data.msg)
+                  this.$notify.error({title: '错误', message: data.msg})
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
@@ -413,11 +413,11 @@ export default {
                   this.isRedact = false
                   this.GetInfoList(this.allocateId)
                 } else {
-                  this.$message.error(data.msg)
+                  this.$notify.error({title: '错误', message: data.msg})
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }

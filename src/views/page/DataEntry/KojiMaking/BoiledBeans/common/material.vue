@@ -600,7 +600,7 @@ export default {
     //     if (data.code === 0) {
     //       this.pulpListPici = data.listInfo
     //     } else {
-    //       this.$message.error(data.msg)
+    //       this.$notify.error({title: '错误', message: data.msg})
     //     }
     //   })
     // },
@@ -609,7 +609,7 @@ export default {
     //     if (data.code === 0) {
     //       this.wheatListPici = data.listInfo
     //     } else {
-    //       this.$message.error(data.msg)
+    //       this.$notify.error({title: '错误', message: data.msg})
     //     }
     //   })
     // },
@@ -618,7 +618,7 @@ export default {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -627,7 +627,7 @@ export default {
         if (data.code === 0) {
           this.wheatShort = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -636,7 +636,7 @@ export default {
         if (data.code === 0) {
           this.soyShort = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -723,11 +723,12 @@ export default {
                 this.$set(this.MaiHoldList[index], 'total', total)
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -763,11 +764,11 @@ export default {
                 this.$set(this.DouHoldList[index], 'total', total)
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -777,7 +778,7 @@ export default {
         if (res.data.code === 0) {
           this.DouCangList = res.data.page.list
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -1167,14 +1168,14 @@ export default {
         this.$http(`${KJM_API.DOUMATERSUBMITZHONG_API}`, 'POST', this.materialList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
       this.$http(`${KJM_API.DOUMATERZHONG_API}`, 'POST', this.materialList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -1195,14 +1196,14 @@ export default {
         this.$http(`${KJM_API.DOUMATERSUBMITWHEAT_API}`, 'POST', this.wheatList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
       this.$http(`${KJM_API.DOUMATERWHEAT_API}`, 'POST', this.wheatList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -1230,14 +1231,14 @@ export default {
         this.$http(`${KJM_API.DOUMATERSUBMITSOY_API}`, 'POST', this.soyList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
       this.$http(`${KJM_API.DOUMATERPULP_API}`, 'POST', this.soyList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -1252,7 +1253,7 @@ export default {
       this.$http(`${KJM_API.DOUMATERSTATUS_API}`, 'POST', {status: this.formHeader.submitStatus, orderHouseId: this.formHeader.orderHouseId, orderId: this.formHeader.orderId}).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -1325,7 +1326,7 @@ export default {
             inState = 'checked'
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         this.$message.error(error)
@@ -1362,7 +1363,7 @@ export default {
         if (data.code === 0) {
           this.PulpCangList = data.holder
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

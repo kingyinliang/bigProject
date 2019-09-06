@@ -205,7 +205,7 @@ export default {
           this.factoryList = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -223,7 +223,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -242,7 +242,7 @@ export default {
         if (data.code === 0) {
           this.holderNoList = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -252,7 +252,7 @@ export default {
         if (data.code === 0) {
           this.materialList = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -288,7 +288,7 @@ export default {
           this.pages.total = this.dataListAll.length
           this.GetPageCurrenList()
         } else {
-          this.message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -323,7 +323,7 @@ export default {
           this.$message.success('调整成功')
           this.GetList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

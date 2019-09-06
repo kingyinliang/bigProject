@@ -67,7 +67,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -77,7 +77,7 @@ export default {
         if (data.code === 0) {
           this.TimeAudit = data.listRecord
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -87,7 +87,7 @@ export default {
         if (data.code === 0) {
           this.GetTimeList(this.formHeader)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -109,7 +109,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -131,7 +131,7 @@ export default {
           this.$message.success('退回成功')
           this.GetTime()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

@@ -388,7 +388,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -400,7 +400,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -414,7 +414,7 @@ export default class Index extends Vue {
         if (data.code === 0) {
           this.productlineList = data.childList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -424,7 +424,7 @@ export default class Index extends Vue {
     //     if (data.code === 0) {
     //       this.productlineList = data.childList
     //     } else {
-    //       this.$message.error(data.msg)
+    //       this.$notify.error({title: '错误', message: data.msg})
     //     }
     //   })
     // }
@@ -436,14 +436,14 @@ export default class Index extends Vue {
       if (data.code === 0) {
         this.materialList = data.materialList
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
     // Vue.prototype.$http(`${BASICDATA_API.MATERIAL_API}`, 'POST', {param: '欣和成品'}, false, false, false).then(({data}) => {
     //   if (data.code === 0) {
     //     this.materialList = data.allList
     //   } else {
-    //     this.$message.error(data.msg)
+    //     this.$notify.error({title: '错误', message: data.msg})
     //   }
     // })
   }
@@ -510,7 +510,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.sumBean = res.data.sumBean
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
         if (resolve) {
           resolve()
@@ -527,7 +527,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.opeSumBean = res.data.sumBean
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
         if (resolve) {
           resolve()
@@ -547,7 +547,7 @@ export default class Index extends Vue {
         this.dataList = res.data.page.list
         this.totalCount = res.data.page.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
       if (resolve) {
         resolve()
@@ -566,7 +566,7 @@ export default class Index extends Vue {
         this.opeDataList = res.data.page.list
         this.totalCount = res.data.page.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
       if (resolve) {
         resolve()

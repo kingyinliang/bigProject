@@ -370,7 +370,7 @@ export default class Index extends Vue {
         this.$message.success('成功')
         this.getList()
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
   }
@@ -403,7 +403,7 @@ export default class Index extends Vue {
         this.newForHeader = res.data.list
         Object.assign(this.formHeader, item)
       } else {
-        this.$message.error(res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -451,7 +451,7 @@ export default class Index extends Vue {
         }
         this.readyState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -499,7 +499,7 @@ export default class Index extends Vue {
         }
         this.inStorageState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -548,7 +548,7 @@ export default class Index extends Vue {
         }
         this.applyMaterielState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -565,7 +565,7 @@ export default class Index extends Vue {
         this.$message.success('数据保存成功!')
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -588,7 +588,7 @@ export default class Index extends Vue {
         this.$message.success('数据回退成功!')
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -600,7 +600,7 @@ export default class Index extends Vue {
         this.$message.success('数据回退成功!')
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -612,7 +612,7 @@ export default class Index extends Vue {
         this.$message.success('数据回退成功!')
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -676,7 +676,7 @@ export default class Index extends Vue {
     })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
       if (res.data.code !== 0) {
-        this.$message.error('报工工时提交失败：' + res.data.msg)
+        this.$notify.error({title: '错误', message: '报工工时提交失败：' + res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)

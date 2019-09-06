@@ -113,7 +113,7 @@ export default {
         if (data.code === 0) {
           this.$emit('GetList')
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -134,7 +134,7 @@ export default {
         if (data.code === 0) {
           this.orderAudit = data.listRecord
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -148,7 +148,7 @@ export default {
           this.$message.success('退回成功')
           this.$emit('GetList')
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -172,7 +172,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

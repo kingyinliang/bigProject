@@ -104,7 +104,7 @@ export default {
         if (data.code === 0) {
           this.orderList = this.ProcessingData(data.list)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -182,7 +182,7 @@ export default {
             this.params.factoryId = res.data.typeList[0].deptId
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -198,7 +198,7 @@ export default {
               this.params.workShop = res.data.typeList[0].deptId
             }
           } else {
-            this.$message.error(res.data.msg)
+            this.$notify.error({title: '错误', message: res.data.msg})
           }
         })
       }

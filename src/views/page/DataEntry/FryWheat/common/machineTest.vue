@@ -70,7 +70,7 @@ export default {
         if (data.code === 0) {
           this.machineTest = data.record
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -120,7 +120,7 @@ export default {
           this.$message.success('保存成功')
           this.visible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

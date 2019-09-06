@@ -150,7 +150,7 @@ export default {
           }
           this.GetList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -223,7 +223,7 @@ export default {
           //   })
           // })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE ? this.formHeader.HALF_TYPE : '', materialCode: this.formHeader.MATERIAL_CODE}).then(({data}) => {
@@ -292,7 +292,7 @@ export default {
               this.$message.success('开罐成功')
               this.Getdetail()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })

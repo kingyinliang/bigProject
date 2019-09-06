@@ -655,7 +655,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -671,7 +671,7 @@ export default class Index extends Vue {
             this.params.workshopName = res.data.typeList[0].deptName
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -688,7 +688,7 @@ export default class Index extends Vue {
             this.params.productLineName = data.childList[0].deptName
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -704,7 +704,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -716,7 +716,7 @@ export default class Index extends Vue {
         this.startForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
         this.startForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -727,7 +727,7 @@ export default class Index extends Vue {
         this.modifyForm.remainAmountUnit = (res.data.psp && res.data.psp.remainAmountUnit) ? res.data.psp.remainAmountUnit : 'L'
         this.modifyForm.batch = (res.data.psp && res.data.psp.batch) ? res.data.psp.batch : ''
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -784,7 +784,7 @@ export default class Index extends Vue {
         // let that = this
         this.sdList.forEach(item => this.availableMap.set(item.deviceId, '0'))
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -796,7 +796,7 @@ export default class Index extends Vue {
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       this.$message.error('保存失败: ' + err)
@@ -810,7 +810,7 @@ export default class Index extends Vue {
         this.getFermentPot(this.params.factoryId)
         this.getOrderList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       this.$message.error('提交失败: ' + err)

@@ -273,11 +273,11 @@ export default {
             if (data.code === 0) {
               this.ARtype = this.ARtype.concat(data.dicList)
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -294,7 +294,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.dataListLoading = false
       })
@@ -305,7 +305,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -318,7 +318,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -333,7 +333,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -373,7 +373,7 @@ export default {
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.GetAuditList()
         })
@@ -413,7 +413,7 @@ export default {
               this.GetAuditList()
               this.$message.success('操作成功')
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -442,7 +442,7 @@ export default {
               if (data) {}
             } else {
               this.GetAuditList()
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
