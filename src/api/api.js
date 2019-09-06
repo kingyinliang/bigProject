@@ -1614,3 +1614,15 @@ export const BOTTLE_API = {
   BOTTLE_QUALITY_LIST: HOST + '/bottle/workShop/qualityInspectionList',
   BOTTLE_QUALITY_SAVE: HOST + '/bottle/workShop/qualityInspectionSave'
 }
+/**
+ *  原汁api  Juice
+ */
+export const JUICE_API = {
+  JUICE_POT_LIST: HOST + '/juice/pot/List',
+  JUICE_TYPE_LIST: HOST + '/juice/pot/maintainList',
+  JUICE_TRANSFER_LIST: HOST + '/juice/pot/transferStorageList',
+  JUICE_TRANSFER_POT_LIST: HOST + '/juice/pot/transferStoragePotList',
+  JUICE_TRANSFER_SAVE: HOST + '/juice/pot/transferStorage',
+  JUICE_ADD_POT_LIST: HOST + '/juice/pot/addPotList',
+  JUICE_ADD_SAVE: HOST + '/juice/pot/addJuicePot'
+}
