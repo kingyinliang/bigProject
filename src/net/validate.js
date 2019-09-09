@@ -1,4 +1,4 @@
-import {BASICDATA_API, STERILIZED_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 // import Vue from "vue/types/index";
 /**
  * 邮箱
@@ -172,7 +172,7 @@ export function exportFile (url, fileName, vue) {
       elink.click()
       document.body.removeChild(elink)
     } else {
-      vue.$message.error(data.msg)
+      vue.$notify.error({title: '错误', message: data.msg})
     }
   })
 }
@@ -313,12 +313,12 @@ export function getFactory (Vue) {
       Vue.factory = data.typeList
       Vue.formHeader.factory = data.typeList[0].deptId
     } else {
-      Vue.$message.error(data.msg)
+      Vue.$notify.error({title: '错误', message: data.msg})
     }
   })
 }
 /**
- * 获取工厂
+ * 获取车间
  */
 export function getWorkshop (Vue, id, workshopName) {
   if (id) {
@@ -332,10 +332,41 @@ export function getWorkshop (Vue, id, workshopName) {
           Vue.formHeader.workShop = data.typeList[0].deptId
         }
       } else {
-        Vue.$message.error(data.msg)
+        Vue.$notify.error({title: '错误', message: data.msg})
       }
     })
   }
+}
+/**
+ * 获取产线
+ */
+export function getParentline (Vue, id) {
+  if (id) {
+    Vue.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {
+      parentId: id
+    }, false, false, false).then(({data}) => {
+      if (data.code === 0) {
+        Vue.productline = data.childList
+        if (data.childList.length) {
+          Vue.formHeader.productline = data.childList[0].deptId
+        }
+      } else {
+        Vue.$notify.error({title: '错误', message: data.msg})
+      }
+    })
+  }
+}
+/**
+ * 获取状态
+ */
+export function getStatus (Vue) {
+  Vue.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'status_type'}, false, false, false).then(({data}) => {
+    if (data.code === 0) {
+      Vue.Status = data.dicList
+    } else {
+      Vue.$notify.error({title: '错误', message: data.msg})
+    }
+  })
 }
 export class Stesave {
   constructor (formHeader) {

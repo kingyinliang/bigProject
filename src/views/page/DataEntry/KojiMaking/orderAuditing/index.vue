@@ -67,7 +67,7 @@
               </el-tooltip>
             </span>
             <el-row>
-              <el-button type="primary" style="float: right" size="small" @click="GetTime" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked'">获取工时</el-button>
+              <el-button type="primary" style="float: right" size="small" @click="GetTime" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked'&& isAuth('sys:midTimeSheet:udpate')">获取工时</el-button>
               <el-table header-row-class-name="tableHead" :data="workHourList"  border tooltip-effect="dark" >
                 <el-table-column type="index" width="55" label="序号"></el-table-column>
                 <el-table-column label="工序" width="140">
@@ -367,10 +367,10 @@ export default class Index extends Vue {
   GetTime () {
     Vue.prototype.$http(`${KJM_API.GETKJMAKINGCHECKTIME_API}`, 'POST', this.newForHeader).then(({data}) => {
       if (data.code === 0) {
-        this.$message.success('成功')
+        this.$notify({title: '成功', message: '成功', type: 'success'})
         this.getList()
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
   }
@@ -403,7 +403,7 @@ export default class Index extends Vue {
         this.newForHeader = res.data.list
         Object.assign(this.formHeader, item)
       } else {
-        this.$message.error(res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.code === 0 ? '数据异常，请稍后再试' : res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -451,7 +451,7 @@ export default class Index extends Vue {
         }
         this.readyState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -499,7 +499,7 @@ export default class Index extends Vue {
         }
         this.inStorageState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -548,7 +548,7 @@ export default class Index extends Vue {
         }
         this.applyMaterielState = inState
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -562,10 +562,10 @@ export default class Index extends Vue {
     row.status = 'saved'
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESAVE_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
-        this.$message.success('数据保存成功!')
+        this.$notify({title: '成功', message: '数据保存成功', type: 'success'})
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -585,10 +585,10 @@ export default class Index extends Vue {
     let params = Object.assign({}, row, {workShop: this.formHeader.workShop, inKjmDate: this.formHeader.inKjmDate})
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMEBACK_API}`, 'POST', params).then(res => {
       if (res.data.code === 0) {
-        this.$message.success('数据回退成功!')
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -597,10 +597,10 @@ export default class Index extends Vue {
   storageGoBack (row) {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
-        this.$message.success('数据回退成功!')
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -609,10 +609,10 @@ export default class Index extends Vue {
   materialGoBack (row) {
     Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALEBACK_API}`, 'POST', row).then(res => {
       if (res.data.code === 0) {
-        this.$message.success('数据回退成功!')
+        this.$notify({title: '成功', message: '数据回退成功', type: 'success'})
         this.getList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -635,7 +635,7 @@ export default class Index extends Vue {
       } else {
         Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {
           Promise.all([that.headSubmit()]).then((result) => {
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
             that.getList()
           })
         })
@@ -645,7 +645,7 @@ export default class Index extends Vue {
 
   validateTime () {
     if (!this.workHourList || this.workHourList.length === 0) {
-      this.$message.error('报工工时无数据，不可提交')
+      this.$notify.error({title: '错误', message: '报工工时无数据，不可提交'})
       return false
     }
     let sum = 0
@@ -655,7 +655,7 @@ export default class Index extends Vue {
       }
     }
     if (sum <= 0) {
-      this.$message.error('机器工时之和不能小于0')
+      this.$notify.error({title: '错误', message: '机器工时之和不能小于0'})
       return false
     }
     return true
@@ -676,7 +676,7 @@ export default class Index extends Vue {
     })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKTIMESUBMIT_API}`, 'POST', this.workHourList).then(res => {
       if (res.data.code !== 0) {
-        this.$message.error('报工工时提交失败：' + res.data.msg)
+        this.$notify.error({title: '错误', message: '报工工时提交失败：' + res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -692,7 +692,7 @@ export default class Index extends Vue {
       countOutputUnit: 'L'
     }).then(res => {
       if (res.data.code !== 0) {
-        this.$message.error('表头提交失败：' + res.data.msg)
+        this.$notify.error({title: '错误', message: '表头提交失败：' + res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -716,7 +716,7 @@ export default class Index extends Vue {
     })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKSTORAGESUBMIT_API}`, 'POST', this.inStockList).then(res => {
       if (res.data.code !== 0) {
-        this.$message.error('生产入库提交失败：' + res.data.msg)
+        this.$notify.error({title: '错误', message: '生产入库提交失败：' + res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -727,7 +727,7 @@ export default class Index extends Vue {
     this.applyMaterieList.forEach(function (item) { item.status = 'submit' })
     await Vue.prototype.$http(`${KJM_API.KJMAKINGCHECKMATERIALESUBMIT_API}`, 'POST', this.applyMaterieList).then(res => {
       if (res.data.code !== 0) {
-        this.$message.error('物料领用提交失败：' + res.data.msg)
+        this.$notify.error({title: '错误', message: '物料领用提交失败：' + res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)

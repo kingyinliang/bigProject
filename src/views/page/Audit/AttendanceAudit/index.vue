@@ -273,11 +273,11 @@ export default {
             if (data.code === 0) {
               this.ARtype = this.ARtype.concat(data.dicList)
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -294,7 +294,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.dataListLoading = false
       })
@@ -305,7 +305,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -318,7 +318,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -333,7 +333,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -368,12 +368,12 @@ export default {
         this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus1 = false
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.GetAuditList()
         })
@@ -386,14 +386,14 @@ export default {
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择考勤')
+        this.$notify.error({title: '错误', message: '请选择考勤'})
       } else {
         this.visible = true
       }
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
-        this.$message.error('请填写不通过原因')
+        this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
         this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
           confirmButtonText: '确定',
@@ -411,9 +411,9 @@ export default {
               this.visible = false
               this.Text = ''
               this.GetAuditList()
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -422,7 +422,7 @@ export default {
     // 审核通过
     subAutio () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         this.$confirm('确认审核通过, 是否继续?', '审核通过', {
           confirmButtonText: '确定',
@@ -437,12 +437,12 @@ export default {
           this.$http(`${AR_API.ARAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             this.lodingStatus1 = false
             if (data.code === 0) {
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
               if (data) {}
             } else {
               this.GetAuditList()
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })

@@ -120,7 +120,7 @@ export default {
           }
           this.$emit('GetMaterielStatus', this.Materielstatus)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -130,7 +130,7 @@ export default {
         if (item.delFlag !== '1') {
           if (item.material && item.saltWaterHolderId && (item.startValue || item.startValue === 0) && (item.endValue || item.endValue === 0)) {} else {
             ty = false
-            this.$message.error('原料领用必填项未填')
+            this.$notify.error({title: '错误', message: '原料领用必填项未填'})
             return false
           }
         }
@@ -157,7 +157,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('原料领用' + data.msg)
           }
@@ -170,7 +170,7 @@ export default {
         if (data.code === 0) {
           this.brine = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -187,7 +187,7 @@ export default {
         if (data.code === 0) {
           this.brineTankNo = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

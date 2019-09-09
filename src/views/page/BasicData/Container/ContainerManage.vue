@@ -189,7 +189,7 @@ export default {
           this.form.pageSize = data.page.pageSize
           this.form.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
       })
@@ -200,7 +200,7 @@ export default {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -209,7 +209,7 @@ export default {
         if (res.data.code === 0) {
           this.factoryList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -221,7 +221,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -250,7 +250,7 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的容器')
+        this.$notify.error({title: '错误', message: '请选择要删除的容器'})
       } else {
         this.$confirm('确认删除容器, 是否继续?', '删除容器', {
           confirmButtonText: '确定',
@@ -266,7 +266,7 @@ export default {
               this.multipleSelection = []
               this.GetContainerList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }).catch(() => {

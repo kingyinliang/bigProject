@@ -279,7 +279,7 @@ export default {
     // 获取列表
     GetLtkList (st) {
       if (!this.plantList.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       this.deptCode = (this.factory.filter(item => item.deptId === this.plantList.factory))[0].deptCode
@@ -294,7 +294,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })
@@ -320,12 +320,12 @@ export default {
             this.ReText = ''
             this.reData = {}
             this.GetLtkList()
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         }).catch(() => {
-          this.$message.error('网络错误')
+          this.$notify.error({title: '错误', message: '网络错误'})
           this.lodingS = false
         })
       })
@@ -336,7 +336,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -349,7 +349,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -362,7 +362,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -385,14 +385,14 @@ export default {
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         this.visible = true
       }
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
-        this.$message.error('请填写不通过原因')
+        this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
         this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
           confirmButtonText: '确定',
@@ -406,10 +406,10 @@ export default {
           this.$http(`${LTK_API.LTKAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
               this.visible = false
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetLtkList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })
@@ -418,7 +418,7 @@ export default {
     // 审核通过
     subAutio () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         this.$confirm('确认审核通过, 是否继续?', '审核通过', {
           confirmButtonText: '确定',
@@ -431,10 +431,10 @@ export default {
           })
           this.$http(`${LTK_API.LTKAUDIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetLtkList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })

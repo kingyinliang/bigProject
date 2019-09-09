@@ -137,7 +137,7 @@ export default {
           let CraftControlStatus = this.CraftControlDate.status ? this.CraftControlDate.status : ''
           this.$emit('GetCraftControlStatus', CraftControlStatus)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -158,13 +158,13 @@ export default {
         if (data.code === 0) {
           if (str === 'saved') {
             this.GetTechList(this.formHeader)
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
           } else if (str === 'submit') {
             this.GetTechList(this.formHeader)
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -175,20 +175,20 @@ export default {
       let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive || this.CraftControlDate.outTempSix || this.CraftControlDate.outTempSeven || this.CraftControlDate.outTempEight || this.CraftControlDate.outTempNine || this.CraftControlDate.outTempTen
       if (!windSpeed) {
         ty = false
-        this.$message.error('工艺控制风速必填项未填')
+        this.$notify.error({title: '错误', message: '工艺控制风速必填项未填'})
         return false
       } else if (!blendTemp) {
         ty = false
-        this.$message.error('工艺控制混合料温度必填项未填')
+        this.$notify.error({title: '错误', message: '工艺控制混合料温度必填项未填'})
         return false
       } else if (!outTemp) {
         ty = false
-        this.$message.error('工艺控制出曲品温必填项未填')
+        this.$notify.error({title: '错误', message: '工艺控制出曲品温必填项未填'})
         return false
       }
       if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator && this.CraftControlDate.outStartTime && this.CraftControlDate.outEndTime && this.CraftControlDate.saltWaterTemp && this.CraftControlDate.saltWaterNd) {} else {
         ty = false
-        this.$message.error('工艺控制必填项未填')
+        this.$notify.error({title: '错误', message: '工艺控制必填项未填'})
       }
       // if (this.CraftControlDate.kojoMakingTime > 36) {} else {
       //   ty = false
@@ -212,7 +212,7 @@ export default {
         if (data.code === 0) {
           this.userlist = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

@@ -156,7 +156,7 @@ export default {
           }
           console.log(this.formData.frozenStatus)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

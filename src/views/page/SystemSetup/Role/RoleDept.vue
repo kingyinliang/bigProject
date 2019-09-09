@@ -41,7 +41,7 @@ export default {
         if (data.code === 0) {
           this.OrgTree = data.deptList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = true
       }).then(() => {
@@ -51,7 +51,7 @@ export default {
           if (data.code === 0) {
             this.$refs.deptListTree.setCheckedKeys(data.list)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -76,7 +76,7 @@ export default {
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.visible = true
         })

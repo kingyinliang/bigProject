@@ -601,6 +601,11 @@ img {
     color: #FFFFFF;
     border-color: #1890FF;
   }
+  .el-button--primary.is-disabled{
+    color: #fff;
+    background-color: #a0cfff;
+    border-color: #a0cfff;
+  }
 }
 .marbottom{
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{

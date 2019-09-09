@@ -147,7 +147,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -159,7 +159,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -169,7 +169,7 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     this.searched = true
@@ -196,13 +196,13 @@ export default class Index extends Vue {
           }
         })
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
   goDetail (holderId, holderName) {
     if (!this.isAuth('gra:material:list')) {
-      this.$message.error('您无权限查看详情')
+      this.$notify.error({title: '错误', message: '您无权限查看详情'})
       return
     }
     let p = Object.assign({}, this.params, {holderId, holderName})

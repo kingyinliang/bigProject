@@ -110,7 +110,7 @@ export default {
         if (data.code === 0) {
           this.factoryList = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -126,7 +126,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -139,7 +139,7 @@ export default {
           if (data.code === 0) {
             this.productlineList = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -155,7 +155,7 @@ export default {
           this.formHeader.pageSize = data.page.pageSize
           this.formHeader.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

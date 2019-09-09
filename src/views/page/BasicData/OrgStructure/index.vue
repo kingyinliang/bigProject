@@ -241,7 +241,7 @@ export default {
             this.setdetail(this.OrgTree[0].children[0])
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -251,7 +251,7 @@ export default {
         if (data.code === 0) {
           this.dictList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -274,7 +274,7 @@ export default {
             this.fileList = []
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -339,7 +339,7 @@ export default {
             this.update = true
             this.setdetail(this.row)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -362,7 +362,7 @@ export default {
             this.getTree()
             this.OrgDetail = {}
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -393,7 +393,7 @@ export default {
             this.submitType = true
           } else {
             this.submitType = true
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

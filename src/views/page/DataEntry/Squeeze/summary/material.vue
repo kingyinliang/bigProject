@@ -41,6 +41,11 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column label="类别" width="80">
+        <template slot-scope="scope">
+          {{scope.row.material.category}}
+        </template>
+      </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
           {{scope.row.material.childMaterial}}
@@ -111,6 +116,16 @@ export default {
       default () { return [] }
     }
   },
+  watch: {
+    'fumet': {
+      handler (n, o) {
+        for (let i = 0; i < this.SumDate.length; i++) {
+          this.PotChange(this.SumDate[i])
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
   },
   methods: {
@@ -163,7 +178,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -173,7 +188,7 @@ export default {
         if (data.code === 0) {
           this.MaterialAudit = data.listRecord
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -210,15 +225,29 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     PotChange (row) {
       let pot = this.potList.filter(it => it.holderId === row.material.childPotNo)[0]
-      row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
-      row.material.childBatch = pot.batch
-      row.material.childFullPotAmount = pot.sumAmount
+      console.log(pot)
+      if (pot) {
+        row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
+        row.material.childBatch = pot.batch
+        row.material.childFullPotAmount = pot.sumAmount
+        if (row.fumet.fullPort === '正常') {
+          row.material.category = pot.halfName
+        } else {
+          row.material.category = '味极鲜'
+        }
+      } else {
+        if (row.fumet.fullPort === '正常') {
+          row.material.category = ''
+        } else {
+          row.material.category = '味极鲜'
+        }
+      }
     },
     // 校验
     materialRul () {
@@ -228,7 +257,7 @@ export default {
         if (item.delFlag !== '1') {
           if (!item.material.childPotNo && !item.material.childUsedAmount) {
             ty = false
-            this.$message.error('物料领用必填项未填写')
+            this.$notify.error({title: '错误', message: '物料领用必填项未填写'})
             return false
           } else {
             this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
@@ -239,7 +268,7 @@ export default {
         console.log(key, this.sumAmount2[key], this.sumAmount1[key])
         if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
           ty = false
-          this.$message.error('剩余量不足')
+          this.$notify.error({title: '错误', message: '剩余量不足'})
           return false
         }
       })
@@ -258,7 +287,7 @@ export default {
         console.log(key, this.sumAmount2[key], this.sumAmount1[key])
         if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
           ty = false
-          this.$message.error('剩余量不足')
+          this.$notify.error({title: '错误', message: '剩余量不足'})
           return false
         }
       })
@@ -298,7 +327,7 @@ export default {
         this.SumDate.splice(this.SumDate.length, 0, {})
         this.SumDate.splice(this.SumDate.length - 1, 1)
       } else {
-        this.$message.error('此订单最后一条了，不能删除')
+        this.$notify.error({title: '错误', message: '此订单最后一条了，不能删除'})
       }
     },
     RowDelFlag ({row, rowIndex}) {
@@ -317,7 +346,7 @@ export default {
         if (data.code === 0) {
           this.potList = data.holderInfo
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

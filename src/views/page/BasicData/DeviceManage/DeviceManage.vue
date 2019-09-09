@@ -128,7 +128,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -155,7 +155,7 @@ export default {
           this.totalCount = data.list.totalCount
           this.currPage = data.list.currPage
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.multipleSelection = []
       })
@@ -174,7 +174,7 @@ export default {
     // 添加和编辑
     addOrupdate (deptId, id) {
       if (deptId === 0) {
-        this.$message.error('请选择部门后新增')
+        this.$notify.error({title: '错误', message: '请选择部门后新增'})
       } else {
         this.visible = true
         this.$nextTick(() => {
@@ -185,7 +185,7 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的设备')
+        this.$notify.error({title: '错误', message: '请选择要删除的设备'})
       } else {
         this.$confirm('确认删除设备, 是否继续?', '删除设备', {
           confirmButtonText: '确定',
@@ -201,7 +201,7 @@ export default {
               this.multipleSelection = []
               this.getList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }).catch(() => {

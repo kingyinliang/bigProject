@@ -136,7 +136,7 @@ export default {
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }
@@ -164,7 +164,7 @@ export default {
                 this.$router.push({path: '/home'})
               }
             } else {
-              this.$message.error(res.data.msg)
+              this.$notify.error({title: '错误', message: res.data.msg})
             }
           })
         } else {

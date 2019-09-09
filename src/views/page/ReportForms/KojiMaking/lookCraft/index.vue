@@ -60,6 +60,9 @@
         <el-table-column label="制曲日期" prop="inKjmDate" width="100"></el-table-column>
         <el-table-column label="曲房" prop="houseNoName" width="100" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="发酵罐" prop="inPotNoName" width="100" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="豆粕量" prop="pulpWeight" width="80"></el-table-column>
+        <el-table-column label="麦粉量" prop="wheatWeight" width="80"></el-table-column>
+        <el-table-column label="盐水量" prop="saltWaterWeight" width="80"></el-table-column>
         <el-table-column label="入曲开始时间" prop="inStartTime" width="165"></el-table-column>
         <el-table-column label="入曲结束时间" prop="inEndTime" width="165"></el-table-column>
         <el-table-column label="二翻加水量" prop="overWeight" width="95"></el-table-column>
@@ -143,7 +146,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -155,7 +158,7 @@ export default {
           if (data.code === 0) {
             this.workShop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -168,7 +171,7 @@ export default {
           if (data.code === 0) {
             this.inPotList = data.page.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -181,7 +184,7 @@ export default {
           if (data.code === 0) {
             this.houseList = data.page.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -197,7 +200,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.lodingS = false
       })

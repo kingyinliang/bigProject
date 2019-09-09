@@ -167,7 +167,7 @@ export default {
               resolve('resolve')
             }
           } else {
-            this.$message.error('异常记录' + data.msg)
+            this.$notify.error({title: '错误', message: '异常记录' + data.msg})
             if (reject) {
               reject('异常记录' + data.msg)
             }
@@ -193,7 +193,7 @@ export default {
         if (data.code === 0) {
           this.ExcDate = data.listForm
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -205,31 +205,31 @@ export default {
           if (item.expCode && item.expStartDate && item.expEndDate) {
             if ((item.expContinue * 1) < 0) {
               ty = false
-              this.$message.error('异常开始时间大于结束时间')
+              this.$notify.error({title: '错误', message: '异常开始时间大于结束时间'})
               return false
             }
             if (item.expCode === '001' || item.expCode === '002') {
               if (!item.deviceId) {
                 ty = false
-                this.$message.error('异常记录设备必填')
+                this.$notify.error({title: '错误', message: '异常记录设备必填'})
                 return false
               }
             } else if (item.expCode === '003' || item.expCode === '004') {
               if (!item.materialShort) {
                 ty = false
-                this.$message.error('异常记录物料分类必填')
+                this.$notify.error({title: '错误', message: '异常记录物料分类必填'})
                 return false
               }
             } else if (item.expCode === '005') {
               if (!item.energy) {
                 ty = false
-                this.$message.error('异常记录能源必填')
+                this.$notify.error({title: '错误', message: '异常记录能源必填'})
                 return false
               }
             }
           } else {
             ty = false
-            this.$message.error('异常记录必填项未填')
+            this.$notify.error({title: '错误', message: '异常记录必填项未填'})
             return false
           }
         }
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.stoppageType = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -263,7 +263,7 @@ export default {
         if (data.code === 0) {
           this.equipmentType = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -273,7 +273,7 @@ export default {
         if (data.code === 0) {
           this.materialShort = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -283,7 +283,7 @@ export default {
         if (data.code === 0) {
           this.enery = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -323,7 +323,7 @@ export default {
       return function (end, start, row) {
         if (end && start && row.delFlag !== '1') {
           if (((toDate(end) - toDate(start)) / 60000) < 0) {
-            this.$message.error('异常结束时间早于异常开始时间，请重新录入')
+            this.$notify.error({title: '错误', message: '异常结束时间早于异常开始时间，请重新录入'})
             return 'NaN'
           } else {
             return ((toDate(end) - toDate(start)) / 60000).toFixed(2) * 1

@@ -62,7 +62,7 @@ export default {
         if (data.code === 0) {
           this.InPot = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
       })

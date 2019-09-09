@@ -93,7 +93,7 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPLIST_API 获取物料同步状态
    */
-  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_MATERIAL',
+  GETSAPUPDATE_API: HOST + '/sys/async/getAsyncState',
   /**
    * @property {string} SAPDETAIL_API 物料详情
    */
@@ -180,7 +180,7 @@ export const BASICDATA_API = {
   /**
    * @property {string} SAPORDERUPDATE_API 获取同步订单状态
    */
-  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_ORDER',
+  GETSAPORDERUPDATE_API: HOST + '/sys/async/getAsyncState',
   /**
    * @property {string} CAPALIST_API 产能列表
    */
@@ -228,7 +228,7 @@ export const BASICDATA_API = {
   /**
    * 原料入库记录同步状态
    */
-  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState/ASYNC_SAP_INSTORAGE',
+  MATERIALRAWSYNCHRONISMSTASUS_API: HOST + '/sys/async/getAsyncState',
   /**
    * 豆粕 + 小麦 罐
    */
@@ -648,7 +648,15 @@ export const AUDIT_API = {
   */
   AUDIT_ADJUST_LIST: HOST + '/ver/adjust/list',
   AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust',
-  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial'
+  AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial',
+  /**
+   * 助滤剂审核
+   */
+  AUDIT_AID_LIST: HOST + '/ver/aid/list',
+  AUDIT_AID_UPDATE: HOST + '/ver/aid/update',
+  AUDIT_AID_AUDIT: HOST + '/ver/aid/audit',
+  AUDIT_AID_RESET: HOST + '/ver/aid/resetVerifyAid',
+  AUDIT_AID_SUBMIT: HOST + '/ver/aid/submitAid'
 }
 /*
 *考勤api
@@ -770,7 +778,7 @@ export const REP_API = {
   /**
    *  车间出勤汇总表 导出 获取状态
    *  */
-  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState/ASYNC_TYPE_EXPORT_SHOP_ATTM',
+  GETREPOUTFORWORKOUTPUT_API: HOST + '/sys/async/getAsyncState',
   /**
    *  包装车间 - 产量总工时、导出
    */
@@ -869,6 +877,11 @@ export const REP_API = {
    */
   SQUEEZEOILERLIST_API: HOST + '/report/formPress/oilYieldList',
   REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield',
+  /**
+   * 订单状态报表
+   */
+  ORDER_STATUS_LIST_API: HOST + '/report/formh/getAllStatusList',
+  ORDER_STATUS_OUT_API: HOST + '/report/formh/exportGetAllStatusList',
   /**
    *  二合一报表
    */
@@ -1402,7 +1415,8 @@ export const FERMENTATION_API = {
   /*
    * 订单申请
    */
-  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrder',
+  ORDER_APPLY_API: HOST + '/fer/order/applyFerOrderThread',
+  ORDER_APPLY_STATUS_API: HOST + '/fer/order/applyFerOrderThread',
   /**
    * 报工管理
    */
@@ -1599,4 +1613,16 @@ export const BOTTLE_API = {
   // 质检
   BOTTLE_QUALITY_LIST: HOST + '/bottle/workShop/qualityInspectionList',
   BOTTLE_QUALITY_SAVE: HOST + '/bottle/workShop/qualityInspectionSave'
+}
+/**
+ *  原汁api  Juice
+ */
+export const JUICE_API = {
+  JUICE_POT_LIST: HOST + '/juice/pot/List',
+  JUICE_TYPE_LIST: HOST + '/juice/pot/maintainList',
+  JUICE_TRANSFER_LIST: HOST + '/juice/pot/transferStorageList',
+  JUICE_TRANSFER_POT_LIST: HOST + '/juice/pot/transferStoragePotList',
+  JUICE_TRANSFER_SAVE: HOST + '/juice/pot/transferStorage',
+  JUICE_ADD_POT_LIST: HOST + '/juice/pot/addPotList',
+  JUICE_ADD_SAVE: HOST + '/juice/pot/addJuicePot'
 }

@@ -67,7 +67,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -77,7 +77,7 @@ export default {
         if (data.code === 0) {
           this.TimeAudit = data.listRecord
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -87,7 +87,7 @@ export default {
         if (data.code === 0) {
           this.GetTimeList(this.formHeader)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -109,7 +109,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -118,7 +118,7 @@ export default {
       this.timeDate.forEach(item => {
         if (item.confActivity2 === '0' || !item.confActivity2) {
           ty = false
-          this.$message.error('机器工时未填写')
+          this.$notify.error({title: '错误', message: '机器工时未填写'})
           return false
         }
       })
@@ -128,10 +128,10 @@ export default {
     BackTime (row) {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('退回成功')
+          this.$notify({title: '成功', message: '退回成功', type: 'success'})
           this.GetTime()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

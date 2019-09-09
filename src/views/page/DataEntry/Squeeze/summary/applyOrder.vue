@@ -17,7 +17,7 @@
       </el-table-column>
       <el-table-column label="是否混合罐" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fullPort" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
+          <el-select v-model="scope.row.fullPort" @change="fullPortChange" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
             <el-option label="正常" value="正常"></el-option>
             <el-option label="共用混合" value="共用混合"></el-option>
             <el-option label="单用混合" value="单用混合"></el-option>
@@ -102,7 +102,7 @@ export default {
     // 申请订单
     ApplyOrder () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       this.multipleSelection.forEach((item, index) => {
@@ -113,7 +113,7 @@ export default {
         if (data.code === 0) {
           this.$emit('GetList')
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -134,18 +134,21 @@ export default {
         if (data.code === 0) {
           this.orderAudit = data.listRecord
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
+    },
+    fullPortChange () {
+
     },
     // 退回
     backIn (row) {
       this.$http(`${SQU_API.SUM_ORDER_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('退回成功')
+          this.$notify({title: '成功', message: '退回成功', type: 'success'})
           this.$emit('GetList')
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -169,7 +172,7 @@ export default {
           if (reject) {
             reject(data.msg)
           }
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

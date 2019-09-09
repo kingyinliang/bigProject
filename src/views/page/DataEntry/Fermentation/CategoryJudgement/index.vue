@@ -270,7 +270,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -284,7 +284,7 @@ export default {
               this.workshop = data.typeList
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -297,7 +297,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -307,7 +307,7 @@ export default {
         if (data.code === 0) {
           this.materialList = data.materialList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -317,7 +317,7 @@ export default {
         if (data.code === 0) {
           this.materialTypeList = data.ferList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -327,7 +327,7 @@ export default {
         if (data.code === 0) {
           this.materialTypeList = data.ferList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -338,7 +338,7 @@ export default {
           this.form.totalCount = data.data.totalCount
           // console.log(this.dataList)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -383,7 +383,7 @@ export default {
             if (data.code === 0) {
               this.GetList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         } else {

@@ -354,7 +354,7 @@ export default {
           this.factory = data.typeList
           this.form.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -372,7 +372,7 @@ export default {
               }
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -385,7 +385,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -408,7 +408,7 @@ export default {
           this.form.totalCount = data.data.totalCount
           this.LogList = []
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -440,7 +440,7 @@ export default {
     SaveForm (types) {
       // console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请先勾选数据')
+        this.$notify.error({title: '错误', message: '请先勾选数据'})
       } else {
         let url
         let msg
@@ -448,7 +448,7 @@ export default {
           // 非空判断
           for (var i in this.multipleSelection) {
             if (this.multipleSelection[i].actAmount === '' || this.multipleSelection[i].prepareTimes === '' || this.multipleSelection[i].machineTimes === '' || this.multipleSelection[i].humanTimes === '' || this.multipleSelection[i].startDate === '' || this.multipleSelection[i].endDate === '' || this.multipleSelection[i].unMatureUse === '' || this.multipleSelection[i].actAmount === null || this.multipleSelection[i].prepareTimes === null || this.multipleSelection[i].machineTimes === null || this.multipleSelection[i].humanTimes === null || this.multipleSelection[i].startDate === null || this.multipleSelection[i].endDate === null || this.multipleSelection[i].unMatureUse === null) {
-              this.$message.error('请填写必填项')
+              this.$notify.error({title: '错误', message: '请填写必填项'})
               return false
             }
           }
@@ -467,13 +467,13 @@ export default {
         }
         this.$http(url, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success(msg + '成功')
+            this.$notify({title: '成功', message: msg + '成功', type: 'success'})
             this.SearchList()
             this.isRedact = false
             this.form.currPage = 1
             this.LogList = []
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -495,7 +495,7 @@ export default {
         if (data.code === 0) {
           this.LogList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -504,7 +504,7 @@ export default {
         if (data.code === 0) {
           this.LogList = data.data
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -516,9 +516,9 @@ export default {
     DataSynchronism () {
       this.$http(`${FERMENTATION_API.WORKINGHOURTONGBU_API}`, 'GET').then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('同步成功')
+          this.$notify({title: '成功', message: '同步成功', type: 'success'})
         } else {
-          this.$message.error('同步失败')
+          this.$notify.error({title: '错误', message: '同步失败'})
         }
       })
     }

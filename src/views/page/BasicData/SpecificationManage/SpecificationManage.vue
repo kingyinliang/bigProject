@@ -180,7 +180,7 @@ export default {
       if (data.code === 0) {
         this.SerchSapList = data.list
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
   },
@@ -191,7 +191,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -215,7 +215,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
         this.lodingS = false
@@ -232,7 +232,7 @@ export default {
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的规格')
+        this.$notify.error({title: '错误', message: '请选择要删除的规格'})
       } else {
         this.$confirm('确认删除规格, 是否继续?', '删除规格', {
           confirmButtonText: '确定',
@@ -248,7 +248,7 @@ export default {
               this.multipleSelection = []
               this.GetList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }).catch(() => {

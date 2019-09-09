@@ -159,7 +159,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -175,7 +175,7 @@ export default {
         this.currPage = 1
       }
       if (!this.deptId) {
-        this.$message.error('请选择组织层级')
+        this.$notify.error({title: '错误', message: '请选择组织层级'})
         return
       }
       this.$http(`${SYSTEMSETUP_API.USERLIST1_API}`, 'POST', {
@@ -191,7 +191,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
       })
@@ -211,13 +211,13 @@ export default {
           this.$refs.addOrupdate.init(this.deptId, this.deptName, id)
         })
       } else {
-        this.$message.error('请先选择部门')
+        this.$notify.error({title: '错误', message: '请先选择部门'})
       }
     },
     // 删除
     remove () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的用户')
+        this.$notify.error({title: '错误', message: '请选择要删除的用户'})
       } else {
         let roleName = []
         let userId = []
@@ -248,7 +248,7 @@ export default {
                 this.multipleSelection = []
                 this.getList()
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           }).catch(() => {

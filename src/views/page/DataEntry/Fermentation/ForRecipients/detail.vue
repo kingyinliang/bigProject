@@ -150,7 +150,7 @@ export default {
           }
           this.GetList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -223,7 +223,7 @@ export default {
           //   })
           // })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       this.$http(`${FERMENTATION_API.FORRECIPIENTSDETAILIST_API}`, 'POST', {deptId: '06AB4ABA9E7B4BCA9131E3A69D7E0B2A', pageSize: 10000, currPage: '1', halfType: this.formHeader.HALF_TYPE ? this.formHeader.HALF_TYPE : '', materialCode: this.formHeader.MATERIAL_CODE}).then(({data}) => {
@@ -263,11 +263,11 @@ export default {
         }
       })
       if (i === 0) {
-        this.$message.error('请勾选罐号')
+        this.$notify.error({title: '错误', message: '请勾选罐号'})
         return false
       } else {
         if (this.formHeader.AMOUNT < (this.multipleSelection.length)) {
-          this.$message.error('勾选开罐数量不能大于申请数')
+          this.$notify.error({title: '错误', message: '勾选开罐数量不能大于申请数'})
           return false
         }
         this.$confirm('确认执行开罐操作吗?', '提示', {
@@ -289,10 +289,10 @@ export default {
                 currentPage: 1, // 当前页数
                 pageSize: 10
               }
-              this.$message.success('开罐成功')
+              this.$notify({title: '成功', message: '开罐成功', type: 'success'})
               this.Getdetail()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         })

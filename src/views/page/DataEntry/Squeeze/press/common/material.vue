@@ -185,7 +185,7 @@ export default {
           if (data.code === 0) {
             this.proPressList = data.list.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -200,7 +200,7 @@ export default {
             this.formInline.destoryNumWest = this.materialList[0].destoryNumWest
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -236,7 +236,7 @@ export default {
             }
             this.visible = true
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -251,29 +251,29 @@ export default {
     // 提交
     submitMaterial (resolve, reject) {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选提交数据')
+        this.$notify.error({title: '错误', message: '请勾选提交数据'})
         return false
       }
       for (let item of this.multipleSelection) {
         if (this.formHeader.pressure === 1) {
           if (!item.prePressNo || item.prePressNo === '' || !item.prePressStart || item.prePressStart === '' || !item.prePressEnd || item.prePressEnd === '') {
-            this.$message.error('请填写必填项')
+            this.$notify.error({title: '错误', message: '请填写必填项'})
             return false
           }
         } else {
           if (!item.pressNo || item.pressNo === '' || !item.pressStart || item.pressStart === '' || !item.pressEnd || item.pressEnd === '') {
-            this.$message.error('请填写必填项')
+            this.$notify.error({title: '错误', message: '请填写必填项'})
             return false
           }
           if (this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D') {
             if (!item.destoryNum || item.destoryNum === '') {
-              this.$message.error('请填写必填项')
+              this.$notify.error({title: '错误', message: '请填写必填项'})
               return false
             }
           }
           if (this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D') {
             if (this.formInline.destoryNumEast === '' || !this.formInline.destoryNumEast || this.formInline.destoryNumWest === '' || !this.formInline.destoryNumWest) {
-              this.$message.error('请填写必填项')
+              this.$notify.error({title: '错误', message: '请填写必填项'})
               return false
             } else {
               this.multipleSelection.map((item) => {
@@ -293,7 +293,7 @@ export default {
       this.$http(`${configurl}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -328,7 +328,7 @@ export default {
       this.$http(`${configurl}`, 'POST', this.materialList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
