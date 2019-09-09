@@ -69,7 +69,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <el-dialog width="400px" title="入罐开始" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
+    <el-dialog width="400px" title="入罐" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
         <el-form-item label="半成品罐号：" prop="holderId">
           <el-select v-model="dataForm.holderId" filterable placeholder="请选择" @change="PotinTankAmount" style="width: 100%">
@@ -170,7 +170,7 @@ export default {
           this.InStorageDate = data.list
           this.DataAudit = data.vList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -196,13 +196,14 @@ export default {
       }
     },
     PotinTankAmount (id) {
-      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount ? this.PotList.filter(item => item.holderId === id)[0].amount : 0
       this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
-      if (this.dataForm.inTankAmount) {
-        this.PotObject.inTankAmount = true
-      } else {
-        this.PotObject.inTankAmount = false
-      }
+      this.PotObject.inTankAmount = true
+      // if (this.dataForm.inTankAmount) {
+      //   this.PotObject.inTankAmount = true
+      // } else {
+      //   this.PotObject.inTankAmount = false
+      // }
       if (this.dataForm.batch) {
         this.PotObject.batch = true
       } else {
@@ -213,7 +214,7 @@ export default {
     addIn () {
       if (this.dataForm.isFull === '1') {
         if (!this.dataForm.fullDate) {
-          this.$message.error('满罐时间必填')
+          this.$notify.error({title: '错误', message: '满罐时间必填'})
           return
         }
       }
@@ -257,7 +258,7 @@ export default {
         if (data.code === 0) {
           this.PotList = data.halfList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -290,13 +291,13 @@ export default {
             this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -305,11 +306,11 @@ export default {
             this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },
@@ -368,7 +369,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

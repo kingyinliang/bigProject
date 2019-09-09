@@ -116,7 +116,7 @@ export default {
           this.readAudit = data.verify
           this.materialStatus = GetStatus(data.list)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setMaterialStatus', this.materialStatus)
@@ -127,7 +127,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -183,7 +183,7 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$message.error('请录入物料领用数据')
+        this.$notify.error({title: '错误', message: '请录入物料领用数据'})
         return false
       }
       return ty
@@ -219,7 +219,7 @@ export default {
         })
         if (total * 1000 > item.holderAmount) {
           ty = false
-          this.$message.error(item.holderName + '罐领用数超过库存，请重新调整')
+          this.$notify.error({title: '错误', message: item.holderName + '罐领用数超过库存，请重新调整'})
           return false
         }
       }
@@ -246,7 +246,7 @@ export default {
       }
       this.$http(url, 'POST', this.dataList).then(({data}) => {
         if (data.code === 0) {} else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

@@ -102,7 +102,7 @@
                           <div class="split"></div>
                           <div>&nbsp;拆分</div>
                         </div>
-                        <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')" @click="orderCheck(scope.row)">
+                        <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')&& isAuth('sys:midInStorage:list')" @click="orderCheck(scope.row)">
                           <div class="check"></div>
                           <div>&nbsp;审核</div>
                         </div>
@@ -417,7 +417,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -429,7 +429,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -458,7 +458,7 @@ export default class Index extends Vue {
           this.continueList = data.page.list
         }
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     }).catch((error) => {
       console.log('catch data::', error)
@@ -469,11 +469,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     if (this.params.workshopId === '') {
-      this.$message.error('请选择车间')
+      this.$notify.error({title: '错误', message: '请选择车间'})
       return
     }
     // if (this.params.orderDate === null || this.params.orderDate === '') {
@@ -502,7 +502,7 @@ export default class Index extends Vue {
           this.orderList.push(order)
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -538,29 +538,29 @@ export default class Index extends Vue {
     for (let item of this.splitDetailList) {
       if (item.delFlag === '0') {
         if (!item.inPotNo || item.inPotNo.length === 0) {
-          this.$message.error('入罐号不能为空')
+          this.$notify.error({title: '错误', message: '入罐号不能为空'})
           return
         }
         if (!item.houseNo || item.houseNo.length === 0) {
-          this.$message.error('曲房不能为空')
+          this.$notify.error({title: '错误', message: '曲房不能为空'})
           return
         }
         if (!item.inKjmDate || item.inKjmDate.length === 0) {
-          this.$message.error('制曲日期不能为空')
+          this.$notify.error({title: '错误', message: '制曲日期不能为空'})
           return
         }
         if (!item.productDate || item.productDate.length === 0) {
-          this.$message.error('生产日期不能为空')
+          this.$notify.error({title: '错误', message: '生产日期不能为空'})
           return
         }
         potSet.add(item.inPotNo)
         if (potSet.size > 1) {
-          this.$message.error('同一订单不能多个入罐号')
+          this.$notify.error({title: '错误', message: '同一订单不能多个入罐号'})
           return
         }
         let houseKey = item.houseNo + item.inKjmDate
         if (houseSet.has(houseKey)) {
-          this.$message.error('相同制曲日期下，曲房重复')
+          this.$notify.error({title: '错误', message: '相同制曲日期下，曲房重复'})
           return
         } else {
           houseSet.add(houseKey)
@@ -586,7 +586,7 @@ export default class Index extends Vue {
         this.getOrderList()
         this.retrieveDetail(this.splitDetailList[0].orderId)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -623,7 +623,7 @@ export default class Index extends Vue {
           this.orderDetailList.push(detail)
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)
@@ -636,17 +636,17 @@ export default class Index extends Vue {
   // 删除订单详情
   delDetail () {
     if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
-      this.$message.error('无权限进行删除操作')
+      this.$notify.error({title: '错误', message: '无权限进行删除操作'})
       return
     }
     if (!this.selectedDetailList || this.selectedDetailList.length === 0) {
-      this.$message.error('请选择删除项')
+      this.$notify.error({title: '错误', message: '请选择删除项'})
       return
     }
     for (let row of this.selectedDetailList) {
       // 提交或者通过的数据不能删除
       if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
-        this.$message.error(`${row.status}的数据不可删除`)
+        this.$notify.error({title: '错误', message: `${row.status}的数据不可删除`})
         return
       }
     }
@@ -662,7 +662,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.retrieveDetail(this.selectedDetailList[0].orderId)
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       }).catch(err => {
         console.log('catch data::', err)
@@ -672,11 +672,11 @@ export default class Index extends Vue {
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
     if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
-      this.$message.error('无权限进行修改操作')
+      this.$notify.error({title: '错误', message: '无权限进行修改操作'})
       return
     }
     if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
-      this.$message.error(`${row.status}的数据不可修改`)
+      this.$notify.error({title: '错误', message: `${row.status}的数据不可修改`})
       return
     }
     this.detailForm = row.clone()
@@ -684,19 +684,19 @@ export default class Index extends Vue {
   }
   modifyDetial () {
     if (!this.detailForm.inPotNo || this.detailForm.inPotNo.length === 0) {
-      this.$message.error('入罐号不能为空')
+      this.$notify.error({title: '错误', message: '入罐号不能为空'})
       return false
     }
     if (!this.detailForm.houseNo || this.detailForm.houseNo.length === 0) {
-      this.$message.error('曲房不能为空')
+      this.$notify.error({title: '错误', message: '曲房不能为空'})
       return false
     }
     if (!this.detailForm.inKjmDate || this.detailForm.inKjmDate.length === 0) {
-      this.$message.error('制曲日期不能为空')
+      this.$notify.error({title: '错误', message: '制曲日期不能为空'})
       return false
     }
     if (!this.detailForm.productDate || this.detailForm.productDate.length === 0) {
-      this.$message.error('生产日期不能为空')
+      this.$notify.error({title: '错误', message: '生产日期不能为空'})
       return false
     }
     let params: OrderDetail[] = [this.detailForm]
@@ -705,7 +705,7 @@ export default class Index extends Vue {
         this.dialogFormVisible2 = false
         this.retrieveDetail(this.detailForm.orderId)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     }).catch(err => {
       console.log('catch data::', err)

@@ -100,7 +100,7 @@ export default {
             })
           } else {
             this.submitType = true
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -114,7 +114,7 @@ export default {
           //   this.plantList.factoryid = res.data.typeList[0].deptId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },

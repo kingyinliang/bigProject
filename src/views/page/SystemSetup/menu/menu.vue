@@ -150,7 +150,7 @@ export default {
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }).catch(() => {})

@@ -164,7 +164,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -181,7 +181,7 @@ export default {
               this.formHeader.workShop = ''
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -202,7 +202,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -210,11 +210,11 @@ export default {
     },
     GetList (st) {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return false
       }
       if (st) {
@@ -225,7 +225,7 @@ export default {
           this.dataList = data.list.list
           this.formHeader.totalCount = data.list.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -254,12 +254,12 @@ export default {
     // 保存
     SaveForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
         return false
       } else {
         for (let item of this.multipleSelection) {
           if (!item.productDate || !item.panId) {
-            this.$message.error('生产日期与锅号为必填项')
+            this.$notify.error({title: '错误', message: '生产日期与锅号为必填项'})
             return false
           }
         }
@@ -272,11 +272,11 @@ export default {
         })
         this.$http(`${STERILIZED_API.ORDERALLOTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.isRedact = false
             this.GetList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

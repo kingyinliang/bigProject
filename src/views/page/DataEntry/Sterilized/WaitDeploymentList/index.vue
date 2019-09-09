@@ -111,7 +111,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -128,7 +128,7 @@ export default {
               this.formHeader.workShop = ''
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -142,7 +142,7 @@ export default {
         if (data.code === 0) {
           this.materialList = data.productsInfo
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -167,11 +167,11 @@ export default {
     },
     GetList (st) {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return false
       }
       if (st) {
@@ -191,24 +191,24 @@ export default {
           this.dataList = data.orderInfo.list.slice((this.formHeader.currPage - 1) * this.formHeader.pageSize, Number((this.formHeader.currPage - 1) * this.formHeader.pageSize) + Number(this.formHeader.pageSize))
           this.formHeader.totalCount = this.dataListAll.length
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     // 调配
     DoDeploy () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选订单')
+        this.$notify.error({title: '错误', message: '请勾选订单'})
       } else {
         let materialCode = this.multipleSelection[0].materialCode
         let dispatchMan = this.multipleSelection[0].dispatchMan
         for (let item of this.multipleSelection) {
           if (materialCode !== item.materialCode) {
-            this.$message.error('物料冲突，请重新选择订单！')
+            this.$notify.error({title: '错误', message: '物料冲突，请重新选择订单！'})
             return false
           }
           if (dispatchMan !== item.dispatchMan) {
-            this.$message.error('调度人员冲突，请重新选择订单！')
+            this.$notify.error({title: '错误', message: '调度人员冲突，请重新选择订单！'})
             return false
           }
         }

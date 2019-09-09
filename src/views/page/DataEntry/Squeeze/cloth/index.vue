@@ -119,7 +119,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -135,7 +135,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -151,7 +151,7 @@ export default {
             this.productline = data.childList
             this.formHeader.productLine = data.childList[0].deptId
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -161,19 +161,19 @@ export default {
     // 查询
     SearchList () {
       if (!this.formHeader.factory || this.formHeader.factory === '') {
-        this.$message.error('请选择生产工厂')
+        this.$notify.error({title: '错误', message: '请选择生产工厂'})
         return false
       }
       if (!this.formHeader.workShop || this.formHeader.workShop === '') {
-        this.$message.error('请选择生产车间')
+        this.$notify.error({title: '错误', message: '请选择生产车间'})
         return false
       }
       if (!this.formHeader.productLine || this.formHeader.productLine === '') {
-        this.$message.error('请选择布浆线')
+        this.$notify.error({title: '错误', message: '请选择布浆线'})
         return false
       }
       if (!this.formHeader.productDate || this.formHeader.productDate === '') {
-        this.$message.error('请选择生产日期')
+        this.$notify.error({title: '错误', message: '请选择生产日期'})
         return false
       }
       this.contentshow = true
@@ -222,7 +222,7 @@ export default {
           that.$refs.material.savepeople(resolve, reject)
         })
         Promise.all([net1, net2, excSaveNet, textSaveNet]).then(function () {
-          that.$message.success(that.succmessage)
+          that.$notify({title: '成功', message: that.succmessage, type: 'success'})
           that.SearchList()
           that.isRedact = false
         }).catch(() => {

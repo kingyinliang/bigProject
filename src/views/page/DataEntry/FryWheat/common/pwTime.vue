@@ -112,7 +112,7 @@ export default {
               }]
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         }).finally(() => {
           this.$emit('SetReadyStatus', status)
@@ -124,7 +124,7 @@ export default {
       let ty = true
       if ((this.pwTimeDate[0].prepareTime || this.pwTimeDate[0].prepareTime === 0) && (this.pwTimeDate[0].machineTime || this.pwTimeDate[0].machineTime === 0) && (this.pwTimeDate[0].humanTime || this.pwTimeDate[0].humanTime === 0)) {} else {
         ty = false
-        this.$message.error('工时录入必填项未填')
+        this.$notify.error({title: '错误', message: '工时录入必填项未填'})
         return false
       }
       return ty
@@ -139,7 +139,7 @@ export default {
       this.$http(`${WHT_API.MATERIELTIMEUPDATE_API}`, 'POST', this.pwTimeDate[0]).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

@@ -362,7 +362,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.formData = res.data.data
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -379,7 +379,7 @@ export default class Index extends Vue {
         this.dataTotalCount = this.totalDataList.length
         this.dataList = this.totalDataList.slice(0, this.dataPageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -396,7 +396,7 @@ export default class Index extends Vue {
         this.adjustTotalCount = this.totalAdjustList.length
         this.adjustList = this.totalAdjustList.slice(0, this.adjustPageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -413,22 +413,22 @@ export default class Index extends Vue {
         this.totalCount = this.totalList.length
         this.applyList = this.totalList.slice(0, this.pageSize)
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
   saveAdjust () {
     if (this.adjustForm.QUANTITY.toString() === '') {
-      this.$message.error('调整数量不能为空')
+      this.$notify.error({title: '错误', message: '调整数量不能为空'})
       return false
     }
     Vue.prototype.$http(`${GRANARY_API.WHEAT_ADJUST}`, `POST`, this.adjustForm).then((res) => {
       if (res.data.code === 0) {
-        this.$message.success('保存成功')
+        this.$notify({title: '成功', message: '保存成功', type: 'success'})
         this.retrieveDataList()
         this.retrieveAdjustList()
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
     this.dialogFormVisible2 = false

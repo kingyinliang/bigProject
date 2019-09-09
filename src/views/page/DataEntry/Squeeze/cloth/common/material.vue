@@ -222,7 +222,7 @@ export default {
         if (data.code === 0) {
           this.sauceClassList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.pulpMachineList = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -264,7 +264,7 @@ export default {
         if (data.code === 0) {
           this.hovercraftList = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
       this.$http(`${BASICDATA_API.DEVICELIST_API}`, 'POST', {
@@ -276,7 +276,7 @@ export default {
         if (data.code === 0) {
           this.hovercraftAll = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -380,7 +380,7 @@ export default {
           this.materialList = data.propulp
           this.peopleList = data.propulpMan
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -388,32 +388,32 @@ export default {
       let ty = true
       if (this.multipleSelection.length === 0) {
         ty = false
-        this.$message.error('请勾选提交数据')
+        this.$notify.error({title: '错误', message: '请勾选提交数据'})
         return false
       }
       for (let items of this.multipleSelection) {
         if (!items.pulpMachineName || items.pulpMachineName === '' || !items.hovercraftName || items.hovercraftName === '' || !items.pulpStartDate || items.pulpStartDate === '' || !items.pulpEndDate || items.pulpEndDate === '' || !items.pulpAmount || items.pulpAmount === '' || !items.selfDrenchTime || items.selfDrenchTime === '' || !items.potOne || items.potOne === '' || !items.sauceClass || items.sauceClass === '') {
           ty = false
-          this.$message.error('物料必填项不能为空')
+          this.$notify.error({title: '错误', message: '物料必填项不能为空'})
           return false
         }
       }
       if (this.peopleList.length === 0) {
         ty = false
-        this.$message.error('请填写布浆人员')
+        this.$notify.error({title: '错误', message: '请填写布浆人员'})
         return false
       }
       for (let items of this.peopleList) {
         if (!items.classes || items.classes === '' || !items.man || items.man === '') {
           ty = false
-          this.$message.error('人员必填项不能为空')
+          this.$notify.error({title: '错误', message: '人员必填项不能为空'})
           return false
         }
       }
       for (let item of this.multipleSelection) {
         if (item.id === '') {
           ty = false
-          this.$message.error('请先保存再提交')
+          this.$notify.error({title: '错误', message: '请先保存再提交'})
           return false
         }
       }
@@ -427,7 +427,7 @@ export default {
       this.$http(`${SQU_API.CLOTHFORMHEADER_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -460,12 +460,12 @@ export default {
             this.$http(`${SQU_API.CLOTHMATERIALSUBMIT_API}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -483,7 +483,7 @@ export default {
       this.$http(`${SQU_API.CLOTHMATERIALMAN_API}`, 'POST', this.peopleList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -522,7 +522,7 @@ export default {
             }
             this.visible = true
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

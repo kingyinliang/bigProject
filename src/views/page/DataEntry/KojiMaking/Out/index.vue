@@ -140,7 +140,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -153,7 +153,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
           if (reject) {
             reject('保存表头' + data.msg)
           }
@@ -203,7 +203,7 @@ export default {
           let submitNet = Promise.all([meaterielSubmit, InstockSubmit])
           submitNet.then(function () {
             that.GetOrderList()
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
           }, err => {
             that.$message.error(err)
           })
@@ -218,7 +218,7 @@ export default {
         let saveNet = Promise.all([OrderHeadSaveNet, meaterielSave, InstockSave, excSaveNet, textSaveNet])
         saveNet.then(function () {
           that.GetOrderList()
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
         }, err => {
           that.$message.error(err)
         })

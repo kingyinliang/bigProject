@@ -243,7 +243,7 @@ export default class Index extends Vue {
             this.formHeader = res.data.page.list[0]
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -256,7 +256,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.detailList = res.data.list
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -268,7 +268,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.factoryList = res.data.typeList
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -280,7 +280,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -291,7 +291,7 @@ export default class Index extends Vue {
     //   if (data.code === 0) {
     //     this.MaterialType = data.productsInfo
     //   } else {
-    //     this.$message.error(data.msg)
+    //     this.$notify.error({title: '错误', message: data.msg})
     //   }
     // })
     if (factory) {
@@ -299,7 +299,7 @@ export default class Index extends Vue {
         if (data.code === 0) {
           this.materialList = data.productsInfo
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -311,7 +311,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.halfTypeList = res.data.ferList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -324,7 +324,7 @@ export default class Index extends Vue {
           this.getHeaderForm(res.data.id)
           this.getDetailList(res.data.id)
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -337,22 +337,22 @@ export default class Index extends Vue {
           this.getHeaderForm(res.data.id)
           this.getDetailList(res.data.id)
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
   }
   validate () {
     if (!this.formHeader.factory) {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return false
     }
     if (!this.formHeader.workShop) {
-      this.$message.error('请选择车间')
+      this.$notify.error({title: '错误', message: '请选择车间'})
       return false
     }
     if (!this.formHeader.materialCode) {
-      this.$message.error('请选择酱醪')
+      this.$notify.error({title: '错误', message: '请选择酱醪'})
       return false
     }
     // if (!this.formHeader.halfType) {
@@ -360,11 +360,11 @@ export default class Index extends Vue {
     //   return false
     // }
     if (!this.formHeader.amount) {
-      this.$message.error('请填写申请数量')
+      this.$notify.error({title: '错误', message: '请填写申请数量'})
       return false
     }
     if (!this.formHeader.productDate) {
-      this.$message.error('请选择生产日期')
+      this.$notify.error({title: '错误', message: '请选择生产日期'})
       return false
     }
     return true

@@ -134,15 +134,15 @@ export default {
     },
     GetList () {
       if (!this.formHeader.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       if (!this.formHeader.workShop) {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
         return
       }
       if (!this.formHeader.productDate) {
-        this.$message.error('请选择生产日期')
+        this.$notify.error({title: '错误', message: '请选择生产日期'})
         return
       }
       this.isRedact = false
@@ -181,7 +181,7 @@ export default {
             this.GetOrderStatus()
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -226,7 +226,7 @@ export default {
           let SubmitNet = Promise.all([SubmitApplyorder, SubmitMaterial, SubmitTime])
           SubmitNet.then(function () {
             that.isRedact = false
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
             that.GetList()
           }, err => {
             that.$message.error(err)
@@ -236,7 +236,7 @@ export default {
         let saveNet = Promise.all([updateApplyorder, updateMaterial, UpdateTime])
         saveNet.then(function () {
           that.isRedact = false
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
           that.GetList()
         }, err => {
           that.$message.error(err)
@@ -262,7 +262,7 @@ export default {
         if (data.code === 0) {
           this.SerchSapList = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -272,7 +272,7 @@ export default {
         if (data.code === 0) {
           this.SerchSapListM = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -282,7 +282,7 @@ export default {
         if (data.code === 0) {
           this.orderTypeList = data.dicList[0].prolist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -294,7 +294,7 @@ export default {
         if (data.code === 0) {
           this.VersionList = data.dicList[0].prolist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -307,7 +307,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -322,7 +322,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

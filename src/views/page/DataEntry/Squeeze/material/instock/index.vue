@@ -554,48 +554,48 @@ export default class Index extends Vue {
   }
   startValidate () {
     if (this.startForm.potNo === '') {
-      this.$message.error('原汁罐号不能为空')
+      this.$notify.error({title: '错误', message: '原汁罐号不能为空'})
       return false
     } else if (this.startForm.batch.length !== 10) {
-      this.$message.error('批次长度必须为10')
+      this.$notify.error({title: '错误', message: '批次长度必须为10'})
       return false
     } else if (this.startForm.startAmount.toString() === '') {
-      this.$message.error('起始数不能为空')
+      this.$notify.error({title: '错误', message: '起始数不能为空'})
       return false
     }
     return true
   }
   endValidate () {
     if (this.endForm.endAmount.toString() === '') {
-      this.$message.error('结束数不能为空')
+      this.$notify.error({title: '错误', message: '结束数不能为空'})
       return false
     } else if (this.endForm.fullPot === '1' && (this.endForm.fullPotAmount.toString() === '' || this.endForm.fullPotAmount.toString() === '0')) {
-      this.$message.error('满罐数量不能为空')
+      this.$notify.error({title: '错误', message: '满罐数量不能为空'})
       return false
     } else if (this.endForm.fullPot === '1' && this.endForm.fulPotDate === '') {
-      this.$message.error('满罐日期不能为空')
+      this.$notify.error({title: '错误', message: '满罐日期不能为空'})
       return false
     }
     return true
   }
   modifyValidate () {
     if (this.modifyForm.potNo === '') {
-      this.$message.error('原汁罐号不能为空')
+      this.$notify.error({title: '错误', message: '原汁罐号不能为空'})
       return false
     } else if (this.modifyForm.batch.length !== 10) {
-      this.$message.error('批次长度必须为10')
+      this.$notify.error({title: '错误', message: '批次长度必须为10'})
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
-      this.$message.error('起始数不能为空')
+      this.$notify.error({title: '错误', message: '起始数不能为空'})
       return false
     } else if (this.modifyForm.endAmount.toString() === '') {
-      this.$message.error('结束数不能为空')
+      this.$notify.error({title: '错误', message: '结束数不能为空'})
       return false
     } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fullPotAmount.toString() === '') {
-      this.$message.error('满罐数量不能为空')
+      this.$notify.error({title: '错误', message: '满罐数量不能为空'})
       return false
     } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fulPotDate === '') {
-      this.$message.error('满罐日期不能为空')
+      this.$notify.error({title: '错误', message: '满罐日期不能为空'})
       return false
     }
     return true
@@ -629,7 +629,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -645,7 +645,7 @@ export default class Index extends Vue {
             this.params.workshopName = res.data.typeList[0].deptName
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -662,7 +662,7 @@ export default class Index extends Vue {
             this.params.productLineName = data.childList[0].deptName
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }
@@ -682,7 +682,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.potList = res.data.page.list
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -695,11 +695,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     if (this.params.workshopId === '') {
-      this.$message.error('请选择车间')
+      this.$notify.error({title: '错误', message: '请选择车间'})
       return
     }
     // if (this.params.productLineId === '') {
@@ -707,7 +707,7 @@ export default class Index extends Vue {
     //   return
     // }
     if (this.params.applyDate === null || this.params.applyDate === '') {
-      this.$message.error('请选择入罐日期')
+      this.$notify.error({title: '错误', message: '请选择入罐日期'})
       return
     }
     // 保存选项值到common store
@@ -726,7 +726,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.dataList = res.data.list
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -767,7 +767,7 @@ export default class Index extends Vue {
     // })
     let that = this
     this.save2().then((result : { code: number, msg: string }) => {
-      that.$message.success(result.msg)
+      that.$notify({title: '成功', message: result.msg, type: 'success'})
       that.getOrderList()
     }).catch((result: { code: number, msg: string }) => {
       that.$message.error(result.msg)
@@ -816,7 +816,7 @@ export default class Index extends Vue {
     }).then(() => {
       let that = this
       this.save2().then(() => this.submit2()).then((result : { code: number, msg: string }) => {
-        that.$message.success(result.msg)
+        that.$notify({title: '成功', message: result.msg, type: 'success'})
         that.getOrderList()
       }).catch((result : { code: number, msg: string }) => {
         that.$message.error(result.msg)

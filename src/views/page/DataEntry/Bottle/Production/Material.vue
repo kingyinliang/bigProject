@@ -79,21 +79,31 @@ export default {
   },
   methods: {
     // 获取物料领用
-    getDataList (orderNo) {
+    getDataList (formHeader) {
       let status = ''
       this.$http(`${BOTTLE_API.BOTTLE_PRO_MATERIAL_LIST}`, 'POST', {
         orderId: this.$store.state.common.bottle.ProOrderId,
-        orderNo: orderNo
+        status: formHeader.orderStatus,
+        orderNo: formHeader.orderNo
       }).then(({data}) => {
         if (data.code === 0) {
           this.MaterialList = data.list
           this.MaterialAudit = data.vrList
           status = GetStatus(this.MaterialList)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setApplyMaterielState', status)
+      })
+    },
+    setNum (num) {
+      this.MaterialList.forEach(item => {
+        if (!item.status) {
+          item.productUseAmount = num
+        } else if (item.status === 'saved' || item.status === 'noPass') {
+          item.productUseAmount = num
+        }
       })
     },
     // 保存提交
@@ -123,12 +133,12 @@ export default {
       this.MaterialList.forEach((item) => {
         if (!(item.batch && item.productUseAmount && item.supplier)) {
           ty = false
-          this.$message.error('物料领用必填项未填')
+          this.$notify.error({title: '错误', message: '物料领用必填项未填'})
           return false
         }
         if (item.batch.length !== 10) {
           ty = false
-          this.$message.error('物料领用批次十位')
+          this.$notify.error({title: '错误', message: '物料领用批次十位'})
           return false
         }
       })

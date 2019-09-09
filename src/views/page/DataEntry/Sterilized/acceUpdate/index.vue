@@ -238,7 +238,7 @@ export default {
           // this.totalCount = data.list.length
           // this.dataList = this.SumDataList.slice((this.currPage - 1) * this.pageSize, (this.currPage - 1) * this.pageSize + this.pageSize)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -265,7 +265,7 @@ export default {
     // 保存
     SavedOr (str) {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       this.multipleSelection.forEach((item) => {
@@ -283,17 +283,17 @@ export default {
       })
       this.$http(`${STERILIZED_API.STE_SUP_SAVED_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('操作成功')
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetDataList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     // 推送
     pushData (str) {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       if (str === '已确认') {
@@ -327,10 +327,10 @@ export default {
       })
       this.$http(`${STERILIZED_API.STE_SUP_PUSH_API}`, 'POST', this.multipleSelection).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('操作成功')
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetDataList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -340,30 +340,30 @@ export default {
       this.multipleSelection.forEach((item) => {
         if (!item.steStatus) {
           ty = false
-          this.$message.error('杀菌状态必填')
+          this.$notify.error({title: '错误', message: '杀菌状态必填'})
           return false
         }
         if (item.steStatus === '异常订单') {
           if (!item.steStatusRemake) {
             ty = false
-            this.$message.error('订单状态为异常，状态备注必填')
+            this.$notify.error({title: '错误', message: '订单状态为异常，状态备注必填'})
             return false
           }
         }
         item.steSupMaterialBean.supList.forEach((item1) => {
           if (!item1.materialCode) {
             ty = false
-            this.$message.error('增补料记录物料必填')
+            this.$notify.error({title: '错误', message: '增补料记录物料必填'})
             return false
           }
           if (!item1.addAmount) {
             ty = false
-            this.$message.error('增补料记录添加数量必填')
+            this.$notify.error({title: '错误', message: '增补料记录添加数量必填'})
             return false
           }
           if (!item1.unit) {
             ty = false
-            this.$message.error('增补料记录单位必填')
+            this.$notify.error({title: '错误', message: '增补料记录单位必填'})
             return false
           }
         })
@@ -419,7 +419,7 @@ export default {
         if (data.code === 0) {
           this.Materails = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -429,7 +429,7 @@ export default {
         if (data.code === 0) {
           this.Unit = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

@@ -197,7 +197,7 @@ export default {
           this.machineTimeData = data.listFormMachine
           this.timeAuditlog = data.listApproval
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('SetReadyStatus', status)
@@ -226,7 +226,7 @@ export default {
       this.$http(`${WHT_API.READYTIMEUPDATE_API}`, 'POST', this.readyTimeDate).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -250,7 +250,7 @@ export default {
       this.$http(`${WHT_API.MACHINETIMEUPDATE_API}`, 'POST', this.machineTimeData).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -266,25 +266,25 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$message.error('准备时间白班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$message.error('准备时间中班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$message.error('准备时间夜班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$message.error('准备时间多班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
           return false
         }
       }
@@ -292,13 +292,13 @@ export default {
         this.machineTimeData.forEach((item, index) => {
           if (!item.closeTime) {
             ty = false
-            this.$message.error('机器工时没结束，请结束后提交')
+            this.$notify.error({title: '错误', message: '机器工时没结束，请结束后提交'})
             return false
           }
         })
       } else {
         ty = false
-        this.$message.error('机器工时为空数据')
+        this.$notify.error({title: '错误', message: '机器工时为空数据'})
         return false
       }
       return ty
@@ -343,7 +343,7 @@ export default {
         if (data.code === 0) {
           this.Machine = data.list.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -354,7 +354,7 @@ export default {
         if (item.deviceId === me.deviceId && item.openTime && !item.closeTime) {
           if (st) {
             tmp = false
-            this.$message.error('请结束后开始')
+            this.$notify.error({title: '错误', message: '请结束后开始'})
           } else {
             tmp = true
           }
@@ -366,7 +366,7 @@ export default {
           this.$refs.machinetime.init(me, st)
         })
       } else if (!st && !tmp) {
-        this.$message.error('请开始后结束')
+        this.$notify.error({title: '错误', message: '请开始后结束'})
       }
     },
     // 检测

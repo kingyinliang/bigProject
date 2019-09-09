@@ -55,7 +55,7 @@
             <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
           </el-tooltip>
         </span>
-        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift" @setInStorageState='setInStorageState'></in-storage>
+        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift" @setInStorageState='setInStorageState' @SetMeaterielNum="SetMeaterielNum"></in-storage>
       </el-tab-pane>
       <el-tab-pane name="6">
         <span slot="label" class="spanview">
@@ -122,6 +122,10 @@ export default {
       // 强制刷新tabs
       this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
     },
+    SetMeaterielNum (num) {
+      // this.$refs.outtech.GetsaltWaterUsed(num)
+      this.$refs.material.setNum(num)
+    },
     // 获取表头
     getHead () {
       this.isRedact = false
@@ -144,13 +148,13 @@ export default {
             this.$refs.readytimes.getDataList()
             this.$refs.record.getDataList()
             this.$refs.instorage.getDataList()
-            this.$refs.material.getDataList(this.formHeader.orderNo)
+            this.$refs.material.getDataList(this.formHeader)
             this.GetUser()
             this.$refs.excrecord.GetExcDate(this.formHeader.orderId)
             this.$refs.textrecord.GetText(this.formHeader.orderId)
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -163,7 +167,7 @@ export default {
           this.$refs.workerref.GetTimeUserList(data.listuser, data.vrList)
           this.Attendance = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -252,10 +256,10 @@ export default {
       if (str === 'saved') {
         let savedNet = Promise.all([updateHead, updateReady, updateDevice, updateRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
         savedNet.then(() => {
-          this.$message.success('操作成功')
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.getHead()
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([updateReady, updateDevice, updateRecord])
@@ -268,13 +272,13 @@ export default {
           })
           let SubmitNet = Promise.all([updateHead, SubmitTime, SubmitRecord, updateIn, updateMaterial, updateUser, updateUserAtt, updateExc, updateText])
           SubmitNet.then(() => {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             this.getHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },
@@ -292,7 +296,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('工时提交' + data.msg)
           }
@@ -305,7 +309,7 @@ export default {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -315,7 +319,7 @@ export default {
         if (data.code === 0) {
           this.Supplier = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

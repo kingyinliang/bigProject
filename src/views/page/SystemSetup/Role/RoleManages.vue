@@ -147,7 +147,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.addOrUpdateVisible1 = false
         this.addOrUpdateVisible2 = false
@@ -198,7 +198,7 @@ export default {
             })
             this.GetRoleList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }).catch(() => {

@@ -186,6 +186,7 @@ export default {
       dataList: [],
       dialogTableVisible: false,
       ItemList: [],
+      materialName: '',
       multipleSelection: [],
       holderList: [],
       lineStatus: '',
@@ -215,7 +216,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -232,7 +233,7 @@ export default {
               this.formHeader.workShop = ''
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -245,7 +246,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -261,7 +262,7 @@ export default {
           if (data.code === 0) {
             this.thrwHolderList = data.list
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -269,7 +270,7 @@ export default {
     // 查询
     SearchList () {
       if (this.formHeader.factory === '') {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSEARCHLIST}`, 'POST', this.formHeader).then(({data}) => {
@@ -284,12 +285,13 @@ export default {
           this.pages.currentPage = 1
           this.dataList = this.dataListAll.slice((this.pages.currentPage - 1) * this.pages.pageSize, this.pages.currentPage * this.pages.pageSize)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     ShowDetail (row) {
       // row.id = 'C57A2AE171024496AD26B0BEE8B0ACAD'
+      this.materialName = row.materialName
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMS}`, 'POST', {orderNo: row.id, factory: this.formHeader.factory}).then(({data}) => {
         if (data.code === 0) {
           this.ItemList = data.info
@@ -302,7 +304,7 @@ export default {
           this.lineStatus = row.status
           this.ID = row.id
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -326,33 +328,39 @@ export default {
         batchList.push(item.batch)
         item.ID = this.ID
         if (!item.receiveAmount || item.receiveAmount === '') {
-          this.$message.error('请填写实际领料')
+          this.$notify.error({title: '错误', message: '请填写实际领料'})
           return false
         }
         if (!item.batch || item.batch === '') {
-          this.$message.error('请填写批次')
+          this.$notify.error({title: '错误', message: '请填写批次'})
           return false
         }
         if (item.batch.length !== 10) {
-          this.$message.error('批次应为10位')
+          this.$notify.error({title: '错误', message: '批次应为10位'})
           return false
         }
         if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
-          this.$message.error('原汁物料需选择罐号')
+          this.$notify.error({title: '错误', message: '原汁物料需选择罐号'})
           return false
         }
+        // if (/六月鲜/g.test(this.materialName)) {
+        //   if (/味极鲜/g.test(item.category)) {
+        //     this.$message.error('领用原汁与生产物料不匹配！无法保存，无法操作')
+        //     return false
+        //   }
+        // }
       }
       if (new Set(batchList).size !== batchList.length) {
-        this.$message.error('批次不能重复')
+        this.$notify.error({title: '错误', message: '批次不能重复'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
         if (data.code === 0) {
-          this.$message.success('保存成功')
+          this.$notify({title: '成功', message: '保存成功', type: 'success'})
           // this.SearchList()
           this.dialogTableVisible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -361,34 +369,34 @@ export default {
     },
     SavedForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
       } else {
-        this.multipleSelection.map((item) => {
+        this.multipleSelection.forEach((item) => {
           item.status = '已调配'
         })
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.isRedact = false
             this.SearchList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
     },
     SubmitForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请勾选数据')
+        this.$notify.error({title: '错误', message: '请勾选数据'})
         return false
       }
       for (let item of this.multipleSelection) {
         if (item.isUpdate === false) {
-          this.$message.error('请先保存调配列表（调配单：' + item.orderNo + '）')
+          this.$notify.error({title: '错误', message: '请先保存调配列表（调配单：' + item.orderNo + '）'})
           return false
         }
         if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
-          this.$message.error('请填写必填项')
+          this.$notify.error({title: '错误', message: '请填写必填项'})
           return false
         }
       }
@@ -401,15 +409,15 @@ export default {
           if (data.code === 0) {
             this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
               if (data.code === 0) {
-                this.$message.success('提交成功')
+                this.$notify({title: '成功', message: '提交成功', type: 'success'})
                 this.isRedact = false
                 this.SearchList()
               } else {
-                this.$message.error(data.msg)
+                this.$notify.error({title: '错误', message: data.msg})
               }
             })
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

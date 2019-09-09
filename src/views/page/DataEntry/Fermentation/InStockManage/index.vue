@@ -274,7 +274,7 @@ export default class Index extends Vue {
           this.params.factoryName = res.data.typeList[0].deptName
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -286,7 +286,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -299,7 +299,7 @@ export default class Index extends Vue {
       if (data.code === 0) {
         this.orderTypeList = data.dicList[0].prolist
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     }).catch((error) => {
       console.log('catch data::', error)
@@ -316,7 +316,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -332,7 +332,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -342,11 +342,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择车间')
+    //   this.$notify.error({title: '错误', message: '请选择车间'})
     //   return
     // }
     // if (this.params.potId === '') {
@@ -396,7 +396,7 @@ export default class Index extends Vue {
         })
         this.totalCount = res.data.page.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -422,7 +422,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.retrieveOrderList()
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -443,7 +443,7 @@ export default class Index extends Vue {
           if (res.data.code === 0) {
             this.retrieveOrderList()
           } else {
-            this.$message.error(res.data.msg)
+            this.$notify.error({title: '错误', message: res.data.msg})
           }
         })
       })
@@ -451,20 +451,20 @@ export default class Index extends Vue {
   }
   validate () {
     if (!this.selectedList || this.selectedList.length === 0) {
-      this.$message.error('请选择要入库的订单')
+      this.$notify.error({title: '错误', message: '请选择要入库的订单'})
       return false
     }
     for (let item of this.selectedList) {
       if (!item.inAmount || item.inAmount === '') {
-        this.$message.error('入库数不能为空')
+        this.$notify.error({title: '错误', message: '请选择要入库的订单'})
         return false
       }
       if (item.batch === null || item.batch === '') {
-        this.$message.error('批次不能为空')
+        this.$notify.error({title: '错误', message: '批次不能为空'})
         return false
       }
       if (item.batch.length !== 10) {
-        this.$message.error('批次长度为10')
+        this.$notify.error({title: '错误', message: '批次长度为10'})
         return false
       }
     }
@@ -476,7 +476,7 @@ export default class Index extends Vue {
       if (res.data.code === 0) {
         this.readAudit = res.data.list
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }

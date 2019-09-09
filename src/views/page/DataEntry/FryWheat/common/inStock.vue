@@ -262,13 +262,13 @@ export default {
   methods: {
     validate () {
       if (this.wheatDataList === undefined || this.wheatDataList.length === 0) {
-        this.$message.error('生产入库未录入数据')
+        this.$notify.error({title: '错误', message: '生产入库未录入数据'})
         return false
       }
       for (let item of this.wheatDataList) {
         if (item.delFlag === '0') {
           if (item.inPortWeight <= 0) {
-            this.$message.error('入库数必须大于0')
+            this.$notify.error({title: '错误', message: '入库数必须大于0'})
             return false
           }
         }
@@ -293,7 +293,7 @@ export default {
         if (data.code === 0) {
           this.flourContainerList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -317,7 +317,7 @@ export default {
         if (data.code === 0) {
           this.wheatContainerList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -361,7 +361,7 @@ export default {
             inState = 'checked'
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -448,7 +448,7 @@ export default {
         this.$http(WHT_API.INSTORAGESAVE_API, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -473,7 +473,7 @@ export default {
         this.$http(`${WHT_API.INSTORAGESUBMIT_API}`, 'POST', this.wheatDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')

@@ -151,7 +151,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -167,7 +167,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -183,7 +183,7 @@ export default {
             this.productline = data.childList
             this.formHeader.productLine = data.childList[0].deptId
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -192,7 +192,7 @@ export default {
     },
     SearchList () {
       // if (!this.formHeader.factory || this.formHeader.factory === '') {
-      //   this.$message.error('请选择生产工厂')
+      //   this.$notify.error({title: '错误', message: '请选择生产工厂'})
       //   return false
       // }
       // if (!this.formHeader.workShop || this.formHeader.workShop === '') {
@@ -214,7 +214,7 @@ export default {
             item.drenchEndDate = item.drenchEndDate ? item.drenchEndDate : dateFormat(new Date(), 'yyyy-MM-dd hh:mm')
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -229,7 +229,7 @@ export default {
             }
             this.visible = true
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -243,12 +243,12 @@ export default {
     // 提交
     SubmitForm () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('没有勾选提交数据')
+        this.$notify.error({title: '错误', message: '没有勾选提交数据'})
         return false
       }
       for (let items of this.multipleSelection) {
         if (!items.moveOperator || items.moveOperator === '') {
-          this.$message.error('请选择挪笼操作人')
+          this.$notify.error({title: '错误', message: '请选择挪笼操作人'})
           return false
         }
       }
@@ -269,10 +269,10 @@ export default {
         this.$http(`${configurl}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.SearchList()
-            this.$message.success(this.succmessage)
+            this.$notify({title: '成功', message: this.succmessage, type: 'success'})
             this.isRedact = false
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -281,10 +281,10 @@ export default {
         this.$http(`${configurl}`, 'POST', this.waterList).then(({data}) => {
           if (data.code === 0) {
             this.SearchList()
-            this.$message.success(this.succmessage)
+            this.$notify({title: '成功', message: this.succmessage, type: 'success'})
             this.isRedact = false
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

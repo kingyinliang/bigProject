@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
     <div class="main">
       <el-card class="searchCard newCard">
         <el-row type="flex">
@@ -259,7 +259,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API} from '@/api/api'
+import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API, REP_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 import {dateFormat, headanimation} from '@/net/validate'
 @Component({
@@ -284,8 +284,10 @@ export default class Index extends Vue {
   applyPageSize = 10
   applyTotalCount = 0
   selectedList = []
+  ExportTime = 0
   activeName = '1'
   searched: boolean = false
+  lodingS: boolean = false
   mounted () {
     headanimation(Vue.prototype.$)
     const now = dateFormat(new Date(), 'yyyy-MM-dd')
@@ -328,7 +330,7 @@ export default class Index extends Vue {
         if (data.code === 0) {
           this.orderTypeList = data.dicList[0].prolist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -366,7 +368,7 @@ export default class Index extends Vue {
           this.params.factoryId = res.data.typeList[0].deptId
         }
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -378,7 +380,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -394,7 +396,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -409,7 +411,7 @@ export default class Index extends Vue {
           //   this.params.workshopId = res.data.num[0].holderId
           // }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
@@ -419,11 +421,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$message.error('请选择工厂')
+      this.$notify.error({title: '错误', message: '请选择工厂'})
       return
     }
     // if (this.params.workshopId === '') {
-    //   this.$message.error('请选择车间')
+    //   this.$notify.error({title: '错误', message: '请选择车间'})
     //   return
     // }
     // if (this.params.potId === '') {
@@ -466,7 +468,7 @@ export default class Index extends Vue {
         this.dataList = res.data.orderPage.list
         this.totalCount = res.data.orderPage.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -488,7 +490,7 @@ export default class Index extends Vue {
         this.applyedList = res.data.orderPage.list
         this.applyTotalCount = res.data.orderPage.totalCount
       } else {
-        this.$message.error(res.data.msg)
+        this.$notify.error({title: '错误', message: res.data.msg})
       }
     })
   }
@@ -498,12 +500,12 @@ export default class Index extends Vue {
   }
   applyOrder () {
     if (!this.selectedList || this.selectedList.length === 0) {
-      this.$message.error('请选择要申请的订单')
+      this.$notify.error({title: '错误', message: '请选择要申请的订单'})
       return
     }
     for (let item of this.selectedList) {
       if (item.kjmAmount <= 0) {
-        this.$message.error(item.holdName + ' 订单量需大于0')
+        this.$notify.error({title: '错误', message: item.holdName + ' 订单量需大于0'})
         return false
       }
     }
@@ -512,13 +514,43 @@ export default class Index extends Vue {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
+      this.lodingS = true
       Vue.prototype.$http(`${FERMENTATION_API.ORDER_APPLY_API}`, `POST`, this.selectedList).then((res) => {
         if (res.data.code === 0) {
-          this.getOrderList()
+          // this.getOrderList()
+          this.ExportTime = setInterval(() => {
+            this.getStatus()
+          }, 4000)
         } else {
-          this.$message.error(res.data.msg)
+          this.lodingS = false
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
+    })
+  }
+  getStatus () {
+    Vue.prototype.$http(`${REP_API.GETREPOUTFORWORKOUTPUT_API}`, 'GET', {asyncType: 'ASYNC_TYPE_FER_APPLY_ORDER'}).then(({data}) => {
+      if (data.code === 0) {
+        if (data.asyncRecord) {
+          if (data.asyncRecord.asyncStatus === '0') {
+            this.lodingS = false
+            clearInterval(this.ExportTime)
+            this.$notify.error({title: '错误', message: data.asyncRecord.remark})
+          } else if (data.asyncRecord.asyncStatus === '1') {
+            this.lodingS = false
+            clearInterval(this.ExportTime)
+            this.getOrderList()
+            this.$notify({title: '成功', message: '申请成功', type: 'success'})
+          }
+        }
+      } else {
+        this.lodingS = false
+        clearInterval(this.ExportTime)
+        this.$notify.error({title: '错误', message: data.msg})
+      }
+    }).catch(() => {
+      this.lodingS = false
+      clearInterval(this.ExportTime)
     })
   }
   @Watch('params', {deep: true})

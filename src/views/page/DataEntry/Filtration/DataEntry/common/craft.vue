@@ -58,7 +58,7 @@
         </el-table-column>
         <el-table-column width="65">
           <template slot-scope="scope">
-            <el-button type="text" @click="SplitData(scope.row, scope.$index)" :disabled="!isRedact || soleStatus"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+            <el-button type="text" v-if="scope.row.isSplit === '0'" @click="SplitData(scope.row, scope.$index)" :disabled="!isRedact || soleStatus"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
         </el-table-column>
         <el-table-column width="110">
@@ -97,7 +97,7 @@
         <el-table-column label="备注" show-overflow-tooltip width="120" prop="remark"></el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelMaterial(scope.row)" :disabled="!isRedact || soleStatus" size="small"></el-button>
+            <el-button type="danger" icon="el-icon-delete" v-if="scope.row.isSplit === '1'" circle @click="DelMaterial(scope.row)" :disabled="!isRedact || soleStatus" size="small"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -142,7 +142,7 @@
 
 <script>
 import { dateFormat } from '@/net/validate'
-import { FILTRATION_API } from '@/api/api'
+import { FILTRATION_API, AUDIT_API } from '@/api/api'
 export default {
   name: 'equworkinghours',
   data () {
@@ -216,7 +216,7 @@ export default {
             }
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).finally(() => {
         this.$emit('setCraftStatus', this.craftStatus)
@@ -228,7 +228,7 @@ export default {
           this.filterAidModelList = data.materialInfo.materialType
           this.filterAidVenderList = data.materialInfo.materialSupplier
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -285,6 +285,7 @@ export default {
                 materialName: this.filterAidMaterialList[0].VALUE,
                 unit: 'KG',
                 batch: '',
+                isSplit: '0',
                 filterAidModel: this.filterAidModelList[0].VALUE,
                 filterAidVender: this.filterAidVenderList[0].VALUE,
                 filterMachineId: this.techInfo.filterMachineId
@@ -314,6 +315,7 @@ export default {
                 materialName: this.filterAidMaterialList[0].VALUE,
                 unit: 'KG',
                 batch: '',
+                isSplit: '0',
                 filterAidModel: this.filterAidModelList[0].VALUE,
                 filterAidVender: this.filterAidVenderList[0].VALUE,
                 filterMachineId: this.techInfo.filterMachineId
@@ -348,6 +350,7 @@ export default {
         filterAidAmount: '',
         unit: 'KG',
         batch: '',
+        isSplit: '1',
         filterAidModel: row.filterAidModel,
         filterAidVender: row.filterAidVender,
         remark: row.remark,
@@ -371,7 +374,7 @@ export default {
           this.supMaterialList.splice(this.supMaterialList.indexOf(row), 1)
           return false
         } else {
-          this.$message.error('最后一条禁止删除')
+          this.$notify.error({title: '错误', message: '最后一条禁止删除'})
           return false
         }
       })
@@ -383,7 +386,7 @@ export default {
       this.$http(`${FILTRATION_API.FILTER_CRAFT_TECHSAVE}`, 'POST', this.techList).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -401,7 +404,26 @@ export default {
       this.$http(`${FILTRATION_API.FILTER_CRAFT_MATERIALSAVE}`, 'POST', [{orderId: this.orderId, materialInfo: this.supMaterialList}]).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+        if (resolve) {
+          resolve('resolve')
+        }
+      }).catch(() => {
+        if (resolve) {
+          reject('reject')
+        }
+      })
+    },
+    aidSubmit (str, id, resolve, reject) {
+      this.supMaterialList.map((item) => {
+        item.materialName = this.filterAidMaterialList.find(items => items.CODE === item.materialCode).VALUE
+        item.workShop = id
+      })
+      this.$http(`${AUDIT_API.AUDIT_AID_SUBMIT}`, 'POST', [{orderId: this.orderId, materialInfo: this.supMaterialList}]).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -470,13 +492,13 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$message.error('请录入工艺控制数据')
+        this.$notify.error({title: '错误', message: '请录入工艺控制数据'})
         return false
       }
       for (let item of this.supMaterialList) {
         if (item.filterAidAmount === '' || !item.filterAidAmount || item.batch === '' || !item.batch) {
           ty = false
-          this.$message.error('工艺控制中辅料领用必填项不能为空')
+          this.$notify.error({title: '错误', message: '工艺控制中辅料领用必填项不能为空'})
           return false
         }
       }
@@ -508,7 +530,7 @@ export default {
       for (let item of SupMaTotal) {
         if (item.sum !== techTotal.find((items) => items.id === item.id).sum) {
           ty = false
-          this.$message.error(item.deviceName + ' 剂用量不相等')
+          this.$notify.error({title: '错误', message: item.deviceName + ' 剂用量不相等'})
           return false
         }
       }
@@ -517,7 +539,7 @@ export default {
     SubmitMaterial (resolve, reject) {
       this.$http(`${FILTRATION_API.FILTER_CRAFT_MATERIASUBMIT}`, 'POST', this.techList).then(({data}) => {
         if (data.code === 0) {} else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

@@ -86,8 +86,11 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.RecordList = data.embryoRecordList
+          this.currPage = 1
+          this.pageSize = 10
+          this.totalCount = data.embryoRecordList.length
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -135,7 +138,7 @@ export default {
       this.RecordList.forEach((item) => {
         if (!(item.date && item.embryoBatch && item.embryoAmount)) {
           ty = false
-          this.$message.error('投胚记录必填项未填')
+          this.$notify.error({title: '错误', message: '投胚记录必填项未填'})
           return false
         }
       })

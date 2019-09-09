@@ -101,14 +101,14 @@ export default {
           this.formHeader.pageSize = data.ferList.pageSize
           this.formHeader.totalCount = data.ferList.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     // 批量删除
     delList () {
       if (this.multipleSelection.length === 0) {
-        this.$message.error('请选择要删除的类别')
+        this.$notify.error({title: '错误', message: '请选择要删除的类别'})
       } else {
         this.$confirm('确认删除类别, 是否继续?', '删除类别', {
           confirmButtonText: '确定',
@@ -127,7 +127,7 @@ export default {
               this.multipleSelection = []
               this.GetDataList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           })
         }).catch(() => {
@@ -145,7 +145,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -156,7 +156,7 @@ export default {
         if (data.code === 0) {
           this.material = data.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

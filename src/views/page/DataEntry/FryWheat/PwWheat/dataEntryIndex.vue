@@ -172,7 +172,7 @@ export default {
       this.$http(`${WHT_API.WHTORDERUPDATE_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -226,7 +226,7 @@ export default {
           let net12 = Promise.all([net5, net6])
           net12.then(() => {
             that.GetOrderList()
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
           })
         })
       } else {
@@ -236,7 +236,7 @@ export default {
         let net10 = Promise.all([net0, net1, net2, net3, net4])
         net10.then(function () {
           that.GetOrderList()
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
         })
       }
     },
@@ -252,7 +252,7 @@ export default {
       }]).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         if (resolve) {
           resolve('resolve')

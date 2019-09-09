@@ -188,7 +188,7 @@ export default {
           this.WorkerDate = data.listForm
           this.UserAudit = data.listApproval
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -248,7 +248,7 @@ export default {
         if (data.code === 0) {
           this.Materails = data.result
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -277,7 +277,7 @@ export default {
         this.$http(`${PACKAGING_API.PKGUSERUPDATE_API}`, 'POST', this.WorkerDate).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error('修改人员' + data.msg)
+            this.$notify.error({title: '错误', message: '修改人员' + data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -299,7 +299,7 @@ export default {
           }]).then(({data}) => {
             if (data.code === 0) {
             } else {
-              this.$message.error('修改人员' + data.msg)
+              this.$notify.error({title: '错误', message: '修改人员' + data.msg})
             }
             if (resolve) {
               resolve('resolve')
@@ -324,7 +324,7 @@ export default {
         this.$http(`${BOTTLE_API.BOTTLE_PRO_USER_UPDATE}`, 'POST', this.WorkerDate).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error('修改人员' + data.msg)
+            this.$notify.error({title: '错误', message: '修改人员' + data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -346,7 +346,7 @@ export default {
           }]).then(({data}) => {
             if (data.code === 0) {
             } else {
-              this.$message.error('修改人员' + data.msg)
+              this.$notify.error({title: '错误', message: '修改人员' + data.msg})
             }
             if (resolve) {
               resolve('resolve')
@@ -363,7 +363,7 @@ export default {
       this.$http(`${BOTTLE_API.BOTTLE_PRO_ATTEND_UPDATE}`, 'POST', this.Attendance).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error('修改人员考勤分配' + data.msg)
+          this.$notify.error({title: '错误', message: '修改人员考勤分配' + data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -375,13 +375,13 @@ export default {
       let ty = true
       if (this.WorkerDate.length === 0) {
         ty = false
-        this.$message.error('人员不能为空')
+        this.$notify.error({title: '错误', message: '人员不能为空'})
         return false
       }
       this.WorkerDate.forEach((item) => {
         if (item.userType && item.userId.length !== 0 && item.startDate && item.endDate) {} else {
           ty = false
-          this.$message.error('人员必填项未填')
+          this.$notify.error({title: '错误', message: '人员必填项未填'})
           return false
         }
       })
@@ -393,7 +393,7 @@ export default {
         if (data.code === 0) {
           this.productShift = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -404,14 +404,14 @@ export default {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
         // this.$http(`${BASICDATA_API.FINDORGBYPARENTID_API}`, 'POST', {parentId: id}).then(({data}) => {
         //   if (data.code === 0) {
         //     this.Team = data.childList
         //   } else {
-        //     this.$message.error(data.msg)
+        //     this.$notify.error({title: '错误', message: data.msg})
         //   }
         // })
       } else {
@@ -419,7 +419,7 @@ export default {
           if (data.code === 0) {
             this.Team = data.teamList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -439,7 +439,7 @@ export default {
           this.OrgTree = data.deptList
           this.arrList = [this.OrgTree[0].children[0].deptId]
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -458,10 +458,10 @@ export default {
             this.$refs.officialWorker.init(row.deptId, row.userId)
           })
         } else {
-          this.$message.error('请选择工序')
+          this.$notify.error({title: '错误', message: '请选择工序'})
         }
       } else {
-        this.$message.error('请选择人员属性')
+        this.$notify.error({title: '错误', message: '请选择人员属性'})
       }
     },
     // 临时工

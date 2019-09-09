@@ -113,7 +113,7 @@ export default {
             this.plantList.factoryid = data.typeList[0].deptId
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -127,7 +127,7 @@ export default {
               this.plantList.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -136,7 +136,7 @@ export default {
     GetOrderList () {
       if (this.plantList.workShop) {
         if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
-          this.$message.error('日期或订单请选填一项')
+          this.$notify.error({title: '错误', message: '日期或订单请选填一项'})
           return false
         }
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -154,11 +154,11 @@ export default {
             this.productDate = this.plantList.productDate
             this.factoryid = this.plantList.factoryid
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
-        this.$message.error('请选择车间')
+        this.$notify.error({title: '错误', message: '请选择车间'})
       }
     },
     // 订单号下拉
@@ -181,7 +181,7 @@ export default {
             row.realOutput = data.list[0].realOutput
             row.plan = data.list[0].plan
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -236,7 +236,7 @@ export default {
           that.$router.push({ name: `DataEntry-Packaging-ProDataIn` })
         }, 100)
       } else {
-        this.$message.error('请选择订单号')
+        this.$notify.error({title: '错误', message: '请选择订单号'})
       }
     }
   },

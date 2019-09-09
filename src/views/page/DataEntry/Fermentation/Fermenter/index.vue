@@ -306,7 +306,7 @@ export default {
     // 总览点击
     topClick (item) {
       if (!this.formHeader.factory) {
-        this.$message.error('请选择工厂')
+        this.$notify.error({title: '错误', message: '请选择工厂'})
         return
       }
       this.formHeader.currPage = 1
@@ -359,7 +359,7 @@ export default {
           this.topBox[3].wdm = data.overView.wdmSixMonthCount
           this.topBox[3].lyx = data.overView.lyxSixMonthCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -370,7 +370,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -384,7 +384,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -402,7 +402,7 @@ export default {
           if (data.code === 0) {
             this.halfList = data.halfList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -414,7 +414,7 @@ export default {
           if (data.code === 0) {
             this.holderStatusList = data.statusList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -467,7 +467,7 @@ export default {
           this.dialogData = row
           this.visible = true
         } else {
-          this.$message.error('该罐不是未清洗状态')
+          this.$notify.error({title: '错误', message: '该罐不是未清洗状态'})
         }
         return
       }
@@ -483,7 +483,7 @@ export default {
           this.dialogData.holderStatus = '0'
           this.visible = false
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

@@ -37,7 +37,7 @@
                 <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
               </template>
             </el-table-column>
-            <el-table-column width="120">
+            <el-table-column width="130">
               <template slot="header"><i class="reqI">*</i><span>罐号</span></template>
               <template slot-scope="scope">
                 <el-select v-model="scope.row.hloderId" @change="setBatch(scope.row)" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
@@ -45,13 +45,13 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column width="120">
+            <el-table-column width="130">
               <template slot="header"><i class="reqI">*</i><span>批次</span></template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
+                <el-input v-model="scope.row.batch" :disabled="true" size="small"></el-input>
               </template>
             </el-table-column>
-            <el-table-column width="120">
+            <el-table-column width="130">
               <template slot="header"><i class="reqI">*</i><span>实际领料</span></template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
@@ -120,7 +120,7 @@ export default {
           this.MaterialDate = data.list
           this.DataAudit = data.vList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -128,7 +128,7 @@ export default {
     addData (row, index) {
       this.MaterialDate.splice(index + 1, 0, {
         delFlag: '0',
-        hloderId: row.hloderId,
+        hloderId: '',
         id: '',
         indexNum: '',
         isSplit: '0',
@@ -150,7 +150,7 @@ export default {
         if (data.code === 0) {
           this.PotList = data.halfList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -159,7 +159,7 @@ export default {
     },
     delRow (row) {
       if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
-        this.$message.error('最后一条了哦，不能再删了')
+        this.$notify.error({title: '错误', message: '最后一条了哦，不能再删了'})
       } else {
         row.delFlag = '1'
       }
@@ -225,13 +225,13 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('提交成功')
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       } else {
         let savedNet = Promise.all([net1, net2, net3])
@@ -240,13 +240,13 @@ export default {
             this.Stesave.orderUpdate(this, 'semiStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$message.success('保存成功')
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
-            this.$message.error(err)
+            this.$notify.error({title: '错误', message: err})
           })
         }).catch((err) => {
-          this.$message.error(err)
+          this.$notify.error({title: '错误', message: err})
         })
       }
     },
@@ -256,17 +256,17 @@ export default {
       this.MaterialDate.forEach((item) => {
         if (!item.hloderId) {
           ty = false
-          this.$message.error('罐号未填')
+          this.$notify.error({title: '错误', message: '罐号未填'})
           return false
         }
         if (!item.batch) {
           ty = false
-          this.$message.error('批次未填')
+          this.$notify.error({title: '错误', message: '批次未填'})
           return false
         }
         if (!item.receiveAmount) {
           ty = false
-          this.$message.error('实际领料未填')
+          this.$notify.error({title: '错误', message: '实际领料未填'})
           return false
         }
       })
@@ -295,7 +295,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     }

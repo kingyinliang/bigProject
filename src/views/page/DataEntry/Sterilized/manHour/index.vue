@@ -216,7 +216,7 @@ export default {
     // 查询
     GetTimeList () {
       if (this.formHeader.factory === '' || this.formHeader.workShop === '' || this.formHeader.inKjmDate === '' || this.formHeader.deptId === '') {
-        this.$message.error('请填写查询选项')
+        this.$notify.error({title: '错误', message: '请填写查询选项'})
         return false
       }
       this.searchCard = false
@@ -256,7 +256,7 @@ export default {
             this.$refs.workerref.GetProductShift(this.formHeader.factory)
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -283,7 +283,7 @@ export default {
           let submitNet = Promise.all([submit])
           submitNet.then(function () {
             that.GetTimeList()
-            that.$message.success('提交成功')
+            that.$notify({title: '成功', message: '提交成功', type: 'success'})
           }, err => {
             that.$message.error(err)
           })
@@ -294,7 +294,7 @@ export default {
         let saveNet = Promise.all([headSave, readySave, userSave])
         saveNet.then(function () {
           that.GetTimeList()
-          that.$message.success('保存成功')
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
         }, err => {
           that.$message.error(err)
         })
@@ -324,7 +324,7 @@ export default {
               resolve('resolve')
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
             if (reject) {
               reject('提交' + data.msg)
             }
@@ -350,7 +350,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('表头保存' + data.msg)
           }
@@ -383,7 +383,7 @@ export default {
             resolve('resolve')
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
           if (reject) {
             reject('准备时间保存' + data.msg)
           }
@@ -399,25 +399,25 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$message.error('准备时间白班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$message.error('准备时间中班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$message.error('准备时间夜班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$message.error('准备时间多班必填项未填写完全')
+          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
           return false
         }
       }
@@ -430,7 +430,7 @@ export default {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -446,7 +446,7 @@ export default {
               this.formHeader.workShop = data.typeList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }
@@ -462,7 +462,7 @@ export default {
               this.formHeader.deptId = data.childList[0].deptId
             }
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }

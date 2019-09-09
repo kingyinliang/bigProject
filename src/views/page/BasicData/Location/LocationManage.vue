@@ -181,21 +181,21 @@ export default {
     //   if (data.code === 0) {
     //     this.workshop = data.typeList
     //   } else {
-    //     this.$message.error(data.msg)
+    //     this.$notify.error({title: '错误', message: data.msg})
     //   }
     // })
     this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'material_type'}).then(({data}) => {
       if (data.code === 0) {
         this.sapList = data.dicList
       } else {
-        this.$message.error(data.msg)
+        this.$notify.error({title: '错误', message: data.msg})
       }
     })
     // this.$http(`${BASICDATA_API.SERCHSAPLIST_API}`, 'POST', {params: ''}).then(({data}) => {
     //   if (data.code === 0) {
     //     this.SerchSapList = data.allList
     //   } else {
-    //     this.$message.error(data.msg)
+    //     this.$notify.error({title: '错误', message: data.msg})
     //   }
     // })
   },
@@ -206,7 +206,7 @@ export default {
         if (data.code === 0) {
           this.factory = data.typeList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -218,7 +218,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -251,7 +251,7 @@ export default {
           this.pageSize = data.page.pageSize
           this.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.visible = false
       })
@@ -272,7 +272,7 @@ export default {
             this.multipleSelection = []
             this.GetLocationList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })

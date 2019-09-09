@@ -343,7 +343,7 @@ export default {
         if (data.code === 0) {
           this.orderTypeList = data.dicList[0].prolist
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -363,7 +363,7 @@ export default {
           this.plantList.pageSize = data.page.pageSize
           this.plantList.totalCount = data.page.totalCount
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
         this.dataListLoading = false
       })
@@ -389,12 +389,12 @@ export default {
             this.ReText = ''
             this.reData = {}
             this.GetAuditList()
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         }).catch(() => {
-          this.$message.error('网络错误')
+          this.$notify.error({title: '错误', message: '网络错误'})
           this.dataListLoading = false
         })
       })
@@ -406,7 +406,7 @@ export default {
           this.factory = data.typeList
           this.plantList.factory = data.typeList[0].deptId
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -419,7 +419,7 @@ export default {
           if (data.code === 0) {
             this.workshop = data.typeList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -434,7 +434,7 @@ export default {
           if (data.code === 0) {
             this.productline = data.childList
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       } else {
@@ -469,16 +469,16 @@ export default {
         this.$http(`${AUDIT_API.INUPDATE_API}`, 'POST', [row]).then(({data}) => {
           this.lodingStatus = false
           if (data.code === 0) {
-            this.$message.success('操作成功')
+            this.$notify({title: '成功', message: '操作成功', type: 'success'})
             row.redact = false
             this.AuditList.splice(this.AuditList.length, 0, {})
             this.AuditList.splice(this.AuditList.length - 1, 1)
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           this.GetAuditList()
         }).catch(() => {
-          this.$message.error('网络错误')
+          this.$notify.error({title: '错误', message: '网络错误'})
           this.lodingStatus = false
         })
       }
@@ -486,14 +486,14 @@ export default {
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         this.visible = true
       }
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
-        this.$message.error('请填写不通过原因')
+        this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
         this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
           confirmButtonText: '确定',
@@ -510,13 +510,13 @@ export default {
             this.lodingStatus = false
             if (data.code === 0) {
               this.visible = false
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           }).catch(() => {
-            this.$message.error('网络错误')
+            this.$notify.error({title: '错误', message: '网络错误'})
             this.lodingStatus = false
           })
         })
@@ -525,7 +525,7 @@ export default {
     // 审核通过
     subAutio () {
       if (this.multipleSelection.length <= 0) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
         this.$confirm('确认审核通过, 是否继续?', '审核通过', {
           confirmButtonText: '确定',
@@ -543,14 +543,14 @@ export default {
             this.plantList.headerTxt = ''
             this.lodingStatus1 = false
             if (data.code === 0) {
-              this.$message.success('操作成功')
+              this.$notify({title: '成功', message: '操作成功', type: 'success'})
               this.GetAuditList()
             } else {
               this.GetAuditList()
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
           }).catch(() => {
-            this.$message.error('网络错误')
+            this.$notify.error({title: '错误', message: '网络错误'})
             this.lodingStatus = false
           })
         })

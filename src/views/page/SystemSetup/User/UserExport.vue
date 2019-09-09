@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     outPut () {
-      this.$message.error('敬请期待')
+      this.$notify.error({title: '错误', message: '敬请期待'})
       return false
       // let that = this
       // exportFile(`${REP_API.REPOUT_API}`, '用户表导出', that)
@@ -145,7 +145,7 @@ export default {
         if (data.code === 0) {
           this.RoleList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -156,10 +156,10 @@ export default {
       }).then(({data}) => {
         if (data.code === 0) {
           this.visible = false
-          this.$message.success('操作成功')
+          this.$notify({title: '成功', message: '操作成功', type: 'success'})
           this.GetList()
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -172,10 +172,10 @@ export default {
         this.$http(`${SYSTEMSETUP_API.PASSWORDRESET_API}`, 'POST', {userId: id}).then(({data}) => {
           this.lodings = false
           if (data.code === 0) {
-            this.$message.success('重置成功')
+            this.$notify({title: '成功', message: '重置成功', type: 'success'})
             this.GetList()
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
         })
       })
@@ -199,7 +199,7 @@ export default {
           this.UserListArr = data.page
           this.dataPro(this.currPage)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

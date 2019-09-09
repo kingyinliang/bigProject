@@ -163,7 +163,7 @@ export default {
             })
           }
         } else {
-          this.$message.error(res.data.msg)
+          this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     },
@@ -173,7 +173,7 @@ export default {
         if (data.code === 0) {
           this.holderList = data.page.list
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -183,7 +183,7 @@ export default {
       this.$http(`${KJM_API.DOUHEADER_API}`, 'POST', {cookingNoId: holderNamestr, orderHouseId: this.formHeader.orderHouseId}).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -194,7 +194,7 @@ export default {
       this.$http(`${KJM_API.DOUMATERHEADCREATOR_API}`, 'POST', {orderId: this.formHeader.orderId}).then(({data}) => {
         if (data.code === 0) {
         } else {
-          this.$message.error('保存表头' + data.msg)
+          this.$notify.error({title: '错误', message: '保存表头' + data.msg})
         }
         if (resolve) {
           resolve('resolve')
@@ -222,7 +222,7 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (!this.cookingNoId || this.cookingNoId === '') {
-        this.$message.error('请选择连续蒸煮号')
+        this.$notify.error({title: '错误', message: '请选择连续蒸煮号'})
         return false
       }
       if (str === 'submit') {
@@ -280,7 +280,7 @@ export default {
             that.$refs.craft.updatehunhe(resolve, reject)
           })
           Promise.all([net5, net6, net7]).then(function () {
-            that.$message.success(that.succmessage)
+            that.$notify({title: '成功', message: that.succmessage, type: 'success'})
             that.GetheadList()
             that.isRedact = false
           }).catch(() => {

@@ -24,8 +24,8 @@
       </el-form>
     </el-card>
     <el-card class="searchCard  newCard" style="min-height: 420px">
-      <el-row class="dataList" :gutter="10" style="min-height: 150px">
-        <el-col :span="12" v-for="(item, index) in dataList" :key="index">
+      <el-row class="dataList" :gutter="6" style="min-height: 150px">
+        <el-col :span="6" v-for="(item, index) in dataList" :key="index">
           <el-card class="dataList_item">
             <h3 class="dataList_item_tit">
               {{item.holderName}}
@@ -36,13 +36,13 @@
                 <div class="dataList_item_body_ptobox_pto"><div class="dataList_item_body_ptobox_pto_bg"></div></div>
               </div>
               <div class="dataList_item_body_text">
-                <el-form :inline="true" size="small">
+                <el-form :inline="true" size="mini">
                   <el-form-item label="订单编号：">
-                    <el-select class="orderSelect" v-model="item.selectOrderId" placeholder="请选择" style="width: 150px" @change="OrderChange($event, item)" value-key="orderId">
+                    <el-select class="orderSelect" v-model="item.selectOrderId" placeholder="请选择" style="width: 100px" @change="OrderChange($event, item)" value-key="orderId">
                       <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1.orderId"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="生产品项：">
+                  <el-form-item label="生产品项：" style="line-height: 22px">
                     <el-tooltip class="item" effect="dark" :content="(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')" placement="top">
                       <p class="dataList_item_body_text_tit">{{(item.selectOrder.materialCode || '') + ' ' + (item.selectOrder.materialName || '')}}</p>
                     </el-tooltip>
@@ -57,6 +57,7 @@
                 </el-form>
               </div>
               <img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img" v-if="item.selectOrder.supStatus === '已确认'">
+              <!--<img src="@/assets/img/zhang.png" alt="" class="dataList_item_body_text_img">-->
             </div>
             <el-row class="dataList_item_btn">
               <el-col :span="6" class="dataList_item_btn_item">
@@ -112,16 +113,17 @@ export default {
   methods: {
     GetDataList () {
       if (!this.formHeader.factory || !this.formHeader.workShop) {
-        this.$message.error('请选择工厂与车间')
+        this.$notify.error({title: '错误', message: '请选择工厂与车间'})
         return
       }
       if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
-        this.$message.error('生产日期或订单请选填一项')
+        this.$notify.error({title: '错误', message: '生产日期或订单请选填一项'})
         return false
       }
       this.$http(`${STERILIZED_API.STE_HOME_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.GetMaterails(this.formHeader.factory)
+          // this.dataList = data.list
           this.dataList = data.list
           this.dataList.forEach((item, index) => {
             if (item.steList.length === 1) {
@@ -132,7 +134,7 @@ export default {
             }
           })
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
@@ -145,24 +147,24 @@ export default {
         if (data.code === 0) {
           this.Materails = data.dicList
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     toRouter (str, item) {
       let url
       if (!item.orderId) {
-        this.$message.error('请选择订单')
+        this.$notify.error({title: '错误', message: '请选择订单'})
         return
       }
       if (str === '1') {
         let st = this.Materails.filter(items => items.code === item.materialCode)
         if (st.length === 0) {
-          this.$message.error('非特殊物料，不能跳转')
+          this.$notify.error({title: '错误', message: '非特殊物料，不能跳转'})
           return
         }
         if (!this.isAuth('ste:semiMaterial:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.seiOrderId = item.orderId
@@ -171,7 +173,7 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-semiReceive-index'
       } else if (str === '2') {
         if (!this.isAuth('ste:supMaterial:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.acceOrderId = item.orderId
@@ -180,14 +182,14 @@ export default {
         url = 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'
       } else if (str === '3') {
         if (!this.isAuth('ste:tec:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.craftOrderId = item.orderId
         url = 'DataEntry-Sterilized-SterilizedIndex-craftControl-index'
       } else if (str === '4') {
         if (!this.isAuth('ste:inStorage:list')) {
-          this.$message.error('没有分配权限')
+          this.$notify.error({title: '错误', message: '没有分配权限'})
           return
         }
         this.$store.state.common.sterilized.inOrderId = item.orderId
@@ -219,6 +221,16 @@ export default {
   .el-select-dropdown__wrap{
     max-height: 200px;
   }
+  .dataList_item{
+    .el-card__body{
+      padding: 0!important;
+    }
+  }
+  .dataList_item_body_text .el-form-item{
+    .el-form-item__label{
+      font-size: 12px;
+    }
+  }
 </style>
 <style lang="scss" scoped>
   .dataList {
@@ -230,7 +242,7 @@ export default {
         color: black;
         font-size: 16px;
         padding: 0 10px;
-        line-height: 45px;
+        line-height: 40px;
         border-bottom: 1px solid #E8E8E8;
         &_right{
           float: right;
@@ -245,7 +257,7 @@ export default {
           position: absolute;
           background: #1890FF;
           left: 0;
-          top: 19px;
+          top: 17px;
         }
       }
       &_body{
@@ -254,26 +266,28 @@ export default {
         display: flex;
         justify-content: center;
         &_ptobox{
-          width: 259px;
-          height: 301px;
+          width: 100px;
+          min-width: 100px;
+          height: 111px;
+          margin-top: 10px;
           position: relative;
           background: url('~@/assets/img/sterilized.png') no-repeat;
           background-size:contain;
           &_pto{
-            width: 111px;
+            width: 41px;
             border-bottom-right-radius: 53px 21px;
             border-bottom-left-radius: 53px 21px;
-            height: 135px;
+            height: 53px;
             position: absolute;
-            top: 42px;
-            left: 74px;
+            top: 13px;
+            left: 28px;
             display: flex;
             flex-wrap: wrap;
             align-content: flex-end;
             overflow: hidden;
             &_bg{
               flex: 1;
-              height: 70px;
+              height: 40px;
               align-items: center;
               overflow: hidden;
               position: relative;
@@ -282,18 +296,18 @@ export default {
                 content: "";
                 position: absolute;
                 left: 50%;
-                min-width: 165px;
-                min-height: 160px;
+                min-width: 65px;
+                min-height: 60px;
                 background: #fff;
                 animation: roateTwo 10s linear infinite;
               }
 
               &::before {
-                top: -148px;
+                top: -55px;
                 border-radius: 45%;
               }
               &::after {
-                top: -142px;
+                top: -51px;
                 opacity: 0.5;
                 border-radius: 47%;
               }
@@ -304,16 +318,17 @@ export default {
           }
         }
         &_text{
-          width: 220px;
-          padding-top: 32px;
+          width: 170px;
+          min-width: 170px;
           position: relative;
           .el-form-item{
             margin-bottom: 4px!important;
             margin-right: 0px!important;
           }
           &_tit{
-            width: 150px;
-            min-height: 32px;
+            width: 100px;
+            min-height: 26px;
+            font-size: 12px;
             border-bottom: 1px solid #D8D8D8;
             overflow:hidden;
             text-overflow:ellipsis;
@@ -321,10 +336,10 @@ export default {
           }
           &_img{
             position: absolute;
-            top: 60px;
-            left: 30px;
-            width: 100px;
-            height: 100px;
+            top: 10px;
+            left: 10px;
+            width: 45px;
+            height: 45px;
             transform: rotateZ(-50deg);
           }
         }

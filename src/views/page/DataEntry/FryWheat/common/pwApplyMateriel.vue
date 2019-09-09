@@ -234,7 +234,7 @@ export default {
             })
             if (total > shengyu) {
               abc = 1
-              this.$message.error(itemc + '批次领取量不能大于剩余量')
+              this.$notify.error({title: '错误', message: itemc + '批次领取量不能大于剩余量'})
               return false
             }
           })
@@ -250,7 +250,7 @@ export default {
                 // 申请订单成功，订单号回写，触发全局刷新
                 this.$emit('updateOrderInfo', {orderId: data.orderId, orderNo: data.orderNo})
               } else {
-                this.$message.error(data.msg || '申请订单失败，请稍后尝试')
+                this.$notify.error({title: '错误', message: data.msg || '申请订单失败，请稍后尝试'})
               }
             }).catch((error) => {
               console.log('catch data::', error)
@@ -278,7 +278,7 @@ export default {
           })
           if (total > shengyu) {
             abc = 1
-            this.$message.error(itemc + '批次领取量不能大于剩余量')
+            this.$notify.error({title: '错误', message: '批次领取量不能大于剩余量'})
             return false
           }
         })
@@ -298,7 +298,7 @@ export default {
           this.$http(WHT_API.MATERIELSAVE_API, 'POST', this.materielDataList).then(({data}) => {
             if (data.code === 0) {
             } else {
-              this.$message.error(data.msg)
+              this.$notify.error({title: '错误', message: data.msg})
             }
             if (resolve) {
               resolve('resolve')
@@ -323,7 +323,7 @@ export default {
         this.$http(WHT_API.MATERIELSUBMIT_API, 'POST', this.materielDataList).then(({data}) => {
           if (data.code === 0) {
           } else {
-            this.$message.error(data.msg)
+            this.$notify.error({title: '错误', message: data.msg})
           }
           if (resolve) {
             resolve('resolve')
@@ -341,42 +341,42 @@ export default {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.dispatchMan === null || item.dispatchMan.trim() === '') {
-            this.$message.error('生产调度员不能为空')
+            this.$notify.error({title: '错误', message: '生产调度员不能为空'})
             return false
           }
           if (item.productCode === null || item.productCode.trim() === '') {
-            this.$message.error('生产物料不能为空')
+            this.$notify.error({title: '错误', message: '生产物料不能为空'})
             return false
           }
           if (item.issueCode === null || item.issueCode.trim() === '') {
-            this.$message.error('发料料号不能为空')
+            this.$notify.error({title: '错误', message: '发料料号不能为空'})
             return false
           }
           if (item.productWeight === '') {
-            this.$message.error('生产数不能为空')
+            this.$notify.error({title: '错误', message: '生产数不能为空'})
             return false
           }
           if (item.issueBatch === null || item.issueBatch.trim() === '') {
-            this.$message.error('发料批次不能为空')
+            this.$notify.error({title: '错误', message: '发料批次不能为空'})
             return false
           }
           if (item.issueBatch.trim().length > 10) {
-            this.$message.error('发料批次长度不能超过10')
+            this.$notify.error({title: '错误', message: '发料批次长度不能超过10'})
             return false
           }
           if (item.inStorageWeight === '') {
-            this.$message.error('入库数不能为空')
+            this.$notify.error({title: '错误', message: '入库数不能为空'})
             return false
           }
           if (flag && flag === 'submit') {
             // 提交的时候验证，申请订单不验证
             if (item.inStorageBatch === null || item.inStorageBatch.trim() === '') {
-              this.$message.error('入库批次不能为空')
+              this.$notify.error({title: '错误', message: '入库批次不能为空'})
               return false
             }
           }
           if (item.inStorageBatch && item.inStorageBatch.trim().length > 10) {
-            this.$message.error('入库批次长度不能超过10')
+            this.$notify.error({title: '错误', message: '入库批次长度不能超过10'})
             return false
           }
         }
@@ -393,7 +393,7 @@ export default {
             this.$set(this.dictListObj, dict.shname, dict.prolist)
           }
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
@@ -443,7 +443,7 @@ export default {
           }
           // this.$emit('setAppyMaterielState', inState)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch((error) => {
         console.log('catch data::', error)
