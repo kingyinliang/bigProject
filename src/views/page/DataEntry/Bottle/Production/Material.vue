@@ -101,6 +101,8 @@ export default {
       this.MaterialList.forEach(item => {
         if (!item.status) {
           item.productUseAmount = num
+        } else if (item.status === 'saved' || item.status === 'noPass') {
+          item.productUseAmount = num
         }
       })
     },
