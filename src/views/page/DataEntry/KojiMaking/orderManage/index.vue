@@ -102,7 +102,7 @@
                           <div class="split"></div>
                           <div>&nbsp;拆分</div>
                         </div>
-                        <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')" @click="orderCheck(scope.row)">
+                        <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')&& isAuth('sys:midInStorage:list')" @click="orderCheck(scope.row)">
                           <div class="check"></div>
                           <div>&nbsp;审核</div>
                         </div>

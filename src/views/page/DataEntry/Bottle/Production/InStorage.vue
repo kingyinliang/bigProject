@@ -161,6 +161,7 @@ export default {
           num += item.production * 1
         }
       })
+      this.$emit('SetMeaterielNum', num)
       return num
     }
   },

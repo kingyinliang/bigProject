@@ -97,6 +97,13 @@ export default {
         this.$emit('setApplyMaterielState', status)
       })
     },
+    setNum (num) {
+      this.MaterialList.forEach(item => {
+        if (!item.status) {
+          item.productUseAmount = num
+        }
+      })
+    },
     // 保存提交
     SaveOrSubmitData (str, resolve, reject) {
       this.MaterialList.forEach((item) => {

@@ -55,7 +55,7 @@
             <el-button :style="{'color': inStorageState === 'noPass'? 'red' : ''}">生产入库</el-button>
           </el-tooltip>
         </span>
-        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift" @setInStorageState='setInStorageState'></in-storage>
+        <in-storage ref="instorage" :isRedact="isRedact" :productShift="productShift" @setInStorageState='setInStorageState' @SetMeaterielNum="SetMeaterielNum"></in-storage>
       </el-tab-pane>
       <el-tab-pane name="6">
         <span slot="label" class="spanview">
@@ -121,6 +121,10 @@ export default {
       this.applyMaterielState = status
       // 强制刷新tabs
       this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[parseInt(this.$refs.tabs.currentName) - 1])
+    },
+    SetMeaterielNum (num) {
+      // this.$refs.outtech.GetsaltWaterUsed(num)
+      this.$refs.material.setNum(num)
     },
     // 获取表头
     getHead () {
