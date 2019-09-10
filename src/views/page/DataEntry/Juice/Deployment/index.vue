@@ -44,7 +44,7 @@
         </div>
       </div>
       <el-card>
-        <el-table :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="ShowDetail" border header-row-class-name="tableHead">
+        <el-table :data="dataList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
           <el-table-column type="selection" width="35" :selectable="CheckBoxInit"></el-table-column>
           <el-table-column label="状态" width="90" :show-overflow-tooltip="true">
             <template slot-scope="scope">
@@ -53,7 +53,7 @@
           </el-table-column>
           <el-table-column label="调配单号" prop="orderNo" width="130"></el-table-column>
           <el-table-column label="生产车间" prop="workShopName" width="100" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="调配单日期" prop="allocateDate" width="130" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="调配单日期" prop="allocateDate" width="110" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="杀菌物料" width="190" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               {{scope.row.materialCode}}{{scope.row.materialName}}
@@ -86,6 +86,12 @@
           <el-table-column label="创建时间" prop="created" width="170"></el-table-column>
           <el-table-column label="调配人员" prop="changer" width="150"></el-table-column>
           <el-table-column label="调配时间" prop="changed" width="170"></el-table-column>
+          <el-table-column label="操作" width="150" fixed="right">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="ShowDetail(scope.row)" size="small">调配</el-button>
+              <el-button type="primary" @click="AddRecord(scope.row)" size="small">记录</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"
@@ -160,6 +166,64 @@
         </template>
       </span>
     </el-dialog>
+    <el-dialog :visible.sync="RecordDialogTableVisible" width="400px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">记录</div>
+      <el-form :model="record" size="small" label-width="130px" :rules="recordrules" ref="record">
+        <el-form-item label="搅罐时间：" prop="stirringTime">
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="record.stirringTime" size="small" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="送样时间：" prop="sampleTime">
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="record.sampleTime" size="small" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="一次性合格：" prop="oneOffSuc">
+          <el-select v-model="record.oneOffSuc" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) of oneOffSucList" :key="index" :value="item" :label="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="不合格原因：">
+          <el-select v-model="record.nonReasons" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) of nonReasonsList" :key="index" :value="item" :label="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="不合格调整分类：">
+          <el-select v-model="record.nonReasonClass" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) of nonReasonClassList" :key="index" :value="item" :label="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="调整数量（方）：">
+          <el-input v-model="record.adjustAmount" style="width:220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-input>
+        </el-form-item>
+        <el-form-item label="调前米数：">
+          <el-input v-model="record.beforeMet" style="width:220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-input>
+        </el-form-item>
+        <el-form-item label="调后米数：">
+          <el-input v-model="record.afterMet" style="width:220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-input>
+        </el-form-item>
+        <el-form-item label="合格时间：">
+          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm" placeholder="选择" v-model="record.qualTime" size="small" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="白班操作人：">
+          <el-select v-model="record.dayOperator" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) of userList" :key="index" :value="item.realName+`(${item.userName})`" :label="item.realName+`(${item.userName})`"></el-option>
+          </el-select>
+        </el-form-item><el-form-item label="夜班操作人：">
+          <el-select v-model="record.nightOperator" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
+            <el-option value=''>请选择</el-option>
+            <el-option v-for="(item, index) of userList" :key="index" :value="item.realName+`(${item.userName})`" :label="item.realName+`(${item.userName})`"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <template v-if="this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false">
+          <el-button @click="RecordDialogTableVisible = false" size="small">取 消</el-button>
+          <el-button type="primary" @click="RecordSave('record')" size="small">确 定</el-button>
+        </template>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -170,6 +234,23 @@ export default {
   name: 'JuiceDeployment',
   data () {
     return {
+      RecordDialogTableVisible: false,
+      recordrules: {
+        stirringTime: [
+          { required: true, message: '请选择搅罐时间', trigger: 'blur' }
+        ],
+        sampleTime: [
+          { required: true, message: '请选择送样时间', trigger: 'blur' }
+        ],
+        oneOffSuc: [
+          { required: true, message: '请选择一次性合格', trigger: 'blur' }
+        ]
+      },
+      record: {},
+      soleRowstatus: '',
+      oneOffSucList: ['是', '否'],
+      nonReasonsList: ['氨氮高', '盐高', '氨氮低', '盐低'],
+      nonReasonClassList: ['原汁', '水', '盐水'],
       formHeader: {
         factory: '',
         workShop: '',
@@ -190,12 +271,14 @@ export default {
       multipleSelection: [],
       holderList: [],
       lineStatus: '',
-      thrwHolderList: []
+      thrwHolderList: [],
+      userList: []
     }
   },
   mounted () {
     headanimation(this.$)
     this.Getdeptcode()
+    this.GetUserList()
   },
   watch: {
     'formHeader.factory' (n, o) {
@@ -292,7 +375,7 @@ export default {
     ShowDetail (row) {
       // row.id = 'C57A2AE171024496AD26B0BEE8B0ACAD'
       this.materialName = row.materialName
-      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMS}`, 'POST', {orderNo: row.id, factory: this.formHeader.factory}).then(({data}) => {
+      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMS}`, 'POST', {orderNo: row.id, factory: this.formHeader.factory, sign: 'oldMethod'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.ItemList = data.info
           this.ItemList.map((item) => {
@@ -454,6 +537,85 @@ export default {
       } else {
         return true
       }
+    },
+    GetUserList () {
+      this.$http(`${STERILIZED_API.JUICEDUSERLIST}`, 'POST', {deptName: '原汁组'}).then(({data}) => {
+        if (data.code === 0) {
+          this.userList = data.list
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
+    AddRecord (row) {
+      this.soleRowstatus = row.status
+      this.$http(`${STERILIZED_API.JUICEDLIST}`, 'POST', {aId: row.id}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          if (data.list.length === 1) {
+            this.record = {
+              aId: row.id,
+              adjustAmount: data.list[0].adjustAmount,
+              afterMet: data.list[0].afterMet,
+              beforeMet: data.list[0].beforeMet,
+              dayOperator: data.list[0].dayOperator,
+              delFlag: '0',
+              id: data.list[0].id,
+              nightOperator: data.list[0].nightOperator,
+              nonReasonClass: data.list[0].nonReasonClass,
+              nonReasons: data.list[0].nonReasons,
+              oneOffSuc: data.list[0].oneOffSuc,
+              qualTime: data.list[0].qualTime,
+              remark: '',
+              sampleTime: data.list[0].sampleTime,
+              stirringTime: data.list[0].stirringTime
+            }
+          } else {
+            this.record = {
+              aId: row.id,
+              adjustAmount: '',
+              afterMet: '',
+              beforeMet: '',
+              dayOperator: '',
+              delFlag: '0',
+              id: '',
+              nightOperator: '',
+              nonReasonClass: '',
+              nonReasons: '',
+              oneOffSuc: '',
+              qualTime: '',
+              remark: '',
+              sampleTime: '',
+              stirringTime: ''
+            }
+          }
+          this.RecordDialogTableVisible = true
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
+    RecordSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.record.oneOffSuc === '否') {
+            if (this.record.nonReasons === '' || this.record.nonReasonClass === '') {
+              this.$notify({title: '警告', message: '请选择不合格原因，不合格调整分类', type: 'warning'})
+              return false
+            }
+          }
+          this.$http(`${STERILIZED_API.JUICEDRECORDSAVE}`, 'POST', this.record).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.RecordDialogTableVisible = false
+              this.$refs[formName].resetFields()
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
 }

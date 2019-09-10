@@ -1508,6 +1508,9 @@ export const STERILIZED_API = {
   JUICEDEPLOYMENTSAVE: HOST + '/ste/allocate/allocateUpdate',
   JUICEDEPLOYMENTSUBMIT: HOST + '/ste/allocate/allocateSubmit',
   JUICEDEPLOYMENTHOLDER: HOST + '/ste/allocate/holderList',
+  JUICEDLIST: HOST + '/juice/record/list',
+  JUICEDUSERLIST: HOST + '/juice/record/userList',
+  JUICEDRECORDSAVE: HOST + '/juice/record/save',
   /**
    * 半成品罐
    */
