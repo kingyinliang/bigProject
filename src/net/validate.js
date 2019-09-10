@@ -360,7 +360,7 @@ export function getParentline (Vue, id) {
  * 获取状态
  */
 export function getStatus (Vue) {
-  Vue.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'status_type'}).then(({data}) => {
+  Vue.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'status_type'}, false, false, false).then(({data}) => {
     if (data.code === 0) {
       Vue.Status = data.dicList
     } else {
