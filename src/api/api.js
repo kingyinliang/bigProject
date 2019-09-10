@@ -878,6 +878,11 @@ export const REP_API = {
   SQUEEZEOILERLIST_API: HOST + '/report/formPress/oilYieldList',
   REPSQUEEZEOILERLIST_API: HOST + '/report/formPress/exportoilYield',
   /**
+   * 订单状态报表
+   */
+  ORDER_STATUS_LIST_API: HOST + '/report/formh/getAllStatusList',
+  ORDER_STATUS_OUT_API: HOST + '/report/formh/exportGetAllStatusList',
+  /**
    *  二合一报表
    */
   TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
