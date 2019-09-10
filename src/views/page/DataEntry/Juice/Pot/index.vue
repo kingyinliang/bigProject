@@ -106,9 +106,10 @@
           </div>
           <el-row class="dataList_item_btn">
             <el-col :span="6" class="dataList_item_btn_item"><p @click="TransferProp(item)">转储</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="JuiceJudgeProp(item)">判定</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="ClearProp(item)">清洗</p></el-col>
             <el-col :span="6" class="dataList_item_btn_item"><p @click="AddProp(item)">添加</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('3', item)">入库</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="toRouter('4', item)">清洗</p></el-col>
+            <el-col :span="6" class="dataList_item_btn_item"><p @click="BringOutProp(item)">调拨</p></el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -176,23 +177,23 @@
       <el-form size="small" :model="formAdd" :rules="Addrulestar" ref="Addstar" label-width="150px">
         <el-form-item label="领用罐号：">{{formAdd.holderName}}</el-form-item>
         <el-form-item label="物料：">{{formAdd.materialCode}} {{formAdd.materialName}}</el-form-item>
-        <el-form-item label="类别：">{{formTransfer.type}}</el-form-item>
-        <el-form-item label="批次：">{{formTransfer.batch}}</el-form-item>
+        <el-form-item label="类别：">{{formAdd.type}}</el-form-item>
+        <el-form-item label="批次：">{{formAdd.batch}}</el-form-item>
         <el-form-item label="领用量（L）：" prop="amount">
-          <el-input v-model="formTransfer.amount" style="width:200px"></el-input>
+          <el-input v-model="formAdd.amount" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
-          <el-select v-model="formTransfer.inHolderType" placeholder="请选择" clearable>
+          <el-select v-model="formAdd.inHolderType" placeholder="请选择" clearable>
             <el-option label="请选择"  value=""></el-option>
-            <el-option v-for="(sole, index) in this.potTypeList" :key="index" :value="sole.value" :label="sole.name"></el-option>
+            <el-option v-for="(sole, index) in this.potTypeList" v-if="sole.name === '发酵罐'" :key="index" :value="sole.value" :label="sole.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
-          <el-select v-model="formTransfer.inHolderId">
-            <el-option v-for="(item, index) in thrwHolderList" :key="index" :value="item.HOLDER_ID" :label="item.HOLDER_NAME"></el-option>
+          <el-select v-model="formAdd.inHolderId">
+            <el-option v-for="(item, index) in AddPotList" :key="index" :value="item.holderId" :label="item.HOLDER_NAME"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料：">{{formTransfer.materialCode}} {{formTransfer.materialName}}</el-form-item>
+        <el-form-item label="物料：">{{formAdd.materialCode}} {{formAdd.materialName}}</el-form-item>
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -200,16 +201,31 @@
       <el-button type="primary" @click="FormAddSave('Addstar')" size="small">确定</el-button>
     </span>
   </el-dialog>
-  <el-dialog
-    width="450px"
-    class="ShinHoDialog"
-    :title="dialogData.holderName+'清洗'"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
+  <el-dialog :visible.sync="JudgeDialogTableVisible" width="400px" custom-class='dialog__class'>
+    <div slot="title" style="line-hight:59px">类别判定</div>
+    <el-form :model="judge" size="small" label-width="130px" :rules="judgerules" ref="judge">
+      <el-form-item label="物料：">{{this.judge.materialCode}}{{this.judge.materialName}}</el-form-item>
+      <el-form-item label="发酵天数：">{{this.judge.ferDays}} 天</el-form-item>
+      <el-form-item label="半成品类别：">
+        <el-select v-model="judge.type" placeholder="请选择" style="width: 140px">
+          <el-option :label="item.halfType" v-for="(item, index) in typeList" :key="index" :value="item.halfType"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="状态：">
+        <el-radio v-model="judge.frozenStatus" label="1">正常</el-radio>
+        <el-radio v-model="judge.frozenStatus" label="0">冻结</el-radio>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="JudgeDialogTableVisible = false" size="small">取 消</el-button>
+      <el-button type="primary" @click="FormJudgeSave('judge')" size="small">确 定</el-button>
+    </span>
+  </el-dialog>
+  <el-dialog width="450px" class="ShinHoDialog" :title="dialogData.holderName+'清洗'" :close-on-click-modal="false" :visible.sync="visible">
     <div style="display: flex">
-      <el-form label-width="100px" class="topform marbottom" style="margin: auto">
+      <el-form :model="dialogData" label-width="100px" class="topform marbottom" style="margin: auto">
         <el-form-item label="罐号：">
-          <p>{{dialogData.holderNo}}</p>
+          <p>{{dialogData.HOLDER_NAME}}</p>
         </el-form-item>
         <el-form-item label="状态：">
           <p>待清洗</p>
@@ -231,8 +247,8 @@
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="rinse()">确定</el-button>
+      <el-button @click="visible = false" size="small">取消</el-button>
+      <el-button type="primary" @click="rinse()" size="small">确定</el-button>
     </span>
   </el-dialog>
 </div>
@@ -376,6 +392,9 @@ export default {
           { required: true, message: '请填写发酵天数', trigger: 'blur' }
         ]
       },
+      JudgeDialogTableVisible: false,
+      judge: {},
+      judgerules: {},
       thrwHolderList: [],
       isFullList: [{
         name: '是',
@@ -384,6 +403,7 @@ export default {
         name: '否',
         value: '0'
       }],
+      AddPotList: [],
       newData: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
       fastS: false,
       visible: false,
@@ -498,7 +518,7 @@ export default {
     GetTypeList () {
       this.$http(`${JUICE_API.JUICE_TYPE_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.typeList = data.halfList
+          this.typeList = data.maintain
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -607,6 +627,7 @@ export default {
     AddProp (item) {
       this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
+          this.AddPotList = data.addPotList
           this.formAdd = {
             holderId: item.HOLDER_ID,
             holderName: item.HOLDER_NAME,
@@ -624,6 +645,89 @@ export default {
             remark: ''
           }
           this.AddDialogTableVisible = true
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
+    FormAddSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$http(`${JUICE_API.JUICE_ADD_SAVE}`, 'POST', this.formAdd).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.AddDialogTableVisible = false
+              this.$refs[formName].resetFields()
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    JuiceJudgeProp (item) {
+      this.$http(`${JUICE_API.JUICE_JUICEINFO_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
+        if (data.code === 0) {
+          if (data.juiceJudgeList !== null) {
+            this.judge = {
+              holderId: item.HOLDER_ID,
+              materialCode: item.MATERIAL_CODE,
+              materialName: item.MATERIAL_NAME,
+              oldType: item.TYPE,
+              type: data.juiceJudgeList.TYPE,
+              ferDays: item.days,
+              remark: '',
+              frozenStatus: data.juiceJudgeList.FROZEN_STATUS
+            }
+          } else {
+            this.judge = {
+              holderId: item.HOLDER_ID,
+              materialCode: item.MATERIAL_CODE,
+              materialName: item.MATERIAL_NAME,
+              oldType: item.TYPE,
+              type: '',
+              ferDays: item.days,
+              remark: '',
+              frozenStatus: '1'
+            }
+          }
+          this.JudgeDialogTableVisible = true
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
+    FormJudgeSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$http(`${JUICE_API.JUICE_JUICEJUDGE_SAVE}`, 'POST', this.judge).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.JudgeDialogTableVisible = false
+              this.$refs[formName].resetFields()
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    ClearProp (item) {
+      this.dialogData = {
+        HOLDER_NAME: item.HOLDER_NAME,
+        holderId: item.HOLDER_ID,
+        remark: ''
+      }
+      this.visible = true
+    },
+    ClearSave () {
+      this.$http(`${JUICE_API.JUICE_JUICE_CLEAN}`, 'POST', this.dialogData).then(({data}) => {
+        if (data.code === 0) {
+          this.$notify({title: '成功', message: '清洗成功', type: 'success'})
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

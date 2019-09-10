@@ -1513,6 +1513,9 @@ export const STERILIZED_API = {
   JUICEDEPLOYMENTSAVE: HOST + '/ste/allocate/allocateUpdate',
   JUICEDEPLOYMENTSUBMIT: HOST + '/ste/allocate/allocateSubmit',
   JUICEDEPLOYMENTHOLDER: HOST + '/ste/allocate/holderList',
+  JUICEDLIST: HOST + '/juice/record/list',
+  JUICEDUSERLIST: HOST + '/juice/record/userList',
+  JUICEDRECORDSAVE: HOST + '/juice/record/save',
   /**
    * 半成品罐
    */
@@ -1624,5 +1627,8 @@ export const JUICE_API = {
   JUICE_TRANSFER_POT_LIST: HOST + '/juice/pot/transferStoragePotList',
   JUICE_TRANSFER_SAVE: HOST + '/juice/pot/transferStorage',
   JUICE_ADD_POT_LIST: HOST + '/juice/pot/addPotList',
-  JUICE_ADD_SAVE: HOST + '/juice/pot/addJuicePot'
+  JUICE_ADD_SAVE: HOST + '/juice/pot/addJuicePot',
+  JUICE_JUICEINFO_LIST: HOST + '/juice/pot/juiceJudgeList',
+  JUICE_JUICEJUDGE_SAVE: HOST + '/juice/pot/juiceJudge',
+  JUICE_JUICE_CLEAN: HOST + '/juice/pot/juiceClean' // 清罐
 }
