@@ -353,7 +353,7 @@ export default {
     // 查询
     SearchList () {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$notify({title: '警告', message: '请选择工厂', type: 'warning'})
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSEARCHLIST}`, 'POST', this.formHeader).then(({data}) => {
