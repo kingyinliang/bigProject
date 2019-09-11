@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item prop="pass">
         <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"><i slot="prefix" class="el-input__icon el-icon-date"></i></el-input>
-        <el-button type="text" @click="resetForm('ruleForm2')" class="reset">重置</el-button>
+        <el-button type="text" @click="resetForm('ruleForm2')" class="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm2')" style="width: 100%;margin-top: 20px">登录</el-button>

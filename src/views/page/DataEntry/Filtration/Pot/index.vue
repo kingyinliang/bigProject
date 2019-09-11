@@ -117,7 +117,7 @@
           <el-input v-model="TurnSavedataForm.receiveAmount" size="small" placeholder="手工录入"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
-          <el-select v-model="TurnSavedataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType(TurnSavedataForm.inHolderType)">
+          <el-select v-model="TurnSavedataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType1(TurnSavedataForm)">
             <!--<el-option v-for="(sole, index) in InHolderType" :key="index" :value="sole.code" :label="sole.name"></el-option>-->
             <el-option value="007" label="成品罐"></el-option>
           </el-select>
@@ -153,7 +153,7 @@
 
 <script>
 import {getFactory, getWorkshop, dateFormat} from '@/net/validate'
-import {FILTRATION_API, BASICDATA_API} from '@/api/api'
+import {FILTRATION_API, BASICDATA_API, STERILIZED_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -381,6 +381,11 @@ export default {
     // 获取罐号
     GetHolderType (holderType) {
       this.$http(`${FILTRATION_API.FILTER_HOLDER_LIST_API}`, 'POST', {factory: this.formHeader.factory, holderType: holderType}, false, false, false).then(({data}) => {
+        this.Holder = data.list
+      })
+    },
+    GetHolderType1 (row) {
+      this.$http(`${STERILIZED_API.SEMIFINIS_DROPDOWN_LIST}`, 'POST', {factory: this.formHeader.factory, materialCode: row.materialCode, batch: row.batch, code: '007', holderId: row.receiveHolderId}, false, false, false).then(({data}) => {
         this.Holder = data.list
       })
     },
