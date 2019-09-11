@@ -1525,8 +1525,8 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
   SEMIFINISHEDPRODUCTZCSAVE: HOST + '/ste/semi/dumpSemiMaterial',
-  SEMIFINISHEDPRODUCTHOLDER: HOST + '/ste/semi/oneselfHolderList',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/semi/holderList',
+  SEMIFINIS_DROPDOWN_LIST: HOST + '/all/dropDown/getDumpHolder', // 转储打入罐下拉
   /**
    *  调配列表
    */
@@ -1634,5 +1634,6 @@ export const JUICE_API = {
   JUICE_JUICEJUDGE_SAVE: HOST + '/juice/pot/juiceJudge', // 判定保存
   JUICE_JUICE_CLEAN: HOST + '/juice/pot/juiceClean', // 清罐
   JUICE_JUICE_BRINGOUT_SAVE: HOST + '/juice/pot/juiceBringOut', // 调拨
-  JUICE_JUICE_DETAIL: HOST + '/juice/pot/juiceItem' // 详情
+  JUICE_JUICE_DETAIL: HOST + '/juice/pot/juiceItem', // 详情
+  JUICE_JUICE_STOCKITEM: HOST + '/juice/pot/juiceStockItem' // 库存详情
 }
