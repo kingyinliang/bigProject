@@ -143,7 +143,7 @@ export default {
       })
     },
     GetPot () {
-      this.$http(`${STERILIZED_API.STE_ENTER_IN_POT_LIST_API}`, 'POST', {
+      this.$http(`${STERILIZED_API.STE_ENTER_MATERIAL_POT_LIST_API}`, 'POST', {
         factory: this.formHeader.factory,
         workShop: this.formHeader.workShop
       }).then(({data}) => {
@@ -156,6 +156,7 @@ export default {
     },
     setBatch (row) {
       row.batch = this.PotList.filter(items => items.holderId === row.hloderId)[0].batch
+      row.receiveAmount = this.PotList.filter(items => items.holderId === row.hloderId)[0].amount
     },
     delRow (row) {
       if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {

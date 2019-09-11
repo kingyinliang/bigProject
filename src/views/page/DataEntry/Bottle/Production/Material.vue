@@ -63,7 +63,8 @@ export default {
   data () {
     return {
       MaterialList: [],
-      MaterialAudit: []
+      MaterialAudit: [],
+      num: ''
     }
   },
   props: {
@@ -73,6 +74,11 @@ export default {
     },
     Supplier: {
       type: Array
+    }
+  },
+  watch: {
+    'num' (n, o) {
+      this.setAmount(n)
     }
   },
   mounted () {
@@ -98,6 +104,10 @@ export default {
       })
     },
     setNum (num) {
+      let tmp = num
+      this.num = JSON.stringify(tmp)
+    },
+    setAmount (num) {
       this.MaterialList.forEach(item => {
         if (!item.status) {
           item.productUseAmount = num

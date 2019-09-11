@@ -1469,6 +1469,7 @@ export const STERILIZED_API = {
   STE_ENTER_MATERIAL_LIST_API: HOST + '/ste/semiMaterial/list',
   STE_ENTER_MATERIAL_UPDATE_API: HOST + '/ste/semiMaterial/mySaveOrUpdate',
   STE_ENTER_MATERIAL_SUBMIT_API: HOST + '/ste/semiMaterial/submit',
+  STE_ENTER_MATERIAL_POT_LIST_API: HOST + '/ste/semiMaterial/halfHolderList',
   // 杀菌录入入库
   STE_ENTER_IN_LIST_API: HOST + '/ste/inStorage/list',
   STE_ENTER_IN_UPDATE_API: HOST + '/ste/inStorage/mySaveOrUpdate',
