@@ -284,9 +284,6 @@ export default {
       if (!this.$refs.listbom.saprul(str)) {
         return false
       }
-      if (!this.$refs.listbom.ListbomsRule(str)) {
-        return false
-      }
       this.lodingS = true
       let that = this
       let net0 = new Promise((resolve, reject) => {

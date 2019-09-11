@@ -3,52 +3,40 @@
     <el-card class="searchCard  newCard">
       <el-row type="flex">
         <el-col class="header_pot" style="width: 160px">
-          <p class='header_pot_label'>罐号：{{formData.holderName ? formData.holderName : ''}}</p>
+          <p class='header_pot_label'>罐号：{{formData.HOLDER_NAME ? formData.HOLDER_NAME : ''}}</p>
           <div class="header_pot_image">
             <div class="header_pot_image_content">
             </div>
           </div>
         </el-col>
         <el-col>
-          <el-form :inline="true" size="small" label-width="84px" class="topforms topformsde">
-            <el-form-item label="生产工厂：">
-              <p class="el-input">{{formData.factoryName ? formData.factoryName : ''}}</p>
-            </el-form-item>
+          <el-form :inline="true" size="small" label-width="84px" class="topforms topformsde" style="margin-top:30px;">
             <el-form-item label="生产车间：">
-              <p class="el-input">{{formData.workShopName ? formData.workShopName : ''}}</p>
+              <p class="el-input">{{formData.WORK_SHOP ? formData.WORK_SHOP : ''}}</p>
             </el-form-item>
-            <el-form-item label="订单编号：">
-              <p class="el-input">{{formData.ferOrderNo}}</p>
+            <el-form-item label="容器类型：">
+              <p class="el-input">{{formData.HOLDER_TYPE}}</p>
             </el-form-item>
-            <el-form-item label="入库状态：">
-              <p class="el-input">{{formData.holderStatus === '2'? '未入库' : formData.holderStatus === '3' ? '已入库' : ''}}</p>
+            <el-form-item label="容器编号：">
+              <p class="el-input">{{formData.HOLDER_NAME}}</p>
             </el-form-item>
-            <el-form-item label="容器号：">
-              <p class="el-input">{{formData.holderName}}</p>
-            </el-form-item>
-            <el-form-item label="订单数量：">
-              <p class="el-input">{{formData.ferAmount}}</p>
-            </el-form-item>
-            <el-form-item label="入库数量：">
-              <p class="el-input">{{formData.inStoreAmount}}</p>
-            </el-form-item>
-            <el-form-item label="发酵物料：">
-              <p class="el-input">{{(formData.ferMaterialCode? formData.ferMaterialCode: '') + ' ' + (formData.ferMaterialName? formData.ferMaterialName : '')}}</p>
+            <el-form-item label="生产物料：">
+              <p class="el-input">{{formData.MATERIAL_CODE}} {{formData.MATERIAL_NAME}}</p>
             </el-form-item>
             <el-form-item label="半成品类别：">
-              <p class="el-input">{{formData.halfTypeName}}</p>
+              <p class="el-input">{{formData.TYPE}}</p>
             </el-form-item>
-            <el-form-item label="投料日期：">
-              <p class="el-input">{{formData.shootDate}}</p>
+            <el-form-item label="库存数量：">
+              <p class="el-input">{{formData.AMOUNT}}</p>
             </el-form-item>
-            <el-form-item label="发酵天数：">
-              <p class="el-input">{{formData.ferDays}}</p>
+            <el-form-item label="满罐日期：">
+              <p class="el-input">{{formData.FULL_DATE}}</p>
             </el-form-item>
-            <el-form-item label="是否成熟：">
-              <p class="el-input">{{formData.matureFlag === '0' ? '成熟' : formData.matureFlag === '1' ? '未成熟' : ''}}</p>
+            <el-form-item label="存储天数：">
+              <p class="el-input">{{formData.days}}</p>
             </el-form-item>
             <el-form-item label="状态：" class="noneBorder">
-              <el-radio-group v-model="formData.frozenStatus" :disabled="true">
+              <el-radio-group v-model="formData.TYPE_STATUS" :disabled="true">
                 <el-radio label="1">正常</el-radio>
                 <el-radio label="0">冻结</el-radio>
               </el-radio-group>
@@ -63,18 +51,22 @@
           <span slot="label" class="spanview">当前订单信息</span>
           <el-table header-row-class-name="tableHead" :data="dataListOrder" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexOrderMethod"></el-table-column>
-            <el-table-column label="车间" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="90"></el-table-column>
-            <el-table-column label="生产订单号" :show-overflow-tooltip="true" prop="orderNo" width="120"></el-table-column>
-            <el-table-column label="订单类型" :show-overflow-tooltip="true" prop="orderType" width="80"></el-table-column>
-            <el-table-column label="物料批次" :show-overflow-tooltip="true" prop="batch" width="105"></el-table-column>
-            <el-table-column label="物料编码" :show-overflow-tooltip="true" prop="materialCode" width="110"></el-table-column>
-            <el-table-column label="物料描述" :show-overflow-tooltip="true" prop="materialName"></el-table-column>
-            <el-table-column label="曲房号" :show-overflow-tooltip="true" prop="kjmHouse" width="80"></el-table-column>
-            <el-table-column label="计划数量" :show-overflow-tooltip="true" prop="amount" width="80"></el-table-column>
-            <el-table-column label="入库数量" :show-overflow-tooltip="true" prop="instorageAmount" width="80"></el-table-column>
-            <el-table-column label="单位" :show-overflow-tooltip="true" prop="unit" width="50"></el-table-column>
-            <el-table-column label="投料日期" :show-overflow-tooltip="true" prop="shootDate" width="80"></el-table-column>
-            <el-table-column label="入罐日期" :show-overflow-tooltip="true" prop="inHolderDate" width="80"></el-table-column>
+            <el-table-column label="车间" :show-overflow-tooltip="true" prop="WORK_SHOP" width="90"></el-table-column>
+            <el-table-column label="物料" :show-overflow-tooltip="true" width="160">
+              <template slot-scope="scope">
+                {{scope.row.MATERIAL_CODE}}{{scope.row.MATERIAL_NAME}}
+              </template>
+            </el-table-column>
+            <el-table-column label="类别" :show-overflow-tooltip="true" prop="TYPE" width="70"></el-table-column>
+            <el-table-column label="移动类型" :show-overflow-tooltip="true" prop="move" width="80"></el-table-column>
+            <el-table-column label="来源" :show-overflow-tooltip="true" prop="source" width="70"></el-table-column>
+            <el-table-column label="物料批次" :show-overflow-tooltip="true" prop="BATCH" width="110"></el-table-column>
+            <el-table-column label="来源批次" :show-overflow-tooltip="true" prop="IN_BATCH" width="110"></el-table-column>
+            <el-table-column label="数量" :show-overflow-tooltip="true" prop="IN_POT_AMOUNT" width="80"></el-table-column>
+            <el-table-column label="单位" :show-overflow-tooltip="true" prop="UNIT" width="50"></el-table-column>
+            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="FULL_POT_DATE" width="160"></el-table-column>
+            <el-table-column label="单号" :show-overflow-tooltip="true" prop="ORDER_NO" width="120"></el-table-column>
+            <el-table-column label="订单类型" :show-overflow-tooltip="true" prop="ORDER_TYPE" width="80"></el-table-column>
           </el-table>
           <el-row>
             <el-pagination
@@ -92,12 +84,22 @@
           <span slot="label" class="spanview">当前领用信息</span>
           <el-table header-row-class-name="tableHead" :data="dataListUse" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexUseMethod"></el-table-column>
-            <el-table-column label="领用日期" :show-overflow-tooltip="true" prop="useDate" width="160"></el-table-column>
-            <el-table-column label="领用车间" :show-overflow-tooltip="true" prop="useWorkShopName" width="160"></el-table-column>
-            <el-table-column label="领用量(方)" :show-overflow-tooltip="true" prop="useAmount" width="150"></el-table-column>
-            <el-table-column label="批次" :show-overflow-tooltip="true" prop="batch" width="140"></el-table-column>
-            <el-table-column label="原汁罐" :show-overflow-tooltip="true" prop="oriHolder"></el-table-column>
-            <el-table-column label="入库量(方)" :show-overflow-tooltip="true" prop="inStoreAmount" width="150"></el-table-column>
+            <el-table-column label="车间" :show-overflow-tooltip="true" prop="WORK_SHOP" width="90"></el-table-column>
+            <el-table-column label="物料" :show-overflow-tooltip="true" width="160">
+              <template slot-scope="scope">
+                {{scope.row.MATERIAL_CODE}}{{scope.row.MATERIAL_NAME}}
+              </template>
+            </el-table-column>
+            <el-table-column label="类别" :show-overflow-tooltip="true" prop="RECEIVE_TYPE" width="70"></el-table-column>
+            <el-table-column label="移动类型" :show-overflow-tooltip="true" prop="move" width="80"></el-table-column>
+            <el-table-column label="领用" :show-overflow-tooltip="true" prop="source" width="70"></el-table-column>
+            <el-table-column label="物料批次" :show-overflow-tooltip="true" prop="BATCH" width="110"></el-table-column>
+            <el-table-column label="来源批次" :show-overflow-tooltip="true" prop="RECEIVE_BATCH" width="110"></el-table-column>
+            <el-table-column label="数量" :show-overflow-tooltip="true" prop="RECEIVE_AMOUNT" width="80"></el-table-column>
+            <el-table-column label="单位" :show-overflow-tooltip="true" prop="UNIT" width="50"></el-table-column>
+            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="FULL_DATE" width="160"></el-table-column>
+            <el-table-column label="单号" :show-overflow-tooltip="true" prop="ORDER_NO" width="120"></el-table-column>
+            <el-table-column label="订单类型" :show-overflow-tooltip="true" prop="ORDER_TYPE" width="80"></el-table-column>
           </el-table>
           <el-row>
             <el-pagination
@@ -117,7 +119,7 @@
 </template>
 
 <script>
-import {FERMENTATION_API} from '@/api/api'
+import {JUICE_API} from '@/api/api'
 export default {
   name: 'Ferdetails',
   data () {
@@ -142,21 +144,17 @@ export default {
   methods: {
     // 获取基础信息
     Getdetail () {
-      this.$http(`${FERMENTATION_API.FER_DETAIL_API}`, 'POST', {factory: this.$store.state.common.Fermentation.details.factory, workShop: this.$store.state.common.Fermentation.details.workShop, holderNo: this.$store.state.common.Fermentation.details.holderNo}).then(({data}) => {
+      this.$http(`${JUICE_API.JUICE_JUICE_DETAIL}`, 'POST', {holderId: this.$store.state.common.Juice.HOLDER_ID, batch: this.$store.state.common.Juice.BATCH}).then(({data}) => {
         if (data.code === 0) {
-          this.formData = data.ferHolderManage
-          this.dataTotalCount = this.formData.currentOrderInfo.length
-          this.dataUseTotalCount = this.formData.currentUseInfo.length
-          this.dataListOrder = this.formData.currentOrderInfo.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
-          this.dataListUse = this.formData.currentUseInfo.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (this.dataUseCurrPage - 1) * this.dataUsePageSize + this.dataUsePageSize)
-          if (this.formData.frozenStatus !== 0) {
-            this.formData.frozenStatus = '1'
-          } else {
-            this.formData.frozenStatus = '0'
-          }
-          console.log(this.formData.frozenStatus)
+          this.formData = data.juiceItem.head
+          // this.dataListOrder = data.juiceItem.infoEnter
+          // this.dataListUse = data.juiceItem.infoOut
+          this.dataTotalCount = data.juiceItem.infoEnter.length
+          this.dataUseTotalCount = data.juiceItem.infoOut.length
+          this.dataListOrder = data.juiceItem.infoEnter.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
+          this.dataListUse = data.juiceItem.infoOut.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (this.dataUseCurrPage - 1) * this.dataUsePageSize + this.dataUsePageSize)
         } else {
-          this.$message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },

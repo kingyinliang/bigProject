@@ -1629,7 +1629,9 @@ export const JUICE_API = {
   JUICE_TRANSFER_SAVE: HOST + '/juice/pot/transferStorage',
   JUICE_ADD_POT_LIST: HOST + '/juice/pot/addPotList',
   JUICE_ADD_SAVE: HOST + '/juice/pot/addJuicePot',
-  JUICE_JUICEINFO_LIST: HOST + '/juice/pot/juiceJudgeList',
-  JUICE_JUICEJUDGE_SAVE: HOST + '/juice/pot/juiceJudge',
-  JUICE_JUICE_CLEAN: HOST + '/juice/pot/juiceClean' // 清罐
+  JUICE_JUICEINFO_LIST: HOST + '/juice/pot/juiceJudgeList', // 判定拉取
+  JUICE_JUICEJUDGE_SAVE: HOST + '/juice/pot/juiceJudge', // 判定保存
+  JUICE_JUICE_CLEAN: HOST + '/juice/pot/juiceClean', // 清罐
+  JUICE_JUICE_BRINGOUT_SAVE: HOST + '/juice/pot/juiceBringOut', // 调拨
+  JUICE_JUICE_DETAIL: HOST + '/juice/pot/juiceItem' // 详情
 }
