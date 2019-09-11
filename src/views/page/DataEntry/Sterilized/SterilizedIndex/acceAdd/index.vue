@@ -226,6 +226,9 @@ export default {
         unit: row.unit
       })
     },
+    setAmount (row) {
+      // row.adjustAmount = row.receiveAmount
+    },
     // 添加完成
     addOver (data, str, row) {
       this.addSupOverData = []
@@ -265,7 +268,7 @@ export default {
         if (data.code === 0) {
           this.visible = false
           this.$notify({title: '成功', message: '操作成功', type: 'success'})
-          // this.GetOrderHead()
+          this.GetOrderHead(true)
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -466,10 +469,12 @@ export default {
       }
     },
     // 获取订单表头
-    GetOrderHead () {
+    GetOrderHead (st) {
       this.$http(`${STERILIZED_API.STE_ORDER_HEAD_API}`, 'POST', {orderId: this.$store.state.common.sterilized.acceOrderId}).then(({data}) => {
         if (data.code === 0) {
-          this.isRedact = false
+          if (!st) {
+            this.isRedact = false
+          }
           this.formHeader = data.list[0]
           this.orderStatus = data.list[0].supmStatus
           this.Stesave = new Stesave(this.formHeader)
