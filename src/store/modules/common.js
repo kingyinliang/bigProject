@@ -183,6 +183,10 @@ export default {
       instock: {}
     },
     /**
+     * 原汁车间
+     */
+    juice: {},
+    /**
      * 杀菌车间
      */
     sterilized: {
@@ -367,6 +371,9 @@ export default {
     /** 发酵 */
     updateFermentationM (state, params) {
       state.Fermentation.materia = params
+    },
+    updateJuice (state, params) {
+      state.Juice = params
     },
     updateSterilized (state, params) {
       state.Sterilized = params

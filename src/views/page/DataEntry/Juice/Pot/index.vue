@@ -91,12 +91,14 @@
             </span>
             <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
           </h3>
-          <div class="dataList_item_pot clearfix">
+          <div class="dataList_item_pot clearfix" style="position:relative;">
+            <img src="@/assets/img/F0.png" alt="" v-if="item.IS_F === '1'" style="position:absolute; left:10px; top:10px;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
                 <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.holderStatus !== '6'"></div>
                 <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== 6">
                   <p>{{item.BATCH}}</p>
+                  <p v-if="item.IS_F === '2'">JBS</p>
                   <p>{{item.TYPE}}</p>
                   <p>{{item.days}}天</p>
                   <p>{{item.AMOUNT}}方</p>
@@ -105,12 +107,13 @@
             </div>
           </div>
           <el-row class="dataList_item_btn">
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="TransferProp(item)">转储</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="JuiceJudgeProp(item)">判定</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="ClearProp(item)">清洗</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="AddProp(item)">添加</p></el-col>
-            <el-col :span="6" class="dataList_item_btn_item"><p @click="BringOutProp(item)">调拨</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="TransferProp(item)">转储</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="JuiceJudgeProp(item)">判定</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="ClearProp(item)">清洗</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="AddProp(item)">添加</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="BringOutProp(item)">调拨</p></el-col>
           </el-row>
+          <!-- 转储:沉淀中 领用中 可以。  添加:领用中可添加  判定:空罐，领用中，待清洗不能判定   调拨:除了空罐跟领用中 不能调拨 -->
         </el-card>
       </el-col>
     </el-row>
@@ -248,7 +251,25 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false" size="small">取消</el-button>
-      <el-button type="primary" @click="rinse()" size="small">确定</el-button>
+      <el-button type="primary" @click="ClearSave(item)" size="small">确定</el-button>
+    </span>
+  </el-dialog>
+  <el-dialog :visible.sync="BringOutDialogTableVisible" :close-on-click-modal="false" width="500px" custom-class='dialog__class'>
+    <div slot="title" style="line-hight:59px">调拨</div>
+    <div>
+      <el-form size="small" :model="formBringOut" :rules="BringOutrulestar" ref="BringOutstar" label-width="150px">
+        <el-form-item label="领用罐号：">{{formBringOut.holderName}}</el-form-item>
+        <el-form-item label="物料：">{{formBringOut.materialCode}} {{formAdd.materialName}}</el-form-item>
+        <el-form-item label="类别：">{{formBringOut.type}}</el-form-item>
+        <el-form-item label="批次：">{{formBringOut.batch}}</el-form-item>
+        <el-form-item label="领用量（L）：" prop="amount">
+          <el-input v-model="formBringOut.amount" style="width:200px"></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="BringOutDialogTableVisible = false" size="small">取消</el-button>
+      <el-button type="primary" @click="FormBringOutSave('BringOutstar')" size="small">确定</el-button>
     </span>
   </el-dialog>
 </div>
@@ -256,7 +277,7 @@
 
 <script>
 import { dateFormat } from '@/net/validate'
-import {BASICDATA_API, SYSTEMSETUP_API, JUICE_API, FERMENTATION_API} from '@/api/api'
+import {BASICDATA_API, SYSTEMSETUP_API, JUICE_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -408,6 +429,13 @@ export default {
       fastS: false,
       visible: false,
       dialogData: {},
+      BringOutDialogTableVisible: false,
+      BringOutrulestar: {
+        amount: [
+          { required: true, message: '请填写领用量', trigger: 'blur' }
+        ]
+      },
+      formBringOut: {},
       a: true
     }
   },
@@ -537,17 +565,19 @@ export default {
     // 查询
     GetDataList (ty) {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$notify({title: '警告', message: '请选择工厂', type: 'warning'})
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$notify({title: '警告', message: '请选择车间', type: 'warning'})
         return false
       }
       this.$http(`${JUICE_API.JUICE_POT_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.fastS = true
           this.dataListAll = data.indexList.potList
+          this.holderStatus = ''
+          this.days = ''
           this.GetPageCurrenList(true)
           this.topBox[0].num = data.indexList.summaryData.kong
           this.topBox[0].content = data.indexList.summaryData.kongMaintain ? data.indexList.summaryData.kongMaintain : 0
@@ -568,30 +598,34 @@ export default {
     },
     // 转储弹框
     TransferProp (item) {
-      this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
-        if (data.code === 0) {
-          this.formTransfer = {
-            holderId: item.HOLDER_ID,
-            holderName: item.HOLDER_NAME,
-            materialCode: data.transferStorageList.materialCode,
-            materialName: data.transferStorageList.materialName,
-            type: data.transferStorageList.type,
-            batch: data.transferStorageList.batch,
-            receiveAmount: '',
-            unit: 'L',
-            inHolderId: '',
-            inHolderType: '',
-            isF: '0',
-            inBatch: '',
-            isFull: '0',
-            fullDate: '',
-            remark: ''
+      if (item.HOLDER_STATUS === 8 || item.HOLDER_STATUS === 9) {
+        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
+          if (data.code === 0) {
+            this.formTransfer = {
+              holderId: item.HOLDER_ID,
+              holderName: item.HOLDER_NAME,
+              materialCode: data.transferStorageList.materialCode,
+              materialName: data.transferStorageList.materialName,
+              type: data.transferStorageList.type,
+              batch: data.transferStorageList.batch,
+              receiveAmount: '',
+              unit: 'L',
+              inHolderId: '',
+              inHolderType: '',
+              isF: '0',
+              inBatch: '',
+              isFull: '0',
+              fullDate: '',
+              remark: ''
+            }
+            this.TransferDialogTableVisible = true
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
           }
-          this.TransferDialogTableVisible = true
-        } else {
-          this.$notify.error({title: '错误', message: data.msg})
-        }
-      })
+        })
+      } else {
+        this.$notify({title: '警告', message: '该罐当前不允许转储', type: 'warning'})
+      }
     },
     // 转储打入罐号下拉
     GetRuPotList (holderType) {
@@ -625,30 +659,34 @@ export default {
       })
     },
     AddProp (item) {
-      this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
-        if (data.code === 0) {
-          this.AddPotList = data.addPotList
-          this.formAdd = {
-            holderId: item.HOLDER_ID,
-            holderName: item.HOLDER_NAME,
-            materialCode: item.MATERIAL_CODE,
-            materialName: item.MATERIAL_NAME,
-            type: item.TYPE,
-            batch: item.BATCH,
-            amount: '',
-            unit: 'L',
-            isF: '',
-            inHolderType: '',
-            inHolderId: '',
-            inBatch: '',
-            isFull: '',
-            remark: ''
+      if (item.HOLDER_STATUS === 9) {
+        this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.AddPotList = data.addPotList
+            this.formAdd = {
+              holderId: item.HOLDER_ID,
+              holderName: item.HOLDER_NAME,
+              materialCode: item.MATERIAL_CODE,
+              materialName: item.MATERIAL_NAME,
+              type: item.TYPE,
+              batch: item.BATCH,
+              amount: '',
+              unit: 'L',
+              isF: '',
+              inHolderType: '',
+              inHolderId: '',
+              inBatch: '',
+              isFull: '',
+              remark: ''
+            }
+            this.AddDialogTableVisible = true
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
           }
-          this.AddDialogTableVisible = true
-        } else {
-          this.$notify.error({title: '错误', message: data.msg})
-        }
-      })
+        })
+      } else {
+        this.$notify({title: '警告', message: '该罐当前不允许添加', type: 'warning'})
+      }
     },
     FormAddSave (formName) {
       this.$refs[formName].validate((valid) => {
@@ -668,6 +706,10 @@ export default {
       })
     },
     JuiceJudgeProp (item) {
+      if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9 || item.HOLDER_STATUS === 10) {
+        this.$notify({title: '警告', message: '该罐当前不允许判定', type: 'warning'})
+        return false
+      }
       this.$http(`${JUICE_API.JUICE_JUICEINFO_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
         if (data.code === 0) {
           if (data.juiceJudgeList !== null) {
@@ -717,12 +759,16 @@ export default {
       })
     },
     ClearProp (item) {
-      this.dialogData = {
-        HOLDER_NAME: item.HOLDER_NAME,
-        holderId: item.HOLDER_ID,
-        remark: ''
+      if (item.HOLDER_STATUS === 10) {
+        this.dialogData = {
+          HOLDER_NAME: item.HOLDER_NAME,
+          holderId: item.HOLDER_ID,
+          remark: ''
+        }
+        this.visible = true
+      } else {
+        this.$notify({title: '警告', message: '该罐当前不允许清洗', type: 'warning'})
       }
-      this.visible = true
     },
     ClearSave () {
       this.$http(`${JUICE_API.JUICE_JUICE_CLEAN}`, 'POST', this.dialogData).then(({data}) => {
@@ -733,73 +779,48 @@ export default {
         }
       })
     },
-    // 去详请
-    godetails (row) {
-      this.$store.state.common.Fermentation.details = row
-      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Fermentation-Fermenter-details')
-      let that = this
-      setTimeout(function () {
-        that.$router.push({ name: `DataEntry-Fermentation-Fermenter-details` })
-      }, 100)
-    },
-    toRouter (str, row) {
-      let url = ''
-      if (str === '1') {
-        this.$store.state.common.Fermentation.materia.factory = row.factory
-        this.$store.state.common.Fermentation.materia.workShop = row.workShop
-        this.$store.state.common.Fermentation.materia.ferMaterialCode = ''
-        this.$store.state.common.Fermentation.materia.holderIds = [row.holderId]
-        this.$store.state.common.Fermentation.materia.ferOrderNos = [row.ferOrderNo]
-        this.$store.state.common.Fermentation.materia.approveStatus = ''
-        this.$store.state.common.Fermentation.materia.productDateOne = ''
-        this.$store.state.common.Fermentation.materia.productDateTwo = ''
-        url = 'DataEntry-Fermentation-MaterialManage-index'
-      } else if (str === '2') {
-        this.$store.state.common.Fermentation.category.factory = row.factory
-        this.$store.state.common.Fermentation.category.workShop = row.workShop
-        this.$store.state.common.Fermentation.category.holderId = row.holderId
-        this.$store.state.common.Fermentation.category.orderNo = row.ferOrderNo
-        this.$store.state.common.Fermentation.category.materialCode = row.ferMaterialCode
-        this.$store.state.common.Fermentation.category.ferDays = row.ferDays + ''
-        this.$store.state.common.Fermentation.category.halfId = row.halfType
-        this.$store.state.common.Fermentation.category.currPage = 1
-        this.$store.state.common.Fermentation.category.pageSize = 1
-        this.$store.state.common.Fermentation.category.totalCount = 10
-        this.$store.state.common.Fermentation.category.isJudged = 0
-        url = 'DataEntry-Fermentation-CategoryJudgement-index'
-      } else if (str === '3') {
-        this.$store.state.common.FerInStockManage.factoryId = row.factory
-        this.$store.state.common.FerInStockManage.workshopId = row.workShop
-        this.$store.state.common.FerInStockManage.startDate = ''
-        this.$store.state.common.FerInStockManage.endDate = ''
-        this.$store.state.common.FerInStockManage.holderList = [row.holderId]
-        this.$store.state.common.FerInStockManage.orderList = [row.ferOrderNo]
-        url = 'DataEntry-Fermentation-InStockManage-index'
-      } else if (str === '4') {
-        url = ''
-        if (row.holderStatus === '5') {
-          this.dialogData = row
-          this.visible = true
-        } else {
-          this.$message.error('该罐不是未清洗状态')
+    BringOutProp (item) {
+      if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9) {
+        this.BringOutDialogTableVisible = true
+        this.formBringOut = {
+          holderName: item.HOLDER_NAME,
+          holderId: item.HOLDER_ID,
+          materialCode: item.MATERIAL_CODE,
+          materialName: item.MATERIAL_NAME,
+          type: item.TYPE,
+          batch: item.BATCH,
+          amount: '',
+          remark: ''
         }
-        return
+      } else {
+        this.$notify({title: '警告', message: '该罐当前不允许调拨', type: 'warning'})
       }
-      this.mainTabs = this.mainTabs.filter(item => item.name !== url)
-      let that = this
-      setTimeout(function () {
-        that.$router.push({ name: url })
-      }, 100)
     },
-    rinse () {
-      this.$http(`${FERMENTATION_API.FER_RINSE_API}`, 'POST', this.dialogData).then(({data}) => {
-        if (data.code === 0) {
-          this.dialogData.holderStatus = '0'
-          this.visible = false
+    FormBringOutSave (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$http(`${JUICE_API.JUICE_JUICE_BRINGOUT_SAVE}`, 'POST', this.formBringOut).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.BringOutDialogTableVisible = false
+              this.$refs[formName].resetFields()
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
         } else {
-          this.$message.error(data.msg)
+          return false
         }
       })
+    },
+    // 去详请
+    godetails (row) {
+      this.$store.state.common.Juice = row
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Juice-Pot-detail')
+      let that = this
+      setTimeout(function () {
+        that.$router.push({ name: `DataEntry-Juice-Pot-detail` })
+      }, 100)
     },
     // 改变每页条数
     handleSizeChange (val) {
@@ -822,7 +843,7 @@ export default {
             this.dataListAlls.push(item)
           }
           if (this.days !== '') {
-            if (this.days[0] < parseInt(item.days) && parseInt(item.days) <= this.days[1]) {
+            if (this.days[0] <= parseInt(item.days) && parseInt(item.days) < this.days[1]) {
               this.dataListAlls.push(item)
             }
           }
@@ -954,6 +975,9 @@ export default {
 .dataList{
   margin-top: 10px;
   &_item{
+    &_btn_item {
+      width:20%
+    }
     margin-bottom: 10px;
     &_tit{
       font-weight: 600;
