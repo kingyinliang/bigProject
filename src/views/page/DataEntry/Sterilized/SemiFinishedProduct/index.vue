@@ -28,7 +28,7 @@
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="4" v-for="(item, index) in DataList" :key="index">
         <el-card class="dataList_item">
-          <h3 class="dataList_item_tit">{{item.holderNo}} - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '非空罐' : '空罐'}}</span></h3>
+          <h3 class="dataList_item_tit">{{item.holderNo}} - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '入库中' : item.holderStatus === '0' ? '空罐' : item.holderStatus === '2' ? '满罐' : item.holderStatus === '3' ? '领用中' : ''}}</span><span style="cursor:pointer; color:#1890FF; float:right; font-size:12px;">详情>></span></h3>
           <div class="dataList_item_pot clearfix" style="position:relative;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end; position:relative;">
@@ -144,13 +144,13 @@
           <el-input v-model="formZc.receiveAmount" style="width:200px"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
-          <el-select v-model="formZc.inHolderType" filterable>
+          <el-select v-model="formZc.inHolderType" filterable @change="GetZhuanPot($event, formZc)">
             <el-option v-for="(item, index) in typeZcList" :key="index" :value="item.code" :label="item.code + ` ${item.name}`"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
           <el-select filterable v-model="formZc.inHolderId">
-            <el-option v-for="(item, index) in thrwHolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
+            <el-option v-for="(item, index) in zhuanHolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否满灌：">
@@ -243,9 +243,13 @@ export default {
         value: '0'
       }],
       typeZcList: [{
+        code: '006',
+        name: '半成品罐'
+      }, {
         code: '007',
         name: '成品罐'
-      }]
+      }],
+      zhuanHolderList: []
     }
   },
   watch: {
@@ -259,10 +263,10 @@ export default {
     },
     'formJsb.inHolderType' (n, o) {
       this.getPot(n)
-    },
-    'formZc.inHolderType' (n, o) {
-      this.getPot(n)
     }
+    // 'formZc.inHolderType' (n, o) {
+    //   this.getPot(n)
+    // }
   },
   mounted () {
     this.Getdeptcode()
@@ -300,9 +304,9 @@ export default {
       this.formHeader.holderId = ''
       this.DataList = []
       if (id) {
-        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHOLDER}`, 'POST', {factory: this.formHeader.factory, workShop: id}).then(({data}) => {
+        this.$http(`${BASICDATA_API.DROPDOWN_HOLDER_LIST}`, 'POST', {factory: this.formHeader.factory, workShop: id, holderType: '006'}).then(({data}) => {
           if (data.code === 0) {
-            this.HolderList = data.halfList
+            this.HolderList = data.list
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -378,17 +382,28 @@ export default {
         if (data.code === 0) {
           this.typeList = data.list
         } else {
-          this.message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
-    // 罐下拉
+    // JBS 打入罐下拉
     getPot (id) {
       this.$http(`${BASICDATA_API.DROPDOWN_HOLDER_LIST}`, 'POST', { factory: this.formHeader.factory, holderType: id }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.thrwHolderList = data.list
         } else {
-          this.message.error(data.msg)
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
+    // 转储打入罐下拉
+    GetZhuanPot (event, item) {
+      this.formZc.inHolderId = ''
+      this.$http(`${STERILIZED_API.SEMIFINIS_DROPDOWN_LIST}`, 'POST', { factory: this.formHeader.factory, code: event, materialCode: item.materialCode, batch: item.batch, holderId: item.holderId }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.zhuanHolderList = data.list
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
