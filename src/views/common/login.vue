@@ -4,15 +4,16 @@
       您的浏览器不支持 video 标签。
     </video>
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
-      <el-form-item label="账号：" prop="user">
-      <el-input v-model="ruleForm2.user" auto-complete="off"></el-input>
+      <img src="@/assets/img/MDSlogo.png" alt="" style="width: 300px;margin-bottom: 25px">
+      <el-form-item prop="user">
+        <el-input v-model="ruleForm2.user" auto-complete="off" placeholder="账户/工号"><i slot="prefix" class="el-input__icon el-icon-date"></i></el-input>
       </el-form-item>
-      <el-form-item label="密码：" prop="pass">
-        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+      <el-form-item prop="pass">
+        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"><i slot="prefix" class="el-input__icon el-icon-date"></i></el-input>
+        <el-button type="text" @click="resetForm('ruleForm2')" class="reset">重置</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
-        <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm2')" style="width: 100%;margin-top: 20px">登录</el-button>
       </el-form-item>
     </el-form>
     <div class="loginFormBg"></div>
@@ -212,11 +213,15 @@ video{
   object-fit: fill;
 }
 .loginForm{
-  width: 400px;
-  height: 180px;
+  width: 320px;
+  height: 254px;
   position: fixed;
-  top: 200px;
-  right: 100px;
+  /*top: 200px;*/
+  /*right: 100px;*/
+  top: 50%;
+  left: 50%;
+  margin-left: -160px;
+  margin-top: -127px;
   z-index: 999;
   label{
     color: white!important;
@@ -224,16 +229,32 @@ video{
   input{
     background: #ffffff!important;
   }
+  .el-form-item__content{
+    margin-left: 0!important;
+  }
+  .reset{
+    float: right;
+    color: white;
+    position: absolute;
+    right: 0;
+    bottom: -22px;
+    padding: 0;
+    font-size: 12px;
+  }
 }
 .loginFormBg{
   border-radius: 10px;
   background-color: rgba(60, 60, 60, 0.6);
   box-shadow: 0px 5px 19px 1px
   rgba(214, 221, 237, 0.45);
-  width: 425px;
-  height: 220px;
+  width: 426px;
+  height: 354px;
   position: fixed;
-  top: 165px;
-  right: 65px;
+  /*top: 165px;*/
+  /*right: 65px;*/
+  top: 50%;
+  left: 50%;
+  margin-left: -213px;
+  margin-top: -177px;
 }
 </style>

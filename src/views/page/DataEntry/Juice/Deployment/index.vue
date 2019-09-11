@@ -454,18 +454,45 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$notify.error({title: '错误', message: '请勾选数据'})
       } else {
+        let str = ''
         this.multipleSelection.forEach((item) => {
-          item.status = '已调配'
-        })
-        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
-          if (data.code === 0) {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'})
-            this.isRedact = false
-            this.SearchList()
-          } else {
-            this.$notify.error({title: '错误', message: data.msg})
+          if (item.cDay * 1 < 6) {
+            str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
           }
         })
+        if (str.length > 0) {
+          this.$confirm(str, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.multipleSelection.forEach((item) => {
+              item.status = '已调配'
+            })
+            this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+              if (data.code === 0) {
+                this.$notify({title: '成功', message: '保存成功', type: 'success'})
+                this.isRedact = false
+                this.SearchList()
+              } else {
+                this.$notify.error({title: '错误', message: data.msg})
+              }
+            })
+          })
+        } else {
+          this.multipleSelection.forEach((item) => {
+            item.status = '已调配'
+          })
+          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.isRedact = false
+              this.SearchList()
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        }
       }
     },
     SubmitForm () {
@@ -483,7 +510,13 @@ export default {
           return false
         }
       }
-      this.$confirm('确认要提交数据吗?', '提示', {
+      let str = ''
+      this.multipleSelection.forEach((item) => {
+        if (item.cDay * 1 < 6) {
+          str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+        }
+      })
+      this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

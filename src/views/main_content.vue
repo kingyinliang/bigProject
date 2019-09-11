@@ -117,7 +117,7 @@ export default {
     },
     // tabs, 删除tab
     removeTabHandle (tabName) {
-      if (tabName === 'DataEntry-Packaging-ProDataIn') {
+      if (/录入/g.test(this.mainTabs.filter(item => item.name === tabName)[0].title)) {
         this.$confirm('为防止数据丢失请保存后关闭, 是否继续?', '关闭', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

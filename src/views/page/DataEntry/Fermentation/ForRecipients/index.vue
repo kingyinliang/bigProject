@@ -54,9 +54,10 @@
           <el-table-column label="申请数量" prop="amount"></el-table-column>
           <el-table-column label="申请时间" prop="created" width="170"></el-table-column>
           <el-table-column label="生产日期" prop="productDate"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="Go(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">确认</el-button>
+              <el-button type="text" size="small" @click="Go(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">确认</el-button>
+              <el-button type="text" size="small" @click="DelRow(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -204,6 +205,22 @@ export default {
           this.$router.push({ name: `DataEntry-Fermentation-ForRecipients-detail` })
         }, 100)
       }
+    },
+    DelRow (row) {
+      this.$confirm('确认要删除该数据吗?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http(`${FERMENTATION_API.FORRECIPIENTSALREADYDEL_API}`, 'POST', [row.id]).then(({data}) => {
+          if (data.code === 0) {
+            this.$notify({title: '成功', message: '删除成功', type: 'success'})
+            this.SearchList()
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {

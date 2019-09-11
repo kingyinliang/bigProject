@@ -1377,6 +1377,7 @@ export const FERMENTATION_API = {
    */
   FORRECIPIENTSLIST_API: HOST + '/fer/openHolder/openHolderList',
   FORRECIPIENTSALREADYLIST_API: HOST + '/fer/openHolder/isOpenFermentationList',
+  FORRECIPIENTSALREADYDEL_API: HOST + '/fer/openHolder/deleteG',
   FORRECIPIENTSHOLDER_API: HOST + '/fer/openHolder/productsList', // 罐
   /**
    *  压榨通知单

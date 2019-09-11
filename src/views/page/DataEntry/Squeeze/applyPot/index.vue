@@ -241,13 +241,19 @@ export default class Index extends Vue {
     }, 100)
   }
   deleteRow (id) {
-    Vue.prototype.$http(`${SQU_API.POT_APPLY_DEL_API}`, `POST`, [id]).then(({data}) => {
-      if (data.code === 0) {
-        this.$notify({title: '成功', message: '删除成功', type: 'success'})
-        this.getOrderList()
-      } else {
-        this.$notify.error({title: '错误', message: data.msg})
-      }
+    this.$confirm('确认要删除该数据吗?', '删除', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      Vue.prototype.$http(`${SQU_API.POT_APPLY_DEL_API}`, `POST`, [id]).then(({data}) => {
+        if (data.code === 0) {
+          this.$notify({title: '成功', message: '删除成功', type: 'success'})
+          this.getOrderList()
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
     })
   }
   changeOptions (flag: string) {

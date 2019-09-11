@@ -23,7 +23,7 @@
               <p class="el-input">{{formData.amount + formData.unit}}</p>
             </el-form-item>
             <el-form-item label="容量：">
-              <p class="el-input">{{formData.holderHold + formData.unit}}</p>
+              <p class="el-input">{{(formData.holderHold || '') + (formData.unit||'')}}</p>
             </el-form-item>
             <el-form-item label="当前物料：">
               <el-tooltip class="item" effect="dark" :content="(formData.materialCode? formData.materialCode: '') + ' ' + (formData.materialName? formData.materialName : '')" placement="top">
