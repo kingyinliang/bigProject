@@ -6,11 +6,11 @@
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="loginForm" @keyup.enter.native="submitForm('ruleForm2')">
       <img src="@/assets/img/MDSlogo.png" alt="" style="width: 300px;margin-bottom: 25px">
       <el-form-item prop="user">
-        <el-input v-model="ruleForm2.user" auto-complete="off" placeholder="账户/工号"><i slot="prefix" class="el-input__icon el-icon-date"></i></el-input>
+        <el-input v-model="ruleForm2.user" auto-complete="off" placeholder="账户/工号"><i slot="prefix" class="iconfont factory-zhanghaodenglu"></i></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"><i slot="prefix" class="el-input__icon el-icon-date"></i></el-input>
-        <el-button type="text" @click="resetForm('ruleForm2')" class="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
+        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"><i slot="prefix" class="iconfont factory-mima"></i></el-input>
+        <el-button type="text" @click="resetForm('ruleForm2')" class="reset"><i class="iconfont factory-zhongzhi" style="font-size: 12px"></i>重置</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm2')" style="width: 100%;margin-top: 20px">登录</el-button>
@@ -231,6 +231,9 @@ video{
   }
   .el-form-item__content{
     margin-left: 0!important;
+  }
+  .el-input__prefix{
+    margin-left: 6px;
   }
   .reset{
     float: right;
