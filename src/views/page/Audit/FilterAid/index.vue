@@ -267,7 +267,7 @@ export default {
           this.multipleSelection.forEach((item) => {
             item.status = 'checked'
             item.memo = '审核通过'
-            item.pstngDate = this.formHeader.pstngDate
+            item.pstngDate = this.formHeader.postgDate
             item.headerTxt = this.formHeader.headerTxt
           })
           this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
