@@ -66,7 +66,7 @@
           </p>
           <div class="topBox_boxItem_popover" v-if="item.content !== 0">
             <p v-for="(i, ins) in Object.keys(item.content)" :key="ins">
-              <i class="dot" :style="{'background': ins === 0 ? '#1890FF' : ins === 1 ? '#FFBF00' : '#1890FF'}"></i>{{i}} <span style="float: right">{{item.content[i]}} 罐</span>
+              <i class="dot" :style="{'background': ins === 0 ? '#1890FF' : ins === 1 ? '#FFBF00' : '#1890FF'}"></i>{{i}} <span style="float: right">{{item.content[i]}} 方</span>
             </p>
             <i class="topBox_boxItem_popover_ar"></i>
           </div>
@@ -85,7 +85,7 @@
       <el-col :span="4" v-for="(item, index) in dataList" :key="index">
         <el-card class="dataList_item" style="padding:0!important;">
           <h3 class="dataList_item_tit">
-            {{item.HOLDER_NAME}}
+            {{item.HOLDER_NO}}
             <span style="color: #333333;font-weight: normal;font-size: 14px">
               -{{item.HOLDER_STATUS === '6' ? '空罐' : item.HOLDER_STATUS === '7' ? '入料中' : item.HOLDER_STATUS === '8' ? '沉淀中' : item.HOLDER_STATUS === '9' ? '领用中' : item.HOLDER_STATUS === '10' ? '待清洗' : ''}}
             </span>
@@ -1011,6 +1011,7 @@ export default {
       font-size: 14px;
       line-height: 45px;
       border-bottom: 1px solid #E8E8E8;
+      padding:0 5px;
     }
     &_a{
       cursor: pointer;
