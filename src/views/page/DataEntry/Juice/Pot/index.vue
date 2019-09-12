@@ -15,36 +15,36 @@
         </el-select>
       </el-form-item>
       <el-form-item label="罐类型：" label-width="60px">
-        <el-select v-model="formHeader.potType" placeholder="请选择" clearable style="width: 140px">
+        <el-select v-model="formHeader.potType" placeholder="请选择" @change="ChangeSearch()" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option v-for="(sole, index) in this.potTypeList" :key="index" :value="sole.value" :label="sole.name"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="罐号：" label-width="50px">
-        <el-select v-model="formHeader.potNo" placeholder="请选择" multiple filterable allow-create default-first-op style="width: 140px">
+        <el-select v-model="formHeader.potNo" placeholder="请选择" multiple @change="ChangeSearch()" filterable allow-create default-first-op style="width: 140px">
           <el-option v-for="(sole, index) in this.guanList" :key="index" :value="sole.holderNo" :label="sole.holderName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="类别：" label-width="50px">
-        <el-select v-model="formHeader.type" placeholder="请选择" style="width: 140px">
+        <el-select v-model="formHeader.type" placeholder="请选择" @change="ChangeSearch()" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.halfType" v-for="(item, index) in typeList" :key="index" :value="item.halfType"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态：">
-        <el-select v-model="formHeader.status" placeholder="请选择" style="width: 140px">
+        <el-select v-model="formHeader.status" placeholder="请选择" @change="ChangeSearch()" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.value" v-for="(item, index) in holderStatusList" :key="index" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="待转储：">
-        <el-select v-model="formHeader.dump" placeholder="请选择" style="width: 140px">
+        <el-select v-model="formHeader.dump" placeholder="请选择" @change="ChangeSearch()" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
           <el-option :label="item.name" v-for="(item, index) in dumpList" :key="index" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item style="float:right">
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
+        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('juice:pot:List')">查询</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -79,7 +79,7 @@
   <el-card class="searchCard newCard ferCard" style="margin-top:5px;"  v-show="fastS">
     <h3 style="color: black;margin-bottom: 8px">
       <i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表
-      <i class="gotop" @click="gotop">原汁库存情况>></i>
+      <i class="gotop" v-if="isAuth('juice:pot:juiceStockItem')"><a href="#/DataEntry-Juice-Pot-summary">原汁库存情况>></a></i>
     </h3>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="4" v-for="(item, index) in dataList" :key="index">
@@ -89,7 +89,7 @@
             <span style="color: #333333;font-weight: normal;font-size: 14px">
               -{{item.HOLDER_STATUS === '6' ? '空罐' : item.HOLDER_STATUS === '7' ? '入料中' : item.HOLDER_STATUS === '8' ? '沉淀中' : item.HOLDER_STATUS === '9' ? '领用中' : item.HOLDER_STATUS === '10' ? '待清洗' : ''}}
             </span>
-            <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
+            <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('juice:pot:juiceItem')">详情>></span>
           </h3>
           <div class="dataList_item_pot clearfix" style="position:relative;">
             <img src="@/assets/img/F0.png" alt="" v-if="item.IS_F === '1'" style="position:absolute; left:10px; top:10px;">
@@ -445,10 +445,12 @@ export default {
       this.formHeader.holderStatus = ''
       this.formHeader.potNo = []
       this.Getdeptbyid(n)
+      this.ChangeSearch()
     },
     'formHeader.workShop' (n, o) {
       this.formHeader.potNo = []
       this.HolderList(n)
+      this.ChangeSearch()
     },
     'formTransfer.inHolderType' (n, o) {
       if (n) {
@@ -598,8 +600,12 @@ export default {
     },
     // 转储弹框
     TransferProp (item) {
+      if (this.isAuth('juice:pot:List') !== true) {
+        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        return false
+      }
       if (item.HOLDER_STATUS === 8 || item.HOLDER_STATUS === 9) {
-        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
+        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID, factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
           if (data.code === 0) {
             this.formTransfer = {
               holderId: item.HOLDER_ID,
@@ -659,8 +665,12 @@ export default {
       })
     },
     AddProp (item) {
+      if (this.isAuth('juice:pot:addJuicePot') !== true) {
+        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        return false
+      }
       if (item.HOLDER_STATUS === 9) {
-        this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
+        this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.AddPotList = data.addPotList
             this.formAdd = {
@@ -706,6 +716,10 @@ export default {
       })
     },
     JuiceJudgeProp (item) {
+      if (this.isAuth('juice:pot:juiceJudge') !== true) {
+        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        return false
+      }
       if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9 || item.HOLDER_STATUS === 10) {
         this.$notify({title: '警告', message: '该罐当前不允许判定', type: 'warning'})
         return false
@@ -759,6 +773,10 @@ export default {
       })
     },
     ClearProp (item) {
+      if (this.isAuth('juice:pot:juiceClean') !== true) {
+        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        return false
+      }
       if (item.HOLDER_STATUS === 10) {
         this.dialogData = {
           HOLDER_NAME: item.HOLDER_NAME,
@@ -780,6 +798,10 @@ export default {
       })
     },
     BringOutProp (item) {
+      if (this.isAuth('juice:pot:juiceBringOut') !== true) {
+        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        return false
+      }
       if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9) {
         this.BringOutDialogTableVisible = true
         this.formBringOut = {
@@ -853,6 +875,10 @@ export default {
       }
       this.pages.total = this.dataListAlls.length
       this.dataList = this.dataListAlls.slice((this.pages.currentPage - 1) * this.pages.pageSize, (this.pages.currentPage - 1) * this.pages.pageSize + this.pages.pageSize)
+    },
+    // 更改头部查询信息
+    ChangeSearch () {
+      this.fastS = false
     }
   },
   computed: {
