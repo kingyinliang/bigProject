@@ -373,7 +373,8 @@ export default {
     // 校验
     userrul () {
       let ty = true
-      if (this.WorkerDate.length === 0) {
+      // if (this.WorkerDate.length === 0) {
+      if (this.WorkerDate.filter(item => item.delFlag === '0').length === 0) {
         ty = false
         this.$notify.error({title: '错误', message: '人员不能为空'})
         return false

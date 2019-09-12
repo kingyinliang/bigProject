@@ -288,7 +288,8 @@ export default {
           return false
         }
       }
-      if (this.machineTimeData.length > 0) {
+      // if (this.machineTimeData.length > 0) {
+      if (this.machineTimeData.filter(item => item.delFlag === '0').length > 0) {
         this.machineTimeData.forEach((item, index) => {
           if (!item.closeTime) {
             ty = false

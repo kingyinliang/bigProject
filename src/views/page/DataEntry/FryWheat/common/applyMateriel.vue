@@ -194,7 +194,8 @@ export default {
       }
     },
     validate () {
-      if (this.materielDataList === undefined || this.materielDataList.length === 0) {
+      // if (this.materielDataList === undefined || this.materielDataList.length === 0) {
+      if (this.materielDataList === undefined || this.materielDataList.filter(item => item.delFlag === '0').length === 0) {
         this.$notify.error({title: '错误', message: '物料领用未录入数据'})
         return false
       }

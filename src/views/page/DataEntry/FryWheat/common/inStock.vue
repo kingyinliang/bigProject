@@ -261,7 +261,8 @@ export default {
   },
   methods: {
     validate () {
-      if (this.wheatDataList === undefined || this.wheatDataList.length === 0) {
+      // if (this.wheatDataList === undefined || this.wheatDataList.length === 0) {
+      if (this.wheatDataList === undefined || this.wheatDataList.filter(item => item.delFlag === '0').length === 0) {
         this.$notify.error({title: '错误', message: '生产入库未录入数据'})
         return false
       }
