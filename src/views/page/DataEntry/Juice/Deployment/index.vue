@@ -455,11 +455,23 @@ export default {
         this.$notify.error({title: '错误', message: '请勾选数据'})
       } else {
         let str = ''
+        let st = false
         this.multipleSelection.forEach((item) => {
-          if (item.cDay * 1 < 6) {
+          if (item.cDay === null) {
+            console.log('------')
+            this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {})
+            st = true
+          } else if (item.cDay * 1 < 6) {
             str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
           }
         })
+        if (st) {
+          return false
+        }
         if (str.length > 0) {
           this.$confirm(str, '提示', {
             confirmButtonText: '确定',
@@ -502,7 +514,7 @@ export default {
       }
       for (let item of this.multipleSelection) {
         if (item.isUpdate === false) {
-          this.$notify.error({title: '错误', message: '请先保存调配列表（调配单：' + item.orderNo + '）'})
+          this.$notify.error({title: '错误', message: '请先保存调配详情信息（调配单：' + item.orderNo + '）'})
           return false
         }
         if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
@@ -511,11 +523,23 @@ export default {
         }
       }
       let str = ''
+      let st = false
       this.multipleSelection.forEach((item) => {
-        if (item.cDay * 1 < 6) {
+        if (item.cDay === null) {
+          console.log('------')
+          this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {})
+          st = true
+        } else if (item.cDay * 1 < 6) {
           str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
         }
       })
+      if (st) {
+        return false
+      }
       this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

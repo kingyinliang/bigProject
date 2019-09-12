@@ -9,7 +9,7 @@
         <el-input v-model="ruleForm2.user" auto-complete="off" placeholder="账户/工号"><i slot="prefix" class="iconfont factory-zhanghaodenglu"></i></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"><i slot="prefix" class="iconfont factory-mima"></i></el-input>
+        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="密码"><i slot="prefix" class="iconfont factory-mima"></i></el-input>
         <el-button type="text" @click="resetForm('ruleForm2')" class="reset"><i class="iconfont factory-zhongzhi" style="font-size: 12px"></i>重置</el-button>
       </el-form-item>
       <el-form-item>
@@ -216,12 +216,12 @@ video{
   width: 320px;
   height: 254px;
   position: fixed;
-  /*top: 200px;*/
-  /*right: 100px;*/
-  top: 50%;
-  left: 50%;
-  margin-left: -160px;
-  margin-top: -127px;
+  top: 200px;
+  right: 105px;
+  /*top: 50%;*/
+  /*left: 50%;*/
+  /*margin-left: -160px;*/
+  /*margin-top: -127px;*/
   z-index: 999;
   label{
     color: white!important;
@@ -250,14 +250,16 @@ video{
   background-color: rgba(60, 60, 60, 0.6);
   box-shadow: 0px 5px 19px 1px
   rgba(214, 221, 237, 0.45);
-  width: 426px;
-  height: 354px;
+  /*width: 426px;*/
+  width: 405px;
+  /*height: 354px;*/
+  height: 321px;
   position: fixed;
-  /*top: 165px;*/
-  /*right: 65px;*/
-  top: 50%;
-  left: 50%;
-  margin-left: -213px;
-  margin-top: -177px;
+  top: 165px;
+  right: 65px;
+  /*top: 50%;*/
+  /*left: 50%;*/
+  /*margin-left: -213px;*/
+  /*margin-top: -177px;*/
 }
 </style>

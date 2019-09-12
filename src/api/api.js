@@ -650,6 +650,12 @@ export const AUDIT_API = {
   AUDIT_ADJUST_SUBMIT: HOST + '/ver/adjust/adjust',
   AUDIT_ADJUST_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial',
   /**
+   * 原汁转储
+   */
+  AUDIT_TURNSAVE_LIST: HOST + '/juice/pot/juiceExamine',
+  AUDIT_TURNSAVE_SUBMIT: HOST + '/ver/adjust/adjust',
+  AUDIT_TURNSAVE_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial',
+  /**
    * 助滤剂审核
    */
   AUDIT_AID_LIST: HOST + '/ver/aid/list',
