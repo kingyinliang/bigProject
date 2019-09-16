@@ -15,33 +15,24 @@
           </el-select>
         </el-form-item>
         <el-form-item label="容器类型：" label-width="70px">
-          <el-select v-model="formHeader.holderType" multiple filterable placeholder="请选择" style="width: 180px">
-            <el-option label="请选择"  value=""></el-option>
-            <el-option label="发酵罐"  value="001"></el-option>
-            <el-option label="原汁罐"  value="013"></el-option>
-            <el-option label="jbs罐"  value="016"></el-option>
+          <el-select v-model="formHeader.holderTypes" multiple filterable placeholder="请选择" style="width: 180px">
+            <el-option label="请选择" value=""></el-option>
+            <el-option label="发酵罐" value="001"></el-option>
+            <el-option label="原汁罐" value="013"></el-option>
+            <el-option label="JBS罐" value="016"></el-option>
           </el-select>
           <!--<el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.productDate" style="width: 180px"></el-date-picker>-->
         </el-form-item>
         <el-form-item label="容器号：" label-width="70px">
           <el-select v-model="formHeader.holderNo" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
-            <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+            <el-option :label="item.HOLDER_NAME" v-for="(item, index) in PotList" :key="index" :value="item.HOLDER_NO"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="生产物料：" label-width="70px">
           <el-select v-model="formHeader.materialCode" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
-            <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="生产订单：">
-          <el-input type="text" v-model="formHeader.orderNo" clearable style="width: 180px"></el-input>
-        </el-form-item>
-        <el-form-item label="移动类型：" label-width="70px">
-          <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 180px">
-            <el-option label="请选择"  value=""></el-option>
-            <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
+            <el-option :label="item.MATERIAL_NAME" v-for="(item, index) in MaterialList" :key="index" :value="item.MATERIAL_CODE"></el-option>
           </el-select>
         </el-form-item>
         <div style="float: right">
@@ -107,7 +98,8 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        holderType: [],
+        holderType: '',
+        holderTypes: [],
         holderNo: '',
         materialCode: '',
         orderNo: '',
@@ -115,6 +107,8 @@ export default {
       },
       factory: [],
       workshop: [],
+      PotList: [],
+      MaterialList: [],
       multipleSelection: [],
       multipleSelection1: [],
       DataList: []
@@ -131,13 +125,29 @@ export default {
   },
   mounted () {
     getFactory(this)
+    this.GetPostLost()
   },
   methods: {
+    GetPostLost () {
+      this.$http(`${AUDIT_API.JUICT_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.PotList = data.materialPotList.material
+          this.MaterialList = data.materialPotList.pot
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
     GetDataList () {
       if (this.activeName === '1') {
         this.formHeader.listType = 'add'
       } else if (this.activeName === '2') {
         this.formHeader.listType = 'dump'
+      }
+      if (this.formHeader.holderTypes.length === 0) {
+        this.formHeader.holderType = ''
+      } else {
+        this.formHeader.holderType = this.formHeader.holderTypes
       }
       this.$http(`${AUDIT_API.AUDIT_TURNSAVE_LIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
@@ -163,8 +173,17 @@ export default {
       }
     },
     ExportExcel () {
+      if (this.formHeader.holderTypes.length === 0) {
+        this.formHeader.holderType = ''
+      } else {
+        this.formHeader.holderType = this.formHeader.holderTypes
+      }
       let that = this
-      exportFile(`${AUDIT_API.AUDIT_TURNSAVE_LIST}`, '原汁转储导出', that)
+      if (this.formHeader.listType === 'add') {
+        exportFile(`${AUDIT_API.AUDIT_DUMP_EXPORT}`, '原汁生管转储审核导出', that)
+      } else {
+        exportFile(`${AUDIT_API.AUDIT_ADD_EXPORT}`, '原汁生管添加审核导出', that)
+      }
     },
     // 审核通过禁用
     checkboxT (row) {

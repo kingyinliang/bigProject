@@ -655,6 +655,9 @@ export const AUDIT_API = {
   AUDIT_TURNSAVE_LIST: HOST + '/juice/pot/juiceExamine',
   AUDIT_TURNSAVE_SUBMIT: HOST + '/ver/adjust/adjust',
   AUDIT_TURNSAVE_MATERIAL: HOST + '/all/dropDown/getAdjustMaterial',
+  JUICT_POT_LIST: HOST + '/juice/pot/materialPotList',
+  AUDIT_ADD_EXPORT: HOST + '/juiceExamineAddExport', // 原汁生管添加审核导出
+  AUDIT_DUMP_EXPORT: HOST + '/juiceExamineDumpExport', // 原汁生管转储审核导出
   /**
    * 助滤剂审核
    */
@@ -1645,5 +1648,6 @@ export const JUICE_API = {
   JUICE_JUICE_CLEAN: HOST + '/juice/pot/juiceClean', // 清罐
   JUICE_JUICE_BRINGOUT_SAVE: HOST + '/juice/pot/juiceBringOut', // 调拨
   JUICE_JUICE_DETAIL: HOST + '/juice/pot/juiceItem', // 详情
-  JUICE_JUICE_STOCKITEM: HOST + '/juice/pot/juiceStockItem' // 库存详情
+  JUICE_JUICE_STOCKITEM: HOST + '/juice/pot/juiceStockItem', // 库存详情
+  JUICE_STOCKITEM_KUCUN: HOST + '/juice/pot/juiceStockItemExport' // 导出
 }

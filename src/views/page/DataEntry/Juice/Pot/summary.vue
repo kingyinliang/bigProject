@@ -1,10 +1,13 @@
 <template>
-<div class="main">
-  <el-card class="searchCard newCard">
+  <div class="main">
+    <el-card class="searchCard newCard">
       <el-tabs v-model="activeName" class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">原汁库存汇总</span>
-          <div class="titleLeft"><i class="iconfont factory-kucun" style="color:#666666; margin-right:10px"></i>原汁总库存（单位:方）</div>
+          <div class="titleLeft">
+            <i class="iconfont factory-kucun" style="color:#666666; margin-right:10px"></i>原汁总库存（单位:方）
+            <el-button type="primary" size="small" @click="ExportExcelA(true)"  v-if="isAuth('juice:pot:juiceStockItemExport')" style="background-color:#1890FF; color:#FFFFFF; float:right">导出</el-button>
+          </div>
           <el-table header-row-class-name="tableHead" :data="formLeftData" border tooltip-effect="dark" >
             <el-table-column label="六月鲜" :show-overflow-tooltip="true" prop="liuyuexian"></el-table-column>
             <el-table-column label="味极鲜" :show-overflow-tooltip="true" prop="weijixian"></el-table-column>
@@ -18,29 +21,29 @@
           <div class="titleLeft"><i class="iconfont factory-icon_function_keyongkucun" style="color:#666666; margin-right:10px"></i>原汁总库存列表（单位:方）</div>
           <el-table header-row-class-name="tableHead" :data="dataLeftListOrder" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexOrderMethod"></el-table-column>
-            <el-table-column label="原汁罐号" :show-overflow-tooltip="true" prop="HOLDER_NAME" width="120"></el-table-column>
+            <el-table-column label="原汁罐号" :show-overflow-tooltip="true" prop="holderName" width="120"></el-table-column>
             <el-table-column label="状态" :show-overflow-tooltip="true" width="75">
               <template slot-scope="scope">
-                {{scope.row.HOLDER_STATUS === '6' ? '空罐' : scope.row.HOLDER_STATUS === '7' ? '入料中' : scope.row.HOLDER_STATUS === '8' ? '沉淀中' : scope.row.HOLDER_STATUS === '9' ? '领用中' : scope.row.HOLDER_STATUS === '10' ? '待清洗' : ''}}
+                {{scope.row.holderStatus === '6' ? '空罐' : scope.row.holderStatus === '7' ? '入料中' : scope.row.holderStatus === '8' ? '沉淀中' : scope.row.holderStatus === '9' ? '领用中' : scope.row.holderStatus === '10' ? '待清洗' : ''}}
               </template>
             </el-table-column>
-            <el-table-column label="罐内总量" :show-overflow-tooltip="true" prop="AMOUNT" width="100"></el-table-column>
-            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="FULL_DATE" width="160"></el-table-column>
-            <el-table-column label="车间" :show-overflow-tooltip="true" prop="WORK_SHOP" width="70"></el-table-column>
+            <el-table-column label="罐内总量" :show-overflow-tooltip="true" prop="amount" width="100"></el-table-column>
+            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="fullDate" width="160"></el-table-column>
+            <el-table-column label="车间" :show-overflow-tooltip="true" prop="workShop" width="70"></el-table-column>
             <el-table-column label="物料" :show-overflow-tooltip="true" width="160">
               <template slot-scope="scope">
-                {{scope.row.MATERIAL_CODE}}{{scope.row.MATERIAL_NAME}}
+                {{scope.row.materialCode}}{{scope.row.materialName}}
               </template>
             </el-table-column>
-            <el-table-column label="类别" :show-overflow-tooltip="true" prop="TYPE" width="70"></el-table-column>
+            <el-table-column label="类别" :show-overflow-tooltip="true" prop="type" width="70"></el-table-column>
             <el-table-column label="是否F0/原汁JBS" :show-overflow-tooltip="true" width="80">
               <template slot-scope="scope">
-                {{scope.row.IS_F === 1 ? 'FO' : scope.row.IS_F === 2 ? 'JBS' : ''}}
+                {{scope.row.isF === '1' ? 'FO' : scope.row.isF === '2' ? 'JBS' : ''}}
               </template>
             </el-table-column>
             <el-table-column label="沉淀期" :show-overflow-tooltip="true" prop="days" width="70"></el-table-column>
-            <el-table-column label="入库批次" :show-overflow-tooltip="true" prop="BATCH" width="110"></el-table-column>
-            <el-table-column label="入库订单号" :show-overflow-tooltip="true" prop="ORDER_NO" width="120"></el-table-column>
+            <el-table-column label="入库批次" :show-overflow-tooltip="true" prop="batch" width="110"></el-table-column>
+            <el-table-column label="入库订单号" :show-overflow-tooltip="true" prop="orderNo" width="120"></el-table-column>
           </el-table>
           <el-row>
             <el-pagination
@@ -56,7 +59,10 @@
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">可用原汁汇总</span>
-          <div class="titleLeft"><i class="iconfont factory-kucun" style="color:#666666; margin-right:10px"></i>原汁总库存（单位:方）</div>
+          <div class="titleLeft">
+            <i class="iconfont factory-kucun" style="color:#666666; margin-right:10px"></i>原汁总库存（单位:方）
+            <el-button type="primary" size="small" @click="ExportExcelB(true)"  v-if="isAuth('juice:pot:juiceStockItemExport')" style="background-color:#1890FF; color:#FFFFFF; float:right">导出</el-button>
+          </div>
           <el-table header-row-class-name="tableHead" :data="formRightData" border tooltip-effect="dark" >
             <el-table-column label="六月鲜" :show-overflow-tooltip="true" prop="liuyuexian"></el-table-column>
             <el-table-column label="味极鲜" :show-overflow-tooltip="true" prop="weijixian"></el-table-column>
@@ -70,29 +76,29 @@
           <div class="titleLeft"><i class="iconfont factory-icon_function_keyongkucun" style="color:#666666; margin-right:10px"></i>可用原汁列表（单位:方）</div>
           <el-table header-row-class-name="tableHead" :data="dataRightListOrder" border tooltip-effect="dark" >
             <el-table-column type="index" label="序号" width="55" :index="indexOrderMethodRight"></el-table-column>
-            <el-table-column label="原汁罐号" :show-overflow-tooltip="true" prop="HOLDER_NAME" width="120"></el-table-column>
+            <el-table-column label="原汁罐号" :show-overflow-tooltip="true" prop="holderName" width="120"></el-table-column>
             <el-table-column label="状态" :show-overflow-tooltip="true" width="75">
               <template slot-scope="scope">
-                {{scope.row.HOLDER_STATUS === '6' ? '空罐' : scope.row.HOLDER_STATUS === '7' ? '入料中' : scope.row.HOLDER_STATUS === '8' ? '沉淀中' : scope.row.HOLDER_STATUS === '9' ? '领用中' : scope.row.HOLDER_STATUS === '10' ? '待清洗' : ''}}
+                {{scope.row.holderStatus === '6' ? '空罐' : scope.row.holderStatus === '7' ? '入料中' : scope.row.holderStatus === '8' ? '沉淀中' : scope.row.holderStatus === '9' ? '领用中' : scope.row.holderStatus === '10' ? '待清洗' : ''}}
               </template>
             </el-table-column>
-            <el-table-column label="罐内总量" :show-overflow-tooltip="true" prop="AMOUNT" width="100"></el-table-column>
-            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="FULL_DATE" width="160"></el-table-column>
-            <el-table-column label="车间" :show-overflow-tooltip="true" prop="WORK_SHOP" width="70"></el-table-column>
+            <el-table-column label="罐内总量" :show-overflow-tooltip="true" prop="amount" width="100"></el-table-column>
+            <el-table-column label="满罐日期" :show-overflow-tooltip="true" prop="fullDate" width="160"></el-table-column>
+            <el-table-column label="车间" :show-overflow-tooltip="true" prop="workShop" width="70"></el-table-column>
             <el-table-column label="物料" :show-overflow-tooltip="true" width="160">
               <template slot-scope="scope">
-                {{scope.row.MATERIAL_CODE}}{{scope.row.MATERIAL_NAME}}
+                {{scope.row.materialCode}}{{scope.row.materialName}}
               </template>
             </el-table-column>
-            <el-table-column label="类别" :show-overflow-tooltip="true" prop="TYPE" width="70"></el-table-column>
+            <el-table-column label="类别" :show-overflow-tooltip="true" prop="type" width="70"></el-table-column>
             <el-table-column label="是否F0" :show-overflow-tooltip="true" width="80">
               <template slot-scope="scope">
-                {{scope.row.IS_F === 1 ? 'FO' : scope.row.IS_F === 2 ? 'JBS' : ''}}
+                {{scope.row.isF === '1' ? 'FO' : scope.row.isF === '2' ? 'JBS' : ''}}
               </template>
             </el-table-column>
             <el-table-column label="沉淀期" :show-overflow-tooltip="true" prop="days" width="70"></el-table-column>
-            <el-table-column label="入库批次" :show-overflow-tooltip="true" prop="BATCH" width="110"></el-table-column>
-            <el-table-column label="入库订单号" :show-overflow-tooltip="true" prop="ORDER_NO" width="120"></el-table-column>
+            <el-table-column label="入库批次" :show-overflow-tooltip="true" prop="batch" width="110"></el-table-column>
+            <el-table-column label="入库订单号" :show-overflow-tooltip="true" prop="orderNo" width="120"></el-table-column>
           </el-table>
           <el-row>
             <el-pagination
@@ -113,8 +119,9 @@
 
 <script>
 import {JUICE_API} from '@/api/api'
+import { exportFile } from '@/net/validate'
 export default {
-  name: 'summary',
+  name: 'summarys',
   data () {
     return {
       activeName: '1',
@@ -129,7 +136,8 @@ export default {
       dataRightListOrder: [],
       dataPageSizeRight: 10,
       dataRightCurrPage: 1,
-      dataRightTotalCount: 0
+      dataRightTotalCount: 0,
+      plantList: {}
     }
   },
   mounted () {
@@ -189,11 +197,20 @@ export default {
     },
     changeRightDataList () {
       this.dataRightListOrder = this.dataRightListOrderTotal.slice((this.dataRightCurrPage - 1) * this.dataPageSizeRight, (this.dataRightCurrPage - 1) * this.dataPageSizeRight + this.dataPageSizeRight)
+    },
+    // 导出
+    ExportExcelA () {
+      this.plantList.TYPE = 'all'
+      exportFile(`${JUICE_API.JUICE_STOCKITEM_KUCUN}`, '原汁库存汇总', this)
+    },
+    ExportExcelB () {
+      this.plantList.TYPE = 'alls'
+      exportFile(`${JUICE_API.JUICE_STOCKITEM_KUCUN}`, '可用原汁汇总', this)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.titleLeft {font-weight:bold; margin:15px 0;}
+.titleLeft {font-weight:bold; margin:15px 0; line-height:32px;}
 </style>

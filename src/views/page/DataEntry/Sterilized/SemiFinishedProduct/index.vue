@@ -32,13 +32,12 @@
           <div class="dataList_item_pot clearfix" style="position:relative;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end; position:relative;">
-                <div v-if="item.holderStatus === '1'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`">
-                  <!-- <p>{{(item.amount / 1000).toFixed(3)}}方</p> -->
-                </div>
+                <div v-if="item.holderStatus === '1' || item.holderStatus === '3'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`"></div>
+                <div v-if="item.holderStatus === '2'" class="dataList_item_pot_box_item2 dataList_item_pot_box_item2s"  :style="`height:150%`"></div>
                 <div v-else class="dataList_item_pot_box_item1" :style="`height:0%`"><p></p></div>
               </div>
             </div>
-            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1'">
+            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1' || item.holderStatus === '2'">
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
               <p>{{(item.amount / 1000).toFixed(3)}}方</p>
@@ -607,7 +606,7 @@ export default {
         }
         &_item2{
           height: 100px;
-          background: #1890FF;
+          background: #69C0FF;
         }
         &:hover &_item1::before,&:hover &_item1::after,&:hover &_item2s::before,&:hover &_item2s::after{
           animation: roateOne 10s linear infinite;

@@ -458,8 +458,14 @@ export default {
         let st = false
         this.multipleSelection.forEach((item) => {
           if (item.cDay === null) {
-            console.log('------')
             this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {})
+            st = true
+          } else if (item.cDay === -999) {
+            this.$confirm(`请确认${item.yzHolderName}，${item.batch}批次原汁有库存?`, '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'

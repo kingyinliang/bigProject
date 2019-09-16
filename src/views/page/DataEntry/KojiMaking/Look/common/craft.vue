@@ -24,7 +24,7 @@
         <span class="iconfont">&#xe606;</span> 看曲记录<el-button type="text" class="readyshiftBtn" name="lookar" style="margin-left: 30px">收起<i class="el-icon-caret-top"></i></el-button>
       </div>
       <div class="lookarBox">
-        <!-- <iframe src="#/lookEcharts" style="width:100%; height:460px" name="iframe_a" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe> -->
+        <iframe src="#/lookEcharts" style="width:100%; height:460px" name="iframe_a" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
         <!-- <iframe src="https://search-iot-m4krkhtzni6xjktkbymymhix5a.cn-north-1.es.amazonaws.com.cn/_plugin/kibana/app/kibana#/visualize/edit/e6382af0-adb4-11e9-8b6e-1f733cf01d7e?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A10000)%2Ctime%3A(from%3A'2019-07-23T14%3A52%3A42.616Z'%2Cmode%3Aabsolute%2Cto%3A'2019-07-26T14%3A12%3A20.186Z'))" style="width:100%;height:600px" name="iframe_a" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe> -->
         <el-row style="line-height: 32px; margin-bottom:10px">
           <el-col :span="5">第（<el-input size="small" v-model="tech.guardProcess" style="width:80px; padding:0;" class="guard-form-input">{{tech.guardProcess}}</el-input>）套程序</el-col>
@@ -69,23 +69,23 @@
               <el-input v-model="scope.row.productTemp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="100">
+          <el-table-column width="130">
             <template slot="header">
               <i class="reqI">*</i>
-              <span>风机风速</span>
+              <span>风速（R/HZ）</span>
             </template>
             <template slot-scope="scope">
               <el-input v-model="scope.row.windSpeed" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="120" label="单位">
+          <!-- <el-table-column width="120" label="单位">
             <template slot-scope="scope">
               <el-select v-model="scope.row.unit" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small">
                 <el-option label="R/MIN" value="R/MIN"></el-option>
                 <el-option label="HZ" value="HZ"></el-option>
               </el-select>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column width="100">
             <template slot="header">
               <i class="reqI">*</i>
@@ -142,14 +142,14 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="品温探头温度">
+          <el-table-column label="外品温探头温度">
             <el-table-column label="">
               <template slot="header">
                 <i class="reqI">*</i>
                 <span>上</span>
               </template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.productTempUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <el-input v-model="scope.row.productTempOutsideUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="">
@@ -158,12 +158,38 @@
                 <span>中</span>
               </template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.productTempMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+                <el-input v-model="scope.row.productTempOutsideMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="">
               <template slot="header">
                 <i class="reqI">*</i>
+                <span>下</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempOutsideDown" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label="内品温探头温度">
+            <el-table-column label="">
+              <template slot="header">
+                <span>上</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempUp" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="">
+              <template slot="header">
+                <span>中</span>
+              </template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.productTempMid" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="">
+              <template slot="header">
                 <span>下</span>
               </template>
               <template slot-scope="scope">
@@ -404,7 +430,7 @@ export default {
       }
       for (let items of this.lookList) {
         if (items.delFlag === '0') {
-          if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempUp === '' || items.productTempMid === '' || items.productTempDown === '' || items.thermometerOut === '' || items.thermometerInner === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '') {
+          if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '' || items.thermometerOut === '' || items.thermometerInner === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '') {
             // if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
             ty = false
             this.$notify.error({title: '错误', message: '看曲记录必填项未填'})
