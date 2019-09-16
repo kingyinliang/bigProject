@@ -167,7 +167,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="批次：" required>
-              <el-input v-model.trim="startForm.batch" style='width:220px'/>
+              <el-input v-model.trim="startForm.batch" maxlength="10" style='width:220px'/>
             </el-form-item>
             <el-form-item label="起始数：" required>
               <el-input  type='number' v-model.number="startForm.startAmount" style='width:220px'/>
@@ -371,7 +371,7 @@ export default class Index extends Vue {
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     // this.getProductLine(this.params.workshopId)
-    this.getPot(this.params.workshopName)
+    this.getPot(this.params)
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -668,24 +668,34 @@ export default class Index extends Vue {
     }
   }
   // 原汁罐
-  getPot (wName: string) {
-    let params = {
-      type: 'holder_type',
-      holder_type: '013',
-      pageSize: 9999,
-      workShopName: wName,
-      currPage: 1
-    }
+  getPot (params) {
     this.potList = []
-    if (wName) {
-      Vue.prototype.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params, false, false, false).then(res => {
+    if (params.workshopId) {
+      Vue.prototype.$http(`${SQU_API.PRE_INSTORAGE_LIST_API}`, 'POST', {factory: params.factoryId, workShop: params.workshopId}, false, false, false).then(res => {
         if (res.data.code === 0) {
-          this.potList = res.data.page.list
+          this.potList = res.data.holderList
         } else {
           this.$notify.error({title: '错误', message: res.data.msg})
         }
       })
     }
+    // let params = {
+    //   type: 'holder_type',
+    //   holder_type: '013',
+    //   pageSize: 9999,
+    //   workShopName: wName,
+    //   currPage: 1
+    // }
+    // this.potList = []
+    // if (wName) {
+    //   Vue.prototype.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', params, false, false, false).then(res => {
+    //     if (res.data.code === 0) {
+    //       this.potList = res.data.page.list
+    //     } else {
+    //       this.$notify.error({title: '错误', message: res.data.msg})
+    //     }
+    //   })
+    // }
   }
   setDisabled (flag: boolean) {
     this.disabled = flag
@@ -695,11 +705,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      this.$notify({title: '警告', message: '请选择工厂', type: 'warning'})
       return
     }
     if (this.params.workshopId === '') {
-      this.$notify.error({title: '错误', message: '请选择车间'})
+      this.$notify({title: '错误', message: '请选择车间', type: 'warning'})
       return
     }
     // if (this.params.productLineId === '') {
@@ -707,7 +717,7 @@ export default class Index extends Vue {
     //   return
     // }
     if (this.params.applyDate === null || this.params.applyDate === '') {
-      this.$notify.error({title: '错误', message: '请选择入罐日期'})
+      this.$notify({title: '错误', message: '请选择入罐日期', type: 'warning'})
       return
     }
     // 保存选项值到common store
@@ -839,7 +849,7 @@ export default class Index extends Vue {
     this.params.productLineId = ''
     this.params.productLineName = ''
     // this.getProductLine(newVal)
-    this.getPot(this.params.workshopName)
+    this.getPot(this.params)
   }
 }
 </script>

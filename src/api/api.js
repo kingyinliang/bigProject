@@ -1315,7 +1315,11 @@ export const SQU_API = {
   /**
    * 工时与异常更新接口
    */
-  PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update'
+  PRS_TIMESHEET_UPDATE_API: HOST + '/prs/timeSheet/update',
+  /**
+   * 罐
+   */
+  PRE_INSTORAGE_LIST_API: HOST + '/prs/inStorage/holderList'
 }
 
 /**
