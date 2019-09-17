@@ -38,7 +38,7 @@
             <el-table-column label="类别" :show-overflow-tooltip="true" prop="type" width="70"></el-table-column>
             <el-table-column label="是否F0/原汁JBS" :show-overflow-tooltip="true" width="80">
               <template slot-scope="scope">
-                {{scope.row.isF === '1' ? 'FO' : scope.row.isF === '2' ? 'JBS' : ''}}
+                {{scope.row.isF === '1' ? 'F0' : scope.row.isF === '2' ? 'JBS' : ''}}
               </template>
             </el-table-column>
             <el-table-column label="沉淀期" :show-overflow-tooltip="true" prop="days" width="70"></el-table-column>
@@ -93,7 +93,7 @@
             <el-table-column label="类别" :show-overflow-tooltip="true" prop="type" width="70"></el-table-column>
             <el-table-column label="是否F0" :show-overflow-tooltip="true" width="80">
               <template slot-scope="scope">
-                {{scope.row.isF === '1' ? 'FO' : scope.row.isF === '2' ? 'JBS' : ''}}
+                {{scope.row.isF === '1' ? 'F0' : scope.row.isF === '2' ? 'JBS' : ''}}
               </template>
             </el-table-column>
             <el-table-column label="沉淀期" :show-overflow-tooltip="true" prop="days" width="70"></el-table-column>
