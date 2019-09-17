@@ -449,8 +449,10 @@ export default {
     },
     'formHeader.workShop' (n, o) {
       this.formHeader.potNo = []
-      this.HolderList(n)
       this.ChangeSearch()
+    },
+    'formHeader.potType' (n, o) {
+      this.HolderList(n)
     },
     'formTransfer.inHolderType' (n, o) {
       if (n) {
@@ -539,10 +541,12 @@ export default {
       }
     },
     // 罐号
-    HolderList () {
-      this.$http(`${BASICDATA_API.BASEHOLDERLIST_API}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
-        this.guanList = data.holderList
-      })
+    HolderList (n) {
+      if (n) {
+        this.$http(`${JUICE_API.JUICE_SEARCH_POT_LIST}`, 'POST', {deptId: this.formHeader.workShop, holderType: n}, false, false, false).then(({data}) => {
+          this.guanList = data.holderList
+        })
+      }
     },
     // 获取类别
     GetTypeList () {

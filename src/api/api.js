@@ -1649,5 +1649,6 @@ export const JUICE_API = {
   JUICE_JUICE_BRINGOUT_SAVE: HOST + '/juice/pot/juiceBringOut', // 调拨
   JUICE_JUICE_DETAIL: HOST + '/juice/pot/juiceItem', // 详情
   JUICE_JUICE_STOCKITEM: HOST + '/juice/pot/juiceStockItem', // 库存详情
-  JUICE_STOCKITEM_KUCUN: HOST + '/juice/pot/juiceStockItemExport' // 导出
+  JUICE_STOCKITEM_KUCUN: HOST + '/juice/pot/juiceStockItemExport', // 导出
+  JUICE_SEARCH_POT_LIST: HOST + '/juice/pot/holderList'
 }
