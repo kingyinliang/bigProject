@@ -604,7 +604,7 @@ export default {
         this.$notify({title: '警告', message: '没有权限', type: 'warning'})
         return false
       }
-      if (item.HOLDER_STATUS === 8 || item.HOLDER_STATUS === 9) {
+      if (item.HOLDER_STATUS === '8' || item.HOLDER_STATUS === '9') {
         this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID, factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
           if (data.code === 0) {
             this.formTransfer = {
@@ -669,7 +669,7 @@ export default {
         this.$notify({title: '警告', message: '没有权限', type: 'warning'})
         return false
       }
-      if (item.HOLDER_STATUS === 9) {
+      if (item.HOLDER_STATUS === '9') {
         this.$http(`${JUICE_API.JUICE_ADD_POT_LIST}`, 'POST', {factory: this.formHeader.factory, workShop: this.formHeader.workShop}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.AddPotList = data.addPotList
@@ -720,7 +720,7 @@ export default {
         this.$notify({title: '警告', message: '没有权限', type: 'warning'})
         return false
       }
-      if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9 || item.HOLDER_STATUS === 10) {
+      if (item.HOLDER_STATUS === '6' || item.HOLDER_STATUS === '9' || item.HOLDER_STATUS === '10') {
         this.$notify({title: '警告', message: '该罐当前不允许判定', type: 'warning'})
         return false
       }
@@ -777,7 +777,7 @@ export default {
         this.$notify({title: '警告', message: '没有权限', type: 'warning'})
         return false
       }
-      if (item.HOLDER_STATUS === 10) {
+      if (item.HOLDER_STATUS === '10') {
         this.dialogData = {
           HOLDER_NAME: item.HOLDER_NAME,
           holderId: item.HOLDER_ID,
@@ -802,7 +802,7 @@ export default {
         this.$notify({title: '警告', message: '没有权限', type: 'warning'})
         return false
       }
-      if (item.HOLDER_STATUS === 6 || item.HOLDER_STATUS === 9) {
+      if (item.HOLDER_STATUS === '6' || item.HOLDER_STATUS === '9') {
         this.BringOutDialogTableVisible = true
         this.formBringOut = {
           holderName: item.HOLDER_NAME,
