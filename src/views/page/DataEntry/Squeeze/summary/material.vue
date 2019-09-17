@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column label="类别" width="80">
         <template slot-scope="scope">
-          {{scope.row.material.category}}
+          {{scope.row.material.type}}
         </template>
       </el-table-column>
       <el-table-column label="物料" width="220">
@@ -237,15 +237,15 @@ export default {
         row.material.childBatch = pot.batch
         row.material.childFullPotAmount = pot.sumAmount
         if (row.fumet.fullPort === '正常') {
-          row.material.category = pot.halfName
+          row.material.type = pot.halfName
         } else {
-          row.material.category = '味极鲜'
+          row.material.type = '味极鲜'
         }
       } else {
         if (row.fumet.fullPort === '正常') {
-          row.material.category = ''
+          row.material.type = ''
         } else {
-          row.material.category = '味极鲜'
+          row.material.type = '味极鲜'
         }
       }
     },
