@@ -323,6 +323,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.getHeaderForm(res.data.id)
           this.getDetailList(res.data.id)
+          this.$notify({title: '成功', message: '保存成功', type: 'success'})
         } else {
           this.$notify.error({title: '错误', message: res.data.msg})
         }
@@ -336,6 +337,7 @@ export default class Index extends Vue {
         if (res.data.code === 0) {
           this.getHeaderForm(res.data.id)
           this.getDetailList(res.data.id)
+          this.$notify({title: '成功', message: '提交成功', type: 'success'})
         } else {
           this.$notify.error({title: '错误', message: res.data.msg})
         }
