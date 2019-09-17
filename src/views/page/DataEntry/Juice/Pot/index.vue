@@ -96,7 +96,7 @@
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
                 <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.holderStatus !== '6'"></div>
-                <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== 6">
+                <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== '6'">
                   <p>{{item.BATCH}}</p>
                   <p v-if="item.IS_F === '2'">JBS</p>
                   <p>{{item.TYPE}}</p>
@@ -586,7 +586,7 @@ export default {
           this.topBox[1].num = data.indexList.summaryData.six
           this.topBox[1].content = data.indexList.summaryData.sixMaintain ? data.indexList.summaryData.sixMaintain : 0
           this.topBox[2].num = data.indexList.summaryData.twenty
-          this.topBox[2].content = data.indexList.summaryData.twentyMaintain ? data.indexList.summaryDatatwentyMaintain : 0
+          this.topBox[2].content = data.indexList.summaryData.twentyMaintain ? data.indexList.summaryData.twentyMaintain : 0
           this.topBox[3].num = data.indexList.summaryData.forty
           this.topBox[3].content = data.indexList.summaryData.fortyMaintain ? data.indexList.summaryData.fortyMaintain : 0
           this.topBox[4].num = data.indexList.summaryData.fortyPlus
@@ -861,14 +861,23 @@ export default {
       this.dataListAlls = []
       if (this.holderStatus !== '' || this.days !== '') {
         this.dataListAll.map((item) => {
-          if (this.holderStatus !== '' && item.holderStatus === 6) {
-            this.dataListAlls.push(item)
-          }
-          if (this.days !== '') {
-            if (this.days[0] <= parseInt(item.days) && parseInt(item.days) < this.days[1]) {
+          if (this.holderStatus !== '') {
+            if (item.HOLDER_STATUS === this.holderStatus) {
+              this.dataListAlls.push(item)
+            }
+          } else if (this.days !== '') {
+            if (this.days[0] <= parseInt(item.days) && parseInt(item.days) < this.days[1] && item.HOLDER_STATUS !== '6') {
               this.dataListAlls.push(item)
             }
           }
+          // if (this.holderStatus !== '' && item.holderStatus === '6') {
+          //   this.dataListAlls.push(item)
+          // }
+          // if (this.days !== '') {
+          //   if (this.days[0] <= parseInt(item.days) && parseInt(item.days) < this.days[1]) {
+          //     this.dataListAlls.push(item)
+          //   }
+          // }
         })
       } else {
         this.dataListAlls = this.dataListAll
