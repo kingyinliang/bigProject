@@ -17,7 +17,8 @@
       </el-table-column>
       <el-table-column label="是否混合罐" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.fullPort" @change="fullPortChange" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">
+          <!--<el-select v-model="scope.row.fullPort" @change="fullPortChange" placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small">-->
+          <el-select v-model="scope.row.fullPort" @change="fullPortChange" placeholder="请选择" disabled size="small">
             <el-option label="正常" value="正常"></el-option>
             <el-option label="共用混合" value="共用混合"></el-option>
             <el-option label="单用混合" value="单用混合"></el-option>
@@ -26,7 +27,8 @@
       </el-table-column>
       <el-table-column label="物料" width="220">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small" @change="setProVersion(scope.row)">
+          <!--<el-select v-model="scope.row.material" filterable placeholder="请选择" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.isVerBack !== '1')" size="small" @change="setProVersion(scope.row)">-->
+          <el-select v-model="scope.row.material" filterable placeholder="请选择" disabled size="small" @change="setProVersion(scope.row)">
             <el-option
               v-for="item in SerchSapList"
               :key="item.code+' '+item.value"

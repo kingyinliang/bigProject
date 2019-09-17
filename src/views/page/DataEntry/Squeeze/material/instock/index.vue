@@ -90,6 +90,11 @@
                     {{scope.row.potName}}
                   </template>
                 </el-table-column>
+                <el-table-column label="物料" :show-overflow-tooltip="true" width='120'>
+                  <template slot-scope="scope">
+                    {{scope.row.materialCode + ' ' + scope.row.materialName}}
+                  </template>
+                </el-table-column>
                 <el-table-column label="原汁批次" width='120' >
                   <template slot-scope="scope">
                     {{scope.row.batch}}
@@ -166,21 +171,26 @@
                 <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="物料：" required>
+              <el-select v-model="startForm.materialCode" :disabled="startForm.materialSt" @change="setmaterial(startForm)" filterable placeholder="请选择" size="small" style="width:220px" >
+                <el-option v-for="item in SerchSapList" :key="item.code" :label="item.code + ' ' + item.value" :value="item.code"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="混合罐类型：" required>
+              <el-select v-model="startForm.mixType" placeholder="请选择" :disabled="startForm.mixTypeSt" filterable style="width:220px" >
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="单用混合" value="单用混合"></el-option>
+                <el-option label="共用混合" value="共用混合"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="批次：" required>
-              <el-input v-model.trim="startForm.batch" maxlength="10" style='width:220px'/>
+              <el-input v-model.trim="startForm.batch" maxlength="10" style='width:220px' :disabled="startForm.batchSt"/>
             </el-form-item>
             <el-form-item label="起始数：" required>
               <el-input  type='number' v-model.number="startForm.startAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="单位：" required>
               {{startForm.unit = 'L'}}
-            </el-form-item>
-            <el-form-item label="混合罐类型：" required>
-              <el-select v-model="startForm.mixType" placeholder="请选择" filterable style="width:220px" >
-                <el-option label="正常" value="正常"></el-option>
-                <el-option label="单用混合" value="单用混合"></el-option>
-                <el-option label="共用混合" value="共用混合"></el-option>
-              </el-select>
             </el-form-item>
             <el-form-item label="操作时间：">
               <label>{{startForm.changed}}</label>
@@ -214,7 +224,7 @@
               {{endForm.unit = 'L'}}
             </el-form-item>
             <el-form-item label="是否满罐：">
-              <el-select v-model="endForm.fullPot" placeholder="请选择" filterable style="width:220px" >
+              <el-select v-model="endForm.fullPot" placeholder="请选择" @change="setfullPotAmount('endForm')" filterable style="width:220px" >
                 <el-option label="是" value="1"></el-option>
                 <el-option label="否" value="0"></el-option>
               </el-select>
@@ -252,8 +262,20 @@
                 <el-option v-for="(item, index) in potList" :key="index" :label="item.holderName" :value="item.holderId" ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="物料：" required>
+              <el-select v-model="modifyForm.materialCode" :disabled="modifyForm.materialSt" @change="setmaterial(modifyForm)" filterable placeholder="请选择" size="small" style="width:220px" >
+                <el-option v-for="item in SerchSapList" :key="item.code" :label="item.code + ' ' + item.value" :value="item.code"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="混合罐类型：" required>
+              <el-select v-model="modifyForm.mixType" placeholder="请选择" :disabled="modifyForm.mixTypeSt" filterable style="width:220px" >
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="单用混合" value="单用混合"></el-option>
+                <el-option label="共用混合" value="共用混合"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="批次：" required>
-              <el-input v-model.trim="modifyForm.batch" style='width:220px'/>
+              <el-input v-model.trim="modifyForm.batch" style='width:220px' :disabled="modifyForm.batchSt"/>
             </el-form-item>
             <el-form-item label="起始数：" required>
               <el-input  type='number' v-model.number="modifyForm.startAmount" style='width:220px'/>
@@ -261,15 +283,8 @@
             <el-form-item label="结束数：" required>
               <el-input  type='number' v-model.number="modifyForm.endAmount" style='width:220px'/>
             </el-form-item>
-            <el-form-item label="混合罐类型：" required>
-              <el-select v-model="modifyForm.mixType" placeholder="请选择" filterable style="width:220px" >
-                <el-option label="正常" value="正常"></el-option>
-                <el-option label="单用混合" value="单用混合"></el-option>
-                <el-option label="共用混合" value="共用混合"></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item label="是否满罐：">
-              <el-select v-model="modifyForm.fullPot" placeholder="请选择" filterable style="width:220px" >
+              <el-select v-model="modifyForm.fullPot" placeholder="请选择" @change="setfullPotAmount('modifyForm')"  filterable style="width:220px" >
                 <el-option label="是" value="1"></el-option>
                 <el-option label="否" value="0"></el-option>
               </el-select>
@@ -301,7 +316,7 @@
 </template>
 
 <script lang="ts">
-import {BASICDATA_API, SQU_API} from '@/api/api'
+import {BASICDATA_API, SQU_API, SYSTEMSETUP_API} from '@/api/api'
 import {dateFormat} from '@/net/validate'
 import {Vue, Component, Watch} from 'vue-property-decorator'
 
@@ -316,6 +331,7 @@ export default class Index extends Vue {
   factoryList = []
   workshopList = []
   productlineList = []
+  SerchSapList = []
   dataList = []
   potList = []
   isAvailable = '0'
@@ -329,7 +345,12 @@ export default class Index extends Vue {
     inDate: '',
     potNo: '',
     potName: '',
+    materialCode: '',
+    materialName: '',
+    materialSt: false,
+    mixTypeSt: false,
     batch: '',
+    batchSt: false,
     unit: 'L',
     startAmount: 0,
     mixType: '',
@@ -355,7 +376,12 @@ export default class Index extends Vue {
     inDate: '',
     potNo: '',
     potName: '',
+    materialCode: '',
+    materialName: '',
+    materialSt: false,
+    mixTypeSt: false,
     batch: '',
+    batchSt: false,
     startAmount: 0,
     endAmount: 0,
     mixType: '',
@@ -372,6 +398,7 @@ export default class Index extends Vue {
     this.getWorkshop(this.params.factoryId)
     // this.getProductLine(this.params.workshopId)
     this.getPot(this.params)
+    this.getMaterial(this.params.factoryId)
   }
   isAuth (key) {
     return Vue.prototype.isAuth(key)
@@ -431,7 +458,12 @@ export default class Index extends Vue {
       inDate: row.inDate ? row.inDate : dateFormat(new Date(), 'yyyy-MM-dd'),
       potNo: row.potNo ? row.potNo : '',
       potName: row.potName ? row.potName : '',
+      materialCode: row.materialCode ? row.materialCode : '',
+      materialName: row.materialName ? row.materialName : '',
+      materialSt: false,
+      mixTypeSt: false,
       batch: row.batch ? row.batch : '',
+      batchSt: false,
       startAmount: row.startAmount ? row.startAmount : 0,
       endAmount: row.endAmount ? row.endAmount : 0,
       mixType: row.mixType ? row.mixType : '正常',
@@ -444,6 +476,7 @@ export default class Index extends Vue {
       changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
     }
     this.dialogFormVisible3 = true
+    this.changeOptions('potModify')
   }
   saveModify () {
     if (this.modifyValidate()) {
@@ -457,6 +490,8 @@ export default class Index extends Vue {
         let record = this.dataList[matchedIndex]
         Object.assign(record, {
           batch: this.modifyForm.batch,
+          materialCode: this.modifyForm.materialCode,
+          materialName: this.modifyForm.materialName,
           inDate: this.modifyForm.inDate,
           potNo: this.modifyForm.potNo,
           potName: this.modifyForm.potName,
@@ -481,7 +516,12 @@ export default class Index extends Vue {
       inDate: this.params.applyDate,
       potNo: '',
       potName: '',
+      materialCode: '',
+      materialName: '',
+      materialSt: false,
+      mixTypeSt: false,
       batch: '',
+      batchSt: false,
       unit: '',
       startAmount: 0,
       mixType: '正常',
@@ -499,6 +539,8 @@ export default class Index extends Vue {
         workShop: this.params.workshopId,
         productLine: this.params.productLineId,
         batch: this.startForm.batch,
+        materialCode: this.startForm.materialCode,
+        materialName: this.startForm.materialName,
         unit: this.startForm.unit,
         inDate: this.startForm.inDate,
         potNo: this.startForm.potNo,
@@ -552,9 +594,16 @@ export default class Index extends Vue {
       this.dialogFormVisible2 = false
     }
   }
+  setmaterial (it) {
+    let item = this.SerchSapList.find(ele => ele.code === it.materialCode)
+    it.materialName = item ? item.materialName : ''
+  }
   startValidate () {
     if (this.startForm.potNo === '') {
       this.$notify.error({title: '错误', message: '原汁罐号不能为空'})
+      return false
+    } else if (this.startForm.materialCode === '') {
+      this.$notify.error({title: '错误', message: '物料不能为空'})
       return false
     } else if (this.startForm.batch.length !== 10) {
       this.$notify.error({title: '错误', message: '批次长度必须为10'})
@@ -585,6 +634,9 @@ export default class Index extends Vue {
     } else if (this.modifyForm.batch.length !== 10) {
       this.$notify.error({title: '错误', message: '批次长度必须为10'})
       return false
+    } else if (this.modifyForm.materialCode === '') {
+      this.$notify.error({title: '错误', message: '物料不能为空'})
+      return false
     } else if (this.modifyForm.startAmount.toString() === '') {
       this.$notify.error({title: '错误', message: '起始数不能为空'})
       return false
@@ -613,9 +665,39 @@ export default class Index extends Vue {
     } else if (flag === 'pot') {
       let item = this.potList.find(ele => ele.holderId === this.startForm.potNo)
       this.startForm.potName = item ? item.holderName : ''
+      this.startForm.batch = item ? item.batch : ''
+      if (item && item.potType) {
+        this.startForm.mixType = item.potType
+        this.startForm.mixTypeSt = true
+      }
+      this.startForm.materialCode = item.materialCode || ''
+      this.startForm.materialName = item.materialName || ''
+      this.startForm.batchSt = item.batch !== false
+      this.startForm.materialSt = item.materialCode !== false
     } else if (flag === 'potModify') {
       let item = this.potList.find(ele => ele.holderId === this.modifyForm.potNo)
       this.modifyForm.potName = item ? item.holderName : ''
+      this.modifyForm.batch = item ? item.batch : ''
+      if (item && item.potType) {
+        this.modifyForm.mixType = item.potType
+        this.modifyForm.mixTypeSt = true
+      }
+      this.modifyForm.materialCode = item.materialCode || ''
+      this.modifyForm.materialName = item.materialName || ''
+      this.modifyForm.batchSt = item.batch !== false
+      this.modifyForm.materialSt = item.materialCode !== false
+    }
+  }
+  setfullPotAmount (str) {
+    if (str === 'endForm') {
+      if (this.endForm.fullPot === '1') {
+        let startData = this.dataList.find((item, index) => index === this.dataList.length - 1)
+        this.endForm.fullPotAmount = this.potList.find(ele => ele.holderId === this.endForm.potNo).amount * 1000 + (this.endForm.endAmount * 1 - startData.startAmount)
+      }
+    } else if (str === 'modifyForm') {
+      if (this.modifyForm.fullPot === '1') {
+        this.modifyForm.fullPotAmount = this.potList.find(ele => ele.holderId === this.modifyForm.potNo).amount * 1000 + (this.modifyForm.endAmount - this.modifyForm.startAmount)
+      }
     }
   }
   // 获取工厂
@@ -666,6 +748,16 @@ export default class Index extends Vue {
         }
       })
     }
+  }
+  // 获取物料下拉
+  getMaterial (factory) {
+    Vue.prototype.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'YA_M_MATERIAL'}, false, false, false).then(({data}) => {
+      if (data.code === 0) {
+        this.SerchSapList = data.dicList
+      } else {
+        this.$notify.error({title: '错误', message: data.msg})
+      }
+    })
   }
   // 原汁罐
   getPot (params) {
@@ -843,6 +935,7 @@ export default class Index extends Vue {
     this.params.workshopId = ''
     this.params.workshopName = ''
     this.getWorkshop(newVal)
+    this.getMaterial(newVal)
   }
   @Watch('params.workshopId')
   onChangeWorkshop (newVal: string, oldVal: string) {

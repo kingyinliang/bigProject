@@ -3,52 +3,54 @@
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
       <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform marbottom">
         <el-form-item label="生产工厂：">
-          <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="生产车间：">
-          <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="生产产线：">
-          <el-select v-model="formHeader.productline" placeholder="产线" style="width: 180px">
+          <el-select v-model="formHeader.productline" placeholder="产线" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="生产订单：">
-          <el-input type="text" v-model="formHeader.orderNo" clearable style="width: 180px"></el-input>
+          <el-input type="text" v-model="formHeader.orderNo" clearable style="width: 170px"></el-input>
         </el-form-item>
         <el-form-item label="订单状态：">
-          <el-select v-model="formHeader.orderStatus" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.orderStatus" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="报工状态：">
-          <el-select v-model="formHeader.timeStatus" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.timeStatus" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="入库状态：">
-          <el-select v-model="formHeader.inStatus" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.inStatus" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="发料状态：">
-          <el-select v-model="formHeader.matStatus" placeholder="请选择" style="width: 180px">
+          <el-select v-model="formHeader.matStatus" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" @click="ExportExcel(true)" style="float: right" v-if="isAuth('report:formh:getAllStatusList')">导出</el-button>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right;margin-right: 10px" v-if="isAuth('report:formh:getAllStatusList')">查询</el-button>
+        <div style="float: right">
+          <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('report:formh:getAllStatusList')">查询</el-button>
+          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formh:getAllStatusList')">导出</el-button>
+        </div>
         </el-form>
     </el-card>
     <el-card class="tableCard">
@@ -142,12 +144,12 @@ export default {
     // 改变每页条数
     handleSizeChange (val) {
       this.formHeader.pageSize = val
-      this.GetList()
+      this.GetDataList()
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.formHeader.currPage = val
-      this.GetList()
+      this.GetDataList()
     }
   },
   computed: {},
