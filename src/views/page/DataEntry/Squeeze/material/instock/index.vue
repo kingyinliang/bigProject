@@ -596,7 +596,7 @@ export default class Index extends Vue {
   }
   setmaterial (it) {
     let item = this.SerchSapList.find(ele => ele.code === it.materialCode)
-    it.materialName = item ? item.materialName : ''
+    it.materialName = item ? item.value : ''
   }
   startValidate () {
     if (this.startForm.potNo === '') {
