@@ -1,7 +1,7 @@
 <template>
 <div style="padding: 5px 10px">
   <el-card class="searchCard  newCard ferCard">
-    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
+    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="marbottom">
       <el-form-item label="生产工厂：">
         <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
@@ -543,6 +543,7 @@ export default {
     // 罐号
     HolderList (n) {
       if (n) {
+        this.formHeader.potNo = []
         this.$http(`${JUICE_API.JUICE_SEARCH_POT_LIST}`, 'POST', {deptId: this.formHeader.workShop, holderType: n}, false, false, false).then(({data}) => {
           this.guanList = data.holderList
         })
@@ -609,7 +610,7 @@ export default {
         return false
       }
       if (item.HOLDER_STATUS === '8' || item.HOLDER_STATUS === '9') {
-        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID, factory: this.formHeader.factory, workShop: this.formHeader.workShop}).then(({data}) => {
+        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
           if (data.code === 0) {
             this.formTransfer = {
               holderId: item.HOLDER_ID,
@@ -626,7 +627,9 @@ export default {
               inBatch: '',
               isFull: '0',
               fullDate: '',
-              remark: ''
+              remark: '',
+              factory: this.formHeader.factory,
+              workShop: this.formHeader.workShop
             }
             this.TransferDialogTableVisible = true
           } else {
