@@ -672,8 +672,8 @@ export default class Index extends Vue {
       }
       this.startForm.materialCode = item.materialCode || ''
       this.startForm.materialName = item.materialName || ''
-      this.startForm.batchSt = item.batch !== false
-      this.startForm.materialSt = item.materialCode !== false
+      item.materialCode ? this.startForm.materialSt = true : this.startForm.materialSt = false
+      item.batch ? this.startForm.batchSt = true : this.startForm.batchSt = false
     } else if (flag === 'potModify') {
       let item = this.potList.find(ele => ele.holderId === this.modifyForm.potNo)
       this.modifyForm.potName = item ? item.holderName : ''
@@ -684,8 +684,8 @@ export default class Index extends Vue {
       }
       this.modifyForm.materialCode = item.materialCode || ''
       this.modifyForm.materialName = item.materialName || ''
-      this.modifyForm.batchSt = item.batch !== false
-      this.modifyForm.materialSt = item.materialCode !== false
+      item.materialCode ? this.modifyForm.batchSt = true : this.modifyForm.batchSt = false
+      item.batch ? this.modifyForm.materialSt = true : this.modifyForm.materialSt = false
     }
   }
   setfullPotAmount (str) {
