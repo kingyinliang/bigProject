@@ -42,7 +42,7 @@
                   <div class="dataList_item_pot_box_detail" v-if="item.holderStatus !== '0'">
                     <p>{{item.batch || ''}}</p>
                     <p>{{(item.materialCode || '') + ' ' + (item.materialName || '')}}</p>
-                    <p>{{item.amount || ''}}L</p>
+                    <p>{{item.amount || ''}}方</p>
                     <p>{{item.timeLength || ''}}</p>
                   </div>
                 </div>
