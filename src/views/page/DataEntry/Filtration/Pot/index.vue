@@ -42,7 +42,7 @@
                   <div class="dataList_item_pot_box_detail" v-if="item.holderStatus !== '0'">
                     <p>{{item.batch || ''}}</p>
                     <p>{{(item.materialCode || '') + ' ' + (item.materialName || '')}}</p>
-                    <p>{{item.amount || ''}}L</p>
+                    <p>{{item.amount || ''}}方</p>
                     <p>{{item.timeLength || ''}}</p>
                   </div>
                 </div>
@@ -235,6 +235,10 @@ export default {
   methods: {
     // 查询
     GetDataList () {
+      if (!this.formHeader.factory) {
+        this.$notify.error({title: '错误', message: '工厂必填'})
+        return false
+      }
       this.$http(`${FILTRATION_API.FILTER_POT_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.fastS = true
