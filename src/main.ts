@@ -29,6 +29,14 @@ Vue.prototype.$ = $// 权限方法
 Vue.prototype.lodingStatus = false// 加载遮罩
 Vue.prototype.lodingState = false// 加载遮罩
 Vue.prototype.version = version // 版本号
+// 警告通知
+Vue.prototype.$warning_SHINHO = (str) => {
+  ElementUI.Notification({ title: '警告', message: str, type: 'warning' })
+}
+// 错误通知
+Vue.prototype.$error_SHINHO = (str) => {
+  ElementUI.Notification({ title: '警告', message: str, type: 'error' })
+}
 
 // 关闭弹窗清除表单
 Vue.prototype.clearForm = function (form: any) {

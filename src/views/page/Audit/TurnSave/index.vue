@@ -47,40 +47,60 @@
       <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">转储</span>
-          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
             <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
-            <el-table-column prop="verifyMan" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="类别" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="批次" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="领用量" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入批次" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+            <el-table-column prop="receiveType" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="receiveBatch" label="批次" width="150" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="receiveAmount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
+            <el-table-column prop="inType" label="打入类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="inBatch" label="打入批次" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
           </el-table>
+          <el-row>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="formHeader.currPage"
+              :page-sizes="[10, 15, 20]"
+              :page-size="formHeader.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="formHeader.totalCount">
+            </el-pagination>
+          </el-row>
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="spanview">返工</span>
-          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange1" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange1" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
             <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
-            <el-table-column prop="verifyMan" label="移动类型" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="批次" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="打入批次" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="moveType" label="移动类型" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+            <el-table-column prop="type" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="batch" label="批次" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="amount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
+            <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
           </el-table>
+          <el-row>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="formHeader.currPage"
+              :page-sizes="[10, 15, 20]"
+              :page-size="formHeader.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="formHeader.totalCount">
+            </el-pagination>
+          </el-row>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -103,7 +123,10 @@ export default {
         holderNo: '',
         materialCode: '',
         orderNo: '',
-        listType: 'add'
+        listType: 'dump',
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 1
       },
       factory: [],
       workshop: [],
@@ -120,7 +143,7 @@ export default {
       getWorkshop(this, n)
     },
     'activeName' (n, o) {
-      this.GetDataList()
+      this.GetDataList(true)
     }
   },
   mounted () {
@@ -131,18 +154,21 @@ export default {
     GetPostLost () {
       this.$http(`${AUDIT_API.JUICT_POT_LIST}`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.PotList = data.materialPotList.material
-          this.MaterialList = data.materialPotList.pot
+          this.PotList = data.materialPotList.pot
+          this.MaterialList = data.materialPotList.material
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
-    GetDataList () {
+    GetDataList (st) {
+      if (st) {
+        this.formHeader.currPage = 1
+      }
       if (this.activeName === '1') {
-        this.formHeader.listType = 'add'
-      } else if (this.activeName === '2') {
         this.formHeader.listType = 'dump'
+      } else if (this.activeName === '2') {
+        this.formHeader.listType = 'add'
       }
       if (this.formHeader.holderTypes.length === 0) {
         this.formHeader.holderType = ''
@@ -153,23 +179,21 @@ export default {
         if (data.code === 0) {
           this.multipleSelection = []
           this.multipleSelection1 = []
-          this.DataList = data.juiceExamine.list
-          this.formHeader.currPage = data.juiceExamine.currPage
-          this.formHeader.pageSize = data.juiceExamine.pageSize
-          this.formHeader.totalCount = data.juiceExamine.totalCount
+          this.DataList = data.juiceExamine
+          this.formHeader.totalCount = data.juiceExamine.length
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     TurnSave () {
-      if (this.multipleSelection > 0) {} else if (this.multipleSelection1 > 0) {
-        this.$notify({title: '警告', message: '返工内容无法转储，请点击返工！', type: 'warning'})
+      if (this.multipleSelection.length > 0) {} else if (this.multipleSelection1.length > 0) {
+        this.$warning_SHINHO('返工内容无法转储，请点击返工！')
       }
     },
     Rework () {
-      if (this.multipleSelection1 > 0) {} else if (this.multipleSelection > 0) {
-        this.$notify({title: '警告', message: '转储内容无法返工，请点击转储！', type: 'warning'})
+      if (this.multipleSelection1.length > 0) {} else if (this.multipleSelection.length > 0) {
+        this.$warning_SHINHO('转储内容无法返工，请点击转储！')
       }
     },
     ExportExcel () {
@@ -179,6 +203,11 @@ export default {
         this.formHeader.holderType = this.formHeader.holderTypes
       }
       let that = this
+      if (this.activeName === '1') {
+        this.formHeader.listType = 'dump'
+      } else if (this.activeName === '2') {
+        this.formHeader.listType = 'add'
+      }
       if (this.formHeader.listType === 'add') {
         exportFile(`${AUDIT_API.AUDIT_DUMP_EXPORT}`, '原汁生管转储审核导出', that)
       } else {
@@ -206,6 +235,18 @@ export default {
       val.forEach((item, index) => {
         this.multipleSelection1.push(item)
       })
+    },
+    // 改变每页条数
+    handleSizeChange (val) {
+      this.formHeader.pageSize = val
+      this.multipleSelection = []
+      this.multipleSelection1 = []
+    },
+    // 跳转页数
+    handleCurrentChange (val) {
+      this.formHeader.currPage = val
+      this.multipleSelection = []
+      this.multipleSelection1 = []
     }
   },
   computed: {},
