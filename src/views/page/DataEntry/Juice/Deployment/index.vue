@@ -184,7 +184,7 @@
         <el-form-item label="不合格原因：">
           <el-select v-model="record.nonReasons" filterable class="width220px" :disabled="!isRedact || this.soleRowstatus === '已提交' || this.soleRowstatus === '审核通过'">
             <el-option value=''>请选择</el-option>
-            <el-option v-for="(item, index) of nonReasonsList" :key="index" :value="item" :label="item"></el-option>
+            <el-option v-for="(item, index) of nonReasonsList" :key="index" :value="item.code" :label="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="不合格调整分类：">
@@ -229,7 +229,7 @@
 
 <script>
 import {headanimation, dateFormat} from '@/net/validate'
-import {BASICDATA_API, STERILIZED_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API} from '@/api/api'
 export default {
   name: 'JuiceDeployment',
   data () {
@@ -279,6 +279,7 @@ export default {
     headanimation(this.$)
     this.Getdeptcode()
     this.GetUserList()
+    this.GetHolderStatusList()
   },
   watch: {
     'formHeader.factory' (n, o) {
@@ -291,6 +292,16 @@ export default {
     }
   },
   methods: {
+    // 获取不合格原因
+    GetHolderStatusList () {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'reason_yznopass'}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.nonReasonsList = data.dicList
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
     // 获取工厂
     Getdeptcode () {
       this.workshop = []
