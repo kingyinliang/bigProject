@@ -265,10 +265,7 @@ export default {
       }).then(() => {
         this.$http(`${BASICDATA_API.LOCATIONDEL_API}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
+            this.$success_SHINHO('删除成功!')
             this.multipleSelection = []
             this.GetLocationList()
           } else {

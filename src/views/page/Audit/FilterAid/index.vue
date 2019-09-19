@@ -24,9 +24,9 @@
       </el-form>
     </el-card>
     <el-card class="tableCard">
-      <el-form :model="formHeader" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
-        <el-form-item label="记账日期：" prop="postgDate">
-          <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.postgDate" style="width: 160px"></el-date-picker>
+      <el-form ref="pstngDate" :model="formHeader" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
+        <el-form-item label="记账日期：" prop="pstngDate">
+          <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="formHeader.pstngDate" style="width: 160px"></el-date-picker>
         </el-form-item>
         <el-form-item label="抬头文本：">
           <el-input v-model="formHeader.headerTxt" placeholder="抬头文本" style="width: 160px"></el-input>
@@ -148,7 +148,7 @@ export default {
         totalCount: 0
       },
       plantListRule: {
-        postgDate: [
+        pstngDate: [
           { required: true, message: '记账日期不能为空', trigger: 'blur' }
         ]
       },
@@ -230,27 +230,31 @@ export default {
       if (this.Text.length <= 0) {
         this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
-        this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.multipleSelection.forEach((item) => {
-            item.status = 'noPass'
-            item.memo = this.Text
-            item.pstngDate = this.formHeader.pstngDate
-          })
-          this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.visible = false
-              this.$notify({title: '成功', message: '操作成功', type: 'success'})
-              this.GetAuditList()
-            } else {
-              this.$notify.error({title: '错误', message: data.msg})
-            }
-          }).catch(() => {
-            this.$notify.error({title: '错误', message: '网络错误'})
-          })
+        this.$refs.pstngDate.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.multipleSelection.forEach((item) => {
+                item.status = 'noPass'
+                item.memo = this.Text
+                item.pstngDate = this.formHeader.pstngDate
+              })
+              this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
+                if (data.code === 0) {
+                  this.visible = false
+                  this.$notify({title: '成功', message: '操作成功', type: 'success'})
+                  this.GetAuditList()
+                } else {
+                  this.$notify.error({title: '错误', message: data.msg})
+                }
+              }).catch(() => {
+                this.$notify.error({title: '错误', message: '网络错误'})
+              })
+            })
+          }
         })
       }
     },
@@ -259,28 +263,32 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$notify.error({title: '错误', message: '请选择订单'})
       } else {
-        this.$confirm('确认审核通过, 是否继续?', '审核通过', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.multipleSelection.forEach((item) => {
-            item.status = 'checked'
-            item.memo = '审核通过'
-            item.pstngDate = this.formHeader.postgDate
-            item.headerTxt = this.formHeader.headerTxt
-          })
-          this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
-            if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'})
-              this.GetAuditList()
-            } else {
-              this.$notify.error({title: '错误', message: data.msg})
-              this.GetAuditList()
-            }
-          }).catch(() => {
-            this.$notify.error({title: '错误', message: '网络错误'})
-          })
+        this.$refs.pstngDate.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认审核通过, 是否继续?', '审核通过', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.multipleSelection.forEach((item) => {
+                item.status = 'checked'
+                item.memo = '审核通过'
+                item.pstngDate = this.formHeader.pstngDate
+                item.headerTxt = this.formHeader.headerTxt
+              })
+              this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
+                if (data.code === 0) {
+                  this.$notify({title: '成功', message: '操作成功', type: 'success'})
+                  this.GetAuditList()
+                } else {
+                  this.$notify.error({title: '错误', message: data.msg})
+                  this.GetAuditList()
+                }
+              }).catch(() => {
+                this.$notify.error({title: '错误', message: '网络错误'})
+              })
+            })
+          }
         })
       }
     },

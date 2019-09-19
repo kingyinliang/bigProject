@@ -127,15 +127,9 @@ export default {
         if (valid) {
           this.$http(`${MAIN_API.UPPASS_API}`, 'POST', this.dataForm).then(({data}) => {
             if (data.code === 0) {
-              this.$message({
-                message: '修改成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$router.push({path: '/home'})
-                }
-              })
+              this.$success_SHINHO('操作成功')
+              this.visible = false
+              this.$router.push({path: '/home'})
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }

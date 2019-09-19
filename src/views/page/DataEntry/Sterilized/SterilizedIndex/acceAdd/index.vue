@@ -275,19 +275,25 @@ export default {
       })
     },
     delRow (row) {
-      if (this.multipleSelectionAddSup.length > 0) {
-        this.multipleSelectionAddSup.forEach((item, index) => {
-          if (item === row) {
-            this.multipleSelectionAddSup.splice(index, 1)
-          }
-        })
-        this.multipleSelectionSup.forEach((item, index) => {
-          if (item === row) {
-            this.multipleSelectionSup.splice(index, 1)
-          }
-        })
-      }
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.multipleSelectionAddSup.length > 0) {
+          this.multipleSelectionAddSup.forEach((item, index) => {
+            if (item === row) {
+              this.multipleSelectionAddSup.splice(index, 1)
+            }
+          })
+          this.multipleSelectionSup.forEach((item, index) => {
+            if (item === row) {
+              this.multipleSelectionSup.splice(index, 1)
+            }
+          })
+        }
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {

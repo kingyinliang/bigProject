@@ -304,10 +304,10 @@ export default {
             that.GetTimeList()
             that.$notify({title: '成功', message: '提交成功', type: 'success'})
           }, err => {
-            that.$message.error(err)
+            that.$error_SHINHO(err)
           })
         }, err => {
-          that.$message.error(err)
+          that.$error_SHINHO(err)
         })
       } else if (str === 'saved') {
         let saveNet = Promise.all([headSave, readySave, userSave])
@@ -315,7 +315,7 @@ export default {
           that.GetTimeList()
           that.$notify({title: '成功', message: '保存成功', type: 'success'})
         }, err => {
-          that.$message.error(err)
+          that.$error_SHINHO(err)
         })
       }
     },

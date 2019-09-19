@@ -167,9 +167,9 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="60">
+              width="70">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)"></el-button>
+                <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -234,7 +234,7 @@ export default {
             })
             if (total > shengyu) {
               abc = 1
-              this.$notify.error({title: '错误', message: itemc + '批次领取量不能大于剩余量'})
+              this.$warning_SHINHO(itemc + '批次领取量不能大于剩余量')
               return false
             }
           })
@@ -278,7 +278,7 @@ export default {
           })
           if (total > shengyu) {
             abc = 1
-            this.$notify.error({title: '错误', message: '批次领取量不能大于剩余量'})
+            this.$warning_SHINHO('批次领取量不能大于剩余量')
             return false
           }
         })
@@ -341,42 +341,42 @@ export default {
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.dispatchMan === null || item.dispatchMan.trim() === '') {
-            this.$notify.error({title: '错误', message: '生产调度员不能为空'})
+            this.$warning_SHINHO('生产调度员不能为空')
             return false
           }
           if (item.productCode === null || item.productCode.trim() === '') {
-            this.$notify.error({title: '错误', message: '生产物料不能为空'})
+            this.$warning_SHINHO('生产物料不能为空')
             return false
           }
           if (item.issueCode === null || item.issueCode.trim() === '') {
-            this.$notify.error({title: '错误', message: '发料料号不能为空'})
+            this.$warning_SHINHO('发料料号不能为空')
             return false
           }
           if (item.productWeight === '') {
-            this.$notify.error({title: '错误', message: '生产数不能为空'})
+            this.$warning_SHINHO('生产数不能为空')
             return false
           }
           if (item.issueBatch === null || item.issueBatch.trim() === '') {
-            this.$notify.error({title: '错误', message: '发料批次不能为空'})
+            this.$warning_SHINHO('发料批次不能为空')
             return false
           }
           if (item.issueBatch.trim().length > 10) {
-            this.$notify.error({title: '错误', message: '发料批次长度不能超过10'})
+            this.$warning_SHINHO('发料批次长度不能超过10')
             return false
           }
           if (item.inStorageWeight === '') {
-            this.$notify.error({title: '错误', message: '入库数不能为空'})
+            this.$warning_SHINHO('入库数不能为空')
             return false
           }
           if (flag && flag === 'submit') {
             // 提交的时候验证，申请订单不验证
             if (item.inStorageBatch === null || item.inStorageBatch.trim() === '') {
-              this.$notify.error({title: '错误', message: '入库批次不能为空'})
+              this.$warning_SHINHO('入库批次不能为空')
               return false
             }
           }
           if (item.inStorageBatch && item.inStorageBatch.trim().length > 10) {
-            this.$notify.error({title: '错误', message: '入库批次长度不能超过10'})
+            this.$warning_SHINHO('入库批次长度不能超过10')
             return false
           }
         }
@@ -499,7 +499,13 @@ export default {
     },
     // 删除
     dellistbomS (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     rowDelFlag ({row, rowIndex}) {

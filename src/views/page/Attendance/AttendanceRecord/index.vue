@@ -840,10 +840,7 @@ export default {
         }).then(() => {
           this.$http(`${AR_API.ARDELAPI}`, 'POST', this.multipleSelection).then(({data}) => {
             if (data.code === 0) {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
+              this.$success_SHINHO('删除成功!')
               this.multipleSelection = []
               this.GetList()
             } else {

@@ -229,7 +229,7 @@ export default {
             that.$notify({title: '成功', message: '提交成功', type: 'success'})
             that.GetList()
           }, err => {
-            that.$message.error(err)
+            that.$error_SHINHO(err)
           })
         })
       } else {
@@ -239,7 +239,7 @@ export default {
           that.$notify({title: '成功', message: '保存成功', type: 'success'})
           that.GetList()
         }, err => {
-          that.$message.error(err)
+          that.$error_SHINHO(err)
         })
       }
     },

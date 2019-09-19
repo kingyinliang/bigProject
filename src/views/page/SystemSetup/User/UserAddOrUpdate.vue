@@ -113,16 +113,10 @@ export default {
                 // 修改
                 this.$http(`${SYSTEMSETUP_API.USERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
                   if (data.code === 0) {
-                    this.$message({
-                      message: '操作成功',
-                      type: 'success',
-                      duration: 1500,
-                      onClose: () => {
-                        this.type = true
-                        this.visible = false
-                        this.$emit('refreshDataList')
-                      }
-                    })
+                    this.$success_SHINHO('操作成功')
+                    this.type = true
+                    this.visible = false
+                    this.$emit('refreshDataList')
                   } else {
                     this.type = true
                     this.$notify.error({title: '错误', message: data.msg})
@@ -133,16 +127,10 @@ export default {
                 this.dataForm.deptId = this.deptId
                 this.$http(`${SYSTEMSETUP_API.USERADD_API}`, 'POST', this.dataForm).then(({data}) => {
                   if (data.code === 0) {
-                    this.$message({
-                      message: '操作成功',
-                      type: 'success',
-                      duration: 1500,
-                      onClose: () => {
-                        this.type = true
-                        this.visible = false
-                        this.$emit('refreshDataList')
-                      }
-                    })
+                    this.$success_SHINHO('操作成功')
+                    this.type = true
+                    this.visible = false
+                    this.$emit('refreshDataList')
                   } else {
                     this.type = true
                     this.$notify.error({title: '错误', message: data.msg})

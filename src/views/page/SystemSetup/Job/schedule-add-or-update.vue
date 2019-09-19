@@ -92,15 +92,9 @@ export default {
             status: !this.dataForm.id ? undefined : this.dataForm.status
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
+              this.$success_SHINHO('操作成功')
+              this.visible = false
+              this.$emit('refreshDataList')
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }

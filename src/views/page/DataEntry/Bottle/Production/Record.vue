@@ -163,8 +163,14 @@ export default {
       this.totalCount = this.RecordList.filter(item => item.delFlag === '0').length
     },
     delRecord (row) {
-      row.delFlag = '1'
-      this.totalCount = this.RecordList.filter(item => item.delFlag === '0').length
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+        this.totalCount = this.RecordList.filter(item => item.delFlag === '0').length
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {

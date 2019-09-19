@@ -192,14 +192,8 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.SCHEDULEDEL_API}`, 'POST', ids).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.$success_SHINHO('操作成功')
+            this.getDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -218,14 +212,8 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.SCHEDULEPAUSE_API}`, 'POST', ids).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.$success_SHINHO('操作成功')
+            this.getDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -244,14 +232,8 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.SCHEDULERESUME_API}`, 'POST', ids).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.$success_SHINHO('操作成功')
+            this.getDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -270,14 +252,8 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.SCHEDULERUN_API}`, 'POST', ids).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.$success_SHINHO('操作成功')
+            this.getDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

@@ -78,9 +78,9 @@
           <el-input v-model="scope.row.remark" size="small" :disabled="!isRedact"></el-input>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="60">
+      <el-table-column fixed="right" label="操作" width="70">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="delUser(scope.row)"></el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact" @click="delUser(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -122,9 +122,9 @@
             <el-input v-model="scope.row.remark" size="mini" :disabled="!isRedact"></el-input>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="60">
+        <el-table-column fixed="right" label="操作" width="70">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!isRedact" @click="scope.row.delFlag = '1'"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" :disabled="!isRedact" @click="delUser1(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -376,13 +376,13 @@ export default {
       if (this.WorkerDate.length === 0) {
       // if (this.WorkerDate.filter(item => item.delFlag === '0').length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '人员不能为空'})
+        this.$warning_SHINHO('人员不能为空')
         return false
       }
       this.WorkerDate.forEach((item) => {
         if (item.userType && item.userId.length !== 0 && item.startDate && item.endDate) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '人员必填项未填'})
+          this.$warning_SHINHO('人员必填项未填')
           return false
         }
       })
@@ -459,10 +459,10 @@ export default {
             this.$refs.officialWorker.init(row.deptId, row.userId)
           })
         } else {
-          this.$notify.error({title: '错误', message: '请选择工序'})
+          this.$warning_SHINHO('请选择工序')
         }
       } else {
-        this.$notify.error({title: '错误', message: '请选择人员属性'})
+        this.$warning_SHINHO('请选择人员属性')
       }
     },
     // 临时工
@@ -485,10 +485,26 @@ export default {
     },
     // 人员删除
     delUser (row) {
-      this.WorkerDate.splice(this.WorkerDate.indexOf(row), 1)
-      if (this.att) {
-        this.SetAtt(row.deptId)
-      }
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.WorkerDate.splice(this.WorkerDate.indexOf(row), 1)
+        if (this.att) {
+          this.SetAtt(row.deptId)
+        }
+      })
+    },
+    // 人员删除
+    delUser1 (row) {
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     // 新增人员
     AddWorkerDate (form) {

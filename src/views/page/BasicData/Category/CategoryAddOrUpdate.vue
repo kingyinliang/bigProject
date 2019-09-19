@@ -98,15 +98,9 @@ export default {
           this.dataForm.materialName = this.material.find((item) => item.materialCode === this.dataForm.materialCode).materialName
           this.$http(`${this.id ? BASICDATA_API.CATEGORY_UPDATE : BASICDATA_API.CATEGORY_SAVE}`, 'POST', this.dataForm).then(({data}) => {
             if (data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
+              this.$success_SHINHO('操作成功')
+              this.visible = false
+              this.$emit('refreshDataList')
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }

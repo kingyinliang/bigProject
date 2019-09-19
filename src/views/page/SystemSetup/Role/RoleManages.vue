@@ -192,20 +192,13 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.ROLEDEL_API}`, 'POST', {roleId: id}).then(({data}) => {
           if (data.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
+            this.$success_SHINHO('删除成功!')
             this.GetRoleList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
     },
     // 改变每页条数

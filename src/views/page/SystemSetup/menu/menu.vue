@@ -141,14 +141,8 @@ export default {
       }).then(() => {
         this.$http(`${SYSTEMSETUP_API.MENUDEL_API}/${id}`, 'POST', {}).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.$success_SHINHO('操作成功')
+            this.getDataList()
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

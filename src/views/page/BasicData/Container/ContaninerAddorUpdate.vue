@@ -190,16 +190,10 @@ export default {
             if (this.conid) {
               this.$http(`${BASICDATA_API.CONTAINERUPDATE_API}`, 'POST', this.dataForm).then(({data}) => {
                 if (data.code === 0) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    duration: 1500,
-                    onClose: () => {
-                      this.submitType = true
-                      this.visible = false
-                      this.$emit('refreshDataList')
-                    }
-                  })
+                  this.$success_SHINHO('操作成功')
+                  this.submitType = true
+                  this.visible = false
+                  this.$emit('refreshDataList')
                 } else {
                   this.submitType = true
                   this.$notify.error({title: '错误', message: data.msg})
@@ -208,16 +202,10 @@ export default {
             } else {
               this.$http(`${BASICDATA_API.CONTAINERADD_API}`, 'POST', this.dataForm).then(({data}) => {
                 if (data.code === 0) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    duration: 1500,
-                    onClose: () => {
-                      this.submitType = true
-                      this.visible = false
-                      this.$emit('refreshDataList')
-                    }
-                  })
+                  this.$success_SHINHO('操作成功')
+                  this.submitType = true
+                  this.visible = false
+                  this.$emit('refreshDataList')
                 } else {
                   this.submitType = true
                   this.$notify.error({title: '错误', message: data.msg})

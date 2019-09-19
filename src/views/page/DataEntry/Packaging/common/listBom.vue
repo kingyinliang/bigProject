@@ -433,8 +433,14 @@ export default {
     },
     // 删除半成品
     dellistbomS (row, num) {
-      row.delFlag = '1'
-      num++
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+        num++
+      })
     },
     // 新增物料半成品
     addSapS (form, row) {

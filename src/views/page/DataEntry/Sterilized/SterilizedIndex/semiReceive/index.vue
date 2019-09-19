@@ -159,11 +159,17 @@ export default {
       row.receiveAmount = this.PotList.filter(items => items.holderId === row.hloderId)[0].amount
     },
     delRow (row) {
-      if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
-        this.$notify.error({title: '错误', message: '最后一条了哦，不能再删了'})
-      } else {
-        row.delFlag = '1'
-      }
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
+          this.$notify.error({title: '错误', message: '最后一条了哦，不能再删了'})
+        } else {
+          row.delFlag = '1'
+        }
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {

@@ -1335,7 +1335,13 @@ export default {
       })
     },
     delrow (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     rowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
@@ -1348,14 +1354,26 @@ export default {
       if (row.id === '') {
         this.wheatList.splice(this.wheatList.indexOf(row), 1)
       } else {
-        row.delFlag = '1'
+        this.$confirm('是否删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          row.delFlag = '1'
+        })
       }
     },
     delsoyRow (row) {
       if (row.id === '') {
         this.soyList.splice(this.soyList.indexOf(row), 1)
       } else {
-        row.delFlag = '1'
+        this.$confirm('是否删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          row.delFlag = '1'
+        })
       }
     },
     GetPuplList (formHeader) {

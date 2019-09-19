@@ -585,7 +585,7 @@ export default {
           })
           if (tmp) {
             ty = false
-            that.$message.error('机维组未确认，请保存后等待机维组确认后提交')
+            that.$error_SHINHO('机维组未确认，请保存后等待机维组确认后提交')
             return false
           }
         })
@@ -745,7 +745,13 @@ export default {
     },
     // 删除
     dellistbomS (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {

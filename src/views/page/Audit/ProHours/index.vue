@@ -57,7 +57,7 @@
           <div class="toggleSearchTop">
               <i class="el-icon-caret-bottom"></i>
           </div>
-          <el-form :model="plantList" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
+          <el-form ref="postgDate" :model="plantList" :rules="plantListRule" size="small" :inline="true" label-position="right" label-width="100px" class="topforms">
             <el-form-item label="记账日期：" prop="postgDate">
               <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.postgDate" style="width: 160px"></el-date-picker>
             </el-form-item>
@@ -512,32 +512,36 @@ export default {
       if (this.Text.length <= 0) {
         this.$notify.error({title: '错误', message: '请填写不通过原因'})
       } else {
-        this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.multipleSelection.forEach((item) => {
-            item.status = 'noPass'
-            item.memo = this.Text
-            item.postgDate = this.plantList.postgDate
-            item.backType = this.backType
-          })
-          this.lodingStatus1 = true
-          this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.lodingStatus1 = false
-            if (data.code === 0) {
-              this.visible = false
-              this.Text = ''
-              this.GetAuditList()
-              this.$notify({title: '成功', message: '操作成功', type: 'success'})
-            } else {
-              this.$notify.error({title: '错误', message: data.msg})
-            }
-          }).catch(() => {
-            this.$notify.error({title: '错误', message: '网络错误'})
-            this.lodingStatus1 = false
-          })
+        this.$refs.postgDate.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认审核不通过, 是否继续?', '审核不通过', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.multipleSelection.forEach((item) => {
+                item.status = 'noPass'
+                item.memo = this.Text
+                item.postgDate = this.plantList.postgDate
+                item.backType = this.backType
+              })
+              this.lodingStatus1 = true
+              this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+                this.lodingStatus1 = false
+                if (data.code === 0) {
+                  this.visible = false
+                  this.Text = ''
+                  this.GetAuditList()
+                  this.$notify({title: '成功', message: '操作成功', type: 'success'})
+                } else {
+                  this.$notify.error({title: '错误', message: data.msg})
+                }
+              }).catch(() => {
+                this.$notify.error({title: '错误', message: '网络错误'})
+                this.lodingStatus1 = false
+              })
+            })
+          }
         })
       }
     },
@@ -559,31 +563,36 @@ export default {
         if (st) {
           return
         }
-        this.$confirm('确认审核通过, 是否继续?', '审核通过', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.multipleSelection.forEach((item) => {
-            item.status = 'checked'
-            item.memo = '审核通过'
-            item.postgDate = this.plantList.postgDate
-          })
-          this.lodingStatus1 = true
-          this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
-            this.lodingStatus1 = false
-            if (data.code === 0) {
-              this.$notify({title: '成功', message: '操作成功', type: 'success'})
-              this.GetAuditList()
-              if (data) {}
-            } else {
-              this.GetAuditList()
-              this.$notify.error({title: '错误', message: data.msg})
-            }
-          }).catch(() => {
-            this.$notify.error({title: '错误', message: '网络错误'})
-            this.lodingStatus1 = false
-          })
+        this.$refs.postgDate.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认审核通过, 是否继续?', '审核通过', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.multipleSelection.forEach((item) => {
+                item.status = 'checked'
+                item.memo = '审核通过'
+                item.postgDate = this.plantList.postgDate
+              })
+              this.lodingStatus1 = true
+              this.$http(`${AUDIT_API.AUDITHOURSUPDATE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+                this.lodingStatus1 = false
+                if (data.code === 0) {
+                  this.$notify({title: '成功', message: '操作成功', type: 'success'})
+                  this.GetAuditList()
+                  if (data) {
+                  }
+                } else {
+                  this.GetAuditList()
+                  this.$notify.error({title: '错误', message: data.msg})
+                }
+              }).catch(() => {
+                this.$notify.error({title: '错误', message: '网络错误'})
+                this.lodingStatus1 = false
+              })
+            })
+          }
         })
       }
     },

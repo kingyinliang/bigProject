@@ -13,7 +13,7 @@ export function Getdeptcode (Vue) {
         Vue.plantList.factory = data.typeList[0].deptId
       }
     } else {
-      Vue.$message.error(data.msg)
+      Vue.prototype.$error_SHINHO(data.msg)
     }
   })
 }
@@ -31,7 +31,7 @@ export function Getdeptbyid (Vue, id, str) {
           Vue.plantList.workShop = data.typeList[0].deptId
         }
       } else {
-        Vue.$message.error(data.msg)
+        Vue.prototype.$error_SHINHO(data.msg)
       }
     })
   }

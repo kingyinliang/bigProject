@@ -290,10 +290,7 @@ export default {
     beforeAvatarUpload (file) {
       const isLt2M = file.size / 1024 / 1024 < 50
       if (!isLt2M) {
-        this.$message({
-          message: '上传文件大小不能超过 10MB!',
-          type: 'warning'
-        })
+        this.$warning_SHINHO('上传文件大小不能超过 10MB!')
       }
       return isLt2M
     },
@@ -330,10 +327,7 @@ export default {
       }).then(() => {
         this.$http(`${BASICDATA_API.SAVEORG_API}`, 'POST', this.OrgDetail).then(({data}) => {
           if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
+            this.$success_SHINHO('操作成功')
             this.OrgDetail = {}
             this.fileList = [{}]
             this.update = true
@@ -355,10 +349,7 @@ export default {
           deptId: this.OrgDetail.deptId
         }).then(({data}) => {
           if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
+            this.$success_SHINHO('操作成功')
             this.getTree()
             this.OrgDetail = {}
           } else {
@@ -383,10 +374,7 @@ export default {
         }
         this.$http(`${BASICDATA_API.ADDORG_API}`, 'POST', this.addDep).then(({data}) => {
           if (data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
+            this.$success_SHINHO('操作成功')
             this.getTree()
             this.addDep = {}
             this.dialogFormVisible1 = false

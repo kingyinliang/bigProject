@@ -404,7 +404,13 @@ export default class Index extends Vue {
     return Vue.prototype.isAuth(key)
   }
   delRow (row) {
-    row.delFlag = '1'
+    this.$confirm('是否删除?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      row.delFlag = '1'
+    })
   }
   rowDelFlag ({row, rowIndex}) {
     if (row.delFlag === '1') {
@@ -872,7 +878,7 @@ export default class Index extends Vue {
       that.$notify({title: '成功', message: result.msg, type: 'success'})
       that.getOrderList()
     }).catch((result: { code: number, msg: string }) => {
-      that.$message.error(result.msg)
+      Vue.prototype.$error_SHINHO(result.msg)
     })
   }
   async submit () {
@@ -921,7 +927,7 @@ export default class Index extends Vue {
         that.$notify({title: '成功', message: result.msg, type: 'success'})
         that.getOrderList()
       }).catch((result : { code: number, msg: string }) => {
-        that.$message.error(result.msg)
+        Vue.prototype.$error_SHINHO(result.msg)
       })
     })
   }

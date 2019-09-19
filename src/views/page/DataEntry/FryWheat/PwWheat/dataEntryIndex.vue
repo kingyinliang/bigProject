@@ -130,7 +130,7 @@ export default {
     },
     beforeLeave (activeName, oldActiveName) {
       if (!this.enableOpt && activeName !== '1') {
-        this.$message({type: 'error', message: '请申请订单之后操作', duration: 1000})
+        this.$error_SHINHO('请申请订单之后操作')
         return false
       }
       return true

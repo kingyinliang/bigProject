@@ -144,9 +144,9 @@
                 <el-table-column
                   fixed="right"
                   label="操作"
-                  width="60">
+                  width="70">
                   <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked' "  @click="dellistbomS(scope.row)"></el-button>
+                    <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked' "  @click="dellistbomS(scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -263,13 +263,13 @@ export default {
     validate () {
       // if (this.wheatDataList === undefined || this.wheatDataList.length === 0) {
       if (this.wheatDataList === undefined || this.wheatDataList.filter(item => item.delFlag === '0').length === 0) {
-        this.$notify.error({title: '错误', message: '生产入库未录入数据'})
+        this.$warning_SHINHO('生产入库未录入数据')
         return false
       }
       for (let item of this.wheatDataList) {
         if (item.delFlag === '0') {
           if (item.inPortWeight <= 0) {
-            this.$notify.error({title: '错误', message: '入库数必须大于0'})
+            this.$warning_SHINHO('入库数必须大于0')
             return false
           }
         }
@@ -500,7 +500,13 @@ export default {
     },
     // 删除
     dellistbomS (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     // RowDelFlag
     rowDelFlag ({row, rowIndex}) {

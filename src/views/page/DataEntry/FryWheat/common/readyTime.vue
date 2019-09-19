@@ -91,9 +91,9 @@
           <el-table-column label="开始人" width="140" prop="openMan"></el-table-column>
           <el-table-column label="结束时间" prop="closeTime"></el-table-column>
           <el-table-column label="结束人" width="140" prop="closeMan"></el-table-column>
-          <el-table-column label="操作" width="50">
+          <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))" @click="delmachine(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && (readyTimeDate.status ==='noPass' || readyTimeDate.status ==='saved' || readyTimeDate.status ===''))" @click="delmachine(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -266,25 +266,25 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间白班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间中班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间夜班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间多班必填项未填写完全')
           return false
         }
       }
@@ -293,13 +293,13 @@ export default {
         this.machineTimeData.forEach((item, index) => {
           if (!item.closeTime) {
             ty = false
-            this.$notify.error({title: '错误', message: '机器工时没结束，请结束后提交'})
+            this.$warning_SHINHO('机器工时没结束，请结束后提交')
             return false
           }
         })
       } else {
         ty = false
-        this.$notify.error({title: '错误', message: '机器工时为空数据'})
+        this.$warning_SHINHO('机器工时为空数据')
         return false
       }
       return ty
@@ -323,7 +323,13 @@ export default {
     },
     // 机器删除
     delmachine (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
@@ -355,7 +361,7 @@ export default {
         if (item.deviceId === me.deviceId && item.openTime && !item.closeTime) {
           if (st) {
             tmp = false
-            this.$notify.error({title: '错误', message: '请结束后开始'})
+            this.$warning_SHINHO('请结束后开始')
           } else {
             tmp = true
           }
@@ -367,7 +373,7 @@ export default {
           this.$refs.machinetime.init(me, st)
         })
       } else if (!st && !tmp) {
-        this.$notify.error({title: '错误', message: '请开始后结束'})
+        this.$warning_SHINHO('请开始后结束')
       }
     },
     // 检测

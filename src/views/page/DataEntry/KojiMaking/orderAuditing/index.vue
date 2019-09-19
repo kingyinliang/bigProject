@@ -630,7 +630,7 @@ export default class Index extends Vue {
         return
       }
       if (this.realInAmount === 0 || !this.realInAmount) {
-        that.$message.error('请确认实际入库数')
+        Vue.prototype.$error_SHINHO('请确认实际入库数')
         return false
       } else {
         Promise.all([that.timeSubmit(), that.storageSubmit(), that.materialSubmit()]).then((result) => {

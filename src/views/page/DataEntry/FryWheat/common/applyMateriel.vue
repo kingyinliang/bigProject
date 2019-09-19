@@ -50,9 +50,9 @@
             <el-table-column width="160" label="小麦领用数" prop="wheatWeight"></el-table-column>
             <el-table-column label="单位" width="120" prop="weightUnit"></el-table-column>
             <!-- <el-table-column label="备注" width="160" prop="remark"></el-table-column> -->
-            <el-table-column fixed="right" label="操作" width="100">
+            <el-table-column fixed="right" label="操作" width="70">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)"></el-button>
+                <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact || scope.row.status === 'submit' || scope.row.status === 'checked'"  @click="dellistbomS(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -196,33 +196,33 @@ export default {
     validate () {
       // if (this.materielDataList === undefined || this.materielDataList.length === 0) {
       if (this.materielDataList === undefined || this.materielDataList.filter(item => item.delFlag === '0').length === 0) {
-        this.$notify.error({title: '错误', message: '物料领用未录入数据'})
+        this.$warning_SHINHO('物料领用未录入数据')
         return false
       }
       for (let item of this.materielDataList) {
         if (item.delFlag === '0') {
           if (item.materialCode == null || item.materialCode.trim() === '') {
-            this.$notify.error({title: '错误', message: '物料不能为空'})
+            this.$warning_SHINHO('物料不能为空')
             return false
           }
           if (item.deviceId == null || item.deviceId === '') {
-            this.$notify.error({title: '错误', message: '粮仓不能为空'})
+            this.$warning_SHINHO('粮仓不能为空')
             return false
           }
           if (item.batch == null || item.batch.trim() === '') {
-            this.$notify.error({title: '错误', message: '物料批次不能为空'})
+            this.$warning_SHINHO('物料批次不能为空')
             return false
           }
           if (item.batch.trim().length > 10) {
-            this.$notify.error({title: '错误', message: '物料批次长度不能超过10'})
+            this.$warning_SHINHO('物料批次长度不能超过10')
             return false
           }
           if (item.wheatWeight === '') {
-            this.$notify.error({title: '错误', message: '小麦领用数不能为空'})
+            this.$warning_SHINHO('小麦领用数不能为空')
             return false
           }
           if (item.wheatWeight <= 0) {
-            this.$notify.error({title: '错误', message: '小麦领用数必须大于0'})
+            this.$warning_SHINHO('小麦领用数必须大于0')
             return false
           }
         }
@@ -346,7 +346,13 @@ export default {
     },
     // 删除
     dellistbomS (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     rowDelFlag ({row, rowIndex}) {
@@ -452,7 +458,7 @@ export default {
           let abc
           abc = this.cang.currentQuantity + this.materielDataListArray.find((items) => items.batch === this.cang.batch).quantotal
           if ((this.cang.wheatWeight + total) > abc) {
-            this.$notify.error({title: '错误', message: '领用数大于该批次剩余量'})
+            this.$warning_SHINHO('领用数大于该批次剩余量')
             return false
           }
           if (currentRecord && currentRecord.length > 0) {

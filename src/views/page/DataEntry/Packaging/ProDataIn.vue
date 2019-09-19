@@ -260,7 +260,7 @@ export default {
           that.GetOrderList()
           that.$notify({title: '成功', message: '提交成功', type: 'success'})
         }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+          that.$error_SHINHO('网络请求失败，请刷新重试')
           that.isRedact = false
           that.visible = false
         })
@@ -337,12 +337,12 @@ export default {
             that.GetOrderList()
             that.$notify({title: '成功', message: '提交成功', type: 'success'})
           }).catch(() => {
-            that.$message.error('网络请求失败，请刷新重试')
+            that.$error_SHINHO('网络请求失败，请刷新重试')
             that.isRedact = false
             that.visible = false
           })
         }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+          that.$error_SHINHO('网络请求失败，请刷新重试')
           that.isRedact = false
           that.visible = false
         })
@@ -362,7 +362,7 @@ export default {
           that.$notify({title: '成功', message: '保存成功', type: 'success'})
           that.visible = false
         }).catch(() => {
-          that.$message.error('网络请求失败，请刷新重试')
+          that.$error_SHINHO('网络请求失败，请刷新重试')
           that.isRedact = false
           that.visible = false
         })

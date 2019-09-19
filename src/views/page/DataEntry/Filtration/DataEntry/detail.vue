@@ -284,7 +284,7 @@ export default {
             that.GetOrder()
             that.isRedact = false
           }).catch(() => {
-            that.$message.error('网络请求失败，请刷新重试')
+            that.$error_SHINHO('网络请求失败，请刷新重试')
           })
         })
       } else {
@@ -296,7 +296,7 @@ export default {
           that.GetOrder()
           that.isRedact = false
         }).catch(function (reason) {
-          that.$message.error('网络请求失败，请刷新重试' + reason)
+          that.$error_SHINHO('网络请求失败，请刷新重试' + reason)
         })
       }
     }

@@ -82,9 +82,9 @@
           <el-input v-model="scope.row.remark" :disabled="!isRedact" size="small" placeholder="手工录入"></el-input>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="60">
+      <el-table-column fixed="right" label="操作" width="70">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)"></el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -205,31 +205,31 @@ export default {
           if (item.expCode && item.expStartDate && item.expEndDate) {
             if ((item.expContinue * 1) < 0) {
               ty = false
-              this.$notify.error({title: '错误', message: '异常开始时间大于结束时间'})
+              this.$warning_SHINHO('异常开始时间大于结束时间')
               return false
             }
             if (item.expCode === '001' || item.expCode === '002') {
               if (!item.deviceId) {
                 ty = false
-                this.$notify.error({title: '错误', message: '异常记录设备必填'})
+                this.$warning_SHINHO('异常记录设备必填')
                 return false
               }
             } else if (item.expCode === '003' || item.expCode === '004') {
               if (!item.materialShort) {
                 ty = false
-                this.$notify.error({title: '错误', message: '异常记录物料分类必填'})
+                this.$warning_SHINHO('异常记录物料分类必填')
                 return false
               }
             } else if (item.expCode === '005') {
               if (!item.energy) {
                 ty = false
-                this.$notify.error({title: '错误', message: '异常记录能源必填'})
+                this.$warning_SHINHO('异常记录能源必填')
                 return false
               }
             }
           } else {
             ty = false
-            this.$notify.error({title: '错误', message: '异常记录必填项未填'})
+            this.$warning_SHINHO('异常记录必填项未填')
             return false
           }
         }
@@ -307,7 +307,13 @@ export default {
     },
     // 删除
     dellistbomS (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
@@ -323,7 +329,7 @@ export default {
       return function (end, start, row) {
         if (end && start && row.delFlag !== '1') {
           if (((toDate(end) - toDate(start)) / 60000) < 0) {
-            this.$notify.error({title: '错误', message: '异常结束时间早于异常开始时间，请重新录入'})
+            this.$warning_SHINHO('异常结束时间早于异常开始时间，请重新录入')
             return 'NaN'
           } else {
             return ((toDate(end) - toDate(start)) / 60000).toFixed(2) * 1

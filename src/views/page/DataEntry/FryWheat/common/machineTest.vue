@@ -28,9 +28,9 @@
         <el-input v-model="scope.row.remark" size="small"></el-input>
       </template>
     </el-table-column>
-    <el-table-column label="操作" width="55" fixed="right">
+    <el-table-column label="操作" width="70" fixed="right">
       <template slot-scope="scope">
-        <el-button type="text" size="small" @click="dellist(scope.row)">删除</el-button>
+        <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" @click="dellist(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -89,7 +89,13 @@ export default {
     },
     // 删除
     dellist (row) {
-      row.delFlag = '1'
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.delFlag = '1'
+      })
     },
     //  RowDelFlag
     RowDelFlag ({row, rowIndex}) {
@@ -105,7 +111,7 @@ export default {
       this.machineTest.forEach((item, index) => {
         if (!item.cokingRate || !item.expandRate || !item.piecesRate) {
           ty = false
-          this.$notify.error({title: '错误', message: '必填项未填'})
+          this.$warning_SHINHO('必填项未填')
           return false
         }
       })

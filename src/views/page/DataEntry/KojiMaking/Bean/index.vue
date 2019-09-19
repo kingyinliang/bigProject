@@ -499,10 +499,7 @@ export default class Index extends Vue {
         Vue.prototype.$http(`${WHT_API.CINDEXDELUSER}`, 'POST', {orderId: row.orderId}).then(({data}) => {
           if (data.code === 0) {
             this.datalist.splice(this.datalist.indexOf(row), 1)
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            })
+            Vue.prototype.$success_SHINHO('删除成功!')
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -597,10 +594,7 @@ export default class Index extends Vue {
       }
       Vue.prototype.$http(`${WHT_API.CINDEXUPDATEUSER}`, 'POST', this.datalist).then(({data}) => {
         if (data.code === 0) {
-          this.$message({
-            type: 'success',
-            message: '保存成功'
-          })
+          Vue.prototype.$success_SHINHO('操作成功')
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

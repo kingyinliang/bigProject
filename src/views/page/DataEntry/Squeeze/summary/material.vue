@@ -316,19 +316,25 @@ export default {
     },
     // 删除
     dellist (row) {
-      let s = 0
-      this.SumDate.forEach((item) => {
-        if (item.delFlag !== '1' && row.fumet.id === item.fumet.id) {
-          s++
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let s = 0
+        this.SumDate.forEach((item) => {
+          if (item.delFlag !== '1' && row.fumet.id === item.fumet.id) {
+            s++
+          }
+        })
+        if (s > 1) {
+          row.delFlag = '1'
+          this.SumDate.splice(this.SumDate.length, 0, {})
+          this.SumDate.splice(this.SumDate.length - 1, 1)
+        } else {
+          this.$notify.error({title: '错误', message: '此订单最后一条了，不能删除'})
         }
       })
-      if (s > 1) {
-        row.delFlag = '1'
-        this.SumDate.splice(this.SumDate.length, 0, {})
-        this.SumDate.splice(this.SumDate.length - 1, 1)
-      } else {
-        this.$notify.error({title: '错误', message: '此订单最后一条了，不能删除'})
-      }
     },
     RowDelFlag ({row, rowIndex}) {
       if (row.delFlag === '1') {
