@@ -78,7 +78,7 @@
   </el-card>
   <el-card class="searchCard newCard ferCard" style="margin-top:5px;"  v-show="fastS">
     <h3 style="color: black;margin-bottom: 8px">
-      <i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表
+      <i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>原汁罐列表
       <i class="gotop" v-if="isAuth('juice:pot:juiceStockItem')"><a href="#/DataEntry-Juice-Pot-summary">原汁库存情况>></a></i>
     </h3>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
@@ -976,7 +976,7 @@ export default {
       top: -60px;
       min-width: 150px;
       min-height: 52px;
-      padding: 10px 16px;
+      padding: 10px 10px;
       border-radius: 4px;
       font-size: 13px;
       line-height: 18px;
