@@ -222,7 +222,7 @@ export default {
     },
     savedOrSubmitForm (str) {
       if (!this.cookingNoId || this.cookingNoId === '') {
-        this.$notify.error({title: '错误', message: '请选择连续蒸煮号'})
+        this.$warning_SHINHO('请选择连续蒸煮号')
         return false
       }
       if (str === 'submit') {

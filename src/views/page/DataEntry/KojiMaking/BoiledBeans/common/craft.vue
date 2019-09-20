@@ -215,9 +215,9 @@
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
-          <el-table-column width="50" fixed="right">
+          <el-table-column width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" @click="delrow(scope.row)" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" icon="el-icon-delete" circle size="small"></el-button>
+              <el-button class="delBtn" type="text" @click="delrow(scope.row)" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" icon="el-icon-delete" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -279,9 +279,9 @@
               <el-input v-model="scope.row.remark" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="50">
+          <el-table-column width="70">
             <template slot-scope="scope">
-              <el-button type="danger" @click="delrow(scope.row)" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" icon="el-icon-delete" circle size="small"></el-button>
+              <el-button class="delBtn" type="text" @click="delrow(scope.row)" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" icon="el-icon-delete" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -341,60 +341,60 @@ export default {
       let ty = true
       if (this.craftfrom.preheatDate === '' || !this.craftfrom.preheatDate) {
         ty = false
-        this.$notify.error({title: '错误', message: '预热开始时间不能为空'})
+        this.$warning_SHINHO('预热开始时间不能为空')
         return false
       }
       if (this.craftfrom.unloadingStartDate === '' || !this.craftfrom.unloadingStartDate) {
         ty = false
-        this.$notify.error({title: '错误', message: '下料开始时间不能为空'})
+        this.$warning_SHINHO('下料开始时间不能为空')
         return false
       }
       if (!this.craftfrom.unloadingEndDate || this.craftfrom.unloadingEndDate === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '下料结束时间不能为空'})
+        this.$warning_SHINHO('下料结束时间不能为空')
         return false
       }
       if (!this.craftfrom.frequenceRunWater || !this.craftfrom.realRate || !this.craftfrom.weightRunWater || !this.craftfrom.speedRunWater || !this.craftfrom.oncePreheatFrequency || !this.craftfrom.secondPreheatFrequency || !this.craftfrom.secondPreheatTemp || !this.craftfrom.unloadingSpeed || this.craftfrom.frequenceRunWater === '' || this.craftfrom.realRate === '' || this.craftfrom.weightRunWater === '' || this.craftfrom.speedRunWater === '' || this.craftfrom.oncePreheatFrequency === '' || this.craftfrom.secondPreheatFrequency === '' || this.craftfrom.secondPreheatTemp === '' || this.craftfrom.unloadingSpeed === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '煮豆润水参数不能为空'})
+        this.$warning_SHINHO('煮豆润水参数不能为空')
         return false
       }
       if (this.lishuiList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '煮豆润水过程监控数据记录未填'})
+        this.$warning_SHINHO('煮豆润水过程监控数据记录未填')
         return false
       }
       for (let items of this.lishuiList) {
         if (items.delFlag === '0') {
           if (!items.guardDate || items.guardDate === '' || !items.runWaterTemp || items.runWaterTemp === '' || !items.preheatTemp || items.preheatTemp === '' || !items.unloadingWeight || items.unloadingWeight === '' || !items.runWaterSpeed || items.runWaterSpeed === '') {
             ty = false
-            this.$notify.error({title: '错误', message: '煮豆润水过程监控数据必填项不能为空'})
+            this.$warning_SHINHO('煮豆润水过程监控数据必填项不能为空')
             return false
           }
         }
       }
       if (this.craftfrom.cookingFrequency === '' || this.craftfrom.upFrequency === '' || this.craftfrom.downFrequency === '' || !this.craftfrom.cookingFrequency || !this.craftfrom.upFrequency || !this.craftfrom.downFrequency) {
         ty = false
-        this.$notify.error({title: '错误', message: '连续蒸煮参数不能为空'})
+        this.$warning_SHINHO('连续蒸煮参数不能为空')
         return false
       }
       for (let items of this.zhengzhuList) {
         if (items.delFlag === '0') {
           if (!items.guardTime || items.guardTime === '' || !items.cookingMachinePress || items.cookingMachinePress === '' || !items.separateDrum || items.separateDrum === '' || !items.cookingMachineTemp || items.cookingMachineTemp === '' || !items.downCooling || items.downCooling === '') {
             ty = false
-            this.$notify.error({title: '错误', message: '连续蒸煮监控数据必填项不能为空'})
+            this.$warning_SHINHO('连续蒸煮监控数据必填项不能为空')
             return false
           }
         }
       }
       if (this.zhengzhuList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '过程监控数据记录未填'})
+        this.$warning_SHINHO('过程监控数据记录未填')
         return false
       }
       if (this.hunheList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '混合入曲控制未填'})
+        this.$warning_SHINHO('混合入曲控制未填')
         return false
       }
       this.hunheList.forEach((item) => {
@@ -406,7 +406,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$notify.error({title: '错误', message: '混合入曲控制必填项未填'})
+        this.$warning_SHINHO('混合入曲控制必填项未填')
         return false
       }
       return ty

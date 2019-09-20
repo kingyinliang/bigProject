@@ -124,7 +124,7 @@ export default {
       let ty = true
       if ((this.pwTimeDate[0].prepareTime || this.pwTimeDate[0].prepareTime === 0) && (this.pwTimeDate[0].machineTime || this.pwTimeDate[0].machineTime === 0) && (this.pwTimeDate[0].humanTime || this.pwTimeDate[0].humanTime === 0)) {} else {
         ty = false
-        this.$notify.error({title: '错误', message: '工时录入必填项未填'})
+        this.$warning_SHINHO('工时录入必填项未填')
         return false
       }
       return ty

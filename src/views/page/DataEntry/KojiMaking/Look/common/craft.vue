@@ -225,7 +225,7 @@
           <el-table-column label="操作人" prop="changer" width="150px"></el-table-column>
           <el-table-column width=50 fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" circle size="small" @click="delrow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small" @click="delrow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -405,27 +405,27 @@ export default {
       let ty = true
       if (!this.tech.inCheck || this.tech.inCheck === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '入曲检查必填'})
+        this.$warning_SHINHO('入曲检查必填')
         return false
       }
       if (!this.tech.inCheckMan || this.tech.inCheckMan === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '检查人必填'})
+        this.$warning_SHINHO('检查人必填')
         return false
       }
       if (!this.tech.inStartTime || this.tech.inStartTime === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '入曲开始时间为必填'})
+        this.$warning_SHINHO('入曲开始时间为必填')
         return false
       }
       if (!this.tech.inEndTime || this.tech.inEndTime === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '入曲结束时间为必填'})
+        this.$warning_SHINHO('入曲结束时间为必填')
         return false
       }
       if (this.lookList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '看曲记录未填'})
+        this.$warning_SHINHO('看曲记录未填')
         return false
       }
       for (let items of this.lookList) {
@@ -433,25 +433,25 @@ export default {
           if (items.guardTime === '' || items.windTemp === '' || items.productTemp === '' || items.windSpeed === '' || items.windInFlag === '' || items.forceOutFlag === '' || items.jiashiFlag === '' || items.jiareFlag === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '' || items.thermometerOut === '' || items.thermometerInner === '' || items.productTempOutsideUp === '' || items.productTempOutsideMid === '' || items.productTempOutsideDown === '') {
             // if (!items.guardTime || items.guardTime === '' || !items.guardTime || items.guardTime === '' || !items.windTemp || items.windTemp === '' || !items.productTemp || items.productTemp === '' || !items.windSpeed || items.windSpeed === '' || !items.windInFlag || items.windInFlag === '' || !items.forceOutFlag || items.forceOutFlag === '' || !items.jiashiFlag || items.jiashiFlag === '' || !items.jiareFlag || items.jiareFlag === '' || !items.productTempUp || items.productTempUp === '' || !items.productTempMid || items.productTempMid === '' || !items.productTempDown || items.productTempDown === '' || !items.thermometerOut || items.thermometerOut === '' || !items.thermometerInner || items.thermometerInner === '') {
             ty = false
-            this.$notify.error({title: '错误', message: '看曲记录必填项未填'})
+            this.$warning_SHINHO('看曲记录必填项未填')
             return false
           }
         }
       }
       if (!this.tech.overStartWeight || !this.tech.overEndWeight || !this.tech.outStartWeight || !this.tech.outEndWeight || this.tech.overStartWeight === '' || this.tech.overEndWeight === '' || this.tech.outStartWeight === '' || this.tech.outEndWeight === '') {
         ty = false
-        this.$notify.error({title: '错误', message: '加水量记录全必填'})
+        this.$warning_SHINHO('加水量记录全必填')
         return false
       }
       if (this.tech.overWeight < 0 || this.tech.outWeight < 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '加水量不能为负数'})
+        this.$warning_SHINHO('加水量不能为负数')
         return false
       }
       this.assessList.map((item) => {
         if (item.codeU === undefined || item.codeS === undefined || item.codeA === undefined) {
           ty = false
-          this.$notify.error({title: '错误', message: '感官评价记录必须全选'})
+          this.$warning_SHINHO('感官评价记录必须全选')
           return false
         }
       })

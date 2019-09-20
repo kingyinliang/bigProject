@@ -59,9 +59,9 @@
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140px"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160px"></el-table-column>
-          <el-table-column label="操作" width="50" fixed="right">
+          <el-table-column label="操作" width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delrow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" @click="delrow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -127,7 +127,7 @@
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delwheatRow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" @click="delwheatRow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -194,7 +194,7 @@
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" circle size="small" @click="delsoyRow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" @click="delsoyRow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -644,7 +644,7 @@ export default {
       let ty = true
       if (this.materialList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请填写种曲'})
+        this.$warning_SHINHO('请填写种曲')
         return false
       }
       this.materialList.forEach((item) => {
@@ -656,7 +656,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$notify.error({title: '错误', message: '种曲必填项未填'})
+        this.$warning_SHINHO('种曲必填项未填')
         return false
       }
       this.materialList.forEach((item) => {
@@ -668,7 +668,7 @@ export default {
         }
       })
       if (!ty) {
-        this.$notify.error({title: '错误', message: '种曲批次长度应为10位'})
+        this.$warning_SHINHO('种曲批次长度应为10位')
         return false
       }
       // if (!this.wheatliang || this.wheatliang === 0 || this.wheatliang.trim() === '') {
@@ -677,7 +677,7 @@ export default {
       // }
       if (this.wheatList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请填写小麦粉数据'})
+        this.$warning_SHINHO('请填写小麦粉数据')
         return false
       }
       // if (!this.soyliang || this.soyliang === 0 || this.soyliang.trim() === '') {
@@ -686,7 +686,7 @@ export default {
       // }
       if (this.soyList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请填写豆粕数据'})
+        this.$warning_SHINHO('请填写豆粕数据')
         return false
       }
       return ty
@@ -848,7 +848,7 @@ export default {
         }
         this.dialogFormVisibleMai = true
       } else {
-        this.$notify.error({title: '错误', message: '请结束后开始'})
+        this.$warning_SHINHO('请结束后开始')
       }
     },
     endwheat (row) {
@@ -894,7 +894,7 @@ export default {
         }
         this.dialogFormVisibleMai2 = true
       } else {
-        this.$notify.error({title: '错误', message: '请先领用'})
+        this.$warning_SHINHO('请先领用')
       }
     },
     // 小麦领用修改
@@ -983,7 +983,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.rusoylnum <= 0) {
-            this.$notify.error({title: '错误', message: '领用数必须大于0'})
+            this.$warning_SHINHO('领用数必须大于0')
           } else {
             let soyUsedTotal = 0
             var obj = {}
@@ -1005,7 +1005,7 @@ export default {
                 }
               })
               if (soyUsedTotal + (this.rusoy.endWeight - this.rusoy.startWeight) > this.PulpCangBatchList.find(item => item.batch === this.rusoy.batch).currentQuantity) {
-                this.$notify.error({title: '错误', message: '领用数不能大于剩余量'})
+                this.$warning_SHINHO('领用数不能大于剩余量')
                 return false
               }
             }
@@ -1090,7 +1090,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.chusoylnum <= 0) {
-            this.$notify.error({title: '错误', message: '领用数必须大于0'})
+            this.$warning_SHINHO('领用数必须大于0')
           } else {
             this.dialogFormVisibleDouChu = false
             let currentRecord = []
