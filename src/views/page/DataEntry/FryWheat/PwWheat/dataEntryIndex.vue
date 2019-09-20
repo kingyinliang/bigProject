@@ -1,7 +1,7 @@
 <template>
   <el-col>
-    <div class="main">
-      <el-card class="searchCard newCard" style="margin: 0">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate' ></form-header>
@@ -22,7 +22,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right" class="buttonCss">
+        <el-row style="text-align:right; position:absolute; right:8px; top:90px; z-index:1000;" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
             <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:whtPwMaterial:update')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -37,7 +37,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

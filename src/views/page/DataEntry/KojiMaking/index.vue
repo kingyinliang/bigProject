@@ -1,11 +1,11 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
-        <el-card class="newCard">
-          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
+      <div class="header_main">
+        <el-card>
+          <el-row type="flex">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
                 <el-form-item label="生产工厂：">
                   <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
@@ -47,7 +47,7 @@
             </el-col>
           </el-row>
         </el-card>
-        <el-row v-if="params.productStatus === 'normal' && searched" style="margin-top:20px;">
+        <el-row v-if="params.productStatus === 'normal' && searched" style="margin-top:5px;">
           <el-col>
             <el-row :gutter="32" v-for="(item, index) in orderList" :key="index" v-if="index%3===0">
               <el-col :span="8" v-if="index < orderList.length">
@@ -155,7 +155,7 @@
             </el-row>
           </el-col>
         </el-row>
-        <el-row v-show="params.productStatus === 'abnormal' && searched" style="margin-top:20px;">
+        <el-row v-show="params.productStatus === 'abnormal' && searched" style="margin-top:5px;">
           <div style="min-height:340px">
           <el-table border  header-row-class-name="tableHead" :data="datalist">
             <!-- <el-table-column label="序号" width="50" prop="id" type="index"></el-table-column> -->

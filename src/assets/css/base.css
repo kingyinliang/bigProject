@@ -94,22 +94,6 @@ td{
 .el-table td, .el-table th { padding: 6px 0 !important; }
 .el-tag--small { height: 22px !important; line-height: 20px !important; }
 
-/* 按钮样式  add 20190702  start */
-.searchCards .el-button--primary,.el-button--primary:focus{
-  color: #000000;
-  background-color: #FFFFFF;
-  border-color: #D9D9D9;
-}
-.searchCards .el-button--primary:hover{
-  background-color: #1890FF;
-  color: #FFFFFF
-}
-.searchCards .el-button--primary:first-child{
-  background-color: #1890FF;
-  color: #FFFFFF;
-  border-color: #1890FF;
-}
-/* 按钮样式  add 20190702  end  */
 .secondcard{
   margin-top:5px
 }

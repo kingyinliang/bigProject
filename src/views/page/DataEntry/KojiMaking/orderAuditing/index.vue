@@ -1,10 +1,10 @@
 <template>
   <el-col>
-    <div class="main">
-      <el-card class="searchCard newCard" style="margin:0">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col :span="21">
-            <el-form :inline="true" size="small" label-width="85px">
+            <el-form :inline="true" size="small" label-width="70px">
               <el-form-item label="生产车间：">
                 <p class="input_bommom">{{formHeader.workShopName}}</p>
               </el-form-item>
@@ -43,7 +43,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right" class="buttonCss">
+        <el-row style="text-align:right" class="button_three_goup">
           <template style="float:right;margin-left:10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-orderManage-index'})">返回</el-button>
             <el-button type="primary" size="small" @click="submitForm" v-if="formHeader.orderStatus !== 'submit' && formHeader.orderStatus !== 'checked' && isAuth('sys:midTimeSheet:udpate')">提交</el-button>
@@ -54,7 +54,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top:0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color:white;margin-bottom:8px;position:relative;border-radius:5px">
           <i class="el-icon-caret-bottom"></i>

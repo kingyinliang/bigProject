@@ -1,31 +1,31 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
-        <el-card class="newCard">
-          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
+      <div class="header_main">
+        <el-card>
+          <el-row type="flex">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
-                <el-form-item label="工厂：">
-                  <el-select size="small" v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
+                <el-form-item label="生产工厂：">
+                  <el-select size="small" v-model="params.factoryId" class="selectwpx" style="width:150px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="车间：">
-                  <el-select size="small" v-model="params.workshopId" class="selectwpx" style="width:140px" @change="changeOptions('workshop')">
+                <el-form-item label="生产车间：">
+                  <el-select size="small" v-model="params.workshopId" class="selectwpx" style="width:150px" @change="changeOptions('workshop')">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="订单日期：" label-width="70px" class="selectwpx">
-                  <el-date-picker size="small" type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+                <el-form-item label="订单日期：" class="selectwpx">
+                  <el-date-picker size="small" type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:150px"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="订单号：" label-width="60px" >
-                  <el-input size="small" type="text" v-model.trim="params.orderNo" placeholder='请输入' style="width:140px"/>
+                <el-form-item label="订单号：" >
+                  <el-input size="small" type="text" v-model.trim="params.orderNo" placeholder='请输入' style="width:150px"/>
                 </el-form-item>
-                <el-form-item label="订单状态：" label-width="70px">
-                  <el-select size="small" v-model="params.orderStatus" class="selectwpx" style="width:120px">
+                <el-form-item label="订单状态：">
+                  <el-select size="small" v-model="params.orderStatus" class="selectwpx" style="width:150px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option label="已同步" value="已同步"></el-option>
                     <el-option label="未录入" value="已拆分"></el-option>
@@ -39,13 +39,13 @@
               </el-form>
             </el-col>
             <el-col style="width:80px">
-              <el-row class="rowButton">
+              <el-row class="rowButton button_two_goup">
                 <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isAuth('sys:order:orderlist')">查询</el-button>
               </el-row>
             </el-col>
           </el-row>
         </el-card>
-        <el-row :gutter="12" v-if="searched" style="margin-top:20px;">
+        <el-row :gutter="12" v-if="searched" style="margin-top:5px;">
           <el-col :span="12">
             <el-card>
               <el-row style="margin-bottom:5px;" >

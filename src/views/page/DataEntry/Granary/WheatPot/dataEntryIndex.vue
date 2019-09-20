@@ -1,8 +1,8 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
-        <el-card class="searchCard newCard" style="margin: 0">
+      <div class="header_main">
+        <el-card>
           <el-row type="flex" class="header">
             <el-col class="header-pot">
               <div class='header-pot__label'>小麦仓罐号：{{formData.holderName ? formData.holderName : ''}}</div>
@@ -36,7 +36,7 @@
           </el-row>
         </el-card>
       </div>
-      <div class="main" style="padding-top: 0px">
+      <div class="main">
         <div class="tableCard">
           <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
             <i class="el-icon-caret-bottom"></i>

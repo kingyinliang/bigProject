@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
-    <el-card class="newCard searchCard">
+  <div class="header_main">
+    <el-card class="searchCard">
       <el-row>
         <el-col :span="21">
-          <el-form :inline="true" size="small" label-width="85px">
+          <el-form :inline="true" size="small" label-width="70px">
             <el-form-item label="生产车间：">
               <p class="input_bommom">&nbsp;{{formHeader.workShopName ? formHeader.workShopName : ''}}</p>
             </el-form-item>
@@ -13,7 +13,7 @@
             <el-form-item label="工序：">
               <p class="input_bommom">&nbsp;看曲</p>
             </el-form-item>
-            <el-form-item label="生产订单：">
+            <el-form-item label="生产订单：" label-width="85px">
               <p class="input_bommom">&nbsp;{{formHeader.orderNo ? formHeader.orderNo : ''}}</p>
             </el-form-item>
             <el-form-item label="生产品项：">
@@ -25,7 +25,7 @@
             <el-form-item label="入罐号：">
               <p class="input_bommom">&nbsp;{{formHeader.inPotNoName ? formHeader.inPotNoName : ''}}</p>
             </el-form-item>
-            <el-form-item label="连续蒸煮号：">
+            <el-form-item label="连续蒸煮号：" label-width="85px">
               <p class="input_bommom">&nbsp;{{formHeader.cookingNoName ? formHeader.cookingNoName : ''}}</p>
             </el-form-item>
             <el-form-item label="提交人员：">
@@ -45,7 +45,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row style="text-align:right">
+      <el-row style="text-align:right" class="button_three_goup">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('kjm:guard:tech:update')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -63,7 +63,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:15px">
+      <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs" id="DaatTtabs" style="margin-top:5px">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">
             <el-tooltip class="item" effect="dark"  :content="applyCraftState === 'noPass'? '不通过':applyCraftState === 'saved'? '已保存':applyCraftState === 'submit' ? '已提交' : applyCraftState === 'checked'? '通过':'未录入'" placement="top-start">
