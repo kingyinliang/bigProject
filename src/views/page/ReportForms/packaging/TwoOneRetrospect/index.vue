@@ -1,41 +1,41 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCards newCard">
       <el-row>
-        <el-col :span="20">
-          <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
-            <el-form-item label="工厂：" label-width="60px">
+        <el-col :span="24">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
+            <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" class="width150px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in factoryList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="车间：">
+            <el-form-item label="生产车间：">
               <el-select v-model="formHeader.workShop" class="width150px">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in workshopList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="产线：">
+            <el-form-item label="生产产线：">
               <el-select v-model="formHeader.productLine">
                 <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in productlineList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item><br>
-            <el-form-item label="订单：" label-width="60px">
+            <el-form-item label="订单：">
               <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
             </el-form-item>
-            <el-form-item label="品相：">
+            <el-form-item label="生产品相：">
               <el-input v-model="formHeader.materialCode" style="width:150px"></el-input>
             </el-form-item>
-            <el-form-item label="生产日期：" label-width="85px">
+            <el-form-item label="生产日期：">
               <el-date-picker type="date" v-model="formHeader.commitDateOne" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker> - <el-date-picker type="date" v-model="formHeader.commitDateTwo" value-format="yyyy-MM-dd" placeholder="请选择日期" style="width:150px"></el-date-picker>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" @click="GetList(true)" v-if="isAuth('report:formh:pkgOneAndTwoList')" size="small">查询</el-button>
+              <el-button type="primary" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportPkgOneAndTwoList')" size="small">导出</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="4" style="text-align:right; margin-top:50px;">
-          <el-button type="primary" @click="GetList(true)" v-if="isAuth('report:formh:pkgOneAndTwoList')" size="small">查询</el-button>
-          <el-button type="primary" @click="ExportExcel(true)" v-if="isAuth('report:formh:exportPkgOneAndTwoList')" size="small">导出</el-button>
         </el-col>
       </el-row>
     </el-card>

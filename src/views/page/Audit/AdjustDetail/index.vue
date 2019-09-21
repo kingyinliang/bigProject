@@ -1,14 +1,14 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCards newCard">
-      <el-form :model="formHeader" :inline="true" size="small" label-width="85px">
-        <el-form-item label="工厂：" label-width="60px">
+      <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
+        <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" class="width180px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in factoryList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间：">
+        <el-form-item label="生产车间：">
           <el-select v-model="formHeader.workShop" class="width180px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in workshopList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
@@ -26,7 +26,7 @@
             <el-option v-for="(item, index) in holderNoList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料：" label-width="60px">
+        <el-form-item label="物料：">
           <el-select v-model="formHeader.materialCode" filterable class="width180px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in materialList" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
@@ -41,16 +41,14 @@
             <el-option v-for="(item, index) in moveTypeList" :key="index" :value="item" :label="item"></el-option>
           </el-select>
         </el-form-item>
-      </el-form>
-      <el-row>
-        <el-col style="text-align:right">
+        <el-form-item class="floatr">
           <el-button type="primary" @click="GetList()" v-if="isAuth('ver:adjust:list')" size="small">查询</el-button>
           <el-button type="primary" @click="SubmitInfo()" v-if="isAuth('ver:adjust:adjust')" size="small">调整</el-button>
           <el-button type="primary" @click="ExportExcel(true)" v-if="isAuth('ver:adjust:exportList')" size="small">导出</el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+      </el-form>
     </el-card>
-    <el-tabs type="border-card" v-model="activeName" @tab-click="TabClick" class="NewDaatTtabs" style="margin-top:15px">
+    <el-tabs type="border-card" v-model="activeName" @tab-click="TabClick" class="NewDaatTtabs" style="margin-top:5px">
       <el-tab-pane name="1">
         <span slot="label" class="spanview">
           <el-button>待调整</el-button>

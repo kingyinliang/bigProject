@@ -1,11 +1,11 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
     <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
-      <div class="main">
+      <div class="header_main">
         <el-card class="searchCard switching">
           <el-row type="flex">
             <el-col>
-              <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" class="topforms">
+              <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
                 <el-form-item label="生产工厂：">
                   <el-select v-model="plantList.factory" placeholder="请选择" style="width: 160px">
                     <el-option label="请选择"  value=""></el-option>
@@ -45,7 +45,7 @@
                 <el-form-item label="生产日期：">
                   <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.productDate" style="width: 160px"></el-date-picker>
                 </el-form-item>
-                <el-form-item style="float: right">
+                <el-form-item class="floatr">
                   <el-button type="primary" size="small" @click="GetAuditList(true)" v-if="isAuth('verify:material:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="subAutio()" v-if="isAuth('verify:material:update')">审核通过</el-button>
                   <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
@@ -58,7 +58,7 @@
           </div>
         </el-card>
       </div>
-      <div class="main" style="padding-top: 0">
+      <div class="main">
         <el-card class="tableCard">
           <div class="toggleSearchTop">
               <i class="el-icon-caret-bottom"></i>

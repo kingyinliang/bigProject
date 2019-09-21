@@ -347,7 +347,8 @@ export default {
       this.GetList()
     },
     GnProp (row) {
-      if (row.holderStatus === '1') {
+      console.log(row)
+      if (row.holderStatus === '1' || row.holderStatus === '2') {
         this.formGn = {
           holderName: row.holderName,
           holderId: row.holderId,
@@ -357,6 +358,8 @@ export default {
           remark: ''
         }
         this.GnDialogTableVisible = true
+      } else {
+        this.$notify.error({title: '警告', message: '当前状态不能搅罐', type: 'warning'})
       }
     },
     GnSave (formName) {
@@ -409,7 +412,8 @@ export default {
       })
     },
     JsbProp (row) {
-      if (row.holderStatus === '1') {
+      // 领用中 满灌 入库中
+      if (row.holderStatus === '1' || row.holderStatus === '2' || row.holderStatus === '3') {
         this.typeList = []
         this.GetInHolderType()
         this.formJsb = {
@@ -428,10 +432,12 @@ export default {
           remark: ''
         }
         this.JsbDialogTableVisible = true
+      } else {
+        this.$notify.error({title: '警告', message: '当前状态不能JBS出库', type: 'warning'})
       }
     },
     ZcProp (row) {
-      if (row.holderStatus === '1') {
+      if (row.holderStatus === '1' || row.holderStatus === '2' || row.holderStatus === '3') {
         this.typeList = []
         this.GetInHolderType()
         this.formZc = {
@@ -450,6 +456,8 @@ export default {
           remark: ''
         }
         this.ZcDialogTableVisible = true
+      } else {
+        this.$notify.error({title: '警告', message: '当前状态不能转储', type: 'warning'})
       }
     },
     JsbSave (formName) {

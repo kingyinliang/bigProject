@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform marbottom">
+  <div class="header_main">
+    <el-card class="searchCard" style="margin-bottom: 5px">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform multi_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 170px">
             <el-option label="请选择"  value=""></el-option>
@@ -47,10 +47,10 @@
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in Status" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <div style="float: right">
+        <el-form-item class="floatr">
           <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('report:formh:getAllStatusList')">查询</el-button>
           <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formh:getAllStatusList')">导出</el-button>
-        </div>
+        </el-form-item>
         </el-form>
     </el-card>
     <el-card class="tableCard">

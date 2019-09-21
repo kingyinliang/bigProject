@@ -1,11 +1,11 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
+      <div class="header_main">
         <el-card class="newCard">
-          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
+          <el-row type="flex">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px">
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
                 <el-form-item label="生产工厂：">
                   <el-select v-model="params.factoryId" class="selectwpx" style="width:140px" @change="changeOptions('factory')">
                     <el-option label="请选择" value=""></el-option>
@@ -40,17 +40,15 @@
                     <el-radio v-model="params.radio" label="OPE">OPE</el-radio>
                   </template>
                 </el-form-item>
+                <el-form-item class="floatr">
+                  <el-button type="primary" size="small" @click="getCompleteData()" v-if='isQueryAuth()'>查询</el-button>
+                  <el-button type="primary" size="small" @click="exportExcel()" v-if='isExcelAuth()'>导出</el-button>
+                </el-form-item >
               </el-form>
-            </el-col>
-            <el-col style="width:340px">
-              <el-row class="rowButton">
-                <el-button type="primary" size="small" @click="exportExcel()" style="float:right" v-if='isExcelAuth()'>导出</el-button>
-                <el-button type="primary" size="small" @click="getCompleteData()" style="float:right" v-if='isQueryAuth()'>查询</el-button>
-              </el-row>
             </el-col>
           </el-row>
         </el-card>
-        <el-row v-show="searched" style="margin-top:20px;">
+        <el-row v-show="searched" style="margin-top:5px;">
           <div style="min-height:320px">
             <el-table border  header-row-class-name="tableHead" :data="dataList" v-show="params.radio === 'OEE'">
               <el-table-column fixed label="工厂"  width="130" :show-overflow-tooltip="true">

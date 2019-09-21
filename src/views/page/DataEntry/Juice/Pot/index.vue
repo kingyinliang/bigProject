@@ -102,7 +102,6 @@
                   <p>{{item.TYPE}}</p>
                   <p>{{item.days}}天</p>
                   <p>{{item.AMOUNT}}方</p>
-                  <p>{{item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}}</p>
                 </div>
               </div>
             </div>

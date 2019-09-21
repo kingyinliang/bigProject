@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 5px 10px">
+  <div class="header_main">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform marbottom">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform multi_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
@@ -35,7 +35,7 @@
             <el-option :label="item.MATERIAL_NAME" v-for="(item, index) in MaterialList" :key="index" :value="item.MATERIAL_CODE"></el-option>
           </el-select>
         </el-form-item>
-        <div style="float: right">
+        <div class="floatr">
           <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:order:list')">查询</el-button>
           <el-button type="primary" size="small" @click="TurnSave(true)" v-if="isAuth('ste:order:list')">转储</el-button>
           <el-button type="primary" size="small" @click="Rework(true)" v-if="isAuth('ste:order:list')">返工</el-button>
@@ -43,67 +43,65 @@
         </div>
       </el-form>
     </el-card>
-    <el-card class="searchCard  newCard" style="min-height: 420px">
-      <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">转储</span>
-          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
-            <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
-            <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
-            <el-table-column prop="receiveType" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="receiveBatch" label="批次" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="receiveAmount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
-            <el-table-column prop="inType" label="打入类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="inBatch" label="打入批次" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
-          </el-table>
-          <el-row>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="formHeader.currPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="formHeader.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="formHeader.totalCount">
-            </el-pagination>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane name="2">
-          <span slot="label" class="spanview">返工</span>
-          <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange1" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
-            <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
-            <el-table-column prop="moveType" label="移动类型" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
-            <el-table-column prop="type" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="batch" label="批次" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="amount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
-            <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
-          </el-table>
-          <el-row>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="formHeader.currPage"
-              :page-sizes="[10, 15, 20]"
-              :page-size="formHeader.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="formHeader.totalCount">
-            </el-pagination>
-          </el-row>
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+    <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
+      <el-tab-pane name="1">
+        <span slot="label" class="spanview">转储</span>
+        <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+          <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
+          <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+          <el-table-column prop="receiveType" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="receiveBatch" label="批次" width="150" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="receiveAmount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
+          <el-table-column prop="inType" label="打入类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="inBatch" label="打入批次" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
+        </el-table>
+        <el-row>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="formHeader.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="formHeader.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="formHeader.totalCount">
+          </el-pagination>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane name="2">
+        <span slot="label" class="spanview">返工</span>
+        <el-table ref="table1" header-row-class-name="tableHead" :data="DataList.slice((formHeader.currPage-1)*formHeader.pageSize,formHeader.currPage*formHeader.pageSize)" @selection-change="handleSelectionChange1" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+          <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
+          <el-table-column prop="moveType" label="移动类型" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="holderName" label="领用罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+          <el-table-column prop="type" label="类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="batch" label="批次" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="amount" label="领用量" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="unit" label="单位" width="50" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="inHolderType" label="打入罐类别" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="inHolderName" label="打入罐号" width="100" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="verifyMan" label="物料" width="150" :show-overflow-tooltip="true"><template slot-scope="scope" width="120">{{scope.row.inMaterialCode + ' ' + scope.row.inMaterialName}}</template></el-table-column>
+          <el-table-column prop="creator" label="操作人" width="100" :show-overflow-tooltip="true"></el-table-column>
+        </el-table>
+        <el-row>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="formHeader.currPage"
+            :page-sizes="[10, 15, 20]"
+            :page-size="formHeader.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="formHeader.totalCount">
+          </el-pagination>
+        </el-row>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
