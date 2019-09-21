@@ -1,9 +1,9 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
+  <div class="header_main">
+    <el-card class="searchCard" style="margin-bottom: 5px">
       <el-row type="flex">
         <el-col>
-          <el-form :inline="true" size="small" :model="formHeader" label-width="75px" class="topform">
+          <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
                 <el-option label="请选择"  value=""></el-option>
@@ -34,22 +34,22 @@
                 <el-option :label="item.materialCode+' '+ item.materialName" v-for="(item, index) in Matertail" :key="index" :value="item.materialCode"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item class="floatr">
+              <template>
+                <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:supMaterialQQA:orderList')">查询</el-button>
+                <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
+              </template>
+              <template v-if="isRedact ">
+                <el-button type="primary" size="small" @click="SavedOr('已保存')" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">保存</el-button>
+                <el-button type="primary" size="small" @click="pushData('已推送')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">推送</el-button>
+                <el-button type="primary" size="small" @click="pushData('已确认')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">确认</el-button>
+              </template>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col style="width: 250px">
-          <el-row>
-            <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:supMaterialQQA:orderList')">查询</el-button>
-            <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
-          </el-row>
-          <el-row style="margin-top: 15px" v-if="isRedact ">
-            <el-button type="primary" size="small" @click="SavedOr('已保存')" v-if="isAuth('ste:supMaterialQQA:mySaveOrUpdate')">保存</el-button>
-            <el-button type="primary" size="small" @click="pushData('已推送')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">推送</el-button>
-            <el-button type="primary" size="small" @click="pushData('已确认')" v-if="isAuth('ste:supMaterialQQA:pushInfo')">确认</el-button>
-          </el-row>
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard">
+    <el-card class="searchCard newCard">
       <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
         <h3 style="line-height: 32px">订单列表</h3>
       </div>

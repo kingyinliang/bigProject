@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card>
       <el-row class="searchCard">
-        <el-col :span="20">
-          <el-form :model="plantList" :inline="true" size="small" label-width="85px">
+        <el-col>
+          <el-form :model="plantList" :inline="true" size="small" label-width="70px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="plantList.factory">
                 <el-option label="请选择"  value=""></el-option>
@@ -34,7 +34,7 @@
             <!--<el-form-item label="制曲日期：">-->
               <!--<el-date-picker v-model="plantList.inKjmDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:199px"></el-date-picker>-->
             <!--</el-form-item>-->
-            <el-form-item label="制曲日期：" style="width: 400px">
+            <el-form-item label="制曲日期：" class="dateinput">
               <el-row style="width: 300px">
                 <el-col :span="12">
                   <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 130px"></el-date-picker>
@@ -45,15 +45,15 @@
                 </el-col>
               </el-row>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" size="small" @click="GetList" v-if="isAuth('report:kjmORwht:guardTechList')">查询</el-button>
+              <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:kjmORwht:expectGuardTech')">导出</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="4" style="float:right; width:128px">
-          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('report:kjmORwht:guardTechList')">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:kjmORwht:expectGuardTech')">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
-    <el-card style="margin-top:10px">
+    <el-card style="margin-top:5px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
         <el-table-column label="工厂" width="120" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="车间" prop="workShopName" width="100"></el-table-column>

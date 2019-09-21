@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="75px" class="topform marbottom">
+  <div class="header_main">
+    <el-card class="searchCard">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform marbottom sole_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
@@ -20,10 +20,12 @@
             <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('filter:holder:list')">查询</el-button>
+        <el-form-item class="floatr">
+          <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('filter:holder:list')">查询</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
+    <el-card class="searchCard newCard ferCard" style="margin-top:5px" v-show="fastS">
       <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>成品罐区</h3>
       <el-row class="dataList" :gutter="10" style="min-height: 150px">
         <el-col :span="4" v-for="(item, index) in dataList" :key="index">

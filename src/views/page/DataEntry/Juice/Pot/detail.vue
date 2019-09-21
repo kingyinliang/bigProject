@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 10px">
-    <el-card class="searchCard  newCard">
+  <div class="header_main">
+    <el-card class="searchCard">
       <el-row type="flex">
         <el-col class="header_pot" style="width: 160px">
           <p class='header_pot_label'>罐号：{{formData.HOLDER_NAME ? formData.HOLDER_NAME : ''}}</p>
@@ -45,7 +45,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard" style="margin-top: 10px">
+    <el-card class="searchCard newCard" style="margin-top:5px">
       <el-tabs v-model="activeName"  class="NewDaatTtabs" type="border-card">
         <el-tab-pane name="1">
           <span slot="label" class="spanview">当前订单信息</span>

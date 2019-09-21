@@ -1,10 +1,10 @@
 <template>
 <div>
-  <div class="main">
-    <el-card class="searchCard  newCard">
+  <div class="header_main">
+    <el-card class="searchCard">
       <el-row type="flex">
-        <el-col :span="21">
-          <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
+        <el-col :span="18">
+          <el-form :inline="true" :model="formHeader" size="small" label-width="70px" class="topform multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
                 <el-option label="请选择"  value=""></el-option>
@@ -28,29 +28,30 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col style="width:180px;font-size: 14px;line-height: 32px">
-          <div style="float: right;">
+        <el-col :span="6" style="font-size: 14px;line-height: 32px">
+          <div style="text-align: left; overflow: hidden; float: right;">
             <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
             <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
           </div>
+          <div style="clear: both;"></div>
+          <div style="width: 100%; text-align: right; margin-top: 10px;">
+            <template style="float:right; margin-left: 10px;">
+              <el-button type="primary" size="small" @click="GetList" v-if="isAuth('mid:prsOrder:orderList')">查询</el-button>
+              <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('mid:prsOrder:updateOrder')">{{isRedact?'取消':'编辑'}}</el-button>
+            </template>
+            <template v-if="isRedact" style="float:right; margin-left: 10px;">
+              <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('mid:prsOrder:updateOrder')">保存</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('mid:prsOrder:updateOrder')">提交</el-button>
+            </template>
+          </div>
         </el-col>
-      </el-row>
-      <el-row style="text-align:right" class="buttonCss">
-        <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('mid:prsOrder:orderList')">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isSerch && orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('mid:prsOrder:updateOrder')">{{isRedact?'取消':'编辑'}}</el-button>
-        </template>
-        <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('mid:prsOrder:updateOrder')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('mid:prsOrder:updateOrder')">提交</el-button>
-        </template>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
   </div>
-  <div class="main" style="padding-top: 0px" v-show="isSerch">
+  <div class="main" v-show="isSerch">
     <div class="tableCard">
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>

@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
+  <div class="header_main">
+    <el-card class="searchCard" style="margin-bottom: 5px">
       <el-row type="flex">
         <el-col>
           <form-head :formHeader="formHeader"></form-head>
@@ -19,56 +19,54 @@
         </template>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard">
-      <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">
-            杀菌入库
-          </span>
-          <div class="inStorage_card">
-            <div style="width: 158px" class="inStorage_card_left">
-              <p>杀菌罐</p>
-              <div style="text-align: center;padding: 0 20px"><img src="@/assets/img/ferPot.png" alt="" style="width: 92px;height: 190px"></div>
-              <el-button type="text" class="inStorage_card_left_btn" size="small" :disabled="!(isRedact && (orderStatus !== 'submit' && orderStatus !== 'checked'))" @click="showDialog()">入罐</el-button>
-            </div>
-            <div style="flex: 1">
-              <el-table header-row-class-name="tableHead" :data="InStorageDate" border tooltip-effect="dark" :row-class-name="RowDelFlag" @row-dblclick="updateRow" >
-                <el-table-column type="index" width="50" label="序号" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="日期" width="80" prop="date"  :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="半成品罐号" width="95" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="半成品批次" width="95" prop="batch" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="入罐数量" width="80" prop="inAmount" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="满罐数量" width="80" prop="fullAmount" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="罐内库存" width="80" prop="inTankAmount" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="满罐" width="60" prop="isFull" :show-overflow-tooltip="true"> <template slot-scope="scope">{{scope.row.isFull === '1'? '是' : '否'}}</template></el-table-column>
-                <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="操作时间"  prop="changed" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
-                  <template slot-scope="scope">
-                    <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
+    <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
+      <el-tab-pane name="1">
+        <span slot="label" class="spanview">
+          杀菌入库
+        </span>
+        <div class="inStorage_card">
+          <div style="width: 158px" class="inStorage_card_left">
+            <p>杀菌罐</p>
+            <div style="text-align: center;padding: 0 20px"><img src="@/assets/img/ferPot.png" alt="" style="width: 92px;height: 190px"></div>
+            <el-button type="text" class="inStorage_card_left_btn" size="small" :disabled="!(isRedact && (orderStatus !== 'submit' && orderStatus !== 'checked'))" @click="showDialog()">入罐</el-button>
           </div>
-          <auditLog :tableData="DataAudit"></auditLog>
-        </el-tab-pane>
-        <el-tab-pane name="2">
-          <span slot="label" class="spanview">
-            异常记录
-          </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
-        </el-tab-pane>
-        <el-tab-pane name="3">
-          <span slot="label" class="spanview">
-            文本记录
-          </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+          <div style="flex: 1">
+            <el-table header-row-class-name="tableHead" :data="InStorageDate" border tooltip-effect="dark" :row-class-name="RowDelFlag" @row-dblclick="updateRow" >
+              <el-table-column type="index" width="50" label="序号" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="日期" width="80" prop="date"  :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="半成品罐号" width="95" prop="holderName" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="半成品批次" width="95" prop="batch" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="入罐数量" width="80" prop="inAmount" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="满罐数量" width="80" prop="fullAmount" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="罐内库存" width="80" prop="inTankAmount" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="满罐" width="60" prop="isFull" :show-overflow-tooltip="true"> <template slot-scope="scope">{{scope.row.isFull === '1'? '是' : '否'}}</template></el-table-column>
+              <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="操作时间"  prop="changed" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="操作人" width="80" prop="changer" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column label="操作" width="50" prop="changer" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+        <auditLog :tableData="DataAudit"></auditLog>
+      </el-tab-pane>
+      <el-tab-pane name="2">
+        <span slot="label" class="spanview">
+          异常记录
+        </span>
+        <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+      </el-tab-pane>
+      <el-tab-pane name="3">
+        <span slot="label" class="spanview">
+          文本记录
+        </span>
+        <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+      </el-tab-pane>
+    </el-tabs>
     <el-dialog width="400px" title="入罐" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" @submit.native.prevent label-width="110px"  size="small" style="width: 300px;margin: auto">
         <el-form-item label="半成品罐号：" prop="holderId">

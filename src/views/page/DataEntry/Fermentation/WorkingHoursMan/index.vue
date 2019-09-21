@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
-    <el-card class="searchCard newCard">
+  <div class="header_main">
+    <el-card class="searchCard">
       <el-row>
         <el-col>
-          <el-form :inline="true" :model="form" size="small" label-width="85px">
+          <el-form :inline="true" :model="form" size="small" label-width="80px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="form.factory" placeholder="请选择" class="width170px">
                 <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>

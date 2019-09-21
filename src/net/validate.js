@@ -265,7 +265,11 @@ export function Readyanimation ($) {
 // 数据处理
 export function orderList (data) {
   let result = []
+  let productDate = ''
   for (let i = 0; i < data.length; i++) {
+    if (i === 0) {
+      productDate = data[i].productDate
+    }
     let orderIdList = {}
     let orderNo = [data[i].orderNo]
     orderIdList[data[i].orderNo] = data[i].orderId
@@ -299,7 +303,8 @@ export function orderList (data) {
       planOutput: '',
       outputUnit: '',
       properties: '',
-      orderIdList: orderIdList
+      orderIdList: orderIdList,
+      productDate: productDate
     })
   }
   return result

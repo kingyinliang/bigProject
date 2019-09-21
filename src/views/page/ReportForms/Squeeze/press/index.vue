@@ -1,10 +1,10 @@
 <template>
   <el-row v-loading.fullscreen.lock="lodingS">
-    <div class="main">
+    <div class="header_main">
       <el-card class="searchCard" element-loading-text="加载中">
         <el-row>
-          <el-col :span="21">
-            <el-form :model="plantList" :inline="true" size="small" label-width="85px">
+          <el-col>
+            <el-form :model="plantList" :inline="true" size="small" label-width="70px" class="multi_row">
               <el-form-item label="生产工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
@@ -26,11 +26,11 @@
               <el-form-item label="生产日期：">
                 <el-date-picker v-model="plantList.startTime" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:199px"></el-date-picker> - <el-date-picker v-model="plantList.endTime" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:199px"></el-date-picker>
               </el-form-item>
+              <el-form-item class="floatr">
+                <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formPress:pressList')">查询</el-button>
+                <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formPress:exportPress')">导出</el-button>
+              </el-form-item>
             </el-form>
-          </el-col>
-          <el-col :span="3" style="text-align:right;">
-            <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:formPress:pressList')">查询</el-button>
-            <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:formPress:exportPress')">导出</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -38,7 +38,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0">
+    <div class="main">
       <el-card class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>

@@ -1,7 +1,7 @@
 <template>
-<div style="padding: 5px 10px">
+<div class="header_main">
   <el-card class="searchCard  newCard ferCard">
-    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="marbottom">
+    <el-form :inline="true" :model="formHeader" size="small" label-width="70px" class="multi_row">
       <el-form-item label="生产工厂：">
         <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
@@ -95,7 +95,7 @@
             <img src="@/assets/img/F0.png" alt="" v-if="item.IS_F === '1'" style="position:absolute; left:10px; top:10px;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
-                <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.holderStatus !== '6'"></div>
+                <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.HOLDER_STATUS !== '6'"></div>
                 <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== '6'">
                   <p>{{item.BATCH}}</p>
                   <p v-if="item.IS_F === '2'">JBS</p>
@@ -113,7 +113,7 @@
             <el-col :span="4" class="dataList_item_btn_item"><p @click="AddProp(item)">添加</p></el-col>
             <el-col :span="4" class="dataList_item_btn_item"><p @click="BringOutProp(item)">调拨</p></el-col>
           </el-row>
-          <!-- 转储:沉淀中 领用中 可以。  添加:领用中可添加  判定:空罐，领用中，待清洗不能判定   调拨:除了空罐跟领用中 不能调拨 -->
+          <!-- 转储:沉淀中 领用中 可以。  添加:领用中可添加  判定:空罐，领用中，待清洗不能判定   调拨:空罐跟领用中 不能调拨 -->
         </el-card>
       </el-col>
     </el-row>
@@ -315,7 +315,7 @@ export default {
       }],
       pages: {
         currentPage: 1,
-        pageSize: 40,
+        pageSize: 42,
         total: 0
       },
       topBox: [
@@ -610,7 +610,7 @@ export default {
         return false
       }
       if (item.HOLDER_STATUS === '8' || item.HOLDER_STATUS === '9') {
-        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
+        this.$http(`${JUICE_API.JUICE_TRANSFER_LIST}`, 'POST', {holderId: item.HOLDER_ID}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.formTransfer = {
               holderId: item.HOLDER_ID,
@@ -659,9 +659,10 @@ export default {
           }
           this.$http(`${JUICE_API.JUICE_TRANSFER_SAVE}`, 'POST', this.formTransfer).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.$notify({title: '成功', message: '转储成功', type: 'success'})
               this.TransferDialogTableVisible = false
               this.$refs[formName].resetFields()
+              this.GetDataList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }
@@ -710,9 +711,10 @@ export default {
         if (valid) {
           this.$http(`${JUICE_API.JUICE_ADD_SAVE}`, 'POST', this.formAdd).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.$notify({title: '成功', message: '添加成功', type: 'success'})
               this.AddDialogTableVisible = false
               this.$refs[formName].resetFields()
+              this.GetDataList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }
@@ -731,7 +733,7 @@ export default {
         this.$notify({title: '警告', message: '该罐当前不允许判定', type: 'warning'})
         return false
       }
-      this.$http(`${JUICE_API.JUICE_JUICEINFO_LIST}`, 'POST', {holderId: item.HOLDER_ID}).then(({data}) => {
+      this.$http(`${JUICE_API.JUICE_JUICEINFO_LIST}`, 'POST', {holderId: item.HOLDER_ID}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           if (data.juiceJudgeList !== null) {
             this.judge = {
@@ -767,9 +769,10 @@ export default {
         if (valid) {
           this.$http(`${JUICE_API.JUICE_JUICEJUDGE_SAVE}`, 'POST', this.judge).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.$notify({title: '成功', message: '判定成功', type: 'success'})
               this.JudgeDialogTableVisible = false
               this.$refs[formName].resetFields()
+              this.GetDataList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }
@@ -799,6 +802,7 @@ export default {
       this.$http(`${JUICE_API.JUICE_JUICE_CLEAN}`, 'POST', this.dialogData).then(({data}) => {
         if (data.code === 0) {
           this.$notify({title: '成功', message: '清洗成功', type: 'success'})
+          this.GetDataList(true)
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -810,6 +814,8 @@ export default {
         return false
       }
       if (item.HOLDER_STATUS === '6' || item.HOLDER_STATUS === '9') {
+        this.$notify({title: '警告', message: '该罐当前不允许调拨', type: 'warning'})
+      } else {
         this.BringOutDialogTableVisible = true
         this.formBringOut = {
           holderName: item.HOLDER_NAME,
@@ -821,8 +827,6 @@ export default {
           amount: '',
           remark: ''
         }
-      } else {
-        this.$notify({title: '警告', message: '该罐当前不允许调拨', type: 'warning'})
       }
     },
     FormBringOutSave (formName) {
@@ -830,9 +834,10 @@ export default {
         if (valid) {
           this.$http(`${JUICE_API.JUICE_JUICE_BRINGOUT_SAVE}`, 'POST', this.formBringOut).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              this.$notify({title: '成功', message: '调拨成功', type: 'success'})
               this.BringOutDialogTableVisible = false
               this.$refs[formName].resetFields()
+              this.GetDataList(true)
             } else {
               this.$notify.error({title: '错误', message: data.msg})
             }

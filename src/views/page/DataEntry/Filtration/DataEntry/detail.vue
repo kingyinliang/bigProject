@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="searchCards searchCard newCard">
+    <div class="header_main">
+      <el-card class="searchCards searchCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="formHeader" :inline="true" size="small" label-width="85px" class="marbottom">
-              <el-form-item label="车间：">
+            <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="marbottom multi_row">
+              <el-form-item label="生产车间：">
                 <p class="input_bottom">{{formHeader.workShopName}}</p>
               </el-form-item>
               <el-form-item label="生产订单：">
@@ -31,15 +31,15 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <el-col style="max-width: 173px">
+          <el-col style="max-width:210px; height:30px;">
             <div style="padding-top: 0px;float: right;font-size: 14px" :style="{'color': orderStatus === 'noPass'? 'red' : '' }"><span style="width: 5px;height: 5px;float: left;background: #1890FF;border-radius: 50%;margin-top: 7px;margin-right: 3px" :style="{'background': orderStatus === 'noPass'? 'red' : '#1890FF' }"></span>订单状态：{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : '未录入' }}</div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right;position: absolute;bottom: 10px;right: 7px;">
-          <template style="float:right; margin-left: 10px;">
+        <el-row style="text-align:right; position:absolute; top:44px; right:7px;">
+          <template style="float:right; margin-left:10px;">
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' &&  isAuth('filter:instorage:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
           </template>
-          <template v-if="isRedact" style="float:right; margin-left: 10px;">
+          <template v-if="isRedact" style="float:right; margin-left:10px;">
             <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')"  v-if="isAuth('filter:instorage:mySaveOrUpdate')">保存</el-button>
             <el-button type="primary" size="small" @click="SubmitForm"  v-if="isAuth('filter:instorage:submit')">提交</el-button>
           </template>
@@ -49,7 +49,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

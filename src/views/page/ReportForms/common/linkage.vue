@@ -1,19 +1,19 @@
 <template>
 <el-col>
-  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" v-if="!lablewidth">
-    <el-form-item label="工厂：">
+  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" v-if="!lablewidth" class="multi_row">
+    <el-form-item label="生产工厂：">
       <el-select v-model="plantList.factory" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="车间：">
+    <el-form-item label="生产车间：">
       <el-select v-model="plantList.workshop" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="产线：">
+    <el-form-item label="生产产线：">
       <el-select v-model="plantList.productline" placeholder="产线">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
@@ -29,20 +29,20 @@
       <el-date-picker type="month" v-model="plantList.productDate" placeholder="选择月份" value-format="yyyy-MM" style="width: 199px"></el-date-picker>
     </el-form-item>
   </el-form>
-  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px" v-if="lablewidth">
-    <el-form-item label="工厂：">
+  <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" v-if="lablewidth" class="multi_row">
+    <el-form-item label="生产工厂：">
       <el-select v-model="plantList.factory" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="车间：">
+    <el-form-item label="生产车间：">
       <el-select v-model="plantList.workshop" placeholder="请选择">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="产线：">
+    <el-form-item label="生产产线：">
       <el-select v-model="plantList.productline" placeholder="产线">
         <el-option label="请选择"  value=""></el-option>
         <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>

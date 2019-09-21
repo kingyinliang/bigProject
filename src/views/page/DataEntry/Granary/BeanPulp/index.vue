@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div class="main" style="padding-bottom: 0">
-      <el-card class="newCard">
+    <div class="header_main">
+      <el-card>
         <el-row type="flex">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="50px">
-              <el-form-item label="工厂：" style="margin-bottom: 0px">
-                <el-select v-model="plantList.factory" class="selectwpx" style="width: 140px">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="sole_row">
+              <el-form-item label="生产工厂：">
+                <el-select v-model="plantList.factory" class="selectwpx">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factory" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" style="margin-bottom: 0px">
-                <el-select v-model="plantList.workshop" class="selectwpx" style="width: 140px">
+              <el-form-item label="生产车间：">
+                <el-select v-model="plantList.workshop" class="selectwpx">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshop" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
@@ -25,7 +25,7 @@
         </el-row>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 8px">
+    <div class="main">
       <el-card class="newCard" style="min-height: 436px">
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in DataList" :key="index">

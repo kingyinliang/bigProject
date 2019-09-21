@@ -1,10 +1,10 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <div class="main">
-      <el-card class="newCard" style="min-height: 480px">
+    <div class="header_main">
+      <el-card style="min-height: 480px">
         <el-row type="flex" style="border-bottom: 1px solid #E9E9E9;margin-bottom: 12px">
           <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
               <el-form-item label="生产工厂：">
                 <el-select v-model="plantList.factoryid" class="selectwpx" style="width: 140px">
                   <el-option label="请选择" value=""></el-option>
@@ -273,6 +273,13 @@ export default {
   },
   methods: {
     go (item) {
+      if (!item.productDate) {
+        if (!this.plantList.productDate) {
+          item.productDate = dateFormat(new Date(), 'yyyy-MM-dd')
+        } else {
+          item.productDate = this.plantList.productDate
+        }
+      }
       this.FWworkShop = this.workShop
       this.FWfactoryid = this.factoryid
       if (item.productLineName === '炒麦') {

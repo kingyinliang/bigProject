@@ -1,14 +1,14 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="newCard">
-      <el-form :model="formHeader" :inline="true" size="small">
-        <el-form-item label="工厂：">
+      <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="sole_row">
+        <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" class="width150px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in factoryList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间：">
+        <el-form-item label="生产车间：">
           <el-select v-model="formHeader.workShop" class="width150px">
             <el-option value=''>请选择</el-option>
             <el-option v-for="(item, index) in workshopList" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
@@ -20,10 +20,12 @@
         <el-form-item label="生产订单：">
           <el-input v-model.trim="formHeader.orderNo" style="width:150px"></el-input>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetList" v-if="isAuth('bottle:workshop:indexList')" class="floatr">查询</el-button>
+        <el-form-item class="floatr">
+          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('bottle:workshop:indexList')" class="floatr">查询</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
-    <el-row :gutter="20" style="margin-top:15px">
+    <el-row :gutter="20" style="margin-top:5px">
       <el-col :span="8" v-for="(item, index) in dataList" :key="index" style="margin-bottom:15px">
         <div class="sole">
           <div class="top">

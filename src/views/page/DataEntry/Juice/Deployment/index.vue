@@ -1,8 +1,8 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCard searchCards">
       <el-row>
-        <el-form :model="formHeader" :inline="true" size="small" label-width="82px">
+        <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
           <el-form-item label="生产工厂：">
             <el-select v-model="formHeader.factory" placeholder="请选择" class="width150px">
               <el-option value="">请选择</el-option>
@@ -21,23 +21,23 @@
           <el-form-item label="调配单号：">
             <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
           </el-form-item>
+          <el-form-item class="floatr" style="width:290px">
+            <template style="float:right;">
+              <el-button type="primary" size="small" v-if="isAuth('ste:allocate:allocateList')" @click="SearchList">查询</el-button>
+              <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allocate:allocateUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
+            </template>
+            <template v-if="isRedact" style="float:right;">
+              <el-button type="primary" size="small" @click="SavedForm()">保存</el-button>
+              <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
+            </template>
+          </el-form-item>
         </el-form>
-      </el-row>
-      <el-row style="text-align:right">
-        <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" v-if="isAuth('ste:allocate:allocateList')" @click="SearchList">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('ste:allocate:allocateUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
-        </template>
-        <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SavedForm()">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm()">提交</el-button>
-        </template>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
       </div>
     </el-card>
-    <div class="secondcard" style="padding-top: 0">
+    <div class="secondcard" style="padding-top:0">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="searchCard  newCard">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
             <form-head :formHeader="formHeader" :isRedact="isRedact" :CraftControlStatus="CraftControlStatus"></form-head>
@@ -13,7 +13,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right" class="buttonCss">
+        <el-row style="text-align:right" class="button_three_goup">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-KojiMaking-index'})">返回</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('sys:kjmOutMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -28,7 +28,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

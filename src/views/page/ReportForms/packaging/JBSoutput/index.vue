@@ -1,11 +1,11 @@
 <template>
 <el-row v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCard">
       <el-row type="flex">
         <el-col>
           <linkage :plantList="plantList" :lablewidth="true" :isPackaging="true"></linkage>
-          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="100px">
+          <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
             <el-form-item label="品项：">
               <el-select v-model="plantList.material" filterable placeholder="请选择">
                 <el-option label="请选择"  value=""></el-option>
@@ -17,7 +17,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="生产日期：" style="width: 400px" class="dateinput">
+            <el-form-item label="生产日期：" class="dateinput">
               <el-row>
                 <el-col :span="12">
                   <el-date-picker v-model="plantList.commitDateOne" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 135px"></el-date-picker>
@@ -28,11 +28,11 @@
                 </el-col>
               </el-row>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listJBS')">查询</el-button>
+              <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportJBS')">导出</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col style="width: 200px">
-          <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('report:form:listJBS')">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:form:exportJBS')">导出</el-button>
         </el-col>
       </el-row>
       <div class="toggleSearchBottom">
@@ -40,7 +40,7 @@
       </div>
     </el-card>
   </div>
-  <div class="main" style="padding-top: 0">
+  <div class="main">
     <el-card class="tableCard">
       <div class="toggleSearchTop">
         <i class="el-icon-caret-bottom"></i>
@@ -242,14 +242,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.dateinput{
-  .el-form-item__label{
-    width: 100px!important;
-  }
-  .el-form-item__content{
-    width: 300px;
-  }
-}
-</style>

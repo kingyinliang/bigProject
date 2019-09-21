@@ -1,14 +1,29 @@
 <template>
   <!--<el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">-->
   <el-col>
-    <div class="main">
-      <el-card class="searchCard newCard" style="margin: 0">
+    <div class="header_main">
+      <el-card class="searchCard newCard" style="margin:0">
         <el-row type="flex">
           <el-col>
             <form-header :formHeader="formHeader" :isRedact="isRedact" :pro="true" ref="formheader"></form-header>
           </el-col>
-          <el-col style="width: 210px">
-            <el-row style="float:right;margin-bottom: 13px">
+          <el-col :span="8" style="font-size: 14px;line-height: 32px">
+            <div style="text-align:left; overflow:hidden; float:right;">
+              <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
+              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
+            </div>
+            <div style="clear:both"></div>
+            <div style="width:100%; text-align:right; margin-top:50px;">
+              <template style="float:right;margin-bottom: 13px">
+                <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
+                <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('pkg:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
+              </template>
+              <template v-if="isRedact" style="float:right;">
+                <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')">保存</el-button>
+                <el-button type="primary" size="small" @click="Submitdialog">提交</el-button>
+              </template>
+            </div>
+            <!-- <el-row style="float:right;margin-bottom: 13px">
               <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Packaging-index'})">返回</el-button>
               <el-button type="primary" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('pkg:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
             </el-row>
@@ -18,7 +33,7 @@
             </el-row>
             <el-row style="position: absolute;right: 0;top: 100px;">
               <div>订单状态：<span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span></div>
-            </el-row>
+            </el-row> -->
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -26,7 +41,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <el-card class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>

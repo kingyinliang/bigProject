@@ -1,13 +1,13 @@
 <template>
   <el-col>
-    <div class="main">
-      <el-card class="searchCard newCard" style="margin: 0">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col :span="21">
             <form-header :formHeader="formHeader" :isRedact="isRedact" @updateProductDateCallback='updateProductDate'></form-header>
           </el-col>
           <el-col :span="3" >
-            <div style="float:right; line-height:31px;font-size: 14px">
+            <div style="float:right;line-height:31px;font-size: 14px">
               <div style="float:left">
                 <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
               </div>
@@ -15,7 +15,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="text-align:right" class="buttonCss">
+        <el-row style="text-align:right; position:absolute; right:8px; top:90px; z-index:1000;" class="buttonCss">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-FryWheat-index'})">返回</el-button>
             <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('wht:order:update')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -30,7 +30,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
@@ -117,7 +117,8 @@ export default {
         // '炒麦'
         productLineName: this.$store.state.common.FWproductLineName,
         // yyy-MM-dd
-        productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
+        // productDate: `${this.$store.state.common.FWproductDate.substring(0, 4)}-${this.$store.state.common.FWproductDate.substring(4, 6)}-${this.$store.state.common.FWproductDate.substring(6, 8)}`
+        productDate: this.$store.state.common.FWproductDate
       },
       activeName: '1',
       readyState: '',

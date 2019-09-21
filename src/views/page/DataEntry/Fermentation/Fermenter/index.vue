@@ -1,7 +1,7 @@
 <template>
-<div style="padding: 5px 10px">
-  <el-card class="searchCard  newCard ferCard">
-    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
+<div class="header_main">
+  <el-card class="searchCard ferCard">
+    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform sole_row">
       <el-form-item label="生产工厂：">
         <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 140px">
           <el-option label="请选择"  value=""></el-option>
@@ -32,7 +32,9 @@
           <el-option label="发酵中" v-for="(item, index) in holderStatusList" :key="index" value="2,3" v-if="item.code === '2'"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
+      <el-form-item style="float:right; margin-right:0;">
+        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('fer:holderManage:list')">查询</el-button>
+      </el-form-item>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px" v-show="fastS">

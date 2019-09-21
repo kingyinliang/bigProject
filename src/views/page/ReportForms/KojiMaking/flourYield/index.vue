@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card>
       <el-row class="searchCard">
-        <el-col :span="20">
-          <el-form :model="plantList" :inline="true" size="small">
+        <el-col>
+          <el-form :model="plantList" :inline="true" size="small" class="sole_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="plantList.factory" style="width:170px;">
                 <el-option label="请选择"  value=""></el-option>
@@ -19,15 +19,15 @@
             <el-form-item label="生产日期：">
               <el-date-picker v-model="plantList.commitDateOne" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker> - <el-date-picker v-model="plantList.commitDateTwo" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width:135px"></el-date-picker>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" size="small" @click="GetList" v-if="isAuth('report:kjmORwht:flourYieldList')">查询</el-button>
+              <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:kjmORwht:expectFlourYield')">导出</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="4" style="float:right; width:128px">
-          <el-button type="primary" size="small" @click="GetList" v-if="isAuth('report:kjmORwht:flourYieldList')">查询</el-button>
-          <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('report:kjmORwht:expectFlourYield')">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
-    <el-card style="margin-top:10px">
+    <el-card style="margin-top:5px">
       <el-table :data="dataList" border tooltip-effect="dark" header-row-class-name="tableHead" style="width:100%; margin-bottom: 20px">
         <el-table-column label="生产日期" width="120" prop="productDate"></el-table-column>
         <el-table-column label="工厂" width="220" prop="factoryName" :show-overflow-tooltip="true"></el-table-column>

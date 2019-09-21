@@ -52,20 +52,6 @@ img {
 }
 
 //bass scss
-.searchCard { margin-bottom: 0; }
-.searchCard, .tableCard {
-  position: relative;
-  .toggleSearchTop {
-    width: 100%; position: absolute; top: 0; left: 0; text-align: center; cursor: pointer; display: none;
-  }
-  .toggleSearchBottom {
-    width: 100%; position: absolute; bottom: 0; left: 0; text-align: center; cursor: pointer;
-  }
-  .el-icon-caret-top:before,
-  .el-icon-caret-bottom:before {
-    color: #dcdfe6;
-  }
-}
 .dateinput{
   .el-form-item__label{
     width: 100px!important;
@@ -476,25 +462,8 @@ img {
 .el-tabs--border-card>.el-tabs__header {
   background-color: #e8e8e8;
 }
-.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-  margin-bottom: 7px!important;
-}
 .el-form-item--small .el-form-item__content, .el-form-item--small .el-form-item__label{
   height: 32px;
-}
-.el-button--primary,.el-button--primary:focus{
-  color: #000000;
-  background-color: #FFFFFF;
-  border-color: #D9D9D9;
-}
-.el-button--primary:hover{
-  background-color: #1890FF;
-  color: #FFFFFF
-}
-.el-button--primary:first-child{
-  background-color: #1890FF;
-  color: #FFFFFF;
-  border-color: #1890FF;
 }
 .el-input__inner{
   padding: 0 10px!important;

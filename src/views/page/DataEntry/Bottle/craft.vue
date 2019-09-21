@@ -1,11 +1,11 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCards newCard">
-      <el-form :model="formHeader" :inline="true" size="small" label-width="85px" class="marbottom">
-        <el-form-item label="车间：" label-width="60px">
+      <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
+        <el-form-item label="生产车间：">
           <p class="bottom">{{formHeader.workShopName}}</p>
         </el-form-item>
-        <el-form-item label="产线：">
+        <el-form-item label="生产产线：">
           <p class="bottom">{{formHeader.productLineName}}</p>
         </el-form-item>
         <el-form-item label="生产日期：">
@@ -14,7 +14,7 @@
         <el-form-item label="订单号：">
           <p class="bottom">{{formHeader.orderNo}}</p>
         </el-form-item>
-        <el-form-item label="品项：" label-width="60px">
+        <el-form-item label="生产品项：">
           <el-tooltip class="item" effect="dark" :content="formHeader.materialCode + formHeader.materialName" placement="top-start">
             <p class="bottom">{{formHeader.materialCode}} {{formHeader.materialName}}</p>
           </el-tooltip>
@@ -28,17 +28,17 @@
         <el-form-item label="保存时间：">
           <p class="bottom">&nbsp;{{formHeader.changed}}</p>
         </el-form-item>
+        <el-form-item class="floatr">
+          <template style="float:right;">
+            <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
+            <el-button type="primary" class="button" v-if="isAuth('bottle:workshop:techProductParameterSave')" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
+          </template>
+          <template v-if="isRedact" style="float:right;">
+            <el-button type="primary" size="small" v-if="isAuth('bottle:workshop:techProductParameterSave')" @click="savedOrSubmitForm('saved')" >保存</el-button>
+            <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
+          </template>
+        </el-form-item>
       </el-form>
-      <el-row style="text-align:right">
-        <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="$router.push({ path: '/DataEntry-Bottle-index'})">返回</el-button>
-          <el-button type="primary" class="button" v-if="isAuth('bottle:workshop:techProductParameterSave')" size="small" @click="isRedact = !isRedact" >{{isRedact?'取消':'编辑'}}</el-button>
-        </template>
-        <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" v-if="isAuth('bottle:workshop:techProductParameterSave')" @click="savedOrSubmitForm('saved')" >保存</el-button>
-          <!-- <el-button type="primary" size="small" @click="savedOrSubmitForm('submit')" >提交</el-button> -->
-        </template>
-      </el-row>
     </el-card>
     <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" type="border-card" class="NewDaatTtabs secondcard">
       <el-tab-pane name="1" label="产品参数">

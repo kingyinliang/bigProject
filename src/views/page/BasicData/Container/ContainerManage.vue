@@ -10,8 +10,8 @@
         <el-card>
           <h3>容器管理列表</h3>
           <el-row type="flex">
-            <el-col>
-              <el-form :inline="true" :model="form" size="small" label-width="100px" class="topforms1" @keyup.enter.native="qurery()" @submit.native.prevent>
+            <el-col class="header_main" style="margin-bottom:10px">
+              <el-form :inline="true" :model="form" size="small" label-width="70px" class="multi_row" @keyup.enter.native="qurery()" @submit.native.prevent>
                 <el-form-item label="归属工厂：" >
                   <el-select v-model="form.factory" placeholder="请选择">
                     <el-option label=""  value="">请选择</el-option>
@@ -36,12 +36,12 @@
                 <el-form-item label="容器量：">
                   <el-input v-model="form.holder_hold" placeholder="手动输入" clearable></el-input>
                 </el-form-item>
+                <el-form-item class="floatr">
+                  <el-button type="primary" size="small" @click="qurery(true)" v-if="isAuth('sys:holder:checkList')">查询</el-button>
+                  <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:holder:save')">新增</el-button>
+                  <el-button type="danger" size="small" @click="remove" v-if="isAuth('sys:holder:delete')">批量删除</el-button>
+                </el-form-item>
               </el-form>
-            </el-col>
-            <el-col style="width: 320px">
-              <el-button type="primary" size="small" @click="qurery(true)" v-if="isAuth('sys:holder:checkList')">查询</el-button>
-              <el-button type="primary" size="small" @click="addOrupdate()" v-if="isAuth('sys:holder:save')">新增</el-button>
-              <el-button type="danger" size="small" @click="remove" v-if="isAuth('sys:holder:delete')">批量删除</el-button>
             </el-col>
           </el-row>
           <el-row>

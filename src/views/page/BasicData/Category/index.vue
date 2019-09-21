@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 15px">
+  <div class="header_main">
     <el-card class="searchCard  newCard">
-      <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
+      <el-form :inline="true" :model="formHeader" size="small" label-width="70px" class="sole_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
@@ -20,7 +20,7 @@
         </div>
       </el-form>
     </el-card>
-    <el-card style="margin-top: 10px">
+    <el-card style="margin-top:5px">
       <el-table ref="table1" v-loading="dataListLoading" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
         <el-table-column type="selection" width="34"></el-table-column>
         <el-table-column label="工厂" prop="factoryName" width="140" :show-overflow-tooltip="true"></el-table-column>

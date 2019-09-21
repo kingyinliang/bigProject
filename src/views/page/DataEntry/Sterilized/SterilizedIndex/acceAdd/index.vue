@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
+  <div class="header_main">
+    <el-card class="searchCard" style="margin-bottom: 5px">
       <el-row type="flex">
         <el-col>
           <form-head :formHeader="formHeader"></form-head>
@@ -20,116 +20,114 @@
         </template>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard">
-      <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">
-            辅料添加
-          </span>
-          <el-card class="newCard">
-            <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
-              <h3 style="line-height: 32px">辅料添加记录</h3>
-              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
-            </div>
-            <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
-              <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
-              <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
-              <el-table-column label="需求数量" width="80" prop="adjustAmount" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  {{scope.row.supStatus === '已推送'? scope.row.adjustAmount : scope.row.supStatus === '已确认'? scope.row.adjustAmount : scope.row.adjustAmountPro}}
-                </template>
-              </el-table-column>
-              <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="操作" width="65">
-                <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, AddSupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
-                </template>
-              </el-table-column>
-              <el-table-column width="100">
-                <template slot="header"><i class="reqI">*</i><span>批次</span></template>
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10"  size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="领用数量" width="100">
-                <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="备注" width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="115" fixed="right">
-                <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-          <el-card class="newCard">
-            <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
-              <h3 style="line-height: 32px">增补料记录</h3>
-              <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
-            </div>
-            <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
-              <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
-              <el-table-column type="index" width="55" label="序号"></el-table-column>
-              <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
-              <el-table-column label="添加数量" width="80" prop="addAmount" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column label="操作" width="65">
-                <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, SupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
-                </template>
-              </el-table-column>
-              <el-table-column width="100">
-                <template slot="header"><i class="reqI">*</i><span>批次</span></template>
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10" size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="领用数量" width="100">
-                <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="备注" width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="115" fixed="right">
-                <template slot-scope="scope">
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionSup, 'Sup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
-                  <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-          <auditLog :tableData="DataAudit"></auditLog>
-        </el-tab-pane>
-        <el-tab-pane name="2">
-          <span slot="label" class="spanview">
-            异常记录
-          </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
-        </el-tab-pane>
-        <el-tab-pane name="3">
-          <span slot="label" class="spanview">
-            文本记录
-          </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+    <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
+      <el-tab-pane name="1">
+        <span slot="label" class="spanview">
+          辅料添加
+        </span>
+        <el-card class="newCard">
+          <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
+            <h3 style="line-height: 32px">辅料添加记录</h3>
+            <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionAddSup, 'addSup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
+          </div>
+          <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+            <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
+            <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+            <el-table-column label="需求数量" width="80" prop="adjustAmount" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                {{scope.row.supStatus === '已推送'? scope.row.adjustAmount : scope.row.supStatus === '已确认'? scope.row.adjustAmount : scope.row.adjustAmountPro}}
+              </template>
+            </el-table-column>
+            <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="操作" width="65">
+              <template slot-scope="scope">
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, AddSupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column width="100">
+              <template slot="header"><i class="reqI">*</i><span>批次</span></template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10"  size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="领用数量" width="100">
+              <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="备注" width="100">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="115" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionAddSup, 'addSup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+        <el-card class="newCard">
+          <div class="clearfix" style="padding-top: 5px;padding-bottom: 5px">
+            <h3 style="line-height: 32px">增补料记录</h3>
+            <el-button type="primary" size="mini" style="float: right" :disabled="!isRedact" @click="addOver(multipleSelectionSup, 'Sup')" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
+          </div>
+          <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+            <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
+            <el-table-column type="index" width="55" label="序号"></el-table-column>
+            <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
+            <el-table-column label="添加数量" width="80" prop="addAmount" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="操作" width="65">
+              <template slot-scope="scope">
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, SupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column width="100">
+              <template slot="header"><i class="reqI">*</i><span>批次</span></template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10" size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="领用数量" width="100">
+              <template slot="header"><i class="reqI">*</i><span>领用数量</span></template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.receiveAmount" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="备注" width="100">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" size="mini"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="115" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="addOver(multipleSelectionSup, 'Sup', scope.row)" v-if="isAuth('ste:supMaterial:mySaveOrUpdate')">添加完成</el-button>
+                <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" @click="delRow(scope.row)"  v-if="scope.row.isSplit !== '0'">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+        <auditLog :tableData="DataAudit"></auditLog>
+      </el-tab-pane>
+      <el-tab-pane name="2">
+        <span slot="label" class="spanview">
+          异常记录
+        </span>
+        <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+      </el-tab-pane>
+      <el-tab-pane name="3">
+        <span slot="label" class="spanview">
+          文本记录
+        </span>
+        <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+      </el-tab-pane>
+    </el-tabs>
     <el-dialog width="400px" title="添加确认" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible">
       <div style="height: 160px;overflow-y: initial" :style="{'overflow-y':(addSupOverData.length > 5 || SupOverData.length > 5)? 'scroll' : 'initial'}">
         <p style="line-height: 20px;margin-bottom: 8px" v-for="(item, index) in addSupOverData" :key="index">{{item.materialCode + ' ' + item.materialName}}已经添加{{item.receiveAmount + item.unit}},确认添加完成！</p>

@@ -40,7 +40,6 @@ img {
 }
 
 //bass scss
-.searchCard { margin-bottom: 0; }
 .searchCard, .tableCard {
   position: relative;
   .toggleSearchTop {
@@ -56,7 +55,7 @@ img {
 }
 .dateinput{
   .el-form-item__label{
-    width: 100px!important;
+    width: 70px!important;
   }
   .el-form-item__content{
     width: 300px;
@@ -473,11 +472,6 @@ img {
     padding: 0;
   }
 }
-.marbottom{
-  .el-form-item,.el-form-item--small{
-    margin-bottom: 0!important;
-  }
-}
 .NewDaatTtabs{
   .el-tabs__item {
     height: 40px!important;
@@ -586,40 +580,89 @@ img {
 .ra_btn{
   padding: 7px!important;
 }
-.searchCard {
-  .el-button--primary,.el-button--primary:focus{
-    color: #000000;
-    background-color: #FFFFFF;
-    border-color: #D9D9D9;
-  }
-  .el-button--primary:hover{
-    background-color: #1890FF;
-    color: #FFFFFF
-  }
-  .el-button--primary:first-child{
-    background-color: #1890FF;
-    color: #FFFFFF;
-    border-color: #1890FF;
-  }
-  .el-button--primary.is-disabled{
-    color: #fff;
-    background-color: #a0cfff;
-    border-color: #a0cfff;
-  }
-}
+// .searchCard {
+//   .el-button--primary,.el-button--primary:focus{
+//     color: #000000;
+//     background-color: #FFFFFF;
+//     border-color: #D9D9D9;
+//   }
+//   .el-button--primary:hover{
+//     background-color: #1890FF;
+//     color: #FFFFFF
+//   }
+//   .el-button--primary:first-child{
+//     background-color: #1890FF;
+//     color: #FFFFFF;
+//     border-color: #1890FF;
+//   }
+//   .el-button--primary.is-disabled{
+//     color: #fff;
+//     background-color: #a0cfff;
+//     border-color: #a0cfff;
+//   }
+// }
 .marbottom{
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    margin-bottom: 8px!important;
+    margin-bottom: 7px!important;
   }
-  .input_bottom{
-    width: 145px!important;
-    border-bottom: 1px solid #d8d8d8;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 32px;
-  }
+}
+.input_bottom{
+  width: 145px!important;
+  border-bottom: 1px solid #d8d8d8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 32px;
 }
 .delBtn{
   color: red;
 }
+
+// .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+//   margin-bottom: 7px!important;
+// }
+.header_main{
+  padding: 5px 10px 0 10px;
+  .el-card__body {
+    padding: 7px !important;
+  }
+  .el-form-item__label {
+    padding: 0;
+  }
+  // header 多行
+  .multi_row{
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+      margin-bottom: 7px!important;
+    }
+  }
+  // header 单行
+  .sole_row{
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+      margin-bottom: 0px!important;
+    }
+  }
+  .floatr {margin-right:0; text-align:right}
+}
+/*********  按钮 start  *********/
+.el-button--primary,.el-button--primary:focus{
+  color: #000000;
+  background-color: #FFFFFF;
+  border-color: #D9D9D9;
+}
+.el-button--primary:hover{
+  background-color: #1890FF;
+  color: #FFFFFF
+}
+.el-button--primary:first-child{
+  background-color: #1890FF;
+  color: #FFFFFF;
+  border-color: #1890FF;
+}
+.el-button--primary.is-disabled{
+  color: #fff;
+  background-color: #a0cfff;
+  border-color: #a0cfff;
+}
+/*********  按钮 end  *********/
+.button_two_goup {margin-top:39px; text-align:right;}
+.button_three_goup {text-align: right; position: absolute; right: 8px; top: 90px; z-index: 1000;}

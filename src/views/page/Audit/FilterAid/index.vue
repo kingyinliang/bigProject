@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 5px 10px">
+  <div class="header_main">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform marbottom">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="80px" class="topform multi_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
@@ -20,7 +20,9 @@
         <el-form-item label="生产订单：">
           <el-input type="text" v-model="formHeader.orderNo" clearable style="width: 140px"></el-input>
         </el-form-item>
-        <el-button type="primary" size="small" @click="GetDataList(true)" style="float: right" v-if="isAuth('ste:order:list')">查询</el-button>
+        <el-form-item class="floatr">
+          <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:order:list')">查询</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card class="tableCard">

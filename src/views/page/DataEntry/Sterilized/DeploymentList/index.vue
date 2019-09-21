@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCard searchCards">
       <el-row>
         <el-col>
-          <el-form :model="formHeader" :inline="true" size="small" label-width="100px">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" class="width150px">
                 <el-option value="">请选择</el-option>
@@ -28,7 +28,7 @@
             <el-form-item label="调配单号：">
               <el-input style="width:150px" v-model="formHeader.orderNo"></el-input>
             </el-form-item>
-            <el-form-item label="调配单状态：">
+            <el-form-item label="调配单状态：" label-width="85px">
               <el-select v-model="formHeader.status" palceholder="请选择" class="width150px">
                 <el-option value="">请选择</el-option>
                 <el-option v-for="(item, index) in statusList" :key="index" :value="item" :label="item"></el-option>
@@ -37,12 +37,12 @@
             <el-form-item label="订单号：">
               <el-input style="width:150px" v-model="formHeader.orderId"></el-input>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allocate:allocateListTp')">查询</el-button>
+              <el-button type="primary" size="small" @click="CreateOrder()" v-if="isAuth('ste:allocate:allocateCreateTp')">生成</el-button>
+            </el-form-item>
           </el-form>
         </el-col>
-      </el-row>
-      <el-row style="text-align: right">
-        <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:allocate:allocateListTp')">查询</el-button>
-        <el-button type="primary" size="small" @click="CreateOrder()" v-if="isAuth('ste:allocate:allocateCreateTp')">生成</el-button>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>

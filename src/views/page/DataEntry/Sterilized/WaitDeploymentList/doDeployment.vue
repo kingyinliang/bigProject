@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="newCard searchCard">
-        <el-form :model="formHeader" :inline="true" size="small" label-width="80px" style="margin-top:10px">
+    <div class="header_main">
+      <el-card class="searchCard">
+        <el-form :model="formHeader" :inline="true" size="small" label-width="80px">
           <el-row>
             <el-col :span="21">
               <el-form-item label="生产工厂：">
@@ -60,7 +60,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
