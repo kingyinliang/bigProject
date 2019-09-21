@@ -1,16 +1,16 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
-    <div class="main">
+    <div class="header_main">
       <el-card class="searchCard">
         <el-row type="flex">
-          <el-col>
-            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="85px" @keyup.enter.native="GetList(true)" @submit.native.prevent>
-              <el-form-item label="工厂：">
+          <el-col :span="24">
+            <el-form :model="plantList" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row" @keyup.enter.native="GetList(true)" @submit.native.prevent>
+              <el-form-item label="生产工厂：">
                 <el-select v-model="plantList.factory" placeholder="请选择">
                   <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：">
+              <el-form-item label="生产车间：">
                 <el-select v-model="plantList.workShop" placeholder="请选择">
                   <el-option label="请选择"  value=""></el-option>
                   <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
@@ -40,16 +40,14 @@
               <el-form-item label="日期：">
                 <el-date-picker type="date" placeholder="选择" value-format="yyyy-MM-dd" v-model="plantList.setDate" style="width: 200px"></el-date-picker>
               </el-form-item>
+              <el-form-item class="floatr">
+                <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:att:listAtt')">查询</el-button>
+                <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('sys:att:saveAtt')">新增</el-button>
+                <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('sys:att:updateAtt')">保存</el-button>
+                <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('sys:att:updateAtt')">提交</el-button>
+                <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('sys:att:deleteAtt')">删除</el-button>
+              </el-form-item>
             </el-form>
-          </el-col>
-          <el-col style="width: 250px">
-            <el-row style="margin-bottom: 18px">
-              <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('sys:att:listAtt')" style="margin-right: 48px">查询</el-button>
-              <el-button type="danger" size="small" @click="delDate()" v-if="isAuth('sys:att:deleteAtt')">批量删除</el-button>
-            </el-row>
-            <el-button type="primary" size="small" @click="addAR()" v-if="isAuth('sys:att:saveAtt')">新增</el-button>
-            <el-button type="primary" size="small" @click="saveAtt('saved')" v-if="isAuth('sys:att:updateAtt')">保存</el-button>
-            <el-button type="primary" size="small" @click="saveAtt('submit')" v-if="isAuth('sys:att:updateAtt')">提交</el-button>
           </el-col>
         </el-row>
         <div class="toggleSearchBottom">
@@ -57,7 +55,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0">
+    <div class="main">
       <el-card class="tableCard">
         <div class="toggleSearchTop">
           <i class="el-icon-caret-bottom"></i>

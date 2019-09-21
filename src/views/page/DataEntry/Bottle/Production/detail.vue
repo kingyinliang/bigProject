@@ -1,11 +1,11 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
+  <div class="header_main">
+    <el-card class="searchCard newCard" style="margin-bottom: 5px">
       <el-row type="flex">
         <el-col>
           <form-head :formHeader="formHeader" :isRedact="isRedact"></form-head>
         </el-col>
-        <el-col style="width: 244px;position: relative" class="clearfix">
+        <el-col style="width:244px; position:relative" class="clearfix">
           <el-row class="clearfix">
             <div style="float:right; line-height:31px;font-size: 14px">
               <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：

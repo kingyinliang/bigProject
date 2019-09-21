@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
-    <el-card class="newCard searchCard">
+  <div class="header_main">
+    <el-card class="searchCard">
       <el-row>
         <el-col>
-          <el-form :model="formHeader" :inline="true" size="small" label-width="75px">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="sole_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
@@ -22,18 +22,18 @@
                 <el-option :label="item.deptName" v-for="(item, index) in productline" :key="index" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item class="floatr">
+              <template style="float:right;">
+                <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('prs:drench:drenchList')">查询</el-button>
+                <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('prs:dernchUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
+              </template>
+              <template v-if="isRedact" style="float:right;">
+                <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('prs:dernchUpdate')">保存</el-button>
+                <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('prs:dernchUpdate')">提交</el-button>
+              </template>
+            </el-form-item>
           </el-form>
         </el-col>
-      </el-row>
-      <el-row style="text-align:right">
-        <template style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="SearchList" v-if="isAuth('prs:drench:drenchList')">查询</el-button>
-          <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('prs:dernchUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
-        </template>
-        <template v-if="isRedact" style="float:right; margin-left: 10px;">
-          <el-button type="primary" size="small" @click="savedOrSubmitForm('saved')" v-if="isAuth('prs:dernchUpdate')">保存</el-button>
-          <el-button type="primary" size="small" @click="SubmitForm" v-if="isAuth('prs:dernchUpdate')">提交</el-button>
-        </template>
       </el-row>
       <div class="toggleSearchBottom">
         <i class="el-icon-caret-top"></i>
@@ -43,7 +43,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-card style="margin-top:10px" v-show="contentshow">
+      <el-card style="margin-top:5px" v-show="contentshow">
         <el-table :data="waterList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead">
           <el-table-column type="selection" width="35"></el-table-column>
           <el-table-column label="工序" width="50px">自淋</el-table-column>

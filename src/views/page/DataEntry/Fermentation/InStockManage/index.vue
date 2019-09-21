@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="searchCard newCard">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="80px">
-              <el-form-item label="工厂：" label-width="80px">
+            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="multi_row">
+              <el-form-item label="生产工厂：">
                 <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：" >
+              <el-form-item label="生产车间：" >
                 <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px" @change="changeOptions('workshop')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="罐号：" label-width="80px">
+              <el-form-item label="罐号：">
                 <el-select v-model="params.holderList" class="selectwpx" style="width: 140px" filterable multiple @change="changeOptions('pot')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in potList" :key="sole.holderId" :label="sole.holderName" :value="sole.holderId"></el-option>
@@ -29,11 +29,11 @@
                   <el-option v-for="sole in materialList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item> -->
-              <el-form-item label="订单日期：" label-width="80px">
+              <el-form-item label="订单日期：">
                 <el-date-picker type="date" v-model="params.startDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
                 - <el-date-picker type="date" v-model="params.endDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
               </el-form-item>
-              <el-form-item label="订单号：" label-width="80px" >
+              <el-form-item label="订单号：" >
                 <el-select v-model="params.orderList" class="selectwpx" style="width: 140px" filterable multiple allow-create @change="changeOptions('order')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in orderDataList" :key="sole.orderNo" :label="sole.orderNo" :value="sole.orderNo"></el-option>
@@ -49,7 +49,7 @@
                   <el-option label="已审核" value="checked"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="订单类型：" label-width="80px">
+              <el-form-item label="订单类型：">
                 <el-select v-model="params.orderType" placeholder="请选择" style="width: 140px" @change="changeOptions('orderType')">
                   <el-option label="请选择"  value=""></el-option>
                   <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
@@ -57,16 +57,8 @@
               </el-form-item>
             </el-form>
           </el-col>
-          <!-- <el-col style="width: 180px">
-            <div style="float:right; line-height:31px;font-size: 14px">
-              <div style="float:left">
-                <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890ff' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
-              </div>
-              <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
-            </div>
-          </el-col> -->
         </el-row>
-        <el-row style="text-align:right" class="buttonCss">
+        <el-row style="text-align:right;right: 8px;text-align: right;position: absolute;top: 49px;">
           <template style="float:right; margin-left: 10px;">
             <el-button type="primary" size="small" v-if="isAuth('fer:inStore:list')" @click="getOrderList()">查询</el-button>
             <el-button type="primary" class="button" size="small" v-if="isAuth('fer:inStore:mySaveOrUpdate') || isAuth('fer:inStore:submit')" @click="isEdit = !isEdit">{{isEdit?'取消':'编辑'}}</el-button>
@@ -81,7 +73,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

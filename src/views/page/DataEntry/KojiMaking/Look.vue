@@ -1,19 +1,19 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
+      <div class="header_main">
         <el-card class="newCard">
-          <el-row type="flex" style="border-bottom:1px solid #E9E9E9;margin-bottom:12px">
+          <el-row type="flex">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="42px">
-                <el-form-item label="工厂：">
-                  <el-select v-model="params.factoryId" class="selectwpx" style="width:140px">
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="sole_row">
+                <el-form-item label="生产工厂：">
+                  <el-select v-model="params.factoryId" class="selectwpx" style="width:150px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="车间：">
-                  <el-select v-model="params.workShop" class="selectwpx" style="width:140px">
+                <el-form-item label="生产车间：">
+                  <el-select v-model="params.workShop" class="selectwpx" style="width:150px">
                     <el-option label="请选择" value=""></el-option>
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
@@ -25,8 +25,8 @@
             </el-col>
           </el-row>
         </el-card>
-        <el-row :gutter="32">
-          <el-col :span="8" v-for="(item, index) in orderList" :key="index" style="margin-top: 20px">
+        <el-row :gutter="10">
+          <el-col :span="8" v-for="(item, index) in orderList" :key="index" style="margin-top:5px">
             <div class="box-item">
               <div class="box-item-top">
                 <div class="box-item-title">

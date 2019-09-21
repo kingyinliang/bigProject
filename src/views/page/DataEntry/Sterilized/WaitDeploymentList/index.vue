@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCards">
       <el-row>
         <el-col style="width:975px; float:left">
-          <el-form :model="formHeader" :inline="true" size="small" label-width="82px">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="sole_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" class="width150px">
                 <el-option value="">请选择</el-option>

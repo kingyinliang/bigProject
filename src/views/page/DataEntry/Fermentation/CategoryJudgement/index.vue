@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card>
       <el-row>
-        <el-col :span="23">
-          <el-form :inline="true" :model="form" size="small" label-width="84px">
+        <el-col :span="24">
+          <el-form :inline="true" :model="form" size="small" label-width="70px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="form.factory" placeholder="请选择" class="width160px">
                 <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
@@ -44,14 +44,14 @@
                 <el-option v-for="(item, index) of materialTypeList" :key="index" :value="item.id" :label="item.halfName"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="1">
-          <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
         </el-col>
       </el-row>
     </el-card>
-    <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:15px">
+    <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:5px">
       <el-tab-pane name="0" label="未判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
           <el-table-column label="状态" show-overflow-tooltip>

@@ -651,7 +651,6 @@ export default class Index extends Vue {
     let sum = 0
     let iskong = 0
     for (let item of this.workHourList) {
-      console.log(item.confActivity2)
       if (item.confActivity2 === '' || item.confActivity2 === null) {
         iskong = 1
         this.$notify.error({title: '错误', message: '机器工时不能为空'})

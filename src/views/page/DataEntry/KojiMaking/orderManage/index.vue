@@ -36,12 +36,10 @@
                     <el-option label="通过" value="checked"></el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item class="floatr">
+                  <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isAuth('sys:order:orderlist')">查询</el-button>
+                </el-form-item>
               </el-form>
-            </el-col>
-            <el-col style="width:80px">
-              <el-row class="rowButton button_two_goup">
-                <el-button type="primary" size="small" @click="getOrderList()" style="float:right" v-if="isAuth('sys:order:orderlist')">查询</el-button>
-              </el-row>
             </el-col>
           </el-row>
         </el-card>

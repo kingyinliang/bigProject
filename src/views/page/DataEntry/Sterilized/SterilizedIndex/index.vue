@@ -1,14 +1,14 @@
 <template>
-  <div style="padding: 5px 10px">
+  <div class="header_main">
     <el-card class="searchCard  newCard" style="margin-bottom: 5px">
-      <el-form :inline="true" size="small" :model="formHeader" label-width="45px" class="topform marbottom">
-        <el-form-item label="工厂：">
+      <el-form :inline="true" size="small" :model="formHeader" label-width="70px" class="topform sole_row">
+        <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间：">
+        <el-form-item label="生产车间：">
           <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 180px">
             <el-option label="请选择"  value=""></el-option>
             <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>

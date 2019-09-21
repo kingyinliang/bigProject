@@ -1,31 +1,31 @@
 <template>
   <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <div class="main">
+    <div class="header_main">
       <el-card class="newCard">
-        <el-form :model="plantList" size="small" class="marbottom" :inline="true" label-position="left" label-width="45px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
-          <el-form-item label="工厂：">
+        <el-form :model="plantList" size="small" class="sole_row" :inline="true" label-width="70px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>
+          <el-form-item label="生产工厂：">
             <el-select v-model="plantList.factoryid" placeholder="请选择">
               <el-option value="">请选择</el-option>
               <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="车间：">
+          <el-form-item label="生产车间：">
             <el-select v-model="plantList.workShop" placeholder="请选择" @change="setworkShopname" class="width140px">
               <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="日期：">
+          <el-form-item label="日期：" label-width="45px">
             <el-date-picker type="date" placeholder="选择" v-model="plantList.productDate" value-format="yyyyMMdd" style="width:140px"></el-date-picker>
           </el-form-item>
-          <el-form-item label="订单：">
+          <el-form-item label="订单：" label-width="45px">
             <el-input type="text" v-model="plantList.orderNo" clearable style="width:140px"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="floatr">
             <el-button type="primary" @click="GetOrderList()">查询</el-button>
           </el-form-item>
         </el-form>
       </el-card>
-      <el-card style="margin-top: 10px" v-if="list.length">
+      <el-card style="margin-top:5px" v-if="list.length">
         <el-row :gutter="10">
           <el-col :span="12" v-for="(item, index) in list" :key="index" style="margin-bottom: 10px">
             <el-card class="box-card">

@@ -1,11 +1,11 @@
 <template>
   <el-row>
     <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-      <div class="main">
+      <div class="header_main">
         <el-card class="newCard">
           <el-row type="flex">
             <el-col>
-              <el-form :model="params" size="small" :inline="true" label-position="right" >
+              <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="sole_row">
                 <el-form-item label="生产工厂：" >
                   <el-select v-model="params.factoryId" style="width:150px" @change="changeOptions('factory')" >
                     <el-option label="请选择" value=""></el-option>
@@ -27,6 +27,12 @@
                 <el-form-item label="领用日期：" >
                   <el-date-picker type="date" v-model="params.applyDate" value-format="yyyy-MM-dd" style="width:150px"></el-date-picker>
                 </el-form-item>
+                <el-form-item class="floatr" style="width:270px; text-align:right">
+                  <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:material:list')">查询</el-button>
+                  <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
+                  <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
+                  <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
+                </el-form-item>
               </el-form>
             </el-col>
             <!-- <el-col style='width:180px'>
@@ -38,14 +44,14 @@
               </div>
             </el-col> -->
           </el-row>
-          <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
+          <!-- <el-row class="rowButton" style="display:flex; justify-content:flex-end;">
             <el-button type="primary" size="small"  @click="getOrderList()"  v-if="isAuth('prs:material:list')">查询</el-button>
             <el-button type="primary" size="small"  @click="setDisabled(!disabled)"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && orderStatus !== 'submit' &&  orderStatus !== 'checked'">{{disabled?'编辑':'返回'}}</el-button>
             <el-button type="primary" size="small"  @click="save()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">保存</el-button>
             <el-button type="primary" size="small"  @click="submit()"  v-if="isAuth('prs:material:mySaveOrUpdate') && searched && !disabled && orderStatus !== 'submit' &&  orderStatus !== 'checked'">提交</el-button>
-          </el-row>
+          </el-row> -->
         </el-card>
-        <el-row v-if="searched" style="margin-top:10px;background-color:#fff">
+        <el-row v-if="searched" style="margin-top:5px;background-color:#fff">
           <el-col :span="24">
             <el-row type="flex" justify="center" style="margin-top:20px">
               <div  class="pot-box"  v-for="(item, index) in sdList" :key="index" >

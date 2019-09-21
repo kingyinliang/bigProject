@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="searchCard newCard">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row>
           <el-col>
             <div style="line-height:40px;" ><i style="font-size: 22px;float:left;" class="iconfont factory-shouqicaidan"></i><span style="font-size:16px;font-weight:bold;margin-left:12px;">申请基本信息</span></div>
@@ -9,7 +9,7 @@
         </el-row>
         <el-row type="flex">
           <el-col class="header-form" :span="24">
-            <el-form :model="formHeader" size="small" :inline="true" label-position="right" label-width="100px" class="topform">
+            <el-form :model="formHeader" size="small" :inline="true" label-position="right" label-width="100px" class="topform multi_row">
               <el-form-item label="生产工厂：" >
                 <el-select v-model="formHeader.factory" class="selectwpx" style="width: 140px" @change="changeOptions('factory')" :disabled="!isEdit">
                   <el-option label="请选择" value=""></el-option>
@@ -79,7 +79,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>

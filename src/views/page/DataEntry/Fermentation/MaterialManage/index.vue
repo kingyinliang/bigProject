@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 15px">
-    <el-card class="searchCard  newCard">
-      <el-form :inline="true" :model="formHeader" size="small" label-width="82px">
+  <div class="header_main">
+    <el-card class="searchCard">
+      <el-form :inline="true" :model="formHeader" size="small" label-width="80px" class="multi_row">
         <el-form-item label="生产工厂：">
           <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
             <el-option label="请选择"  value=""></el-option>
@@ -50,7 +50,7 @@
           <el-date-picker v-model="formHeader.productDateOne" type="date" placeholder="选择日期" style="width:160px;margin-right: 15px"></el-date-picker> - <el-date-picker v-model="formHeader.productDateTwo" type="date" placeholder="选择日期" style="width:160px;margin-left: 15px"></el-date-picker>
         </el-form-item>
       </el-form>
-      <el-row style="text-align:right" class="buttonCss">
+      <el-row style="text-align:right" class="button_three_goup">
         <template style="float:right; margin-left: 10px;">
           <el-button type="primary" size="small" @click="GetDataList()" v-if="isAuth('fer:shoot:list')">查 询</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="isAuth('fer:shoot:update')">{{isRedact?'取消':'编辑'}}</el-button>
@@ -61,7 +61,7 @@
         </template>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard" style="margin-top: 10px">
+    <el-card class="searchCard  newCard" style="margin-top:5px">
       <h2 style="font-size: 16px;font-weight: bolder;margin-bottom: 10px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发料列表</h2>
       <el-table :data="dataList" @selection-change="handleSelectionChange" @row-dblclick="GetLog" border tooltip-effect="dark" header-row-class-name="tableHead">
         <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>

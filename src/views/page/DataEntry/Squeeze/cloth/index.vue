@@ -1,9 +1,9 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="newCard searchCard">
       <el-row>
         <el-col>
-          <el-form :model="formHeader" :inline="true" size="small" label-width="75px">
+          <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory" placeholder="请选择" class="width180px">
                 <el-option label="请选择"  value=""></el-option>
@@ -46,7 +46,7 @@
       <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:15px" :style="{'display':contentshow?'block':'none'}">
+      <el-tabs v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="margin-top:5px" :style="{'display':contentshow?'block':'none'}">
         <el-tab-pane name="1" label="物料领用">
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>

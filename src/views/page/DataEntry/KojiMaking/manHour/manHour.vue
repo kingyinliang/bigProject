@@ -4,7 +4,7 @@
       <el-card class="searchCard">
         <el-row type="flex">
           <el-col :span="18">
-            <el-form :inline="true" :model="formHeader" size="small" label-width="82px" class="topform">
+            <el-form :inline="true" :model="formHeader" size="small" label-width="70px" class="topform multi_row">
               <el-form-item label="生产工厂：">
                 <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 180px">
                   <el-option label="请选择"  value=""></el-option>

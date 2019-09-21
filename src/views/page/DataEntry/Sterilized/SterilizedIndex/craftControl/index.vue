@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 5px 10px">
-    <el-card class="searchCard  newCard" style="margin-bottom: 5px">
+  <div class="header_main">
+    <el-card class="searchCard" style="margin-bottom: 5px">
       <el-row type="flex">
         <el-col>
           <form-head :formHeader="formHeader"></form-head>
@@ -19,94 +19,92 @@
         </template>
       </el-row>
     </el-card>
-    <el-card class="searchCard  newCard">
-      <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
-        <el-tab-pane name="1">
-          <span slot="label" class="spanview">
-            工艺控制
-          </span>
-          <el-form :inline="true" size="small" :model="crafData" :rules="dataRule" ref="dataForm" class="topform">
-            <el-form-item label="原汁换热介质：" prop="hotMedium" label-width="120px">
-              <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 170px">
-                <el-checkbox label="热水" name="type"></el-checkbox>
-                <el-checkbox label="酱油" name="type"></el-checkbox>
-              </el-checkbox-group>
+    <el-tabs ref='tabs' v-model="activeName" class="NewDaatTtabs" type="border-card">
+      <el-tab-pane name="1">
+        <span slot="label" class="spanview">
+          工艺控制
+        </span>
+        <el-form :inline="true" size="small" :model="crafData" :rules="dataRule" ref="dataForm" class="topform">
+          <el-form-item label="原汁换热介质：" prop="hotMedium" label-width="120px">
+            <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 170px">
+              <el-checkbox label="热水" name="type"></el-checkbox>
+              <el-checkbox label="酱油" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="热水温度：" label-width="110px">
+            <el-input v-model="crafData.hotTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+          </el-form-item>
+          <el-form-item label="酱油温度：" label-width="80px">
+            <el-input v-model="crafData.sauceTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+          </el-form-item>
+          <el-form-item label="原汁入锅温度：" prop="originalTemp" label-width="120px">
+            <el-input v-model="crafData.originalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 170px"></el-input>
+          </el-form-item>
+          <el-form-item label="升温开始时间：" prop="upStartTime">
+            <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.upStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 180px"></el-date-picker>
+          </el-form-item>
+          <!--<el-card class="searchCard  newCard" style="padding: 8px 4px">-->
+          <div style="padding: 8px 12px">
+            <el-form-item label="冷却开始时间：" prop="coolingStartTime">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
             </el-form-item>
-            <el-form-item label="热水温度：" label-width="110px">
-              <el-input v-model="crafData.hotTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+            <el-form-item label="机械温度：" label-width="108px">
+              <el-input v-model="crafData.mechanicalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="酱油温度：" label-width="80px">
-              <el-input v-model="crafData.sauceTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
+            <el-form-item label="出料温度：" prop="dischargeTemp">
+              <el-input v-model="crafData.dischargeTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <el-form-item label="原汁入锅温度：" prop="originalTemp" label-width="120px">
-              <el-input v-model="crafData.originalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 170px"></el-input>
+            <el-form-item label="冷却结束时间：" prop="coolingEndTime">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingEndTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
             </el-form-item>
-            <el-form-item label="升温开始时间：" prop="upStartTime">
-              <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.upStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 180px"></el-date-picker>
+            <el-form-item label="数显温度：" label-width="108px">
+              <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
             </el-form-item>
-            <!--<el-card class="searchCard  newCard" style="padding: 8px 4px">-->
-            <div style="padding: 8px 12px">
-              <el-form-item label="冷却开始时间：" prop="coolingStartTime">
-                <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingStartTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="机械温度：" label-width="108px">
-                <el-input v-model="crafData.mechanicalTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
-              </el-form-item>
-              <el-form-item label="出料温度：" prop="dischargeTemp">
-                <el-input v-model="crafData.dischargeTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
-              </el-form-item>
-              <el-form-item label="冷却结束时间：" prop="coolingEndTime">
-                <el-date-picker type="datetime" placeholder="选择日期" v-model="crafData.coolingEndTime" :disabled="!isRedact" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" style="width: 170px"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="数显温度：" label-width="108px">
-                <el-input v-model="crafData.displayTemp" :disabled="!isRedact" placeholder="手工录入" size="small" style="width: 180px"></el-input>
-              </el-form-item>
-              <el-row>
-                <h3><i class="iconfont factory-shezhi"></i>保温时间及屏显温度</h3>
-                <el-button type="primary" size="small" @click="addresult()" style="float: right" :disabled="!isRedact" >新增</el-button>
-              </el-row>
-              <el-table header-row-class-name="tableHead" :data="crafData.result" :row-class-name="RowDelFlag" border tooltip-effect="dark">
-                <el-table-column type="index" width="55" label="序号"></el-table-column>
-                <el-table-column label="屏显温度(℃)">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.temp" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="记录时间">
-                  <template slot-scope="scope">
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" size="small" placeholder="选择日期" v-model="scope.row.created" :disabled="!isRedact"></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column label="备注">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" width="80">
-                  <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" circle size="small"  @click="dellist(scope.row)" :disabled="!isRedact"></el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-            <!--</el-card>-->
-          </el-form>
-          <auditLog :tableData="DataAudit"></auditLog>
-        </el-tab-pane>
-        <el-tab-pane name="2">
-          <span slot="label" class="spanview">
-            异常记录
-          </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
-        </el-tab-pane>
-        <el-tab-pane name="3">
-          <span slot="label" class="spanview">
-            文本记录
-          </span>
-          <text-record ref="textrecord" :isRedact="isRedact"></text-record>
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+            <el-row>
+              <h3><i class="iconfont factory-shezhi"></i>保温时间及屏显温度</h3>
+              <el-button type="primary" size="small" @click="addresult()" style="float: right" :disabled="!isRedact" >新增</el-button>
+            </el-row>
+            <el-table header-row-class-name="tableHead" :data="crafData.result" :row-class-name="RowDelFlag" border tooltip-effect="dark">
+              <el-table-column type="index" width="55" label="序号"></el-table-column>
+              <el-table-column label="屏显温度(℃)">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.temp" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="记录时间">
+                <template slot-scope="scope">
+                  <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" size="small" placeholder="选择日期" v-model="scope.row.created" :disabled="!isRedact"></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="80">
+                <template slot-scope="scope">
+                  <el-button type="danger" icon="el-icon-delete" circle size="small"  @click="dellist(scope.row)" :disabled="!isRedact"></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <!--</el-card>-->
+        </el-form>
+        <auditLog :tableData="DataAudit"></auditLog>
+      </el-tab-pane>
+      <el-tab-pane name="2">
+        <span slot="label" class="spanview">
+          异常记录
+        </span>
+        <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+      </el-tab-pane>
+      <el-tab-pane name="3">
+        <span slot="label" class="spanview">
+          文本记录
+        </span>
+        <text-record ref="textrecord" :isRedact="isRedact"></text-record>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 

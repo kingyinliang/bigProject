@@ -1,7 +1,7 @@
 <template>
-<div style="padding: 5px 10px">
+<div class="header_main">
   <el-card class="searchCard  newCard ferCard">
-    <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="topform marbottom">
+    <el-form :inline="true" :model="formHeader" size="small" label-width="70px" class="topform sole_row">
       <el-form-item label="生产工厂：">
         <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 160px">
           <el-option label="请选择"  value=""></el-option>
@@ -20,7 +20,9 @@
           <el-option v-for="(item, index) in HolderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:semi:list')" style="float: right" >查询</el-button>
+      <el-form-item class="floatr">
+        <el-button type="primary" size="small" @click="GetList(true)" v-if="isAuth('ste:semi:list')">查询</el-button>
+      </el-form-item>
     </el-form>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top:5px; padding:0px !important;"  v-show="fastS">

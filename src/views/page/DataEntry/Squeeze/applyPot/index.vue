@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="main">
-      <el-card class="searchCard newCard">
+    <div class="header_main">
+      <el-card class="searchCard">
         <el-row type="flex">
           <el-col>
-            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="50px">
-              <el-form-item label="工厂：" >
+            <el-form :model="params" size="small" :inline="true" label-position="right" label-width="70px" class="sole_row">
+              <el-form-item label="生产工厂：" >
                 <el-select v-model="params.factoryId" class="selectwpx" style="width: 140px" @change="changeOptions('factory')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in factoryList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="车间：">
+              <el-form-item label="生产车间：">
                 <el-select v-model="params.workshopId" class="selectwpx" style="width: 140px" @change="changeOptions('workshop')">
                   <el-option label="请选择" value=""></el-option>
                   <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="订单日期：" label-width="80px">
+              <el-form-item label="订单日期：">
                 <el-date-picker type="date" v-model="params.orderDate" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
               </el-form-item>
             </el-form>
@@ -32,7 +32,7 @@
         </div>
       </el-card>
     </div>
-    <div class="main" style="padding-top: 0px">
+    <div class="main">
       <div class="tableCard">
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
