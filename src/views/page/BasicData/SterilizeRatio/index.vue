@@ -1,26 +1,26 @@
 <template>
-  <div class="main">
+  <div class="header_main">
     <el-card class="searchCard searchCards">
       <el-row>
-        <el-col :span="18">
-          <el-form :model="formHeader" size="small" :inline="true" label-width="70px">
-            <el-form-item label="工厂：">
+        <el-col>
+          <el-form :model="formHeader" size="small" :inline="true" label-width="70px" class="sole_row">
+            <el-form-item label="生产工厂：">
               <el-select v-model="formHeader.factory">
                 <el-option v-for="(item, index) in factory" :key="index" :label="item.deptName" :value="item.deptId"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="物料：">
+            <el-form-item label="生产物料：">
               <el-select filterable v-model="formHeader.materialCode">
                 <el-option value="">请选择</el-option>
                 <el-option v-for="(item, index) in materialList" :key="index" :label="item.materialCode +  `${item.materialName}`" :value="item.materialCode"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item class="floatr">
+              <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('ste:mid:list')">查询</el-button>
+              <el-button type="primary" size="small" @click="AddInfo()" v-if="isAuth('ste:mid:save')">新增</el-button>
+              <el-button type="primary" size="small" @click="DeleteInfo()" v-if="isAuth('ste:mid:delete')">批量删除</el-button>
+            </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="6" style="text-align: right">
-          <el-button type="primary" size="small" @click="GetList()" v-if="isAuth('ste:mid:list')">查询</el-button>
-          <el-button type="primary" size="small" @click="AddInfo()" v-if="isAuth('ste:mid:save')">新增</el-button>
-          <el-button type="primary" size="small" @click="DeleteInfo()" v-if="isAuth('ste:mid:delete')">批量删除</el-button>
         </el-col>
       </el-row>
       <div class="toggleSearchBottom">
