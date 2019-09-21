@@ -136,7 +136,7 @@ export default {
     GetOrderList () {
       if (this.plantList.workShop) {
         if ((this.plantList.productDate === '' || !this.plantList.productDate) && this.plantList.orderNo === '') {
-          this.$notify.error({title: '错误', message: '日期或订单请选填一项'})
+          this.$warning_SHINHO('日期或订单请选填一项')
           return false
         }
         this.$http(`${PACKAGING_API.PKGORDELIST_API}`, 'POST', {
@@ -158,7 +158,7 @@ export default {
           }
         })
       } else {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
       }
     },
     // 订单号下拉
@@ -236,7 +236,7 @@ export default {
           that.$router.push({ name: `DataEntry-Packaging-ProDataIn` })
         }, 100)
       } else {
-        this.$notify.error({title: '错误', message: '请选择订单号'})
+        this.$warning_SHINHO('请选择订单号')
       }
     }
   },

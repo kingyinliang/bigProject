@@ -31,7 +31,8 @@
         </el-table-column>
         <el-table-column label="半成品类别" prop="halfType" width="115"></el-table-column>
         <el-table-column label="订单天数" prop="orderDays" width="110"></el-table-column>
-        <el-table-column label="发酵成熟天数" prop="matureDays" width="115"></el-table-column>
+        <el-table-column label="报工成熟天数" prop="matureDays" width="115"></el-table-column>
+        <el-table-column label="发酵成熟天数" prop="fermentationMatureDays" width="115"></el-table-column>
         <el-table-column label="发酵超期天数" prop="outDays" width="115"></el-table-column>
         <el-table-column label="操作人员" prop="changer" width="120" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="操作时间" prop="changed" width="140" :show-overflow-tooltip="true"></el-table-column>

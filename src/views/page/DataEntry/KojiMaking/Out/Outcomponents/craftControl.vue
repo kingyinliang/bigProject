@@ -175,20 +175,20 @@ export default {
       let outTemp = this.CraftControlDate.outTempOne || this.CraftControlDate.outTempTwo || this.CraftControlDate.outTempThree || this.CraftControlDate.outTempFour || this.CraftControlDate.outTempFive || this.CraftControlDate.outTempSix || this.CraftControlDate.outTempSeven || this.CraftControlDate.outTempEight || this.CraftControlDate.outTempNine || this.CraftControlDate.outTempTen
       if (!windSpeed) {
         ty = false
-        this.$notify.error({title: '错误', message: '工艺控制风速必填项未填'})
+        this.$warning_SHINHO('工艺控制风速必填项未填')
         return false
       } else if (!blendTemp) {
         ty = false
-        this.$notify.error({title: '错误', message: '工艺控制混合料温度必填项未填'})
+        this.$warning_SHINHO('工艺控制混合料温度必填项未填')
         return false
       } else if (!outTemp) {
         ty = false
-        this.$notify.error({title: '错误', message: '工艺控制出曲品温必填项未填'})
+        this.$warning_SHINHO('工艺控制出曲品温必填项未填')
         return false
       }
       if (windSpeed && blendTemp && outTemp && this.CraftControlDate.operator && this.CraftControlDate.outStartTime && this.CraftControlDate.outEndTime && this.CraftControlDate.saltWaterTemp && this.CraftControlDate.saltWaterNd) {} else {
         ty = false
-        this.$notify.error({title: '错误', message: '工艺控制必填项未填'})
+        this.$warning_SHINHO('工艺控制必填项未填')
       }
       // if (this.CraftControlDate.kojoMakingTime > 36) {} else {
       //   ty = false

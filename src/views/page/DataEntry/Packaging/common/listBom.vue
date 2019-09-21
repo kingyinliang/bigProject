@@ -132,10 +132,10 @@
         <el-input size="small" v-model="scope.row.remark" v-else disabled></el-input>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" label="操作" width="60">
+    <el-table-column fixed="right" label="操作" width="70">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-plus" circle size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row)"></el-button>
+        <el-button type="text" size="small" @click="addSapS(listbomS, scope.row)" v-if="scope.row.isSplit === '0' && isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+        <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" v-if="scope.row.isSplit === '1' && isRedact  && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='')" @click="dellistbomS(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -331,7 +331,7 @@ export default {
             if (item.productUseNum === 0 || item.productUseNum) {
             } else {
               ty = false
-              this.$notify.error({title: '错误', message: '物料必填项未填'})
+              this.$warning_SHINHO('物料必填项未填')
               return false
             }
           }
@@ -342,7 +342,7 @@ export default {
               if (item.potNo && item.filterDate && item.productUseNum && item.batch) {
               } else {
                 ty = false
-                this.$notify.error({title: '错误', message: '物料半成品必填项未填'})
+                this.$warning_SHINHO('物料半成品必填项未填')
                 return false
               }
             }
@@ -377,7 +377,7 @@ export default {
       })
       for (let items of this.repertory) {
         if (items.total > this.semiHolder.find(so => so.holderId === items.holderId).amount) {
-          this.$notify.error({title: '错误', message: this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整'})
+          this.$warning_SHINHO(this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整')
           return false
         }
       }

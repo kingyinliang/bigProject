@@ -51,9 +51,9 @@
       <el-table-column label="单位" width="50" prop="unit" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作人" prop="creator" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作时间" prop="created" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作" width="50">
+      <el-table-column label="操作" width="70" fixed="right">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delMateriel(scope.row)"></el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delMateriel(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -130,7 +130,7 @@ export default {
         if (item.delFlag !== '1') {
           if (item.material && item.saltWaterHolderId && (item.startValue || item.startValue === 0) && (item.endValue || item.endValue === 0)) {} else {
             ty = false
-            this.$notify.error({title: '错误', message: '原料领用必填项未填'})
+            this.$warning_SHINHO('原料领用必填项未填')
             return false
           }
         }

@@ -125,7 +125,7 @@
           <el-table-column label="单位" prop="unit" width="50"></el-table-column>
           <el-table-column label="操作人员" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
-          <el-table-column label="操作" width="50" fixed="right">
+          <el-table-column label="操作" width="70" fixed="right">
             <template slot-scope="scope">
               <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" @click="delwheatRow(scope.row)">删除</el-button>
             </template>
@@ -192,7 +192,7 @@
           <el-table-column label="入罐/出罐" prop="useType" width="90"></el-table-column>
           <el-table-column label="操作人员" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
-          <el-table-column label="操作" width="50" fixed="right">
+          <el-table-column label="操作" width="70" fixed="right">
             <template slot-scope="scope">
               <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" @click="delsoyRow(scope.row)">删除</el-button>
             </template>

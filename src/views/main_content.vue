@@ -116,7 +116,7 @@ export default {
       }
     },
     // tabs, 删除tab
-    removeTabHandle (tabName) {
+    removeTabHandle (tabName, add) {
       if (/录入/g.test(this.mainTabs.filter(item => item.name === tabName)[0].title)) {
         this.$confirm('为防止数据丢失请保存后关闭, 是否继续?', '关闭', {
           confirmButtonText: '确定',
@@ -134,6 +134,11 @@ export default {
           } else {
             this.menuActiveName = ''
             this.$router.push({name: 'home'})
+          }
+          if (add) {
+            this.$nextTick(() => {
+              this.$router.push({name: tabName})
+            })
           }
         })
       } else {
@@ -168,7 +173,7 @@ export default {
     // tabs, 刷新当前
     tabsRefreshCurrentHandle () {
       var tempTabName = this.mainTabsActiveName
-      this.removeTabHandle(tempTabName)
+      this.removeTabHandle(tempTabName, true)
       this.$nextTick(() => {
         this.$router.push({name: tempTabName})
       })

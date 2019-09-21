@@ -13,6 +13,7 @@
         <sub-menu
           v-for="menu in menuList"
           :key="menu.menuId"
+          v-if="menu.type != '4'"
           :menu="menu"
           :dynamicMenuRoutes="dynamicMenuRoutes">
         </sub-menu>

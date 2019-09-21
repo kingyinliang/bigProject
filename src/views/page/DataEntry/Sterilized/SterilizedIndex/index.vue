@@ -221,10 +221,8 @@ export default {
   .el-select-dropdown__wrap{
     max-height: 200px;
   }
-  .dataList_item{
-    .el-card__body{
-      padding: 0!important;
-    }
+  .dataList_item .el-card__body{
+    padding: 0!important;
   }
   .dataList_item_body_text .el-form-item{
     .el-form-item__label{
@@ -327,7 +325,7 @@ export default {
           }
           &_tit{
             width: 100px;
-            min-height: 26px;
+            min-height: 29px;
             font-size: 12px;
             border-bottom: 1px solid #D8D8D8;
             overflow:hidden;

@@ -223,7 +223,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="150px"></el-table-column>
-          <el-table-column width=50 fixed="right">
+          <el-table-column width=70 fixed="right">
             <template slot-scope="scope">
               <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!(isRedact && tech.status !== 'submit' && tech.status !== 'checked')" size="small" @click="delrow(scope.row)">删除</el-button>
             </template>

@@ -134,7 +134,7 @@ export default {
             row.orderStatus = data.list[0].orderStatus
             row.outputUnit = data.list[0].outputUnit
             row.properties = data.list[0].properties
-            row.realOutput = data.list[0].realOutput
+            row.countOutput = data.list[0].countOutput
             row.plan = data.list[0].plan
           } else {
             this.$notify.error({title: '错误', message: data.msg})

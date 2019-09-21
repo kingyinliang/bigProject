@@ -332,15 +332,21 @@ export default class Index extends Vue {
   }
   submit () {
     if (this.validate()) {
-      this.formHeader.status = 'submit'
-      Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_SAVE_API}`, 'POST', this.formHeader).then(res => {
-        if (res.data.code === 0) {
-          this.getHeaderForm(res.data.id)
-          this.getDetailList(res.data.id)
-          this.$notify({title: '成功', message: '提交成功', type: 'success'})
-        } else {
-          this.$notify.error({title: '错误', message: res.data.msg})
-        }
+      this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.formHeader.status = 'submit'
+        Vue.prototype.$http(`${SQU_API.POT_APPLY_DETAIL_SAVE_API}`, 'POST', this.formHeader).then(res => {
+          if (res.data.code === 0) {
+            this.getHeaderForm(res.data.id)
+            this.getDetailList(res.data.id)
+            this.$notify({title: '成功', message: '提交成功', type: 'success'})
+          } else {
+            this.$notify.error({title: '错误', message: res.data.msg})
+          }
+        })
       })
     }
   }

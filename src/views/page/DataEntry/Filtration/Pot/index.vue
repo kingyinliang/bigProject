@@ -43,7 +43,7 @@
                     <p>{{item.batch || ''}}</p>
                     <p>{{(item.materialCode || '') + ' ' + (item.materialName || '')}}</p>
                     <p v-if="item.amount">{{item.amount/1000 || ''}}方</p>
-                    <p>{{item.timeLength || ''}}</p>
+                    <p v-if="item.timeLength">{{item.timeLength || ''}}H</p>
                   </div>
                 </div>
               </div>

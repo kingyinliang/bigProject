@@ -55,6 +55,7 @@
                   <el-tag v-else-if="scope.row.type === '1'" size="small" type="success">菜单</el-tag>
                   <el-tag v-else-if="scope.row.type === '2'" size="small" type="info">按钮</el-tag>
                   <el-tag v-else-if="scope.row.type === '3'" size="small" type="success">三级页面</el-tag>
+                  <el-tag v-else-if="scope.row.type === '4'" size="small" type="success">看板</el-tag>
                 </template>
               </el-table-column>
               <el-table-column

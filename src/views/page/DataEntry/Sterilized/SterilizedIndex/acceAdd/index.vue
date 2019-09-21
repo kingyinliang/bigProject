@@ -235,10 +235,16 @@ export default {
       this.SupOverData = []
       if (row) {
         str === 'addSup' ? this.addSupOverData = [row] : this.SupOverData = [row]
+        if (!this.dataRul(this.addSupOverData, 'AddSupDate', true)) {
+          return
+        }
         this.visible = true
       } else {
         if (data.length > 0) {
           str === 'addSup' ? this.addSupOverData = data : this.SupOverData = data
+          if (!this.dataRul(this.SupOverData, 'SupDate', true)) {
+            return
+          }
           this.visible = true
         } else {
           this.$notify.error({title: '错误', message: '请选择数据'})

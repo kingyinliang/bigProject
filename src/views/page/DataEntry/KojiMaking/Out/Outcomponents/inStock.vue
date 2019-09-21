@@ -41,7 +41,7 @@
       <el-table-column width="" label="操作时间" prop="changed" show-overflow-tooltip></el-table-column>
       <el-table-column width="70" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="delInStock(scope.row)" v-if="scope.row.isSplit === '1' ">删除</el-button>
           <el-button type="text" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" @click="addInStock(scope.row, scope.$index)" v-if="scope.row.isSplit === '0' "><i class="icons iconfont factory-chaifen"></i>新增</el-button>
         </template>
       </el-table-column>
@@ -214,27 +214,27 @@ export default {
       this.InStock.forEach((item) => {
         if (item.sauceWeight && item.batch) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '生产入库必填项未填'})
+          this.$warning_SHINHO('生产入库必填项未填')
           return false
         }
         if (item.pulpWeight) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '生产入库豆粕量未填'})
+          this.$warning_SHINHO('生产入库豆粕量未填')
           return false
         }
         if (item.wheatWeight) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '生产入库麦粉量未填'})
+          this.$warning_SHINHO('生产入库麦粉量未填')
           return false
         }
         if (item.saltWaterWeight) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '生产入库盐水量未填'})
+          this.$warning_SHINHO('生产入库盐水量未填')
           return false
         }
         if (item.batch.length < 10) {
           ty = false
-          this.$notify.error({title: '错误', message: '生产入库批次必须为10位'})
+          this.$warning_SHINHO('生产入库批次必须为10位')
           return false
         }
       })

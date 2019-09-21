@@ -113,9 +113,9 @@
           </el-table-column>
           <el-table-column label="操作人" prop="changer" width="140"></el-table-column>
           <el-table-column label="操作时间" prop="changed" width="160"></el-table-column>
-          <el-table-column width="50" fixed="right">
+          <el-table-column width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger"  @click="delrow(scope.row)" icon="el-icon-delete" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" circle size="small"></el-button>
+              <el-button class="delBtn" type="text"  @click="delrow(scope.row)" icon="el-icon-delete" :disabled="!(isRedact && craftfrom.status !== 'submit' && craftfrom.status !== 'checked')" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

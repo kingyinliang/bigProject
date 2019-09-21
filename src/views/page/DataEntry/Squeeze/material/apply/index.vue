@@ -809,17 +809,23 @@ export default class Index extends Vue {
     })
   }
   submit () {
-    this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
-    Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
-      if (res.data.code === 0) {
-        this.$notify({title: '成功', message: '提交成功', type: 'success'})
-        this.getFermentPot(this.params.factoryId)
-        this.getOrderList()
-      } else {
-        this.$notify.error({title: '错误', message: res.data.msg})
-      }
-    }).catch(err => {
-      this.$notify.error({title: '错误', message: '提交失败' + err})
+    this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      this.dataList.map(item => { if (item.status !== 'checked') { item.status = 'submit' } })
+      Vue.prototype.$http(`${SQU_API.MATERIAL_APPLY_UPDATE_API}`, `POST`, this.dataList).then((res) => {
+        if (res.data.code === 0) {
+          this.$notify({title: '成功', message: '提交成功', type: 'success'})
+          this.getFermentPot(this.params.factoryId)
+          this.getOrderList()
+        } else {
+          this.$notify.error({title: '错误', message: res.data.msg})
+        }
+      }).catch(err => {
+        this.$notify.error({title: '错误', message: '提交失败' + err})
+      })
     })
   }
   @Watch('params', {deep: true})

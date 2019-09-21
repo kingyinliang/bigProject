@@ -111,9 +111,9 @@
             <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="60">
+        <el-table-column fixed="right" label="操作" width="70">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -190,9 +190,9 @@
             <el-input v-model="scope.row.remark" placeholder="手工录入" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="60">
+        <el-table-column fixed="right" label="操作" width="70">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -301,9 +301,9 @@
           <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="60">
+      <el-table-column fixed="right" label="操作" width="70">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)"></el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked' && scope.row.isL === '0' && scope.row.isZ === '0' && scope.row.isS === '0'))" @click="dellistbomS(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -532,7 +532,7 @@ export default {
       let obj = {}
       if (this.InDate.filter(item => item.delFlag !== '1').length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '生产入库没有数据'})
+        this.$warning_SHINHO('生产入库没有数据')
         return false
       }
       this.InDate.forEach((item) => {
@@ -545,23 +545,23 @@ export default {
           // }
           if (!item.output) {
             ty = false
-            this.$notify.error({title: '错误', message: '生产入库产出数不能为空或0'})
+            this.$warning_SHINHO('生产入库产出数不能为空或0')
             return false
           }
           if (!item.classType) {
             ty = false
-            this.$notify.error({title: '错误', message: '生产入库班次不能为空'})
+            this.$warning_SHINHO('生产入库班次不能为空')
             return false
           }
           if (item.batch) {
             if (item.batch.length !== 10) {
               ty = false
-              this.$notify.error({title: '错误', message: '生产入库请录入10位批次号'})
+              this.$warning_SHINHO('生产入库请录入10位批次号')
               return false
             }
           } else {
             ty = false
-            this.$notify.error({title: '错误', message: '生产入库批次项未填'})
+            this.$warning_SHINHO('生产入库批次项未填')
             return false
           }
           if (item.aiShelves !== '' && item.aiShelves !== '0') {
@@ -585,7 +585,7 @@ export default {
           })
           if (tmp) {
             ty = false
-            that.$error_SHINHO('机维组未确认，请保存后等待机维组确认后提交')
+            that.$warning_SHINHO('机维组未确认，请保存后等待机维组确认后提交')
             return false
           }
         })

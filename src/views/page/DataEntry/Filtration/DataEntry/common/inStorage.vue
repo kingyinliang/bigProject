@@ -198,7 +198,7 @@ export default {
     },
     // 半成品罐下拉
     PotinTankAmount (id) {
-      this.dataForm.holderRemaining = this.PotList.filter(item => item.holderId === id)[0].amount
+      this.dataForm.holderRemaining = this.PotList.filter(item => item.holderId === id)[0].amount / 1000
       this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
       if (this.dataForm.holderRemaining) {
         this.PotObject.inTankAmount = true

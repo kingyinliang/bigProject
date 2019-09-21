@@ -248,6 +248,11 @@ export default {
       if (row.supStatus !== '已确认') {
         this.$refs.multipleTable.toggleRowSelection(row)
       }
+      // if (row.supStatus === '已确认') {
+      //   this.btn = true
+      // } else {
+      //   this.btn = false
+      // }
       if (row.steSupMaterialBean.resultList) {
         this.AddSupDate = row.steSupMaterialBean.resultList
       } else {

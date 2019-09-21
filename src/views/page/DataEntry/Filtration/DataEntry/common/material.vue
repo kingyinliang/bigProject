@@ -53,7 +53,8 @@
           <el-input v-model="receive.receiveAmount" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="单位：">
-          <el-input v-model="receive.unit" style="width:220px"></el-input>
+          <!--<el-input v-model="receive.unit" style="width:220px"></el-input>-->
+          {{receive.unit}}
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="receive.remark" style="width:220px"></el-input>

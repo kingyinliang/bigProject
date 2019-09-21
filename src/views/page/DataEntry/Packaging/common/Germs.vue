@@ -52,9 +52,9 @@
         <el-input v-model="scope.row.remark" :disabled="!isRedact" placeholder="手工录入" size="small"></el-input>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" label="操作" width="60">
+    <el-table-column fixed="right" label="操作" width="70">
       <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)"></el-button>
+        <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact" @click="dellistbomS(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

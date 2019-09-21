@@ -35,7 +35,11 @@ export const MAIN_API = {
   /**
    * @property {string} MENULIST_API 功能列表
    */
-  PRINTLTK_API: HOST + '/reports/printLtk'
+  PRINTLTK_API: HOST + '/reports/printLtk',
+  /**
+   * @property {string} MENULIST_API 根据车间id获取容器
+   */
+  CONTAINER_API: HOST + '/all/dropDown/getBoardHolderList'
 }
 /*
 *基础数据api
