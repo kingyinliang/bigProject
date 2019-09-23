@@ -94,7 +94,7 @@ export default {
     // 获取列表
     GetOrderList () {
       if (!this.plantList.factory) {
-        Vue.prototype.$warning_SHINHO('请选择工厂')
+        this.$warning_SHINHO('请选择工厂')
         return
       }
       this.$http(`${GRA_API.BEANPULP_LIST_API}/${this.plantList.factory}?deptId=${this.plantList.workshop}&flag=012`, 'GET', {}).then(({data}) => {

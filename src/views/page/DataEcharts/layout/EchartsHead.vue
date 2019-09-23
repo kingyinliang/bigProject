@@ -1,6 +1,6 @@
 <template>
   <div class="EchartsHead">
-    <p>欣和企业制曲车间数据展示中心</p>
+    <p><slot></slot></p>
     <img src="@/assets/img/echartsHead.png" alt="">
   </div>
 </template>
@@ -22,7 +22,8 @@ export default {
 <style lang="scss" scoped>
 .EchartsHead{
   width: 100%;
-  height: 85px;
+  height: 90px;
+  padding-top: 5px;
   position: relative;
   p{
     font-size: 30px;
@@ -30,11 +31,16 @@ export default {
     text-align: center;
     width: 100%;
     position: absolute;
-    top: 10px;
+    top: 0px;
   }
   img{
     display: block;
     width: 100%;
+  }
+}
+@media (max-width: 1300px) {
+  .EchartsHead p{
+    font-size: 28px;
   }
 }
 @media (max-width: 1200px) {
@@ -44,7 +50,7 @@ export default {
 }
 @media (max-width: 1100px) {
   .EchartsHead p{
-    font-size: 20px;
+    font-size: 22px;
   }
 }
 </style>
