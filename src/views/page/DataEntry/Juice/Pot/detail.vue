@@ -147,6 +147,7 @@ export default {
       this.$http(`${JUICE_API.JUICE_JUICE_DETAIL}`, 'POST', {holderId: this.$store.state.common.Juice.HOLDER_ID, batch: this.$store.state.common.Juice.BATCH}).then(({data}) => {
         if (data.code === 0) {
           this.formData = data.juiceItem.head
+          this.formData.TYPE_STATUS = this.formData.TYPE_STATUS === null ? '1' : this.formData.TYPE_STATUS
           // this.dataListOrder = data.juiceItem.infoEnter
           // this.dataListUse = data.juiceItem.infoOut
           this.dataTotalCount = data.juiceItem.infoEnter.length

@@ -39,7 +39,7 @@
                 <div v-else class="dataList_item_pot_box_item1" :style="`height:0%`"><p></p></div>
               </div>
             </div>
-            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1' || item.holderStatus === '2'">
+            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1' || item.holderStatus === '2' || item.holderStatus === '3'">
               <p>{{item.batch}}</p>
               <p>{{item.materialName}}</p>
               <p>{{(item.amount / 1000).toFixed(3)}}方</p>
@@ -63,7 +63,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="formHeader.currPage"
-        :page-sizes="[12, 16, 20]"
+        :page-sizes="[18, 24, 30]"
         :page-size="formHeader.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="formHeader.totalCount">
@@ -186,7 +186,7 @@ export default {
         workShop: '',
         holderId: '',
         currPage: 1,
-        pageSize: 12,
+        pageSize: 18,
         totalCount: 0
       },
       HolderList: [],
@@ -347,7 +347,6 @@ export default {
       this.GetList()
     },
     GnProp (row) {
-      console.log(row)
       if (row.holderStatus === '1' || row.holderStatus === '2') {
         this.formGn = {
           holderName: row.holderName,
