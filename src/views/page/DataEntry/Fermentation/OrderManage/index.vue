@@ -421,7 +421,7 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return
     }
     // if (this.params.workshopId === '') {
@@ -500,12 +500,12 @@ export default class Index extends Vue {
   }
   applyOrder () {
     if (!this.selectedList || this.selectedList.length === 0) {
-      this.$notify.error({title: '错误', message: '请选择要申请的订单'})
+      Vue.prototype.$warning_SHINHO('请选择要申请的订单')
       return
     }
     for (let item of this.selectedList) {
       if (item.kjmAmount <= 0) {
-        this.$notify.error({title: '错误', message: item.holdName + ' 订单量需大于0'})
+        Vue.prototype.$warning_SHINHO(item.holdName + ' 订单量需大于0')
         return false
       }
     }

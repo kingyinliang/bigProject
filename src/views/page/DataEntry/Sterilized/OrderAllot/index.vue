@@ -210,11 +210,11 @@ export default {
     },
     GetList (st) {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return false
       }
       if (st) {
@@ -254,12 +254,12 @@ export default {
     // 保存
     SaveForm () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选数据'})
+        this.$warning_SHINHO('请勾选数据')
         return false
       } else {
         for (let item of this.multipleSelection) {
           if (!item.productDate || !item.panId) {
-            this.$notify.error({title: '错误', message: '生产日期与锅号为必填项'})
+            this.$warning_SHINHO('生产日期与锅号为必填项')
             return false
           }
         }

@@ -138,7 +138,7 @@ export default {
     // 查询
     GetList (st) {
       if (!this.formHeader.factory) {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       this.$http(`${BASICDATA_API.STERILIZEMATERIALRATIOLIST}`, 'POST', this.formHeader).then(({data}) => {
@@ -197,7 +197,7 @@ export default {
     },
     DeleteInfo () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选数据'})
+        this.$warning_SHINHO('请勾选数据')
         return false
       }
       this.$confirm('确认要删除数据吗?', '提示', {

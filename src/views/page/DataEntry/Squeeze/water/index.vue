@@ -243,12 +243,12 @@ export default {
     // 提交
     SubmitForm () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '没有勾选提交数据'})
+        this.$warning_SHINHO('没有勾选提交数据')
         return false
       }
       for (let items of this.multipleSelection) {
         if (!items.moveOperator || items.moveOperator === '') {
-          this.$notify.error({title: '错误', message: '请选择挪笼操作人'})
+          this.$warning_SHINHO('请选择挪笼操作人')
           return false
         }
       }

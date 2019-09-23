@@ -645,7 +645,7 @@ export default class Index extends Vue {
 
   validateTime () {
     if (!this.workHourList || this.workHourList.length === 0) {
-      this.$notify.error({title: '错误', message: '报工工时无数据，不可提交'})
+      Vue.prototype.$warning_SHINHO('报工工时无数据，不可提交')
       return false
     }
     let sum = 0
@@ -653,7 +653,7 @@ export default class Index extends Vue {
     for (let item of this.workHourList) {
       if (item.confActivity2 === '' || item.confActivity2 === null) {
         iskong = 1
-        this.$notify.error({title: '错误', message: '机器工时不能为空'})
+        Vue.prototype.$warning_SHINHO('机器工时不能为空')
         return false
       }
       if (!isNaN(item.confActivity2)) {
@@ -661,7 +661,7 @@ export default class Index extends Vue {
       }
     }
     if (iskong === 0 && sum <= 0) {
-      this.$notify.error({title: '错误', message: '机器工时之和不能小于0'})
+      Vue.prototype.$warning_SHINHO('机器工时之和不能小于0')
       return false
     }
     return true

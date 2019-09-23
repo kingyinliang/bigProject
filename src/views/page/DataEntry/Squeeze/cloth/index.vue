@@ -161,19 +161,19 @@ export default {
     // 查询
     SearchList () {
       if (!this.formHeader.factory || this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择生产工厂'})
+        this.$warning_SHINHO('请选择生产工厂')
         return false
       }
       if (!this.formHeader.workShop || this.formHeader.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择生产车间'})
+        this.$warning_SHINHO('请选择生产车间')
         return false
       }
       if (!this.formHeader.productLine || this.formHeader.productLine === '') {
-        this.$notify.error({title: '错误', message: '请选择布浆线'})
+        this.$warning_SHINHO('请选择布浆线')
         return false
       }
       if (!this.formHeader.productDate || this.formHeader.productDate === '') {
-        this.$notify.error({title: '错误', message: '请选择生产日期'})
+        this.$warning_SHINHO('请选择生产日期')
         return false
       }
       this.contentshow = true

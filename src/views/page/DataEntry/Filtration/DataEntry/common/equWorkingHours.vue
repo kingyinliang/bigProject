@@ -41,7 +41,7 @@
         <el-table-column label="操作人" prop="changer" width="150" show-overflow-tooltip></el-table-column>
         <el-table-column width="50" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="mini" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row)" size="mini" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,7 +122,7 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请录入设备工时数据'})
+        this.$warning_SHINHO('请录入设备工时数据')
         return false
       }
       return ty

@@ -80,9 +80,9 @@
       </el-table-column>
       <el-table-column label="记录人" width="120" prop="material.childRecordMan"></el-table-column>
     </el-table-column>
-    <el-table-column label="操作" fixed="right" width="50">
+    <el-table-column label="操作" fixed="right" width="70">
       <template slot-scope="scope">
-        <el-button type="danger"  icon="el-icon-delete" circle size="small" v-if="dangerIf(scope.row)" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" @click="dellist(scope.row)"></el-button>
+        <el-button class="delBtn" type="text"  icon="el-icon-delete" size="small" v-if="dangerIf(scope.row)" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" @click="dellist(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -196,6 +196,9 @@ export default {
     updateMaterial (str, resolve, reject, st = false) {
       let tmp = []
       this.SumDate.forEach((item, index) => {
+        if (!item.material.childUsedAmount) {
+          item.material.childUsedAmount = '0'
+        }
         if (item.childStatus) {
           if (item.material.childStatus === 'saved') { item.material.childStatus = str } else if (item.material.childStatus === 'noPass' && str === 'submit') { item.material.childStatus = str }
         } else {
@@ -257,7 +260,7 @@ export default {
         if (item.delFlag !== '1') {
           if (!item.material.childPotNo && !item.material.childUsedAmount) {
             ty = false
-            this.$notify.error({title: '错误', message: '物料领用必填项未填写'})
+            this.$warning_SHINHO('物料领用必填项未填写')
             return false
           } else {
             this.sumAmount2[item.material.childPotNo] ? this.sumAmount2[item.material.childPotNo] += (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1 : this.sumAmount2[item.material.childPotNo] = (item.material.childUsedAmount ? item.material.childUsedAmount : 0) * 1
@@ -268,7 +271,7 @@ export default {
         console.log(key, this.sumAmount2[key], this.sumAmount1[key])
         if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
           ty = false
-          this.$notify.error({title: '错误', message: '剩余量不足'})
+          this.$warning_SHINHO('剩余量不足')
           return false
         }
       })
@@ -287,7 +290,7 @@ export default {
         console.log(key, this.sumAmount2[key], this.sumAmount1[key])
         if (this.sumAmount2[key] - (this.sumAmount1[key] ? this.sumAmount1[key] : 0) > (this.potList.filter(it => it.holderId === key).length ? this.potList.filter(it => it.holderId === key)[0].sumAmount : 0)) {
           ty = false
-          this.$notify.error({title: '错误', message: '剩余量不足'})
+          this.$warning_SHINHO('剩余量不足')
           return false
         }
       })
@@ -329,10 +332,11 @@ export default {
         })
         if (s > 1) {
           row.delFlag = '1'
+          row.material.childDelFlag = '1'
           this.SumDate.splice(this.SumDate.length, 0, {})
           this.SumDate.splice(this.SumDate.length - 1, 1)
         } else {
-          this.$notify.error({title: '错误', message: '此订单最后一条了，不能删除'})
+          this.$warning_SHINHO('此订单最后一条了，不能删除')
         }
       })
     },

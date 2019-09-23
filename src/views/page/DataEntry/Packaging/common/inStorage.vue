@@ -483,14 +483,20 @@ export default {
       }
     },
     isSt (item) {
-      if (item.isL === '0') {
-        item.isL = '1'
+      if ((item.manSolid && item.manSolid !== '0') || (item.aiSolid && item.aiSolid !== '0') || (item.aiShelves && item.aiShelves !== '0')) {
+        if (item.isL === '0') {
+          item.isL = '1'
+        }
       }
-      if (item.isZ === '0') {
-        item.isZ = '1'
+      if ((item.manPacking && item.manPacking !== '0') || (item.aiPacking && item.aiPacking !== '0')) {
+        if (item.isZ === '0') {
+          item.isZ = '1'
+        }
       }
-      if (item.isS === '0') {
-        item.isS = '1'
+      if ((item.sample && item.sample !== '0')) {
+        if (item.isS === '0') {
+          item.isS = '1'
+        }
       }
     },
     // 入库提交

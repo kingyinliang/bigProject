@@ -308,7 +308,7 @@ export default {
     // 总览点击
     topClick (item) {
       if (!this.formHeader.factory) {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return
       }
       this.formHeader.currPage = 1
@@ -469,7 +469,7 @@ export default {
           this.dialogData = row
           this.visible = true
         } else {
-          this.$notify.error({title: '错误', message: '该罐不是未清洗状态'})
+          this.$warning_SHINHO('该罐不是未清洗状态')
         }
         return
       }

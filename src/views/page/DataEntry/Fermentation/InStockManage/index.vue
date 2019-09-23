@@ -334,7 +334,7 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return
     }
     // if (this.params.workshopId === '') {
@@ -443,20 +443,20 @@ export default class Index extends Vue {
   }
   validate () {
     if (!this.selectedList || this.selectedList.length === 0) {
-      this.$notify.error({title: '错误', message: '请选择要入库的订单'})
+      Vue.prototype.$warning_SHINHO('请选择要入库的订单')
       return false
     }
     for (let item of this.selectedList) {
       if (!item.inAmount || item.inAmount === '') {
-        this.$notify.error({title: '错误', message: '请选择要入库的订单'})
+        Vue.prototype.$warning_SHINHO('请选择要入库的订单')
         return false
       }
       if (item.batch === null || item.batch === '') {
-        this.$notify.error({title: '错误', message: '批次不能为空'})
+        Vue.prototype.$warning_SHINHO('批次不能为空')
         return false
       }
       if (item.batch.length !== 10) {
-        this.$notify.error({title: '错误', message: '批次长度为10'})
+        Vue.prototype.$warning_SHINHO('批次长度为10')
         return false
       }
     }

@@ -162,9 +162,9 @@
             <el-input v-model="scope.row.twelveWell" :disabled="!isRedact" size="small" v-else></el-input>
           </template>
         </el-table-column>
-        <el-table-column width="50" fixed="right">
+        <el-table-column width="70" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '外观'" size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

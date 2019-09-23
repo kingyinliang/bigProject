@@ -354,7 +354,7 @@ export default {
         }
         this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params).then(({data}) => {
           if (data.code === 0) {
-            this.thrwHolderList = data.list
+            this.thrwHolderList = data.holderList
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
@@ -422,19 +422,19 @@ export default {
         batchList.push(item.batch)
         item.ID = this.ID
         if (!item.receiveAmount || item.receiveAmount === '') {
-          this.$notify.error({title: '错误', message: '请填写实际领料'})
+          this.$warning_SHINHO('请填写实际领料')
           return false
         }
         if (!item.batch || item.batch === '') {
-          this.$notify.error({title: '错误', message: '请填写批次'})
+          this.$warning_SHINHO('请填写批次')
           return false
         }
         if (item.batch.length !== 10) {
-          this.$notify.error({title: '错误', message: '批次应为10位'})
+          this.$warning_SHINHO('批次应为10位')
           return false
         }
         if (item.materialName.indexOf('原汁') !== -1 && (item.holderId === '' || !item.holderId)) {
-          this.$notify.error({title: '错误', message: '原汁物料需选择罐号'})
+          this.$warning_SHINHO('原汁物料需选择罐号')
           return false
         }
         // if (/六月鲜/g.test(this.materialName)) {
@@ -445,7 +445,7 @@ export default {
         // }
       }
       if (new Set(batchList).size !== batchList.length) {
-        this.$notify.error({title: '错误', message: '批次不能重复'})
+        this.$warning_SHINHO('批次不能重复')
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
@@ -463,7 +463,7 @@ export default {
     },
     SavedForm () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选数据'})
+        this.$warning_SHINHO('请勾选数据')
       } else {
         let str = ''
         let st = false
@@ -526,16 +526,16 @@ export default {
     },
     SubmitForm () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选数据'})
+        this.$warning_SHINHO('请勾选数据')
         return false
       }
       for (let item of this.multipleSelection) {
         if (item.isUpdate === false) {
-          this.$notify.error({title: '错误', message: '请先保存调配详情信息（调配单：' + item.orderNo + '）'})
+          this.$warning_SHINHO('请先保存调配详情信息（调配单：' + item.orderNo + '）')
           return false
         }
         if (!item.holderId || !item.allocateTime || item.holderId === '' || item.allocateTime === '') {
-          this.$notify.error({title: '错误', message: '请填写必填项'})
+          this.$warning_SHINHO('请填写必填项')
           return false
         }
       }
@@ -596,7 +596,13 @@ export default {
     },
     // 删除
     DelOrderNo (row) {
-      this.ItemList.splice(this.ItemList.indexOf(row), 1)
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.ItemList.splice(this.ItemList.indexOf(row), 1)
+      })
     },
     SplitStatus (row) {
       if (row.materialName.indexOf('原汁') === -1) {

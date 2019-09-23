@@ -61,9 +61,9 @@
               <el-input v-model="scope.row.remark" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" placeholder="手工录入" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="50">
+          <el-table-column fixed="right" label="操作" width="70">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delRow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -163,7 +163,7 @@ export default {
         type: 'warning'
       }).then(() => {
         if (this.MaterialDate.filter(item => item.delFlag === '0' && item.materialCode === row.materialCode).length === 1) {
-          this.$notify.error({title: '错误', message: '最后一条了哦，不能再删了'})
+          this.$warning_SHINHO('最后一条了哦，不能再删了')
         } else {
           row.delFlag = '1'
         }
@@ -261,17 +261,17 @@ export default {
       this.MaterialDate.forEach((item) => {
         if (!item.hloderId) {
           ty = false
-          this.$notify.error({title: '错误', message: '罐号未填'})
+          this.$warning_SHINHO('罐号未填')
           return false
         }
         if (!item.batch) {
           ty = false
-          this.$notify.error({title: '错误', message: '批次未填'})
+          this.$warning_SHINHO('批次未填')
           return false
         }
         if (!item.receiveAmount) {
           ty = false
-          this.$notify.error({title: '错误', message: '实际领料未填'})
+          this.$warning_SHINHO('实际领料未填')
           return false
         }
       })

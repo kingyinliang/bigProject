@@ -467,11 +467,11 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return
     }
     if (this.params.workshopId === '') {
-      this.$notify.error({title: '错误', message: '请选择车间'})
+      Vue.prototype.$warning_SHINHO('请选择车间')
       return
     }
     // if (this.params.orderDate === null || this.params.orderDate === '') {
@@ -542,29 +542,29 @@ export default class Index extends Vue {
     for (let item of this.splitDetailList) {
       if (item.delFlag === '0') {
         if (!item.inPotNo || item.inPotNo.length === 0) {
-          this.$notify.error({title: '错误', message: '入罐号不能为空'})
+          Vue.prototype.$warning_SHINHO('入罐号不能为空')
           return
         }
         if (!item.houseNo || item.houseNo.length === 0) {
-          this.$notify.error({title: '错误', message: '曲房不能为空'})
+          Vue.prototype.$warning_SHINHO('曲房不能为空')
           return
         }
         if (!item.inKjmDate || item.inKjmDate.length === 0) {
-          this.$notify.error({title: '错误', message: '制曲日期不能为空'})
+          Vue.prototype.$warning_SHINHO('制曲日期不能为空')
           return
         }
         if (!item.productDate || item.productDate.length === 0) {
-          this.$notify.error({title: '错误', message: '生产日期不能为空'})
+          Vue.prototype.$warning_SHINHO('生产日期不能为空')
           return
         }
         potSet.add(item.inPotNo)
         if (potSet.size > 1) {
-          this.$notify.error({title: '错误', message: '同一订单不能多个入罐号'})
+          Vue.prototype.$warning_SHINHO('同一订单不能多个入罐号')
           return
         }
         let houseKey = item.houseNo + item.inKjmDate
         if (houseSet.has(houseKey)) {
-          this.$notify.error({title: '错误', message: '相同制曲日期下，曲房重复'})
+          Vue.prototype.$warning_SHINHO('相同制曲日期下，曲房重复')
           return
         } else {
           houseSet.add(houseKey)
@@ -640,17 +640,17 @@ export default class Index extends Vue {
   // 删除订单详情
   delDetail () {
     if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
-      this.$notify.error({title: '错误', message: '无权限进行删除操作'})
+      Vue.prototype.$warning_SHINHO('无权限进行删除操作')
       return
     }
     if (!this.selectedDetailList || this.selectedDetailList.length === 0) {
-      this.$notify.error({title: '错误', message: '请选择删除项'})
+      Vue.prototype.$warning_SHINHO('请选择删除项')
       return
     }
     for (let row of this.selectedDetailList) {
       // 提交或者通过的数据不能删除
       if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
-        this.$notify.error({title: '错误', message: `${row.status}的数据不可删除`})
+        Vue.prototype.$warning_SHINHO(`${row.status}的数据不可删除`)
         return
       }
     }
@@ -676,11 +676,11 @@ export default class Index extends Vue {
   // 订单详情修改
   showModifyDetial (row: OrderDetail) {
     if (!this.isAuth('sys:kjmOrderHouse:mySaveOrUpdate')) {
-      this.$notify.error({title: '错误', message: '无权限进行修改操作'})
+      Vue.prototype.$warning_SHINHO('无权限进行修改操作')
       return
     }
     if (row.status && (row.status === Status.SUBMIT || row.status === Status.CHECKED)) {
-      this.$notify.error({title: '错误', message: `${row.status}的数据不可修改`})
+      Vue.prototype.$warning_SHINHO(`${row.status}的数据不可修改`)
       return
     }
     this.detailForm = row.clone()
@@ -688,19 +688,19 @@ export default class Index extends Vue {
   }
   modifyDetial () {
     if (!this.detailForm.inPotNo || this.detailForm.inPotNo.length === 0) {
-      this.$notify.error({title: '错误', message: '入罐号不能为空'})
+      Vue.prototype.$warning_SHINHO('入罐号不能为空')
       return false
     }
     if (!this.detailForm.houseNo || this.detailForm.houseNo.length === 0) {
-      this.$notify.error({title: '错误', message: '曲房不能为空'})
+      Vue.prototype.$warning_SHINHO('曲房不能为空')
       return false
     }
     if (!this.detailForm.inKjmDate || this.detailForm.inKjmDate.length === 0) {
-      this.$notify.error({title: '错误', message: '制曲日期不能为空'})
+      Vue.prototype.$warning_SHINHO('制曲日期不能为空')
       return false
     }
     if (!this.detailForm.productDate || this.detailForm.productDate.length === 0) {
-      this.$notify.error({title: '错误', message: '生产日期不能为空'})
+      Vue.prototype.$warning_SHINHO('生产日期不能为空')
       return false
     }
     let params: OrderDetail[] = [this.detailForm]

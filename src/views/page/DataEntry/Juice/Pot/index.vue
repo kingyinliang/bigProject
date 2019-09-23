@@ -654,7 +654,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.formTransfer.isFull === '1' && (this.formTransfer.fullDate === '' || !this.formTransfer.fullDate)) {
-            this.$notify.error({title: '错误', message: '满灌时请选择满罐时间'})
+            this.$warning_SHINHO('满灌时请选择满罐时间')
             return false
           }
           this.$http(`${JUICE_API.JUICE_TRANSFER_SAVE}`, 'POST', this.formTransfer).then(({data}) => {

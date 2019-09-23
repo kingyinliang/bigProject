@@ -135,15 +135,15 @@ export default {
     },
     GetList () {
       if (!this.formHeader.factory) {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return
       }
       if (!this.formHeader.workShop) {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return
       }
       if (!this.formHeader.productDate) {
-        this.$notify.error({title: '错误', message: '请选择生产日期'})
+        this.$warning_SHINHO('请选择生产日期')
         return
       }
       this.isRedact = false
@@ -203,44 +203,54 @@ export default {
         }
       }
       let that = this
-      let updateApplyorder = new Promise((resolve, reject) => {
-        that.$refs.applyorder.UpdateOrder(str, resolve, reject)
-      })
       let updateMaterial = new Promise((resolve, reject) => {
         that.$refs.materielref.updateMaterial(str, resolve, reject)
       })
-      let UpdateTime = new Promise((resolve, reject) => {
-        that.$refs.manhour.UpdateTime(str, resolve, reject)
-      })
       if (str === 'submit') {
-        let saveNet = Promise.all([updateApplyorder, updateMaterial, UpdateTime])
-        saveNet.then(function () {
-          let SubmitApplyorder = new Promise((resolve, reject) => {
-            that.$refs.applyorder.UpdateOrder(str, resolve, reject, true)
+        updateMaterial.then(() => {
+          let updateApplyorder = new Promise((resolve, reject) => {
+            that.$refs.applyorder.UpdateOrder(str, resolve, reject)
           })
-          let SubmitMaterial = new Promise((resolve, reject) => {
-            that.$refs.materielref.updateMaterial(str, resolve, reject, true)
+          let UpdateTime = new Promise((resolve, reject) => {
+            that.$refs.manhour.UpdateTime(str, resolve, reject)
           })
-          let SubmitTime = new Promise((resolve, reject) => {
-            that.$refs.manhour.UpdateTime(str, resolve, reject, true)
+          let saveNet = Promise.all([updateApplyorder, UpdateTime])
+          saveNet.then(function () {
+            let SubmitApplyorder = new Promise((resolve, reject) => {
+              that.$refs.applyorder.UpdateOrder(str, resolve, reject, true)
+            })
+            let SubmitMaterial = new Promise((resolve, reject) => {
+              that.$refs.materielref.updateMaterial(str, resolve, reject, true)
+            })
+            let SubmitTime = new Promise((resolve, reject) => {
+              that.$refs.manhour.UpdateTime(str, resolve, reject, true)
+            })
+            let SubmitNet = Promise.all([SubmitApplyorder, SubmitMaterial, SubmitTime])
+            SubmitNet.then(function () {
+              that.isRedact = false
+              that.$notify({title: '成功', message: '提交成功', type: 'success'})
+              that.GetList()
+            }, err => {
+              that.$error_SHINHO(err)
+            })
           })
-          let SubmitNet = Promise.all([SubmitApplyorder, SubmitMaterial, SubmitTime])
-          SubmitNet.then(function () {
+        })
+      } else {
+        updateMaterial.then(() => {
+          let updateApplyorder = new Promise((resolve, reject) => {
+            that.$refs.applyorder.UpdateOrder(str, resolve, reject)
+          })
+          let UpdateTime = new Promise((resolve, reject) => {
+            that.$refs.manhour.UpdateTime(str, resolve, reject)
+          })
+          let saveNet = Promise.all([updateApplyorder, UpdateTime])
+          saveNet.then(function () {
             that.isRedact = false
-            that.$notify({title: '成功', message: '提交成功', type: 'success'})
+            that.$notify({title: '成功', message: '保存成功', type: 'success'})
             that.GetList()
           }, err => {
             that.$error_SHINHO(err)
           })
-        })
-      } else {
-        let saveNet = Promise.all([updateApplyorder, updateMaterial, UpdateTime])
-        saveNet.then(function () {
-          that.isRedact = false
-          that.$notify({title: '成功', message: '保存成功', type: 'success'})
-          that.GetList()
-        }, err => {
-          that.$error_SHINHO(err)
         })
       }
     },

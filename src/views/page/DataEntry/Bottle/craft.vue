@@ -115,9 +115,9 @@
               <el-input v-model="scope.row.twelveWell" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="50" fixed="right">
+          <el-table-column width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row, 1, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row, 1, scope.$index)" :disabled="!isRedact" v-if="scope.row.parameter === '拉伸角度'" size="mini">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -173,9 +173,9 @@
               <el-input v-model="scope.row.twoInletWaterTemp" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="50" fixed="right">
+          <el-table-column width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,2)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row,2)" :disabled="!isRedact" size="mini">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -273,9 +273,9 @@
               <el-input v-model="scope.row.afterEight" :disabled="!isRedact" size="small"></el-input>
             </template>
           </el-table-column>
-          <el-table-column width="50" fixed="right">
+          <el-table-column width="70" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row,3)" :disabled="!isRedact" size="mini"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row,3)" :disabled="!isRedact" size="mini">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

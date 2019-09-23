@@ -167,11 +167,11 @@ export default {
     },
     GetList (st) {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return false
       }
       if (st) {
@@ -198,17 +198,17 @@ export default {
     // 调配
     DoDeploy () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选订单'})
+        this.$warning_SHINHO('请勾选订单')
       } else {
         let materialCode = this.multipleSelection[0].materialCode
         let dispatchMan = this.multipleSelection[0].dispatchMan
         for (let item of this.multipleSelection) {
           if (materialCode !== item.materialCode) {
-            this.$notify.error({title: '错误', message: '物料冲突，请重新选择订单！'})
+            this.$warning_SHINHO('物料冲突，请重新选择订单！')
             return false
           }
           if (dispatchMan !== item.dispatchMan) {
-            this.$notify.error({title: '错误', message: '调度人员冲突，请重新选择订单！'})
+            this.$warning_SHINHO('调度人员冲突，请重新选择订单！')
             return false
           }
         }
