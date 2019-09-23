@@ -45,9 +45,9 @@
           <el-input v-model="scope.row.remark" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60" fixed="right">
+      <el-table-column label="操作" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="70" fixed="right">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delMaterial(scope.row)" v-if="scope.row.isSplit === '1'"></el-button>
+          <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delMaterial(scope.row)" v-if="scope.row.isSplit === '1'">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,12 +143,12 @@ export default {
       this.MaterialList.forEach((item) => {
         if (!(item.batch && item.productUseAmount && item.supplier)) {
           ty = false
-          this.$notify.error({title: '错误', message: '物料领用必填项未填'})
+          this.$warning_SHINHO('物料领用必填项未填')
           return false
         }
         if (item.batch.length !== 10) {
           ty = false
-          this.$notify.error({title: '错误', message: '物料领用批次十位'})
+          this.$warning_SHINHO('物料领用批次十位')
           return false
         }
       })

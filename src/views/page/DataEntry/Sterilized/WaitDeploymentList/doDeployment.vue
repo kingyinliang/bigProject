@@ -86,9 +86,9 @@
           <!-- <el-table-column label="订单结束日期"></el-table-column> -->
           <el-table-column label="生产调度员" prop="dispatchMan"></el-table-column>
           <el-table-column label="订单备注" prop="remark" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="操作" width="50">
+          <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle size="small" :disabled="!isRedact"  @click="DelOrderNo(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" size="small" :disabled="!isRedact"  @click="DelOrderNo(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -259,7 +259,7 @@ export default {
     // 新增订单
     SaveOderNo () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选订单'})
+        this.$warning_SHINHO('请勾选订单')
       } else {
         let materialCode
         let dispatchMan
@@ -272,11 +272,11 @@ export default {
         }
         for (let item of this.multipleSelection) {
           if (materialCode !== item.materialCode) {
-            this.$notify.error({title: '错误', message: '物料冲突，请重新选择订单！'})
+            this.$warning_SHINHO('物料冲突，请重新选择订单！')
             return false
           }
           if (dispatchMan !== item.dispatchMan) {
-            this.$notify.error({title: '错误', message: '调度人员冲突，请重新选择订单！'})
+            this.$warning_SHINHO('调度人员冲突，请重新选择订单！')
             return false
           }
         }
@@ -303,7 +303,7 @@ export default {
     },
     SaveOrderNo () {
       if (this.orderList.length === 0) {
-        this.$notify.error({title: '错误', message: '请添加订单'})
+        this.$warning_SHINHO('请添加订单')
       } else {
         let params = {
           factory: this.$store.state.common.Sterilized.factoryId,
@@ -349,7 +349,7 @@ export default {
         type: 'warning'
       }).then(() => {
         if (this.orderList.length === 0) {
-          this.$notify.error({title: '错误', message: '请添加订单'})
+          this.$warning_SHINHO('请添加订单')
           return false
         }
         if (this.allocateId === '') {

@@ -89,15 +89,15 @@ export default {
   methods: {
     getOrderList () {
       if (this.params.factoryId === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return
       }
       if (this.params.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return
       }
       if (this.params.type === '') {
-        this.$notify.error({title: '错误', message: '请选择类型'})
+        this.$warning_SHINHO('请选择类型')
         return
       }
       this.$http(`${KJM_API.KJMAKINGORDERLIST_API}`, 'POST', this.params).then(({data}) => {

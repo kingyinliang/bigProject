@@ -104,7 +104,7 @@ export default {
     // 申请订单
     ApplyOrder () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请选择订单'})
+        this.$warning_SHINHO('请选择订单')
         return
       }
       this.multipleSelection.forEach((item, index) => {

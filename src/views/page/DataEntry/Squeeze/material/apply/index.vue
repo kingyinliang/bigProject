@@ -161,9 +161,9 @@
                     {{scope.row.changer}}
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" width='50' fixed="right">
+                <el-table-column label="操作" width='70' fixed="right">
                   <template slot-scope="scope">
-                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
+                    <el-button  class="delBtn" type="text" icon="el-icon-delete" size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -585,7 +585,7 @@ export default class Index extends Vue {
   }
   saveEnd () {
     if (this.endForm.endAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '结束数不能为空'})
+      Vue.prototype.$warning_SHINHO('结束数不能为空')
       return false
     }
     this.availableMap.set(this.endForm.deviceId, '0')
@@ -605,29 +605,29 @@ export default class Index extends Vue {
   }
   startValidate () {
     if (this.startForm.fermentPotNo === '') {
-      this.$notify.error({title: '错误', message: '领用发酵罐不能为空'})
+      Vue.prototype.$warning_SHINHO('领用发酵罐不能为空')
       return false
     } else if (this.startForm.batch.length !== 10) {
-      this.$notify.error({title: '错误', message: '批次长度必须为10'})
+      Vue.prototype.$warning_SHINHO('批次长度必须为10')
       return false
     } else if (this.startForm.startAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '起始数不能为空'})
+      Vue.prototype.$warning_SHINHO('起始数不能为空')
       return false
     }
     return true
   }
   modifyValidate () {
     if (this.modifyForm.fermentPotNo === '') {
-      this.$notify.error({title: '错误', message: '领用发酵罐不能为空'})
+      Vue.prototype.$warning_SHINHO('领用发酵罐不能为空')
       return false
     } else if (this.modifyForm.batch.length !== 10) {
-      this.$notify.error({title: '错误', message: '批次长度必须为10'})
+      Vue.prototype.$warning_SHINHO('批次长度必须为10')
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '起始数不能为空'})
+      Vue.prototype.$warning_SHINHO('起始数不能为空')
       return false
     } else if (this.modifyForm.endAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '结束数不能为空'})
+      Vue.prototype.$warning_SHINHO('结束数不能为空')
       return false
     }
     return true
@@ -752,19 +752,19 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return
     }
     if (this.params.workshopId === '') {
-      this.$notify.error({title: '错误', message: '请选择车间'})
+      Vue.prototype.$warning_SHINHO('请选择车间')
       return
     }
     if (this.params.productLineId === '') {
-      this.$notify.error({title: '错误', message: '请选择布浆线'})
+      Vue.prototype.$warning_SHINHO('请选择布浆线')
       return
     }
     if (this.params.applyDate === null || this.params.applyDate === '') {
-      this.$notify.error({title: '错误', message: '请选择领用日期'})
+      Vue.prototype.$warning_SHINHO('请选择领用日期')
       return
     }
     // 保存选项值到common store

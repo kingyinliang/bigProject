@@ -33,6 +33,11 @@
           <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
             <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
             <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="审核状态" width="100">
+              <template slot-scope="scope">
+                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':'未录入'}}
+              </template>
+            </el-table-column>
             <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
             <el-table-column label="需求数量" width="80" prop="adjustAmount" :show-overflow-tooltip="true">
@@ -79,6 +84,11 @@
           <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
             <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
             <el-table-column type="index" width="55" label="序号"></el-table-column>
+            <el-table-column label="审核状态" width="100">
+              <template slot-scope="scope">
+                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':'未录入'}}
+              </template>
+            </el-table-column>
             <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
             <el-table-column label="添加数量" width="80" prop="addAmount" :show-overflow-tooltip="true"></el-table-column>
@@ -245,7 +255,7 @@ export default {
           }
           this.visible = true
         } else {
-          this.$notify.error({title: '错误', message: '请选择数据'})
+          this.$warning_SHINHO('请选择数据')
         }
       }
     },
@@ -422,23 +432,23 @@ export default {
         if (item.delFlag === '0') {
           if (!item.batch) {
             ty = false
-            this.$notify.error({title: '错误', message: '批次必填'})
+            this.$warning_SHINHO('批次必填')
             return false
           }
           if (item.batch.length !== 10) {
             ty = false
-            this.$notify.error({title: '错误', message: '批次长度限制10位'})
+            this.$warning_SHINHO('批次长度限制10位')
             return false
           }
           if (!item.receiveAmount) {
             ty = false
-            this.$notify.error({title: '错误', message: '领用数量必填'})
+            this.$warning_SHINHO('领用数量必填')
             return false
           }
           if (!st) {
             if (item.supStatus !== '已确认') {
               ty = false
-              this.$notify.error({title: '错误', message: '品保未确认'})
+              this.$warning_SHINHO('品保未确认')
               return false
             }
           }
@@ -458,13 +468,13 @@ export default {
             console.log(sum)
             if (sum !== item.adjustAmount * 1) {
               ty = false
-              this.$notify.error({title: '错误', message: '领用数量不等于需求数量'})
+              this.$warning_SHINHO('领用数量不等于需求数量')
             }
           } else if (data1 === 'SupDate') {
             console.log(sum)
             if (sum !== item.addAmount * 1) {
               ty = false
-              this.$notify.error({title: '错误', message: '领用数量不等于添加数量'})
+              this.$warning_SHINHO('领用数量不等于添加数量')
             }
           }
         }

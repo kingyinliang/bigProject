@@ -247,7 +247,7 @@ export default {
     savedOrSubmitForm (str) {
       if (str === 'submit') {
         if (this.check()) {
-          this.$notify.error({title: '错误', message: '有必填项未填写'})
+          this.$warning_SHINHO('有必填项未填写')
           return false
         }
       }
@@ -260,7 +260,7 @@ export default {
           }
         })
       } else {
-        this.$notify.error({title: '错误', message: '请选择数据后操作'})
+        this.$warning_SHINHO('请选择数据后操作')
         return
       }
       if (str === 'submit') {

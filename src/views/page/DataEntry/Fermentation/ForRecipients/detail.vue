@@ -263,11 +263,11 @@ export default {
         }
       })
       if (i === 0) {
-        this.$notify.error({title: '错误', message: '请勾选罐号'})
+        this.$warning_SHINHO('请勾选罐号')
         return false
       } else {
         if (this.formHeader.AMOUNT < (this.multipleSelection.length)) {
-          this.$notify.error({title: '错误', message: '勾选开罐数量不能大于申请数'})
+          this.$warning_SHINHO('勾选开罐数量不能大于申请数')
           return false
         }
         this.$confirm('确认执行开罐操作吗?', '提示', {

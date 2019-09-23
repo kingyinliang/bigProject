@@ -316,11 +316,11 @@ export default {
     },
     GetList (st) {
       if (!this.formHeader.factory) {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       if (!this.formHeader.workShop) {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return false
       }
       if (st) {
@@ -358,7 +358,7 @@ export default {
         }
         this.GnDialogTableVisible = true
       } else {
-        this.$notify.error({title: '警告', message: '当前状态不能搅罐', type: 'warning'})
+        this.$warning_SHINHO('当前状态不能搅罐')
       }
     },
     GnSave (formName) {
@@ -432,7 +432,7 @@ export default {
         }
         this.JsbDialogTableVisible = true
       } else {
-        this.$notify.error({title: '警告', message: '当前状态不能JBS出库', type: 'warning'})
+        this.$warning_SHINHO('当前状态不能JBS出库')
       }
     },
     ZcProp (row) {
@@ -456,18 +456,18 @@ export default {
         }
         this.ZcDialogTableVisible = true
       } else {
-        this.$notify.error({title: '警告', message: '当前状态不能转储', type: 'warning'})
+        this.$warning_SHINHO('当前状态不能转储')
       }
     },
     JsbSave (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.formJsb.receiveAmount > this.formJsb.amount) {
-            this.$notify.error({title: '错误', message: '领用量不能大于库存'})
+            this.$warning_SHINHO('领用量不能大于库存')
             return false
           }
           if (this.formJsb.isFull === '1' && (this.formJsb.fullDate === '' || !this.formJsb.fullDate)) {
-            this.$notify.error({title: '错误', message: '满灌时请选择满罐时间'})
+            this.$warning_SHINHO('满灌时请选择满罐时间')
             return false
           }
           this.formJsb.factory = this.formHeader.factory
@@ -491,11 +491,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.formZc.receiveAmount > this.formZc.amount) {
-            this.$notify.error({title: '错误', message: '领用量不能大于库存'})
+            this.$warning_SHINHO('领用量不能大于库存')
             return false
           }
           if (this.formZc.isFull === '1' && (this.formZc.fullDate === '' || !this.formZc.fullDate)) {
-            this.$notify.error({title: '错误', message: '满灌时请选择满罐时间'})
+            this.$warning_SHINHO('满灌时请选择满罐时间')
             return false
           }
           this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTZCSAVE}`, 'POST', this.formZc).then(({data}) => {

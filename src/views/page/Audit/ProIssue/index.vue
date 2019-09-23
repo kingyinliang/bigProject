@@ -359,7 +359,7 @@ export default {
         this.plantList.currPage = 1
       }
       if (!this.plantList.factory) {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return
       }
       this.plantList.headerTxt = ''
@@ -506,14 +506,14 @@ export default {
     // 审核拒绝
     repulseAutios () {
       if (this.multipleSelection.length <= 0) {
-        this.$notify.error({title: '错误', message: '请选择订单'})
+        this.$warning_SHINHO('请选择订单')
       } else {
         this.visible = true
       }
     },
     repulseAutio () {
       if (this.Text.length <= 0) {
-        this.$notify.error({title: '错误', message: '请填写不通过原因'})
+        this.$warning_SHINHO('请填写不通过原因')
       } else {
         this.$refs.pstngDate.validate((valid) => {
           if (valid) {
@@ -549,7 +549,7 @@ export default {
     // 审核通过
     subAutio () {
       if (this.multipleSelection.length <= 0) {
-        this.$notify.error({title: '错误', message: '请选择订单'})
+        this.$warning_SHINHO('请选择订单')
       } else {
         this.$refs.pstngDate.validate((valid) => {
           if (valid) {

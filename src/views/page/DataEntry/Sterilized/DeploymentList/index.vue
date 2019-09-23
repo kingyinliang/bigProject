@@ -200,7 +200,7 @@ export default {
     },
     GetList () {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTLISTTP}`, 'POST', this.formHeader).then(({data}) => {
@@ -258,7 +258,7 @@ export default {
     },
     CreateOrder () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选数据'})
+        this.$warning_SHINHO('请勾选数据')
         return false
       }
       this.$confirm('确认生成调配单吗?', '提示', {

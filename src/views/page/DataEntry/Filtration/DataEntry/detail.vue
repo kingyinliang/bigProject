@@ -217,7 +217,7 @@ export default {
         return false
       }
       if (!this.$refs.instorage.countOutputNum) {
-        this.$notify.error({title: '错误', message: '入库数未0，不能提交'})
+        this.$warning_SHINHO('入库数未0，不能提交')
         return false
       }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {

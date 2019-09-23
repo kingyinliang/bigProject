@@ -83,7 +83,7 @@
               </el-table-column>
               <el-table-column label="操作" width="80">
                 <template slot-scope="scope">
-                  <el-button type="danger" icon="el-icon-delete" circle size="small"  @click="dellist(scope.row)" :disabled="!isRedact"></el-button>
+                  <el-button class="delBtn" type="text" icon="el-icon-delete" size="small"  @click="dellist(scope.row)" :disabled="!isRedact">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -265,27 +265,27 @@ export default {
           if (item === '酱油') {
             if (!this.crafData.sauceTemp) {
               ty = false
-              this.$notify.error({title: '错误', message: '酱油温度必填'})
+              this.$warning_SHINHO('酱油温度必填')
             }
           } else if (item === '热水') {
             if (!this.crafData.hotTemp) {
               ty = false
-              this.$notify.error({title: '错误', message: '热水温度必填'})
+              this.$warning_SHINHO('热水温度必填')
             }
           }
         })
       } else {
         ty = false
-        this.$notify.error({title: '错误', message: '原汁换热介质必填'})
+        this.$warning_SHINHO('原汁换热介质必填')
       }
       this.crafData.result.forEach((item) => {
         if (!item.temp) {
           ty = false
-          this.$notify.error({title: '错误', message: '屏显温度必填'})
+          this.$warning_SHINHO('屏显温度必填')
         }
         if (!item.created) {
           ty = false
-          this.$notify.error({title: '错误', message: '记录时间必填'})
+          this.$warning_SHINHO('记录时间必填')
         }
       })
       return ty

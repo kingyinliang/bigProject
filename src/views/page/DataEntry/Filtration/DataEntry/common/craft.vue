@@ -36,9 +36,9 @@
         <el-table-column label="备注" show-overflow-tooltip width="120" prop="remark"></el-table-column>
         <el-table-column label="操作时间" show-overflow-tooltip width="150" prop="changed"></el-table-column>
         <el-table-column label="操作人" show-overflow-tooltip width="100" prop="changer"></el-table-column>
-        <el-table-column width="50" fixed="right">
+        <el-table-column width="70" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle @click="DelRow(scope.row)" :disabled="!isRedact || soleStatus " size="mini"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" @click="DelRow(scope.row)" :disabled="!isRedact || soleStatus " size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -374,7 +374,7 @@ export default {
           this.supMaterialList.splice(this.supMaterialList.indexOf(row), 1)
           return false
         } else {
-          this.$notify.error({title: '错误', message: '最后一条禁止删除'})
+          this.$warning_SHINHO('最后一条禁止删除')
           return false
         }
       })
@@ -492,13 +492,13 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请录入工艺控制数据'})
+        this.$warning_SHINHO('请录入工艺控制数据')
         return false
       }
       for (let item of this.supMaterialList) {
         if (item.filterAidAmount === '' || !item.filterAidAmount || item.batch === '' || !item.batch) {
           ty = false
-          this.$notify.error({title: '错误', message: '工艺控制中辅料领用必填项不能为空'})
+          this.$warning_SHINHO('工艺控制中辅料领用必填项不能为空')
           return false
         }
       }
@@ -530,7 +530,7 @@ export default {
       for (let item of SupMaTotal) {
         if (item.sum !== techTotal.find((items) => items.id === item.id).sum) {
           ty = false
-          this.$notify.error({title: '错误', message: item.deviceName + ' 剂用量不相等'})
+          this.$warning_SHINHO(item.deviceName + ' 剂用量不相等')
           return false
         }
       }

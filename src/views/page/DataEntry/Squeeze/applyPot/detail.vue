@@ -352,15 +352,15 @@ export default class Index extends Vue {
   }
   validate () {
     if (!this.formHeader.factory) {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return false
     }
     if (!this.formHeader.workShop) {
-      this.$notify.error({title: '错误', message: '请选择车间'})
+      Vue.prototype.$warning_SHINHO('请选择车间')
       return false
     }
     if (!this.formHeader.materialCode) {
-      this.$notify.error({title: '错误', message: '请选择酱醪'})
+      Vue.prototype.$warning_SHINHO('请选择酱醪')
       return false
     }
     // if (!this.formHeader.halfType) {
@@ -368,11 +368,11 @@ export default class Index extends Vue {
     //   return false
     // }
     if (!this.formHeader.amount) {
-      this.$notify.error({title: '错误', message: '请填写申请数量'})
+      Vue.prototype.$warning_SHINHO('请填写申请数量')
       return false
     }
     if (!this.formHeader.productDate) {
-      this.$notify.error({title: '错误', message: '请选择生产日期'})
+      Vue.prototype.$warning_SHINHO('请选择生产日期')
       return false
     }
     return true

@@ -270,7 +270,7 @@ export default {
     // 保存
     SavedOr (str) {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请选择订单'})
+        this.$warning_SHINHO('请选择订单')
         return
       }
       this.multipleSelection.forEach((item) => {
@@ -298,7 +298,7 @@ export default {
     // 推送
     pushData (str) {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请选择订单'})
+        this.$warning_SHINHO('请选择订单')
         return
       }
       if (str === '已确认') {
@@ -345,30 +345,30 @@ export default {
       this.multipleSelection.forEach((item) => {
         if (!item.steStatus) {
           ty = false
-          this.$notify.error({title: '错误', message: '杀菌状态必填'})
+          this.$warning_SHINHO('杀菌状态必填')
           return false
         }
         if (item.steStatus === '异常订单') {
           if (!item.steStatusRemake) {
             ty = false
-            this.$notify.error({title: '错误', message: '订单状态为异常，状态备注必填'})
+            this.$warning_SHINHO('订单状态为异常，状态备注必填')
             return false
           }
         }
         item.steSupMaterialBean.supList.forEach((item1) => {
           if (!item1.materialCode) {
             ty = false
-            this.$notify.error({title: '错误', message: '增补料记录物料必填'})
+            this.$warning_SHINHO('增补料记录物料必填')
             return false
           }
           if (!item1.addAmount) {
             ty = false
-            this.$notify.error({title: '错误', message: '增补料记录添加数量必填'})
+            this.$warning_SHINHO('增补料记录添加数量必填')
             return false
           }
           if (!item1.unit) {
             ty = false
-            this.$notify.error({title: '错误', message: '增补料记录单位必填'})
+            this.$warning_SHINHO('增补料记录单位必填')
             return false
           }
         })

@@ -150,9 +150,9 @@
                     {{scope.row.remark}}
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" width='50' fixed="right">
+                <el-table-column label="操作" width='70' fixed="right">
                   <template slot-scope="scope">
-                    <el-button  type="danger" icon="el-icon-delete" circle size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-button>
+                    <el-button  class="delBtn" type="text" icon="el-icon-delete" size="small" @click="delRow(scope.row)" :disabled="!(!disabled && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -606,54 +606,54 @@ export default class Index extends Vue {
   }
   startValidate () {
     if (this.startForm.potNo === '') {
-      this.$notify.error({title: '错误', message: '原汁罐号不能为空'})
+      Vue.prototype.$warning_SHINHO('原汁罐号不能为空')
       return false
     } else if (this.startForm.materialCode === '') {
-      this.$notify.error({title: '错误', message: '物料不能为空'})
+      Vue.prototype.$warning_SHINHO('物料不能为空')
       return false
     } else if (this.startForm.batch.length !== 10) {
-      this.$notify.error({title: '错误', message: '批次长度必须为10'})
+      Vue.prototype.$warning_SHINHO('批次长度必须为10')
       return false
     } else if (this.startForm.startAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '起始数不能为空'})
+      Vue.prototype.$warning_SHINHO('起始数不能为空')
       return false
     }
     return true
   }
   endValidate () {
     if (this.endForm.endAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '结束数不能为空'})
+      Vue.prototype.$warning_SHINHO('结束数不能为空')
       return false
     } else if (this.endForm.fullPot === '1' && (this.endForm.fullPotAmount.toString() === '' || this.endForm.fullPotAmount.toString() === '0')) {
-      this.$notify.error({title: '错误', message: '满罐数量不能为空'})
+      Vue.prototype.$warning_SHINHO('满罐数量不能为空')
       return false
     } else if (this.endForm.fullPot === '1' && this.endForm.fulPotDate === '') {
-      this.$notify.error({title: '错误', message: '满罐日期不能为空'})
+      Vue.prototype.$warning_SHINHO('满罐日期不能为空')
       return false
     }
     return true
   }
   modifyValidate () {
     if (this.modifyForm.potNo === '') {
-      this.$notify.error({title: '错误', message: '原汁罐号不能为空'})
+      Vue.prototype.$warning_SHINHO('原汁罐号不能为空')
       return false
     } else if (this.modifyForm.batch.length !== 10) {
-      this.$notify.error({title: '错误', message: '批次长度必须为10'})
+      Vue.prototype.$warning_SHINHO('批次长度必须为10')
       return false
     } else if (this.modifyForm.materialCode === '') {
-      this.$notify.error({title: '错误', message: '物料不能为空'})
+      Vue.prototype.$warning_SHINHO('物料不能为空')
       return false
     } else if (this.modifyForm.startAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '起始数不能为空'})
+      Vue.prototype.$warning_SHINHO('起始数不能为空')
       return false
     } else if (this.modifyForm.endAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '结束数不能为空'})
+      Vue.prototype.$warning_SHINHO('结束数不能为空')
       return false
     } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fullPotAmount.toString() === '') {
-      this.$notify.error({title: '错误', message: '满罐数量不能为空'})
+      Vue.prototype.$warning_SHINHO('满罐数量不能为空')
       return false
     } else if (this.modifyForm.fullPot === '1' && this.modifyForm.fulPotDate === '') {
-      this.$notify.error({title: '错误', message: '满罐日期不能为空'})
+      Vue.prototype.$warning_SHINHO('满罐日期不能为空')
       return false
     }
     return true
