@@ -100,7 +100,7 @@
                   <p>{{item.BATCH}}</p>
                   <p v-if="item.IS_F === '2'">JBS</p>
                   <p>{{item.TYPE}}</p>
-                  <p>{{item.days}}天</p>
+                  <p v-if="item.HOLDER_STATUS !== '7'">{{item.days}}天</p>
                   <p>{{item.AMOUNT}}方</p>
                 </div>
               </div>

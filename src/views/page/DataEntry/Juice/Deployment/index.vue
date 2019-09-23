@@ -121,7 +121,7 @@
         </el-table-column>
         <el-table-column label="罐号" prop="productDate" width="150" >
           <template slot-scope="scope">
-            <el-select v-model="scope.row.holderId" size="small"  :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false && scope.row.status !== 'submit' && scope.row.status !== 'checked')">
+            <el-select v-model="scope.row.holderId" size="small"  :disabled="IsGuanStatus(scope.row)">
               <el-option value=''>请选择</el-option>
               <el-option v-for="(item, index) in thrwHolderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
             </el-select>
@@ -292,6 +292,9 @@ export default {
     }
   },
   methods: {
+    IsGuanStatus (row) {
+      return (row.materialName.indexOf('原汁') === -1 || !(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false && row.status !== 'submit' && row.status !== 'checked'))
+    },
     // 获取不合格原因
     GetHolderStatusList () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'reason_yznopass'}, false, false, false).then(({data}) => {
