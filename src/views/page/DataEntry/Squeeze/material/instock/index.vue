@@ -458,6 +458,16 @@ export default class Index extends Vue {
     if (this.disabled || row.status === 'submit' || row.status === 'checked') {
       return
     }
+    if (this.potList.find(item => item.holderId === row.potNo) === undefined) {
+      this.potList.push({
+        holderId: row.potNo,
+        holderName: row.potName,
+        batch: row.batch,
+        potType: row.mixType,
+        materialCode: row.materialCode,
+        materialName: row.materialName
+      })
+    }
     this.modifyForm = {
       id: row.id ? row.id : 'id',
       recordId: row.recordId ? row.recordId : 'record',
