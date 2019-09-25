@@ -238,7 +238,7 @@ export default {
     // 查询
     GetDataList () {
       if (!this.formHeader.factory) {
-        this.$notify.error({title: '错误', message: '工厂必填'})
+        this.$warning_SHINHO('工厂必填')
         return false
       }
       this.$http(`${FILTRATION_API.FILTER_POT_LIST_API}`, 'POST', this.formHeader).then(({data}) => {
@@ -262,15 +262,15 @@ export default {
     // 清罐
     clearPot (item) {
       if (!this.isAuth('filter:holder:cleanProHolder')) {
-        this.$notify.error({title: '错误', message: '无权限操作'})
+        this.$warning_SHINHO('无权限操作')
         return false
       }
       if (item.holderStatus === '0') {
-        this.$notify.error({title: '错误', message: '该罐暂不可进行清罐操作'})
+        this.$warning_SHINHO('该罐暂不可进行清罐操作')
         return false
       }
       if (item.holderStatus !== '4') {
-        this.$notify.error({title: '错误', message: '未领用完不能清洗'})
+        this.$warning_SHINHO('未领用完不能清洗')
         return false
       }
       this.$confirm('清罐后，账务将清零，请确认实物已空！', '清罐确认', {
@@ -344,7 +344,7 @@ export default {
     JBS () {
       if (this.JBSdataForm.isFull === '1') {
         if (!this.JBSdataForm.fullDate) {
-          this.$notify.error({title: '错误', message: '满罐时间必填'})
+          this.$warning_SHINHO('满罐时间必填')
           return
         }
       }
@@ -366,7 +366,7 @@ export default {
     TurnSave () {
       if (this.TurnSavedataForm.isFull === '1') {
         if (!this.TurnSavedataForm.fullDate) {
-          this.$notify.error({title: '错误', message: '满罐时间必填'})
+          this.$warning_SHINHO('满罐时间必填')
           return
         }
       }

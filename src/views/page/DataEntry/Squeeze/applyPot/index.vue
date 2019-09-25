@@ -318,7 +318,7 @@ export default class Index extends Vue {
   }
   getOrderList () {
     if (this.params.factoryId === '') {
-      this.$notify.error({title: '错误', message: '请选择工厂'})
+      Vue.prototype.$warning_SHINHO('请选择工厂')
       return
     }
     // if (this.params.workshopId === '') {

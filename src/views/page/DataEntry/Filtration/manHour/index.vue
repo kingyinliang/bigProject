@@ -227,7 +227,7 @@ export default {
     // 查询
     GetTimeList () {
       if (this.formHeader.factory === '' || this.formHeader.workShop === '' || this.formHeader.inKjmDate === '' || this.formHeader.deptId === '') {
-        this.$notify.error({title: '错误', message: '请填写查询选项'})
+        this.$warning_SHINHO('请填写查询选项')
         return false
       }
       this.searchCard = false
@@ -411,25 +411,25 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间白班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间中班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间夜班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间多班必填项未填写完全')
           return false
         }
       }

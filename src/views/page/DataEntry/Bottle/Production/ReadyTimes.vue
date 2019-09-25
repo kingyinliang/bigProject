@@ -87,9 +87,9 @@
             <el-table-column label="备注" :show-overflow-tooltip="true" prop="remark" width="100"></el-table-column>
             <el-table-column label="操作时间" :show-overflow-tooltip="true" prop="changed" width="105"></el-table-column>
             <el-table-column label="操作人" :show-overflow-tooltip="true" prop="changer" width="105"></el-table-column>
-            <el-table-column label="操作" :show-overflow-tooltip="true" width="60" fixed="right">
+            <el-table-column label="操作" :show-overflow-tooltip="true" width="70" fixed="right">
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delData(scope.row)"></el-button>
+                <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="delData(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -328,37 +328,37 @@ export default {
       if (this.readyTimeDate.classes === '白班') {
         if (day) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间白班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间白班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '中班') {
         if (mid) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间中班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间中班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '夜班') {
         if (night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间夜班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间夜班必填项未填写完全')
           return false
         }
       } else if (this.readyTimeDate.classes === '多班') {
         if (day && night) {} else {
           ty = false
-          this.$notify.error({title: '错误', message: '准备时间多班必填项未填写完全'})
+          this.$warning_SHINHO('准备时间多班必填项未填写完全')
           return false
         }
       }
       this.dataList.forEach((item) => {
         if (!(item.classes && item.content && item.startDate)) {
           ty = false
-          this.$notify.error({title: '错误', message: '设备时间必填项未填'})
+          this.$warning_SHINHO('设备时间必填项未填')
           return false
         }
         if (item.dateLength * 1 <= 0) {
           ty = false
-          this.$notify.error({title: '错误', message: '设备时间工时不大于0'})
+          this.$warning_SHINHO('设备时间工时不大于0')
           return false
         }
       })

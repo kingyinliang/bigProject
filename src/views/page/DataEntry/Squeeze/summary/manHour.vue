@@ -118,7 +118,7 @@ export default {
       this.timeDate.forEach(item => {
         if (item.confActivity2 === '0' || !item.confActivity2) {
           ty = false
-          this.$notify.error({title: '错误', message: '机器工时未填写'})
+          this.$warning_SHINHO('机器工时未填写')
           return false
         }
       })

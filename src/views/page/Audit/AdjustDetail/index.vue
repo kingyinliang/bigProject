@@ -292,7 +292,7 @@ export default {
     },
     SubmitInfo () {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选调整数据'})
+        this.$warning_SHINHO('请勾选调整数据')
         return false
       }
       let startStatus

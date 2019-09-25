@@ -50,7 +50,7 @@
           <el-table-column prop="potTwo" label="发酵罐号2" width="150px"></el-table-column>
           <el-table-column prop="remark" label="操作" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" :disabled="!isRedact" circle size="mini" @click="delrow(scope.row)"></el-button>
+              <el-button class="delBtn" type="text" icon="el-icon-delete" :disabled="!isRedact" size="mini" @click="delrow(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -388,32 +388,32 @@ export default {
       let ty = true
       if (this.multipleSelection.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请勾选提交数据'})
+        this.$warning_SHINHO('请勾选提交数据')
         return false
       }
       for (let items of this.multipleSelection) {
         if (!items.pulpMachineName || items.pulpMachineName === '' || !items.hovercraftName || items.hovercraftName === '' || !items.pulpStartDate || items.pulpStartDate === '' || !items.pulpEndDate || items.pulpEndDate === '' || !items.pulpAmount || items.pulpAmount === '' || !items.selfDrenchTime || items.selfDrenchTime === '' || !items.potOne || items.potOne === '' || !items.sauceClass || items.sauceClass === '') {
           ty = false
-          this.$notify.error({title: '错误', message: '物料必填项不能为空'})
+          this.$warning_SHINHO('物料必填项不能为空')
           return false
         }
       }
       if (this.peopleList.length === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请填写布浆人员'})
+        this.$warning_SHINHO('请填写布浆人员')
         return false
       }
       for (let items of this.peopleList) {
         if (!items.classes || items.classes === '' || !items.man || items.man === '') {
           ty = false
-          this.$notify.error({title: '错误', message: '人员必填项不能为空'})
+          this.$warning_SHINHO('人员必填项不能为空')
           return false
         }
       }
       for (let item of this.multipleSelection) {
         if (item.id === '') {
           ty = false
-          this.$notify.error({title: '错误', message: '请先保存再提交'})
+          this.$warning_SHINHO('请先保存再提交')
           return false
         }
       }

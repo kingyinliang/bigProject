@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-menu
-      :default-active="menuActiveName || 'home'"
+      :default-active="menuActiveName"
       class="DataEchartsMenu">
-      <el-menu-item index="home" @click="menuActiveName='home';$router.push({ path: 'home' })" v-for="(item, index) in menuList.filter(it => it.type === '4')[0].list" :key="index" v-if="/总览/g.test(item.name)">
+      <el-menu-item :index="item.menuId" @click="goPageHome(item)" v-for="(item, index) in menuList.filter(it => it.type === '4')[0].list" :key="index" v-if="/总览/g.test(item.name)">
         <i :class="item.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
         <span slot="title">{{item.name}}</span>
       </el-menu-item>
@@ -32,13 +32,27 @@ export default {
   mounted () {
   },
   methods: {
+    goPageHome (page) {
+      var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === page.menuId)
+      if (route.length >= 1) {
+        this.menuActiveName = page.menuId
+        this.$router.push({ path: route[0].path })
+      }
+      // this.menuActiveName = 'home'
+      // this.$router.push({ path: 'home' })
+    },
     // 路由操作
     routeHandle (route) {
-      this.menuActiveName = (route.meta.menuId || route.name) + ''
-      this.mainTabsActiveName = route.name
+      console.log(this.menuActiveName)
+      // this.menuActiveName = (route.meta.menuId || route.name) + ''
+      // this.mainTabsActiveName = route.name
     }
   },
   computed: {
+    dynamicMenuRoutes: {
+      get () { return this.$store.state.common.dynamicMenuRoutes },
+      set (val) { this.$store.commit('common/updateDynamicMenuRoutes', val) }
+    },
     menuList: {
       get () { return this.$store.state.common.menuList },
       set (val) { this.$store.commit('common/updateMenuList', val) }
@@ -67,8 +81,13 @@ export default {
   position: fixed;
   z-index: 999;
   left: 0;
-  top: 60px;
+  top: 80px;
   background-color: rgba(255,255,255,0);
+  max-height: 525px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar { width: 0 !important }
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
   .el-menu{
     background-color: rgba(255,255,255,0);
   }
@@ -92,7 +111,7 @@ export default {
   .el-submenu .el-menu-item{
     width: 85px;
   }
-  .el-menu-item:hover,.el-submenu__title:hover{
+  .el-submenu.is-active .el-submenu__title,.el-menu-item.is-active,.el-menu-item:hover,.el-submenu__title:hover{
     /*background-image: linear-gradient(-90deg, #112041 0%, rgba(17, 32, 65, 0.5) 66%, #112041 100%);*/
     background-color: rgba(255,255,255,0);
     border: 2px solid #ffffff;

@@ -20,9 +20,9 @@
           <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作时间" width="160" prop="changed" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作人" width="150" prop="changer" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="orderStatus" width="50">
+          <el-table-column prop="orderStatus" width="70">
             <template slot-scope="scope">
-              <el-button type="danger" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'" icon="el-icon-delete" circle @click="DelRow(scope.row)" size="mini"></el-button>
+              <el-button class="delBtn" type="text" :disabled="!isRedact || scope.row.status === 'checked' || scope.row.status === 'submit'" icon="el-icon-delete" @click="DelRow(scope.row)" size="mini">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -184,7 +184,7 @@ export default {
       })
       if (i === 0) {
         ty = false
-        this.$notify.error({title: '错误', message: '请录入物料领用数据'})
+        this.$warning_SHINHO('请录入物料领用数据')
         return false
       }
       return ty
@@ -220,7 +220,7 @@ export default {
         })
         if (total * 1000 > item.holderAmount) {
           ty = false
-          this.$notify.error({title: '错误', message: item.holderName + '罐领用数超过库存，请重新调整'})
+          this.$warning_SHINHO(item.holderName + '罐领用数超过库存，请重新调整')
           return false
         }
       }

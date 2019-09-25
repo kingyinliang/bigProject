@@ -12,9 +12,13 @@ export default {
     // 侧边栏, 菜单
     menuList: [],
     menuActiveName: '',
+    dynamicMenuRoutes: [],
     // 主入口标签页
     mainTabs: [],
     mainTabsActiveName: '',
+    // 看板
+    dataEchartDeptId: '',
+    dataEchartUid: '',
     // 包装车间
     Pkgfactoryid: '',
     PkgworkShop: '',
@@ -240,6 +244,9 @@ export default {
     },
     updateSidebarFold (state, fold) {
       state.sidebarFold = fold
+    },
+    updateDynamicMenuRoutes (state, list) {
+      state.dynamicMenuRoutes = list
     },
     updateMenuList (state, list) {
       state.menuList = list

@@ -131,15 +131,15 @@ export default {
     },
     GetList () {
       if (this.formHeader.factory === '') {
-        this.$notify.error({title: '错误', message: '请选择工厂'})
+        this.$warning_SHINHO('请选择工厂')
         return false
       }
       if (this.formHeader.workShop === '') {
-        this.$notify.error({title: '错误', message: '请选择车间'})
+        this.$warning_SHINHO('请选择车间')
         return false
       }
       if ((this.formHeader.productDate === '' || !this.formHeader.productDate) && this.formHeader.orderNo === '') {
-        this.$notify.error({title: '错误', message: '生产日期或生产订单请选填一项'})
+        this.$warning_SHINHO('生产日期或生产订单请选填一项')
         return false
       }
       this.$http(`${BOTTLE_API.BOTTLE_INDEX_LIST}`, 'POST', this.formHeader).then(({data}) => {

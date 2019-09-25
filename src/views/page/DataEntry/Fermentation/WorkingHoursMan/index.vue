@@ -440,7 +440,7 @@ export default {
     SaveForm (types) {
       // console.log(this.multipleSelection)
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请先勾选数据'})
+        this.$warning_SHINHO('请先勾选数据')
       } else {
         let url
         let msg
@@ -448,7 +448,7 @@ export default {
           // 非空判断
           for (var i in this.multipleSelection) {
             if (this.multipleSelection[i].actAmount === '' || this.multipleSelection[i].prepareTimes === '' || this.multipleSelection[i].machineTimes === '' || this.multipleSelection[i].humanTimes === '' || this.multipleSelection[i].startDate === '' || this.multipleSelection[i].endDate === '' || this.multipleSelection[i].unMatureUse === '' || this.multipleSelection[i].actAmount === null || this.multipleSelection[i].prepareTimes === null || this.multipleSelection[i].machineTimes === null || this.multipleSelection[i].humanTimes === null || this.multipleSelection[i].startDate === null || this.multipleSelection[i].endDate === null || this.multipleSelection[i].unMatureUse === null) {
-              this.$notify.error({title: '错误', message: '请填写必填项'})
+              this.$warning_SHINHO('请填写必填项')
               return false
             }
           }

@@ -251,29 +251,29 @@ export default {
     // 提交
     submitMaterial (resolve, reject) {
       if (this.multipleSelection.length === 0) {
-        this.$notify.error({title: '错误', message: '请勾选提交数据'})
+        this.$warning_SHINHO('请勾选提交数据')
         return false
       }
       for (let item of this.multipleSelection) {
         if (this.formHeader.pressure === 1) {
           if (!item.prePressNo || item.prePressNo === '' || !item.prePressStart || item.prePressStart === '' || !item.prePressEnd || item.prePressEnd === '') {
-            this.$notify.error({title: '错误', message: '请填写必填项'})
+            this.$warning_SHINHO('请填写必填项')
             return false
           }
         } else {
           if (!item.pressNo || item.pressNo === '' || !item.pressStart || item.pressStart === '' || !item.pressEnd || item.pressEnd === '') {
-            this.$notify.error({title: '错误', message: '请填写必填项'})
+            this.$warning_SHINHO('请填写必填项')
             return false
           }
           if (this.formHeader.workShop === 'C4F2B8DAD6C14D1C8DC44821F9E2636D') {
             if (!item.destoryNum || item.destoryNum === '') {
-              this.$notify.error({title: '错误', message: '请填写必填项'})
+              this.$warning_SHINHO('请填写必填项')
               return false
             }
           }
           if (this.formHeader.workShop === 'D79ECC0CBB1F483EB4136A3720B68B3D') {
             if (this.formInline.destoryNumEast === '' || !this.formInline.destoryNumEast || this.formInline.destoryNumWest === '' || !this.formInline.destoryNumWest) {
-              this.$notify.error({title: '错误', message: '请填写必填项'})
+              this.$warning_SHINHO('请填写必填项')
               return false
             } else {
               this.multipleSelection.map((item) => {

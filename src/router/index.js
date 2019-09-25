@@ -42,8 +42,7 @@ const DataEchartsRoutes = {
   path: '/DataEcharts',
   component: _import('page/DataEcharts/layout/index'),
   children: [
-    { path: '/', redirect: '/DataEcharts/home' },
-    { path: '/DataEcharts/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } }
+    { path: '/', redirect: '/DataEcharts/KojiMaking-DataScreening-index' }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -128,9 +127,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = [], EchartsRoutes = [])
       routes.push(route0)
       ssroutes.push(route0)
     }
-    if (menuList[i].list && menuList[i].list.length >= 1) {
-      temp = temp.concat(menuList[i].list)
-    } else if (menuList[i].type === '4' && menuList[i].url && /\S/.test(menuList[i].url)) {
+    if (menuList[i].type === '4' && menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       var EchartsRoute = {
         path: `/DataEcharts/${menuList[i].url.slice(12).replace(/\//g, '-')}`,
@@ -146,6 +143,9 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = [], EchartsRoutes = [])
       }
       EchartsRoutes.push(EchartsRoute)
       ssroutes.push(EchartsRoute)
+    }
+    if (menuList[i].list && menuList[i].list.length >= 1) {
+      temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       if (menuList[i].remark) {
         var router2 = {

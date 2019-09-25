@@ -336,7 +336,7 @@ export default {
       } else {
         if (row.different !== 0 || row.orgnDifferent) {
           if (!row.differentInfo) {
-            this.$notify.error({title: '错误', message: '差异说明必填'})
+            this.$warning_SHINHO('差异说明必填')
             return false
           }
         }
@@ -358,7 +358,7 @@ export default {
     save () {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
-          this.$notify.error({title: '错误', message: '差异说明必填'})
+          this.$warning_SHINHO('差异说明必填')
           return false
         }
         this.$confirm('确认保存, 是否继续?', '保存', {
@@ -377,18 +377,18 @@ export default {
           this.GetMaintainList()
         })
       } else {
-        this.$notify.error({title: '错误', message: '请勾选后保存'})
+        this.$warning_SHINHO('请勾选后保存')
       }
     },
     // 提交
     submit () {
       if (this.MaintainList.length > 0) {
         if (!this.getverify()) {
-          this.$notify.error({title: '错误', message: '差异说明必填'})
+          this.$warning_SHINHO('差异说明必填')
           return false
         }
         if (!this.getverify1()) {
-          this.$notify.error({title: '错误', message: '车间入库数与机维组确认数不一致，请重新录入数据！'})
+          this.$warning_SHINHO('车间入库数与机维组确认数不一致，请重新录入数据！')
           return false
         }
         this.$confirm('确认提交, 是否继续?', '提交', {
@@ -406,7 +406,7 @@ export default {
           })
         })
       } else {
-        this.$notify.error({title: '错误', message: '请勾选后保存'})
+        this.$warning_SHINHO('请勾选后保存')
       }
     },
     // 改变每页条数
