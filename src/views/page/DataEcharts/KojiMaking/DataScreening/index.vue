@@ -1,34 +1,127 @@
 <template>
-  <div>
+  <div class="pageMain">
     <echarts-head>欣和企业制曲车间数据展示中心</echarts-head>
     <div class="totalContainer">
-      <div class="dataItem">
-        <p class="dataItem_title">制曲一车间数据</p>
-      </div>
-      <div class="totalContainer_center">
-        <div class="totalContainer_center_top">
-          <div class="totalContainer_center_top_imgBox">
-            <img src="@/assets/img/echartsItemCircle.png" alt="">
+      <div class="totalContainer_box">
+        <div class="totalContainer_dataItem">
+          <p class="totalContainer_dataItem_title">制曲一车间数据</p>
+          <div id="NightingaleRose1" class="NightingaleRose"></div>
+          <div id="pillar1" class="pillar"></div>
+        </div>
+        <div class="totalContainer_center">
+          <div class="totalContainer_center_top">
+            <div class="totalContainer_center_top_imgBox">
+              <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(0, $event)">
+                <p>已使用</p>
+                <p><span>480</span>间</p>
+                <p>曲房共：345间</p>
+              </div>
+              <div class="totalContainer_center_top_imgBox_img bigBox" @click="rotateCircle(1, $event)">
+                <p>已使用</p>
+                <p><span>481</span>间</p>
+                <p>曲房共：345间</p>
+              </div>
+              <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(2, $event)">
+                <p>已使用</p>
+                <p><span>482</span>间</p>
+                <p>曲房共：345间</p>
+              </div>
+            </div>
+          </div>
+          <div class="totalContainer_center_bottom">
+            <div id="pie" class="pie"></div>
           </div>
         </div>
-        <div class="totalContainer_center_bottom"></div>
-      </div>
-      <div class="dataItem">
-        <p class="dataItem_title">制曲二车间数据</p>
+        <div class="totalContainer_dataItem">
+          <p class="totalContainer_dataItem_title">制曲二车间数据</p>
+          <div id="NightingaleRose2" class="NightingaleRose"></div>
+          <div id="pillar2" class="pillar"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import echarts from 'echarts'
+import { option } from './NightingaleRose'
+import { pillar } from './pillar'
+import { pie } from './pie'
 export default {
   name: 'index',
   data () {
-    return {}
+    return {
+      NightingaleRose1: null,
+      NightingaleRose2: null,
+      pillar1: null,
+      pillar2: null,
+      pie: null
+    }
   },
   mounted () {
+    this.NightingaleRose1 = echarts.init(document.getElementById('NightingaleRose1'))
+    this.NightingaleRose2 = echarts.init(document.getElementById('NightingaleRose2'))
+    this.pillar1 = echarts.init(document.getElementById('pillar1'))
+    this.pillar2 = echarts.init(document.getElementById('pillar2'))
+    this.pie = echarts.init(document.getElementById('pie'))
+    this.NightingaleRose1.setOption(this.setNightingaleRose1(option))
+    this.NightingaleRose2.setOption(this.setNightingaleRose2(option))
+    this.pillar1.setOption(pillar)
+    this.pillar2.setOption(pillar)
+    this.pie.setOption(pie)
   },
-  methods: {},
+  activated () {
+    if (this.NightingaleRose) {
+      this.NightingaleRose.resize()
+    }
+  },
+  methods: {
+    setNightingaleRose1 (param) {
+      let option = JSON.parse(JSON.stringify(param))
+      option.series[0].data = [
+        {value: 10, name: '办理环节占比'},
+        {value: 5, name: '审核环节占比'},
+        {value: 15, name: '未办环节占比'},
+        {value: 25, name: '决策环节占比'}
+      ]
+      return option
+    },
+    setNightingaleRose2 (param) {
+      let option = JSON.parse(JSON.stringify(param))
+      option.series[0].color = ['#0fd5f9', '#57c48c', '#eae97b', '#9e34e4']
+      option.series[0].data = [
+        {value: 25, name: '办理环节占比'},
+        {value: 20, name: '审核环节占比'},
+        {value: 15, name: '未办环节占比'},
+        {value: 10, name: '决策环节占比'}
+      ]
+      return option
+    },
+    rotateCircle (index) {
+      let leftMove, rightMove
+      if (document.body.offsetWidth > 1366) {
+        leftMove = '-215px'
+        rightMove = '215px'
+      } else {
+        leftMove = '-185px'
+        rightMove = '185px'
+      }
+      this.$('.totalContainer_center_top_imgBox_img').eq(index).animate({ left: 0 }, 200)
+      if (index === 0) {
+        this.$('.totalContainer_center_top_imgBox_img').eq(1).animate({ left: rightMove }, 200)
+        this.$('.totalContainer_center_top_imgBox_img').eq(2).animate({ left: leftMove }, 200)
+      } else if (index === 1) {
+        this.$('.totalContainer_center_top_imgBox_img').eq(2).animate({ left: rightMove }, 200)
+        this.$('.totalContainer_center_top_imgBox_img').eq(0).animate({ left: leftMove }, 200)
+      } else if (index === 2) {
+        this.$('.totalContainer_center_top_imgBox_img').eq(0).animate({ left: rightMove }, 200)
+        this.$('.totalContainer_center_top_imgBox_img').eq(1).animate({ left: leftMove }, 200)
+      }
+      this.$('.totalContainer_center_top_imgBox_img').removeClass('bigBox')
+      this.$('.totalContainer_center_top_imgBox_img').addClass('smallBox')
+      this.$('.totalContainer_center_top_imgBox_img').eq(index).addClass('bigBox')
+    }
+  },
   computed: {},
   components: {
     EchartsHead: resolve => {
@@ -39,13 +132,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.totalContainer{
+.NightingaleRose{
+  width: 297px;
+  height: 184px;
+}
+.pillar{
+  width: 100%;
+  height: 250px;
+}
+.pie{
+  width: 100%;
+  height: 199px;
+}
+.pageMain{
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: left;
+  flex-direction: column;
+}
+.totalContainer{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-left: 120px;
-  .dataItem{
-    width: 329px;
-    height: 582px;
+  .totalContainer_box{
+    display: flex;
+    justify-content: left;
+  }
+  &_dataItem{
     background: url('~@/assets/img/echartsItemBg.png') no-repeat;
     background-size:100% 100%;
     &_title{
@@ -61,23 +177,131 @@ export default {
   &_center{
     width: 558px;
     &_top{
-      width: 558px;
-      height: 337px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       &_imgBox{
-        width: 325px;
-        height: 309px;
-      }
-      img{
-        width: 100%;
-        height: 100%;
+        position: relative;
+        &_img{
+          position: absolute;
+          text-align: center;
+          color: white;
+          background: url('~@/assets/img/echartsItemCircle.png') no-repeat;
+          background-size:100% 100%;
+          &:nth-child(1){
+            left: -185px;
+          }
+          &:nth-child(3){
+            left: 185px;
+          }
+          p:nth-child(1){
+            padding-top: 45px;
+          }
+          p:nth-child(2){
+            margin: 10px 0;
+          }
+          p{
+            font-weight: 400;
+            span{
+              font-size: 24px;
+              font-weight: bold;
+              font-stretch: normal;
+              letter-spacing: 0px;
+              color: #00ffd4;
+            }
+          }
+        }
       }
     }
     &_bottom{
-      width: 518px;
-      height: 232px;
       margin: auto;
       background: url('~@/assets/img/echartsItemBg.png') no-repeat;
       background-size:100% 100%;
+    }
+  }
+}
+.smallBox{
+  transform: scale(0.7);
+  transition: all 2s;
+}
+.bigBox{
+  transform: scale(1);
+  transition: all 2s;
+}
+@media (max-width: 1367px) {
+  .totalContainer {
+    &_box {
+      width: 1153px;
+    }
+    &_dataItem {
+      width: 297px;
+      height: 479px;
+    }
+    &_center{
+      width: 558px;
+      &_top{
+        width: 100%;
+        height: 280px;
+        &_imgBox{
+          width: 214px;
+          height: 209px;
+          &_img{
+            width: 214px;
+            height: 209px;
+            font-size: 12px;
+          }
+        }
+      }
+      &_bottom{
+        width: 518px;
+        height: 199px;
+      }
+    }
+  }
+}
+@media (min-width: 1367px) {
+  .totalContainer{
+    &_box{
+      width: 1316px;
+    }
+    &_dataItem{
+      width: 329px;
+      height: 582px;
+    }
+    &_center{
+      width: 658px;
+      &_top{
+        width: 100%;
+        height: 340px;
+        &_imgBox{
+          width: 280px;
+          height: 275px;
+          &_img{
+            width: 280px;
+            height: 275px;
+            font-size: 16px;
+            &:nth-child(1){
+              left: -215px;
+            }
+            &:nth-child(3){
+              left: 215px;
+            }
+            p:nth-child(1){
+              padding-top: 60px;
+            }
+            p{
+              span{
+                font-size: 28px;
+              }
+            }
+          }
+        }
+      }
+      &_bottom{
+        width: 620px;
+        height: 238px;
+      }
     }
   }
 }

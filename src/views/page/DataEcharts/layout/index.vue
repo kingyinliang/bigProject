@@ -125,8 +125,9 @@ export default {
 .DataEchartsContent{
   /*padding-left: 107px;*/
   min-width: 1000px;
-  background: #0e0e40;
-  /*background: url('~@/assets/img/echartsBg.png') #0e0e40 no-repeat 10px center;*/
+  /*background: #0e0e40;*/
+  background: url('~@/assets/img/echartsBg.png') no-repeat;
+  background-size: 100% 100%;
   width: 100%;
   height: 100%;
 }
