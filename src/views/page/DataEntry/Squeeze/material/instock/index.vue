@@ -455,6 +455,7 @@ export default class Index extends Vue {
     return status
   }
   modifyRecord (row) {
+    console.log(this.potList)
     if (this.disabled || row.status === 'submit' || row.status === 'checked') {
       return
     }
