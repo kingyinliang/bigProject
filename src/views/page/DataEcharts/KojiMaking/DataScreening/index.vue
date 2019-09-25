@@ -5,7 +5,8 @@
       <div class="totalContainer_box">
         <div class="totalContainer_dataItem">
           <p class="totalContainer_dataItem_title">制曲一车间数据</p>
-          <div id="NightingaleRose"></div>
+          <div id="NightingaleRose1" class="NightingaleRose"></div>
+          <div id="pillar1" class="pillar"></div>
         </div>
         <div class="totalContainer_center">
           <div class="totalContainer_center_top">
@@ -27,10 +28,14 @@
               </div>
             </div>
           </div>
-          <div class="totalContainer_center_bottom"></div>
+          <div class="totalContainer_center_bottom">
+            <div id="pie" class="pie"></div>
+          </div>
         </div>
         <div class="totalContainer_dataItem">
           <p class="totalContainer_dataItem_title">制曲二车间数据</p>
+          <div id="NightingaleRose2" class="NightingaleRose"></div>
+          <div id="pillar2" class="pillar"></div>
         </div>
       </div>
     </div>
@@ -40,16 +45,30 @@
 <script>
 import echarts from 'echarts'
 import { option } from './NightingaleRose'
+import { pillar } from './pillar'
+import { pie } from './pie'
 export default {
   name: 'index',
   data () {
     return {
-      NightingaleRose: null
+      NightingaleRose1: null,
+      NightingaleRose2: null,
+      pillar1: null,
+      pillar2: null,
+      pie: null
     }
   },
   mounted () {
-    this.NightingaleRose = echarts.init(document.getElementById('NightingaleRose'))
-    this.NightingaleRose.setOption(option)
+    this.NightingaleRose1 = echarts.init(document.getElementById('NightingaleRose1'))
+    this.NightingaleRose2 = echarts.init(document.getElementById('NightingaleRose2'))
+    this.pillar1 = echarts.init(document.getElementById('pillar1'))
+    this.pillar2 = echarts.init(document.getElementById('pillar2'))
+    this.pie = echarts.init(document.getElementById('pie'))
+    this.NightingaleRose1.setOption(this.setNightingaleRose1(option))
+    this.NightingaleRose2.setOption(this.setNightingaleRose2(option))
+    this.pillar1.setOption(pillar)
+    this.pillar2.setOption(pillar)
+    this.pie.setOption(pie)
   },
   activated () {
     if (this.NightingaleRose) {
@@ -57,6 +76,27 @@ export default {
     }
   },
   methods: {
+    setNightingaleRose1 (param) {
+      let option = JSON.parse(JSON.stringify(param))
+      option.series[0].data = [
+        {value: 10, name: '办理环节占比'},
+        {value: 5, name: '审核环节占比'},
+        {value: 15, name: '未办环节占比'},
+        {value: 25, name: '决策环节占比'}
+      ]
+      return option
+    },
+    setNightingaleRose2 (param) {
+      let option = JSON.parse(JSON.stringify(param))
+      option.series[0].color = ['#0fd5f9', '#57c48c', '#eae97b', '#9e34e4']
+      option.series[0].data = [
+        {value: 25, name: '办理环节占比'},
+        {value: 20, name: '审核环节占比'},
+        {value: 15, name: '未办环节占比'},
+        {value: 10, name: '决策环节占比'}
+      ]
+      return option
+    },
     rotateCircle (index) {
       let leftMove, rightMove
       if (document.body.offsetWidth > 1366) {
@@ -92,9 +132,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#NightingaleRose{
+.NightingaleRose{
   width: 297px;
   height: 184px;
+}
+.pillar{
+  width: 100%;
+  height: 250px;
+}
+.pie{
+  width: 100%;
+  height: 199px;
 }
 .pageMain{
   width: 100%;
