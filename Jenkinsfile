@@ -3,7 +3,7 @@ VueCI {
   //Jenkins Slave Node
   jenkins_node = 'ecs-agent-vuejs'
   //Project Name
-  project = 'mds'
+  project = 'mds-web'
   //UAT ALB ARN
   dev_listener_arn = 'arn:aws-cn:elasticloadbalancing:cn-north-1:541699087960:listener/app/ALB03-Shinho-UAT/f4f02c22ba0f75ed/b6a60d5c541854ca'
   //TEST ALB ARN
