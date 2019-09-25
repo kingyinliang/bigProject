@@ -455,8 +455,19 @@ export default class Index extends Vue {
     return status
   }
   modifyRecord (row) {
+    console.log(this.potList)
     if (this.disabled || row.status === 'submit' || row.status === 'checked') {
       return
+    }
+    if (this.potList.find(item => item.holderId === row.potNo) === undefined) {
+      this.potList.push({
+        holderId: row.potNo,
+        holderName: row.potName,
+        batch: row.batch,
+        potType: row.mixType,
+        materialCode: row.materialCode,
+        materialName: row.materialName
+      })
     }
     this.modifyForm = {
       id: row.id ? row.id : 'id',
