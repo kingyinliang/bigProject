@@ -5,20 +5,51 @@ export let pie = {
   },
   legend: {
     orient: 'vertical',
-    right: '10px',
-    data: ['直达', '营销广告', '搜索引擎', '邮件营销', '联盟广告', '视频广告', '百度', '谷歌', '必应', '其他']
+    right: '40px',
+    top: '10%',
+    height: '80%',
+    itemWidth: 10,
+    itemHeight: 10,
+    itemGap: 15,
+    textStyle: {
+      color: '#ffffff',
+      fontSize: '12px'
+    },
+    data: ['决策环节占比', '办理环节占比', '审核环节占比', '未办环节占比', '决策环节占比1', '办理环节占比1', '审核环节占比1', '未办环节占比1']
   },
   series: [
     {
-      name: '访问来源',
+      name: '产品分布情况',
       type: 'pie',
       selectedMode: 'single',
-      center: ['95px', '50%'],
-      radius: [0, '40%'],
-
+      center: ['25%', '50%'],
+      radius: [0, '45%'],
       label: {
         normal: {
-          position: 'inner'
+          show: false
+        },
+        emphasis: {
+          show: false
+        }
+      },
+      color: ['#5fcc5f', '#bd4ae7', '#fda338'],
+      data: [
+        {value: 335, name: '决策环节占比', selected: true},
+        {value: 679, name: '办理环节占比'},
+        {value: 1548, name: '审核环节占比'}
+      ]
+    },
+    {
+      name: '产品分布情况',
+      type: 'pie',
+      center: ['25%', '50%'],
+      radius: ['60%', '85%'],
+      label: {
+        normal: {
+          show: false
+        },
+        emphasis: {
+          show: false
         }
       },
       labelLine: {
@@ -26,26 +57,13 @@ export let pie = {
           show: false
         }
       },
+      color: ['#f35945', '#12c0ff', '#dcca36', '#1887ff', '#fff56b'],
       data: [
-        {value: 335, name: '直达', selected: true},
-        {value: 679, name: '营销广告'},
-        {value: 1548, name: '搜索引擎'}
-      ]
-    },
-    {
-      name: '访问来源',
-      type: 'pie',
-      center: ['95px', '50%'],
-      radius: ['60%', '80%'],
-      data: [
-        {value: 335, name: '直达'},
-        {value: 310, name: '邮件营销'},
-        {value: 234, name: '联盟广告'},
-        {value: 135, name: '视频广告'},
-        {value: 1048, name: '百度'},
-        {value: 251, name: '谷歌'},
-        {value: 147, name: '必应'},
-        {value: 102, name: '其他'}
+        {value: 1000, name: '未办环节占比'},
+        {value: 889, name: '决策环节占比1'},
+        {value: 600, name: '办理环节占比1'},
+        {value: 500, name: '审核环节占比1'},
+        {value: 229, name: '未办环节占比1'}
       ]
     }
   ]

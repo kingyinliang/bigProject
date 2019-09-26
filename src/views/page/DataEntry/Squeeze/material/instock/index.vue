@@ -327,7 +327,8 @@ export default class Index extends Vue {
   dialogFormVisible2:boolean = false
   dialogFormVisible3:boolean = false
   formLabelWidth: string = '130px'
-  test: ''
+  teststr: string = ''
+  ci: Number = 0
   startForm = {
     inDate: '',
     potNo: '',
@@ -444,11 +445,11 @@ export default class Index extends Vue {
     return status
   }
   modifyRecord (row) {
-    console.log(this.potList)
+    this.ci = 0
     if (this.disabled || row.status === 'submit' || row.status === 'checked') {
       return
     }
-    this.test = row.potNo
+    this.teststr = row.potNo
     if (this.potList.find(item => item.holderId === row.potNo) === undefined) {
       this.potList.push({
         holderId: row.potNo,
@@ -691,9 +692,11 @@ export default class Index extends Vue {
       item.materialCode ? this.startForm.materialSt = true : this.startForm.materialSt = false
       item.batch ? this.startForm.batchSt = true : this.startForm.batchSt = false
     } else if (flag === 'potModify') {
+      this.ci = Number(this.ci) + Number(1)
+      console.log(this.ci)
       let item = this.potList.find(ele => ele.holderId === this.modifyForm.potNo)
       if (item.batch === '') {
-        if (this.test !== this.modifyForm.potNo) {
+        if (this.teststr !== this.modifyForm.potNo) {
           this.modifyForm.potName = this.potList.find(it => it.holderId === this.modifyForm.potNo).holderName
           this.modifyForm.batch = ''
           this.modifyForm.mixType = '正常'
@@ -702,6 +705,17 @@ export default class Index extends Vue {
           this.modifyForm.batchSt = false
           this.modifyForm.materialSt = false
           this.modifyForm.mixTypeSt = false
+        } else {
+          if (this.ci !== 1) {
+            this.modifyForm.potName = this.potList.find(it => it.holderId === this.modifyForm.potNo).holderName
+            this.modifyForm.batch = ''
+            this.modifyForm.mixType = '正常'
+            this.modifyForm.materialCode = item.materialCode
+            this.modifyForm.materialName = item.materialName
+            this.modifyForm.batchSt = false
+            this.modifyForm.materialSt = false
+            this.modifyForm.mixTypeSt = false
+          }
         }
       } else {
         this.modifyForm.potName = item ? item.holderName : ''
@@ -855,6 +869,7 @@ export default class Index extends Vue {
   retrieveOrderList (params) {
     Vue.prototype.$http(`${SQU_API.MATERIAL_IN_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
+        this.isAvailable = '0'
         this.dataList = res.data.list
         this.dataList.map(item => {
           item.uuid = item.id

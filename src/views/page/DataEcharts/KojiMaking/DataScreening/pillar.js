@@ -24,6 +24,15 @@ export let pillar = {
   },
   xAxis: {
     type: 'value',
+    splitLine: {
+      show: true,
+      lineStyle: {
+        color: ['#42a4ff'],
+        opacity: 0.6,
+        width: 1,
+        type: 'solid'
+      }
+    },
     axisLine: {
       show: true,
       lineStyle: {
@@ -48,8 +57,8 @@ export let pillar = {
   grid: {
     bottom: '20px',
     left: '45px',
-    width: '230px',
-    height: '220px',
+    width: '78%',
+    height: '90%',
     borderColor: '#006fff'
   },
   series: [
