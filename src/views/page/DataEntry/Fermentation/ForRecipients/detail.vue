@@ -67,6 +67,13 @@
               </template>
             </el-table-column>
             <el-table-column label="罐号" prop="holderNo" show-overflow-tooltip width="70"></el-table-column>
+            <el-table-column label="订单类型" prop="orderType" show-overflow-tooltip width="120">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.orderType" :disabled="scope.row.guan === '已开罐'" size="small" placeholder="请选择" style="width: 100px">
+                  <el-option :label="item.value" v-for="(item, index) in OrderType" :key="index" :value="item.code"></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
             <el-table-column label="物料" width="180" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.materialCode}}{{scope.row.materialName}}
@@ -104,7 +111,7 @@
 </template>
 
 <script>
-import { FERMENTATION_API } from '@/api/api'
+import { SYSTEMSETUP_API, FERMENTATION_API } from '@/api/api'
 import { dateFormat } from '@/net/validate'
 export default {
   name: 'detail',
@@ -118,6 +125,7 @@ export default {
         pageSize: 10
       },
       dataList: [],
+      OrderType: [],
       newDataList: [],
       newsDataList: [],
       isRedact: false,
@@ -149,6 +157,7 @@ export default {
             this.isRedact = true
           }
           this.GetList()
+          this.GetOrderType(this.formHeader.FACTORYID)
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -207,6 +216,18 @@ export default {
       //     }
       //   }
       // }
+    },
+    // 获取研发字典
+    GetOrderType (id) {
+      if (id) {
+        this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: id, type: 'order_type'}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.OrderType = data.dicList
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
+      }
     },
     // 罐列表
     GetList () {

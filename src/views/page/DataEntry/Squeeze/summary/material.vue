@@ -31,7 +31,7 @@
         <el-button v-if="scope.row.fumet.fullPort !== '正常'" type="text" :disabled="!(isRedact && (scope.row.material.childStatus !== 'submit' && scope.row.material.childStatus !== 'checked'))" @click="splitDate(scope.row.fumet, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
       </template>
     </el-table-column>
-    <el-table-column label="酱醪领用">
+    <el-table-column label="发酵罐号">
       <el-table-column width="120">
         <template slot="header"><i class="reqI">*</i><span>发酵罐号</span></template>
         <template slot-scope="scope">

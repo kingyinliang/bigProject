@@ -60,19 +60,19 @@
     <el-tabs @tab-click='tabClick' ref='tabs' v-model="activeName" id="OutTabs" class="NewDaatTtabs" type="border-card">
       <el-tab-pane name="1">
         <span slot="label" class="spanview">
-          <el-tooltip class="item" effect="dark" :content="statusArr[0].status === 'noPass'? '不通过':statusArr[0].status === 'saved'? '已保存':statusArr[0].status === 'submit' ? '已提交' : statusArr[0].status === 'checked'? '通过':'未录入'" placement="top-start">
-            <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
-          </el-tooltip>
-        </span>
-        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" :VersionList="VersionList" :orderTypeList="orderTypeList" @GetFunet="GetFunet"  @GetList="GetList"></apply-order>
-      </el-tab-pane>
-      <el-tab-pane name="2">
-        <span slot="label" class="spanview">
           <el-tooltip class="item" effect="dark" :content="statusArr[1].status === 'noPass'? '不通过':statusArr[1].status === 'saved'? '已保存':statusArr[1].status === 'submit' ? '已提交' : statusArr[1].status === 'checked'? '通过':'未录入'" placement="top-start">
             <el-button :style="{'color': statusArr[1].status === 'noPass'? 'red' : ''}" style="font-size: 14px">物料领用</el-button>
           </el-tooltip>
         </span>
         <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapListM"></materiel>
+      </el-tab-pane>
+      <el-tab-pane name="2">
+        <span slot="label" class="spanview">
+          <el-tooltip class="item" effect="dark" :content="statusArr[0].status === 'noPass'? '不通过':statusArr[0].status === 'saved'? '已保存':statusArr[0].status === 'submit' ? '已提交' : statusArr[0].status === 'checked'? '通过':'未录入'" placement="top-start">
+            <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
+          </el-tooltip>
+        </span>
+        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" :VersionList="VersionList" :orderTypeList="orderTypeList" @GetFunet="GetFunet" @ApplyOrder="ApplyOrder"  @GetList="GetList"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">
@@ -132,6 +132,40 @@ export default {
   methods: {
     tabClick (val) {
       this.$refs.tabs.setCurrentName(val.name)
+    },
+    dataRul (data) {
+      let ty = true
+      data.forEach(item => {
+        let datas = this.$refs.materielref.SumDate.filter(it => it.delFlag !== '1' && it.material.midPrsOrderId === item.id && !it.material.childPotNo)
+        if (datas.length > 0) {
+          ty = false
+          this.$warning_SHINHO(item.potNoName + '原汁罐没有匹配发酵罐，不能申请订单！')
+          return false
+        }
+      })
+      return ty
+    },
+    // 申请订单
+    ApplyOrder (data) {
+      if (data.length === 0) {
+        this.$warning_SHINHO('请选择订单')
+        return
+      }
+      if (!this.dataRul(data)) {
+        return false
+      }
+      data.forEach((item, index) => {
+        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+      })
+      this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', data).then(({data}) => {
+        if (data.code === 0) {
+          this.$success_SHINHO('申请成功')
+          this.GetList()
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
     },
     GetList () {
       if (!this.formHeader.factory) {

@@ -101,6 +101,11 @@
                   {{scope.row.holderName}}
                 </template>
               </el-table-column>
+              <el-table-column label="订单类型" :show-overflow-tooltip="true" width="120">
+                <template slot-scope="scope">
+                  {{scope.row.orderTypeName}}
+                </template>
+              </el-table-column>
               <el-table-column label="发酵天数/天" :show-overflow-tooltip="true" width="100">
                 <template slot-scope="scope">
                   {{scope.row.ferDays}}
