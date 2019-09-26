@@ -74,7 +74,8 @@
             </span>
             <span class="dataList_item_a" @click="godetails(item)" style="font-size: 14px" v-if="isAuth('fer:holderManage:detail')">详情>></span>
           </h3>
-          <div class="dataList_item_pot clearfix">
+          <div class="dataList_item_pot clearfix" style="position: relative">
+            <img src="@/assets/img/RD.png" alt="" style="position:absolute; left:10px; top:10px;" v-if="item.ferOrderNo.slice(0,4) === RDorder">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
                 <div class="dataList_item_pot_box_item1" :style="`height:${item.reWorkAmount? (item.reWorkAmount / item.holderAmout) * 100 : 0}%`" v-if="item.holderStatus !== '4'">
@@ -163,7 +164,7 @@
 
 <script>
 import { dateFormat } from '@/net/validate'
-import {BASICDATA_API, FERMENTATION_API} from '@/api/api'
+import {SYSTEMSETUP_API, BASICDATA_API, FERMENTATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -173,6 +174,7 @@ export default {
       visible: false,
       dialogData: {},
       a: true,
+      RDorder: '',
       topBox: [
         {
           color: '#999999',
@@ -256,6 +258,7 @@ export default {
       this.formHeader.workShop = ''
       this.formHeader.holderStatus = ''
       this.Getdeptbyid(n)
+      this.GetRDorder(n)
       this.GetHolderStatusList(n)
     },
     'formHeader.workShop' (n, o) {
@@ -385,6 +388,18 @@ export default {
             if (data.typeList.length) {
               this.formHeader.workShop = data.typeList[0].deptId
             }
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
+      }
+    },
+    // 获取研发字典
+    GetRDorder (id) {
+      if (id) {
+        this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: id, type: 'order_type', value: '研发订单'}, false, false, false).then(({data}) => {
+          if (data.code === 0) {
+            this.RDorder = data.dicList[0].code
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

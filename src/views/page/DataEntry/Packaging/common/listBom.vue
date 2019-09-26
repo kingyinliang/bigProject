@@ -384,7 +384,7 @@ export default {
       return ty
     },
     // 获取罐
-    GetPot (id) {
+    GetPot (id, orderNo) {
       /*
       // 成品罐
       this.$http(`${BASICDATA_API.CONTAINERLIST_API}`, 'POST', {
@@ -417,7 +417,7 @@ export default {
         }
       })
     */
-      this.$http(`${PACKAGING_API.PKGSAVEMATERIALHOLDER_API}`, 'POST', {factory: id}).then(({data}) => {
+      this.$http(`${PACKAGING_API.PKGSAVEMATERIALHOLDER_API}`, 'POST', {factory: id, orderNo: orderNo}).then(({data}) => {
         if (data.code === 0) {
           this.semiHolder = data.list
         } else {

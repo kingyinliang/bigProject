@@ -93,6 +93,7 @@
           </h3>
           <div class="dataList_item_pot clearfix" style="position:relative;">
             <img src="@/assets/img/F0.png" alt="" v-if="item.IS_F === '1'" style="position:absolute; left:10px; top:10px;">
+            <img src="@/assets/img/RD.png" alt="" v-if="item.isRd === 1" style="position:absolute; left:10px; top:10px;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
                 <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.HOLDER_STATUS !== '6'"></div>
