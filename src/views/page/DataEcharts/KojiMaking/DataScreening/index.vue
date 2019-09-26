@@ -29,6 +29,7 @@
             </div>
           </div>
           <div class="totalContainer_center_bottom">
+            <p class="totalContainer_dataItem_title" style="line-height: 30px">产量分布情况</p>
             <div id="pie" class="pie"></div>
           </div>
         </div>
@@ -142,7 +143,7 @@ export default {
 }
 .pie{
   width: 100%;
-  height: 199px;
+  height: 169px;
 }
 .pageMain{
   width: 100%;
@@ -216,7 +217,7 @@ export default {
     }
     &_bottom{
       margin: auto;
-      background: url('~@/assets/img/echartsItemBg.png') no-repeat;
+      background: url('~@/assets/img/echartsItemBottomBg.png') no-repeat;
       background-size:100% 100%;
     }
   }

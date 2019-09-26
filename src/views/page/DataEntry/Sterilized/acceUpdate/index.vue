@@ -132,7 +132,7 @@
         <el-table-column label="物料" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>物料</span></template>
           <template slot-scope="scope">
-            <el-select v-model="scope.row.materialCode" placeholder="请选择" size="mini" style="width: 180px" @change="selectMaterial(scope.row)" :disabled="!isRedact || scope.row.supStatus === '已确认'">
+            <el-select v-model="scope.row.materialCode" placeholder="请选择" size="mini" style="width: 180px" @change="selectMaterial(scope.row)" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.materialCode + ' ' + item.materialName" v-for="(item, index) in Materails" :key="index" :value="item.materialCode"></el-option>
             </el-select>
@@ -141,13 +141,13 @@
         <el-table-column label="添加数量" width="110" prop="addAmount" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>添加数量</span></template>
           <template slot-scope="scope">
-            <el-input v-model="scope.row.addAmount" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
+            <el-input v-model="scope.row.addAmount" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'" placeholder="请输入" size="mini"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单位" width="100" prop="unit" :show-overflow-tooltip="true">
           <template slot="header"><i class="reqI">*</i><span>单位</span></template>
           <template slot-scope="scope">
-            <el-select v-model="scope.row.unit" placeholder="请选择" size="mini" :disabled="!isRedact || scope.row.supStatus === '已确认'">
+            <el-select v-model="scope.row.unit" placeholder="请选择" size="mini" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'">
               <el-option label="请选择"  value=""></el-option>
               <el-option :label="item.value" v-for="(item, index) in Unit" :key="index" :value="item.code"></el-option>
             </el-select>
@@ -155,18 +155,18 @@
         </el-table-column>
         <el-table-column width="100" label="批次">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batch" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
+            <el-input v-model="scope.row.batch" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'" placeholder="请输入" size="mini"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="领用数量" width="80" prop="receiveAmount" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="备注" width="90">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.remark" :disabled="!isRedact || scope.row.supStatus === '已确认'" placeholder="请输入" size="mini"></el-input>
+            <el-input v-model="scope.row.remark" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'" placeholder="请输入" size="mini"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="50" fixed="right">
+        <el-table-column label="操作" width="70" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" circle size="mini" @click="del(scope.row)"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" @click="del(scope.row)" :disabled="!isRedact || scope.row.supStatus === '已确认' || scope.row.addStatus === '已添加'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
