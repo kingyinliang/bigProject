@@ -18,12 +18,6 @@
                     <el-option v-for="sole in workshopList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>
                   </el-select>
                 </el-form-item>
-                <!--<el-form-item label="布浆线：">-->
-                  <!--<el-select v-model="params.productLineId" style="width:150px" @change="changeOptions('productline')" >-->
-                    <!--<el-option label="请选择" value=""></el-option>-->
-                    <!--<el-option v-for="sole in productlineList" :key="sole.deptId" :label="sole.deptName" :value="sole.deptId"></el-option>-->
-                  <!--</el-select>-->
-                <!--</el-form-item>-->
                 <el-form-item label="入罐日期：" >
                   <el-date-picker type="date" v-model="params.applyDate" value-format="yyyy-MM-dd" style="width:150px"></el-date-picker>
                 </el-form-item>
@@ -35,14 +29,6 @@
                 </el-form-item>
               </el-form>
             </el-col>
-            <!-- <el-col style='width:180px'>
-              <div style="float:right; line-height:31px;font-size: 14px">
-                <div style="float:left">
-                  <span class="point" :style="{'background': orderStatus === 'noPass'? 'red' : orderStatus === 'saved'? '#1890f' : orderStatus === 'submit' ? '#1890ff' : orderStatus === '已同步' ?  '#f5f7fa' : 'rgb(103, 194, 58)'}"></span>订单状态：
-                </div>
-                <span :style="{'color': orderStatus === 'noPass'? 'red' : '' }">{{orderStatus === 'noPass'? '审核不通过':orderStatus === 'saved'? '已保存':orderStatus === 'submit' ? '已提交' : orderStatus === 'checked'? '通过':orderStatus === '已同步' ? '未录入' : orderStatus }}</span>
-              </div>
-            </el-col> -->
           </el-row>
         </el-card>
         <el-row v-if="searched" style="margin-top:10px;background-color:#fff;padding-bottom:10px;">
@@ -55,7 +41,7 @@
                 </div>
                 <div class='pot-box-container img'>
                 </div>
-                <div class="pot-box-footer" >
+                <div class="pot-box-footer">
                   <div class="pot-box-button"  v-if="!disabled && isAvailable === '0' && orderStatus !== 'submit' &&  orderStatus !== 'checked'" @click="inPotStart()">
                     <span class="pot-box-button-title">入罐开始</span>
                   </div>
@@ -275,7 +261,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="批次：" required>
-              <el-input v-model.trim="modifyForm.batch" style='width:220px' :disabled="modifyForm.batchSt"/>
+              <el-input v-model.trim="modifyForm.batch" style='width:220px' maxlength="10" :disabled="modifyForm.batchSt"/>
             </el-form-item>
             <el-form-item label="起始数：" required>
               <el-input  type='number' v-model.number="modifyForm.startAmount" style='width:220px'/>
@@ -341,6 +327,7 @@ export default class Index extends Vue {
   dialogFormVisible2:boolean = false
   dialogFormVisible3:boolean = false
   formLabelWidth: string = '130px'
+  test: ''
   startForm = {
     inDate: '',
     potNo: '',
@@ -355,7 +342,8 @@ export default class Index extends Vue {
     startAmount: 0,
     mixType: '',
     changed: '',
-    changer: ''
+    changer: '',
+    uuid: ''
   }
   endForm = {
     potNo: '',
@@ -390,7 +378,8 @@ export default class Index extends Vue {
     fulPotDate: '',
     remark: '',
     changed: '',
-    changer: ''
+    changer: '',
+    uuid: ''
   }
   mounted () {
     this.params.applyDate = dateFormat(new Date(), 'yyyy-MM-dd')
@@ -459,6 +448,7 @@ export default class Index extends Vue {
     if (this.disabled || row.status === 'submit' || row.status === 'checked') {
       return
     }
+    this.test = row.potNo
     if (this.potList.find(item => item.holderId === row.potNo) === undefined) {
       this.potList.push({
         holderId: row.potNo,
@@ -490,7 +480,8 @@ export default class Index extends Vue {
       fulPotDate: row.fulPotDate ? row.fulPotDate : '',
       remark: row.remark ? row.remark : '',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
-      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+      uuid: row.uuid
     }
     this.dialogFormVisible3 = true
     this.changeOptions('potModify')
@@ -511,7 +502,7 @@ export default class Index extends Vue {
           materialName: this.modifyForm.materialName,
           inDate: this.modifyForm.inDate,
           potNo: this.modifyForm.potNo,
-          potName: this.modifyForm.potName,
+          potName: JSON.parse(JSON.stringify(this.modifyForm.potName)),
           startAmount: this.modifyForm.startAmount,
           mixType: this.modifyForm.mixType,
           endAmount: this.modifyForm.endAmount,
@@ -521,9 +512,13 @@ export default class Index extends Vue {
           fullPotAmount: this.modifyForm.fullPotAmount,
           fulPotDate: this.modifyForm.fulPotDate,
           changed: this.modifyForm.changed,
-          changer: this.modifyForm.changer
+          changer: this.modifyForm.changer,
+          uuid: this.modifyForm.uuid
         })
         this.dataList.splice(matchedIndex, 1, record)
+      }
+      if (this.dataList.findIndex(ite => ite.uuid === this.modifyForm.uuid) + 1 === this.dataList.length) {
+        this.isAvailable = '0'
       }
       this.dialogFormVisible3 = false
     }
@@ -543,7 +538,8 @@ export default class Index extends Vue {
       startAmount: 0,
       mixType: '正常',
       changed: dateFormat(new Date(), 'yyyy-MM-dd h:m:s'),
-      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`
+      changer: this.$store.state.user.realName + `(${this.$store.state.user.name})`,
+      uuid: ''
     }
     this.dialogFormVisible = true
   }
@@ -566,7 +562,8 @@ export default class Index extends Vue {
         mixType: this.startForm.mixType,
         changed: this.startForm.changed,
         changer: this.startForm.changer,
-        delFlag: 0
+        delFlag: 0,
+        uuid: Vue.prototype.uuid()
       }
       this.dataList.push(result)
       this.dialogFormVisible = false
@@ -686,6 +683,8 @@ export default class Index extends Vue {
       if (item && item.potType) {
         this.startForm.mixType = item.potType
         this.startForm.mixTypeSt = true
+      } else {
+        this.startForm.mixTypeSt = false
       }
       this.startForm.materialCode = item.materialCode || ''
       this.startForm.materialName = item.materialName || ''
@@ -693,16 +692,29 @@ export default class Index extends Vue {
       item.batch ? this.startForm.batchSt = true : this.startForm.batchSt = false
     } else if (flag === 'potModify') {
       let item = this.potList.find(ele => ele.holderId === this.modifyForm.potNo)
-      this.modifyForm.potName = item ? item.holderName : ''
-      this.modifyForm.batch = item ? item.batch : ''
-      if (item && item.potType) {
-        this.modifyForm.mixType = item.potType
-        this.modifyForm.mixTypeSt = true
+      if (item.batch === '') {
+        if (this.test !== this.modifyForm.potNo) {
+          this.modifyForm.potName = this.potList.find(it => it.holderId === this.modifyForm.potNo).holderName
+          this.modifyForm.batch = ''
+          this.modifyForm.mixType = '正常'
+          this.modifyForm.materialCode = item.materialCode
+          this.modifyForm.materialName = item.materialName
+          this.modifyForm.batchSt = false
+          this.modifyForm.materialSt = false
+          this.modifyForm.mixTypeSt = false
+        }
+      } else {
+        this.modifyForm.potName = item ? item.holderName : ''
+        this.modifyForm.batch = item ? item.batch : ''
+        if (item && item.potType) {
+          this.modifyForm.mixType = item.potType
+          this.modifyForm.mixTypeSt = true
+        }
+        this.modifyForm.materialCode = item.materialCode || ''
+        this.modifyForm.materialName = item.materialName || ''
+        item.materialCode ? this.modifyForm.batchSt = true : this.modifyForm.batchSt = false
+        item.batch ? this.modifyForm.materialSt = true : this.modifyForm.materialSt = false
       }
-      this.modifyForm.materialCode = item.materialCode || ''
-      this.modifyForm.materialName = item.materialName || ''
-      item.materialCode ? this.modifyForm.batchSt = true : this.modifyForm.batchSt = false
-      item.batch ? this.modifyForm.materialSt = true : this.modifyForm.materialSt = false
     }
   }
   setfullPotAmount (str) {
@@ -844,6 +856,9 @@ export default class Index extends Vue {
     Vue.prototype.$http(`${SQU_API.MATERIAL_IN_LIST_API}`, `POST`, params).then((res) => {
       if (res.data.code === 0) {
         this.dataList = res.data.list
+        this.dataList.map(item => {
+          item.uuid = item.id
+        })
       } else {
         this.$notify.error({title: '错误', message: res.data.msg})
       }
