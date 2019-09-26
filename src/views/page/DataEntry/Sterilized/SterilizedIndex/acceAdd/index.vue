@@ -12,6 +12,7 @@
       </el-row>
       <el-row style="text-align:right;position: absolute;bottom:10px;right: 20px;" class="buttonCss">
         <template style="float:right; margin-left: 10px;">
+          <el-button type="primary" class="button" size="small" @click="Refresh">刷新</el-button>
           <el-button type="primary" class="button" size="small" @click="isRedact = !isRedact" v-if="orderStatus !== 'submit' && orderStatus !== 'checked' && isAuth('ste:supMaterial:mySaveOrUpdate')">{{isRedact?'取消':'编辑'}}</el-button>
         </template>
         <template v-if="isRedact" style="float:right; margin-left: 10px;">
@@ -33,12 +34,12 @@
           <el-table header-row-class-name="tableHead" :data="AddSupDate" @selection-change="handleSelectionChangeAddSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
             <el-table-column type="selection" :selectable="CheckBoxA" width="40"></el-table-column>
             <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column label="审核状态" width="100">
+            <el-table-column label="状态" width="100">
               <template slot-scope="scope">
-                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':'未录入'}}
+                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? scope.row.addStatus:scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过' : scope.row.addStatus}}
               </template>
             </el-table-column>
-            <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
+            <!--<el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>-->
             <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
             <el-table-column label="需求数量" width="80" prop="adjustAmount" :show-overflow-tooltip="true">
               <template slot-scope="scope">
@@ -84,12 +85,12 @@
           <el-table header-row-class-name="tableHead" :data="SupDate" @selection-change="handleSelectionChangeSup" :row-class-name="RowDelFlag" border tooltip-effect="dark">
             <el-table-column type="selection" :selectable="CheckBoxA" width="34"></el-table-column>
             <el-table-column type="index" width="55" label="序号"></el-table-column>
-            <el-table-column label="审核状态" width="100">
+            <el-table-column label="状态" width="100">
               <template slot-scope="scope">
-                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? '已保存':scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过':'未录入'}}
+                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? scope.row.addStatus:scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过' : scope.row.addStatus}}
               </template>
             </el-table-column>
-            <el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>
+            <!--<el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>-->
             <el-table-column label="物料" :show-overflow-tooltip="true"><template slot-scope="scope">{{scope.row.materialCode + ' ' + scope.row.materialName}}</template></el-table-column>
             <el-table-column label="添加数量" width="80" prop="addAmount" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="单位" width="50" prop="unit" :show-overflow-tooltip="true"></el-table-column>
@@ -179,6 +180,23 @@ export default {
     this.GetOrderHead()
   },
   methods: {
+    Refresh () {
+      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index')
+      if (this.mainTabs.length >= 1) {
+        // 当前选中tab被删除
+        if (this.mainTabsActiveName === 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index') {
+          this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
+            this.mainTabsActiveName = this.$route.name
+          })
+        }
+      } else {
+        this.menuActiveName = ''
+        this.$router.push({name: 'home'})
+      }
+      this.$nextTick(() => {
+        this.$router.push({name: 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'})
+      })
+    },
     GetDataList () {
       this.$http(`${STERILIZED_API.STE_ENTER_SUP_LIST_API}`, 'POST', {
         orderId: this.$store.state.common.sterilized.acceOrderId,
@@ -517,7 +535,16 @@ export default {
       })
     }
   },
-  computed: {},
+  computed: {
+    mainTabs: {
+      get () {
+        return this.$store.state.common.mainTabs
+      },
+      set (val) {
+        this.$store.commit('common/updateMainTabs', val)
+      }
+    }
+  },
   components: {
     ExcRecord,
     TextRecord,

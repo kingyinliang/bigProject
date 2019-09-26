@@ -15,13 +15,19 @@
         </el-menu-item>
       </el-menu>
       <el-menu
+        v-if="menuList.filter(item => item.type === '4').length>0"
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
-        <el-menu-item class="site-navbar__avatar" index="3">
+        <el-menu-item class="site-navbar__switch" index="4" style="padding: 8px 0" @click="goEacharts">
+          <span style="font-size: 16px;border-left: 1px solid #d9d9d9;color: #00a2d4;padding: 0px 11px;height: 16px;display: block;line-height: 16px">数据面板 <i class="iconfont factory-mianban" style="color: #00a2d4"></i></span>
+        </el-menu-item>
+      </el-menu>
+      <el-menu
+        class="site-navbar__menu site-navbar__menu--right"
+        mode="horizontal">
+        <el-menu-item class="site-navbar__avatar" index="3" style="padding: 0 4px">
           <el-dropdown :show-timeout="0" placement="bottom">
-            <span class="el-dropdown-link">
-              <img src="@/assets/img/avatar.png" :alt="userName">{{ realName + '（' +userName+ '）' }}
-            </span>
+            <span class="el-dropdown-link"><img src="@/assets/img/avatar.png" :alt="userName"><span>{{realName + '（' +userName+ '）'}}</span></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="updatePassword">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="logoutHandle()">退出</el-dropdown-item>
@@ -48,6 +54,9 @@ export default {
   mounted () {
   },
   methods: {
+    goEacharts () {
+      this.$router.push({ path: '/DataEcharts/KojiMaking-DataScreening-index' })
+    },
     // 退出
     logoutHandle () {
       this.$confirm(`确定进行[退出]操作?`, '提示', {
@@ -72,6 +81,10 @@ export default {
     sidebarFold: {
       get () { return this.$store.state.common.sidebarFold },
       set (val) { this.$store.commit('common/updateSidebarFold', val) }
+    },
+    menuList: {
+      get () { return this.$store.state.common.menuList },
+      set (val) { this.$store.commit('common/updateMenuList', val) }
     },
     mainTabs: {
       get () { return this.$store.state.common.mainTabs },
