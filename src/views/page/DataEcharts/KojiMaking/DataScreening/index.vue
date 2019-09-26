@@ -5,7 +5,17 @@
       <div class="totalContainer_box">
         <div class="totalContainer_dataItem">
           <p class="totalContainer_dataItem_title">制曲一车间数据</p>
+          <div class="totalContainer_dataItem_tit clearfix">
+            <img src="@/assets/img/echartsTitleBgL.png" alt="">
+            <span>当年产品分布</span>
+            <img src="@/assets/img/echartsTitleBgR.png" alt="">
+          </div>
           <div id="NightingaleRose1" class="NightingaleRose"></div>
+          <div class="totalContainer_dataItem_tit clearfix">
+            <img src="@/assets/img/echartsTitleBgL.png" alt="">
+            <span>当年产量概览</span>
+            <img src="@/assets/img/echartsTitleBgR.png" alt="">
+          </div>
           <div id="pillar1" class="pillar"></div>
         </div>
         <div class="totalContainer_center">
@@ -35,7 +45,17 @@
         </div>
         <div class="totalContainer_dataItem">
           <p class="totalContainer_dataItem_title">制曲二车间数据</p>
+          <div class="totalContainer_dataItem_tit clearfix">
+            <img src="@/assets/img/echartsTitleBgL.png" alt="">
+            <span>当年产品分布</span>
+            <img src="@/assets/img/echartsTitleBgR.png" alt="">
+          </div>
           <div id="NightingaleRose2" class="NightingaleRose"></div>
+          <div class="totalContainer_dataItem_tit clearfix">
+            <img src="@/assets/img/echartsTitleBgL.png" alt="">
+            <span>当年产量概览</span>
+            <img src="@/assets/img/echartsTitleBgR.png" alt="">
+          </div>
           <div id="pillar2" class="pillar"></div>
         </div>
       </div>
@@ -70,11 +90,23 @@ export default {
     this.pillar1.setOption(pillar)
     this.pillar2.setOption(pillar)
     this.pie.setOption(pie)
-  },
-  activated () {
-    if (this.NightingaleRose) {
-      this.NightingaleRose.resize()
-    }
+    window.addEventListener('resize', () => {
+      if (this.NightingaleRose1) {
+        this.NightingaleRose1.resize()
+      }
+      if (this.NightingaleRose2) {
+        this.NightingaleRose2.resize()
+      }
+      if (this.pillar1) {
+        this.pillar1.resize()
+      }
+      if (this.pillar2) {
+        this.pillar2.resize()
+      }
+      if (this.pie) {
+        this.pie.resize()
+      }
+    })
   },
   methods: {
     setNightingaleRose1 (param) {
@@ -133,18 +165,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.NightingaleRose{
-  width: 297px;
-  height: 184px;
-}
-.pillar{
-  width: 100%;
-  height: 250px;
-}
-.pie{
-  width: 100%;
-  height: 169px;
-}
 .pageMain{
   width: 100%;
   height: 100%;
@@ -163,6 +183,7 @@ export default {
     justify-content: left;
   }
   &_dataItem{
+    transition: all 1s;
     background: url('~@/assets/img/echartsItemBg.png') no-repeat;
     background-size:100% 100%;
     &_title{
@@ -173,6 +194,25 @@ export default {
       text-align: center;
       letter-spacing: 0px;
       color: #2fd5ff;
+      margin-bottom: 10px;
+    }
+    &_tit{
+      width: 268px;
+      margin: auto;
+      span{
+        float: left;
+        font-size: 12px;
+        color: #00dfff;
+        padding-bottom: 4px;
+        border-bottom: 2px transparent solid;
+        border-image: linear-gradient(to right,#2d77f3,#21e7ff) 1 10;
+      }
+      img{
+        width: 98px;
+        height: 8px;
+        margin-top: 4px;
+        float: left;
+      }
     }
   }
   &_center{
@@ -216,6 +256,7 @@ export default {
       }
     }
     &_bottom{
+      transition: all 2s;
       margin: auto;
       background: url('~@/assets/img/echartsItemBottomBg.png') no-repeat;
       background-size:100% 100%;
@@ -231,6 +272,20 @@ export default {
   transition: all 2s;
 }
 @media (max-width: 1367px) {
+  .NightingaleRose{
+    width: 100%;
+    height: 164px;
+  }
+  .pillar{
+    width: 100%;
+    margin-top: 10px;
+    height: 220px;
+  }
+  .pie{
+    width: 100%;
+    margin-top: 10px;
+    height: 149px;
+  }
   .totalContainer {
     &_box {
       width: 1153px;
@@ -262,6 +317,19 @@ export default {
   }
 }
 @media (min-width: 1367px) {
+  .NightingaleRose{
+    width: 100%;
+    height: 204px;
+  }
+  .pillar{
+    width: 100%;
+    margin-top: 10px;
+    height: 270px;
+  }
+  .pie{
+    width: 100%;
+    height: 179px;
+  }
   .totalContainer{
     &_box{
       width: 1316px;
@@ -269,6 +337,9 @@ export default {
     &_dataItem{
       width: 329px;
       height: 582px;
+      &_title{
+        margin-bottom: 20px;
+      }
     }
     &_center{
       width: 658px;
