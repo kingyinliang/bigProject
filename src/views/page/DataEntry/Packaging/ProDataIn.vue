@@ -194,7 +194,7 @@ export default {
         this.formHeader = data.list[0]
         this.orderStatus = data.list[0].orderStatus
         this.GetRatio()
-        this.$refs.listbom.GetPot(this.formHeader.factory)
+        this.$refs.listbom.GetPot(this.formHeader.factory, this.formHeader.orderNo)
         this.$refs.formheader.getLin(this.formHeader.workShop)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.excrecord.getDataList(this.formHeader.factory)

@@ -343,15 +343,19 @@ export default {
       }
     },
     CreateOrder () {
+      if (this.orderList.length === 0) {
+        this.$warning_SHINHO('请添加订单')
+        return false
+      }
+      if (this.orderList.filter(item => item.orderNo.slice(0, 4) === this.orderList[0].orderNo.slice(0, 4)).length !== this.orderList.length) {
+        this.$warning_SHINHO('请选择相同的订单类型的订单！')
+        return false
+      }
       this.$confirm('确认生成调配单吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.orderList.length === 0) {
-          this.$warning_SHINHO('请添加订单')
-          return false
-        }
         if (this.allocateId === '') {
           let params = {
             factory: this.$store.state.common.Sterilized.factoryId,

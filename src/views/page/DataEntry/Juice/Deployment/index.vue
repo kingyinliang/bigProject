@@ -268,6 +268,7 @@ export default {
       dialogTableVisible: false,
       ItemList: [],
       materialName: '',
+      orderTypeSign: '',
       multipleSelection: [],
       holderList: [],
       lineStatus: '',
@@ -397,6 +398,7 @@ export default {
           this.dialogTableVisible = true
           this.lineStatus = row.status
           this.ID = row.id
+          this.orderTypeSign = data.orderTypeSign
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -418,6 +420,7 @@ export default {
     },
     SaveSplit () {
       let batchList = []
+      let ty = true
       for (let item of this.ItemList) {
         batchList.push(item.batch)
         item.ID = this.ID
@@ -437,6 +440,9 @@ export default {
           this.$warning_SHINHO('原汁物料需选择罐号')
           return false
         }
+        if (this.orderTypeSign === '1' && item.holderId && this.thrwHolderList.filter(it => item.holderId === it.holderId)[0].isRdSign !== '1') {
+          ty = false
+        }
         // if (/六月鲜/g.test(this.materialName)) {
         //   if (/味极鲜/g.test(item.category)) {
         //     this.$message.error('领用原汁与生产物料不匹配！无法保存，无法操作')
@@ -448,15 +454,33 @@ export default {
         this.$warning_SHINHO('批次不能重复')
         return false
       }
-      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
-        if (data.code === 0) {
-          this.$notify({title: '成功', message: '保存成功', type: 'success'})
-          // this.SearchList()
-          this.dialogTableVisible = false
-        } else {
-          this.$notify.error({title: '错误', message: data.msg})
-        }
-      })
+      if (ty) {
+        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
+          if (data.code === 0) {
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
+            // this.SearchList()
+            this.dialogTableVisible = false
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
+      } else {
+        this.$confirm(`领用原汁非R&D原汁，请确认！`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
+            if (data.code === 0) {
+              this.$notify({title: '成功', message: '保存成功', type: 'success'})
+              // this.SearchList()
+              this.dialogTableVisible = false
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        })
+      }
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

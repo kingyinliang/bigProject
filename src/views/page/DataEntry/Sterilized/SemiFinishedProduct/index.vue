@@ -32,6 +32,7 @@
         <el-card class="dataList_item">
           <h3 class="dataList_item_tit">{{item.holderNo}} - <span style="color:rgb(51, 51, 51); font-weight:normal; font-size:14px;">{{item.holderStatus === '1' ? '入库中' : item.holderStatus === '0' ? '空罐' : item.holderStatus === '2' ? '满罐' : item.holderStatus === '3' ? '领用中' : ''}}</span><span style="cursor:pointer; color:#1890FF; float:right; font-size:12px;">详情>></span></h3>
           <div class="dataList_item_pot clearfix" style="position:relative;">
+            <img src="@/assets/img/RD.png" alt="" v-if="item.isRd === 1" style="position:absolute; left:10px; top:10px;">
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1" style="display:flex; flex-wrap:wrap; align-content:flex-end; position:relative;">
                 <div v-if="item.holderStatus === '1' || item.holderStatus === '3'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`"></div>
