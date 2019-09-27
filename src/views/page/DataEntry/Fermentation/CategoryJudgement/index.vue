@@ -6,11 +6,13 @@
           <el-form :inline="true" :model="form" size="small" label-width="70px" class="multi_row">
             <el-form-item label="生产工厂：">
               <el-select v-model="form.factory" placeholder="请选择" class="width160px">
+                <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="生产车间：">
               <el-select v-model="form.workShop" placeholder="请选择" class="width160px">
+                <el-option value=''>请选择</el-option>
                 <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
               </el-select>
             </el-form-item>
@@ -113,13 +115,13 @@
       </el-tab-pane>
       <el-tab-pane name="1" label="已判定">
         <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态">
+          <el-table-column label="状态" width="50">
             <template slot-scope="scope">
               <!-- {{scope.row.judge}} -->
               {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : ''}}
             </template>
           </el-table-column>
-          <el-table-column label="发酵罐">
+          <el-table-column label="发酵罐" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.order.holderName}}
             </template>
@@ -129,7 +131,7 @@
               {{scope.row.order.ferOrderNo}}
             </template>
           </el-table-column>
-          <el-table-column label="物料" width="230">
+          <el-table-column label="物料" width="180" show-overflow-tooltip>
             <template slot-scope="scope">
               {{scope.row.order.ferMaterialCode}}{{scope.row.order.ferMaterialName}}
             </template>
@@ -164,7 +166,7 @@
               {{scope.row.judge ? scope.row.judge.created : ''}}
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">调整</el-button>
             </template>
@@ -313,7 +315,7 @@ export default {
     },
     // 物料类别
     GetMaterialTypeList (id) {
-      this.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory: id}).then(({data}) => {
+      this.$http(`${BASICDATA_API.CATEGORY_SORTLIST}`, 'POST', {factory: id}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.materialTypeList = data.ferList
         } else {
@@ -360,6 +362,11 @@ export default {
     // 判定
     JudgeDo (row) {
       this.dialogVisible = true
+      // let halfIds = this.materialTypeList.find(item => item.halfName === '味极鲜')[id]
+      let defaulthalfId = ''
+      if (this.materialTypeList.find(item => item.halfName === '味极鲜')) {
+        defaulthalfId = this.materialTypeList.find(item => item.halfName === '味极鲜').id
+      }
       this.judge = {
         factory: this.form.factory,
         workShop: this.form.workShop,
@@ -371,7 +378,7 @@ export default {
         ferMaterialName: row.order.ferMaterialName,
         ferDays: row.order.ferDays,
         holderNo: row.order.holderNo,
-        halfId: row.judge ? row.judge.halfId : ''
+        halfId: row.judge ? row.judge.halfId : defaulthalfId
       }
       this.GetMaterialTypeListTan()
     },
