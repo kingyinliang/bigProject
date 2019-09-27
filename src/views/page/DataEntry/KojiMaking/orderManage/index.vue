@@ -43,7 +43,7 @@
             </el-col>
           </el-row>
         </el-card>
-        <el-row :gutter="12" v-if="searched" style="margin-top:5px;">
+        <el-row :gutter="5" v-if="searched" style="margin-top:5px;">
           <el-col :span="12">
             <el-card>
               <el-row style="margin-bottom:5px;" >
@@ -75,7 +75,7 @@
                         {{scope.row.materialCode + ' ' + scope.row.materialName}}
                       </template>
                     </el-table-column>
-                    <el-table-column width="70" label="数量">
+                    <el-table-column width="70" label="数量" show-overflow-tooltip>
                       <template slot-scope="scope">
                         {{scope.row.planOutput}}
                       </template>
@@ -85,7 +85,7 @@
                         <span>{{scope.row.outputUnit}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column label="备注" width="140">
+                    <el-table-column label="备注" width="100" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <span>{{scope.row.remark}}</span>
                       </template>
@@ -94,16 +94,18 @@
                       label="操作"
                       fixed="right"
                       align="center"
-                      width="80">
+                      width="130">
                       <template slot-scope="scope">
-                        <div class="operator" v-if="(scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存') && isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)">
+                        <el-button type="text" :disabled="!(scope.row.orderStatus === '不通过' || scope.row.orderStatus === '已同步' || scope.row.orderStatus === '已保存')" @click="orderSplit(scope.row)"><i class="iconfont factory-chaifen"></i>拆分</el-button>
+                        <el-button type="text" :disabled="!(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过')" @click="orderCheck(scope.row)"><i class="iconfont factory-renzhengshenhe_huaban"></i>审核</el-button>
+                        <!-- <div class="operator" v-if="(scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存') && isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)">
                           <div class="split"></div>
                           <div>&nbsp;拆分</div>
                         </div>
                         <div class="operator" v-if="(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') && isAuth('sys:order:orderlist')&& isAuth('sys:midInStorage:list')" @click="orderCheck(scope.row)">
                           <div class="check"></div>
                           <div>&nbsp;审核</div>
-                        </div>
+                        </div> -->
                       </template>
                     </el-table-column>
                   </el-table>
@@ -474,6 +476,7 @@ export default class Index extends Vue {
       Vue.prototype.$warning_SHINHO('请选择车间')
       return
     }
+    this.currPage = 1
     // if (this.params.orderDate === null || this.params.orderDate === '') {
     //   this.$message.error('请选择订单日期')
     //   return
