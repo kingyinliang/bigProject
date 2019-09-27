@@ -95,55 +95,55 @@
     <el-dialog :close-on-click-modal="false" custom-class='dialog__class' :visible.sync="dialogFormVisibleMai" width="450px">
       <div slot="title" style="line-hight:59px">熟酱醪领用</div>
       <el-form :model="sauce" size="small" :rules="saucerule" ref="saucesbu">
-        <el-form-item label="布浆机" :label-width="formLabelWidth" prop="pulpMachine">
+        <el-form-item label="布浆机：" :label-width="formLabelWidth" prop="pulpMachine">
           <el-select v-model="sauce.pulpMachine" filterable placeholder="请选择" style="width:310px">
             <el-option :label="item.deviceName" v-for="(item, index) in pulpMachineList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.id">
+        <el-form-item label="气垫小车：" :label-width="formLabelWidth" prop="hovercraftNo" v-if="!this.sauce.id">
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftList" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="气垫小车" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
+        <el-form-item label="气垫小车：" :label-width="formLabelWidth" prop="hovercraftNo" v-else>
           <el-select v-model="sauce.hovercraftNo" filterable placeholder="请选择" style="width:310px" :disabled="!isSelect">
             <el-option :label="item.deviceName" v-for="(item, index) in hovercraftAll" :key="index" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="布浆张数" :label-width="formLabelWidth" prop="pulpNum">
+        <el-form-item label="布浆张数：" :label-width="formLabelWidth" prop="pulpNum">
           <el-input v-model="sauce.pulpNum"></el-input>
         </el-form-item>
-        <el-form-item label="布浆开始时间" :label-width="formLabelWidth" prop="pulpStartDate">
+        <el-form-item label="布浆开始时间：" :label-width="formLabelWidth" prop="pulpStartDate">
           <el-date-picker v-model="sauce.pulpStartDate" type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:310px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="布浆结束时间" :label-width="formLabelWidth" prop="pulpEndDate">
+        <el-form-item label="布浆结束时间：" :label-width="formLabelWidth" prop="pulpEndDate">
           <el-date-picker v-model="sauce.pulpEndDate" type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" style="width:310px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="布浆量" :label-width="formLabelWidth" prop="pulpAmount">
+        <el-form-item label="布浆量：" :label-width="formLabelWidth" prop="pulpAmount">
           <el-input v-model="sauce.pulpAmount"></el-input>
         </el-form-item>
-        <el-form-item label="单位" :label-width="formLabelWidth">
+        <el-form-item label="单位：" :label-width="formLabelWidth">
           L
         </el-form-item>
-        <el-form-item label="自重自淋时间" :label-width="formLabelWidth" prop="selfDrenchTime">
+        <el-form-item label="自重自淋时间：" :label-width="formLabelWidth" prop="selfDrenchTime">
           <el-input v-model="sauce.selfDrenchTime"></el-input>
         </el-form-item>
-        <el-form-item label="布号" :label-width="formLabelWidth" prop="clothNo">
+        <el-form-item label="布号：" :label-width="formLabelWidth" prop="clothNo">
           <el-input v-model="sauce.clothNo"></el-input>
         </el-form-item>
-        <el-form-item label="酱醪分类" :label-width="formLabelWidth" prop="sauceClass">
+        <el-form-item label="酱醪分类：" :label-width="formLabelWidth" prop="sauceClass">
           <el-select v-model="sauce.sauceClass" filterable placeholder="请选择" style="width:310px">
             <el-option :label="item.code + ' ' + item.value" v-for="(item, index) in sauceClassList" :key="index" :value="item.code + ' ' + item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发酵罐号" :label-width="formLabelWidth" prop="potOne">
+        <el-form-item label="发酵罐号：" :label-width="formLabelWidth" prop="potOne">
           <el-input v-model="sauce.potOne" style="width:259px; float:left"></el-input><el-button @click="addGuan()" style="float:left; margin-left:10px">+</el-button>
         </el-form-item>
-        <el-form-item label="发酵罐号2" :label-width="formLabelWidth" prop="potTwo" :style="{'display': guanTwoDisplayNo ? 'none' : ''}">
+        <el-form-item label="发酵罐号2：" :label-width="formLabelWidth" prop="potTwo" :style="{'display': guanTwoDisplayNo ? 'none' : ''}">
           <el-input v-model="sauce.potTwo" style="width:259px; float:left"></el-input><el-button type="danger" icon="el-icon-delete" circle size="small" @click="delGuan()" style="float:left; margin-left:10px"></el-button>
         </el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{sauce.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{sauce.changer}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{sauce.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{sauce.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelsave()">取 消</el-button>

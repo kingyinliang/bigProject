@@ -202,6 +202,13 @@
       "unicode_decimal": 59149
     },
     {
+      "icon_id": "4721304",
+      "name": "认证审核",
+      "font_class": "renzhengshenhe_huaban",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
       "icon_id": "4811996",
       "name": "液位仪",
       "font_class": "dianhua",
