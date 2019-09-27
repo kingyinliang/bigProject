@@ -96,7 +96,7 @@
                       align="center"
                       width="130">
                       <template slot-scope="scope">
-                        <el-button type="text" :disabled="!(scope.row.orderStatus === '不通过' || scope.row.orderStatus === '已同步' || scope.row.orderStatus === '已保存') || !isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)"><i class="iconfont factory-chaifen"></i>拆分</el-button>
+                        <el-button type="text" :disabled="!(scope.row.orderStatus === '不通过' || scope.row.orderStatus === '已同步' || scope.row.orderStatus === '已保存' || scope.row.orderStatus === '待审核') || !isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)"><i class="iconfont factory-chaifen"></i>拆分</el-button>
                         <el-button type="text" :disabled="!(scope.row.orderStatus === '待审核' || scope.row.orderStatus === '已提交' || scope.row.orderStatus === '不通过' || scope.row.orderStatus === '通过') || !isAuth('sys:midInStorage:list')" @click="orderCheck(scope.row)"><i class="iconfont factory-renzhengshenhe_huaban"></i>审核</el-button>
                         <!-- <div class="operator" v-if="(scope.row.orderStatus === '已同步' || scope.row.orderStatus === '未录入' || scope.row.orderStatus === '已保存') && isAuth('sys:kjmOrderHouse:mySaveOrUpdate')" @click="orderSplit(scope.row)">
                           <div class="split"></div>

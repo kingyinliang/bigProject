@@ -273,7 +273,10 @@ export default {
       holderList: [],
       lineStatus: '',
       thrwHolderList: [],
-      userList: []
+      userList: [],
+      strList: [],
+      strList1: [],
+      strList2: []
     }
   },
   mounted () {
@@ -493,31 +496,65 @@ export default {
         this.$warning_SHINHO('请勾选数据')
       } else {
         let str = ''
-        let st = false
+        this.strList = []
+        this.strList1 = []
+        this.strList2 = []
         this.multipleSelection.forEach((item) => {
-          if (item.cDay === null) {
-            this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {})
-            st = true
-          } else if (item.cDay === -999) {
-            this.$confirm(`请确认${item.yzHolderName}，${item.batch}批次原汁有库存?`, '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {})
-            st = true
-          } else if (item.cDay * 1 < 6) {
-            str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+          if (item.sbList === null) {
+            this.strList.push(item.orderNo)
+          } else {
+            item.sbList.map((items) => {
+              if (items.cDay === null) {
+                this.strList.push(item.orderNo)
+              } else if (items.cDay === -999) {
+                this.strList1.push(`${items.yzHolderName},${items.batch}`)
+              }
+              if (items.cDay * 1 < 6) {
+                this.strList2.push(`${items.yzHolderName},${items.batch}`)
+              }
+            })
           }
         })
-        if (st) {
+        if (this.strList.length !== 0) {
+          this.$confirm(`请先保存调配单${this.strList.join(',')}的调配详情信息?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {})
           return false
         }
+        if (this.strList1.length !== 0) {
+          this.$confirm(`请先确认${this.strList1.join(',')}批次原汁有库存?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {})
+          return false
+        }
+        if (this.strList2.length !== 0) {
+          str = this.strList2.join(',')
+        }
+        // this.multipleSelection.forEach((item) => {
+        //   if (item.cDay === null) {
+        //     this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+        //       confirmButtonText: '确定',
+        //       cancelButtonText: '取消',
+        //       type: 'warning'
+        //     }).then(() => {})
+        //     st = true
+        //   } else if (item.cDay === -999) {
+        //     this.$confirm(`请确认${item.yzHolderName}，${item.batch}批次原汁有库存?`, '提示', {
+        //       confirmButtonText: '确定',
+        //       cancelButtonText: '取消',
+        //       type: 'warning'
+        //     }).then(() => {})
+        //     st = true
+        //   } else if (item.cDay * 1 < 6) {
+        //     str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+        //   }
+        // })
         if (str.length > 0) {
-          this.$confirm(str, '提示', {
+          this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

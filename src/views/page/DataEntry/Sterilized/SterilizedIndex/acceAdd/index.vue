@@ -181,21 +181,22 @@ export default {
   },
   methods: {
     Refresh () {
-      this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index')
-      if (this.mainTabs.length >= 1) {
-        // 当前选中tab被删除
-        if (this.mainTabsActiveName === 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index') {
-          this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
-            this.mainTabsActiveName = this.$route.name
-          })
-        }
-      } else {
-        this.menuActiveName = ''
-        this.$router.push({name: 'home'})
-      }
-      this.$nextTick(() => {
-        this.$router.push({name: 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'})
-      })
+      this.GetOrderHead()
+      // this.mainTabs = this.mainTabs.filter(item => item.name !== 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index')
+      // if (this.mainTabs.length >= 1) {
+      //   // 当前选中tab被删除
+      //   if (this.mainTabsActiveName === 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index') {
+      //     this.$router.push({name: this.mainTabs[this.mainTabs.length - 1].name}, () => {
+      //       this.mainTabsActiveName = this.$route.name
+      //     })
+      //   }
+      // } else {
+      //   this.menuActiveName = ''
+      //   this.$router.push({name: 'home'})
+      // }
+      // this.$nextTick(() => {
+      //   this.$router.push({name: 'DataEntry-Sterilized-SterilizedIndex-acceAdd-index'})
+      // })
     },
     GetDataList () {
       this.$http(`${STERILIZED_API.STE_ENTER_SUP_LIST_API}`, 'POST', {
