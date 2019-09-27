@@ -576,7 +576,7 @@ export default {
         Promise.all([net1, net2, net3, excSaveNet, textSaveNet, net101]).then(function () {
           that.$notify({title: '成功', message: that.succmessage, type: 'success'})
           that.GetheadList()
-          that.$refs.LookEcharts.clearInit()
+          // that.$refs.LookEcharts.clearInit()
           that.isRedact = false
         }).catch(() => {
           that.$error_SHINHO('网络请求失败，请刷新重试')
@@ -781,7 +781,7 @@ export default {
       this.$http(`${KJM_API.DOULOOKLIST_API}`, 'POST', {orderHouseId: formHeader.orderHouseId}).then(({data}) => {
         if (data.code === 0) {
           this.tech = data.techList[0]
-          this.formHeader.inStartTime = data.techList[0].inStartTime
+          this.formHeader.inStartTime = data.techList[0].inStartTime === null ? '' : data.techList[0].inStartTime
           this.$refs.LookEcharts.testInit(this.formHeader)
           this.applyCraftState = this.tech.status
           this.$refs.tabs.handleTabClick(this.$refs.tabs.panes[0])
