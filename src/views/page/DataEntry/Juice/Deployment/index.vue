@@ -121,7 +121,7 @@
         </el-table-column>
         <el-table-column label="罐号" prop="productDate" width="150" >
           <template slot-scope="scope">
-            <el-select v-model="scope.row.holderId" size="small"  :disabled="IsGuanStatus(scope.row)">
+            <el-select v-model="scope.row.holderId" size="small" disabled>
               <el-option value=''>请选择</el-option>
               <el-option v-for="(item, index) in thrwHolderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
             </el-select>
@@ -161,7 +161,7 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <template>
-          <el-button @click="dialogTableVisible = false" size="small" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">取 消</el-button>
+          <el-button @click="dialogTableVisible = false" size="small">取 消</el-button>
           <el-button type="primary" @click="SaveSplit()" size="small" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">确 定</el-button>
         </template>
       </span>
@@ -219,7 +219,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <template>
-          <el-button @click="RecordDialogTableVisible = false" size="small" :disabled="!(this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false)">取 消</el-button>
+          <el-button @click="RecordDialogTableVisible = false" size="small" >取 消</el-button>
           <el-button type="primary" @click="RecordSave('record')" size="small" :disabled="!(this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false)">确 定</el-button>
         </template>
       </span>
@@ -374,6 +374,7 @@ export default {
         this.$notify({title: '警告', message: '请选择工厂', type: 'warning'})
         return false
       }
+      this.ThrowHolder(this.formHeader.workShop)
       this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSEARCHLIST}`, 'POST', this.formHeader).then(({data}) => {
         if (data.code === 0) {
           this.dataListAll = data.orderInfo
@@ -461,10 +462,11 @@ export default {
         return false
       }
       if (ty) {
-        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
+        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', {'tiaoHolder': this.dataList, 'params': this.ItemList}).then(({data}) => {
           if (data.code === 0) {
             this.$notify({title: '成功', message: '保存成功', type: 'success'})
             this.SearchList()
+            // this.ThrowHolder(this.formHeader.workShop)
             this.dialogTableVisible = false
           } else {
             if (data.mes.length === 0) {
@@ -480,10 +482,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
+          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', {'tiaoHolder': this.dataList, 'params': this.ItemList}).then(({data}) => {
             if (data.code === 0) {
               this.$notify({title: '成功', message: '保存成功', type: 'success'})
               this.SearchList()
+              // this.ThrowHolder(this.formHeader.workShop)
               this.dialogTableVisible = false
             } else {
               if (data.mes.length === 0) {
@@ -611,25 +614,64 @@ export default {
           return false
         }
       }
+      // let str = ''
+      // let st = false
+      // this.multipleSelection.forEach((item) => {
+      //   if (item.cDay === null) {
+      //     this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+      //       confirmButtonText: '确定',
+      //       cancelButtonText: '取消',
+      //       type: 'warning'
+      //     }).then(() => {})
+      //     st = true
+      //   } else if (item.cDay * 1 < 6) {
+      //     str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+      //   }
+      // })
+      // if (st) {
+      //   return false
+      // }
       let str = ''
-      let st = false
+      this.strList = []
+      this.strList1 = []
+      this.strList2 = []
       this.multipleSelection.forEach((item) => {
-        if (item.cDay === null) {
-          console.log('------')
-          this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {})
-          st = true
-        } else if (item.cDay * 1 < 6) {
-          str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+        if (item.sbList === null) {
+          this.strList.push(item.orderNo)
+        } else {
+          item.sbList.map((items) => {
+            if (items.cDay === null) {
+              this.strList.push(item.orderNo)
+            } else if (items.cDay === -999) {
+              this.strList1.push(`${items.yzHolderName},${items.batch}`)
+            }
+            if (items.cDay * 1 < 6) {
+              this.strList2.push(`${items.yzHolderName},${items.batch}`)
+            }
+          })
         }
       })
-      if (st) {
+      if (this.strList.length !== 0) {
+        this.$confirm(`请先保存调配单${this.strList.join(',')}的调配详情信息?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {})
         return false
       }
-      this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
+      if (this.strList1.length !== 0) {
+        this.$confirm(`请先确认${this.strList1.join(',')}批次原汁有库存?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {})
+        return false
+      }
+      if (this.strList2.length !== 0) {
+        str = this.strList2.join(',')
+      }
+      // this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
+      this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
