@@ -61,9 +61,9 @@
       <el-card>
         <el-table :data="dataList" @selection-change="handleSelectionChange" border header-row-class-name="tableHead" style="margin-top:10px">>
           <el-table-column type="selection" width="35" :selectable="CheckBoxInit" fixed="left"></el-table-column>
-          <el-table-column label="订单状态" prop="orderStatus">
+          <el-table-column label="订单状态" width="100" prop="orderStatus" show-overflow-tooltip>
             <template slot-scope="scope">
-              {{scope.row.orderStatus === 'saved' ? '已保存' : scope.row.orderStatus === 'submit' ? '已提交' : scope.row.orderStatus === 'checked' ? '审核通过' : scope.row.orderStatus === 'nopass' ? '审核不通过' : scope.row.orderStatus }}
+              {{scope.row.orderStatus === 'saved' ? '已保存' : scope.row.orderStatus === 'submit' ? '已提交' : scope.row.orderStatus === 'checked' ? '审核通过' : scope.row.orderStatus === 'noPass' ? '审核不通过' : scope.row.orderStatus }}
             </template>
           </el-table-column>
           <el-table-column label="订单号" width="120" prop="orderNo"></el-table-column>

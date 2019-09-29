@@ -64,7 +64,7 @@
             <el-button :style="{'color': statusArr[1].status === 'noPass'? 'red' : ''}" style="font-size: 14px">物料领用</el-button>
           </el-tooltip>
         </span>
-        <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapListM"></materiel>
+        <materiel ref="materielref" :isRedact="isRedact" :fumet="fumet" :SerchSapList="SerchSapListM" @PoTest="PoTest"></materiel>
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label" class="spanview">
@@ -72,7 +72,7 @@
             <el-button :style="{'color': statusArr[0].status === 'noPass'? 'red' : ''}" style="font-size: 14px">申请订单</el-button>
           </el-tooltip>
         </span>
-        <apply-order ref="applyorder" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" :VersionList="VersionList" :orderTypeList="orderTypeList" @GetFunet="GetFunet" @ApplyOrder="ApplyOrder"  @GetList="GetList"></apply-order>
+        <apply-order ref="applyorder" :PoTestVar="PoTestVar" :isRedact="isRedact"  :orderAudit="orderAudit" :fumet="orderFumet" :SerchSapList="SerchSapList" :VersionList="VersionList" :orderTypeList="orderTypeList" @GetFunet="GetFunet" @ApplyOrder="ApplyOrder"  @GetList="GetList"></apply-order>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label" class="spanview">
@@ -116,7 +116,8 @@ export default {
       orderFumet: [],
       orderAudit: [],
       fumet: [],
-      statusArr: [{status: ''}, {status: ''}, {status: ''}]
+      statusArr: [{status: ''}, {status: ''}, {status: ''}],
+      PoTestVar: ''
     }
   },
   watch: {
@@ -371,6 +372,9 @@ export default {
           }
         })
       }
+    },
+    PoTest (data) {
+      this.PoTestVar = data
     }
   },
   computed: {},

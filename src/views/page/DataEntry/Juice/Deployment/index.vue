@@ -160,9 +160,9 @@
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <template v-if="lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false">
-          <el-button @click="dialogTableVisible = false" size="small">取 消</el-button>
-          <el-button type="primary" @click="SaveSplit()" size="small">确 定</el-button>
+        <template>
+          <el-button @click="dialogTableVisible = false" size="small" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">取 消</el-button>
+          <el-button type="primary" @click="SaveSplit()" size="small" :disabled="!(lineStatus !== '已提交' && lineStatus !== '审核通过' && isRedact !== false)">确 定</el-button>
         </template>
       </span>
     </el-dialog>
@@ -218,9 +218,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <template v-if="this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false">
-          <el-button @click="RecordDialogTableVisible = false" size="small">取 消</el-button>
-          <el-button type="primary" @click="RecordSave('record')" size="small">确 定</el-button>
+        <template>
+          <el-button @click="RecordDialogTableVisible = false" size="small" :disabled="!(this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false)">取 消</el-button>
+          <el-button type="primary" @click="RecordSave('record')" size="small" :disabled="!(this.soleRowstatus !== '已提交' && this.soleRowstatus !== '审核通过' && isRedact !== false)">确 定</el-button>
         </template>
       </span>
     </el-dialog>
@@ -312,7 +312,7 @@ export default {
     // 获取工厂
     Getdeptcode () {
       this.workshop = []
-      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
+      this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
           this.formHeader.factory = data.typeList[0].deptId
@@ -325,7 +325,7 @@ export default {
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '杀菌'}).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '杀菌'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
@@ -343,7 +343,7 @@ export default {
     },
     // 获取罐
     GetHolderList (id) {
-      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTHOLDER}`, 'POST', {factory: id}).then(({data}) => {
+      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTHOLDER}`, 'POST', {factory: id}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.holderList = data.holderList
         } else {
@@ -359,7 +359,7 @@ export default {
           workShop: id,
           code: '013'
         }
-        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params).then(({data}) => {
+        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTHROWHOLDER}`, 'POST', params, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.thrwHolderList = data.holderList
           } else {
@@ -464,10 +464,14 @@ export default {
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
           if (data.code === 0) {
             this.$notify({title: '成功', message: '保存成功', type: 'success'})
-            // this.SearchList()
+            this.SearchList()
             this.dialogTableVisible = false
           } else {
-            this.$notify.error({title: '错误', message: data.msg})
+            if (data.mes.length === 0) {
+              this.$error_SHINHO(data.msg)
+            } else {
+              this.$error_SHINHO(data.mes.join(','))
+            }
           }
         })
       } else {
@@ -479,10 +483,14 @@ export default {
           this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', this.ItemList).then(({data}) => {
             if (data.code === 0) {
               this.$notify({title: '成功', message: '保存成功', type: 'success'})
-              // this.SearchList()
+              this.SearchList()
               this.dialogTableVisible = false
             } else {
-              this.$notify.error({title: '错误', message: data.msg})
+              if (data.mes.length === 0) {
+                this.$error_SHINHO(data.msg)
+              } else {
+                this.$error_SHINHO(data.mes.join(','))
+              }
             }
           })
         })

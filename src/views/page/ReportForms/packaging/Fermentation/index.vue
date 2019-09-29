@@ -41,18 +41,23 @@
     </el-card>
     <el-card class="secondcard">
       <el-table :data="dataList" border header-row-class-name="tableHead" style="margin-top:10px">
-        <el-table-column label="生产日期" show-overflow-tooltip prop="productDate" width="110"></el-table-column>
-        <el-table-column label="工厂" show-overflow-tooltip prop="factoryName"></el-table-column>
-        <el-table-column label="车间" show-overflow-tooltip prop="workShopName"></el-table-column>
-        <el-table-column label="产线" show-overflow-tooltip prop="productLineName" width="120"></el-table-column>
-        <el-table-column label="生产订单" show-overflow-tooltip prop="orderNo" width="120"></el-table-column>
-        <el-table-column label="生产物料" show-overflow-tooltip prop="material"></el-table-column>
-        <el-table-column label="生产批次" show-overflow-tooltip prop="batch" width="110"></el-table-column>
-        <el-table-column label="生产数" show-overflow-tooltip prop="countOutPut"></el-table-column>
-        <el-table-column label="单位" show-overflow-tooltip prop="countOutPutUnit" width="50"></el-table-column>
-        <el-table-column label="主产品批次" show-overflow-tooltip prop="mainBatch" width="110"></el-table-column>
-        <el-table-column label="赠品批次" show-overflow-tooltip prop="attachBatch" width="110"></el-table-column>
-        <el-table-column label="备注" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="发酵罐编号" show-overflow-tooltip prop="productDate" width="110"></el-table-column>
+        <el-table-column label="状态" show-overflow-tooltip prop="factoryName"></el-table-column>
+        <el-table-column label="发酵罐容量(M³)" show-overflow-tooltip prop="workShopName"></el-table-column>
+        <el-table-column label="投料数量(M³)" show-overflow-tooltip prop="productLineName" width="120"></el-table-column>
+        <el-table-column label="入库数量(M³)" show-overflow-tooltip prop="orderNo" width="120"></el-table-column>
+        <el-table-column label="库存数量(M³)" show-overflow-tooltip prop="material"></el-table-column>
+        <el-table-column label="类别" show-overflow-tooltip prop="batch" width="110"></el-table-column>
+        <el-table-column label="投料时间" show-overflow-tooltip prop="countOutPut"></el-table-column>
+        <el-table-column label="发酵开始时间" show-overflow-tooltip prop="countOutPutUnit" width="50"></el-table-column>
+        <el-table-column label="发酵结束时间" show-overflow-tooltip prop="mainBatch" width="110"></el-table-column>
+        <el-table-column label="发酵期" show-overflow-tooltip prop="attachBatch" width="110"></el-table-column>
+        <el-table-column label="发酵时间" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="压榨时间" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="用酱醪数(M³)" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="出品数" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="库存量(M³)" show-overflow-tooltip prop="remark"></el-table-column>
+        <el-table-column label="出品率" show-overflow-tooltip prop="remark"></el-table-column>
       </el-table>
       <el-row >
         <el-pagination

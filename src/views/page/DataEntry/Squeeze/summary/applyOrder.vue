@@ -81,6 +81,7 @@ export default {
   },
   props: {
     isRedact: '',
+    PoTestVar: '',
     VersionList: {
       type: Array,
       default () { return [] }
@@ -99,6 +100,14 @@ export default {
     }
   },
   mounted () {
+  },
+  watch: {
+    'PoTestVar' (n, o) {
+      if (n !== '') {
+        let row = this.fumet.find(item => item.potNoName === n.potNoName)
+        row.orderType = n.orderType
+      }
+    }
   },
   methods: {
     // 申请订单

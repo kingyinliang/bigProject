@@ -34,11 +34,11 @@
     <el-dialog :visible.sync="dialogVisible" :close-on-click-modal="false" width="450px" custom-class='dialog__class' @keyup.enter.native="SaveDialog('receive')">
       <div slot="title" style="line-hight:59px">领用</div>
       <el-form :model="receive" size="small" label-width="160px" :rules="receiveRules" ref="receive">
-        <el-form-item label="半成品罐号" v-if="receive.id" prop="holderId">
+        <el-form-item label="半成品罐号：" v-if="receive.id" prop="holderId">
           <el-input v-model="receive.holderId" :disabled="true" style="display:none"></el-input>
           <el-select v-model="receive.holderName" :disabled="true" ref="mySelect"></el-select>
         </el-form-item>
-        <el-form-item label="半成品罐号" prop="holderId" v-else>
+        <el-form-item label="半成品罐号：" prop="holderId" v-else>
           <el-select v-model="receive.holderId" filterable ref="mySelect">
             <el-option v-for="(item, index) in holderList" :key="index" :value="item.holderId" :label="item.holderName"></el-option>
           </el-select>

@@ -234,7 +234,6 @@ export default {
     },
     PotChange (row) {
       let pot = this.potList.filter(it => it.holderId === row.material.childPotNo)[0]
-      console.log(pot)
       if (pot) {
         row.material.childMaterial = pot.materialCode + ' ' + pot.materialName
         row.material.childBatch = pot.batch
@@ -243,6 +242,13 @@ export default {
           row.material.type = pot.halfName
         } else {
           row.material.type = '味极鲜'
+        }
+        if (row.fumet.fullPort === '正常') {
+          this.SqueezePot = {
+            orderType: pot.orderType,
+            potNoName: row.fumet.potNoName
+          }
+          this.$emit('PoTest', this.SqueezePot)
         }
       } else {
         if (row.fumet.fullPort === '正常') {
@@ -442,6 +448,10 @@ export default {
         }
       }
     }
+    // SqueezePot: {
+    //   get () { return this.$store.state.common.SqueezePot },
+    //   set (val) { this.$store.commit('common/updateSqueezePot', val) }
+    // }
   },
   components: {
     AuditLog: resolve => {
