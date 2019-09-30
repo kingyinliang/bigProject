@@ -3,16 +3,16 @@
     <el-card class="searchCard  newCard ferCard">
       <el-form :inline="true" :model="formHeader" size="small" label-width="75px" class="marbottom">
         <el-form-item label="生产工厂：">
-          <el-select v-model="formHeader.factory" placeholder="请选择" style="width: 140px">
-            <el-option label="请选择"  value=""></el-option>
-            <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
-          </el-select>
+            <el-select v-model="formHeader.factory" placeholder="请选择" class="width140px">
+              <el-option value="">请选择</el-option>
+              <el-option :label="item.deptName" v-for="(item, index) in factory" :key="index" :value="item.deptId"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="生产车间：">
-          <el-select v-model="formHeader.workShop" placeholder="请选择" style="width: 140px">
-            <el-option label="请选择"  value=""></el-option>
-            <el-option :label="item.deptName" v-for="(item, index) in workshop" :key="index" :value="item.deptId"></el-option>
-          </el-select>
+            <el-select v-model="formHeader.workShop" palceholder="请选择" class="width140px">
+              <el-option value="">请选择</el-option>
+              <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="发酵罐号：">
           <el-select v-model="formHeader.potNo" placeholder="请选择" multiple @change="ChangeSearch()" filterable allow-create default-first-op style="width: 140px">
@@ -89,8 +89,8 @@ export default {
         pageSize: 10,
         totalCount: 0
       },
-      factoryList: [],
-      workshopList: [],
+      factory: [],
+      workshop: [],
       productlineList: [],
       dataList: []
     }
@@ -101,11 +101,6 @@ export default {
   watch: {
     'formHeader.factory' (n, o) {
       this.Getdeptbyid(n)
-    },
-    'formHeader.workShop' (n, o) {
-      if (n) {
-        this.GetParentline(n)
-      }
     }
   },
   methods: {
@@ -113,7 +108,10 @@ export default {
     Getdeptcode () {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
-          this.factoryList = data.typeList
+          this.factory = data.typeList
+          if (data.typeList.length > 0) {
+            this.formHeader.factory = data.typeList[0].deptId
+          }
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -122,11 +120,10 @@ export default {
     // 获取车间
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
-      this.formHeader.productLine = ''
       if (id) {
-        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '二合一'}, false, false, false).then(({data}) => {
+        this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
-            this.workshopList = data.typeList
+            this.workshop = data.typeList
             if (data.typeList.length > 0) {
               this.formHeader.workShop = data.typeList[0].deptId
             }

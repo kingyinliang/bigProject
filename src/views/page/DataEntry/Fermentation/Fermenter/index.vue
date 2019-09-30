@@ -62,7 +62,10 @@
     </div>
   </el-card>
   <el-card class="searchCard  newCard ferCard" style="margin-top: 5px"  v-show="fastS">
-    <h3 style="color: black;margin-bottom: 8px"><i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表</h3>
+    <h3 style="color:black; margin-bottom:8px; line-height:20px;">
+      <i class="iconfont factory-liebiao" style="color: #666666;margin-right: 10px"></i>发酵罐列表
+      <i class="gotop" v-if="isAuth('report:production:fermentation')"><a href="#/DataEntry-Fermentation-Fermenter-summary">发酵库存情况>></a></i>
+    </h3>
     <el-row class="dataList" :gutter="10" style="min-height: 150px">
       <el-col :span="4" v-for="(item, index) in dataList" :key="index">
         <el-card class="dataList_item">
@@ -540,15 +543,15 @@ export default {
     font-weight: 400;
     padding-bottom: 10px;
     border-bottom: 1px solid #E9E9E9;
-    .gotop{
-      float: right;
-      color: #1890FF;
-      font-size: 14px;
-      cursor: pointer;
-      i{
-        :before{
-          color: #1890FF;
-        }
+  }
+  .gotop{
+    float: right;
+    color: #1890FF;
+    font-size: 14px;
+    cursor: pointer;
+    i{
+      :before{
+        color: #1890FF;
       }
     }
   }

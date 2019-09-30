@@ -900,7 +900,10 @@ export const REP_API = {
    */
   TWOONERETROSPECT_LIST_API: HOST + '/report/formh/pkgOneAndTwoList',
   REPTWOONERETROSPECT_API: HOST + '/report/formh/exportPkgOneAndTwoList',
-  REP_ADJUST_LIST_API: HOST + '/ver/adjust/exportList'
+  REP_ADJUST_LIST_API: HOST + '/ver/adjust/exportList',
+  /** ******************** 通用报表  START *************************** */
+  CURRENT_MATERIALTRACEABILITY_LIAT: HOST + '/report/production/materielTraceSelectInfo',
+  CURRENT_MATERIALTRACEABILITY_LIST: HOST + '/report/production/materielTrace'
 }
 /*
 *炒麦api
@@ -1430,6 +1433,7 @@ export const FERMENTATION_API = {
   FER_HALF_LIST_API: HOST + '/fer/holderManage/halfList', // 获取半成品
   FER_HOLDER_STATUS_API: HOST + '/fer/holderManage/ferHolderStatusList', // 发酵罐状态
   FER_RINSE_API: HOST + '/fer/clean/save', // 清洗
+  FER_REPORT_LIST: HOST + '/report/production/fermentation', // 发酵一览表
   /*
    * 订单申请
    */

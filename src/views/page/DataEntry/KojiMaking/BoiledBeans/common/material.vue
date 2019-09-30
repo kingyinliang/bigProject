@@ -203,112 +203,117 @@
     <el-card>
       <audit-log></audit-log>
     </el-card>
-    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai" width="450px">
+    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai" width="450px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">{{this.MTitle}}</div>
       <el-form :model="wheat" size="small" :rules="wheatrulestar" ref="wheatstar">
-        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
+        <el-form-item label="麦粉批次：" :label-width="formLabelWidth" prop="whtBatch">
           <el-select v-model="wheat.whtBatch" placeholder="请选择">
             <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
-        <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
+        <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
+        <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleMai = false">取 消</el-button>
         <el-button type="primary" @click="savewheat('wheatstar')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai2" width="450px">
+    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai2" width="450px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">{{this.MTitle}}</div>
       <el-form :model="wheat" size="small" :rules="wheatrulend" ref="wheatend">
-        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">{{wheat.whtBatch}}</el-form-item>
-        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
-        <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
+        <el-form-item label="麦粉批次：" :label-width="formLabelWidth" prop="whtBatch">{{wheat.whtBatch}}</el-form-item>
+        <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
+        <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
           <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleMai2 = false">取 消</el-button>
         <el-button type="primary" @click="savewheat('wheatend')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai3" width="450px">
+    <el-dialog :title="MTitle" :visible.sync="dialogFormVisibleMai3" width="450px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">{{this.MTitle}}</div>
       <el-form :model="wheat" size="small" :rules="wheatrules" ref="wheat">
-        <el-form-item label="麦粉批次" :label-width="formLabelWidth" prop="whtBatch">
+        <el-form-item label="麦粉批次：" :label-width="formLabelWidth" prop="whtBatch">
           <el-select v-model="wheat.whtBatch" placeholder="请选择">
             <el-option v-for='sole in wheatPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料描述" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
-        <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
+        <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
+        <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
+        <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
           <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="领用数量" :label-width="formLabelWidth" prop="wheatuseprop">{{lnum}}</el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
+        <el-form-item label="领用数量：" :label-width="formLabelWidth" prop="wheatuseprop">{{lnum}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleMai3 = false">取 消</el-button>
         <el-button type="primary" @click="savewheat('wheat')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="DRTitle" :visible.sync="dialogFormVisibleDouRu" width="450px">
+    <el-dialog :title="DRTitle" :visible.sync="dialogFormVisibleDouRu" width="450px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">{{this.DRTitle}}</div>
       <el-form :model="rusoy" size="small" :rules="rusoyrules" ref="rusoy">
-        <el-form-item label="领用粮仓" :label-width="formLabelWidth" prop="foodHolderId">
+        <el-form-item label="领用粮仓：" :label-width="formLabelWidth" prop="foodHolderId">
           <el-select v-model="rusoy.foodHolderId" @change="changCang()">
             <el-option v-for='sole in PulpCangList' :key="sole.holderId" :value="sole.holderId" :label="sole.holderName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
+        <el-form-item label="批次：" :label-width="formLabelWidth" prop="batch">
           <el-select v-model="rusoy.batch">
             <el-option v-for="(sole, index) in PulpCangBatchList" :key="index" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="领用物料" :label-width="formLabelWidth">{{rusoy.materialCode}} {{rusoy.materialName}}</el-form-item>
-        <el-form-item label="剩余数" :label-width="formLabelWidth">{{rusoy.currentQuantity}}</el-form-item>
-        <el-form-item label="起始数" :label-width="formLabelWidth" prop="startWeight">
+        <el-form-item label="领用物料：" :label-width="formLabelWidth">{{rusoy.materialCode}} {{rusoy.materialName}}</el-form-item>
+        <el-form-item label="剩余数：" :label-width="formLabelWidth">{{rusoy.currentQuantity}}</el-form-item>
+        <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
           <el-input type="number" v-model.number="rusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
+        <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
           <el-input type="number" v-model.number="rusoy.endWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="领用数量" :label-width="formLabelWidth">{{rusoylnum}}</el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{rusoy.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{rusoy.changer}}</el-form-item>
+        <el-form-item label="领用数量：" :label-width="formLabelWidth">{{rusoylnum}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{rusoy.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{rusoy.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleDouRu = false">取 消</el-button>
         <el-button type="primary" @click="soydialogrusave('rusoy')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="DCTitle" :visible.sync="dialogFormVisibleDouChu" width="450px">
+    <el-dialog :title="DCTitle" :visible.sync="dialogFormVisibleDouChu" width="450px" custom-class='dialog__class'>
+      <div slot="title" style="line-hight:59px">{{this.DCTitle}}</div>
       <el-form :model="chusoy" size="small" :rules="chusoyrules" ref="chusoy">
-        <el-form-item label="批次" :label-width="formLabelWidth" prop="batch">
+        <el-form-item label="批次：" :label-width="formLabelWidth" prop="batch">
           <!-- <el-input v-model="chusoy.batch" autocomplete="off" maxlength="10"></el-input> -->
           <el-select v-model="chusoy.batch" placeholder="请选择">
             <el-option v-for='sole in pulpPiArray' :key="sole.batch" :value="sole.batch" :label="sole.batch"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物料批次" :label-width="formLabelWidth">
+        <el-form-item label="物料批次：" :label-width="formLabelWidth">
           <el-input v-model="chusoy.soyMaterialstr" disabled></el-input>
         </el-form-item>
-        <el-form-item label="起始数" :label-width="formLabelWidth">
+        <el-form-item label="起始数：" :label-width="formLabelWidth">
           <el-input type="number" v-model.number="chusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="结束数" :label-width="formLabelWidth" prop="endWeight">
+        <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
           <el-input type="number" v-model.number="chusoy.endWeight" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="领用数量" :label-width="formLabelWidth">{{chusoylnum}}</el-form-item>
-        <el-form-item label="操作时间" :label-width="formLabelWidth">{{chusoy.changed}}</el-form-item>
-        <el-form-item label="操作人" :label-width="formLabelWidth">{{chusoy.changer}}</el-form-item>
+        <el-form-item label="领用数量：" :label-width="formLabelWidth">{{chusoylnum}}</el-form-item>
+        <el-form-item label="操作时间：" :label-width="formLabelWidth">{{chusoy.changed}}</el-form-item>
+        <el-form-item label="操作人：" :label-width="formLabelWidth">{{chusoy.changer}}</el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleDouChu = false">取 消</el-button>
