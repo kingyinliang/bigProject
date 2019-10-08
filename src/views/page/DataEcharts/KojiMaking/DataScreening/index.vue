@@ -164,7 +164,18 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .DataEchartsContent{
+    background: url('~@/assets/img/echartsBg.png') no-repeat;
+    background-size:100% 100%;
+  }
+</style>
+
 <style lang="scss" scoped>
+  .DataEchartsContent{
+    background: url('~@/assets/img/echartsBg.png') no-repeat;
+    background-size:100% 100%;
+  }
 .pageMain{
   width: 100%;
   height: 100%;

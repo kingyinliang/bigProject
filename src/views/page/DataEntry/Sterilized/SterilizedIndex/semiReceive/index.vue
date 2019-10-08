@@ -33,13 +33,15 @@
           <el-table-column label="计划领料" width="100" prop="planAmount"></el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+              <!--<el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>-->
+              <el-button type="text" size="mini" disabled @click="addData(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
             </template>
           </el-table-column>
           <el-table-column width="130">
             <template slot="header"><i class="reqI">*</i><span>罐号</span></template>
             <template slot-scope="scope">
-              <el-select v-model="scope.row.hloderId" @change="setBatch(scope.row)" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">
+              <!--<el-select v-model="scope.row.hloderId" @change="setBatch(scope.row)" placeholder="请选择" filterable size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))">-->
+              <el-select v-model="scope.row.hloderId" placeholder="请选择" filterable size="mini" disabled>
                 <el-option v-for="(sole, index) in PotList" :key="index" :value="sole.holderId" :label="sole.holderName"></el-option>
               </el-select>
             </template>
