@@ -76,13 +76,13 @@ export default {
 
 <style lang="scss">
 .DataEchartsMenu{
-  border-right: none;
+  border-right: none!important;
   width: 107px;
-  position: fixed;
+  position: fixed!important;
   z-index: 999;
   left: 0;
   top: 80px;
-  background-color: rgba(255,255,255,0);
+  background-color: rgba(255,255,255,0)!important;
   max-height: 525px;
   overflow-y: scroll;
   &::-webkit-scrollbar { width: 0 !important }
