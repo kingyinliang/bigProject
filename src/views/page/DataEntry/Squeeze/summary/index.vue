@@ -155,17 +155,25 @@ export default {
       if (!this.dataRul(data)) {
         return false
       }
-      data.forEach((item, index) => {
-        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
-        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+      if (!this.$refs.materielref.AmountRul()) {
+        return
+      }
+      let updateMaterial = new Promise((resolve, reject) => {
+        this.$refs.materielref.updateMaterial('saved', resolve, reject)
       })
-      this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', data).then(({data}) => {
-        if (data.code === 0) {
-          this.$success_SHINHO('申请成功')
-          this.GetList()
-        } else {
-          this.$notify.error({title: '错误', message: data.msg})
-        }
+      updateMaterial.then(() => {
+        data.forEach((item, index) => {
+          item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+          item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+        })
+        this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', data).then(({data}) => {
+          if (data.code === 0) {
+            this.$success_SHINHO('申请成功')
+            this.GetList()
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
       })
     },
     GetList () {

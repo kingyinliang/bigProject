@@ -10,7 +10,7 @@ let loading
 function startLoading () {
   loading = ElementUI.Loading.service({
     lock: true,
-    // spinner: 'img',
+    spinner: 'loadingGif',
     text: '加载中……',
     background: 'rgba(255, 255, 255, 0.7)'
   })
