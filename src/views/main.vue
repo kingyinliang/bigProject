@@ -1,9 +1,7 @@
 <template>
   <div
     class="site-wrapper"
-    :class="{ 'site-sidebar--fold': sidebarFold }"
-    v-loading.fullscreen.lock="loading"
-    element-loading-text="拼命加载中">
+    :class="{ 'site-sidebar--fold': sidebarFold }">
     <template v-if="!loading">
       <main-navbar :updatePassword="updatePassword"/>
       <main-sidebar />

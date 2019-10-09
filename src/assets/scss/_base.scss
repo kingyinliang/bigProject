@@ -38,6 +38,17 @@ a {
 img {
   vertical-align: middle;
 }
+.el-loading-mask.is-fullscreen .el-loading-spinner{
+  margin-top: -90px;
+}
+.loadingGif{
+  width: 150px;
+  height: 150px;
+  background: url('~@/assets/img/loading.gif') no-repeat;
+  background-size:100% 100%;
+  display: block;
+  margin: auto;
+}
 
 //bass scss
 .searchCard, .tableCard {
