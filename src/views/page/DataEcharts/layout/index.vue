@@ -100,8 +100,8 @@ export default {
   .el-menu-item,.el-submenu__title{
     font-size: 15px;
     color: #59baf2;
-    height: 40px;
-    line-height: 40px;
+    height: 40px!important;
+    line-height: 40px!important;
     padding-left: 13px!important;
     background-image: linear-gradient(-90deg, #112041 0%, rgba(17, 32, 65, 0.5) 66%, #112041 100%);
     border: 2px solid #2461d1;
@@ -126,7 +126,7 @@ export default {
   /*padding-left: 107px;*/
   min-width: 1000px;
   /*background: #0e0e40;*/
-  background: url('~@/assets/img/echartsBg.png') no-repeat;
+  background: url('~@/assets/img/echartsBgs.png') no-repeat;
   background-size: 100% 100%;
   width: 100%;
   height: 100%;

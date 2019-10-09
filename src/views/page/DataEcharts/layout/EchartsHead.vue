@@ -26,6 +26,7 @@ export default {
   padding-top: 5px;
   position: relative;
   p{
+    padding-top: 7px;
     font-size: 30px;
     color: white;
     text-align: center;

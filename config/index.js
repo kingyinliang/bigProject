@@ -21,7 +21,8 @@ module.exports = {
     },
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
-    host: '10.10.2.42', // can be overwritten by process.env.HOST
+    // host: '10.10.2.42', // can be overwritten by process.env.HOST
+    host: getIPAdress(), // can be overwritten by process.env.HOST
     port: 8888, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -80,5 +81,18 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
+  }
+}
+/**获取本机ip**/
+function getIPAdress(){
+  var interfaces = require('os').networkInterfaces()
+  for(var devName in interfaces){
+    var iface = interfaces[devName]
+    for(var i=0;i<iface.length;i++){
+      var alias = iface[i]
+      if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
+        return alias.address
+      }
+    }
   }
 }
