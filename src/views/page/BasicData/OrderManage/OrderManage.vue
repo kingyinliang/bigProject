@@ -1,5 +1,5 @@
 <template>
-    <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+    <el-col>
       <!--<div class="topTitle">-->
         <!--<el-breadcrumb separator="/">-->
           <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
@@ -22,9 +22,7 @@
               </el-form>
             </el-row>
           </div>
-          <el-row
-            v-loading.fullscreen.lock="loading"
-            element-loading-text="正在同步中">
+          <el-row>
             <el-table
               class="orderTable"
               ref="table1"
@@ -163,10 +161,12 @@
 
 <script>
 import {BASICDATA_API} from '@/api/api'
+import ElementUI from 'element-ui'
 export default {
   name: 'OrderManage',
   data () {
     return {
+      loadings: {},
       loading: true,
       visible: false,
       orderTime: {},
@@ -218,39 +218,50 @@ export default {
     },
     // 同步
     sapOrderUpdate () {
-      this.loading = true
-      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET').then(({data}) => {
+      // this.loading = true
+      this.loadings = ElementUI.Loading.service({
+        lock: true,
+        spinner: 'loadingGif',
+        text: '加载中……',
+        background: 'rgba(255, 255, 255, 0.7)'
+      })
+      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.orderTime = setInterval(() => {
             this.GetOrderUpdateStatus()
           }, 4000)
         }
       }).catch(() => {
-        this.loading = false
+        // this.loading = false
+        this.loadings.close()
       })
     },
     GetOrderUpdateStatus () {
-      this.$http(`${BASICDATA_API.GETSAPORDERUPDATE_API}`, 'GET', {asyncType: 'ASYNC_SAP_ORDER'}).then(({data}) => {
+      this.$http(`${BASICDATA_API.GETSAPORDERUPDATE_API}`, 'GET', {asyncType: 'ASYNC_SAP_ORDER'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
-              this.loading = false
+              // this.loading = false
+              this.loadings.close()
               clearInterval(this.orderTime)
               this.$notify.error({title: '错误', message: '同步失败'})
             } else if (data.asyncRecord.asyncStatus === '1') {
-              this.loading = false
+              // this.loading = false
+              this.loadings.close()
               clearInterval(this.orderTime)
               this.$notify({title: '成功', message: '同步成功', type: 'success'})
               this.GetOrderList()
             }
           }
         } else {
-          this.loading = false
+          // this.loading = false
+          this.loadings.close()
           clearInterval(this.orderTime)
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
-        this.loading = false
+        // this.loading = false
+        this.loadings.close()
         clearInterval(this.orderTime)
       })
     },
