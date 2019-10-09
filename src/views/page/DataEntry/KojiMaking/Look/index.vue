@@ -474,9 +474,11 @@ export default {
   mounted () {
     headanimation(this.$)
     Readyanimation(this.$)
-    if (this.omg === 0) {
-      this.GetheadList()
-    }
+    this.$nextTick(function () {
+      if (this.omg === 0) {
+        this.GetheadList()
+      }
+    })
   },
   methods: {
     tabClick (val) {
