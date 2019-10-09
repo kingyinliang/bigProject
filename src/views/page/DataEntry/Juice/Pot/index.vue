@@ -123,7 +123,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="pages.currentPage"
-        :page-size="40"
+        :page-size="42"
         layout="total, prev, pager, next"
         :total="pages.total">
       </el-pagination>
@@ -872,6 +872,7 @@ export default {
         this.pages.currentPage = 1
       }
       this.dataListAlls = []
+      this.dataList = []
       if (this.holderStatus !== '' || this.days !== '') {
         this.dataListAll.map((item) => {
           if (this.holderStatus !== '') {
