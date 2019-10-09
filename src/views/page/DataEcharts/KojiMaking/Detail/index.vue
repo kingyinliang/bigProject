@@ -8,8 +8,12 @@
             <div class="Container_box_left_top_title"><p>看曲实时曲线</p></div>
             <div class="Container_box_left_top_echarts" id="Line1"></div>
           </div>
+          <div class="Container_box_left_bottom"></div>
         </div>
-        <div class="Container_box_right"></div>
+        <div class="Container_box_right">
+          <div class="Container_box_right_top"></div>
+          <div class="Container_box_right_bottom"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,7 +68,6 @@ export default {
           width: 600px;
           &_top{
             width: 100%;
-            height: 400px;
             display: flex;
             flex-direction: column;
             padding-left: 15px;
@@ -85,10 +88,25 @@ export default {
               width: 100%;
             }
           }
+          &_bottom{
+            width: 100%;
+            background: url('~@/assets/img/echartsDetailLeftBg1.png') no-repeat;
+            background-size:100% 100%;
+          }
         }
         &_right{
           width: 450px;
           margin-left: 50px;
+          &_top {
+            width: 100%;
+            background: url('~@/assets/img/echartsDetailLeftBg2.png') no-repeat;
+            background-size:100% 100%;
+          }
+          &_bottom{
+            width: 100%;
+            background: url('~@/assets/img/echartsDetailLeftBg1.png') no-repeat;
+            background-size:100% 100%;
+          }
         }
       }
     }
@@ -101,10 +119,24 @@ export default {
           height: 500px;
           &_left{
             width: 600px;
+            &_top{
+              height: 340px;
+              margin-bottom: 10px;
+            }
+            &_bottom{
+              height: 150px;
+            }
           }
           &_right{
             width: 450px;
             margin-left: 50px;
+            &_top {
+              height: 340px;
+              margin-bottom: 10px;
+            }
+            &_bottom {
+              height: 150px;
+            }
           }
         }
       }
