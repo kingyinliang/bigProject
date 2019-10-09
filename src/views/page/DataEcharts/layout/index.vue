@@ -134,5 +134,9 @@ export default {
   background-size: 100% 100%;
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar { width: 0 !important }
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
 </style>

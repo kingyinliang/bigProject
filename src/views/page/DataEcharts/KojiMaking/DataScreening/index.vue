@@ -133,8 +133,8 @@ export default {
     rotateCircle (index) {
       let leftMove, rightMove
       if (document.body.offsetWidth > 1366) {
-        leftMove = '-215px'
-        rightMove = '215px'
+        leftMove = '-225px'
+        rightMove = '225px'
       } else {
         leftMove = '-185px'
         rightMove = '185px'
@@ -330,12 +330,12 @@ export default {
 @media (min-width: 1367px) {
   .NightingaleRose{
     width: 100%;
-    height: 204px;
+    height: 219px;
   }
   .pillar{
     width: 100%;
     margin-top: 10px;
-    height: 270px;
+    height: 285px;
   }
   .pie{
     width: 100%;
@@ -343,32 +343,32 @@ export default {
   }
   .totalContainer{
     &_box{
-      width: 1316px;
+      width: 1406px;
     }
     &_dataItem{
-      width: 329px;
-      height: 582px;
+      width: 359px;
+      height: 612px;
       &_title{
         margin-bottom: 20px;
       }
     }
     &_center{
-      width: 658px;
+      width: 688px;
       &_top{
         width: 100%;
-        height: 340px;
+        height: 357px;
         &_imgBox{
-          width: 280px;
-          height: 275px;
+          width: 285px;
+          height: 280px;
           &_img{
-            width: 280px;
-            height: 275px;
+            width: 285px;
+            height: 280px;
             font-size: 16px;
             &:nth-child(1){
-              left: -215px;
+              left: -225px;
             }
             &:nth-child(3){
-              left: 215px;
+              left: 225px;
             }
             p:nth-child(1){
               padding-top: 60px;
@@ -382,8 +382,8 @@ export default {
         }
       }
       &_bottom{
-        width: 620px;
-        height: 238px;
+        width: 635px;
+        height: 255px;
       }
     }
   }
