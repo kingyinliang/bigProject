@@ -121,7 +121,7 @@
         </el-table-column>
         <el-table-column label="罐号" prop="productDate" width="150" >
           <template slot-scope="scope">
-            <el-select v-model="scope.row.holderId" size="small" disabled>
+            <el-select v-model="scope.row.holderId" size="small" @change="changeH(scope.row)" disabled>
               <el-option value=''>请选择</el-option>
               <el-option v-for="(item, index) in thrwHolderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
             </el-select>
@@ -299,6 +299,9 @@ export default {
     IsGuanStatus (row) {
       return (row.materialName.indexOf('原汁') === -1 || !(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false && row.status !== 'submit' && row.status !== 'checked'))
     },
+    changeH (row) {
+      row.category = this.thrwHolderList.filter(item => item.holderId === row.holderId)[0].type
+    },
     // 获取不合格原因
     GetHolderStatusList () {
       this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {type: 'reason_yznopass'}, false, false, false).then(({data}) => {
@@ -398,6 +401,7 @@ export default {
         if (data.code === 0) {
           this.ItemList = data.info
           this.ItemList.map((item) => {
+            this.changeH(item)
             if (item.receiveAmount === '' || !item.receiveAmount) {
               item.receiveAmount = item.planAmount
             }

@@ -456,7 +456,8 @@ export default {
         {value: 'A3', label: 'A3'},
         {value: 'A4', label: 'A4'},
         {value: 'A5', label: 'A5'}
-      ]
+      ],
+      omg: 0
     }
   },
   watch: {
@@ -473,13 +474,19 @@ export default {
   mounted () {
     headanimation(this.$)
     Readyanimation(this.$)
-    this.GetheadList()
+    this.$nextTick(function () {
+      if (this.omg === 0) {
+        this.GetheadList()
+      }
+    })
   },
   methods: {
     tabClick (val) {
       this.$refs.tabs.setCurrentName(val.name)
     },
     GetheadList () {
+      this.omg = 1
+      console.log('abc')
       this.$http(`${KJM_API.DOUHEAERLIST}`, `POST`, {orderHouseId: this.$store.state.common.ZQWorkshop.params.lookOrderHouseId, deptName: '看曲'}, false, false, false).then((res) => {
         if (res.data.code === 0) {
           this.formHeader = res.data.headList[0]
@@ -576,7 +583,6 @@ export default {
         Promise.all([net1, net2, net3, excSaveNet, textSaveNet, net101]).then(function () {
           that.$notify({title: '成功', message: that.succmessage, type: 'success'})
           that.GetheadList()
-          // that.$refs.LookEcharts.clearInit()
           that.isRedact = false
         }).catch(() => {
           that.$error_SHINHO('网络请求失败，请刷新重试')
