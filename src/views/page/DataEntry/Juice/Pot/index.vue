@@ -879,7 +879,7 @@ export default {
               this.dataListAlls.push(item)
             }
           } else if (this.days !== '') {
-            if (this.days[0] <= parseInt(item.days) && parseInt(item.days)) {
+            if (this.days[0] <= parseInt(item.days) && parseInt(item.days) < this.days[1]) {
               this.dataListAlls.push(item)
             }
           }
