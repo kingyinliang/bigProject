@@ -155,17 +155,25 @@ export default {
       if (!this.dataRul(data)) {
         return false
       }
-      data.forEach((item, index) => {
-        item.materialCode = item.material.substring(0, item.material.indexOf(' '))
-        item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+      if (!this.$refs.materielref.AmountRul()) {
+        return
+      }
+      let updateMaterial = new Promise((resolve, reject) => {
+        this.$refs.materielref.updateMaterial('saved', resolve, reject)
       })
-      this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', data).then(({data}) => {
-        if (data.code === 0) {
-          this.$success_SHINHO('申请成功')
-          this.GetList()
-        } else {
-          this.$notify.error({title: '错误', message: data.msg})
-        }
+      updateMaterial.then(() => {
+        data.forEach((item, index) => {
+          item.materialCode = item.material.substring(0, item.material.indexOf(' '))
+          item.materialName = item.material.substring(item.material.indexOf(' ') + 1)
+        })
+        this.$http(`${SQU_API.SUM_APPLYORDER_API}`, 'POST', data).then(({data}) => {
+          if (data.code === 0) {
+            this.$success_SHINHO('申请成功')
+            this.GetList()
+          } else {
+            this.$notify.error({title: '错误', message: data.msg})
+          }
+        })
       })
     },
     GetList () {
@@ -271,22 +279,22 @@ export default {
           })
         })
       } else {
-        // updateMaterial.then(() => {
-        let updateApplyorder = new Promise((resolve, reject) => {
-          that.$refs.applyorder.UpdateOrder(str, resolve, reject)
+        updateMaterial.then(() => {
+          let updateApplyorder = new Promise((resolve, reject) => {
+            that.$refs.applyorder.UpdateOrder(str, resolve, reject)
+          })
+          let UpdateTime = new Promise((resolve, reject) => {
+            that.$refs.manhour.UpdateTime(str, resolve, reject)
+          })
+          let saveNet = Promise.all([updateApplyorder, UpdateTime])
+          saveNet.then(function () {
+            that.isRedact = false
+            that.$notify({title: '成功', message: '保存成功', type: 'success'})
+            that.GetList()
+          }, err => {
+            that.$error_SHINHO(err)
+          })
         })
-        let UpdateTime = new Promise((resolve, reject) => {
-          that.$refs.manhour.UpdateTime(str, resolve, reject)
-        })
-        let saveNet = Promise.all([updateMaterial, updateApplyorder, UpdateTime])
-        saveNet.then(function () {
-          that.isRedact = false
-          that.$notify({title: '成功', message: '保存成功', type: 'success'})
-          that.GetList()
-        }, err => {
-          that.$error_SHINHO(err)
-        })
-        // })
       }
     },
     // 提交

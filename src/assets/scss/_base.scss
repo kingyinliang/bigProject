@@ -43,11 +43,12 @@ img {
 }
 .loadingGif{
   width: 150px;
-  height: 150px;
+  height: 75px;
   background: url('~@/assets/img/loading.gif') no-repeat;
   background-size:100% 100%;
   display: block;
   margin: auto;
+  margin-bottom: 15px;
 }
 
 //bass scss
