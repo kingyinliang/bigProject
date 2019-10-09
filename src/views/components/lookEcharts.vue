@@ -32,6 +32,14 @@ export default {
     // this.initChartLine()
     this.chartLine = echarts.init(document.getElementById('J_chartLineBox'))
   },
+  beforeDestroy () { // 清除定时器
+    clearInterval(this.Iotime)
+    console.log('beforeDestroy')
+  },
+  destroyed () { // 清除定时器
+    clearInterval(this.Iotime)
+    console.log('destroyed')
+  },
   activated () {
     // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
     if (this.chartLine) {
@@ -39,10 +47,8 @@ export default {
     }
   },
   methods: {
-    clearInit () {
-      clearInterval(this.Iotime)
-    },
     testInit (formHeader) {
+      console.log('1')
       clearInterval(this.Iotime)
       this.params = {
         factory: formHeader.factory,
@@ -51,10 +57,15 @@ export default {
         inStartTime: formHeader.inStartTime,
         orderHouseId: formHeader.orderHouseId
       }
+      // if (this.params.inStartTime !== '') {
+      //   this.Iotime = setInterval(() => {
+      //     this.test()
+      //   }, 10000 * 6 * 2)
+      // }
       if (this.params.inStartTime !== '') {
         this.Iotime = setInterval(() => {
           this.test()
-        }, 10000 * 6 * 2)
+        }, 10000 * 2)
       }
       this.$http(`${KJM_API.IOT_LIST}`, 'POST', this.params).then(({data}) => {
         if (data.code === 0) {
@@ -66,6 +77,7 @@ export default {
       })
     },
     test () {
+      console.log('3')
       this.$http(`${KJM_API.IOT_LIST}`, 'POST', this.params, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.DataProcessing(data)

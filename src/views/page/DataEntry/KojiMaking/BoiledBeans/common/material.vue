@@ -213,7 +213,7 @@
         </el-form-item>
         <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
         <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
-          <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
         <el-form-item label="操作人：" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
@@ -229,7 +229,7 @@
         <el-form-item label="麦粉批次：" :label-width="formLabelWidth" prop="whtBatch">{{wheat.whtBatch}}</el-form-item>
         <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
         <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
-          <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
         <el-form-item label="操作人：" :label-width="formLabelWidth">{{wheat.changer}}</el-form-item>
@@ -249,10 +249,10 @@
         </el-form-item>
         <el-form-item label="物料描述：" :label-width="formLabelWidth">{{wheat.materialCode}} {{wheat.materialName}}</el-form-item>
         <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
-          <el-input type="number" v-model.number="wheat.startWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="wheat.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
-          <el-input type="number" v-model.number="wheat.endWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="wheat.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="领用数量：" :label-width="formLabelWidth" prop="wheatuseprop">{{lnum}}</el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{wheat.changed}}</el-form-item>
@@ -279,10 +279,10 @@
         <el-form-item label="领用物料：" :label-width="formLabelWidth">{{rusoy.materialCode}} {{rusoy.materialName}}</el-form-item>
         <el-form-item label="剩余数：" :label-width="formLabelWidth">{{rusoy.currentQuantity}}</el-form-item>
         <el-form-item label="起始数：" :label-width="formLabelWidth" prop="startWeight">
-          <el-input type="number" v-model.number="rusoy.startWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="rusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
-          <el-input type="number" v-model.number="rusoy.endWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="rusoy.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="领用数量：" :label-width="formLabelWidth">{{rusoylnum}}</el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{rusoy.changed}}</el-form-item>
@@ -306,10 +306,10 @@
           <el-input v-model="chusoy.soyMaterialstr" disabled></el-input>
         </el-form-item>
         <el-form-item label="起始数：" :label-width="formLabelWidth">
-          <el-input type="number" v-model.number="chusoy.startWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="chusoy.startWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="结束数：" :label-width="formLabelWidth" prop="endWeight">
-          <el-input type="number" v-model.number="chusoy.endWeight" autocomplete="off"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model.number="chusoy.endWeight" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="领用数量：" :label-width="formLabelWidth">{{chusoylnum}}</el-form-item>
         <el-form-item label="操作时间：" :label-width="formLabelWidth">{{chusoy.changed}}</el-form-item>
