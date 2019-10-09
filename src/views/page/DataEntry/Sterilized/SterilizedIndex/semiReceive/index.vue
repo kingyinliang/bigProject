@@ -261,7 +261,7 @@ export default {
     dataRul () {
       let ty = true
       this.MaterialDate.forEach((item) => {
-        if (!item.isB) {
+        if (!item.isT) {
           if (!item.hloderId) {
             ty = false
             this.$warning_SHINHO('罐号未填')
