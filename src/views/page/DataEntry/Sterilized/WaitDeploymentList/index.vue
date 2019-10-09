@@ -207,6 +207,10 @@ export default {
             this.$warning_SHINHO('物料冲突，请重新选择订单！')
             return false
           }
+          if (this.multipleSelection.filter(item => item.orderNo.slice(0, 4) === this.multipleSelection[0].orderNo.slice(0, 4)).length !== this.multipleSelection.length) {
+            this.$warning_SHINHO('请选择相同的订单类型的订单！')
+            return false
+          }
           if (dispatchMan !== item.dispatchMan) {
             this.$warning_SHINHO('调度人员冲突，请重新选择订单！')
             return false

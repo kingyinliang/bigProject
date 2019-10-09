@@ -204,7 +204,7 @@
               {{endForm.batch}}
             </el-form-item>
             <el-form-item label="结束数：" required>
-              <el-input  type='number' v-model.number="endForm.endAmount" style='width:220px'/>
+              <el-input  type='number' @change="abc" v-model.number="endForm.endAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="单位：" required>
               {{endForm.unit = 'L'}}
@@ -216,7 +216,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="满罐数量：">
-              <el-input  type='number' v-model.number="endForm.fullPotAmount" style='width:220px'/>
+              <el-input  type='number' disabled v-model.number="endForm.fullPotAmount" style='width:220px'/>
             </el-form-item>
             <el-form-item label="满罐日期：">
               <el-date-picker type="date" v-model="endForm.fulPotDate" value-format="yyyy-MM-dd" style="width:220px"></el-date-picker>
@@ -731,15 +731,25 @@ export default class Index extends Vue {
       }
     }
   }
+  abc () {
+    if (this.endForm.fullPot === '1') {
+      let startData = this.dataList.find((item, index) => index === this.dataList.length - 1)
+      this.endForm.fullPotAmount = this.potList.find(ele => ele.holderId === this.endForm.potNo).amount * 1000 + (this.endForm.endAmount * 1 - startData.startAmount)
+    }
+  }
   setfullPotAmount (str) {
     if (str === 'endForm') {
       if (this.endForm.fullPot === '1') {
         let startData = this.dataList.find((item, index) => index === this.dataList.length - 1)
         this.endForm.fullPotAmount = this.potList.find(ele => ele.holderId === this.endForm.potNo).amount * 1000 + (this.endForm.endAmount * 1 - startData.startAmount)
+      } else {
+        this.endForm.fullPotAmount = 0
       }
     } else if (str === 'modifyForm') {
       if (this.modifyForm.fullPot === '1') {
         this.modifyForm.fullPotAmount = this.potList.find(ele => ele.holderId === this.modifyForm.potNo).amount * 1000 + (this.modifyForm.endAmount - this.modifyForm.startAmount)
+      } else {
+        this.modifyForm.fullPotAmount = 0
       }
     }
   }

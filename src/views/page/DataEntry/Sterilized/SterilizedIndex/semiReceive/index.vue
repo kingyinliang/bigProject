@@ -49,7 +49,7 @@
           <el-table-column width="130">
             <template slot="header"><i class="reqI">*</i><span>批次</span></template>
             <template slot-scope="scope">
-              <el-input v-model="scope.row.batch" :disabled="true" size="small"></el-input>
+              <el-input v-model="scope.row.batch" :disabled="!scope.row.isB" size="small"></el-input>
             </template>
           </el-table-column>
           <el-table-column width="130">
@@ -261,10 +261,12 @@ export default {
     dataRul () {
       let ty = true
       this.MaterialDate.forEach((item) => {
-        if (!item.hloderId) {
-          ty = false
-          this.$warning_SHINHO('罐号未填')
-          return false
+        if (!item.isB) {
+          if (!item.hloderId) {
+            ty = false
+            this.$warning_SHINHO('罐号未填')
+            return false
+          }
         }
         if (!item.batch) {
           ty = false
