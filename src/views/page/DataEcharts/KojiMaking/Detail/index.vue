@@ -5,6 +5,7 @@
       <div class="Container_box">
         <div class="Container_box_left">
           <div class="Container_box_left_top">
+            <div class="Container_box_left_top_title"><p>看曲实时曲线</p></div>
             <div class="Container_box_left_top_echarts" id="Line1"></div>
           </div>
         </div>
@@ -64,10 +65,24 @@ export default {
           &_top{
             width: 100%;
             height: 400px;
-            padding-left: 10px;
+            display: flex;
+            flex-direction: column;
+            padding-left: 15px;
+            padding-top: 15px;
+            background: url('~@/assets/img/echartsDetailLeftBg.png') no-repeat;
+            background-size:100% 100%;
+            &_title{
+              margin-left: 10px;
+              height: 20px;
+              line-height: 20px;
+              font-size: 16px;
+              color: #00dfff;
+              border-left: 6px solid #00dfff;
+              padding-left: 10px;
+            }
             &_echarts{
+              flex: 1;
               width: 100%;
-              height: 100%;
             }
           }
         }
