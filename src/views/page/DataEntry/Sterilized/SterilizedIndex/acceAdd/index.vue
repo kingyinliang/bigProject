@@ -36,7 +36,9 @@
             <el-table-column type="index" width="55" label="序号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="状态" width="100">
               <template slot-scope="scope">
-                {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? scope.row.addStatus:scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过' : scope.row.addStatus}}
+                <div :class="{reds: scope.row.status === 'noPass', che: scope.row.status === 'checked'}">
+                  {{scope.row.status === 'noPass'? '不通过':scope.row.status === 'saved'? scope.row.addStatus:scope.row.status === 'submit' ? '已提交' : scope.row.status === 'checked'? '通过' : scope.row.addStatus}}
+                </div>
               </template>
             </el-table-column>
             <!--<el-table-column label="添加状态" width="80" prop="addStatus" :show-overflow-tooltip="true"></el-table-column>-->
@@ -560,6 +562,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .reds{
+    color: red;
+  }
+  .che{
+    color: rgb(103, 194, 58);
+  }
 .supStatus{
   width: 100px;
   height: 100px;

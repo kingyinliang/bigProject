@@ -271,22 +271,22 @@ export default {
           })
         })
       } else {
-        updateMaterial.then(() => {
-          let updateApplyorder = new Promise((resolve, reject) => {
-            that.$refs.applyorder.UpdateOrder(str, resolve, reject)
-          })
-          let UpdateTime = new Promise((resolve, reject) => {
-            that.$refs.manhour.UpdateTime(str, resolve, reject)
-          })
-          let saveNet = Promise.all([updateApplyorder, UpdateTime])
-          saveNet.then(function () {
-            that.isRedact = false
-            that.$notify({title: '成功', message: '保存成功', type: 'success'})
-            that.GetList()
-          }, err => {
-            that.$error_SHINHO(err)
-          })
+        // updateMaterial.then(() => {
+        let updateApplyorder = new Promise((resolve, reject) => {
+          that.$refs.applyorder.UpdateOrder(str, resolve, reject)
         })
+        let UpdateTime = new Promise((resolve, reject) => {
+          that.$refs.manhour.UpdateTime(str, resolve, reject)
+        })
+        let saveNet = Promise.all([updateMaterial, updateApplyorder, UpdateTime])
+        saveNet.then(function () {
+          that.isRedact = false
+          that.$notify({title: '成功', message: '保存成功', type: 'success'})
+          that.GetList()
+        }, err => {
+          that.$error_SHINHO(err)
+        })
+        // })
       }
     },
     // 提交

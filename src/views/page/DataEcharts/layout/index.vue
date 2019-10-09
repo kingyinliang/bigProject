@@ -3,6 +3,10 @@
     <el-menu
       :default-active="menuActiveName"
       class="DataEchartsMenu">
+      <el-menu-item index="1" @click="menuActiveName='home';$router.push({ path: '/home' })">
+        <i class="site-sidebar__menu-icon iconfont factory-shouye"></i>
+        <span slot="title">首页</span>
+      </el-menu-item>
       <el-menu-item :index="item.menuId" @click="goPageHome(item)" v-for="(item, index) in menuList.filter(it => it.type === '4')[0].list" :key="index" v-if="/总览/g.test(item.name)">
         <i :class="item.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
         <span slot="title">{{item.name}}</span>
