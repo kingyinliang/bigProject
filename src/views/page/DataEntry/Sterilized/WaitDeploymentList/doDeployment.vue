@@ -305,6 +305,10 @@ export default {
       if (this.orderList.length === 0) {
         this.$warning_SHINHO('请添加订单')
       } else {
+        if (this.orderList.filter(item => item.orderNo.slice(0, 4) === this.orderList[0].orderNo.slice(0, 4)).length !== this.orderList.length) {
+          this.$warning_SHINHO('请选择相同的订单类型的订单！')
+          return false
+        }
         let params = {
           factory: this.$store.state.common.Sterilized.factoryId,
           workShop: this.$store.state.common.Sterilized.workshopId,
