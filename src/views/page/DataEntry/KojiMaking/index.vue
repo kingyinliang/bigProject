@@ -277,7 +277,21 @@ export default class Index extends Vue {
   //   officialWorker: officialWorker
   // }
   // 将common中的参数复制一份到本地
-  params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop.defaultVal))
+  // params = JSON.parse(JSON.stringify(this.$store.state.common.ZQWorkshop.defaultVal))
+  params = {
+    factoryId: '',
+    factoryName: '',
+    workshopId: '',
+    workshopName: '',
+    // 制曲日期
+    zqDate: '',
+    // normal/abnormal 正常生产/无生产
+    productStatus: 'normal',
+    // 订单管理页的订单日期
+    orderDate: '',
+    orderNo: '',
+    orderStatus: ''
+  }
   factoryList = []
   workshopList = []
   processesList = []
