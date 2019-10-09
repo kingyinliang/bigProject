@@ -1,188 +1,131 @@
 <template>
-  <div class="header_main">
-    <el-card>
-      <el-row>
-        <el-col :span="24">
-          <el-form :inline="true" :model="form" size="small" label-width="70px" class="multi_row">
-            <el-form-item label="生产工厂：">
-              <el-select v-model="form.factory" placeholder="请选择" class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="生产车间：">
-              <el-select v-model="form.workShop" placeholder="请选择" class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="状态：">
-              <el-select v-model="form.frozenStatus" class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) of statusList" :key="index" :label="item.name" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="发酵罐号：">
-              <el-select v-model="form.holderId" filterable class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) of holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="订单编号：">
-              <el-input v-model="form.orderNo" style="width:160px"></el-input>
-            </el-form-item>
-            <el-form-item label="物料：">
-              <el-select v-model="form.materialCode" filterable class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) of materialList" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="发酵天数：">
-              <el-input v-model="form.ferDays" class="width160px" style="width:160px"></el-input>
-            </el-form-item>
-            <el-form-item label="物料类别：">
-              <el-select v-model="form.halfId" filterable class="width160px">
-                <el-option value=''>请选择</el-option>
-                <el-option v-for="(item, index) of materialTypeList" :key="index" :value="item.id" :label="item.halfName"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item class="floatr">
-              <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-    </el-card>
-    <el-tabs v-model="activeName" @tab-click="tabClick" type="border-card" style="margin-top:5px">
-      <el-tab-pane name="0" label="未判定">
-        <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : '正常'}}
-            </template>
-          </el-table-column>
-          <el-table-column label="发酵罐" show-overflow-tooltip width="120">
-            <template slot-scope="scope">
-              {{scope.row.order.holderName}}
-            </template>
-          </el-table-column>
-          <el-table-column label="订单号" width="130" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{scope.row.order.ferOrderNo}}
-            </template>
-          </el-table-column>
-          <el-table-column label="物料" width="220" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{scope.row.order.ferMaterialCode}}{{scope.row.order.ferMaterialName}}
-            </template>
-          </el-table-column>
-          <el-table-column label="订单数量">
-            <template slot-scope="scope">
-              {{scope.row.order.ferAmount}}
-            </template>
-          </el-table-column>
-          <el-table-column label="单位">
-            <template slot-scope="scope">
-              {{scope.row.order.ferUnit}}
-            </template>
-          </el-table-column>
-          <el-table-column label="满灌日期" width="170">
-            <template slot-scope="scope">
-              {{scope.row.order.fullDate}}
-            </template>
-          </el-table-column>
-          <el-table-column label="发酵天数">
-            <template slot-scope="scope">
-              {{scope.row.order.ferDays}}
-            </template>
-          </el-table-column>
-          <el-table-column label="物料类别"></el-table-column>
-          <el-table-column label="操作" fixed="right">
-            <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">判定</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="form.currPage"
-          :page-sizes="[10, 15, 20]"
-          :page-size="form.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="form.totalCount">
-        </el-pagination>
-      </el-tab-pane>
-      <el-tab-pane name="1" label="已判定">
-        <el-table :data="dataList" border header-row-class-name="tableHead">
-          <el-table-column label="状态" width="50">
-            <template slot-scope="scope">
-              <!-- {{scope.row.judge}} -->
-              {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : ''}}
-            </template>
-          </el-table-column>
-          <el-table-column label="发酵罐" width="100" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{scope.row.order.holderName}}
-            </template>
-          </el-table-column>
-          <el-table-column label="订单号" width="130">
-            <template slot-scope="scope">
-              {{scope.row.order.ferOrderNo}}
-            </template>
-          </el-table-column>
-          <el-table-column label="物料" width="180" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{scope.row.order.ferMaterialCode}}{{scope.row.order.ferMaterialName}}
-            </template>
-          </el-table-column>
-          <el-table-column label="订单数量">
-            <template slot-scope="scope">
-              {{scope.row.order.ferAmount}}
-            </template>
-          </el-table-column>
-          <el-table-column label="满灌日期" width="180">
-            <template slot-scope="scope">
-              {{scope.row.order.fullDate}}
-            </template>
-          </el-table-column>
-          <el-table-column label="发酵天数">
-            <template slot-scope="scope">
-              {{scope.row.order.ferDays}}
-            </template>
-          </el-table-column>
-          <el-table-column label="物料类别">
-            <template slot-scope="scope">
-              {{scope.row.judge ? scope.row.judge.halfName : ''}}
-            </template>
-          </el-table-column>
-          <el-table-column label="判定人员" width="150">
-            <template slot-scope="scope">
-              {{scope.row.judge ? scope.row.judge.creator : ''}}
-            </template>
-          </el-table-column>
-          <el-table-column label="判定时间" width="180">
-            <template slot-scope="scope">
-              {{scope.row.judge ? scope.row.judge.created : ''}}
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" fixed="right">
-            <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">调整</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="form.currPage"
-          :page-sizes="[10, 15, 20]"
-          :page-size="form.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="form.totalCount">
-        </el-pagination>
-      </el-tab-pane>
-    </el-tabs>
+  <div>
+    <div class="header_main">
+      <el-card>
+        <el-row>
+          <el-col :span="24">
+            <el-form :inline="true" :model="form" size="small" label-width="70px" class="multi_row">
+              <el-form-item label="生产工厂：">
+                <el-select v-model="form.factory" placeholder="请选择" class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) in factory" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="生产车间：">
+                <el-select v-model="form.workShop" placeholder="请选择" class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) in workshop" :key="index" :value="item.deptId" :label="item.deptName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="状态：">
+                <el-select v-model="form.frozenStatus" class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) of statusList" :key="index" :label="item.name" :value="item.value"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发酵罐号：">
+                <el-select v-model="form.holderId" filterable class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) of holderList" :key="index" :label="item.holderName" :value="item.holderId"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="订单编号：">
+                <el-input v-model="form.orderNo" style="width:160px"></el-input>
+              </el-form-item>
+              <el-form-item label="物料：">
+                <el-select v-model="form.materialCode" filterable class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) of materialList" :key="index" :value="item.materialCode" :label="item.materialCode + item.materialName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发酵天数：">
+                <el-input v-model="form.ferDays" class="width160px" style="width:160px"></el-input>
+              </el-form-item>
+              <el-form-item label="物料类别：">
+                <el-select v-model="form.halfId" filterable class="width160px">
+                  <el-option value=''>请选择</el-option>
+                  <el-option v-for="(item, index) of materialTypeList" :key="index" :value="item.id" :label="item.halfName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item class="floatr">
+                <el-button type="primary" @click="GetList()" v-if="isAuth('fer:judge:list')" size="small" style="float:right">查询</el-button>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-card>
+    </div>
+    <div class="main">
+      <el-card>
+      <el-table :data="dataList" border header-row-class-name="tableHead">
+        <el-table-column label="状态" width="50">
+          <template slot-scope="scope">
+            <!-- {{scope.row.judge}} -->
+            {{scope.row.judge ? (scope.row.judge.frozenStatus === '0' ? '正常' : '冻结') : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="发酵罐" width="100" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.order.holderName}}
+          </template>
+        </el-table-column>
+        <el-table-column label="订单号" width="130">
+          <template slot-scope="scope">
+            {{scope.row.order.ferOrderNo}}
+          </template>
+        </el-table-column>
+        <el-table-column label="物料" width="180" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.order.ferMaterialCode}}{{scope.row.order.ferMaterialName}}
+          </template>
+        </el-table-column>
+        <el-table-column label="订单数量">
+          <template slot-scope="scope">
+            {{scope.row.order.ferAmount}}
+          </template>
+        </el-table-column>
+        <el-table-column label="满灌日期" width="170">
+          <template slot-scope="scope">
+            {{scope.row.order.fullDate}}
+          </template>
+        </el-table-column>
+        <el-table-column label="发酵天数">
+          <template slot-scope="scope">
+            {{scope.row.order.ferDays}}
+          </template>
+        </el-table-column>
+        <el-table-column label="物料类别">
+          <template slot-scope="scope">
+            {{scope.row.judge ? scope.row.judge.halfName : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="判定人员" width="140">
+          <template slot-scope="scope">
+            {{scope.row.judge ? scope.row.judge.creator : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="判定时间" width="170">
+          <template slot-scope="scope">
+            {{scope.row.judge ? scope.row.judge.created : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="primary" size="small" @click="JudgeDo(scope.row)" :disabled="!isAuth('fer:judge:judge')">调整</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="form.currPage"
+        :page-sizes="[10, 15, 20]"
+        :page-size="form.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="form.totalCount">
+      </el-pagination>
+      </el-card>
+    </div>
     <el-dialog :visible.sync="dialogVisible" width="400px" custom-class='dialog__class'>
       <div slot="title" style="line-hight:59px">{{this.judge.holderNo}} 类别判定</div>
       <el-form :model="judge" size="small" label-width="130px" :rules="judgerules" ref="judge">
@@ -227,7 +170,6 @@ export default {
         value: 1
       }],
       dataList: [],
-      activeName: '0',
       judge: {
         frozenStatus: '0',
         changed: dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss'),
@@ -334,6 +276,7 @@ export default {
       })
     },
     GetList () {
+      this.form.isJudged = '1'
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENTLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
@@ -354,11 +297,11 @@ export default {
       this.form.currPage = val
       this.GetList()
     },
-    tabClick (value) {
-      this.form.isJudged = value.name
-      this.form.currPage = 1
-      this.GetList()
-    },
+    // tabClick (value) {
+    //   this.form.isJudged = value.name
+    //   this.form.currPage = 1
+    //   this.GetList()
+    // },
     // 判定
     JudgeDo (row) {
       this.dialogVisible = true
