@@ -300,7 +300,9 @@ export default {
       return (row.materialName.indexOf('原汁') === -1 || !(this.lineStatus !== '已提交' && this.lineStatus !== '审核通过' && this.isRedact !== false && row.status !== 'submit' && row.status !== 'checked'))
     },
     changeH (row) {
-      row.category = this.thrwHolderList.filter(item => item.holderId === row.holderId)[0].type
+      if (row.holderId) {
+        row.category = this.thrwHolderList.filter(item => item.holderId === row.holderId)[0].type
+      }
     },
     // 获取不合格原因
     GetHolderStatusList () {
