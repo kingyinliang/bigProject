@@ -71,7 +71,7 @@
         <el-form-item label="批次：" prop="batch">
           <p>{{JBSdataForm.batch}}</p>
         </el-form-item>
-        <el-form-item label="领用量：" prop="receiveAmount">
+        <el-form-item label="领用量(L)：" prop="receiveAmount">
           <el-input v-model="JBSdataForm.receiveAmount" size="small" placeholder="手工录入"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
@@ -116,7 +116,7 @@
         <el-form-item label="批次：" prop="batch">
           <p>{{TurnSavedataForm.batch}}</p>
         </el-form-item>
-        <el-form-item label="领用量：" prop="receiveAmount">
+        <el-form-item label="领用量(L)：" prop="receiveAmount">
           <el-input v-model="TurnSavedataForm.receiveAmount" size="small" placeholder="手工录入"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
