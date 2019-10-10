@@ -449,7 +449,7 @@ export default {
     dataRul (data, data1, st) {
       console.log(data)
       let ty = true
-      data.forEach((item) => {
+      for (var item of data) {
         if (item.delFlag === '0') {
           if (!item.batch) {
             ty = false
@@ -499,7 +499,7 @@ export default {
             }
           }
         }
-      })
+      }
       return ty
     },
     CheckBoxA (row) {
