@@ -225,7 +225,7 @@
       <el-button type="primary" @click="FormJudgeSave('judge')" size="small">确 定</el-button>
     </span>
   </el-dialog>
-  <el-dialog width="450px" class="ShinHoDialog" :title="dialogData.holderName+'清洗'" :close-on-click-modal="false" :visible.sync="visible">
+  <el-dialog width="450px" class="ShinHoDialog" :title="dialogData.HOLDER_NAME+'清洗'" :close-on-click-modal="false" :visible.sync="visible">
     <div style="display: flex">
       <el-form :model="dialogData" label-width="100px" class="topform marbottom" style="margin: auto">
         <el-form-item label="罐号：">
