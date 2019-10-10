@@ -41,7 +41,7 @@
               <img src="@/assets/img/RD.png" alt="" v-if="item.isRdSign === '1'" style="position:absolute; left:10px; top:10px;">
               <div class="dataList_item_pot_box">
                 <div class="dataList_item_pot_box1">
-                  <div class="dataList_item_pot_box_item2" :style="`height:${item.amount < 0? 0 : ((item.amount * 1) / (item.holderHold * 1)) * 100}%`"></div>
+                  <div class="dataList_item_pot_box_item2" :style="`height:${item.holderStatus === '0' ? 0 : item.amount < 0? 0 : ((item.amount * 1) / (item.holderHold * 1)) * 100}%`"></div>
                   <div class="dataList_item_pot_box_detail" v-if="item.holderStatus !== '0'">
                     <p>{{item.batch || ''}}</p>
                     <p>{{(item.materialCode || '') + ' ' + (item.materialName || '')}}</p>

@@ -123,7 +123,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="pages.currentPage"
-        :page-size="40"
+        :page-size="42"
         layout="total, prev, pager, next"
         :total="pages.total">
       </el-pagination>
@@ -225,7 +225,7 @@
       <el-button type="primary" @click="FormJudgeSave('judge')" size="small">确 定</el-button>
     </span>
   </el-dialog>
-  <el-dialog width="450px" class="ShinHoDialog" :title="dialogData.holderName+'清洗'" :close-on-click-modal="false" :visible.sync="visible">
+  <el-dialog width="450px" class="ShinHoDialog" :title="dialogData.HOLDER_NAME+'清洗'" :close-on-click-modal="false" :visible.sync="visible">
     <div style="display: flex">
       <el-form :model="dialogData" label-width="100px" class="topform marbottom" style="margin: auto">
         <el-form-item label="罐号：">
@@ -696,7 +696,9 @@ export default {
               inHolderId: '',
               inBatch: '',
               isFull: '',
-              remark: ''
+              remark: '',
+              factory: this.formHeader.factory,
+              workShop: this.formHeader.workShop
             }
             this.AddDialogTableVisible = true
           } else {
@@ -872,6 +874,7 @@ export default {
         this.pages.currentPage = 1
       }
       this.dataListAlls = []
+      this.dataList = []
       if (this.holderStatus !== '' || this.days !== '') {
         this.dataListAll.map((item) => {
           if (this.holderStatus !== '') {
