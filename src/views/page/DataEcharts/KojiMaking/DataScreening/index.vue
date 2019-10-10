@@ -23,18 +23,18 @@
             <div class="totalContainer_center_top_imgBox">
               <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(0, $event)">
                 <p>已使用</p>
-                <p><span>480</span>间</p>
-                <p>曲房共：345间</p>
+                <p><span>{{House.oneWorkShop[0]}}</span>间</p>
+                <p>一车间曲房<br>共：345间</p>
               </div>
               <div class="totalContainer_center_top_imgBox_img bigBox" @click="rotateCircle(1, $event)">
                 <p>已使用</p>
-                <p><span>481</span>间</p>
+                <p><span>{{House.oneWorkShop[0] + House.twoWorkShop[0]}}</span>间</p>
                 <p>曲房共：345间</p>
               </div>
               <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(2, $event)">
                 <p>已使用</p>
-                <p><span>482</span>间</p>
-                <p>曲房共：345间</p>
+                <p><span>{{House.twoWorkShop[0]}}</span>间</p>
+                <p>二车间曲房<br>共：345间</p>
               </div>
             </div>
           </div>
@@ -65,9 +65,10 @@
 
 <script>
 import echarts from 'echarts'
-import { option } from './NightingaleRose'
+import { radiuspie } from './NightingaleRose'
 import { pillar } from './pillar'
 import { pie } from './pie'
+import { ECHARTS_API } from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -76,20 +77,30 @@ export default {
       NightingaleRose2: null,
       pillar1: null,
       pillar2: null,
-      pie: null
+      pie: null,
+      House: {
+        oneWorkShop: [0],
+        twoWorkShop: [0]
+      }
     }
   },
   mounted () {
+    this.GetHouseData()
     this.NightingaleRose1 = echarts.init(document.getElementById('NightingaleRose1'))
     this.NightingaleRose2 = echarts.init(document.getElementById('NightingaleRose2'))
     this.pillar1 = echarts.init(document.getElementById('pillar1'))
     this.pillar2 = echarts.init(document.getElementById('pillar2'))
     this.pie = echarts.init(document.getElementById('pie'))
-    this.NightingaleRose1.setOption(this.setNightingaleRose1(option))
-    this.NightingaleRose2.setOption(this.setNightingaleRose2(option))
-    this.pillar1.setOption(pillar)
-    this.pillar2.setOption(pillar)
+    // 模拟图表数据
+    // this.NightingaleRose1.setOption(radiuspie)
+    // this.NightingaleRose2.setOption(radiuspie)
+    // this.pillar1.setOption(pillar)
+    // this.pillar2.setOption(pillar)
     this.pie.setOption(pie)
+    // 初始化图表
+    this.setNightingaleRose()
+    this.setPillar()
+    // 窗口大小改变改变图表
     window.addEventListener('resize', () => {
       if (this.NightingaleRose1) {
         this.NightingaleRose1.resize()
@@ -109,27 +120,71 @@ export default {
     })
   },
   methods: {
-    setNightingaleRose1 (param) {
-      let option = JSON.parse(JSON.stringify(param))
-      option.series[0].data = [
-        {value: 10, name: '办理环节占比'},
-        {value: 5, name: '审核环节占比'},
-        {value: 15, name: '未办环节占比'},
-        {value: 25, name: '决策环节占比'}
-      ]
+    // 曲房情况
+    GetHouseData () {
+      this.$http(`${ECHARTS_API.KOJIMAKING_HOME_HOUSE}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.House = {
+            oneWorkShop: data.oneWorkShop,
+            twoWorkShop: data.twoWorkShop
+          }
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    // 请求数据
+    setNightingaleRose () {
+      console.log(1)
+      this.$http(`${ECHARTS_API.KOJIMAKING_HOME_MATERIAL}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.NightingaleRose1.setOption(this.NightingaleRoseData(data.oneWorkShop))
+          this.NightingaleRose2.setOption(this.NightingaleRoseData(data.twoWorkShop))
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    setPillar () {
+      this.$http(`${ECHARTS_API.KOJIMAKING_HOME_MONTHOUTPUT}`, 'POST', {}, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.pillar1.setOption(this.PillarData(data.oneWorkShop))
+          this.pillar2.setOption(this.PillarData(data.twoWorkShop))
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    // 处理数据
+    NightingaleRoseData (data) {
+      let option = JSON.parse(JSON.stringify(radiuspie))
+      let dataAxis = []
+      let seriesData = []
+      data.forEach(item => {
+        seriesData.push({
+          value: item.amount,
+          name: item.materialName
+        })
+        dataAxis.push(`${item.materialName}`)
+      })
+      option.series[0].data = seriesData
+      option.legend.data = dataAxis
+      option.graphic[1].style.text = `${dataAxis.length}个`
       return option
     },
-    setNightingaleRose2 (param) {
-      let option = JSON.parse(JSON.stringify(param))
-      option.series[0].color = ['#0fd5f9', '#57c48c', '#eae97b', '#9e34e4']
-      option.series[0].data = [
-        {value: 25, name: '办理环节占比'},
-        {value: 20, name: '审核环节占比'},
-        {value: 15, name: '未办环节占比'},
-        {value: 10, name: '决策环节占比'}
-      ]
+    PillarData (data) {
+      let option = JSON.parse(JSON.stringify(pillar))
+      let dataAxis = []
+      let seriesData = []
+      data.forEach(item => {
+        seriesData.push((item.amount / 1000).toFixed(2))
+        dataAxis.push(`${item.everyMonth}月`)
+      })
+      option.series[0].data = seriesData
+      option.yAxis.data = dataAxis
       return option
     },
+    // 曲房动画
     rotateCircle (index) {
       let leftMove, rightMove
       if (document.body.offsetWidth > 1366) {
