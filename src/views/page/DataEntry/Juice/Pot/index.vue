@@ -696,7 +696,9 @@ export default {
               inHolderId: '',
               inBatch: '',
               isFull: '',
-              remark: ''
+              remark: '',
+              factory: this.formHeader.factory,
+              workShop: this.formHeader.workShop
             }
             this.AddDialogTableVisible = true
           } else {
