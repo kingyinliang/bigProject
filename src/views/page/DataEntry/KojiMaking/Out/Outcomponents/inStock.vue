@@ -24,7 +24,7 @@
           <!--<el-input v-if="(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" v-model="scope.row.sauceWeight" :disabled="!(isRedact && scope.row.status !== 'submit' && scope.row.status !== 'checked')" size="small" placeholder="手工录入"></el-input>-->
         </template>
       </el-table-column>
-      <el-table-column width="125" label="入库批次">
+      <el-table-column width="130" label="入库批次">
         <template slot="header">
           <i class="reqI">*</i>
           <span>入库批次</span>

@@ -649,21 +649,34 @@ export default class Index extends Vue {
       return false
     }
     let sum = 0
-    let iskong = 0
+    // let iskong = 0
     for (let item of this.workHourList) {
-      if (item.confActivity2 === '' || item.confActivity2 === null) {
-        iskong = 1
-        Vue.prototype.$warning_SHINHO('机器工时不能为空')
-        return false
+      var sole
+      if (item.confActivity2 === null || item.confActivity2 === '') {
+        sole = 0
+      } else {
+        sole = item.confActivity2
       }
-      if (!isNaN(item.confActivity2)) {
-        sum += item.confActivity2
-      }
+      sum += sole
     }
-    if (iskong === 0 && sum <= 0) {
+    if (sum <= 0) {
       Vue.prototype.$warning_SHINHO('机器工时之和不能小于0')
       return false
     }
+    // for (let item of this.workHourList) {
+    //   if (item.confActivity2 === '' || item.confActivity2 === null) {
+    //     iskong = 1
+    //     Vue.prototype.$warning_SHINHO('机器工时不能为空')
+    //     return false
+    //   }
+    //   if (!isNaN(item.confActivity2)) {
+    //     sum += item.confActivity2
+    //   }
+    // }
+    // if (iskong === 0 && sum <= 0) {
+    //   Vue.prototype.$warning_SHINHO('机器工时之和不能小于0')
+    //   return false
+    // }
     return true
   }
   async timeSubmit () {
