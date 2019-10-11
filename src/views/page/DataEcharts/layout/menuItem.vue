@@ -16,6 +16,7 @@ export default {
       container: []
     }
   },
+  inject: ['reload'],
   props: {
     deptId: {},
     page: {
@@ -29,11 +30,11 @@ export default {
   methods: {
     goPage (id) {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === this.page.menuId)
-      console.log(route)
       if (route.length >= 1) {
         this.menuActiveName = id
         this.$store.state.common.dataEchartUid = id
         this.$router.push({ path: route[0].path })
+        this.reload()
       }
     },
     getContainer () {

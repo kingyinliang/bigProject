@@ -57,7 +57,7 @@
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="Go(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">确认</el-button>
-              <el-button type="text" size="small" @click="DelRow(scope.row)" :disabled="(!isAuth('fer:openholderg:confirm'))">删除</el-button>
+              <el-button type="text" size="small" @click="DelRow(scope.row)" :disabled="(!isAuth('fer:openholderg:deleteG'))">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

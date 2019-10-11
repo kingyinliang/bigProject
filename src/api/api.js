@@ -1666,5 +1666,6 @@ export const JUICE_API = {
 export const ECHARTS_API = {
   KOJIMAKING_HOME_MONTHOUTPUT: HOST + '/zhiqu/board/monthOutput',
   KOJIMAKING_HOME_MATERIAL: HOST + '/zhiqu/board/materialOutput',
-  KOJIMAKING_HOME_HOUSE: HOST + '/zhiqu/board/houseUsed'
+  KOJIMAKING_HOME_HOUSE: HOST + '/zhiqu/board/houseUsed',
+  KOJIMAKING_WORKSHOP_HOUSEDETAIL: HOST + '/zhiqu/board/houseDetail'
 }

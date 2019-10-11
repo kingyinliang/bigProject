@@ -39,6 +39,7 @@
 import echarts from 'echarts'
 import { bar } from './Bar'
 import { pie } from './Pie'
+import { ECHARTS_API } from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -54,9 +55,12 @@ export default {
     this.Bar1 = echarts.init(document.getElementById('Bar1'))
     this.Bar2 = echarts.init(document.getElementById('Bar2'))
     this.Pie1 = echarts.init(document.getElementById('Pie1'))
+    // 模拟图表数据
     this.Bar1.setOption(bar)
     this.Bar2.setOption(bar)
     this.Pie1.setOption(pie)
+    this.getData()
+    // 窗口大小改变改变图表
     window.addEventListener('resize', () => {
       if (this.Bar1) {
         this.Bar1.resize()
@@ -70,6 +74,17 @@ export default {
     })
   },
   methods: {
+    getData () {
+      this.$http(`${ECHARTS_API.KOJIMAKING_WORKSHOP_HOUSEDETAIL}`, 'POST', {
+        workShopName: this.$store.state.common.dataEchartDeptId
+      }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    // 轮播
     boxClick (str) {
       console.log(this.num)
       let ele = this.$('.Container_box_echarts_bg_box_barOrPie').eq(0)

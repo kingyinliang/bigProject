@@ -24,17 +24,17 @@
               <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(0, $event)">
                 <p>已使用</p>
                 <p><span>{{House.oneWorkShop[0]}}</span>间</p>
-                <p>一车间曲房<br>共：345间</p>
+                <p>一车间曲房<br>共：{{House.oneWorkShop[1]}}间</p>
               </div>
               <div class="totalContainer_center_top_imgBox_img bigBox" @click="rotateCircle(1, $event)">
                 <p>已使用</p>
                 <p><span>{{House.oneWorkShop[0] + House.twoWorkShop[0]}}</span>间</p>
-                <p>曲房共：345间</p>
+                <p>曲房共：{{House.oneWorkShop[1] + House.twoWorkShop[1]}}间</p>
               </div>
               <div class="totalContainer_center_top_imgBox_img smallBox" @click="rotateCircle(2, $event)">
                 <p>已使用</p>
                 <p><span>{{House.twoWorkShop[0]}}</span>间</p>
-                <p>二车间曲房<br>共：345间</p>
+                <p>二车间曲房<br>共：{{House.twoWorkShop[1]}}间</p>
               </div>
             </div>
           </div>
@@ -96,8 +96,9 @@ export default {
     // this.NightingaleRose2.setOption(radiuspie)
     // this.pillar1.setOption(pillar)
     // this.pillar2.setOption(pillar)
-    this.pie.setOption(pie)
+    // this.pie.setOption(pie)
     // 初始化图表
+    pie.legend.data = []
     this.setNightingaleRose()
     this.setPillar()
     // 窗口大小改变改变图表
@@ -135,11 +136,11 @@ export default {
     },
     // 请求数据
     setNightingaleRose () {
-      console.log(1)
       this.$http(`${ECHARTS_API.KOJIMAKING_HOME_MATERIAL}`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.NightingaleRose1.setOption(this.NightingaleRoseData(data.oneWorkShop))
           this.NightingaleRose2.setOption(this.NightingaleRoseData(data.twoWorkShop))
+          this.pie.setOption(this.PieData1(data))
         } else {
           this.$error_SHINHO(data.msg)
         }
@@ -150,6 +151,7 @@ export default {
         if (data.code === 0) {
           this.pillar1.setOption(this.PillarData(data.oneWorkShop))
           this.pillar2.setOption(this.PillarData(data.twoWorkShop))
+          this.pie.setOption(this.PieData2(data))
         } else {
           this.$error_SHINHO(data.msg)
         }
@@ -162,7 +164,7 @@ export default {
       let seriesData = []
       data.forEach(item => {
         seriesData.push({
-          value: item.amount,
+          value: (item.amount / 1000).toFixed(2),
           name: item.materialName
         })
         dataAxis.push(`${item.materialName}`)
@@ -182,6 +184,44 @@ export default {
       })
       option.series[0].data = seriesData
       option.yAxis.data = dataAxis
+      return option
+    },
+    PieData1 (data) {
+      let option = pie
+      let seriesData = []
+      data.oneWorkShop.forEach(item => {
+        seriesData.push({
+          value: (item.amount / 1000).toFixed(2),
+          name: `制曲一${item.materialName}`
+        })
+        pie.legend.data.push(`制曲一${item.materialName}`)
+      })
+      data.twoWorkShop.forEach(item => {
+        seriesData.push({
+          value: (item.amount / 1000).toFixed(2),
+          name: `制曲二${item.materialName}`
+        })
+        pie.legend.data.push(`制曲二${item.materialName}`)
+      })
+      option.series[1].data = seriesData
+      return option
+    },
+    PieData2 (data) {
+      let option = pie
+      let oneWorkShop = 0
+      let twoWorkShop = 0
+      data.oneWorkShop.forEach(item => {
+        oneWorkShop = oneWorkShop + (item.amount / 1000).toFixed(2) * 1
+      })
+      data.twoWorkShop.forEach(item => {
+        twoWorkShop = twoWorkShop + (item.amount / 1000).toFixed(2) * 1
+      })
+      option.legend.data.push('制曲一车间')
+      option.legend.data.push('制曲二车间')
+      option.series[0].data = [
+        {value: oneWorkShop.toFixed(2), name: '制曲一车间'},
+        {value: twoWorkShop.toFixed(2), name: '制曲二车间'}
+      ]
       return option
     },
     // 曲房动画

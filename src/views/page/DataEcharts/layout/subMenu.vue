@@ -25,6 +25,7 @@ export default {
       workshop: []
     }
   },
+  inject: ['reload'],
   props: {
     page: {
       type: Object,
@@ -41,6 +42,7 @@ export default {
         this.menuActiveName = id
         this.$store.state.common.dataEchartDeptId = id
         this.$router.push({ path: route[0].path })
+        this.reload()
       }
     },
     getFactory () {

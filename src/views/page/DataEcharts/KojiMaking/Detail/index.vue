@@ -46,6 +46,7 @@ export default {
     }
   },
   mounted () {
+    console.log(1)
     this.Line1 = echarts.init(document.getElementById('Line1'))
     this.Line1.setOption(line)
     window.addEventListener('resize', () => {
