@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingS" element-loading-text="加载中">
+  <el-col>
     <div class="main">
       <el-card>
         <div class="clearfix">

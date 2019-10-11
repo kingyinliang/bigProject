@@ -1,5 +1,5 @@
 <template>
-<el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+<el-col >
   <!--<div class="topTitle">-->
     <!--<el-breadcrumb separator="/">-->
       <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->

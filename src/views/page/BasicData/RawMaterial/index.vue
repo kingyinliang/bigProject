@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col >
     <!--<div class="topTitle">-->
       <!--<el-breadcrumb separator="/">-->
         <!--<el-breadcrumb-item>基础数据</el-breadcrumb-item>-->
@@ -22,7 +22,7 @@
             </el-form>
           </el-row>
         </div>
-        <el-row v-loading.fullscreen.lock="loading" element-loading-text="正在同步中">
+        <el-row>
           <el-table
             ref="table1"
             header-row-class-name="tableHead"

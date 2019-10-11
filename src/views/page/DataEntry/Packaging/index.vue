@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col >
     <div class="header_main">
       <el-card class="newCard">
         <el-form :model="plantList" size="small" class="sole_row" :inline="true" label-width="70px" ref="" @keyup.enter.native="GetOrderList()" @submit.native.prevent>

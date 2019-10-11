@@ -1,5 +1,5 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
+  <el-col >
     <div class="main mainHeader">
       <el-card>
         <el-row style="margin-bottom:10px;">

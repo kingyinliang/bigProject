@@ -1,5 +1,5 @@
 <template>
-  <el-row v-loading.fullscreen.lock="lodingS">
+  <el-row>
     <div class="header_main">
       <el-card class="searchCard" element-loading-text="加载中">
         <el-row>

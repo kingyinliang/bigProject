@@ -1,5 +1,5 @@
 <template>
-  <div class="header_main" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中">
+  <div class="header_main" >
     <el-card class="searchCards">
       <el-form :model="formHeader" :inline="true" size="small" label-width="70px" class="multi_row">
         <el-form-item label="生产车间：">
