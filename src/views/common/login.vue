@@ -72,6 +72,13 @@ export default {
         callback()
       }
     }
+    var checkValidatePass = (rule, value, callback) => {
+      if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,12}$/.test(value) || !value) {
+        callback()
+      } else {
+        callback(new Error('8-12位数字大小写字母组合'))
+      }
+    }
     return {
       dataRule: {
         password: [
@@ -80,7 +87,8 @@ export default {
         ],
         newPassword: [
           { required: true, message: '请填写密码', trigger: 'blur' },
-          { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' }
+          // { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' },
+          { validator: checkValidatePass, trigger: 'blur' }
         ],
         conPassword: [
           {validator: validatePass2, trigger: 'blur', min: 8, max: 12}
