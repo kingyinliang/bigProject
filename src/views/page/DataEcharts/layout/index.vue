@@ -87,7 +87,7 @@ export default {
   left: 0;
   top: 80px;
   background-color: rgba(255,255,255,0)!important;
-  max-height: 525px;
+  max-height: 80%;
   overflow-y: scroll;
   &::-webkit-scrollbar { width: 0 !important }
   -ms-overflow-style: none;

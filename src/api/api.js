@@ -1660,3 +1660,11 @@ export const JUICE_API = {
   JUICE_STOCKITEM_KUCUN: HOST + '/juice/pot/juiceStockItemExport', // 导出
   JUICE_SEARCH_POT_LIST: HOST + '/juice/pot/holderList'
 }
+/**
+ *  看板接口
+ */
+export const ECHARTS_API = {
+  KOJIMAKING_HOME_MONTHOUTPUT: HOST + '/zhiqu/board/monthOutput',
+  KOJIMAKING_HOME_MATERIAL: HOST + '/zhiqu/board/materialOutput',
+  KOJIMAKING_HOME_HOUSE: HOST + '/zhiqu/board/houseUsed'
+}

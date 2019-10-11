@@ -1,5 +1,5 @@
 
-export let option = {
+export let radiuspie = {
   tooltip: {
     trigger: 'item',
     formatter: '{b} : {c} ({d}%)'

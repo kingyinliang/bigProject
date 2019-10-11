@@ -78,7 +78,7 @@
           <el-input v-model="dataForm.batch" placeholder="请输入" :disabled="PotObject.batch" maxlength="10"></el-input>
         </el-form-item>
         <el-form-item label="入罐数量：">
-          <el-input v-model="dataForm.inAmount" placeholder="请输入"></el-input>
+          <el-input v-model="dataForm.inAmount" placeholder="请输入" @change="PotinTankAmount1"></el-input>
         </el-form-item>
         <el-form-item label="单位：">
           {{dataForm.unit = 'L'}}
@@ -193,8 +193,13 @@ export default {
         id: ''
       }
     },
+    PotinTankAmount1 () {
+      if (this.dataForm.holderId) {
+        this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === this.dataForm.holderId)[0].amount ? this.PotList.filter(item => item.holderId === this.dataForm.holderId)[0].amount + this.dataForm.inAmount * 1 : 0 + this.dataForm.inAmount * 1
+      }
+    },
     PotinTankAmount (id) {
-      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount ? this.PotList.filter(item => item.holderId === id)[0].amount : 0
+      this.dataForm.inTankAmount = this.PotList.filter(item => item.holderId === id)[0].amount ? this.PotList.filter(item => item.holderId === id)[0].amount + this.dataForm.inAmount * 1 : 0 + this.dataForm.inAmount * 1
       this.dataForm.batch = this.PotList.filter(item => item.holderId === id)[0].batch
       this.PotObject.inTankAmount = true
       // if (this.dataForm.inTankAmount) {

@@ -1,6 +1,6 @@
 <template>
-  <el-col v-loading.fullscreen.lock="lodingStatus" element-loading-text="加载中">
-    <el-col v-loading.fullscreen.lock="lodingStatus1" element-loading-text="加载中">
+  <el-col>
+    <el-col>
       <div class="header_main">
         <el-card class="searchCard">
           <el-row type="flex">
