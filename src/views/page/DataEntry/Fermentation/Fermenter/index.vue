@@ -466,7 +466,7 @@ export default {
         this.$store.state.common.Fermentation.category.holderId = row.holderId
         this.$store.state.common.Fermentation.category.orderNo = row.ferOrderNo
         this.$store.state.common.Fermentation.category.materialCode = row.ferMaterialCode
-        this.$store.state.common.Fermentation.category.ferDays = row.ferDays + ''
+        this.$store.state.common.Fermentation.category.ferDays = row.ferDays === null ? '' : row.ferDays + ''
         this.$store.state.common.Fermentation.category.halfId = row.halfType
         this.$store.state.common.Fermentation.category.currPage = 1
         this.$store.state.common.Fermentation.category.pageSize = 1

@@ -111,7 +111,7 @@
             <el-col :span="4" class="dataList_item_btn_item"><p @click="TransferProp(item)">转储</p></el-col>
             <el-col :span="4" class="dataList_item_btn_item"><p @click="JuiceJudgeProp(item)">判定</p></el-col>
             <el-col :span="4" class="dataList_item_btn_item"><p @click="ClearProp(item)">清洗</p></el-col>
-            <el-col :span="4" class="dataList_item_btn_item"><p @click="AddProp(item)">添加</p></el-col>
+            <el-col :span="4" class="dataList_item_btn_item"><p @click="AddProp(item)">HD</p></el-col>
             <el-col :span="4" class="dataList_item_btn_item"><p @click="BringOutProp(item)">调拨</p></el-col>
           </el-row>
           <!-- 转储:沉淀中 领用中 可以。  添加:领用中可添加  判定:空罐，领用中，待清洗不能判定   调拨:空罐跟领用中 不能调拨 -->
@@ -176,7 +176,7 @@
     </span>
   </el-dialog>
   <el-dialog :visible.sync="AddDialogTableVisible" :close-on-click-modal="false" width="500px" custom-class='dialog__class'>
-    <div slot="title" style="line-hight:59px">添加</div>
+    <div slot="title" style="line-hight:59px">HD</div>
     <div>
       <el-form size="small" :model="formAdd" :rules="Addrulestar" ref="Addstar" label-width="150px">
         <el-form-item label="领用罐号：">{{formAdd.holderName}}</el-form-item>
@@ -706,7 +706,7 @@ export default {
           }
         })
       } else {
-        this.$notify({title: '警告', message: '该罐当前不允许添加', type: 'warning'})
+        this.$notify({title: '警告', message: '该罐当前不允许进行HD操作', type: 'warning'})
       }
     },
     FormAddSave (formName) {
@@ -714,7 +714,7 @@ export default {
         if (valid) {
           this.$http(`${JUICE_API.JUICE_ADD_SAVE}`, 'POST', this.formAdd).then(({data}) => {
             if (data.code === 0) {
-              this.$notify({title: '成功', message: '添加成功', type: 'success'})
+              this.$notify({title: '成功', message: 'HD操作成功', type: 'success'})
               this.AddDialogTableVisible = false
               this.$refs[formName].resetFields()
               this.GetDataList(true)
