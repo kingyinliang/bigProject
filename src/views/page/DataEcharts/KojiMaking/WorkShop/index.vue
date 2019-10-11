@@ -5,14 +5,20 @@
       <div class="Container_box">
         <div class="Container_box_table">
           <p class="Container_box_table_title">曲房状态汇总</p>
-          <el-table class="KojiMakingTable"  :data="KojiMakingData" stripe row-class-name="KojiMakingTable_row">
-            <el-table-column prop="holderNo" label="曲房" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderNo" label="罐号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderNo" label="产品" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderNo" label="温度(℃)" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderNo" label="入曲时间" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="holderNo" label="阶段" :show-overflow-tooltip="true"></el-table-column>
-          </el-table>
+          <div class="tableBox">
+            <el-table height="100%" class="KojiMakingTable" :data="KojiMakingData" stripe row-class-name="KojiMakingTable_row">
+              <el-table-column prop="houseNoName" label="曲房" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="inPotNoName" label="罐号" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="materialCode" label="产品" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  {{scope.row.materialCode}} {{scope.row.materialName}}
+                </template>
+              </el-table-column>
+              <el-table-column prop="temp" label="温度(℃)" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="inEndTime" label="入曲时间" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="phase" label="阶段" :show-overflow-tooltip="true"></el-table-column>
+            </el-table>
+          </div>
         </div>
         <div class="Container_box_echarts">
           <div class="Container_box_echarts_bg">
@@ -48,7 +54,7 @@ export default {
       Bar1: null,
       Bar2: null,
       Pie1: null,
-      KojiMakingData: [{holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}, {holderNo: '0'}]
+      KojiMakingData: []
     }
   },
   mounted () {
@@ -56,10 +62,13 @@ export default {
     this.Bar2 = echarts.init(document.getElementById('Bar2'))
     this.Pie1 = echarts.init(document.getElementById('Pie1'))
     // 模拟图表数据
-    this.Bar1.setOption(bar)
-    this.Bar2.setOption(bar)
-    this.Pie1.setOption(pie)
+    // this.Bar1.setOption(bar)
+    // this.Bar2.setOption(bar)
+    // this.Pie1.setOption(pie)
+    // 初始化图表
     this.getData()
+    this.getPieData()
+    this.getBarData()
     // 窗口大小改变改变图表
     window.addEventListener('resize', () => {
       if (this.Bar1) {
@@ -76,13 +85,73 @@ export default {
   methods: {
     getData () {
       this.$http(`${ECHARTS_API.KOJIMAKING_WORKSHOP_HOUSEDETAIL}`, 'POST', {
-        workShopName: this.$store.state.common.dataEchartDeptId
+        workShop: this.$store.state.echarts.dataEchartDeptId,
+        workShopName: this.$store.state.echarts.dataEchartDeptName
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
+          this.KojiMakingData = data.list
         } else {
           this.$error_SHINHO(data.msg)
         }
       })
+    },
+    getBarData () {
+      this.$http(`${ECHARTS_API.KOJIMAKING_WORKSHOP_HOUSEMATERIAL}`, 'POST', {
+        workShop: this.$store.state.echarts.dataEchartDeptId
+      }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.Bar1.setOption(this.setBar(data.list))
+          this.Bar2.setOption(this.setBar(data.list))
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    getPieData () {
+      this.$http(`${ECHARTS_API.KOJIMAKING_WORKSHOP_HOUSEPHASE}`, 'POST', {
+        workShop: this.$store.state.echarts.dataEchartDeptId
+      }, false, false, false).then(({data}) => {
+        if (data.code === 0) {
+          this.Pie1.setOption(this.setPie(data.list))
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
+    },
+    setBar (data) {
+      let option = JSON.parse(JSON.stringify(bar))
+      option.xAxis.data = []
+      option.series[0].data = []
+      data.forEach(item => {
+        if (item.materialName) {
+          option.xAxis.data.push(item.materialName)
+        } else {
+          option.xAxis.data.push('空')
+        }
+        option.series[0].data.push(item.amount)
+      })
+      return option
+    },
+    setPie (data) {
+      let option = JSON.parse(JSON.stringify(pie))
+      option.legend.data = []
+      option.series[0].data = []
+      data.forEach(item => {
+        if (item.phase) {
+          option.legend.data.push(item.phase)
+          option.series[0].data.push({
+            value: item.amount,
+            name: item.phase
+          })
+        } else {
+          option.legend.data.push('空')
+          option.series[0].data.push({
+            value: item.amount,
+            name: '空'
+          })
+        }
+      })
+      return option
     },
     // 轮播
     boxClick (str) {
@@ -133,6 +202,9 @@ export default {
     &.el-table, .el-table__expanded-cell{
       background-color: rgba(0, 0, 0, 0);
     }
+    .el-table__row:hover{
+      background-color: inherit;
+    }
     th{
       text-align: center;
       border-bottom: none!important;
@@ -146,12 +218,28 @@ export default {
         background: rgba(0,181,246, 0.1)!important;
       }
     }
+    &_row.el-table__row--striped:hover{
+      background: rgba(0, 0, 0, 0)!important;
+      td{
+        text-align: center;
+        border-bottom: none!important;
+        background: rgba(0, 104, 190, 0.1)!important;
+      }
+    }
     &_row.el-table__row--striped{
       background: rgba(0, 0, 0, 0)!important;
       td{
         text-align: center;
         border-bottom: none!important;
         background: rgba(0, 104, 190, 0.1)!important;
+      }
+    }
+    &.el-table--scrollable-y .el-table__body-wrapper {
+      &::-webkit-scrollbar { width: 0 !important }
+      -ms-overflow-style: none;
+      overflow: -moz-scrollbars-none;
+      .el-table__body{
+        width: 100%!important;
       }
     }
   }
@@ -177,6 +265,8 @@ export default {
           height: 100%;
           background: url('~@/assets/img/echartsWorkShopBg.png') no-repeat;
           background-size:100% 100%;
+          display: flex;
+          flex-direction: column;
           &_title{
             text-align: center;
             color: white;
@@ -184,6 +274,9 @@ export default {
             line-height: 48px;
             color: #19f5fe;
             margin-bottom: 10px;
+          }
+          .tableBox{
+            flex: 1;
           }
         }
         &_echarts{

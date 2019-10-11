@@ -5,7 +5,7 @@
       :key="index"
       :index="deptId.deptId">
       <template slot="title">
-        <div @click="goPage(deptId.deptId)">
+        <div @click="goPage(deptId)">
           <i :class="page.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
           <span>{{ deptId.deptName.replace(/车间/g, '') }}</span>
         </div>
@@ -36,11 +36,12 @@ export default {
     this.getFactory()
   },
   methods: {
-    goPage (id) {
+    goPage (deptId) {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === this.page.menuId)
       if (route.length >= 1) {
-        this.menuActiveName = id
-        this.$store.state.common.dataEchartDeptId = id
+        this.menuActiveName = deptId.deptId
+        this.dataEchartDeptId = deptId.deptId
+        this.dataEchartDeptName = deptId.deptName
         this.$router.push({ path: route[0].path })
         this.reload()
       }
@@ -73,6 +74,14 @@ export default {
     }
   },
   computed: {
+    dataEchartDeptId: {
+      get () { return this.$store.state.echarts.dataEchartDeptId },
+      set (val) { this.$store.commit('echarts/updateDataEchartDeptId', val) }
+    },
+    dataEchartDeptName: {
+      get () { return this.$store.state.echarts.dataEchartDeptName },
+      set (val) { this.$store.commit('echarts/updateDataEchartDeptName', val) }
+    },
     dynamicMenuRoutes: {
       get () { return this.$store.state.common.dynamicMenuRoutes },
       set (val) { this.$store.commit('common/updateDynamicMenuRoutes', val) }
