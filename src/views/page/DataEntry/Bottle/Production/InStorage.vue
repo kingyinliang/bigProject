@@ -19,7 +19,7 @@
       <el-table-column label="本班生产 " :show-overflow-tooltip="true" prop="production" width="190">
         <template slot="header"><i class="reqI">*</i><span>本班生产</span></template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.production" @change="ChangeNum()" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
+          <el-input v-model="scope.row.production" type="number" @change="ChangeNum()" placeholder="手工录入" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="单位" :show-overflow-tooltip="true" prop="kjmWorkShopName" width="60">
@@ -110,15 +110,22 @@ export default {
     dataRul () {
       let ty = true
       this.InDataList.forEach((item) => {
-        if (!(item.production && item.batch)) {
-          ty = false
-          this.$warning_SHINHO('生产入库必填项未填')
-          return false
-        }
-        if (item.batch.length !== 10) {
-          ty = false
-          this.$warning_SHINHO('生产入库批次十位')
-          return false
+        if (item.delFlag !== '1') {
+          if (item.production * 1 < 0) {
+            ty = false
+            this.$warning_SHINHO('生产入库本班生产必须为正整数')
+            return false
+          }
+          if (!(item.production && item.batch)) {
+            ty = false
+            this.$warning_SHINHO('生产入库必填项未填')
+            return false
+          }
+          if (item.batch.length !== 10) {
+            ty = false
+            this.$warning_SHINHO('生产入库批次十位')
+            return false
+          }
         }
       })
       return ty

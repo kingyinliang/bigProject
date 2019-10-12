@@ -136,10 +136,12 @@ export default {
     dataRul () {
       let ty = true
       this.RecordList.forEach((item) => {
-        if (!(item.date && item.embryoBatch && item.embryoAmount)) {
-          ty = false
-          this.$warning_SHINHO('投胚记录必填项未填')
-          return false
+        if (item.delFlag !== '1') {
+          if (!(item.date && item.embryoBatch && item.embryoAmount)) {
+            ty = false
+            this.$warning_SHINHO('投胚记录必填项未填')
+            return false
+          }
         }
       })
       return ty

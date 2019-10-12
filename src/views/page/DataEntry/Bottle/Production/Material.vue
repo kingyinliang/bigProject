@@ -141,15 +141,17 @@ export default {
     dataRul () {
       let ty = true
       this.MaterialList.forEach((item) => {
-        if (!(item.batch && item.productUseAmount && item.supplier)) {
-          ty = false
-          this.$warning_SHINHO('物料领用必填项未填')
-          return false
-        }
-        if (item.batch.length !== 10) {
-          ty = false
-          this.$warning_SHINHO('物料领用批次十位')
-          return false
+        if (item.delFlag !== '1') {
+          if (!(item.batch && item.productUseAmount && item.supplier)) {
+            ty = false
+            this.$warning_SHINHO('物料领用必填项未填')
+            return false
+          }
+          if (item.batch.length !== 10) {
+            ty = false
+            this.$warning_SHINHO('物料领用批次十位')
+            return false
+          }
         }
       })
       return ty

@@ -85,11 +85,12 @@
 <script>
 import {BASICDATA_API} from '@/api/api'
 import SapDetail from './SuppliesDetail'
+import ElementUI from 'element-ui'
 export default {
   name: 'SuppliesManage',
   data () {
     return {
-      loading: false,
+      loading: {},
       visible: false,
       sapTime: {},
       form: {
@@ -130,40 +131,45 @@ export default {
       })
     },
     SapuUpdate () {
-      this.loading = true
-      this.$http(`${BASICDATA_API.SAPUPDATE_API}`, 'GET', {werks: '7100'}).then(({data}) => {
+      this.loading = ElementUI.Loading.service({
+        lock: true,
+        spinner: 'loadingGif',
+        text: '加载中……',
+        background: 'rgba(255, 255, 255, 0.7)'
+      })
+      this.$http(`${BASICDATA_API.SAPUPDATE_API}`, 'GET', {werks: '7100'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.sapTime = setInterval(() => {
             this.GetSapuUpdate()
           }, 4000)
         } else {
-          this.loading = false
+          this.loading.close()
           this.$notify.error({title: '错误', message: data.msg})
         }
       })
     },
     GetSapuUpdate () {
-      this.$http(`${BASICDATA_API.GETSAPUPDATE_API}`, 'GET', {asyncType: 'ASYNC_SAP_MATERIAL'}).then(({data}) => {
+      this.$http(`${BASICDATA_API.GETSAPUPDATE_API}`, 'GET', {asyncType: 'ASYNC_SAP_MATERIAL'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
-              this.loading = false
+              this.loading.close()
               clearInterval(this.sapTime)
               this.$notify.error({title: '错误', message: '同步失败'})
             } else if (data.asyncRecord.asyncStatus === '1') {
-              this.loading = false
+              this.loading.close()
               clearInterval(this.sapTime)
               this.$notify({title: '成功', message: '同步成功', type: 'success'})
               this.Getsaplist()
             }
           }
         } else {
-          this.loading = false
+          this.loading.close()
           clearInterval(this.sapTime)
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
-        this.loading = false
+        this.loading.close()
         clearInterval(this.sapTime)
       })
     },
