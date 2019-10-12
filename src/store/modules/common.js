@@ -179,7 +179,7 @@ export default {
         currPage: 1,
         pageSize: 10,
         totalCount: 0,
-        isJudged: 0
+        isJudged: '1'
       },
       instock: {}
     },

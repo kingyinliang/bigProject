@@ -469,7 +469,7 @@ export default {
         this.$store.state.common.Fermentation.category.ferDays = row.ferDays === null ? '' : row.ferDays + ''
         this.$store.state.common.Fermentation.category.halfId = row.halfType
         this.$store.state.common.Fermentation.category.currPage = 1
-        this.$store.state.common.Fermentation.category.pageSize = 1
+        this.$store.state.common.Fermentation.category.pageSize = 10
         this.$store.state.common.Fermentation.category.totalCount = 10
         this.$store.state.common.Fermentation.category.isJudged = 0
         url = 'DataEntry-Fermentation-CategoryJudgement-index'
