@@ -138,7 +138,7 @@
         <el-form-item label="类别：">{{formTransfer.type}}</el-form-item>
         <el-form-item label="批次：">{{formTransfer.batch}}</el-form-item>
         <el-form-item label="领用量（L）：" prop="receiveAmount">
-          <el-input v-model="formTransfer.receiveAmount" style="width:200px"></el-input>
+          <el-input type="number" @mousewheel.native.prevent v-model="formTransfer.receiveAmount" style="width:200px" placeholder="大于0"></el-input>
         </el-form-item>
         <el-form-item label="打入罐类别：" prop="inHolderType">
           <el-select v-model="formTransfer.inHolderType" placeholder="请选择" clearable>
@@ -282,6 +282,15 @@ import {BASICDATA_API, SYSTEMSETUP_API, JUICE_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
+    var checkreceiveAmount = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请填写领用量'))
+      } else if (value <= 0) {
+        return callback(new Error('转储量需大于0'))
+      } else {
+        callback()
+      }
+    }
     return {
       formHeader: {
         factory: '',
@@ -395,6 +404,10 @@ export default {
         ],
         inBatch: [
           { required: true, message: '请填写打入批次', trigger: 'blur' }
+        ],
+        receiveAmount: [
+          { required: true, message: '请填写领用量', trigger: 'blur' },
+          { validator: checkreceiveAmount, trigger: 'blur' }
         ]
       },
       AddDialogTableVisible: false,
@@ -607,7 +620,7 @@ export default {
     // 转储弹框
     TransferProp (item) {
       if (this.isAuth('juice:pot:List') !== true) {
-        this.$notify({title: '警告', message: '没有权限', type: 'warning'})
+        this.$warning_SHINHO('没有权限')
         return false
       }
       if (item.HOLDER_STATUS === '8' || item.HOLDER_STATUS === '9') {

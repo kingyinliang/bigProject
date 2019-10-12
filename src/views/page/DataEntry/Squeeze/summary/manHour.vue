@@ -50,6 +50,13 @@ export default {
   mounted () {
   },
   methods: {
+    // 提交条数判断
+    ManHourRul () {
+      if (this.timeDate.length <= 0) {
+        this.$warning_SHINHO('工时计算没有数据')
+        return false
+      }
+    },
     // 获取工时列表
     GetTimeList (formHeader, resolve, reject) {
       this.$http(`${SQU_API.SUM_TIME_LIST_API}`, 'POST', {

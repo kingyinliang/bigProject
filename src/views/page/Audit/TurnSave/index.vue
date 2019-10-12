@@ -37,8 +37,8 @@
         </el-form-item>
         <div class="floatr">
           <el-button type="primary" size="small" @click="GetDataList(true)" v-if="isAuth('ste:order:list')">查询</el-button>
-          <el-button type="primary" size="small" @click="TurnSave(true)" v-if="isAuth('ste:order:list')">转储</el-button>
-          <el-button type="primary" size="small" @click="Rework(true)" v-if="isAuth('ste:order:list')">返工</el-button>
+          <!-- <el-button type="primary" size="small" @click="TurnSave(true)" v-if="isAuth('ste:order:list')">转储</el-button>
+          <el-button type="primary" size="small" @click="Rework(true)" v-if="isAuth('ste:order:list')">返工</el-button> -->
           <el-button type="primary" size="small" @click="ExportExcel(true)" v-if="isAuth('ste:order:list')">导出</el-button>
         </div>
       </el-form>
@@ -138,7 +138,7 @@ export default {
   watch: {
     'formHeader.factory' (n, o) {
       this.formHeader.workShop = ''
-      getWorkshop(this, n)
+      getWorkshop(this, n, '原汁')
     },
     'activeName' (n, o) {
       this.GetDataList(true)
