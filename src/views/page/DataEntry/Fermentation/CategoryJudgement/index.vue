@@ -159,7 +159,21 @@ export default {
     return {
       dialogVisible: false,
       radio: '1',
-      form: JSON.parse(JSON.stringify(this.$store.state.common.Fermentation.category)),
+      // form: JSON.parse(JSON.stringify(this.$store.state.common.Fermentation.category)),
+      form: {
+        factory: this.$store.state.common.Fermentation.category.factory,
+        workShop: this.$store.state.common.Fermentation.category.workShop,
+        frozenStatus: this.$store.state.common.Fermentation.category.frozenStatus,
+        holderId: this.$store.state.common.Fermentation.category.holderId,
+        orderNo: this.$store.state.common.Fermentation.category.orderNo,
+        materialCode: this.$store.state.common.Fermentation.category.materialCode,
+        ferDays: this.$store.state.common.Fermentation.category.ferDays,
+        halfId: this.$store.state.common.Fermentation.category.halfId,
+        currPage: 1,
+        pageSize: 10,
+        totalCount: 0,
+        isJudged: '1'
+      },
       factory: '',
       workshop: '',
       statusList: [{
@@ -222,13 +236,17 @@ export default {
     // 获取车间
     GetWorkshopList (id) {
       if (id) {
-        this.form.workShop = ''
+        if (this.$store.state.common.Fermentation.category.workShop === '') {
+          this.form.workShop = ''
+        }
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '发酵'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
             if (data.typeList.length > 0) {
               this.workshop = data.typeList
-              this.form.workShop = data.typeList[0].deptId
+              if (this.$store.state.common.Fermentation.category.workShop === '') {
+                this.form.workShop = data.typeList[0].deptId
+              }
             }
           } else {
             this.$notify.error({title: '错误', message: data.msg})
@@ -279,22 +297,17 @@ export default {
       })
     },
     GetList () {
-      this.$store.state.common.Fermentation.category.factory = ''
-      this.$store.state.common.Fermentation.category.workShop = ''
-      this.$store.state.common.Fermentation.category.holderId = ''
-      this.$store.state.common.Fermentation.category.orderNo = ''
-      this.$store.state.common.Fermentation.category.materialCode = ''
-      this.$store.state.common.Fermentation.category.ferDays = ''
-      this.$store.state.common.Fermentation.category.halfId = ''
-      this.$store.state.common.Fermentation.category.currPage = 1
-      this.$store.state.common.Fermentation.category.pageSize = 1
-      this.$store.state.common.Fermentation.category.totalCount = 10
-      this.$store.state.common.Fermentation.category.isJudged = 0
-      this.form.isJudged = '1'
       this.$http(`${FERMENTATION_API.CATEGORYJUDGEMENTLIST_API}`, 'POST', this.form).then(({data}) => {
         if (data.code === 0) {
           this.dataList = data.data.list
           this.form.totalCount = data.data.totalCount
+          this.$store.state.common.Fermentation.category.factory = ''
+          this.$store.state.common.Fermentation.category.workShop = ''
+          this.$store.state.common.Fermentation.category.holderId = ''
+          this.$store.state.common.Fermentation.category.orderNo = ''
+          this.$store.state.common.Fermentation.category.materialCode = ''
+          this.$store.state.common.Fermentation.category.ferDays = ''
+          this.$store.state.common.Fermentation.category.halfId = ''
           // console.log(this.dataList)
         } else {
           this.$notify.error({title: '错误', message: data.msg})

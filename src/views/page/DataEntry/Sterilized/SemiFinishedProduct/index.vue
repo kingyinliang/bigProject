@@ -42,14 +42,14 @@
                 <div v-if="item.holderStatus === '1' || item.holderStatus === '3'" class="dataList_item_pot_box_item1" :style="`height:${item.amount <= 0 ? '0' : (item.amount / item.holderHold) > 1 ? '100' : (item.amount / item.holderHold) * 100}%`"></div>
                 <div v-if="item.holderStatus === '2'" class="dataList_item_pot_box_item2 dataList_item_pot_box_item2s"  :style="`height:150%`"></div>
                 <div v-else class="dataList_item_pot_box_item1" :style="`height:0%`"><p></p></div>
+                <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1' || item.holderStatus === '2' || item.holderStatus === '3'">
+                  <p>{{item.batch}}</p>
+                  <p>{{item.materialName}}</p>
+                  <p>{{(item.amount / 1000).toFixed(3)}}方</p>
+                  <p style="font-size:12px;">{{item.gnEndTime}}</p>
+                  <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
+                </div>
               </div>
-            </div>
-            <div class="dataList_item_pot_detail" v-if="item.holderStatus === '1' || item.holderStatus === '2' || item.holderStatus === '3'">
-              <p>{{item.batch}}</p>
-              <p>{{item.materialName}}</p>
-              <p>{{(item.amount / 1000).toFixed(3)}}方</p>
-              <p style="font-size:12px;">{{item.gnEndTime}}</p>
-              <p>{{item.timeLength}}<span v-if="item.timeLength !== '' && item.timeLength !== null">H</span></p>
             </div>
           </div>
           <el-row class="bottom">
