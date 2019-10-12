@@ -94,11 +94,12 @@
 
 <script>
 import {BASICDATA_API} from '@/api/api'
+import ElementUI from 'element-ui'
 export default {
   name: 'RawMaterial',
   data () {
     return {
-      loading: false,
+      loading: {},
       visible1: false,
       form: {
         bath: '',
@@ -169,39 +170,44 @@ export default {
     },
     // 数据同步
     DataSynchronism () {
-      this.loading = true
-      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISM_API}`, 'GET').then(({data}) => {
+      this.loading = ElementUI.Loading.service({
+        lock: true,
+        spinner: 'loadingGif',
+        text: '加载中……',
+        background: 'rgba(255, 255, 255, 0.7)'
+      })
+      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISM_API}`, 'GET', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.orderTime = setInterval(() => {
             this.GetDataSynchronismStatus()
           }, 4000)
         }
       }).catch(() => {
-        this.loading = false
+        this.loading.close()
       })
     },
     GetDataSynchronismStatus () {
-      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISMSTASUS_API}`, 'GET', {asyncType: 'ASYNC_SAP_INSTORAGE'}).then(({data}) => {
+      this.$http(`${BASICDATA_API.MATERIALRAWSYNCHRONISMSTASUS_API}`, 'GET', {asyncType: 'ASYNC_SAP_INSTORAGE'}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
-              this.loading = false
+              this.loading.close()
               clearInterval(this.orderTime)
               this.$notify.error({title: '错误', message: '同步失败'})
             } else if (data.asyncRecord.asyncStatus === '1') {
-              this.loading = false
+              this.loading.close()
               clearInterval(this.orderTime)
               this.$notify({title: '成功', message: '同步成功', type: 'success'})
               this.GetList()
             }
           }
         } else {
-          this.loading = false
+          this.loading.close()
           clearInterval(this.orderTime)
           this.$notify.error({title: '错误', message: data.msg})
         }
       }).catch(() => {
-        this.loading = false
+        this.loading.close()
         clearInterval(this.orderTime)
       })
     },
