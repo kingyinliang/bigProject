@@ -351,15 +351,17 @@ export default {
         }
       }
       this.dataList.forEach((item) => {
-        if (!(item.classes && item.content && item.startDate)) {
-          ty = false
-          this.$warning_SHINHO('设备时间必填项未填')
-          return false
-        }
-        if (item.dateLength * 1 <= 0) {
-          ty = false
-          this.$warning_SHINHO('设备时间工时不大于0')
-          return false
+        if (item.delFlag !== '1') {
+          if (!(item.classes && item.content && item.startDate)) {
+            ty = false
+            this.$warning_SHINHO('设备时间必填项未填')
+            return false
+          }
+          if (item.dateLength * 1 <= 0) {
+            ty = false
+            this.$warning_SHINHO('设备时间工时不大于0')
+            return false
+          }
         }
       })
       return ty
