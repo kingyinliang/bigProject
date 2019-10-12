@@ -302,6 +302,9 @@ export default {
       if (!this.$refs.materielref.materialRul()) {
         return
       }
+      if (!this.$refs.manhour.ManHourRul()) {
+        return
+      }
       this.$confirm('确认提交该订单, 是否继续?', '提交订单', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
