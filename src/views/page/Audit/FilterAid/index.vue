@@ -252,8 +252,6 @@ export default {
                 } else {
                   this.$notify.error({title: '错误', message: data.msg})
                 }
-              }).catch(() => {
-                this.$notify.error({title: '错误', message: '网络错误'})
               })
             })
           }
