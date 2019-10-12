@@ -1667,5 +1667,7 @@ export const ECHARTS_API = {
   KOJIMAKING_HOME_MONTHOUTPUT: HOST + '/zhiqu/board/monthOutput',
   KOJIMAKING_HOME_MATERIAL: HOST + '/zhiqu/board/materialOutput',
   KOJIMAKING_HOME_HOUSE: HOST + '/zhiqu/board/houseUsed',
-  KOJIMAKING_WORKSHOP_HOUSEDETAIL: HOST + '/zhiqu/board/houseDetail'
+  KOJIMAKING_WORKSHOP_HOUSEDETAIL: HOST + '/zhiqu/board/houseDetail',
+  KOJIMAKING_WORKSHOP_HOUSEMATERIAL: HOST + '/zhiqu/board/houseUsedMaterial',
+  KOJIMAKING_WORKSHOP_HOUSEPHASE: HOST + '/zhiqu/board/houseUsedPhase'
 }

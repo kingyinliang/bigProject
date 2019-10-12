@@ -32,7 +32,7 @@ export default {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === this.page.menuId)
       if (route.length >= 1) {
         this.menuActiveName = id
-        this.$store.state.common.dataEchartUid = id
+        this.dataEchartUid = id
         this.$router.push({ path: route[0].path })
         this.reload()
       }
@@ -50,6 +50,10 @@ export default {
     }
   },
   computed: {
+    dataEchartUid: {
+      get () { return this.$store.state.echarts.dataEchartUid },
+      set (val) { this.$store.commit('echarts/updateDataEchartUid', val) }
+    },
     dynamicMenuRoutes: {
       get () { return this.$store.state.common.dynamicMenuRoutes },
       set (val) { this.$store.commit('common/updateDynamicMenuRoutes', val) }
