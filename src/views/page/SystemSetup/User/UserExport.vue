@@ -75,8 +75,8 @@
         </el-row>
       </el-card>
     </div>
-    <el-dialog :title="`${selctUser.realName}（${selctUser.workNum}）角色选择`" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible" width="540px">
-      <div>
+    <el-dialog :title="`${selctUser.realName}（${selctUser.workNum}）角色选择`" class="ShinHoDialog" :close-on-click-modal="false" :visible.sync="visible" width="740px">
+      <div class="uaerD">
         <el-transfer filterable :titles="['未分配角色', '已分配角色']" :filter-method="filterMethod" filter-placeholder="请输入角色名称" v-model="selctRoleId" :data="RoleList"
           :props="{
             key: 'roleId',
@@ -230,6 +230,13 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .uaerD{
+    .el-transfer-panel{
+      width: 300px;
+    }
+  }
+</style>
 <style scoped>
 
 </style>
