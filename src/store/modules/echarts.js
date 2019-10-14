@@ -4,7 +4,9 @@ export default {
     // 看板
     dataEchartDeptId: '',
     dataEchartDeptName: '',
-    dataEchartUid: ''
+    dataEchartUid: '',
+    dataEchartDetailDeptId: '',
+    dataEchartDetailHolderName: ''
   },
   mutations: {
     updateDataEchartDeptId (state, name) {
@@ -15,6 +17,12 @@ export default {
     },
     updateDataEchartUid (state, name) {
       state.dataEchartUid = name
+    },
+    updateDataEchartDetailDeptId (state, name) {
+      state.dataEchartDetailDeptId = name
+    },
+    updateDataEchartDetailHolderName (state, name) {
+      state.dataEchartDetailHolderName = name
     }
   }
 }

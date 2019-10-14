@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-menu-item  v-for="(item, index) in container" :key="index" :index="item.holderId" @click="goPage(item.holderId)">
+    <el-menu-item  v-for="(item, index) in container" :key="index" :index="item.holderId" @click="goPage(item)">
       <i :class="page.icon || ''" class="site-sidebar__menu-icon iconfont"></i>
       <span slot="title">{{item.holderNo}}</span>
     </el-menu-item>
@@ -28,11 +28,13 @@ export default {
     this.getContainer()
   },
   methods: {
-    goPage (id) {
+    goPage (item) {
       var route = this.dynamicMenuRoutes.filter(item => item.meta.menuId === this.page.menuId)
       if (route.length >= 1) {
-        this.menuActiveName = id
-        this.dataEchartUid = id
+        this.menuActiveName = item.holderId
+        this.dataEchartUid = item.holderId
+        this.dataEchartDetailDeptId = item.deptId
+        this.dataEchartDetailHolderName = item.holderName
         this.$router.push({ path: route[0].path })
         this.reload()
       }
@@ -53,6 +55,14 @@ export default {
     dataEchartUid: {
       get () { return this.$store.state.echarts.dataEchartUid },
       set (val) { this.$store.commit('echarts/updateDataEchartUid', val) }
+    },
+    dataEchartDetailDeptId: {
+      get () { return this.$store.state.echarts.dataEchartDetailDeptId },
+      set (val) { this.$store.commit('echarts/updateDataEchartDetailDeptId', val) }
+    },
+    dataEchartDetailHolderName: {
+      get () { return this.$store.state.echarts.dataEchartDetailHolderName },
+      set (val) { this.$store.commit('echarts/updateDataEchartDetailHolderName', val) }
     },
     dynamicMenuRoutes: {
       get () { return this.$store.state.common.dynamicMenuRoutes },

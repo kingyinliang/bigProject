@@ -2,6 +2,17 @@ export let line = {
   title: {
     subtext: '制曲时间 16H 20M 15S'
   },
+  dataZoom: [{
+    type: 'slider',
+    show: true,
+    realtime: true,
+    start: 80,
+    end: 100
+  }, {
+    type: 'inside',
+    start: 80,
+    end: 100
+  }],
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -12,20 +23,30 @@ export let line = {
     }
   },
   legend: {
+    textStyle: {
+      color: '#ffffff'
+    },
+    width: '400px',
     right: '30px',
     data: ['设定品温', '平均风温', '平均品温']
   },
   grid: {
     left: '3%',
     right: '4%',
-    bottom: '3%',
+    bottom: '50px',
     containLabel: true
   },
   xAxis: [
     {
       type: 'category',
-      boundaryGap: false,
-      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: '#fff'
+        }
+      },
+      axisLine: {onZero: false},
+      boundaryGap: false
     }
   ],
   yAxis: [
@@ -33,6 +54,12 @@ export let line = {
       type: 'value',
       axisLine: {
         show: false
+      },
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: '#fff'
+        }
       },
       axisTick: {
         show: false
