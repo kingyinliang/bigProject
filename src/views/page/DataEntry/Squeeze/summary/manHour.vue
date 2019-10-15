@@ -139,7 +139,13 @@ export default {
       this.$http(`${SQU_API.SUM_TIME_BACK_API}`, 'POST', row).then(({data}) => {
         if (data.code === 0) {
           this.$notify({title: '成功', message: '退回成功', type: 'success'})
-          this.GetTime()
+          this.$http(`${SQU_API.SUM_TIME_API}`, 'POST', {...this.formHeader, ...{isActive: '1', id: row.id}}).then(({data}) => {
+            if (data.code === 0) {
+              this.GetTimeList(this.formHeader)
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

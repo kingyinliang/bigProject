@@ -92,7 +92,7 @@ import {SYSTEMSETUP_API, BASICDATA_API, SQU_API} from '@/api/api'
 import ApplyOrder from './applyOrder'
 import Materiel from './material'
 import ManHour from './manHour'
-import {GetStatus} from '@/net/validate'
+import {dateFormat, GetStatus} from '@/net/validate'
 export default {
   name: 'index',
   data () {
@@ -109,7 +109,7 @@ export default {
       formHeader: {
         factory: '',
         workShop: '',
-        productDate: ''
+        productDate: dateFormat(new Date(), 'yyyy-MM-dd')
       },
       SerchSapList: [],
       SerchSapListM: [],

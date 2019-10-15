@@ -147,6 +147,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          if (!this.plantList.factory && data.typeList.length > 0) {
+            this.plantList.factory = data.typeList[0].deptId
+          }
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -159,6 +162,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '制曲'}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workShop = data.typeList
+            if (!this.plantList.workShop && data.typeList.length > 0) {
+              this.plantList.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

@@ -121,6 +121,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', {}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          if (!this.formHeader.factory && data.typeList.length > 0) {
+            this.formHeader.factory = data.typeList[0].deptId
+          }
         } else {
           this.$error_SHINHO(data.msg)
         }
@@ -129,11 +132,15 @@ export default {
     // 获取车间
     Getdeptbyid (id) {
       this.formHeader.workShop = ''
+      this.workShopStr = ''
       this.formHeader.productLine = ''
       if (id) {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}, false, false, false).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            if (!this.workShopStr && data.typeList.length > 0) {
+              this.workShopStr = data.typeList[0]
+            }
           } else {
             this.$error_SHINHO(data.msg)
           }

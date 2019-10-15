@@ -191,6 +191,7 @@ export default {
     },
     ReadyRepertoryRules () {
       let ty = true
+      this.repertory = []
       this.dataList.map((item) => {
         // 领用数 库存比较
         if (!this.repertory.find(items => items.holderId === item.holderId)) {
@@ -214,7 +215,7 @@ export default {
       for (let item of this.repertory) {
         let total = 0
         this.dataList.map((items) => {
-          if (item.holderId === items.holderId) {
+          if (item.holderId === items.holderId && items.delFlag === '0') {
             total = Number(total) + Number(items.receiveAmount)
           }
         })

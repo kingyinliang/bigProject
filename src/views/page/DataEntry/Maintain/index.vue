@@ -1,11 +1,5 @@
 <template>
 <el-col >
-  <!--<div class="topTitle">-->
-    <!--<el-breadcrumb separator="/">-->
-      <!--<el-breadcrumb-item>数据录入</el-breadcrumb-item>-->
-      <!--<el-breadcrumb-item>机维组</el-breadcrumb-item>-->
-    <!--</el-breadcrumb>-->
-  <!--</div>-->
   <div class="header_main">
     <el-card class="searchCard">
       <el-row type="flex">
@@ -259,6 +253,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST').then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
+          if (!this.plantList.factory && data.typeList.length > 0) {
+            this.plantList.factory = data.typeList[0].deptId
+          }
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -272,6 +269,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            if (!this.plantList.workshop && data.typeList.length > 0) {
+              this.plantList.workshop = data.typeList[0].deptId
+            }
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

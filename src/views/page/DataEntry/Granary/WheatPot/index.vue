@@ -158,6 +158,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '炒麦'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
+          if (!this.params.workshopId && res.data.typeList.length > 0) {
+            this.params.workshopId = res.data.typeList[0].deptId
+            this.params.workshopName = res.data.typeList[0].deptName
+          }
         } else {
           this.$notify.error({title: '错误', message: res.data.msg})
         }
