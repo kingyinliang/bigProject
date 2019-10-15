@@ -26,6 +26,12 @@
         <el-form-item label="标准产能：" prop="basicCapacity">
           <el-input v-model="dataForm.basicCapacity" placeholder="手动输入"></el-input>
         </el-form-item>
+        <el-form-item label="设计产能：" prop="designCapacity">
+          <el-input v-model="dataForm.designCapacity" placeholder="手动输入"></el-input>
+        </el-form-item>
+        <el-form-item label="有效产能：" prop="effecCapacity">
+          <el-input v-model="dataForm.effecCapacity" placeholder="手动输入"></el-input>
+        </el-form-item>
         <el-form-item label="单位：" prop="basicCapacityUnit">
           <el-select v-model="dataForm.basicCapacityUnit" filterable placeholder="请选择">
             <el-option v-for="item in Unit" :key="item.code" :label="item.value" :value="item.code"></el-option>
@@ -80,7 +86,10 @@ export default {
           { required: true, message: '物料不能为空', trigger: 'blur' }
         ],
         basicCapacity: [
-          { required: true, message: '产能不能为空', trigger: 'blur' }
+          { required: true, message: '标准产能不能为空', trigger: 'blur' }
+        ],
+        effecCapacity: [
+          { required: true, message: '有效产能不能为空', trigger: 'blur' }
         ],
         standardOfMan: [
           { required: true, message: '标配人力不能为空', trigger: 'blur' }

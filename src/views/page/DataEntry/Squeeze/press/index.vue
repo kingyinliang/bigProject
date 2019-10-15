@@ -56,7 +56,7 @@
           <Material ref="material" :isRedact="isRedact" :formHeader="formHeader"></Material>
         </el-tab-pane>
         <el-tab-pane name="2" label="异常记录">
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          <exc-record ref="excrecord" :isRedact="isRedact" :order="formHeader"></exc-record>
         </el-tab-pane>
         <el-tab-pane name="3" label="文本记录">
           <text-record ref="textrecord" :isRedact="isRedact"></text-record>
