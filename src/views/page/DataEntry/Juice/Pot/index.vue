@@ -807,7 +807,8 @@ export default {
         this.dialogData = {
           HOLDER_NAME: item.HOLDER_NAME,
           holderId: item.HOLDER_ID,
-          remark: ''
+          remark: '',
+          holderType: item.HOLDER_TYPE
         }
         this.visible = true
       } else {
