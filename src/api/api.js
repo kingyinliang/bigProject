@@ -1546,6 +1546,7 @@ export const STERILIZED_API = {
   SEMIFINISHEDPRODUCTGNSAVE: HOST + '/ste/gn/save',
   SEMIFINISHEDPRODUCTJSBSAVE: HOST + '/ste/jbs/save',
   SEMIFINISHEDPRODUCTZCSAVE: HOST + '/ste/semi/dumpSemiMaterial',
+  SEMIFINISHEDPRODUCTUSERLIST: HOST + '/all/dropDown/getFilterUsers',
   SEMIFINISHEDPRODUCTHROWHOLDER: HOST + '/ste/allocate/yzHolderList',
   SEMIFINIS_DROPDOWN_LIST: HOST + '/all/dropDown/getDumpHolder', // 转储打入罐下拉
   /**

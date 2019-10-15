@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import {BASICDATA_API, STERILIZED_API, SYSTEMSETUP_API, FILTRATION_API} from '@/api/api'
+import {BASICDATA_API, STERILIZED_API, FILTRATION_API} from '@/api/api'
 export default {
   name: 'index',
   data () {
@@ -521,9 +521,9 @@ export default {
     GetPeople (id) {
       this.PeopleList = []
       if (id) {
-        this.$http(`${SYSTEMSETUP_API.USERLIST_API}`, 'POST', {currPage: '1', deptId: id, pageSize: '1000', param: ''}).then(({data}) => {
+        this.$http(`${STERILIZED_API.SEMIFINISHEDPRODUCTUSERLIST}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
-            this.PeopleList = data.page.list
+            this.PeopleList = data.list
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
