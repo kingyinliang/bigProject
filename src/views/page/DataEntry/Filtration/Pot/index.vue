@@ -488,7 +488,8 @@ export default {
             width: 100%;
             height: 50px;
             background: #69C0FF;
-            position: relative;
+            position: absolute;
+            bottom: 0;
             overflow: hidden;
             &::before,&::after{
               content: "";

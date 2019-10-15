@@ -631,7 +631,7 @@ export default {
         position: absolute;
         height: auto;
         float: left;
-        margin-top: 75px;
+        // margin-top: 75px;
         // margin-left: 10px;
         color: #333333;
         font-size: 14px;
@@ -639,6 +639,8 @@ export default {
         // padding: 5px 4px;
         border-radius: 4px;
         // border: 1px solid #1890FF;
+        left: 0;
+        top: 66px;
       }
     }
     .bottom {

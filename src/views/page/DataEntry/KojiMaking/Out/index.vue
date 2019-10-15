@@ -63,7 +63,7 @@
           <span slot="label" class="spanview">
             <el-button>异常记录</el-button>
           </span>
-          <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+          <exc-record ref="excrecord" :isRedact="isRedact" :order="formHeader"></exc-record>
         </el-tab-pane>
         <el-tab-pane name="5">
           <span slot="label" class="spanview">

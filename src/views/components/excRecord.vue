@@ -9,6 +9,17 @@
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column type="index" width="55" label="序号">
       </el-table-column>
+      <el-table-column label="白/中/夜班" width="120">
+        <template slot="header">
+          <i class="reqI">*</i>
+          <span>白/中/夜班</span>
+        </template>
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.classType" placeholder="请选择" :disabled="!isRedact" size="small">
+            <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <el-table-column label="异常情况" width="150">
         <template slot="header">
           <i class="reqI">*</i>
@@ -103,7 +114,8 @@ export default {
       equipmentType: [],
       materialShort: [],
       enery: [],
-      ExcDate: []
+      ExcDate: [],
+      productShift: []
     }
   },
   mounted () {
@@ -116,6 +128,7 @@ export default {
       this.GetstoppageType(n)
       this.GetmaterialShort(n)
       this.Getenery(n)
+      this.GetProductShift(n)
     }
   },
   props: {
@@ -123,6 +136,16 @@ export default {
     order: {}
   },
   methods: {
+    // 获取生产班次
+    GetProductShift (factory) {
+      this.$http(`${SYSTEMSETUP_API.PARAMETERLIST_API}`, 'POST', {factory: factory, type: 'product_shift'}).then(({data}) => {
+        if (data.code === 0) {
+          this.productShift = data.dicList
+        } else {
+          this.$notify.error({title: '错误', message: data.msg})
+        }
+      })
+    },
     selectExpCode (row) {
       if (row.expCode === '001' || row.expCode === '002') {
         row.materialShort = ''

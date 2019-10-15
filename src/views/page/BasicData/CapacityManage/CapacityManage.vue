@@ -42,7 +42,7 @@
                 style="width: 100%;margin-bottom: 20px">
                 <el-table-column
                   type="selection"
-                  width="34">
+                  width="34" fixed="left">
                 </el-table-column>
                 <el-table-column
                   type="index"
@@ -64,6 +64,8 @@
                   :show-overflow-tooltip="true"
                   width="87">
                 </el-table-column>
+                <el-table-column prop="designCapacity" label="设计产能" :show-overflow-tooltip="true" width="87"></el-table-column>
+                <el-table-column prop="effecCapacity" label="有效产能" :show-overflow-tooltip="true" width="87"></el-table-column>
                 <el-table-column
                   prop="basicCapacityUnitName"
                   label="单位"

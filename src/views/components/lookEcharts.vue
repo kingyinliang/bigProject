@@ -57,16 +57,16 @@ export default {
         inStartTime: formHeader.inStartTime,
         orderHouseId: formHeader.orderHouseId
       }
-      // if (this.params.inStartTime !== '') {
-      //   this.Iotime = setInterval(() => {
-      //     this.test()
-      //   }, 10000 * 6 * 2)
-      // }
       if (this.params.inStartTime !== '') {
         this.Iotime = setInterval(() => {
           this.test()
-        }, 10000 * 2)
+        }, 10000 * 6 * 2)
       }
+      // if (this.params.inStartTime !== '') {
+      //   this.Iotime = setInterval(() => {
+      //     this.test()
+      //   }, 10000 * 2)
+      // }
       this.$http(`${KJM_API.IOT_LIST}`, 'POST', this.params).then(({data}) => {
         if (data.code === 0) {
           this.DataProcessing(data)

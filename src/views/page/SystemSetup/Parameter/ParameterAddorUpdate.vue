@@ -13,17 +13,17 @@
         </el-form-item>
         <el-form-item label="参数类型编码：">
           <span v-if="!type">{{dataForm.type}}</span>
-          <el-input v-model="dataForm.type" placeholder="手动输入" v-if="type"></el-input>
+          <el-input v-model.trim="dataForm.type" placeholder="手动输入" v-if="type"></el-input>
         </el-form-item>
         <el-form-item label="参数类型名称：">
           <span v-if="!type">{{dataForm.name}}</span>
-          <el-input v-model="dataForm.name" placeholder="手动输入" v-if="type"></el-input>
+          <el-input v-model.trim="dataForm.name" placeholder="手动输入" v-if="type"></el-input>
         </el-form-item>
         <el-form-item label="参数编码：">
-          <el-input v-model="dataForm.code" placeholder="手动输入"></el-input>
+          <el-input v-model.trim="dataForm.code" placeholder="手动输入"></el-input>
         </el-form-item>
         <el-form-item label="参数名称：">
-          <el-input v-model="dataForm.value" placeholder="手动输入"></el-input>
+          <el-input v-model.trim="dataForm.value" placeholder="手动输入"></el-input>
         </el-form-item>
       </el-form>
     </div>

@@ -52,10 +52,13 @@ export default {
   methods: {
     // 提交条数判断
     ManHourRul () {
+      let ty = true
       if (this.timeDate.length <= 0) {
         this.$warning_SHINHO('工时计算没有数据')
+        ty = false
         return false
       }
+      return ty
     },
     // 获取工时列表
     GetTimeList (formHeader, resolve, reject) {

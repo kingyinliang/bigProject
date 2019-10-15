@@ -67,7 +67,7 @@
             <span slot="label" class="spanview">
               <el-button>异常记录</el-button>
             </span>
-            <exc-record ref="excrecord" :isRedact="isRedact"></exc-record>
+            <exc-record ref="excrecord" :isRedact="isRedact" :order="formHeader"></exc-record>
           </el-tab-pane>
           <el-tab-pane name="4">
             <span slot="label"  class="spanview">
@@ -198,6 +198,7 @@ export default {
         this.$refs.formheader.getLin(this.formHeader.workShop)
         this.$refs.excrecord.GetequipmentType(this.formHeader.productLine)
         this.$refs.excrecord.getDataList(this.formHeader.factory)
+        // this.$refs.excrecord.GetProductShift(this.formHeader.factory)
         this.$refs.workerref.GetTeam(false, this.formHeader.factory)
         this.$refs.workerref.getTree(this.formHeader.factory)
         this.$refs.workerref.GetProductShift(this.formHeader.factory)
