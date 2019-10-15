@@ -227,7 +227,9 @@ export default {
       this.$http(`${BASICDATA_API.FINDORG_API}?code=factory`, 'POST', false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.factory = data.typeList
-          // this.form.factory = this.factory[0].deptId
+          if (!this.form.factory) {
+            this.form.factory = this.factory[0].deptId
+          }
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }

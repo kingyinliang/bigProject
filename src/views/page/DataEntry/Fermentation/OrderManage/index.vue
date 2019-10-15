@@ -261,7 +261,7 @@
 <script lang="ts">
 import {BASICDATA_API, FERMENTATION_API, SYSTEMSETUP_API, REP_API} from '@/api/api'
 import {Vue, Component, Watch} from 'vue-property-decorator'
-import {dateFormat, headanimation} from '@/net/validate'
+import {headanimation} from '@/net/validate'
 @Component({
   components: {
   }
@@ -290,9 +290,9 @@ export default class Index extends Vue {
   lodingS: boolean = false
   mounted () {
     headanimation(Vue.prototype.$)
-    const now = dateFormat(new Date(), 'yyyy-MM-dd')
-    this.params.startDate = now
-    this.params.endDate = now
+    // const now = dateFormat(new Date(), 'yyyy-MM-dd')
+    // this.params.startDate = now
+    // this.params.endDate = now
     this.getFactory()
     this.getWorkshop(this.params.factoryId)
     this.getDictList(this.params.factoryId)
@@ -379,6 +379,10 @@ export default class Index extends Vue {
       Vue.prototype.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: fid, deptName: '发酵'}, false, false, false).then(res => {
         if (res.data.code === 0) {
           this.workshopList = res.data.typeList
+          if (!this.params.workshopId && res.data.typeList.length > 0) {
+            this.params.workshopId = res.data.typeList[0].deptId
+            this.params.workshopName = res.data.typeList[0].deptName
+          }
         } else {
           this.$notify.error({title: '错误', message: res.data.msg})
         }

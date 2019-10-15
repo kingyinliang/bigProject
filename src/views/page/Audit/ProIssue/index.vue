@@ -434,6 +434,9 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
+            if (!this.plantList.workShop && data.typeList.length > 0) {
+              this.plantList.workShop = data.typeList[0].deptId
+            }
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }

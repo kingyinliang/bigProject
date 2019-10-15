@@ -680,12 +680,30 @@ export default {
       if (this.strList2.length !== 0) {
         str = this.strList2.join(',')
       }
-      // this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
-      this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      if (str.length > 0) {
+        // this.$confirm(str > 0 ? str : '确认要提交数据吗?', '提示', {
+        this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+            if (data.code === 0) {
+              this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
+                if (data.code === 0) {
+                  this.$notify({title: '成功', message: '提交成功', type: 'success'})
+                  this.isRedact = false
+                  this.SearchList()
+                } else {
+                  this.$notify.error({title: '错误', message: data.msg})
+                }
+              })
+            } else {
+              this.$notify.error({title: '错误', message: data.msg})
+            }
+          })
+        })
+      } else {
         this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
           if (data.code === 0) {
             this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSUBMIT}`, 'POST', this.multipleSelection).then(({data}) => {
@@ -701,7 +719,7 @@ export default {
             this.$notify.error({title: '错误', message: data.msg})
           }
         })
-      })
+      }
     },
     // 复选框初始状态
     CheckBoxInit (row, index) {
