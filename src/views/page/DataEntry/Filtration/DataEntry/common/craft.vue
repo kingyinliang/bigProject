@@ -56,7 +56,7 @@
             <!-- {{scope.row.materialCode}} {{scope.row.materialName}} -->
           </template>
         </el-table-column>
-        <el-table-column width="65">
+        <el-table-column width="70">
           <template slot-scope="scope">
             <el-button type="text" v-if="scope.row.isSplit === '0'" @click="SplitData(scope.row, scope.$index)" :disabled="!isRedact || soleStatus"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
           </template>
@@ -95,9 +95,9 @@
           </template>
         </el-table-column>
         <el-table-column label="备注" show-overflow-tooltip width="120" prop="remark"></el-table-column>
-        <el-table-column width="50" fixed="right">
+        <el-table-column width="70" fixed="right">
           <template slot-scope="scope">
-            <el-button type="danger" icon="el-icon-delete" v-if="scope.row.isSplit === '1'" circle @click="DelMaterial(scope.row)" :disabled="!isRedact || soleStatus" size="small"></el-button>
+            <el-button class="delBtn" type="text" icon="el-icon-delete" size="mini" v-if="scope.row.isSplit === '1'" circle @click="DelMaterial(scope.row)" :disabled="!isRedact || soleStatus">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -123,18 +123,18 @@
           <el-input v-model="techInfo.backPreNum" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="助滤剂预涂量(kg)：" prop="filterAidBef">
-          <el-input min="0" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model="techInfo.filterAidBef" style="width:220px"></el-input>
+          <el-input min="0" onkeyup="value=value.replace(/[^\d]+/g,'')" v-model="techInfo.filterAidBef" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="助滤剂添加量(kg)：" prop="filterAidAdd">
-          <el-input min="0" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
+          <el-input min="0" onkeyup="value=value.replace(/[^\d]+/g,'')" v-model="techInfo.filterAidAdd" style="width:220px"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="techInfo.remark" style="width:220px"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="SaveDialog('techInfo')">确 定</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="SaveDialog('techInfo')" size="small">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -194,9 +194,9 @@ export default {
   },
   props: ['isRedact'],
   watch: {
-    'techInfo.filterAidAdd' (n, o) {
-      this.techInfo.filterAidAdd = this.techInfo.filterAidAdd.replace(/^[0]+/, '')
-    }
+    // 'techInfo.filterAidAdd' (n, o) {
+    //   this.techInfo.filterAidAdd = this.techInfo.filterAidAdd.replace(/^[0]+/, '')
+    // }
   },
   methods: {
     GetList (params) {
@@ -270,58 +270,60 @@ export default {
           }
           if (this.techInfo.xiu === 0) {
             // 新增
-            let p = -2
-            this.supMaterialList.map((item, index) => {
-              if (item.filterMachineId === this.techInfo.filterMachineId) {
-                p = index
-              }
-            })
-            if (p === -2) {
-              this.supMaterialList.push({
-                orderId: this.orderId,
-                deviceName: this.techInfo.deviceName,
-                filterAidAmount: Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd),
-                materialCode: this.filterAidMaterialList[0].CODE,
-                materialName: this.filterAidMaterialList[0].VALUE,
-                unit: 'KG',
-                batch: '',
-                isSplit: '0',
-                filterAidModel: this.filterAidModelList[0].VALUE,
-                filterAidVender: this.filterAidVenderList[0].VALUE,
-                filterMachineId: this.techInfo.filterMachineId
-              })
-              this.dialogVisible = false
-              return false
-            } else {
-              for (let item of this.supMaterialList) {
-                if (item.filterMachineId === this.techInfo.filterMachineId && (item.batch === '' || item.batch === null)) {
-                  item.filterAidAmount = Number(item.filterAidAmount) + Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd)
-                  // let filterAidAmountss = 0
-                  // this.techList.map((itemss) => {
-                  //   if (itemss.delFlag === '0' && itemss.filterMachineId === this.techInfo.filterMachineId) {
-                  //     filterAidAmountss = Number(filterAidAmountss) + Number(itemss.filterAidBef) + Number(itemss.filterAidAdd)
-                  //   }
-                  // })
-                  // item.filterAidAmount = filterAidAmountss
-                  this.dialogVisible = false
-                  return false
+            if (this.techInfo.filterAidAdd + this.techInfo.filterAidBef > 0) {
+              let p = -2
+              this.supMaterialList.map((item, index) => {
+                if (item.filterMachineId === this.techInfo.filterMachineId) {
+                  p = index
                 }
-              }
-              this.supMaterialList.splice(Number(p) + 1, 0, {
-                orderId: this.orderId,
-                deviceName: this.techInfo.deviceName,
-                filterAidAmount: Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd),
-                materialCode: this.filterAidMaterialList[0].CODE,
-                materialName: this.filterAidMaterialList[0].VALUE,
-                unit: 'KG',
-                batch: '',
-                isSplit: '0',
-                filterAidModel: this.filterAidModelList[0].VALUE,
-                filterAidVender: this.filterAidVenderList[0].VALUE,
-                filterMachineId: this.techInfo.filterMachineId
               })
-              this.dialogVisible = false
-              return false
+              if (p === -2) {
+                this.supMaterialList.push({
+                  orderId: this.orderId,
+                  deviceName: this.techInfo.deviceName,
+                  filterAidAmount: Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd),
+                  materialCode: this.filterAidMaterialList[0].CODE,
+                  materialName: this.filterAidMaterialList[0].VALUE,
+                  unit: 'KG',
+                  batch: '',
+                  isSplit: '0',
+                  filterAidModel: this.filterAidModelList[0].VALUE,
+                  filterAidVender: this.filterAidVenderList[0].VALUE,
+                  filterMachineId: this.techInfo.filterMachineId
+                })
+                this.dialogVisible = false
+                return false
+              } else {
+                for (let item of this.supMaterialList) {
+                  if (item.filterMachineId === this.techInfo.filterMachineId && (item.batch === '' || item.batch === null)) {
+                    item.filterAidAmount = Number(item.filterAidAmount) + Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd)
+                    // let filterAidAmountss = 0
+                    // this.techList.map((itemss) => {
+                    //   if (itemss.delFlag === '0' && itemss.filterMachineId === this.techInfo.filterMachineId) {
+                    //     filterAidAmountss = Number(filterAidAmountss) + Number(itemss.filterAidBef) + Number(itemss.filterAidAdd)
+                    //   }
+                    // })
+                    // item.filterAidAmount = filterAidAmountss
+                    this.dialogVisible = false
+                    return false
+                  }
+                }
+                this.supMaterialList.splice(Number(p) + 1, 0, {
+                  orderId: this.orderId,
+                  deviceName: this.techInfo.deviceName,
+                  filterAidAmount: Number(this.techInfo.filterAidBef) + Number(this.techInfo.filterAidAdd),
+                  materialCode: this.filterAidMaterialList[0].CODE,
+                  materialName: this.filterAidMaterialList[0].VALUE,
+                  unit: 'KG',
+                  batch: '',
+                  isSplit: '0',
+                  filterAidModel: this.filterAidModelList[0].VALUE,
+                  filterAidVender: this.filterAidVenderList[0].VALUE,
+                  filterMachineId: this.techInfo.filterMachineId
+                })
+                this.dialogVisible = false
+                return false
+              }
             }
           } else {
             // 修改

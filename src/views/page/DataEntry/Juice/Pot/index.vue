@@ -147,8 +147,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-radio v-model="formTransfer.isFo" label="1">F0标识</el-radio>
-          <el-radio v-model="formTransfer.isFo" label="2">原汁JBS</el-radio>
+          <el-radio v-model="formTransfer.isF" label="1">F0标识</el-radio>
+          <el-radio v-model="formTransfer.isF" label="2">原汁JBS</el-radio>
         </el-form-item>
         <el-form-item label="打入罐号：" prop="inHolderId">
           <el-select v-model="formTransfer.inHolderId">
@@ -704,7 +704,7 @@ export default {
               batch: item.BATCH,
               amount: '',
               unit: 'L',
-              isF: '',
+              isF: '0',
               inHolderType: '',
               inHolderId: '',
               inBatch: '',
@@ -1102,7 +1102,8 @@ export default {
         &_item2s,&_item1{
           height: 50px;
           background: #69C0FF;
-          position: relative;
+          position: absolute;
+          bottom: 0;
           overflow: hidden;
           &::before,&::after{
             content: "";
