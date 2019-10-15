@@ -74,7 +74,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column width="250" label="过滤日期">
+    <el-table-column width="190" label="过滤日期">
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
@@ -111,6 +111,15 @@
           <el-select v-model="scope.row.useUsage" size="small" v-else disabled>
             <el-option v-for="(item, index) in useUsageList" :value="item" :label="item" :key="index"></el-option>
           </el-select>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column label="库存量" width="120">
+      <template slot-scope="scope">
+        <div class="required">
+          <i class="reqI">*</i>
+          <!-- <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input> -->
+          <el-input size="small" v-model="scope.row.surplusAmount" disabled></el-input>
         </div>
       </template>
     </el-table-column>
@@ -430,6 +439,7 @@ export default {
       row.filterDate = semiInfo.fullDate
       row.batch = semiInfo.batch
       row.holderType = semiInfo.holderType
+      row.surplusAmount = semiInfo.amount.toString()
     },
     // 删除半成品
     dellistbomS (row, num) {

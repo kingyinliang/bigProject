@@ -97,7 +97,7 @@
             <div class="dataList_item_pot_box">
               <div class="dataList_item_pot_box1">
                 <div class="dataList_item_pot_box_item1" :style="`height:${item.AMOUNT? (item.AMOUNT*1000 / item.HOLDER_HOLD) * 100 : 0}%`" v-if="item.HOLDER_STATUS !== '6'"></div>
-                <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== '6'">
+                <div class="dataList_item_pot_box_detail" v-if="item.HOLDER_STATUS !== '6' && item.HOLDER_STATUS !== '10'">
                   <p>{{item.BATCH}}</p>
                   <p v-if="item.IS_F === '2'">JBS</p>
                   <p>{{item.TYPE}}</p>
@@ -819,6 +819,7 @@ export default {
         if (data.code === 0) {
           this.$notify({title: '成功', message: '清洗成功', type: 'success'})
           this.GetDataList(true)
+          this.visible = false
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
