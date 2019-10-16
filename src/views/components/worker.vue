@@ -94,6 +94,11 @@
         <el-table-column label="班组人数" width="80">
           <template slot-scope="scope">{{scope.row.teamNum}}</template>
         </el-table-column>
+        <el-table-column width="70">
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" :disabled="!isRedact" @click="addUser(scope.row, scope.$index)"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="白/中/夜班" width="140">
           <template slot-scope="scope">
             <el-select v-model="scope.row.classes" placeholder="请选择" size="mini" :disabled="!isRedact">
@@ -203,6 +208,25 @@ export default {
         this.SetAtt(row.deptId)
       }
     },
+    // 拆分考勤分配
+    addUser (row, index) {
+      this.Attendance.splice(index + 1, 0, {
+        id: '',
+        teamNum: row.teamNum,
+        orderId: this.order.orderId,
+        team: row.team,
+        itemName: this.Team.filter(item => item.deptId === row.team)[0].deptName,
+        classes: '',
+        materialCode: '',
+        materialName: '',
+        unit: 'CAR',
+        unitName: '箱',
+        amount: '',
+        remark: '',
+        delFlag: '0'
+      })
+    },
+    // 考勤分配
     SetAtt (id) {
       let tmpobj = {}
       this.WorkerDate.forEach(item => {
@@ -219,7 +243,9 @@ export default {
       })
       Reflect.ownKeys(tmpobj).forEach((key) => {
         if (this.Attendance.filter(item => item.delFlag === '0' && item.team === key).length > 0) {
-          this.Attendance.filter(item => item.delFlag === '0' && item.team === key)[0].teamNum = tmpobj[key].length
+          this.Attendance.filter(item => item.delFlag === '0' && item.team === key).forEach(it => {
+            it.teamNum = tmpobj[key].length
+          })
         } else {
           this.Attendance.push({
             id: '',
