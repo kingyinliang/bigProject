@@ -114,7 +114,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="库存量" width="120">
+    <el-table-column label="库存量" width="120" v-if="order.factoryCode !== '6010'">
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
