@@ -78,8 +78,8 @@
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
-          <!-- <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-date-picker> -->
-          <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" disabled></el-date-picker>
+          <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && order.factoryCode=== '6010'"></el-date-picker>
+          <el-date-picker size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy.MM.dd HH:mm" placeholder="选择" v-model="scope.row.filterDate" v-else disabled></el-date-picker>
         </div>
       </template>
     </el-table-column>
@@ -87,8 +87,8 @@
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
-          <!-- <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked')"></el-input> -->
-          <el-input size="small" v-model="scope.row.batch" disabled></el-input>
+          <el-input size="small" maxlength="10" v-model="scope.row.batch" v-if="isRedact && (Sapstatus ==='noPass' || Sapstatus ==='saved' || Sapstatus ==='') && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && order.factoryCode=== '6010'"></el-input>
+          <el-input size="small" v-model="scope.row.batch" v-else disabled></el-input>
         </div>
       </template>
     </el-table-column>
@@ -101,7 +101,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column width="120" label="使用情况">
+    <el-table-column width="120" label="使用情况" v-if="order.factoryCode !== '6010'">
       <template slot-scope="scope">
         <div class="required">
           <i class="reqI">*</i>
@@ -346,16 +346,26 @@ export default {
           }
         })
         if (this.order.properties !== '二合一&礼盒产线') {
-          this.listbomS.forEach((item, index) => {
-            if (item.delFlag !== '1') {
-              if (item.potNo && item.filterDate && item.productUseNum && item.batch) {
+          for (var itema of this.listbomS) {
+            if (itema.delFlag !== '1') {
+              if (itema.potNo && itema.filterDate && itema.productUseNum && itema.batch) {
               } else {
                 ty = false
                 this.$warning_SHINHO('物料半成品必填项未填')
                 return false
               }
             }
-          })
+          }
+          // this.listbomS.forEach((item, index) => {
+          //   if (item.delFlag !== '1') {
+          //     if (item.potNo && item.filterDate && item.productUseNum && item.batch) {
+          //     } else {
+          //       ty = false
+          //       this.$warning_SHINHO('物料半成品必填项未填')
+          //       return false
+          //     }
+          //   }
+          // })
         }
       }
       return ty
