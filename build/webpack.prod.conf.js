@@ -121,13 +121,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
-    // sentry
-    new SentryPlugin({
-      include: path.join(__dirname,'../dist/static/js/'),
-      release: `factory-wap@${process.env.RELEASE_VERSION}`,
-      configFile: 'sentry.properties',
-      urlPrefix: '~/static/js/'
-    })
+    // // sentry
+    // new SentryPlugin({
+    //   include: path.join(__dirname,'../dist/static/js/'),
+    //   release: `factory-wap@${process.env.RELEASE_VERSION}`,
+    //   configFile: 'sentry.properties',
+    //   urlPrefix: '~/static/js/'
+    // })
   ]
 })
 

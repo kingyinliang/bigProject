@@ -98,7 +98,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
     tryHideFullScreenLoading()// 关闭遮罩
     return response
   }, error => {
-    Vue.prototype.$log.writeErrorLog(new Error(`网络请求失败，接口：${url}`), `${error}`)
+    // Vue.prototype.$log.writeErrorLog(new Error(`网络请求失败，接口：${url}`), `${error}`)
     ElementUI.Notification({ title: '错误', message: '网络请求失败，请刷新重试', type: 'error' })
     endLoading() // 关闭遮罩
     return Promise.reject(error)
