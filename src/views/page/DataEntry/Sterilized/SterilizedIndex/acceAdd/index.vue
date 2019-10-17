@@ -335,7 +335,11 @@ export default {
       if (row.delFlag === '1') {
         return 'rowDel'
       } else {
-        return ''
+        if (row.isOperation === '1') {
+          return 'yellowRow'
+        } else {
+          return ''
+        }
       }
     },
     // 辅料添加多选
@@ -560,7 +564,11 @@ export default {
   }
 }
 </script>
-
+<style>
+  .yellowRow{
+    background-color: yellow!important;
+  }
+</style>
 <style lang="scss" scoped>
   .reds{
     color: red;

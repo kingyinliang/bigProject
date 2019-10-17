@@ -28,7 +28,7 @@
         <el-col :span="6" v-for="(item, index) in dataList" :key="index">
           <el-card class="dataList_item">
             <h3 class="dataList_item_tit">
-              {{item.holderName}}
+              <span :style="{color: item.steList.filter(it => it.orderStatus === 'noPass').length > 0 ? 'red' : ''}">{{item.holderName}}</span>
               <span class="dataList_item_tit_right" :style="{'color': item.selectOrder.orderStatus === 'noPass'? 'red': item.selectOrder.orderStatus === 'checked'? '#67C23A' : ''}"><i class="dataList_item_tit_dian" :style="{'background': item.selectOrder.orderStatus === 'noPass'? 'red': item.selectOrder.orderStatus === 'checked'? '#67C23A' : ''}" v-if="item.selectOrder.orderStatus"></i>{{item.selectOrder.orderStatus === 'submit'? '已提交' : item.selectOrder.orderStatus === 'checked' ? '审核通过' : item.selectOrder.orderStatus === 'noPass'?  '审核不通过' : item.selectOrder.orderStatus === 'saved'? '已保存' : item.selectOrder.orderStatus === '已同步' ? '未录入' : item.selectOrder.orderStatus}}</span>
             </h3>
             <div class="dataList_item_body">
@@ -39,7 +39,9 @@
                 <el-form :inline="true" size="mini">
                   <el-form-item label="订单编号：">
                     <el-select class="orderSelect" v-model="item.selectOrderId" placeholder="请选择" style="width: 100px" @change="OrderChange($event, item)" value-key="orderId">
-                      <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1.orderId"></el-option>
+                      <el-option :label="item1.orderNo" v-for="(item1, index1) in item.steList" :key="index1" :value="item1.orderId">
+                        <div :style="{color:item1.orderStatus === 'noPass'? 'red' : ''}">{{item1.orderNo}}</div>
+                      </el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="生产品项：" style="line-height: 22px">
