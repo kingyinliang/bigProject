@@ -214,9 +214,7 @@ export default {
           } else {
             this.$notify.error({title: '错误', message: data.msg})
           }
-          this.GetAuditList()
-        }).catch(() => {
-          this.$notify.error({title: '错误', message: '网络错误'})
+          this.GetDataList()
         })
       }
     },
@@ -248,7 +246,7 @@ export default {
                 if (data.code === 0) {
                   this.visible = false
                   this.$notify({title: '成功', message: '操作成功', type: 'success'})
-                  this.GetAuditList()
+                  this.GetDataList()
                 } else {
                   this.$notify.error({title: '错误', message: data.msg})
                 }
@@ -279,13 +277,11 @@ export default {
               this.$http(`${AUDIT_API.AUDIT_AID_AUDIT}`, 'POST', this.multipleSelection).then(({data}) => {
                 if (data.code === 0) {
                   this.$notify({title: '成功', message: '操作成功', type: 'success'})
-                  this.GetAuditList()
+                  this.GetDataList()
                 } else {
                   this.$notify.error({title: '错误', message: data.msg})
-                  this.GetAuditList()
+                  this.GetDataList()
                 }
-              }).catch(() => {
-                this.$notify.error({title: '错误', message: '网络错误'})
               })
             })
           }
@@ -312,7 +308,7 @@ export default {
             this.visibleRe = false
             this.ReText = ''
             this.reData = {}
-            this.GetAuditList()
+            this.GetDataList()
             this.$notify({title: '成功', message: '操作成功', type: 'success'})
           } else {
             this.$notify.error({title: '错误', message: data.msg})
