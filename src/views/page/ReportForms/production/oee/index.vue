@@ -66,6 +66,11 @@
                   {{scope.row.productLineName}}
                 </template>
               </el-table-column>
+              <!-- <el-table-column fixed label="班次"  :show-overflow-tooltip="true" width="60">
+                <template slot-scope="scope">
+                  {{scope.row.className}}
+                </template>
+              </el-table-column> -->
               <el-table-column fixed label="品项"  width="150"  :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   {{scope.row.materialName}}
