@@ -516,70 +516,92 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$warning_SHINHO('请勾选数据')
       } else {
-        let str = ''
-        this.strList = []
-        this.strList1 = []
-        this.strList2 = []
-        this.multipleSelection.forEach((item) => {
-          if (item.sbList === null) {
-            this.strList.push(item.orderNo)
-          } else {
-            item.sbList.map((items) => {
-              if (items.cDay === null) {
-                this.strList.push(item.orderNo)
-              } else if (items.cDay === -999) {
-                this.strList1.push(`${items.yzHolderName},${items.batch}`)
-              }
-              if (items.cDay * 1 < 6) {
-                this.strList2.push(`${items.yzHolderName},${items.batch}`)
-              }
-            })
+        let st = 0
+        this.multipleSelection.map((item) => {
+          if (item.status === '已生成') {
+            st = 1
+            return false
           }
         })
-        if (this.strList.length !== 0) {
-          this.$confirm(`请先保存调配单${this.strList.join(',')}的调配详情信息?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {})
-          return false
-        }
-        if (this.strList1.length !== 0) {
-          this.$confirm(`请先确认${this.strList1.join(',')}批次原汁有库存?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {})
-          return false
-        }
-        if (this.strList2.length !== 0) {
-          str = this.strList2.join(',')
-        }
-        // this.multipleSelection.forEach((item) => {
-        //   if (item.cDay === null) {
-        //     this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
-        //       confirmButtonText: '确定',
-        //       cancelButtonText: '取消',
-        //       type: 'warning'
-        //     }).then(() => {})
-        //     st = true
-        //   } else if (item.cDay === -999) {
-        //     this.$confirm(`请确认${item.yzHolderName}，${item.batch}批次原汁有库存?`, '提示', {
-        //       confirmButtonText: '确定',
-        //       cancelButtonText: '取消',
-        //       type: 'warning'
-        //     }).then(() => {})
-        //     st = true
-        //   } else if (item.cDay * 1 < 6) {
-        //     str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
-        //   }
-        // })
-        if (str.length > 0) {
-          this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
+        if (st === 1) {
+          let str = ''
+          this.strList = []
+          this.strList1 = []
+          this.strList2 = []
+          this.multipleSelection.forEach((item) => {
+            if (item.sbList === null) {
+              this.strList.push(item.orderNo)
+            } else {
+              item.sbList.map((items) => {
+                if (items.cDay === null) {
+                  this.strList.push(item.orderNo)
+                } else if (items.cDay === -999) {
+                  this.strList1.push(`${items.yzHolderName},${items.batch}`)
+                }
+                if (items.cDay * 1 < 6) {
+                  this.strList2.push(`${items.yzHolderName},${items.batch}`)
+                }
+              })
+            }
+          })
+          if (this.strList.length !== 0) {
+            this.$confirm(`请先保存调配单${this.strList.join(',')}的调配详情信息?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {})
+            return false
+          }
+          if (this.strList1.length !== 0) {
+            this.$confirm(`请先确认${this.strList1.join(',')}批次原汁有库存?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {})
+            return false
+          }
+          if (this.strList2.length !== 0) {
+            str = this.strList2.join(',')
+          }
+          // this.multipleSelection.forEach((item) => {
+          //   if (item.cDay === null) {
+          //     this.$confirm(`请先保存调配单${item.orderNo}的调配详情信息?`, '提示', {
+          //       confirmButtonText: '确定',
+          //       cancelButtonText: '取消',
+          //       type: 'warning'
+          //     }).then(() => {})
+          //     st = true
+          //   } else if (item.cDay === -999) {
+          //     this.$confirm(`请确认${item.yzHolderName}，${item.batch}批次原汁有库存?`, '提示', {
+          //       confirmButtonText: '确定',
+          //       cancelButtonText: '取消',
+          //       type: 'warning'
+          //     }).then(() => {})
+          //     st = true
+          //   } else if (item.cDay * 1 < 6) {
+          //     str += `${item.yzHolderName}，${item.batch}批次原汁，沉淀天数不足，是否确认使用？`
+          //   }
+          // })
+          if (str.length > 0) {
+            this.$confirm(`${str}批次原汁，沉淀天数不足，是否确认使用？`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.multipleSelection.forEach((item) => {
+                item.status = '已调配'
+              })
+              this.$http(`${STERILIZED_API.JUICEDEPLOYMENTSAVE}`, 'POST', this.multipleSelection).then(({data}) => {
+                if (data.code === 0) {
+                  this.$notify({title: '成功', message: '保存成功', type: 'success'})
+                  this.isRedact = false
+                  this.SearchList()
+                } else {
+                  this.$notify.error({title: '错误', message: data.msg})
+                }
+              })
+            })
+          } else {
             this.multipleSelection.forEach((item) => {
               item.status = '已调配'
             })
@@ -592,7 +614,7 @@ export default {
                 this.$notify.error({title: '错误', message: data.msg})
               }
             })
-          })
+          }
         } else {
           this.multipleSelection.forEach((item) => {
             item.status = '已调配'
