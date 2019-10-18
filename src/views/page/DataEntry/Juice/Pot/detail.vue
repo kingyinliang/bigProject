@@ -21,7 +21,9 @@
               <p class="el-input">{{formData.HOLDER_NAME}}</p>
             </el-form-item>
             <el-form-item label="生产物料：">
-              <p class="el-input">{{formData.MATERIAL_CODE}} {{formData.MATERIAL_NAME}}</p>
+              <el-tooltip class="item" effect="dark" :content="(formData.MATERIAL_CODE || '') + ' ' + (formData.MATERIAL_NAME || '')" placement="top">
+                <p class="el-input" style="text-overflow: ellipsis;" >{{formData.MATERIAL_CODE}} {{formData.MATERIAL_NAME}}</p>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="半成品类别：">
               <p class="el-input">{{formData.TYPE}}</p>

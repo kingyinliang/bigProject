@@ -10,7 +10,9 @@
       <p class="el-input">{{formHeader.orderNo || ''}}</p>
     </el-form-item>
     <el-form-item label="生产品项：">
-      <p class="el-input">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
+      <el-tooltip class="item" effect="dark" :content="formHeader.materialCode + ' ' + formHeader.materialName" placement="top-start">
+        <p class="el-input">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="生产日期：">
       <p class="el-input">{{formHeader.productDate || ''}}</p>
@@ -58,4 +60,13 @@ export default {
     white-space: nowrap;
     line-height: 32px;
   }
+</style>
+
+<style lang="scss">
+.topform{
+  .el-form-item--small .el-form-item__content{
+    height: 32px;
+    border-bottom: 1px solid #D8D8D8;
+  }
+}
 </style>
