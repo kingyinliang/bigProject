@@ -184,10 +184,11 @@ export default {
       })
     },
     // 获取半成品罐
-    GetholderList (factory, workShop) {
+    GetholderList (factory, workShop, id) {
       this.$http(`${FILTRATION_API.FILTER_IN_POT_API}`, 'POST', {
         factory: factory,
-        workShop: workShop
+        workShop: workShop,
+        orderId: id
       }, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.PotList = data.holderList
