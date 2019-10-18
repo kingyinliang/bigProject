@@ -49,7 +49,7 @@
             @size-change="handleDataSizeChange"
             @current-change="handleDataCurrentChange"
             :current-page="dataLeftCurrPage"
-            :page-sizes="[10, 15, 20]"
+            :page-sizes="[10, 20, 50]"
             :page-size="dataPageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="dataLeftTotalCount">
@@ -104,7 +104,7 @@
             @size-change="handleDataSizeChangeRight"
             @current-change="handleDataCurrentChangeRight"
             :current-page="dataRightCurrPage"
-            :page-sizes="[10, 15, 20]"
+            :page-sizes="[10, 20, 50]"
             :page-size="dataPageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="dataRightTotalCount">
