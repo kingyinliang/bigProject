@@ -256,7 +256,8 @@ export default {
     GetPotList () {
       this.$http(`${STERILIZED_API.STE_ENTER_IN_POT_LIST_API}`, 'POST', {
         factory: this.formHeader.factory,
-        workShop: this.formHeader.workShop
+        workShop: this.formHeader.workShop,
+        orderId: this.formHeader.orderId
       }).then(({data}) => {
         if (data.code === 0) {
           this.PotList = data.halfList

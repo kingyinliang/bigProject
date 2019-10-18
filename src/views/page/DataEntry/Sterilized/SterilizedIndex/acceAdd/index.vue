@@ -54,7 +54,7 @@
                 <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, AddSupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
               </template>
             </el-table-column>
-            <el-table-column width="100">
+            <el-table-column width="125">
               <template slot="header"><i class="reqI">*</i><span>批次</span></template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10"  size="mini"></el-input>
@@ -101,7 +101,7 @@
                 <el-button type="text" size="mini" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked'))" @click="addData(scope.row, scope.$index, SupDate)" v-if="scope.row.isSplit === '0'"><i class="icons iconfont factory-chaifen"></i>拆分</el-button>
               </template>
             </el-table-column>
-            <el-table-column width="100">
+            <el-table-column width="125">
               <template slot="header"><i class="reqI">*</i><span>批次</span></template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.batch" :disabled="!(isRedact && (scope.row.status !== 'submit' && scope.row.status !== 'checked') && scope.row.addStatus !== '已添加')" placeholder="请输入" maxlength="10" size="mini"></el-input>
