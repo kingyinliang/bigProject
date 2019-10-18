@@ -270,7 +270,7 @@ export default {
           }
           if (this.techInfo.xiu === 0) {
             // 新增
-            if (this.techInfo.filterAidAdd + this.techInfo.filterAidBef > 0) {
+            if (Number(this.techInfo.filterAidAdd) + Number(this.techInfo.filterAidBef) > 0) {
               let p = -2
               this.supMaterialList.map((item, index) => {
                 if (item.filterMachineId === this.techInfo.filterMachineId) {
@@ -324,6 +324,8 @@ export default {
                 this.dialogVisible = false
                 return false
               }
+            } else {
+              this.dialogVisible = false
             }
           } else {
             // 修改

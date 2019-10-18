@@ -56,7 +56,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="plantList.currPage"
-        :page-sizes="[10, 15, 20]"
+        :page-sizes="[10, 20, 50]"
         :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
         :total="plantList.totalCount">

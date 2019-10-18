@@ -21,7 +21,9 @@
               <p class="el-input">{{formData.HOLDER_NAME}}</p>
             </el-form-item>
             <el-form-item label="生产物料：">
-              <p class="el-input">{{formData.MATERIAL_CODE}} {{formData.MATERIAL_NAME}}</p>
+              <el-tooltip class="item" effect="dark" :content="(formData.MATERIAL_CODE || '') + ' ' + (formData.MATERIAL_NAME || '')" placement="top">
+                <p class="el-input" style="text-overflow: ellipsis;" >{{formData.MATERIAL_CODE}} {{formData.MATERIAL_NAME}}</p>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="半成品类别：">
               <p class="el-input">{{formData.TYPE}}</p>
@@ -73,7 +75,7 @@
               @size-change="handleDataSizeChange"
               @current-change="handleDataCurrentChange"
               :current-page="dataCurrPage"
-              :page-sizes="[10, 15, 20]"
+              :page-sizes="[10, 20, 50]"
               :page-size="dataPageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="dataTotalCount">
@@ -106,7 +108,7 @@
               @size-change="handleUseDataSizeChange"
               @current-change="handleUseDataCurrentChange"
               :current-page="dataUseCurrPage"
-              :page-sizes="[10, 15, 20]"
+              :page-sizes="[10, 20, 50]"
               :page-size="dataUsePageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="dataUseTotalCount">

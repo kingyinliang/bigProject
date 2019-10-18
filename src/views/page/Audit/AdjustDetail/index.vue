@@ -126,7 +126,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pages.currentPage"
-        :page-sizes="[10, 15, 20]"
+        :page-sizes="[10, 20, 50]"
         :page-size="pages.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pages.total">

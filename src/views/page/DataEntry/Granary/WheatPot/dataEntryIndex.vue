@@ -96,7 +96,7 @@
                   @size-change="handleDataSizeChange"
                   @current-change="handleDataCurrentChange"
                   :current-page="dataCurrPage"
-                  :page-sizes="[10, 15, 20]"
+                  :page-sizes="[10, 20, 50]"
                   :page-size="dataPageSize"
                   layout="total, sizes, prev, pager, next, jumper"
                   :total="dataTotalCount">
@@ -152,7 +152,7 @@
                   @size-change="handleAdjustSizeChange"
                   @current-change="handleAdjustCurrentChange"
                   :current-page="adjustCurrPage"
-                  :page-sizes="[10, 15, 20]"
+                  :page-sizes="[10, 20, 50]"
                   :page-size="adjustPageSize"
                   layout="total, sizes, prev, pager, next, jumper"
                   :total="adjustTotalCount">
@@ -200,7 +200,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currPage"
-              :page-sizes="[10, 15, 20]"
+              :page-sizes="[10, 20, 50]"
               :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount">
