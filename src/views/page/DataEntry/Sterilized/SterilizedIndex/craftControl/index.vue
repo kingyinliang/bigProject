@@ -275,9 +275,6 @@ export default {
             }
           }
         })
-      } else {
-        ty = false
-        this.$warning_SHINHO('原汁换热介质必填')
       }
       this.crafData.result.forEach((item) => {
         if (!item.temp) {
