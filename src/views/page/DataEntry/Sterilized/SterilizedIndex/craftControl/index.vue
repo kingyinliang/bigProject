@@ -330,8 +330,13 @@ export default {
             this.Stesave.orderUpdate(this, 'techStatus', str, resolve, reject)
           })
           net0.then(() => {
-            this.$notify({title: '成功', message: '提交成功', type: 'success'})
-            this.GetOrderHead()
+            let net99 = new Promise((resolve, reject) => {
+              this.GetSubmit(str, resolve, reject)
+            })
+            net99.then(() => {
+              this.$notify({title: '成功', message: '提交成功', type: 'success'})
+              this.GetOrderHead()
+            })
           }).catch((err) => {
             this.$notify.error({title: '错误', message: err})
           })
@@ -354,6 +359,20 @@ export default {
           this.$notify.error({title: '错误', message: err})
         })
       }
+    },
+    GetSubmit (str, resolve, reject) {
+      this.crafData.orderId = this.formHeader.orderId
+      this.$http(`${STERILIZED_API.CRAFTCONTROLSUBMIT}`, 'POST', this.crafData).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('工艺保存' + data.msg)
+          }
+        }
+      })
     },
     // 获取订单表头
     GetOrderHead () {
