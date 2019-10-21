@@ -414,13 +414,14 @@ export default {
         }
       })
       for (let items of this.repertory) {
-        let total = 0
+        let amount = 0
         if (this.repertoryS.find(sos => sos.holderId === items.holderId)) {
-          total = items.total + this.repertoryS.find(sos => sos.holderId === items.holderId).total
+          amount = this.repertoryS.find(sos => sos.holderId === items.holderId).total + this.semiHolder.find(so => so.holderId === items.holderId).amount
         } else {
-          total = items.total
+          amount = this.semiHolder.find(so => so.holderId === items.holderId).amount
         }
-        if (total > this.semiHolder.find(so => so.holderId === items.holderId).amount) {
+        // console.log(items.holderId + ' total: ' + items.total + ' amount: ' + amount)
+        if (items.total > amount) {
           this.$warning_SHINHO(this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整')
           return false
         }
