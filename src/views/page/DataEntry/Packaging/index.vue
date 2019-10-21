@@ -101,7 +101,7 @@ export default {
       this.plantList.productDate = this.PkgproductDate
     }
     this.Getdeptcode()
-    this.Getdeptbyid(this.plantList.workShop)
+    this.Getdeptbyid(this.plantList.factoryid)
   },
   methods: {
     // 获取工厂,ceshi
@@ -123,7 +123,7 @@ export default {
         this.$http(`${BASICDATA_API.FINDORGBYID_API}`, 'POST', {deptId: id, deptName: '包装 组装'}).then(({data}) => {
           if (data.code === 0) {
             this.workshop = data.typeList
-            if (data.typeList.length > 0) {
+            if (data.typeList.length > 0 && !this.plantList.workShop) {
               this.plantList.workShop = data.typeList[0].deptId
             }
           } else {
