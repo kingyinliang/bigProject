@@ -271,7 +271,7 @@ export default {
         return false
       }
       if (item.holderStatus !== '4') {
-        this.$warning_SHINHO('未领用完不能清洗')
+        this.$warning_SHINHO('未领用完不能清罐')
         return false
       }
       this.$confirm('清罐后，账务将清零，请确认实物已空！', '清罐确认', {
