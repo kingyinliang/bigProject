@@ -294,7 +294,11 @@ export default {
           let net0 = new Promise((resolve, reject) => {
             this.Stesave.orderUpdate(this, 'insStatus', str, resolve, reject)
           })
-          net0.then(() => {
+          let net99 = new Promise((resolve, reject) => {
+            this.GetSumit(str, resolve, reject)
+          })
+          let net991 = Promise.all([net0, net99])
+          net991.then(() => {
             this.$notify({title: '成功', message: '提交成功', type: 'success'})
             this.GetOrderHead()
           }).catch((err) => {
@@ -317,6 +321,20 @@ export default {
           this.$notify.error({title: '错误', message: err})
         })
       }
+    },
+    // 提交
+    GetSumit (str, resolve, reject) {
+      this.$http(`${STERILIZED_API.STE_ENTER_SUBMIT}`, 'POST', this.InStorageDate).then(({data}) => {
+        if (data.code === 0) {
+          if (resolve) {
+            resolve('resolve')
+          }
+        } else {
+          if (reject) {
+            reject('杀菌入库' + data.msg)
+          }
+        }
+      })
     },
     // 入库修改
     UpdateIn (str, resolve, reject) {
