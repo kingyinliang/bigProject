@@ -163,6 +163,7 @@ export default {
       semiHolder: [],
       listbomP: [],
       listbomS: [],
+      listbomSS: [],
       SapAudit: [],
       useUsageList: ['领用完', '转他用'],
       repertory: [],
@@ -181,6 +182,7 @@ export default {
       if (data) {
         this.listbomP = data.listbomP
         this.listbomS = data.listbomS
+        this.listbomSS = data.listbomS
         this.listbomS.forEach((item) => {
           item.isSplit = '0'
           item.delFlag = '0'
@@ -199,6 +201,7 @@ export default {
           if (data.code === 0) {
             this.listbomP = data.listFormP
             this.listbomS = data.listFormS
+            this.listbomSS = JSON.parse(JSON.stringify(data.listFormS))
             this.SapAudit = data.listApproval
             let sub = 0
             let che = 0
@@ -374,6 +377,22 @@ export default {
       let ty = true
       let holderId
       this.repertory = []
+      this.repertoryS = []
+      this.listbomSS.map(item => {
+        if (item.holderType === '006' && item.delFlag === '0') {
+          let sole = ''
+          sole = this.repertoryS.find(items => items.holderId === item.potNo)
+          holderId = item.potNo
+          if (sole) {
+            sole.total = Number(sole.total) + Number(item.productUseNum)
+          } else {
+            this.repertoryS.push({
+              holderId: holderId,
+              total: item.productUseNum ? item.productUseNum : 0
+            })
+          }
+        }
+      })
       this.listbomS.map(item => {
         if (item.holderType === '006' && item.delFlag === '0') {
           let sole = ''
@@ -395,7 +414,13 @@ export default {
         }
       })
       for (let items of this.repertory) {
-        if (items.total > this.semiHolder.find(so => so.holderId === items.holderId).amount) {
+        let total = 0
+        if (this.repertoryS.find(sos => sos.holderId === items.holderId)) {
+          total = items.total + this.repertoryS.find(sos => sos.holderId === items.holderId).total
+        } else {
+          total = items.total
+        }
+        if (total > this.semiHolder.find(so => so.holderId === items.holderId).amount) {
           this.$warning_SHINHO(this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整')
           return false
         }
