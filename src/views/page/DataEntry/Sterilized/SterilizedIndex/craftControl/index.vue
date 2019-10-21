@@ -25,7 +25,8 @@
           工艺控制
         </span>
         <el-form :inline="true" size="small" :model="crafData" :rules="dataRule" ref="dataForm" class="topform">
-          <el-form-item label="原汁换热介质：" prop="hotMedium" label-width="120px">
+          <!--<el-form-item label="原汁换热介质：" prop="hotMedium" label-width="120px">-->
+          <el-form-item label="原汁换热介质：" label-width="120px">
             <el-checkbox-group v-model="crafData.hotMedium" :disabled="!isRedact" style="width: 170px">
               <el-checkbox label="热水" name="type"></el-checkbox>
               <el-checkbox label="酱油" name="type"></el-checkbox>
@@ -145,9 +146,9 @@ export default {
       },
       DataAudit: [],
       dataRule: {
-        hotMedium: [
-          { required: true, message: '原汁换热介质不能为空', trigger: 'blur' }
-        ],
+        // hotMedium: [
+        //   { required: true, message: '原汁换热介质不能为空', trigger: 'blur' }
+        // ],
         originalTemp: [
           { required: true, message: '原汁入锅温度不能为空', trigger: 'blur' }
         ],
