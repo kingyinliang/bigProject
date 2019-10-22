@@ -303,7 +303,6 @@ export default {
       if (!this.$refs.listbom.saprul(str)) {
         return false
       }
-      console.log('abc')
       if (!this.$refs.listbom.ListbomsRule()) {
         return false
       }

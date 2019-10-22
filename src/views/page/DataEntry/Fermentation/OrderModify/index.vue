@@ -52,7 +52,7 @@
         <el-tabs ref='tabs'  v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="1">
             <span slot="label" class="spanview">
-              <el-button>未申请</el-button>
+              <el-button>未修改</el-button>
             </span>
             <el-row>
               <el-col>
@@ -65,81 +65,49 @@
                   type="selection"
                   width="55">
                 </el-table-column>
-                <el-table-column type="index" label="序号" width="55"></el-table-column>
-                <el-table-column label="容器" :show-overflow-tooltip="true" width="100">
+                <el-table-column type="index" label="罐号" width="55"></el-table-column>
+                <el-table-column label="订单号" :show-overflow-tooltip="true" width="100">
                   <template slot-scope="scope">
                     {{scope.row.holdName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="物料" :show-overflow-tooltip="true" width="140">
+                <el-table-column label="开始日期" :show-overflow-tooltip="true" width="140">
                   <template slot-scope="scope">
                     {{scope.row.ferMaterialCode + ' ' + scope.row.ferMaterialName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="订单量" width="100">
+                <el-table-column label="结束日期" width="100">
                   <template slot-scope="scope">
                     {{scope.row.ferAmount}}
                   </template>
                 </el-table-column>
-                <el-table-column label="单位" width="60">
+                <el-table-column label="判定时发酵天数" width="60">
                   <template slot-scope="scope">
                     {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
-                <el-table-column label="订单类型" width="120">
+                <el-table-column label="判定前" width="120">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.ferOrderType" placeholder="请选择" size="mini" style="width: 100px">
                       <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
                     </el-select>
                   </template>
                 </el-table-column>
-                <el-table-column label="开始日期" width="100">
+                <el-table-column label="判定后" width="100">
                   <template slot-scope="scope">
                     {{scope.row.startDate}}
                   </template>
                 </el-table-column>
-                <el-table-column label="结束日期" width="100">
+                <el-table-column label="发酵成熟天数" width="100">
                   <template slot-scope="scope">
                     {{scope.row.endDate}}
                   </template>
                 </el-table-column>
-                <el-table-column label="制曲工单" width="120">
+                <el-table-column label="修改后结束日期" width="120">
                   <template slot-scope="scope">
                     {{scope.row.kjmOrderNo}}
                   </template>
                 </el-table-column>
-                <el-table-column label="制曲物料" :show-overflow-tooltip="true" width="140">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmMaterialCode + ' ' + scope.row.kjmMaterialName}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="数量" width="100">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmAmount}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="单位" width="60">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmUnit}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="批次" width="120">
-                  <template slot-scope="scope">
-                    {{scope.row.batch}}
-                  </template>
-                </el-table-column>
-                <!-- <el-table-column label="申请人员" width="100">
-                  <template slot-scope="scope">
-                  </template>
-                </el-table-column>
-                <el-table-column label="申请时间" width="100">
-                  <template slot-scope="scope">
-                  </template>
-                </el-table-column>
-                <el-table-column label="订单号" width="100">
-                  <template slot-scope="scope">
-                  </template>
-                </el-table-column> -->
               </el-table>
             </el-row>
             <el-row>
@@ -156,86 +124,56 @@
           </el-tab-pane>
           <el-tab-pane name="2">
             <span slot="label"  class="spanview">
-              <el-button>已申请</el-button>
+              <el-button>已修改</el-button>
             </span>
             <el-row>
               <el-table header-row-class-name="tableHead" :data="applyedList" border tooltip-effect="dark" >
-                <el-table-column type="index" label="序号" width="55"></el-table-column>
+                <el-table-column type="index" label="罐号" width="55"></el-table-column>
                 <el-table-column label="订单号" width="120">
                   <template slot-scope="scope">
                     {{scope.row.ferOrderNo}}
                   </template>
                 </el-table-column>
-                <el-table-column label="容器" :show-overflow-tooltip="true" width="100">
+                <el-table-column label="开始日期" :show-overflow-tooltip="true" width="100">
                   <template slot-scope="scope">
                     {{scope.row.holdName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="物料" :show-overflow-tooltip="true" width="140">
+                <el-table-column label="结束日期" :show-overflow-tooltip="true" width="140">
                   <template slot-scope="scope">
                     {{scope.row.ferMaterialCode + ' ' + scope.row.ferMaterialName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="订单量" width="100">
+                <el-table-column label="判定时发酵天数" width="100">
                   <template slot-scope="scope">
                     {{scope.row.ferAmount}}
                   </template>
                 </el-table-column>
-                <el-table-column label="单位" width="60">
+                <el-table-column label="判定前" width="60">
                   <template slot-scope="scope">
                     {{scope.row.ferUnit}}
                   </template>
                 </el-table-column>
-                <el-table-column label="订单类型" width="120">
+                <el-table-column label="判定后" width="120">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.ferOrderType" placeholder="请选择" size="mini" style="width: 100px" :disabled="true">
                       <el-option v-for="(item, index) in orderTypeList" :label="item.value"  :value="item.code" :key="index"></el-option>
                     </el-select>
                   </template>
                 </el-table-column>
-                <el-table-column label="开始日期" width="100">
+                <el-table-column label="发酵成熟天数" width="100">
                   <template slot-scope="scope">
                     {{scope.row.startDate}}
                   </template>
                 </el-table-column>
-                <el-table-column label="结束日期" width="100">
+                <el-table-column label="修改后结束日期" width="100">
                   <template slot-scope="scope">
                     {{scope.row.endDate}}
                   </template>
                 </el-table-column>
-                <el-table-column label="制曲工单" width="120">
+                <el-table-column label="接口返回" width="120">
                   <template slot-scope="scope">
                     {{scope.row.kjmOrderNo}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="制曲物料" :show-overflow-tooltip="true" width="140">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmMaterialCode + ' ' + scope.row.kjmMaterialName}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="数量" width="100">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmAmount}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="单位" width="60">
-                  <template slot-scope="scope">
-                    {{scope.row.kjmUnit}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="批次" width="120">
-                  <template slot-scope="scope">
-                    {{scope.row.batch}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="申请人员" width="140">
-                  <template slot-scope="scope">
-                    {{scope.row.applyUser}}
-                  </template>
-                </el-table-column>
-                <el-table-column label="申请时间" width="160">
-                  <template slot-scope="scope">
-                    {{scope.row.applyDate}}
                   </template>
                 </el-table-column>
               </el-table>

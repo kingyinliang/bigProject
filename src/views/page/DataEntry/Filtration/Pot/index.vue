@@ -122,6 +122,7 @@
         <el-form-item label="打入罐类别：" prop="inHolderType">
           <el-select v-model="TurnSavedataForm.inHolderType" filterable placeholder="请选择" @change="GetHolderType1(TurnSavedataForm)">
             <!--<el-option v-for="(sole, index) in InHolderType" :key="index" :value="sole.code" :label="sole.name"></el-option>-->
+            <el-option value="006" label="半成品罐"></el-option>
             <el-option value="007" label="成品罐"></el-option>
           </el-select>
         </el-form-item>
@@ -392,7 +393,7 @@ export default {
       })
     },
     GetHolderType1 (row) {
-      this.$http(`${STERILIZED_API.SEMIFINIS_DROPDOWN_LIST}`, 'POST', {factory: this.formHeader.factory, materialCode: row.materialCode, batch: row.batch, code: '007', holderId: row.receiveHolderId}, false, false, false).then(({data}) => {
+      this.$http(`${STERILIZED_API.SEMIFINIS_DROPDOWN_LIST}`, 'POST', {factory: this.formHeader.factory, materialCode: row.materialCode, batch: row.batch, code: row.inHolderType, holderId: row.receiveHolderId}, false, false, false).then(({data}) => {
         this.Holder = data.list
       })
     },
