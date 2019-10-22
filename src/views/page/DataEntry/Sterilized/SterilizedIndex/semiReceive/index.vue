@@ -262,7 +262,7 @@ export default {
       let ty = true
       this.MaterialDate.forEach((item) => {
         if (!item.isT) {
-          if (!item.hloderId) {
+          if (!item.hloderId && /原汁/.test(item.materialName)) {
             ty = false
             this.$warning_SHINHO('罐号未填')
             return false
