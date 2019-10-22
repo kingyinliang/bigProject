@@ -228,7 +228,7 @@ export default {
               } else if (item.status === 'saved') {
                 sav = sav + 1
               }
-              item.useUsage = item.useUsage ? item.useUsage : '转他用'
+              item.useUsage = item.useUsage ? item.useUsage : ''
               if (item.delFlag === '0' && item.holderId) {
                 this.distinctListbomS.push(item.holderId)
               }
@@ -351,7 +351,7 @@ export default {
         if (this.order.properties !== '二合一&礼盒产线') {
           for (var itema of this.listbomS) {
             if (itema.delFlag !== '1') {
-              if (itema.potNo && itema.filterDate && itema.productUseNum && itema.batch) {
+              if (itema.potNo && itema.filterDate && itema.productUseNum && itema.batch && itema.useUsage) {
               } else {
                 ty = false
                 this.$warning_SHINHO('物料半成品必填项未填')
@@ -375,55 +375,69 @@ export default {
     },
     ListbomsRule () {
       let ty = true
-      let holderId
-      this.repertory = []
-      this.repertoryS = []
-      this.listbomSS.map(item => {
-        if (item.holderType === '006' && item.delFlag === '0') {
-          let sole = ''
-          sole = this.repertoryS.find(items => items.holderId === item.potNo)
-          holderId = item.potNo
-          if (sole) {
-            sole.total = Number(sole.total) + Number(item.productUseNum)
-          } else {
-            this.repertoryS.push({
-              holderId: holderId,
-              total: item.productUseNum ? item.productUseNum : 0
-            })
+      if (this.order.properties !== '二合一&礼盒产线') {
+        for (var itema of this.listbomS) {
+          if (itema.delFlag !== '1') {
+            if (itema.potNo && itema.filterDate && itema.productUseNum && itema.batch && itema.useUsage) {
+            } else {
+              ty = false
+              this.$warning_SHINHO('物料半成品必填项未填')
+              return false
+            }
           }
         }
-      })
-      this.listbomS.map(item => {
-        if (item.holderType === '006' && item.delFlag === '0') {
-          let sole = ''
-          // if (item.id === '') {
-          sole = this.repertory.find(items => items.holderId === item.potNo)
-          holderId = item.potNo
-          // } else {
-          //   sole = this.repertory.find(items => items.holderId === item.holderId)
-          //   holderId = item.holderId
-          // }
-          if (sole) {
-            sole.total = Number(sole.total) + Number(item.productUseNum)
-          } else {
-            this.repertory.push({
-              holderId: holderId,
-              total: item.productUseNum ? item.productUseNum : 0
-            })
+      } else {
+        let holderId
+        this.repertory = []
+        this.repertoryS = []
+        this.listbomSS.map(item => {
+          if (item.holderType === '006' && item.delFlag === '0') {
+            let sole = ''
+            sole = this.repertoryS.find(items => items.holderId === item.potNo)
+            holderId = item.potNo
+            if (sole) {
+              sole.total = Number(sole.total) + Number(item.productUseNum)
+            } else {
+              this.repertoryS.push({
+                holderId: holderId,
+                total: item.productUseNum ? item.productUseNum : 0
+              })
+            }
           }
-        }
-      })
-      for (let items of this.repertory) {
-        let amount = 0
-        if (this.repertoryS.find(sos => sos.holderId === items.holderId)) {
-          amount = this.repertoryS.find(sos => sos.holderId === items.holderId).total + this.semiHolder.find(so => so.holderId === items.holderId).amount
-        } else {
-          amount = this.semiHolder.find(so => so.holderId === items.holderId).amount
-        }
-        // console.log(items.holderId + ' total: ' + items.total + ' amount: ' + amount)
-        if (items.total > amount) {
-          this.$warning_SHINHO(this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整')
-          return false
+        })
+        this.listbomS.map(item => {
+          if (item.holderType === '006' && item.delFlag === '0') {
+            let sole = ''
+            // if (item.id === '') {
+            sole = this.repertory.find(items => items.holderId === item.potNo)
+            holderId = item.potNo
+            // } else {
+            //   sole = this.repertory.find(items => items.holderId === item.holderId)
+            //   holderId = item.holderId
+            // }
+            if (sole) {
+              sole.total = Number(sole.total) + Number(item.productUseNum)
+            } else {
+              this.repertory.push({
+                holderId: holderId,
+                total: item.productUseNum ? item.productUseNum : 0
+              })
+            }
+          }
+        })
+        for (let items of this.repertory) {
+          let amount = 0
+          if (this.repertoryS.find(sos => sos.holderId === items.holderId)) {
+            amount = this.repertoryS.find(sos => sos.holderId === items.holderId).total + this.semiHolder.find(so => so.holderId === items.holderId).amount
+          } else {
+            amount = this.semiHolder.find(so => so.holderId === items.holderId).amount
+          }
+          // console.log(items.holderId + ' total: ' + items.total + ' amount: ' + amount)
+          if (items.total > amount) {
+            ty = false
+            this.$warning_SHINHO(this.semiHolder.find(so => so.holderId === items.holderId).holderName + '罐生产使用量超过库存，请重新调整')
+            return false
+          }
         }
       }
       return ty
@@ -505,7 +519,7 @@ export default {
         usePotDate: null,
         isSplit: '1',
         delFlag: '0',
-        useUsage: row.useUsage
+        useUsage: ''
       })
     },
     // tableRowClassName

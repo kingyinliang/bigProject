@@ -304,7 +304,7 @@ export default {
         if (this.thrwHolderList.filter(item => item.holderId === row.holderId).length > 0) {
           row.category = this.thrwHolderList.filter(item => item.holderId === row.holderId)[0].type
         } else {
-          this.$warning_SHINHO('BOOM物料对应批次所需的原汁罐号不存在')
+          this.$warning_SHINHO('BOM物料对应批次所需的原汁罐号不存在')
         }
       }
     },

@@ -1497,6 +1497,7 @@ export const STERILIZED_API = {
   STE_ENTER_IN_UPDATE_API: HOST + '/ste/inStorage/mySaveOrUpdate',
   STE_ENTER_IN_SUBMIT_API: HOST + '/ste/inStorage/submit',
   STE_ENTER_IN_POT_LIST_API: HOST + '/ste/inStorage/halfHolderList',
+  STE_ENTER_SUBMIT: HOST + '/ste/timeSheet/enterPageSteInSubmit',
   // 杀菌录入辅料添加
   STE_ENTER_SUP_LIST_API: HOST + '/ste/supMaterial/list',
   STE_ENTER_SUP_UPDATE_API: HOST + '/ste/supMaterial/mySaveOrUpdate',
@@ -1555,7 +1556,11 @@ export const STERILIZED_API = {
   JUICEDEPLOYMENTLIST: HOST + '/ste/allocate/allocateList',
   JUICEDEPLOYMENTLISTTP: HOST + '/ste/allocate/allocateListTp',
   JUICEDEPLOYMENTCREATE: HOST + '/ste/allocate/allocatecreate',
-  JUICEDEPLOYMENTCREATETP: HOST + '/ste/allocate/allocateCreateTp'
+  JUICEDEPLOYMENTCREATETP: HOST + '/ste/allocate/allocateCreateTp',
+  /**
+   *  工艺控制提交
+  */
+  CRAFTCONTROLSUBMIT: HOST + '/ste/timeSheet/enterPageSteMachineSubmit'
 }
 /**
  *  过滤 api Sterilized

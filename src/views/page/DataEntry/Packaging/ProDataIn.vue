@@ -258,6 +258,9 @@ export default {
         return false
       }
       if (this.submitRadio === '2') {
+        if (!this.$refs.listbom.ListbomsRule()) {
+          return false
+        }
         this.formHeader.isUrgent = '0'
         this.savedOrSubmitForm('submit')
       } else if (this.submitRadio === '1') {
@@ -300,7 +303,7 @@ export default {
       if (!this.$refs.listbom.saprul(str)) {
         return false
       }
-      if (!this.$refs.listbom.ListbomsRule(str)) {
+      if (!this.$refs.listbom.ListbomsRule()) {
         return false
       }
       this.lodingS = true
