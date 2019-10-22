@@ -11,7 +11,7 @@
     </el-form-item>
     <el-form-item label="生产品项：">
       <el-tooltip class="item" effect="dark" :content="formHeader.materialCode + ' ' + formHeader.materialName" placement="top-start">
-        <p class="el-input">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
+        <p class="el-input" style="font-size:12px">{{formHeader.materialCode + ' ' + formHeader.materialName}}</p>
       </el-tooltip>
     </el-form-item>
     <el-form-item label="生产日期：">

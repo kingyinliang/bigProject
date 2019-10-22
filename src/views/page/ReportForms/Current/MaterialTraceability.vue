@@ -23,7 +23,7 @@
         <el-form-item label="订单号：">
           <el-input v-model="formHeader.orderNo"></el-input>
         </el-form-item>
-        <el-form-item label="品相：">
+        <el-form-item label="品项：">
           <el-select v-model="formHeader.materialCode" placeholder="请选择" style="width: 140px">
             <el-option v-for="(sole, index) in this.materiaList" :key="index" :value="sole.MATERIAL_CODE" :label="`${sole.MATERIAL_CODE}`+ ' ' +`${sole.MATERIAL_NAME}`"></el-option>
           </el-select>

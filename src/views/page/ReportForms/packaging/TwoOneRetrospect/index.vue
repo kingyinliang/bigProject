@@ -25,7 +25,7 @@
             <el-form-item label="订单：">
               <el-input v-model="formHeader.orderNo" style="width:150px"></el-input>
             </el-form-item>
-            <el-form-item label="生产品相：">
+            <el-form-item label="生产品项：">
               <el-input v-model="formHeader.materialCode" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="生产日期：">
