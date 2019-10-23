@@ -150,7 +150,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="potNo"
+              prop="potNoName"
               label="领用罐号"
               :show-overflow-tooltip="true"
               width="100">
