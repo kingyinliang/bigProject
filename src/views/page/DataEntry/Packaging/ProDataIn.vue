@@ -258,12 +258,10 @@ export default {
         return false
       }
       if (this.submitRadio === '2') {
-        if (!this.$refs.listbom.ListbomsRule()) {
-          return false
-        }
         this.formHeader.isUrgent = '0'
         this.savedOrSubmitForm('submit')
       } else if (this.submitRadio === '1') {
+        this.$refs.listbom.ListbomsRule('saved')
         this.formHeader.isUrgent = '1'
         let that = this
         let net0 = new Promise((resolve, reject) => {
@@ -299,12 +297,16 @@ export default {
         if (!this.$refs.instorage.inrul()) {
           return false
         }
-      }
-      if (!this.$refs.listbom.saprul(str)) {
-        return false
-      }
-      if (!this.$refs.listbom.ListbomsRule()) {
-        return false
+        if (!this.$refs.listbom.saprul(str)) {
+          return false
+        }
+        if (!this.$refs.listbom.ListbomsRule(str)) {
+          return false
+        }
+      } else if (str === 'saved') {
+        if (!this.$refs.listbom.ListbomsRule(str)) {
+          return false
+        }
       }
       this.lodingS = true
       let that = this
