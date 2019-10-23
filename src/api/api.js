@@ -1470,7 +1470,11 @@ export const FERMENTATION_API = {
   /**
    * 报工同步
    */
-  WORKINGHOURTONGBU_API: HOST + '/sys/fer-report/reportAfter'
+  WORKINGHOURTONGBU_API: HOST + '/sys/fer-report/reportAfter',
+  /**
+   * 订单修改
+   */
+  ORDER_MODIFY_LIST_API: HOST + '/sys/fer-sort-judge/isSapList'
 }
 /**
  *  杀菌 api Sterilized
