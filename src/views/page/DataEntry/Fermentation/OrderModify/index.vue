@@ -48,7 +48,7 @@
         <div class="toggleSearchTop" style="background-color: white;margin-bottom: 8px;position: relative;border-radius: 5px">
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <el-tabs ref='tabs' @tab-click="handleClick" v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
+        <el-tabs ref='multipleTable' @tab-click="handleClick" v-model="activeName" id="DaatTtabs" class="NewDaatTtabs" type="border-card" style="border-radius: 15px;overflow: hidden">
           <el-tab-pane name="0" label="未修改">
             <el-row>
               <el-col>
@@ -56,7 +56,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-table header-row-class-name="tableHead" :data="dataList" border tooltip-effect="dark" >
+              <el-table header-row-class-name="tableHead" @selection-change="handleSelectionChange" :data="dataList" border tooltip-effect="dark" >
                 <el-table-column type="selection" width="40"></el-table-column>
                 <el-table-column label="罐号" width="55" prop="holderNo"></el-table-column>
                 <el-table-column label="订单号" :show-overflow-tooltip="true">
@@ -193,7 +193,8 @@ export default {
       activeName: '0',
       materialList: [],
       potList: [],
-      dataList: []
+      dataList: [],
+      multipleSelection: []
     }
   },
   mounted () {
@@ -278,6 +279,8 @@ export default {
           this.form.currPage = data.isSapList.currPage
           this.form.pageSize = data.isSapList.pageSize
           this.form.totalCount = data.isSapList.totalCount
+        } else {
+          this.$error_SHINHO(data.msg)
         }
       })
     },
@@ -285,8 +288,18 @@ export default {
       this.activeName = value.name
       this.GetList(true)
     },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
     ModifyOrder () {
-
+      this.$http(`${FERMENTATION_API.ORDER_MODIFY_CHANGE_API}`, 'POST', this.multipleSelection).then(({data}) => {
+        if (data.code === 0) {
+          this.$success_SHINHO('修改成功')
+          this.GetList(true)
+        } else {
+          this.$error_SHINHO(data.msg)
+        }
+      })
     },
     // 改变每页条数
     handleSizeChange (val) {
