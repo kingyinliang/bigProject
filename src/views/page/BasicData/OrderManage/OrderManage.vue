@@ -17,7 +17,7 @@
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys(true)" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="visible = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                  <el-button type="primary" size="small" @click="sapOrderUpdate('7010')" v-if="isAuth('sys:sapOrder:syncOrderManual')">欣和企业同步</el-button>
+                  <el-button type="primary" size="small" @click="sapOrderUpdate('7100')" v-if="isAuth('sys:sapOrder:syncOrderManual')">欣和企业同步</el-button>
                   <el-button type="primary" size="small" @click="sapOrderUpdate('6010')" v-if="isAuth('sys:sapOrder:syncOrderManual')">味达美同步</el-button>
                 </el-form-item>
               </el-form>
