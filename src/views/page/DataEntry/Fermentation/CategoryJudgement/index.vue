@@ -350,7 +350,8 @@ export default {
         ferMaterialName: row.order.ferMaterialName,
         ferDays: row.order.ferDays,
         holderNo: row.order.holderNo,
-        halfId: row.judge ? row.judge.halfId : defaulthalfId
+        halfId: row.judge ? row.judge.halfId : defaulthalfId,
+        oldCategory: JSON.parse(JSON.stringify(row.judge.halfName))
       }
       this.GetMaterialTypeListTan()
     },

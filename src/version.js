@@ -1,2 +1,2 @@
-export const version = 1571885996498
+export const version = 1571816326573
 console.log(version)

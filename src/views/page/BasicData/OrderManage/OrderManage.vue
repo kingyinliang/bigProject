@@ -17,7 +17,8 @@
                 <el-form-item>
                   <el-button type="primary" size="small" @click="querys(true)" v-if="isAuth('sys:sapOrder:list')">查询</el-button>
                   <el-button type="primary" size="small" @click="visible = true" v-if="isAuth('sys:sapOrder:list')">高级查询</el-button>
-                  <el-button type="primary" size="small" @click="sapOrderUpdate" v-if="isAuth('sys:sapOrder:syncOrderManual')">同步</el-button>
+                  <el-button type="primary" size="small" @click="sapOrderUpdate('7100')" v-if="isAuth('sys:sapOrder:syncOrderManual')">欣和企业同步</el-button>
+                  <el-button type="primary" size="small" @click="sapOrderUpdate('6010')" v-if="isAuth('sys:sapOrder:syncOrderManual')">味达美同步</el-button>
                 </el-form-item>
               </el-form>
             </el-row>
@@ -217,7 +218,7 @@ export default {
       })
     },
     // 同步
-    sapOrderUpdate () {
+    sapOrderUpdate (code) {
       // this.loading = true
       this.loadings = Loading.service({
         lock: true,
@@ -225,10 +226,10 @@ export default {
         text: '加载中……',
         background: 'rgba(255, 255, 255, 0.7)'
       })
-      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {}, false, false, false).then(({data}) => {
+      this.$http(`${BASICDATA_API.SAPORDERUPDATE_API}`, 'GET', {werks: code}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           this.orderTime = setInterval(() => {
-            this.GetOrderUpdateStatus()
+            this.GetOrderUpdateStatus(code)
           }, 4000)
         }
       }).catch(() => {
@@ -236,8 +237,14 @@ export default {
         this.loadings.close()
       })
     },
-    GetOrderUpdateStatus () {
-      this.$http(`${BASICDATA_API.GETSAPORDERUPDATE_API}`, 'GET', {asyncType: 'ASYNC_SAP_ORDER'}, false, false, false).then(({data}) => {
+    GetOrderUpdateStatus (codes) {
+      let codestring
+      if (codes === '6010') {
+        codestring = 'ASYNC_SAP_ORDER_WEIDAMEI'
+      } else {
+        codestring = 'ASYNC_SAP_ORDER'
+      }
+      this.$http(`${BASICDATA_API.GETSAPORDERUPDATE_API}`, 'GET', {asyncType: codestring}, false, false, false).then(({data}) => {
         if (data.code === 0) {
           if (data.asyncRecord) {
             if (data.asyncRecord.asyncStatus === '0') {
