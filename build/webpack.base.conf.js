@@ -4,6 +4,10 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpack = require('webpack')
+const HappyPack = require('happypack');
+const os = require('os'); // node 提供的系统操作模块
+// 根据我的系统的内核数量 指定线程池个数 也可以其他数量
+const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length})
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -33,6 +37,10 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
+    modules: [ // 优化模块查找路径
+      path.resolve('src'),
+      path.resolve('node_modules') // 指定node_modules所在位置 当你import 第三方模块时 直接从这个路径下搜索寻找
+    ],
     extensions: ['.js', '.vue', '.json', 'ts', 'tsx'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
@@ -70,7 +78,8 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'happypack/loader?id=babel',
+        exclude: /node_modules/,
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
@@ -112,6 +121,12 @@ module.exports = {
     child_process: 'empty'
   },
   plugins: [
+    new HappyPack({ // 基础参数设置
+      id: 'babel', // 上面loader?后面指定的id
+      loaders: ['babel-loader?cacheDirectory'], // 实际匹配处理的loader
+      threadPool: happyThreadPool,
+      verbose: true
+    }),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
     new webpack.ProvidePlugin({
       jQuery: "jquery",

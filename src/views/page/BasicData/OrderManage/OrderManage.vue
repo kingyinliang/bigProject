@@ -161,7 +161,7 @@
 
 <script>
 import {BASICDATA_API} from '@/api/api'
-import ElementUI from 'element-ui'
+import { Loading } from 'element-ui'
 export default {
   name: 'OrderManage',
   data () {
@@ -219,7 +219,7 @@ export default {
     // 同步
     sapOrderUpdate () {
       // this.loading = true
-      this.loadings = ElementUI.Loading.service({
+      this.loadings = Loading.service({
         lock: true,
         spinner: 'loadingGif',
         text: '加载中……',

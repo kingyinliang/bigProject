@@ -929,6 +929,7 @@ export default class Index extends Vue {
       that.$notify({title: '成功', message: result.msg, type: 'success'})
       that.getOrderList()
     }).catch((result: { code: number, msg: string }) => {
+      console.log(result)
       Vue.prototype.$error_SHINHO(result.msg)
     })
   }

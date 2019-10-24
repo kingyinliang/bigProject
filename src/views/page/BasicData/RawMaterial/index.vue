@@ -94,7 +94,7 @@
 
 <script>
 import {BASICDATA_API} from '@/api/api'
-import ElementUI from 'element-ui'
+import { Loading } from 'element-ui'
 export default {
   name: 'RawMaterial',
   data () {
@@ -170,7 +170,7 @@ export default {
     },
     // 数据同步
     DataSynchronism () {
-      this.loading = ElementUI.Loading.service({
+      this.loading = Loading.service({
         lock: true,
         spinner: 'loadingGif',
         text: '加载中……',

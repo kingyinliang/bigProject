@@ -3,12 +3,16 @@ import axios from 'axios'
 import router from '@/router'
 import { HTTP_METHOD } from './http'
 // import {Message, Loading} from 'element-ui'
-import ElementUI from 'element-ui'
+// import ElementUI from 'element-ui'
+import {
+  Notification,
+  Loading
+} from 'element-ui'
 // import storage, { AUTHORIZATION_KEY } from '@/storage/storage'
 let loading
 // 使用Element loading-start 方法
 function startLoading () {
-  loading = ElementUI.Loading.service({
+  loading = Loading.service({
     lock: true,
     spinner: 'loadingGif',
     text: '加载中……',
@@ -99,7 +103,7 @@ export default (url, method = HTTP_METHOD.GET, data = {}, ContentType = false, r
     return response
   }, error => {
     // Vue.prototype.$log.writeErrorLog(new Error(`网络请求失败，接口：${url}`), `${error}`)
-    ElementUI.Notification({ title: '错误', message: '网络请求失败，请刷新重试', type: 'error' })
+    Notification({ title: '错误', message: '网络请求失败，请刷新重试', type: 'error' })
     endLoading() // 关闭遮罩
     return Promise.reject(error)
   })
