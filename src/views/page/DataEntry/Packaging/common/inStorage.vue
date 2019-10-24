@@ -560,11 +560,11 @@ export default {
             return false
           }
           if (item.batch) {
-            if (item.batch.length !== 10) {
-              ty = false
-              this.$warning_SHINHO('生产入库请录入10位批次号')
-              return false
-            }
+            // if (item.batch.length !== 10) {
+            //   ty = false
+            //   this.$warning_SHINHO('生产入库请录入10位批次号')
+            //   return false
+            // }
           } else {
             ty = false
             this.$warning_SHINHO('生产入库批次项未填')
