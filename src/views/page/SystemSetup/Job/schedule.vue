@@ -28,7 +28,6 @@
             :data="dataList"
             tooltip-effect="dark"
             border
-            v-loading="dataListLoading"
             @selection-change="selectionChangeHandle"
             style="width: 100%;">
             <el-table-column

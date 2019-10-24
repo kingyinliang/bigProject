@@ -73,7 +73,6 @@
           </el-form>
           <el-table
             ref="table1"
-            v-loading="dataListLoading"
             header-row-class-name="tableHead"
             :data="AuditList"
             @selection-change="handleSelectionChange"
@@ -150,7 +149,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="potNo"
+              prop="potNoName"
               label="领用罐号"
               :show-overflow-tooltip="true"
               width="100">
