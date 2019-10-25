@@ -304,8 +304,20 @@ export default {
         if (this.thrwHolderList.filter(item => item.holderId === row.holderId).length > 0) {
           row.category = this.thrwHolderList.filter(item => item.holderId === row.holderId)[0].type
         } else {
-          this.$warning_SHINHO('BOM物料对应批次所需的原汁罐号不存在')
+          // this.$warning_SHINHO('BOM物料对应批次所需的原汁罐号不存在')
         }
+      }
+    },
+    CheckMessage () {
+      let tys = 0
+      for (let items of this.ItemList) {
+        if (this.thrwHolderList.filter(item => item.holderId === items.holderId).length > 0) {
+        } else {
+          tys = 1
+        }
+      }
+      if (tys === 1) {
+        this.$warning_SHINHO('BOM物料对应批次所需的原汁罐号不存在')
       }
     },
     // 获取不合格原因
@@ -416,6 +428,9 @@ export default {
           this.lineStatus = row.status
           this.ID = row.id
           this.orderTypeSign = data.orderTypeSign
+          setTimeout(() => {
+            this.CheckMessage()
+          }, 1000)
         } else {
           this.$notify.error({title: '错误', message: data.msg})
         }
@@ -472,42 +487,32 @@ export default {
         return false
       }
       if (ty) {
-        this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', {'tiaoHolder': this.dataList, 'params': this.ItemList}).then(({data}) => {
-          if (data.code === 0) {
-            this.$notify({title: '成功', message: '保存成功', type: 'success'})
-            this.SearchList()
-            // this.ThrowHolder(this.formHeader.workShop)
-            this.dialogTableVisible = false
-          } else {
-            if (data.mes.length === 0) {
-              this.$error_SHINHO(data.msg)
-            } else {
-              this.$error_SHINHO(data.mes.join(','))
-            }
-          }
-        })
+        this.SubmitFunction()
       } else {
         this.$confirm(`领用原汁非R&D原汁，请确认！`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', {'tiaoHolder': this.dataList, 'params': this.ItemList}).then(({data}) => {
-            if (data.code === 0) {
-              this.$notify({title: '成功', message: '保存成功', type: 'success'})
-              this.SearchList()
-              // this.ThrowHolder(this.formHeader.workShop)
-              this.dialogTableVisible = false
-            } else {
-              if (data.mes.length === 0) {
-                this.$error_SHINHO(data.msg)
-              } else {
-                this.$error_SHINHO(data.mes.join(','))
-              }
-            }
-          })
+          this.SubmitFunction()
         })
       }
+    },
+    SubmitFunction () {
+      this.$http(`${STERILIZED_API.JUICEDEPLOYMENTITEMSAVE}`, 'POST', {'tiaoHolder': this.dataList, 'params': this.ItemList}).then(({data}) => {
+        if (data.code === 0) {
+          this.$notify({title: '成功', message: '保存成功', type: 'success'})
+          this.SearchList()
+          // this.ThrowHolder(this.formHeader.workShop)
+          this.dialogTableVisible = false
+        } else {
+          if (data.mes.length === 0) {
+            this.$error_SHINHO(data.msg)
+          } else {
+            this.$error_SHINHO(data.mes.join(','))
+          }
+        }
+      })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

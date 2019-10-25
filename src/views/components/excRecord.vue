@@ -9,7 +9,7 @@
     <el-table header-row-class-name="tableHead" :data="ExcDate" :row-class-name="RowDelFlag" border tooltip-effect="dark">
       <el-table-column type="index" width="55" label="序号">
       </el-table-column>
-      <!-- <el-table-column label="白/中/夜班" width="120">
+      <el-table-column label="白/中/夜班" width="120">
         <template slot="header">
           <i class="reqI">*</i>
           <span>白/中/夜班</span>
@@ -19,7 +19,7 @@
             <el-option :label="iteam.value" :value="iteam.code" v-for="(iteam, index) in productShift" :key="index"></el-option>
           </el-select>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="异常情况" width="150">
         <template slot="header">
           <i class="reqI">*</i>

@@ -403,7 +403,8 @@ export default {
           { required: true, message: '请选择打入罐号', trigger: 'blur' }
         ],
         inBatch: [
-          { required: true, message: '请填写打入批次', trigger: 'blur' }
+          { required: true, message: '请填写打入批次', trigger: 'blur' },
+          { min: 10, max: 10, message: '批次应为10位数', trigger: 'blur' }
         ],
         receiveAmount: [
           { required: true, message: '请填写领用量', trigger: 'blur' },
