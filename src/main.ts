@@ -4,7 +4,10 @@ import Vue from 'vue'
 import router from './router'
 import store from '@/store'
 import VueCookie from 'vue-cookie'
-import ElementUI from 'element-ui'
+import {
+  Notification
+} from 'element-ui'
+import elementUi from './elementUi'
 import install from '@/views/components/install'
 import 'element-ui/lib/theme-chalk/index.css'
 import httpProxy from '@/net/httpProxy'
@@ -15,9 +18,10 @@ import { version } from '@/version'
 import App from './App.vue'
 // import 'script-loader!file-saver'
 
+elementUi()
 // SentryUtil.init()
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+// Vue.use(ElementUI)
 Vue.use(VueCookie)
 // 自定义全局组件
 Vue.use(install)
@@ -31,15 +35,15 @@ Vue.prototype.lodingState = false// 加载遮罩
 Vue.prototype.version = version // 版本号
 // 警告通知
 Vue.prototype.$warning_SHINHO = (str) => {
-  ElementUI.Notification({ title: '警告', message: str, type: 'warning' })
+  Notification({ title: '警告', message: str, type: 'warning' })
 }
 // 错误通知
 Vue.prototype.$error_SHINHO = (str) => {
-  ElementUI.Notification({ title: '错误', message: str, type: 'error' })
+  Notification({ title: '错误', message: str, type: 'error' })
 }
 // 成功通知
 Vue.prototype.$success_SHINHO = (str) => {
-  ElementUI.Notification({ title: '成功', message: str, type: 'success' })
+  Notification({ title: '成功', message: str, type: 'success' })
 }
 
 // 关闭弹窗清除表单

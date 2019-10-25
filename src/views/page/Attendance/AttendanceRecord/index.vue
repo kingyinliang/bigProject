@@ -62,7 +62,6 @@
         </div>
         <el-row v-if="clearStatus">
           <el-table
-            v-loading="tableLoding"
             ref="table1"
             header-row-class-name="tableHead"
             @selection-change="handleSelectionChange"
@@ -266,7 +265,6 @@
           </el-table>
         </el-row>
         <el-table
-          v-loading="tableLoding"
           v-if="!clearStatus"
           ref="table1"
           header-row-class-name="tableHead"

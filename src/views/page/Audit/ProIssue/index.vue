@@ -73,7 +73,6 @@
           </el-form>
           <el-table
             ref="table1"
-            v-loading="dataListLoading"
             header-row-class-name="tableHead"
             :data="AuditList"
             @selection-change="handleSelectionChange"

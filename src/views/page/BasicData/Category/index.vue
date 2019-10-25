@@ -21,7 +21,7 @@
       </el-form>
     </el-card>
     <el-card style="margin-top:5px">
-      <el-table ref="table1" v-loading="dataListLoading" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+      <el-table ref="table1" header-row-class-name="tableHead" :data="DataList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
         <el-table-column type="selection" width="34"></el-table-column>
         <el-table-column label="工厂" prop="factoryName" width="140" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="发酵物料" :show-overflow-tooltip="true">

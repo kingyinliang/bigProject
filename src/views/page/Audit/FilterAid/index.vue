@@ -38,7 +38,7 @@
           <el-button type="danger" size="small" @click="repulseAutios()" v-if="isAuth('verify:material:update')">审核不通过</el-button>
         </el-form-item>
       </el-form>
-      <el-table ref="table1" v-loading="dataListLoading" header-row-class-name="tableHead" :data="AuditList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
+      <el-table ref="table1" header-row-class-name="tableHead" :data="AuditList" @selection-change="handleSelectionChange" border tooltip-effect="dark" style="width: 100%;margin-bottom: 20px">
         <el-table-column type="selection" :selectable='checkboxT' width="34"></el-table-column>
         <el-table-column type="index" label="序号" :index="indexMethod" width="55"></el-table-column>
         <el-table-column label="审核状态" width="100">

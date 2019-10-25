@@ -15,7 +15,6 @@
     <el-table
       :data="dataList"
       border
-      v-loading="dataListLoading"
       height="460"
       style="width: 100%;">
       <el-table-column

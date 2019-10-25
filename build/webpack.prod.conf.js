@@ -130,7 +130,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     // })
   ]
 })
-
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
