@@ -150,8 +150,8 @@ export default {
         if (data.code === 0) {
           this.formData = data.juiceItem.head
           this.formData.TYPE_STATUS = this.formData.TYPE_STATUS === null ? '1' : this.formData.TYPE_STATUS
-          // this.dataListOrder = data.juiceItem.infoEnter
-          // this.dataListUse = data.juiceItem.infoOut
+          this.dataListOrderAll = data.juiceItem.infoEnter
+          this.dataListUseAll = data.juiceItem.infoOut
           this.dataTotalCount = data.juiceItem.infoEnter.length
           this.dataUseTotalCount = data.juiceItem.infoOut.length
           this.dataListOrder = data.juiceItem.infoEnter.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
@@ -172,20 +172,20 @@ export default {
     handleDataSizeChange (val) {
       this.dataPageSize = val
       this.dataCurrPage = 1
-      this.dataListOrder = this.formData.currentOrderInfo.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
+      this.dataListOrder = this.dataListOrderAll.slice((this.dataCurrPage - 1) * this.dataPageSize, (this.dataCurrPage - 1) * this.dataPageSize + this.dataPageSize)
     },
     handleDataCurrentChange (val) {
       this.dataCurrPage = val
-      this.dataListOrder = this.formData.currentOrderInfo.slice((this.dataCurrPage - 1) * this.dataPageSize, (val - 1) * this.dataPageSize + this.dataPageSize)
+      this.dataListOrder = this.dataListOrderAll.slice((this.dataCurrPage - 1) * this.dataPageSize, (val - 1) * this.dataPageSize + this.dataPageSize)
     },
     handleUseDataSizeChange (val) {
       this.dataUsePageSize = val
       this.dataUseCurrPage = 1
-      this.dataListUse = this.formData.currentUseInfo.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (this.dataUseCurrPage - 1) * this.dataUsePageSize + this.dataUsePageSize)
+      this.dataListUse = this.dataListUseAll.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (this.dataUseCurrPage - 1) * this.dataUsePageSize + this.dataUsePageSize)
     },
     handleUseDataCurrentChange (val) {
       this.dataUseCurrPage = val
-      this.dataListUse = this.formData.currentUseInfo.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (val - 1) * this.dataUsePageSize + this.dataUsePageSize)
+      this.dataListUse = this.dataListUseAll.slice((this.dataUseCurrPage - 1) * this.dataUsePageSize, (val - 1) * this.dataUsePageSize + this.dataUsePageSize)
     }
   },
   computed: {},
