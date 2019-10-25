@@ -40,9 +40,4 @@ npm test
 9.	动态路由菜单，动态权限控制，网络请求封装，请求错误捕获，组织架构树形结构与角色人员权限等整体开发，基础数据，数据字典，定时任务等开发
 10.	Echarts饼图柱状图折线图等可视化看板系统开发
 
-![echarts.png](./READMEIMG/echarts.png "echarts")
-![echarts.png](./READMEIMG/echarts1.png "echarts")
-![echarts.png](./READMEIMG/1.png "echarts")
-![echarts.png](./READMEIMG/2.png "echarts")
-![echarts.png](./READMEIMG/3.jpg "echarts")
-![echarts.png](./READMEIMG/4.png "echarts")
+
